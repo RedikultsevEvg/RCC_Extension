@@ -1,0 +1,68 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+using RCC_Extension.BLL.WallAndColumn;
+
+namespace RCC_Extension.UI
+{
+    public partial class frmOpening : Form
+    {
+        private Opening _Opening;
+
+        public frmOpening(Opening value)
+        {
+            InitializeComponent();
+
+            _Opening = value;
+
+            tbName.Text = _Opening.Name;
+            tbPurpose.Text = _Opening.Purpose;
+            nudHeight.Value = _Opening.Height;
+            nudWidth.Value = _Opening.Width;
+            nudLeft.Value = _Opening.Left;
+            nudBottom.Value = _Opening.Bottom;
+
+            cbAddEdgeLeft.Checked = _Opening.AddEdgeLeft;
+            cbAddEdgeRight.Checked = _Opening.AddEdgeRight;
+            cbAddEdgeTop.Checked = _Opening.AddEdgeTop;
+            cbAddEdgeBottom.Checked = _Opening.AddEdgeBottom;
+
+            cbMoveVert.Checked = _Opening.MoveVert;
+            nudQuantVertLeft.Value = _Opening.QuantVertLeft;
+            nudQuantVertRight.Value = _Opening.QuantVertRight;
+        }
+
+        private void cbMoveVert_CheckedChanged(object sender, EventArgs e)
+        {
+            lbQuantVertLeft.Enabled = cbMoveVert.Checked;
+            lbQuantVertRight.Enabled = cbMoveVert.Checked;
+            nudQuantVertLeft.Enabled = cbMoveVert.Checked;
+            nudQuantVertRight.Enabled = cbMoveVert.Checked;
+        }
+
+        private void btnOK_Click(object sender, EventArgs e)
+        {
+            _Opening.Name = tbName.Text;
+            _Opening.Purpose = tbPurpose.Text;
+            _Opening.Height = nudHeight.Value;
+            _Opening.Width = nudWidth.Value;
+            _Opening.Left = nudLeft.Value;
+            _Opening.Bottom = nudBottom.Value;
+
+            _Opening.AddEdgeLeft = cbAddEdgeLeft.Checked;
+            _Opening.AddEdgeRight = cbAddEdgeRight.Checked;
+            _Opening.AddEdgeTop = cbAddEdgeTop.Checked;
+            _Opening.AddEdgeBottom = cbAddEdgeBottom.Checked;
+
+            _Opening.MoveVert = cbMoveVert.Checked;
+            _Opening.QuantVertLeft = Convert.ToInt32(nudQuantVertLeft.Value);
+            _Opening.QuantVertRight = Convert.ToInt32(nudQuantVertRight.Value);
+        }
+    }
+}
