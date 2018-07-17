@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace RCC_Extension.BLL.Geometry
 {
+    //Пока не буду использовать данный класс
     public class Path
     {
         public Point2D StartPoint { get; set; }
