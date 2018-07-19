@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace RCC_Extension.BLL.Building
 {
-    class Building : ICloneable
+    public class Building : ICloneable
     {
         public string Name { get; set; }
         public List<Level> LevelList { get; set; }

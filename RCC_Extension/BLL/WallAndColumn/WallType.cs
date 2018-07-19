@@ -13,9 +13,9 @@ namespace RCC_Extension.BLL.WallAndColumn
         public decimal TopOffset { get; set; }
         public decimal BottomOffset { get; set; }
 
-        public decimal GetHeight(Level _level)
+        public decimal GetHeight(Level level)
         {
-            return _level.Height + TopOffset + BottomOffset;
+            return level.Height + TopOffset + BottomOffset;
         }
 
         public object Clone()

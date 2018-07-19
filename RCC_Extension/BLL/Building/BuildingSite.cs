@@ -6,8 +6,9 @@ using System.Threading.Tasks;
 
 namespace RCC_Extension.BLL.Building
 {
-    class BuildingSite :ICloneable
+    public class BuildingSite :ICloneable
     {
+        public string Name { get; set; }
         public List<Building> BuildingList { get; set; }
 
         public object Clone()

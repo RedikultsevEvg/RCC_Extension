@@ -9,8 +9,9 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>RCC_Extension</RootNamespace>
     <AssemblyName>RCC_Extension</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -51,6 +52,7 @@
     <Compile Include="BLL\Building\Level.cs" />
     <Compile Include="BLL\Geometry\Point2D.cs" />
     <Compile Include="BLL\Geometry\Point3D.cs" />
+    <Compile Include="BLL\Reinforcement\Bar.cs" />
     <Compile Include="BLL\WallAndColumn\Column.cs" />
     <Compile Include="BLL\WallAndColumn\Opening.cs" />
     <Compile Include="BLL\Geometry\Path.cs" />

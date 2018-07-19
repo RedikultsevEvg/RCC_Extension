@@ -26,10 +26,10 @@ namespace RCC_Extension.BLL.WallAndColumn
         public int QuantVertLeft { get; set; } //Количество вертикальных стержней обрамления, если 0 - Стержни не учащаются
         public int QuantVertRight { get; set; } //Количество вертикальных стержней обрамления, если 0 - Стержни не учащаются
 
-        public decimal Area()
+        public decimal GetArea()
         {
             //Возвращает площадь проема
-            return Width * Height;
+            return Math.Round(Width * Height/1000)/1000;
         }
 
         public object Clone()
