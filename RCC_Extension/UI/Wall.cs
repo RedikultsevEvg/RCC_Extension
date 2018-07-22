@@ -7,130 +7,104 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using RCC_Extension.BLL;
-using RCC_Extension.UI;
 using RCC_Extension.BLL.WallAndColumn;
+using RCC_Extension.BLL.BuildingAndSite;
+using RCC_Extension.BLL.Geometry;
+using RCC_Extension.UI.Forms;
 
-
-namespace RCC_Extension
+namespace RCC_Extension.UI
 {
-    public partial class frmWallCrossSection : Form
+    public partial class frmWall : Form
     {
-        List<Opening> OpeningList = new List<Opening>();
+        private Wall _wall;
+        private Level _level;
+        private WallType _wallType;
+        private Building _building;
+        private List<Level> _levelList;
+        private List<WallType> _wallTypeList;
+        private Point2D _tmpStartPoint;
+        private Point2D _tmpEndPoint;
 
-        public decimal WallThickness
-        {
-            get { return this.nUDThickness.Value; }
-            set { this.nUDThickness.Value = value; }
-        }
-
-
-
-        public frmWallCrossSection()
+        public frmWall(Wall wall)
         {
             InitializeComponent();
-        }
+            _wall = wall;
+            _level = wall.Level;
+            _wallType = _wall.WallType;
+            _building = _level.Building;
+            _levelList = _building.LevelList;
+            _wallTypeList = _building.WallTypeList;
+            _tmpStartPoint = (Point2D)_wall.StartPoint.Clone();
+            _tmpEndPoint = (Point2D)_wall.EndPoint.Clone();
 
-        private void frmWallCrossSection_Load(object sender, EventArgs e)
-        {
+            tbName.Text = _wall.Name;
+            tbStartCoord.Text = _wall.StartPoint.PointText();
+            tbEndCoord.Text = _wall.EndPoint.PointText();
+            nudConcreteStartOffset.Value = _wall.ConcreteStartOffset;
+            nudConcreteEndOffset.Value = _wall.ConcreteEndOffset;
+            cbRewriteHeight.Checked = _wall.ReWriteHeight;
+            nudHeight.Value = _wall.Height;
+            tbVertSpacing.Text = _wall.WallType.VertSpacingSetting.SpacingText();
+            tbHorSpacing.Text = _wall.WallType.HorSpacingSetting.SpacingText();
+            nudReinforcementStartOffset.Value = _wall.ReiforcementStartOffset;
+            nudReinforcementEndOffset.Value = _wall.ReiforcementEndOffset;
+            int Counter=0;
+            foreach (Level levelItem in _levelList)
+            {
+                cbLevels.Items.Add(levelItem.Name);
+                if (ReferenceEquals(levelItem, _level)) { cbLevels.SelectedIndex = Counter;}
+                Counter++;
+            }
+            Counter = 0;
+            foreach (WallType wallTypeItem in _wallTypeList)
+            {
+                cbWallTypes.Items.Add(wallTypeItem.Name);
+                if (ReferenceEquals(wallTypeItem, _wallType)) { cbWallTypes.SelectedIndex = Counter; }
+                Counter++;
+            }
 
         }
 
         private void btnOK_Click(object sender, EventArgs e)
         {
-            //Обработчик нажатия ОК
-        }
+            _wall.Name = tbName.Text;
+            _wall.ConcreteStartOffset = nudConcreteStartOffset.Value;
+            _wall.ConcreteEndOffset = nudConcreteEndOffset.Value;
+            _wall.ReWriteHeight = cbRewriteHeight.Checked;
+            _wall.Height = nudHeight.Value;
+            _wall.ReiforcementStartOffset = nudReinforcementStartOffset.Value;
+            _wall.ReiforcementEndOffset = nudReinforcementEndOffset.Value;
 
-        private void btnCalc_Click(object sender, EventArgs e)
-        {
-            tcWall.SelectedIndex = 4;
-
-            string s;
-            s = "Толщина стены "+nUDThickness.Value+"мм" + Environment.NewLine;
-            s += "Высота стены " + nUDHeight.Value + "мм" + Environment.NewLine;
-            s += "Длина стены " + nUDLength.Value + "мм" + Environment.NewLine;
-            s += Environment.NewLine;
-
-            s += "Объем бетона " + nUDThickness.Value * nUDHeight.Value * nUDLength.Value/1000000000 + "куб.м" + Environment.NewLine;
-            s += Environment.NewLine;
-
-            decimal VertLen;
-            VertLen = nUDHeight.Value + nUDSlabThickness.Value + nUDVertLap.Value;
-            if (cbVertRoudLen.Checked) VertLen = nUDVertBaseLength.Value / (Math.Floor(nUDVertBaseLength.Value / VertLen));
-
-            s += "Длина вертикальных стержней " + VertLen + "мм" + Environment.NewLine;
-
-            decimal VertQuant, VertDistance;
-            VertQuant = 0;
-            VertDistance = nUDLength.Value - 2*nUDVertCover.Value;
-            if (cbVertAddLeft.Checked)
-            {
-                VertDistance -= (nUDVertQuantLeft.Value-1) * nUDVertStepLeft.Value + nUDVertStep.Value;
-                VertQuant += nUDVertQuantLeft.Value;
-            }
-
-            if (cbVertAddRight.Checked)
-            {
-                VertDistance -= (nUDVertQuantRight.Value-1) * nUDVertStepRight.Value + nUDVertStep.Value;
-                VertQuant += nUDVertQuantRight.Value;
-            }
-
-            VertQuant += Math.Floor(VertDistance / nUDVertStep.Value)+1;
-            s += "Количество вертикальных стержней 2*" +VertQuant +"=" + 2*VertQuant + "шт." + Environment.NewLine;
-
-            int HorQuant;
-            decimal HorDistance;
-            HorQuant = 0;
-            HorDistance = nUDHeight.Value - 2 * nUDHorCover.Value;
-            HorQuant += Convert.ToInt32(Math.Ceiling(HorDistance / nUDHorStep.Value)) + 1;
-            s += "Количество горизонтальных стержней 2*" + HorQuant +"=" +2*HorQuant + "шт." + Environment.NewLine;
-            s += Environment.NewLine;
-
-            s += "Суммарная длина вертикальных стержней " + 2*VertLen*VertQuant/1000 + "м" + Environment.NewLine;
-            s += "Суммарная длина горизонтальных стержней "
-                + 2*HorQuant*nUDLength.Value*Math.Round((1+nUDHorLap.Value/nUDHorBaseLenth.Value),3)/1000
-                + "м" + Environment.NewLine;
-            s += Environment.NewLine;
-
-            int ShearLeftQuant=0, ShearRightQuant=0;
-            if (cbAddEdgeLeft.Checked)
-            {
-                ShearLeftQuant = HorQuant;
-                s += "Количество обрамляющих стержней левого торца " + ShearLeftQuant + "шт." + Environment.NewLine;
-            }
-
-            if (cbAddEdgeRight.Checked)
-            {
-                ShearRightQuant = HorQuant;
-                s += "Количество обрамляющих стержней правого торца " + ShearRightQuant + "шт." + Environment.NewLine;
-            }
-
-            if (cbAddEdgeLeft.Checked || cbAddEdgeRight.Checked)
-            {
-                s += "Итого " + (ShearLeftQuant+ ShearRightQuant) + "шт." + Environment.NewLine;
-                s += Environment.NewLine;
-            }
-
-            int ShearQuant, ShearVertQuant, ShearHorQuant;
-            ShearVertQuant = Convert.ToInt32(Math.Floor(nUDHeight.Value / nUDShearVertStep.Value) + 1);
-            ShearHorQuant = Convert.ToInt32(Math.Floor(nUDLength.Value / nUDShearHorStep.Value) + 1);
-            ShearQuant = ShearVertQuant* ShearHorQuant;
-            s += "Количество поперечных стержней " + ShearVertQuant +"*" + ShearHorQuant + "=" + ShearQuant + "шт." + Environment.NewLine;
-
-
-            tbInfo.Text = s;
+            //_wall.Level = _levelList[cbLevels.SelectedIndex];
+            _wall.WallType = _wallTypeList[cbWallTypes.SelectedIndex];
+            _wall.StartPoint = _tmpStartPoint;
+            _wall.EndPoint = _tmpEndPoint;
 
         }
 
-        private void tbpReinforcement_Click(object sender, EventArgs e)
+        private void cbRewriteHeight_CheckedChanged(object sender, EventArgs e)
         {
-
+            nudHeight.Enabled = ((CheckBox)sender).Checked;
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void btnOpenings_Click(object sender, EventArgs e)
         {
-            frmOpenings OpeningsForm = new frmOpenings(OpeningList);
+            var OpeningsForm = new frmOpenings(_wall.OpeningList);
             OpeningsForm.ShowDialog();
+        }
+
+        private void btnStartPoint_Click(object sender, EventArgs e)
+        {
+            frmPoint frmPoint = new frmPoint(_tmpStartPoint);
+            frmPoint.ShowDialog();
+            if (frmPoint.DialogResult == DialogResult.OK) { tbStartCoord.Text = _tmpStartPoint.PointText(); }
+        }
+
+        private void btnEndPoint_Click(object sender, EventArgs e)
+        {
+            frmPoint frmPoint = new frmPoint(_tmpEndPoint);
+            frmPoint.ShowDialog();
+            if (frmPoint.DialogResult == DialogResult.OK) { tbEndCoord.Text = _tmpEndPoint.PointText(); }
         }
     }
 }

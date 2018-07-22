@@ -209,6 +209,7 @@
             this.MaximumSize = new System.Drawing.Size(680, 480);
             this.MinimumSize = new System.Drawing.Size(680, 480);
             this.Name = "frmOpenings";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Проемы";
             this.toolStrip1.ResumeLayout(false);
             this.toolStrip1.PerformLayout();

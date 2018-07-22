@@ -47,12 +47,13 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BLL\Building\Building.cs" />
-    <Compile Include="BLL\Building\BuildingSite.cs" />
-    <Compile Include="BLL\Building\Level.cs" />
+    <Compile Include="BLL\BuildingAndSite\Building.cs" />
+    <Compile Include="BLL\BuildingAndSite\BuildingSite.cs" />
+    <Compile Include="BLL\BuildingAndSite\Level.cs" />
     <Compile Include="BLL\Geometry\Point2D.cs" />
     <Compile Include="BLL\Geometry\Point3D.cs" />
     <Compile Include="BLL\Reinforcement\Bar.cs" />
+    <Compile Include="BLL\Service\DetailObjectList.cs" />
     <Compile Include="BLL\WallAndColumn\Column.cs" />
     <Compile Include="BLL\WallAndColumn\Opening.cs" />
     <Compile Include="BLL\Geometry\Path.cs" />
@@ -62,6 +63,24 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="UI\BarSpacingSettings.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\BarSpacingSettings.Designer.cs">
+      <DependentUpon>BarSpacingSettings.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\Forms\frmLevel.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\Forms\frmLevel.Designer.cs">
+      <DependentUpon>frmLevel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\Forms\frmPoint.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\Forms\frmPoint.Designer.cs">
+      <DependentUpon>frmPoint.cs</DependentUpon>
     </Compile>
     <Compile Include="UI\Opening.cs">
       <SubType>Form</SubType>
@@ -81,19 +100,40 @@
     <Compile Include="UI\DetailsList.Designer.cs">
       <DependentUpon>DetailsList.cs</DependentUpon>
     </Compile>
-    <Compile Include="WallCrossSectionCMd.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UI\Wall.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="UI\Wall.Designer.cs">
       <DependentUpon>Wall.cs</DependentUpon>
     </Compile>
+    <Compile Include="UI\WallType.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\WallType.Designer.cs">
+      <DependentUpon>WallType.cs</DependentUpon>
+    </Compile>
+    <Compile Include="WallCrossSectionCMd.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UI\Wall_old.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\Wall_old.Designer.cs">
+      <DependentUpon>Wall_old.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\BarSpacingSettings.resx">
+      <DependentUpon>BarSpacingSettings.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\Forms\frmLevel.resx">
+      <DependentUpon>frmLevel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\Forms\frmPoint.resx">
+      <DependentUpon>frmPoint.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UI\Opening.resx">
       <DependentUpon>Opening.cs</DependentUpon>
@@ -104,8 +144,14 @@
     <EmbeddedResource Include="UI\Wall.resx">
       <DependentUpon>Wall.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="UI\Wall_old.resx">
+      <DependentUpon>Wall_old.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="UI\DetailsList.resx">
       <DependentUpon>DetailsList.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\WallType.resx">
+      <DependentUpon>WallType.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

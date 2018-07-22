@@ -34,6 +34,8 @@
             this.tsbEdit = new System.Windows.Forms.ToolStripButton();
             this.tsbClone = new System.Windows.Forms.ToolStripButton();
             this.tsbDelete = new System.Windows.Forms.ToolStripButton();
+            this.tsbWalls = new System.Windows.Forms.ToolStripButton();
+            this.tsbWallTypes = new System.Windows.Forms.ToolStripButton();
             this.lvDetails = new System.Windows.Forms.ListView();
             this.btnClose = new System.Windows.Forms.Button();
             this.toolStrip1.SuspendLayout();
@@ -46,7 +48,9 @@
             this.tsbNew,
             this.tsbEdit,
             this.tsbClone,
-            this.tsbDelete});
+            this.tsbDelete,
+            this.tsbWalls,
+            this.tsbWallTypes});
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
             this.toolStrip1.Name = "toolStrip1";
             this.toolStrip1.Size = new System.Drawing.Size(834, 37);
@@ -60,7 +64,7 @@
             this.tsbNew.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbNew.Name = "tsbNew";
             this.tsbNew.Size = new System.Drawing.Size(34, 34);
-            this.tsbNew.Text = "toolStripButton1";
+            this.tsbNew.Text = "Добавить";
             this.tsbNew.Click += new System.EventHandler(this.tsbNew_Click);
             // 
             // tsbEdit
@@ -70,7 +74,8 @@
             this.tsbEdit.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbEdit.Name = "tsbEdit";
             this.tsbEdit.Size = new System.Drawing.Size(34, 34);
-            this.tsbEdit.Text = "toolStripButton2";
+            this.tsbEdit.Text = "Изменить";
+            this.tsbEdit.Click += new System.EventHandler(this.tsbEdit_Click);
             // 
             // tsbClone
             // 
@@ -79,7 +84,8 @@
             this.tsbClone.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbClone.Name = "tsbClone";
             this.tsbClone.Size = new System.Drawing.Size(34, 34);
-            this.tsbClone.Text = "toolStripButton3";
+            this.tsbClone.Text = "Клонировать";
+            this.tsbClone.Visible = false;
             // 
             // tsbDelete
             // 
@@ -88,7 +94,28 @@
             this.tsbDelete.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbDelete.Name = "tsbDelete";
             this.tsbDelete.Size = new System.Drawing.Size(34, 34);
-            this.tsbDelete.Text = "toolStripButton4";
+            this.tsbDelete.Text = "Удалить";
+            this.tsbDelete.Click += new System.EventHandler(this.tsbDelete_Click);
+            // 
+            // tsbWalls
+            // 
+            this.tsbWalls.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.tsbWalls.Image = ((System.Drawing.Image)(resources.GetObject("tsbWalls.Image")));
+            this.tsbWalls.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsbWalls.Name = "tsbWalls";
+            this.tsbWalls.Size = new System.Drawing.Size(34, 34);
+            this.tsbWalls.Text = "Стены";
+            this.tsbWalls.Click += new System.EventHandler(this.tsbWalls_Click);
+            // 
+            // tsbWallTypes
+            // 
+            this.tsbWallTypes.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.tsbWallTypes.Image = ((System.Drawing.Image)(resources.GetObject("tsbWallTypes.Image")));
+            this.tsbWallTypes.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsbWallTypes.Name = "tsbWallTypes";
+            this.tsbWallTypes.Size = new System.Drawing.Size(34, 34);
+            this.tsbWallTypes.Text = "Тип стены";
+            this.tsbWallTypes.Click += new System.EventHandler(this.tsbWallType_Click);
             // 
             // lvDetails
             // 
@@ -123,6 +150,7 @@
             this.Controls.Add(this.toolStrip1);
             this.MinimumSize = new System.Drawing.Size(850, 500);
             this.Name = "frmDetailList";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Стены";
             this.toolStrip1.ResumeLayout(false);
             this.toolStrip1.PerformLayout();
@@ -140,5 +168,7 @@
         private System.Windows.Forms.ToolStripButton tsbDelete;
         private System.Windows.Forms.ListView lvDetails;
         private System.Windows.Forms.Button btnClose;
+        private System.Windows.Forms.ToolStripButton tsbWalls;
+        private System.Windows.Forms.ToolStripButton tsbWallTypes;
     }
 }

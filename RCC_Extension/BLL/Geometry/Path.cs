@@ -53,9 +53,9 @@ namespace RCC_Extension.BLL.Geometry
             //Путь из одной линии по начальной точке, длине, углу.
             List<PathPart> PathParts = new List<PathPart>();
             this.PartList = PathParts;
-            Point2D EndPoint = new Point2D();
-            EndPoint.coord_X = StartPoint.coord_X + Convert.ToDecimal(Math.Cos(Convert.ToDouble(Angle))) * Length;
-            EndPoint.coord_Y = StartPoint.coord_Y + Convert.ToDecimal(Math.Sin(Convert.ToDouble(Angle))) * Length;
+            Point2D EndPoint = new Point2D(0,0);
+            EndPoint.Coord_X = StartPoint.Coord_X + Convert.ToDecimal(Math.Cos(Convert.ToDouble(Angle))) * Length;
+            EndPoint.Coord_Y = StartPoint.Coord_Y + Convert.ToDecimal(Math.Sin(Convert.ToDouble(Angle))) * Length;
             this.StartPoint = StartPoint;
             PathPart PathPart = new PathPart(EndPoint);
             PathParts.Add(PathPart);
@@ -69,8 +69,8 @@ namespace RCC_Extension.BLL.Geometry
 
         public decimal GetDistance(Point2D StartPoint)
         {
-            decimal dX = EndPoint.coord_X - StartPoint.coord_X;
-            decimal dY = EndPoint.coord_Y - StartPoint.coord_Y;
+            decimal dX = EndPoint.Coord_X - StartPoint.Coord_X;
+            decimal dY = EndPoint.Coord_Y - StartPoint.Coord_Y;
             return Convert.ToDecimal(Math.Sqrt(Convert.ToDouble((dX + dY))));
         }
 

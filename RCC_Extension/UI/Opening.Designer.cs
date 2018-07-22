@@ -150,7 +150,7 @@
             0});
             this.nudBottom.Location = new System.Drawing.Point(177, 125);
             this.nudBottom.Maximum = new decimal(new int[] {
-            500000,
+            10000,
             0,
             0,
             0});
@@ -229,6 +229,11 @@
             // 
             // nudHeight
             // 
+            this.nudHeight.Increment = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
             this.nudHeight.Location = new System.Drawing.Point(39, 77);
             this.nudHeight.Maximum = new decimal(new int[] {
             10000,
@@ -401,6 +406,7 @@
             this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.tabControl1);
             this.Name = "frmOpening";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Редактировать отверстие";
             this.tabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);

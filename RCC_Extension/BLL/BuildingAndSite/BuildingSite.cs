@@ -4,13 +4,18 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RCC_Extension.BLL.Building
+namespace RCC_Extension.BLL.BuildingAndSite
 {
     public class BuildingSite :ICloneable
     {
         public string Name { get; set; }
         public List<Building> BuildingList { get; set; }
 
+        public BuildingSite()
+        {
+            Name = "Мой объект";
+            BuildingList = new List<Building>();
+        }
         public object Clone()
         {
             return this.MemberwiseClone();

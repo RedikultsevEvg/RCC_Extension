@@ -29,7 +29,7 @@ namespace RCC_Extension.BLL.WallAndColumn
         public decimal GetArea()
         {
             //Возвращает площадь проема
-            return Math.Round(Width * Height/1000)/1000;
+            return Width * Height;
         }
 
         public object Clone()

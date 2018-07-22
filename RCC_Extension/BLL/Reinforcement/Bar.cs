@@ -15,7 +15,7 @@ namespace RCC_Extension.BLL.Reinforcement
         public Path Path { get; set; }
     }
 
-    public class BarSpacingSetting
+    public class BarSpacingSettings :ICloneable
     {
         public bool AddBarsLeft { get; set; }
         public bool AddBarsRight { get; set; }
@@ -27,8 +27,50 @@ namespace RCC_Extension.BLL.Reinforcement
         public Int32 AddBarsRightQuant { get; set; }
 
         public decimal MainSpacing { get; set; }
-
         public Bar Bar { get; set; }
+
+        public String SpacingText()
+        {
+            String S="Шаг ";
+            if (AddBarsLeft) S += Convert.ToString(AddBarsLeftQuant - 1) + "*" + Convert.ToString(AddBarsLeftSpacing) + ";";
+            S += Convert.ToString(MainSpacing) + ";";
+            if (AddBarsRight) S += Convert.ToString(AddBarsRightQuant - 1) + "*" + Convert.ToString(AddBarsRightSpacing) + ";";
+            return S;
+        }
+
+        public BarSpacingSettings(int Type)
+        {
+            switch (Type) //
+            {
+                case 1: //Вертикальная раскладка
+                    {
+                        AddBarsLeft = true;
+                        AddBarsLeftQuant = 2;
+                        AddBarsLeftSpacing = 100;
+                        AddBarsRight = true;
+                        AddBarsRightQuant = 2;
+                        AddBarsRightSpacing = 100;
+                        MainSpacing = 200;
+                        break;
+                    }
+                case 2: //Горизонтальная раскладка
+                    {
+                        AddBarsLeft = false;
+                        AddBarsLeftQuant = 2;
+                        AddBarsLeftSpacing = 100;
+                        AddBarsRight = false;
+                        AddBarsRightQuant = 2;
+                        AddBarsRightSpacing = 100;
+                        MainSpacing = 200;
+                        break;
+                    }
+            }
+        }
+
+        public object Clone()
+        {
+            return this.MemberwiseClone();
+        }
     }
 
     public class BarLineSpacing
@@ -36,16 +78,33 @@ namespace RCC_Extension.BLL.Reinforcement
         public Point2D StartPoint { get; set; }
         public Point2D EndPoint { get; set; }
 
+        public decimal StartOffset { get; set; }
+        public decimal EndOffset { get; set; }
+
         public bool AddStartBar { get; set; }
         public bool AddEndBar { get; set; }
 
-        public Int32 BarQuantity (BarSpacingSetting barSpacingSetting)
+        public BarSpacingSettings barSpacingSettings { get; set; }
+
+        public Int32 BarQuantity ()
         {
             Geometry2D geometry2D = new Geometry2D();
+            int Quant = 0;
             decimal length = geometry2D.GetDistance(this.StartPoint, this.EndPoint);
-            int Quant = Convert.ToInt16(Math.Floor(length / barSpacingSetting.MainSpacing));
-            if (barSpacingSetting.AddBarsLeft) Quant++;
-            if (barSpacingSetting.AddBarsRight) Quant++;
+            decimal mainLength = length - this.StartOffset-this.EndOffset;
+             
+            if (this.barSpacingSettings.AddBarsLeft)
+            {
+                Quant += this.barSpacingSettings.AddBarsLeftQuant;
+                mainLength -= this.barSpacingSettings.AddBarsLeftSpacing * this.barSpacingSettings.AddBarsLeftQuant;
+            }
+            if (this.barSpacingSettings.AddBarsRight)
+            {
+                Quant += this.barSpacingSettings.AddBarsRightQuant;
+                mainLength -= this.barSpacingSettings.AddBarsRightSpacing * this.barSpacingSettings.AddBarsRightQuant;
+            }
+
+            Quant += Convert.ToInt16(Math.Ceiling(mainLength / barSpacingSettings.MainSpacing));
             return Quant;
         }
     }
