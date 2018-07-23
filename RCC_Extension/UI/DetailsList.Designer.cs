@@ -38,7 +38,9 @@
             this.tsbWallTypes = new System.Windows.Forms.ToolStripButton();
             this.lvDetails = new System.Windows.Forms.ListView();
             this.btnClose = new System.Windows.Forms.Button();
+            this.fileSystemWatcher1 = new System.IO.FileSystemWatcher();
             this.toolStrip1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.fileSystemWatcher1)).BeginInit();
             this.SuspendLayout();
             // 
             // toolStrip1
@@ -140,6 +142,12 @@
             this.btnClose.UseVisualStyleBackColor = true;
             this.btnClose.Click += new System.EventHandler(this.btnClose_Click);
             // 
+            // fileSystemWatcher1
+            // 
+            this.fileSystemWatcher1.EnableRaisingEvents = true;
+            this.fileSystemWatcher1.SynchronizingObject = this;
+            this.fileSystemWatcher1.Changed += new System.IO.FileSystemEventHandler(this.fileSystemWatcher1_Changed);
+            // 
             // frmDetailList
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -154,6 +162,7 @@
             this.Text = "Стены";
             this.toolStrip1.ResumeLayout(false);
             this.toolStrip1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.fileSystemWatcher1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -170,5 +179,6 @@
         private System.Windows.Forms.Button btnClose;
         private System.Windows.Forms.ToolStripButton tsbWalls;
         private System.Windows.Forms.ToolStripButton tsbWallTypes;
+        private System.IO.FileSystemWatcher fileSystemWatcher1;
     }
 }

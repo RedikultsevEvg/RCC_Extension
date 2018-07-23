@@ -23,6 +23,14 @@ namespace RCC_Extension.BLL.BuildingAndSite
         public List<Wall> WallList { get; set; }
         public List<Column> ColumnList { get; set; }
 
+        public decimal ConcreteVolumeNetto()
+        {
+            decimal Sum = 0;
+            foreach (Wall wall in WallList)
+            { Sum += wall.GetConcreteVolumeNetto(); }
+            return Sum;
+        }
+
         public Level (Building building)
         {
             Name = "Этаж 1";

@@ -54,8 +54,8 @@ namespace RCC_Extension.UI
                 case "Levels": //Создаем окно для списка уровней
                     {
                         this.Text = "Уровни";
-                        List<String> _ColumnName = new List<String>() { "Наименование", "Отметка, м", "Высота, мм", "Перекрытие, мм", "Кол-во, шт." };
-                        List<Int32> _ColumnWidth = new List<Int32>() { 100, 100, 100, 100, 100 };
+                        List<String> _ColumnName = new List<String>() { "Наименование", "Отметка, м", "Высота, мм", "Перекрытие, мм", "Кол-во, шт.", "Объем ед.", "Объем всего" };
+                        List<Int32> _ColumnWidth = new List<Int32>() { 100, 100, 100, 100, 100, 100, 100 };
                         ColumnName.AddRange(_ColumnName);
                         ColumnWidth.AddRange(_ColumnWidth);
 
@@ -243,6 +243,8 @@ namespace RCC_Extension.UI
             Item.SubItems.Add(Convert.ToString(level.Height));
             Item.SubItems.Add(Convert.ToString(level.TopOffset));
             Item.SubItems.Add(Convert.ToString(level.Quant));
+            Item.SubItems.Add(Convert.ToString(Math.Round(level.ConcreteVolumeNetto()/1000000)/1000));
+            Item.SubItems.Add(Convert.ToString(Math.Round(level.ConcreteVolumeNetto()* level.Quant/1000000)/1000));
         }
         private void EditItemFromWall (ListViewItem Item, Wall wall)
         {
@@ -344,6 +346,11 @@ namespace RCC_Extension.UI
             this.Visible = false;
             DetailForm.ShowDialog();
             this.Visible = true;
+        }
+
+        private void fileSystemWatcher1_Changed(object sender, System.IO.FileSystemEventArgs e)
+        {
+
         }
     }
 }
