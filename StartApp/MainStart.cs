@@ -17,22 +17,24 @@ namespace StartApp
 {
     public partial class frmMain : Form
     {
-        private BuildingSite _buildingSite;
-        private Building _building;
-
-        public frmMain()
+         public frmMain()
         {
             InitializeComponent();
-            _buildingSite = new BuildingSite();
-            _building = new Building(_buildingSite);
+            ProgrammSettings.buildingSite = new BuildingSite();
+            ProgrammSettings.building = new Building(ProgrammSettings.buildingSite);
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
-            var detailObjectList = new DetailObjectList("Levels", _building, _building.LevelList, false);
+            var detailObjectList = new DetailObjectList("Levels", ProgrammSettings.building, ProgrammSettings.building.LevelList, false);
             frmDetailList DetailForm = new frmDetailList(detailObjectList);
             DetailForm.Show();
             
+        }
+
+        private void toolStripButton1_Click(object sender, EventArgs e)
+        {
+            ProgrammSettings.SaveProjectToFile("C:\\Repos\\Project.xml");
         }
     }
 }

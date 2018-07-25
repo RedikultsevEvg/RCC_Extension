@@ -54,6 +54,7 @@
     <Compile Include="BLL\Geometry\Point3D.cs" />
     <Compile Include="BLL\Reinforcement\Bar.cs" />
     <Compile Include="BLL\Service\DetailObjectList.cs" />
+    <Compile Include="BLL\Service\ProgrammSettings.cs" />
     <Compile Include="BLL\WallAndColumn\Column.cs" />
     <Compile Include="BLL\WallAndColumn\Opening.cs" />
     <Compile Include="BLL\Geometry\Path.cs" />

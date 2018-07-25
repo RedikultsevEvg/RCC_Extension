@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using RCC_Extension.BLL.Geometry;
 using RCC_Extension.BLL.WallAndColumn;
+using System.Xml;
 
 
 namespace RCC_Extension.BLL.BuildingAndSite
@@ -22,6 +23,20 @@ namespace RCC_Extension.BLL.BuildingAndSite
         public Point3D BasePoint { get; set; }
         public List<Wall> WallList { get; set; }
         public List<Column> ColumnList { get; set; }
+
+        public XmlElement SaveToXMLNode(XmlDocument xmlDocument)
+        {
+            XmlElement levelNode = xmlDocument.CreateElement("Level");
+            XmlAttribute nameAttr = xmlDocument.CreateAttribute("Name");
+            XmlText nameText = xmlDocument.CreateTextNode(Name);
+            nameAttr.AppendChild(nameText);
+            levelNode.Attributes.Append(nameAttr);
+            XmlAttribute floorLevelAttr = xmlDocument.CreateAttribute("FloorLevel");
+            XmlText floorLevelText = xmlDocument.CreateTextNode(Convert.ToString(FloorLevel));
+            floorLevelAttr.AppendChild(floorLevelText);
+            levelNode.Attributes.Append(floorLevelAttr);
+            return levelNode;
+        }
 
         public Level (Building building)
         {
