@@ -38,7 +38,6 @@
             this.tbName = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.tbpFormWork = new System.Windows.Forms.TabPage();
-            this.btnOpenings = new System.Windows.Forms.Button();
             this.nudHeight = new System.Windows.Forms.NumericUpDown();
             this.cbRewriteHeight = new System.Windows.Forms.CheckBox();
             this.nudConcreteEndOffset = new System.Windows.Forms.NumericUpDown();
@@ -162,7 +161,6 @@
             // 
             // tbpFormWork
             // 
-            this.tbpFormWork.Controls.Add(this.btnOpenings);
             this.tbpFormWork.Controls.Add(this.nudHeight);
             this.tbpFormWork.Controls.Add(this.cbRewriteHeight);
             this.tbpFormWork.Controls.Add(this.nudConcreteEndOffset);
@@ -182,16 +180,6 @@
             this.tbpFormWork.TabIndex = 1;
             this.tbpFormWork.Text = "Опалубка";
             this.tbpFormWork.UseVisualStyleBackColor = true;
-            // 
-            // btnOpenings
-            // 
-            this.btnOpenings.Location = new System.Drawing.Point(374, 145);
-            this.btnOpenings.Name = "btnOpenings";
-            this.btnOpenings.Size = new System.Drawing.Size(100, 23);
-            this.btnOpenings.TabIndex = 12;
-            this.btnOpenings.Text = "Проемы";
-            this.btnOpenings.UseVisualStyleBackColor = true;
-            this.btnOpenings.Click += new System.EventHandler(this.btnOpenings_Click);
             // 
             // nudHeight
             // 
@@ -549,7 +537,6 @@
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.NumericUpDown nudHeight;
         private System.Windows.Forms.CheckBox cbRewriteHeight;
-        private System.Windows.Forms.Button btnOpenings;
         private System.Windows.Forms.TextBox tbHorSpacing;
         private System.Windows.Forms.TextBox tbVertSpacing;
         private System.Windows.Forms.Label label11;

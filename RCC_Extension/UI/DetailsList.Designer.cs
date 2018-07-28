@@ -36,6 +36,8 @@
             this.tsbDelete = new System.Windows.Forms.ToolStripButton();
             this.tsbWalls = new System.Windows.Forms.ToolStripButton();
             this.tsbWallTypes = new System.Windows.Forms.ToolStripButton();
+            this.tsbOpeningTypes = new System.Windows.Forms.ToolStripButton();
+            this.tsbOpenings = new System.Windows.Forms.ToolStripButton();
             this.lvDetails = new System.Windows.Forms.ListView();
             this.btnClose = new System.Windows.Forms.Button();
             this.toolStrip1.SuspendLayout();
@@ -50,7 +52,9 @@
             this.tsbClone,
             this.tsbDelete,
             this.tsbWalls,
-            this.tsbWallTypes});
+            this.tsbWallTypes,
+            this.tsbOpeningTypes,
+            this.tsbOpenings});
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
             this.toolStrip1.Name = "toolStrip1";
             this.toolStrip1.Size = new System.Drawing.Size(834, 37);
@@ -117,6 +121,26 @@
             this.tsbWallTypes.Text = "Тип стены";
             this.tsbWallTypes.Click += new System.EventHandler(this.tsbWallType_Click);
             // 
+            // tsbOpeningTypes
+            // 
+            this.tsbOpeningTypes.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.tsbOpeningTypes.Image = ((System.Drawing.Image)(resources.GetObject("tsbOpeningTypes.Image")));
+            this.tsbOpeningTypes.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsbOpeningTypes.Name = "tsbOpeningTypes";
+            this.tsbOpeningTypes.Size = new System.Drawing.Size(34, 34);
+            this.tsbOpeningTypes.Text = "Типы отверстий";
+            this.tsbOpeningTypes.Click += new System.EventHandler(this.tsbOpeningTypes_Click);
+            // 
+            // tsbOpenings
+            // 
+            this.tsbOpenings.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.tsbOpenings.Image = ((System.Drawing.Image)(resources.GetObject("tsbOpenings.Image")));
+            this.tsbOpenings.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsbOpenings.Name = "tsbOpenings";
+            this.tsbOpenings.Size = new System.Drawing.Size(34, 34);
+            this.tsbOpenings.Text = "Отверстия";
+            this.tsbOpenings.Click += new System.EventHandler(this.tsbOpenings_Click);
+            // 
             // lvDetails
             // 
             this.lvDetails.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -170,5 +194,7 @@
         private System.Windows.Forms.Button btnClose;
         private System.Windows.Forms.ToolStripButton tsbWalls;
         private System.Windows.Forms.ToolStripButton tsbWallTypes;
+        private System.Windows.Forms.ToolStripButton tsbOpeningTypes;
+        private System.Windows.Forms.ToolStripButton tsbOpenings;
     }
 }

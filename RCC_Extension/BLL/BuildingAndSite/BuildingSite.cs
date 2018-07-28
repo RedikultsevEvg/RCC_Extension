@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
+using RCC_Extension.BLL.Service;
 
 namespace RCC_Extension.BLL.BuildingAndSite
 {
@@ -20,16 +21,13 @@ namespace RCC_Extension.BLL.BuildingAndSite
 
         public XmlElement SaveToXMLNode(XmlDocument xmlDocument)
         {
-            XmlElement SiteNode = xmlDocument.CreateElement("BuildingSite");
-            XmlAttribute NameAttr = xmlDocument.CreateAttribute("Name");
-            XmlText NameText = xmlDocument.CreateTextNode(Name);
-            NameAttr.AppendChild(NameText);
-            SiteNode.Attributes.Append(NameAttr);
+            XmlElement xmlNode = xmlDocument.CreateElement("BuildingSite");
+            XMLOperations.AddAttribute(xmlNode, xmlDocument, "Name", Name);
             foreach (Building obj in BuildingList)
             {
-                SiteNode.AppendChild(obj.SaveToXMLNode(xmlDocument));
+                xmlNode.AppendChild(obj.SaveToXMLNode(xmlDocument));
             }
-            return SiteNode;
+            return xmlNode;
         }
 
         public object Clone()

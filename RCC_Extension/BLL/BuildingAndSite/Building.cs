@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using RCC_Extension.BLL.WallAndColumn;
+using RCC_Extension.BLL.Service;
 using System.Xml;
 
 
@@ -14,27 +15,35 @@ namespace RCC_Extension.BLL.BuildingAndSite
         public string Name { get; set; }
         public List<Level> LevelList { get; set; }
         public List<WallType> WallTypeList { get; set; }
+        public List<OpeningType> OpeningTypeList { get; set; }
 
         public Building(BuildingSite buildingSite)
         {         
             Name = "Мое здание";
             LevelList = new List<Level>();
             WallTypeList = new List<WallType>();
+            OpeningTypeList = new List<OpeningType>();
             buildingSite.BuildingList.Add(this);
         }
 
         public XmlElement SaveToXMLNode(XmlDocument xmlDocument)
         {
-            XmlElement BuildingNode = xmlDocument.CreateElement("Building");
-            XmlAttribute NameAttr = xmlDocument.CreateAttribute("Name");
-            XmlText NameText = xmlDocument.CreateTextNode(Name);
-            NameAttr.AppendChild(NameText);
-            BuildingNode.Attributes.Append(NameAttr);
+            XmlElement xmlNode = xmlDocument.CreateElement("Building");
+            XMLOperations.AddAttribute(xmlNode, xmlDocument, "Name", Name);
+            foreach (WallType obj in WallTypeList)
+            {
+                xmlNode.AppendChild(obj.SaveToXMLNode(xmlDocument));
+            }
+            foreach (OpeningType obj in OpeningTypeList)
+            {
+                xmlNode.AppendChild(obj.SaveToXMLNode(xmlDocument));
+            }
+
             foreach (Level obj in LevelList)
             {
-                BuildingNode.AppendChild(obj.SaveToXMLNode(xmlDocument));
+                xmlNode.AppendChild(obj.SaveToXMLNode(xmlDocument));
             }
-            return BuildingNode;
+            return xmlNode;
         }
 
         public object Clone()

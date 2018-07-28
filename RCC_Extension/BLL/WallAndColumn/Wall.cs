@@ -5,6 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using RCC_Extension.BLL.BuildingAndSite;
 using RCC_Extension.BLL.Geometry;
+using RCC_Extension.BLL.Service;
+using System.Xml;
 
 
 namespace RCC_Extension.BLL.WallAndColumn
@@ -15,7 +17,7 @@ namespace RCC_Extension.BLL.WallAndColumn
         public WallType WallType { get; set; }
         
         public Level Level { get; set; }
-        public List<Opening> OpeningList { get; set; }
+        public List<OpeningPlacing> OpeningPlacingList { get; set; } //Поменять на OpeningPlacing
         public Point2D StartPoint { get; set; }
         public Point2D EndPoint { get; set; }
 
@@ -63,9 +65,9 @@ namespace RCC_Extension.BLL.WallAndColumn
         {
             decimal Area = 0;
             //Возвращает суммарную площадь всех проемов
-            foreach (Opening _Opening in OpeningList)
+            foreach (OpeningPlacing _openingPlacing in OpeningPlacingList)
             {
-                Area += _Opening.GetArea();
+                Area += _openingPlacing.OpeningType.GetArea();
             }
             return Area;
         }
@@ -79,6 +81,35 @@ namespace RCC_Extension.BLL.WallAndColumn
         {
             decimal Volume = GetConcreteAreaNetto() * WallType.Thickness;
             return Volume;
+        }
+
+        public XmlElement SaveToXMLNode(XmlDocument xmlDocument)
+        {
+            XmlElement xmlNode = xmlDocument.CreateElement("Wall");
+            XMLOperations.AddAttribute(xmlNode, xmlDocument, "Name", Name);
+            int counter = 0;
+            foreach (WallType wallTypeItem in Level.Building.WallTypeList)
+            {
+                if (ReferenceEquals(wallTypeItem, WallType))
+                { XMLOperations.AddAttribute(xmlNode, xmlDocument, "WallTypeNumber", Convert.ToString(counter)); }
+                counter ++;
+            }
+
+            XMLOperations.AddAttribute(xmlNode, xmlDocument, "ReWriteHeight", Convert.ToString(ReWriteHeight));
+            XMLOperations.AddAttribute(xmlNode, xmlDocument, "Height", Convert.ToString(Height));
+            XMLOperations.AddAttribute(xmlNode, xmlDocument, "ConcreteStartOffset", Convert.ToString(ConcreteStartOffset));
+            XMLOperations.AddAttribute(xmlNode, xmlDocument, "ConcreteEndOffset", Convert.ToString(ConcreteEndOffset));
+            XMLOperations.AddAttribute(xmlNode, xmlDocument, "ReiforcementStartOffset", Convert.ToString(ReiforcementStartOffset));
+            XMLOperations.AddAttribute(xmlNode, xmlDocument, "ReiforcementEndOffset", Convert.ToString(ReiforcementEndOffset));
+            XmlElement StartPointNode = StartPoint.SaveToXMLNode(xmlDocument, "StartPoint");
+            xmlNode.AppendChild(StartPointNode);
+            XmlElement EndPointNode = EndPoint.SaveToXMLNode(xmlDocument, "EndPoint");
+            xmlNode.AppendChild(EndPointNode);
+            foreach (OpeningPlacing obj in OpeningPlacingList)
+            {
+                xmlNode.AppendChild(obj.SaveToXMLNode(xmlDocument));
+            }
+            return xmlNode;
         }
 
         //Конструктор стены по уровню (выбирается первый из списка или создается)
@@ -100,7 +131,7 @@ namespace RCC_Extension.BLL.WallAndColumn
             ReiforcementEndOffset = 0;
             Level = level;
             WallType = wallType;
-            OpeningList = new List<Opening>();
+            OpeningPlacingList = new List<OpeningPlacing>();
             level.WallList.Add(this);
 
         }

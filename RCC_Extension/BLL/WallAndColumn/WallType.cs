@@ -5,6 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using RCC_Extension.BLL.BuildingAndSite;
 using RCC_Extension.BLL.Reinforcement;
+using RCC_Extension.BLL.Service;
+using System.Xml;
 
 namespace RCC_Extension.BLL.WallAndColumn
 {
@@ -33,6 +35,22 @@ namespace RCC_Extension.BLL.WallAndColumn
         public decimal GetHeight(Level level)
         {
             return level.Height + level.TopOffset + TopOffset + BottomOffset;
+        }
+
+        public XmlElement SaveToXMLNode(XmlDocument xmlDocument)
+        {
+            XmlElement xmlNode = xmlDocument.CreateElement("WallType");
+            XMLOperations.AddAttribute(xmlNode, xmlDocument, "Name", Name);
+            XMLOperations.AddAttribute(xmlNode, xmlDocument, "Thickness", Convert.ToString(Thickness));
+            XMLOperations.AddAttribute(xmlNode, xmlDocument, "TopOffset", Convert.ToString(TopOffset));
+            XMLOperations.AddAttribute(xmlNode, xmlDocument, "BottomOffset", Convert.ToString(BottomOffset));
+            XMLOperations.AddAttribute(xmlNode, xmlDocument, "BarTopOffset", Convert.ToString(BarTopOffset));
+            XMLOperations.AddAttribute(xmlNode, xmlDocument, "RoundVertToBaseLength", Convert.ToString(RoundVertToBaseLength));
+            XMLOperations.AddAttribute(xmlNode, xmlDocument, "VertBaseLength", Convert.ToString(VertBaseLength));
+            XMLOperations.AddAttribute(xmlNode, xmlDocument, "HorLapping", Convert.ToString(HorLapping));
+            XMLOperations.AddAttribute(xmlNode, xmlDocument, "HorLappingLength", Convert.ToString(HorLappingLength));
+            XMLOperations.AddAttribute(xmlNode, xmlDocument, "HorBaseLength", Convert.ToString(HorBaseLength));
+            return xmlNode;
         }
 
         public WallType(Building building)

@@ -11,33 +11,28 @@ using RCC_Extension.BLL.WallAndColumn;
 
 namespace RCC_Extension.UI
 {
-    public partial class frmOpening : Form
+    public partial class frmOpeningType : Form
     {
-        private Opening _Opening;
+        private OpeningType _Opening;
 
-        public frmOpening(Opening value)
+        public frmOpeningType(OpeningType value)
         {
             InitializeComponent();
-
             _Opening = value;
-
             tbName.Text = _Opening.Name;
             tbPurpose.Text = _Opening.Purpose;
             nudHeight.Value = _Opening.Height;
             nudWidth.Value = _Opening.Width;
-            nudLeft.Value = _Opening.Left;
             nudBottom.Value = _Opening.Bottom;
-
             cbAddEdgeLeft.Checked = _Opening.AddEdgeLeft;
             cbAddEdgeRight.Checked = _Opening.AddEdgeRight;
             cbAddEdgeTop.Checked = _Opening.AddEdgeTop;
             cbAddEdgeBottom.Checked = _Opening.AddEdgeBottom;
-
             cbMoveVert.Checked = _Opening.MoveVert;
             nudQuantVertLeft.Value = _Opening.QuantVertLeft;
             nudQuantVertRight.Value = _Opening.QuantVertRight;
         }
-
+        
         private void cbMoveVert_CheckedChanged(object sender, EventArgs e)
         {
             lbQuantVertLeft.Enabled = cbMoveVert.Checked;
@@ -52,14 +47,11 @@ namespace RCC_Extension.UI
             _Opening.Purpose = tbPurpose.Text;
             _Opening.Height = nudHeight.Value;
             _Opening.Width = nudWidth.Value;
-            _Opening.Left = nudLeft.Value;
             _Opening.Bottom = nudBottom.Value;
-
             _Opening.AddEdgeLeft = cbAddEdgeLeft.Checked;
             _Opening.AddEdgeRight = cbAddEdgeRight.Checked;
             _Opening.AddEdgeTop = cbAddEdgeTop.Checked;
             _Opening.AddEdgeBottom = cbAddEdgeBottom.Checked;
-
             _Opening.MoveVert = cbMoveVert.Checked;
             _Opening.QuantVertLeft = Convert.ToInt32(nudQuantVertLeft.Value);
             _Opening.QuantVertRight = Convert.ToInt32(nudQuantVertRight.Value);

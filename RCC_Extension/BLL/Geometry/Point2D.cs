@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using RCC_Extension.BLL.Service;
+using System.Xml;
 
 namespace RCC_Extension.BLL.Geometry
 
@@ -23,6 +25,22 @@ namespace RCC_Extension.BLL.Geometry
             EndPoint.Coord_X = this.Coord_X + Convert.ToDecimal(Math.Cos(Convert.ToDouble(Angle))) * Length;
             EndPoint.Coord_Y = this.Coord_Y + Convert.ToDecimal(Math.Sin(Convert.ToDouble(Angle))) * Length;
             return EndPoint;
+        }
+
+        public XmlElement SaveToXMLNode(XmlDocument xmlDocument)
+        {
+            XmlElement xmlNode = xmlDocument.CreateElement("Point2D");
+            XMLOperations.AddAttribute(xmlNode, xmlDocument, "Coord_X", Convert.ToString(Coord_X));
+            XMLOperations.AddAttribute(xmlNode, xmlDocument, "Coord_Y", Convert.ToString(Coord_Y));
+            return xmlNode;
+        }
+
+        public XmlElement SaveToXMLNode(XmlDocument xmlDocument, String NodeName)
+        {
+            XmlElement xmlNode = xmlDocument.CreateElement(NodeName);
+            XMLOperations.AddAttribute(xmlNode, xmlDocument, "Coord_X", Convert.ToString(Coord_X));
+            XMLOperations.AddAttribute(xmlNode, xmlDocument, "Coord_Y", Convert.ToString(Coord_Y));
+            return xmlNode;
         }
 
         public Point2D(decimal coord_X, decimal coord_Y)

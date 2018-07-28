@@ -1,6 +1,6 @@
 ﻿namespace RCC_Extension.UI
 {
-    partial class frmOpening
+    partial class frmOpeningType
     {
         /// <summary>
         /// Required designer variable.
@@ -36,8 +36,6 @@
             this.label7 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.nudBottom = new System.Windows.Forms.NumericUpDown();
-            this.label3 = new System.Windows.Forms.Label();
-            this.nudLeft = new System.Windows.Forms.NumericUpDown();
             this.label2 = new System.Windows.Forms.Label();
             this.nudWidth = new System.Windows.Forms.NumericUpDown();
             this.label1 = new System.Windows.Forms.Label();
@@ -57,7 +55,6 @@
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudBottom)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nudLeft)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudWidth)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudHeight)).BeginInit();
             this.tabPage2.SuspendLayout();
@@ -86,8 +83,6 @@
             this.tabPage1.Controls.Add(this.label7);
             this.tabPage1.Controls.Add(this.label4);
             this.tabPage1.Controls.Add(this.nudBottom);
-            this.tabPage1.Controls.Add(this.label3);
-            this.tabPage1.Controls.Add(this.nudLeft);
             this.tabPage1.Controls.Add(this.label2);
             this.tabPage1.Controls.Add(this.nudWidth);
             this.tabPage1.Controls.Add(this.label1);
@@ -135,7 +130,7 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(161, 109);
+            this.label4.Location = new System.Drawing.Point(161, 61);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(111, 13);
             this.label4.TabIndex = 7;
@@ -148,7 +143,7 @@
             0,
             0,
             0});
-            this.nudBottom.Location = new System.Drawing.Point(177, 125);
+            this.nudBottom.Location = new System.Drawing.Point(177, 77);
             this.nudBottom.Maximum = new decimal(new int[] {
             10000,
             0,
@@ -158,33 +153,6 @@
             this.nudBottom.Size = new System.Drawing.Size(80, 20);
             this.nudBottom.TabIndex = 6;
             this.nudBottom.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(161, 61);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(112, 13);
-            this.label3.TabIndex = 5;
-            this.label3.Text = "Привязка слева, мм";
-            // 
-            // nudLeft
-            // 
-            this.nudLeft.Increment = new decimal(new int[] {
-            10,
-            0,
-            0,
-            0});
-            this.nudLeft.Location = new System.Drawing.Point(177, 77);
-            this.nudLeft.Maximum = new decimal(new int[] {
-            500000,
-            0,
-            0,
-            0});
-            this.nudLeft.Name = "nudLeft";
-            this.nudLeft.Size = new System.Drawing.Size(80, 20);
-            this.nudLeft.TabIndex = 4;
-            this.nudLeft.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             // 
             // label2
             // 
@@ -397,7 +365,7 @@
             this.btnOK.UseVisualStyleBackColor = true;
             this.btnOK.Click += new System.EventHandler(this.btnOK_Click);
             // 
-            // frmOpening
+            // frmOpeningType
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -405,14 +373,13 @@
             this.Controls.Add(this.btnOK);
             this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.tabControl1);
-            this.Name = "frmOpening";
+            this.Name = "frmOpeningType";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-            this.Text = "Редактировать отверстие";
+            this.Text = "Тип отверстия";
             this.tabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
             this.tabPage1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudBottom)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nudLeft)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudWidth)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudHeight)).EndInit();
             this.tabPage2.ResumeLayout(false);
@@ -434,8 +401,6 @@
         private System.Windows.Forms.TabPage tabPage2;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.NumericUpDown nudBottom;
-        private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.NumericUpDown nudLeft;
         private System.Windows.Forms.Label lbQuantVertLeft;
         private System.Windows.Forms.NumericUpDown nudQuantVertLeft;
         private System.Windows.Forms.CheckBox cbMoveVert;

@@ -55,6 +55,7 @@
     <Compile Include="BLL\Reinforcement\Bar.cs" />
     <Compile Include="BLL\Service\DetailObjectList.cs" />
     <Compile Include="BLL\Service\ProgrammSettings.cs" />
+    <Compile Include="BLL\Service\XMLOperations.cs" />
     <Compile Include="BLL\WallAndColumn\Column.cs" />
     <Compile Include="BLL\WallAndColumn\Opening.cs" />
     <Compile Include="BLL\Geometry\Path.cs" />
@@ -77,23 +78,23 @@
     <Compile Include="UI\Forms\frmLevel.Designer.cs">
       <DependentUpon>frmLevel.cs</DependentUpon>
     </Compile>
+    <Compile Include="UI\Forms\frmOpening.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\Forms\frmOpening.Designer.cs">
+      <DependentUpon>frmOpening.cs</DependentUpon>
+    </Compile>
     <Compile Include="UI\Forms\frmPoint.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="UI\Forms\frmPoint.Designer.cs">
       <DependentUpon>frmPoint.cs</DependentUpon>
     </Compile>
-    <Compile Include="UI\Opening.cs">
+    <Compile Include="UI\frmOpeningType.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="UI\Opening.Designer.cs">
-      <DependentUpon>Opening.cs</DependentUpon>
-    </Compile>
-    <Compile Include="UI\Openings.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="UI\Openings.Designer.cs">
-      <DependentUpon>Openings.cs</DependentUpon>
+    <Compile Include="UI\frmOpeningType.Designer.cs">
+      <DependentUpon>frmOpeningType.cs</DependentUpon>
     </Compile>
     <Compile Include="UI\DetailsList.cs">
       <SubType>Form</SubType>
@@ -113,14 +114,11 @@
     <Compile Include="UI\WallType.Designer.cs">
       <DependentUpon>WallType.cs</DependentUpon>
     </Compile>
+    <Compile Include="UI\WPF\frmOpening.xaml.cs">
+      <DependentUpon>frmOpening.xaml</DependentUpon>
+    </Compile>
     <Compile Include="WallCrossSectionCMd.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="UI\Wall_old.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="UI\Wall_old.Designer.cs">
-      <DependentUpon>Wall_old.cs</DependentUpon>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\Resources.resx">
@@ -133,20 +131,17 @@
     <EmbeddedResource Include="UI\Forms\frmLevel.resx">
       <DependentUpon>frmLevel.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="UI\Forms\frmOpening.resx">
+      <DependentUpon>frmOpening.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="UI\Forms\frmPoint.resx">
       <DependentUpon>frmPoint.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="UI\Opening.resx">
-      <DependentUpon>Opening.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="UI\Openings.resx">
-      <DependentUpon>Openings.cs</DependentUpon>
+    <EmbeddedResource Include="UI\frmOpeningType.resx">
+      <DependentUpon>frmOpeningType.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UI\Wall.resx">
       <DependentUpon>Wall.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="UI\Wall_old.resx">
-      <DependentUpon>Wall_old.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UI\DetailsList.resx">
       <DependentUpon>DetailsList.cs</DependentUpon>
@@ -154,6 +149,12 @@
     <EmbeddedResource Include="UI\WallType.resx">
       <DependentUpon>WallType.cs</DependentUpon>
     </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="UI\WPF\frmOpening.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

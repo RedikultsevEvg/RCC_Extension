@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using RCC_Extension.BLL.Geometry;
 using RCC_Extension.BLL.WallAndColumn;
+using RCC_Extension.BLL.Service;
 using System.Xml;
 
 
@@ -24,18 +25,30 @@ namespace RCC_Extension.BLL.BuildingAndSite
         public List<Wall> WallList { get; set; }
         public List<Column> ColumnList { get; set; }
 
+        public decimal GetConcreteVolumeNetto()
+        {
+            decimal volume = 0;
+            foreach (Wall obj in WallList)
+            {
+                volume += obj.GetConcreteVolumeNetto();
+            }
+            return volume;
+
+        }
+
         public XmlElement SaveToXMLNode(XmlDocument xmlDocument)
         {
-            XmlElement levelNode = xmlDocument.CreateElement("Level");
-            XmlAttribute nameAttr = xmlDocument.CreateAttribute("Name");
-            XmlText nameText = xmlDocument.CreateTextNode(Name);
-            nameAttr.AppendChild(nameText);
-            levelNode.Attributes.Append(nameAttr);
-            XmlAttribute floorLevelAttr = xmlDocument.CreateAttribute("FloorLevel");
-            XmlText floorLevelText = xmlDocument.CreateTextNode(Convert.ToString(FloorLevel));
-            floorLevelAttr.AppendChild(floorLevelText);
-            levelNode.Attributes.Append(floorLevelAttr);
-            return levelNode;
+            XmlElement xmlNode = xmlDocument.CreateElement("Level");
+            XMLOperations.AddAttribute(xmlNode, xmlDocument, "Name", Name);
+            XMLOperations.AddAttribute(xmlNode, xmlDocument, "FloorLevel", Convert.ToString(FloorLevel));
+            XMLOperations.AddAttribute(xmlNode, xmlDocument, "Height", Convert.ToString(Height));
+            XMLOperations.AddAttribute(xmlNode, xmlDocument, "TopOffset", Convert.ToString(TopOffset));
+            XMLOperations.AddAttribute(xmlNode, xmlDocument, "Quant", Convert.ToString(Quant));
+            foreach (Wall obj in WallList)
+            {
+                xmlNode.AppendChild(obj.SaveToXMLNode(xmlDocument));
+            }
+            return xmlNode;
         }
 
         public Level (Building building)

@@ -16,7 +16,7 @@ namespace RCC_Extension
             //Database acadDB = acadDoc.Database;
             //Editor acadEd = acadDoc.Editor;
 
-            frmWallCrossSection DialogForm = new frmWallCrossSection();
+            //frmWallCrossSection DialogForm = new frmWallCrossSection();
             //DialogResult dialogResult = Application.ShowModalDialog(DialogForm);
             //DialogForm.Dispose;
         }

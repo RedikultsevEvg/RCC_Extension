@@ -87,11 +87,7 @@ namespace RCC_Extension.UI
             nudHeight.Enabled = ((CheckBox)sender).Checked;
         }
 
-        private void btnOpenings_Click(object sender, EventArgs e)
-        {
-            var OpeningsForm = new frmOpenings(_wall.OpeningList);
-            OpeningsForm.ShowDialog();
-        }
+
 
         private void btnStartPoint_Click(object sender, EventArgs e)
         {

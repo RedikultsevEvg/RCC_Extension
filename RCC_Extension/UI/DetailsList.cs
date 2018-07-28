@@ -41,7 +41,7 @@ namespace RCC_Extension.UI
 
             switch (_formType) //
             {
-                case "Buildings": //Создаем окно для списка уровней
+                case "Buildings": //Создаем окно для списка зданий
                     {
                         this.Text = "Здания";
                         List<String> _ColumnName = new List<String>() { "Наименование"};
@@ -54,8 +54,8 @@ namespace RCC_Extension.UI
                 case "Levels": //Создаем окно для списка уровней
                     {
                         this.Text = "Уровни";
-                        List<String> _ColumnName = new List<String>() { "Наименование", "Отметка, м", "Высота, мм", "Перекрытие, мм", "Кол-во, шт." };
-                        List<Int32> _ColumnWidth = new List<Int32>() { 100, 100, 100, 100, 100 };
+                        List<String> _ColumnName = new List<String>() { "Наименование", "Отметка, м", "Высота, мм", "Перекрытие, мм", "Кол-во, шт.", "V_нетто (на этаж)", "V_нетто (всего)" };
+                        List<Int32> _ColumnWidth = new List<Int32>() { 100, 100, 100, 100, 100, 150, 150 };
                         ColumnName.AddRange(_ColumnName);
                         ColumnWidth.AddRange(_ColumnWidth);
 
@@ -64,10 +64,53 @@ namespace RCC_Extension.UI
                         {
                             NewItemFromLevel(level);
                         }
+                        tsbWalls.Visible = true;
+                        tsbWallTypes.Visible = true;
+                        tsbOpeningTypes.Visible = true;
+                        tsbOpenings.Visible = false;
                         break;
                     }
+                //Create window for Openings
+                case "OpeningPlacings":
+                    {
+                        this.Text = "Проемы";
+                        List<String> _ColumnName = new List<String>() { "Марка", "Назначение", "Ширина, мм", "Высота, мм", "Привязка от начала, мм", "Привязка снизу, мм", "S_нетто, кв.м" };
+                        List<Int32> _ColumnWidth = new List<Int32>() { 200, 80, 80, 80, 150, 150, 80};
+                        ColumnName.AddRange(_ColumnName);
+                        ColumnWidth.AddRange(_ColumnWidth);
 
-                case "Walls": //Создаем окно для списка стен
+                        var openingPlacingList = (List<OpeningPlacing>)_objectList;
+                        foreach (OpeningPlacing openingPlacing in openingPlacingList)
+                        {
+                            NewItemFromOpeningPlacing(openingPlacing);
+                        }
+                        tsbWalls.Visible = false;
+                        tsbWallTypes.Visible = false;
+                        tsbOpeningTypes.Visible = false;
+                        tsbOpenings.Visible = false;
+                        break;
+                    }
+                //Create window for OpeningType
+                case "OpeningTypes": 
+                    {
+                        this.Text = "Типы проемов";
+                        List<String> _ColumnName = new List<String>() { "Марка", "Назначение", "Ширина, мм", "Высота, мм", "Привязка снизу, мм", "Привязка сверху, мм", "Площадь, кв.м" };
+                        List<Int32> _ColumnWidth = new List<Int32>() { 150, 80, 80, 80, 100, 100, 100 };
+                        ColumnName.AddRange(_ColumnName);
+                        ColumnWidth.AddRange(_ColumnWidth);
+                        var openingTypeList = (List<OpeningType>)_objectList;
+                        foreach (OpeningType openingType in openingTypeList)
+                        {
+                            NewItemFromOpeningType(openingType);
+                        }
+                        tsbWalls.Visible = false;
+                        tsbWallTypes.Visible = false;
+                        tsbOpeningTypes.Visible = false;
+                        tsbOpenings.Visible = false;
+                        break;
+                    }
+                //Создаем окно для списка стен
+                case "Walls": 
                 {
                         this.Text = "Стены";
                         List<String> _ColumnName = new List<String>() { "Марка", "Тип", "Толщина, мм", "Высота, мм", "Длина, мм", "S_брутто, кв.м", "S_нетто, кв.м", "V_брутто, куб.м", "V_нетто, куб.м"};
@@ -83,6 +126,8 @@ namespace RCC_Extension.UI
 
                         tsbWalls.Visible = false;
                         tsbWallTypes.Visible = false;
+                        tsbOpeningTypes.Visible = false;
+                        tsbOpenings.Visible = true;
                         break;
                 }
 
@@ -100,6 +145,8 @@ namespace RCC_Extension.UI
                         }
                         tsbWalls.Visible = false;
                         tsbWallTypes.Visible = false;
+                        tsbOpeningTypes.Visible = false;
+                        tsbOpenings.Visible = false;
                         break;
                     }
             }
@@ -134,15 +181,26 @@ namespace RCC_Extension.UI
             {
                 case "Buildings":
                     {
-                        //Добавил комментарий
-                        //Еще один комментарий для гита
-                        //Next comment
                         break;
                     }
                 case "Levels":
                     {
                         Level level = new Level((Building)_parentObject);
                         NewItemFromLevel(level);
+                        break;
+                    }
+                //Add new Opening
+                case "OpeningPlacings":
+                    {
+                        OpeningPlacing openingPlacing = new OpeningPlacing((Wall)_parentObject);
+                        NewItemFromOpeningPlacing(openingPlacing);
+                        break;
+                    }
+                //Add new OpeningType
+                case "OpeningTypes":
+                    {
+                        OpeningType openingType = new OpeningType((Building)_parentObject);
+                        NewItemFromOpeningType(openingType);
                         break;
                     }
                 case "Walls":
@@ -182,6 +240,34 @@ namespace RCC_Extension.UI
                         }
                         break;
                     }
+                case "OpeningPlacings":
+                    {
+                        var OpeningPlacingList = (List<OpeningPlacing>)_objectList;
+                        foreach (int i in lvDetails.SelectedIndices)
+                        {
+                            var frmOpening = new frmOpening(OpeningPlacingList[i]);
+                            frmOpening.ShowDialog();
+                            if (frmOpening.DialogResult == DialogResult.OK)
+                            {
+                                EditItemFromOpeningPlacing(lvDetails.Items[i], OpeningPlacingList[i]);
+                            }
+                        }
+                        break;
+                    }
+                case "OpeningTypes":
+                    {
+                        var objList = (List<OpeningType>)_objectList;
+                        foreach (int i in lvDetails.SelectedIndices)
+                        {
+                            var frmObj = new frmOpeningType(objList[i]);
+                            frmObj.ShowDialog();
+                            if (frmObj.DialogResult == DialogResult.OK)
+                            {
+                                EditItemFromOpeningType(lvDetails.Items[i], objList[i]);
+                            }
+                        }
+                        break;
+                    }
                 case "Walls":
                     {
                         var wallList = (List<Wall>)_objectList;
@@ -212,11 +298,26 @@ namespace RCC_Extension.UI
                     }
             }
         }
-
+        //Add New ListView Item from Level instance
         private ListViewItem NewItemFromLevel(Level obj)
         {
             ListViewItem NewItem = new ListViewItem();
             EditItemFromLevel(NewItem, obj);
+            lvDetails.Items.Add(NewItem);
+            return NewItem;
+        }
+        private ListViewItem NewItemFromOpeningPlacing(OpeningPlacing obj)
+        {
+            ListViewItem NewItem = new ListViewItem();
+            EditItemFromOpeningPlacing(NewItem, obj);
+            lvDetails.Items.Add(NewItem);
+            return NewItem;
+        }
+        //Add New ListView Item from OpeningType instance
+        private ListViewItem NewItemFromOpeningType(OpeningType obj)
+        {
+            ListViewItem NewItem = new ListViewItem();
+            EditItemFromOpeningType(NewItem, obj);
             lvDetails.Items.Add(NewItem);
             return NewItem;
         }
@@ -234,7 +335,7 @@ namespace RCC_Extension.UI
             lvDetails.Items.Add(NewItem);
             return NewItem;
         }
-
+        //Edit item of listView from Level
         private void EditItemFromLevel(ListViewItem Item, Level level)
         {
             Item.SubItems.Clear();
@@ -243,6 +344,30 @@ namespace RCC_Extension.UI
             Item.SubItems.Add(Convert.ToString(level.Height));
             Item.SubItems.Add(Convert.ToString(level.TopOffset));
             Item.SubItems.Add(Convert.ToString(level.Quant));
+            Item.SubItems.Add(Convert.ToString(Math.Round(level.GetConcreteVolumeNetto()/1000000)/1000));
+            Item.SubItems.Add(Convert.ToString(Math.Round(level.GetConcreteVolumeNetto() * level.Quant / 1000000) / 1000));
+        }
+        private void EditItemFromOpeningPlacing(ListViewItem Item, OpeningPlacing openingPlacing)
+        {
+            Item.SubItems.Clear();
+            Item.Text = openingPlacing.OpeningType.Name;
+            Item.SubItems.Add(openingPlacing.OpeningType.Purpose);
+            Item.SubItems.Add(Convert.ToString(openingPlacing.OpeningType.Width));
+            Item.SubItems.Add(Convert.ToString(openingPlacing.OpeningType.Height));
+            Item.SubItems.Add(Convert.ToString(openingPlacing.Left ));
+            Item.SubItems.Add(Convert.ToString(openingPlacing.GetBottom()));
+            Item.SubItems.Add(Convert.ToString(Math.Round(openingPlacing.OpeningType.GetArea() / 1000) / 1000));
+        }
+        private void EditItemFromOpeningType(ListViewItem Item, OpeningType openingType)
+        {
+            Item.SubItems.Clear();
+            Item.Text = openingType.Name;
+            Item.SubItems.Add(Convert.ToString(openingType.Purpose));
+            Item.SubItems.Add(Convert.ToString(openingType.Width));
+            Item.SubItems.Add(Convert.ToString(openingType.Height));
+            Item.SubItems.Add(Convert.ToString(openingType.Bottom));
+            Item.SubItems.Add(Convert.ToString(openingType.Bottom+openingType.Height));
+            Item.SubItems.Add(Convert.ToString(Math.Round(openingType.GetArea()/1000)/1000));
         }
         private void EditItemFromWall (ListViewItem Item, Wall wall)
         {
@@ -268,6 +393,8 @@ namespace RCC_Extension.UI
 
         private void tsbDelete_Click(object sender, EventArgs e)
         {
+            //Show promt Dialog
+
             if (lvDetails.SelectedIndices.Count == 0)
             { MessageBox.Show("Выберите элемент из списка", "Ничего не выбрано"); }
             //При удалении нескольких объектов учитываем сдвижку номеров в коллекции вызванную удалении
@@ -292,6 +419,27 @@ namespace RCC_Extension.UI
                         }
                         break;
                     }
+                case "OpeningPlacings":
+                    {
+                        foreach (int j in lvDetails.SelectedIndices)
+                        {
+                            ((List<OpeningPlacing>)_objectList).RemoveAt(j - i);
+                            lvDetails.Items.RemoveAt(j - i);
+                            i++;
+                        }
+                        break;
+                    }
+                case "OpeningTypes":
+                    {
+                        //Необходимо добавить проверку на существование стен имеющих данный тип стены
+                        foreach (int j in lvDetails.SelectedIndices)
+                        {
+                            ((List<OpeningType>)_objectList).RemoveAt(j - i);
+                            lvDetails.Items.RemoveAt(j - i);
+                            i++;
+                        }
+                        break;
+                    }
                 case "Walls":
                     {
                         foreach (int j in lvDetails.SelectedIndices)
@@ -312,9 +460,7 @@ namespace RCC_Extension.UI
                             i++;
                         }
                         break;
-                    }
-                    
-            
+                    }       
             }
         }
         private void tsbWalls_Click(object sender, EventArgs e)
@@ -330,11 +476,11 @@ namespace RCC_Extension.UI
                     this.Visible = false;
                     DetailForm.ShowDialog();
                     this.Visible = true;
+                    EditItemFromLevel(lvDetails.Items[i], level);
                 }
             }
             else
-            { MessageBox.Show("Выберите один элемент из списка", "Неверный выбор");}
-           
+            { MessageBox.Show("Выберите один элемент из списка", "Неверный выбор");}         
         }
         private void tsbWallType_Click(object sender, EventArgs e)
         {
@@ -344,6 +490,40 @@ namespace RCC_Extension.UI
             this.Visible = false;
             DetailForm.ShowDialog();
             this.Visible = true;
+            foreach (ListViewItem i in lvDetails.Items)
+            {
+                EditItemFromLevel(i, building.LevelList[i.Index]);
+            }
+            
+        }
+        private void tsbOpeningTypes_Click(object sender, EventArgs e)
+        {
+            Building building = (Building)_parentObject;
+            var detailObjectList = new DetailObjectList("OpeningTypes", building, building.OpeningTypeList, false);
+            frmDetailList DetailForm = new frmDetailList(detailObjectList);
+            this.Visible = false;
+            DetailForm.ShowDialog();
+            this.Visible = true;
+        }
+
+        private void tsbOpenings_Click(object sender, EventArgs e)
+        {
+            if (lvDetails.SelectedIndices.Count == 1)
+            {
+                Wall wall;
+                foreach (int i in lvDetails.SelectedIndices)
+                {
+                    wall = ((List<Wall>)_objectList)[i];
+                    var detailObjectList = new DetailObjectList("OpeningPlacings", wall, wall.OpeningPlacingList , false);
+                    frmDetailList DetailForm = new frmDetailList(detailObjectList);
+                    this.Visible = false;
+                    DetailForm.ShowDialog();
+                    this.Visible = true;
+                    EditItemFromWall(lvDetails.Items[i], wall);
+                }
+            }
+            else
+            { MessageBox.Show("Выберите один элемент из списка", "Неверный выбор"); }
         }
     }
 }
