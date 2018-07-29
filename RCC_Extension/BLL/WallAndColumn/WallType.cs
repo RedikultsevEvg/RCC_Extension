@@ -14,29 +14,22 @@ namespace RCC_Extension.BLL.WallAndColumn
     {
         public String Name { get; set; }
         public Building Building { get; set; }
-
         public decimal Thickness { get; set; }
         public decimal TopOffset { get; set; }
         public decimal BottomOffset { get; set; }
-
         public decimal BarTopOffset { get; set; }
-
         public bool RoundVertToBaseLength { get; set; }
         public decimal VertBaseLength { get; set; }
-
         public bool HorLapping { get; set; }
         public decimal HorLappingLength { get; set; }
         public decimal HorBaseLength { get; set; }
-        
         public BarSpacingSettings VertSpacingSetting { get; set; }
         public BarSpacingSettings HorSpacingSetting { get; set; }
-
 
         public decimal GetHeight(Level level)
         {
             return level.Height + level.TopOffset + TopOffset + BottomOffset;
         }
-
         public XmlElement SaveToXMLNode(XmlDocument xmlDocument)
         {
             XmlElement xmlNode = xmlDocument.CreateElement("WallType");
@@ -56,7 +49,6 @@ namespace RCC_Extension.BLL.WallAndColumn
             xmlNode.AppendChild(HorSpacingSettingNode);
             return xmlNode;
         }
-
         public WallType(Building building)
         {
             Name = "Новый тип стены";
@@ -74,7 +66,6 @@ namespace RCC_Extension.BLL.WallAndColumn
             Building = building;
             building.WallTypeList.Add(this);
         }
-
         public WallType(Building building, XmlNode xmlNode)
         {
             Building = building;
@@ -97,7 +88,6 @@ namespace RCC_Extension.BLL.WallAndColumn
                 }
             }
         }
-
         public object Clone()
         {
             return this.MemberwiseClone();
