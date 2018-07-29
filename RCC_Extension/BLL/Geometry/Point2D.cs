@@ -27,14 +27,6 @@ namespace RCC_Extension.BLL.Geometry
             return EndPoint;
         }
 
-        public XmlElement SaveToXMLNode(XmlDocument xmlDocument)
-        {
-            XmlElement xmlNode = xmlDocument.CreateElement("Point2D");
-            XMLOperations.AddAttribute(xmlNode, xmlDocument, "Coord_X", Convert.ToString(Coord_X));
-            XMLOperations.AddAttribute(xmlNode, xmlDocument, "Coord_Y", Convert.ToString(Coord_Y));
-            return xmlNode;
-        }
-
         public XmlElement SaveToXMLNode(XmlDocument xmlDocument, String NodeName)
         {
             XmlElement xmlNode = xmlDocument.CreateElement(NodeName);
@@ -47,6 +39,15 @@ namespace RCC_Extension.BLL.Geometry
         {
             Coord_X = coord_X;
             Coord_Y = coord_Y;
+        }
+
+        public Point2D(XmlNode xmlNode)
+        {
+            foreach (XmlAttribute obj in xmlNode.Attributes)
+            {
+                if (obj.Name == "Coord_X") Coord_X = Convert.ToDecimal(obj.Value);
+                if (obj.Name == "Coord_Y") Coord_Y = Convert.ToDecimal(obj.Value);
+            }
         }
 
         public object Clone()

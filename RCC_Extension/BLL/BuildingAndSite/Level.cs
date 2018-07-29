@@ -63,6 +63,26 @@ namespace RCC_Extension.BLL.BuildingAndSite
             WallList = new List<Wall>();
             building.LevelList.Add(this);
         }
+
+        public Level(Building building, XmlNode xmlNode)
+        {
+            Building = building;
+            WallList = new List<Wall>();
+            foreach (XmlAttribute obj in xmlNode.Attributes)
+            {          
+                if (obj.Name == "Name") Name = obj.Value;
+                if (obj.Name == "FloorLevel") FloorLevel = Convert.ToDecimal( obj.Value);
+                if (obj.Name == "Height") Height = Convert.ToDecimal(obj.Value);
+                if (obj.Name == "TopOffset") TopOffset = Convert.ToDecimal(obj.Value);
+                BasePoint = new Point3D(0, 0, 0);
+                if (obj.Name == "Quant") Quant = Convert.ToInt16(obj.Value);
+            }
+            foreach (XmlNode childNode in xmlNode.ChildNodes)
+            {
+                if (childNode.Name == "Wall") WallList.Add(new Wall(this, childNode));
+            }
+        }
+
         public object Clone()
         {
             return this.MemberwiseClone();

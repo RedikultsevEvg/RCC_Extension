@@ -13,7 +13,7 @@ namespace RCC_Extension.BLL.WallAndColumn
     public class WallType :ICloneable
     {
         public String Name { get; set; }
-        public Building building { get; set; }
+        public Building Building { get; set; }
 
         public decimal Thickness { get; set; }
         public decimal TopOffset { get; set; }
@@ -50,6 +50,10 @@ namespace RCC_Extension.BLL.WallAndColumn
             XMLOperations.AddAttribute(xmlNode, xmlDocument, "HorLapping", Convert.ToString(HorLapping));
             XMLOperations.AddAttribute(xmlNode, xmlDocument, "HorLappingLength", Convert.ToString(HorLappingLength));
             XMLOperations.AddAttribute(xmlNode, xmlDocument, "HorBaseLength", Convert.ToString(HorBaseLength));
+            XmlElement VertSpacingSettingNode = VertSpacingSetting.SaveToXMLNode(xmlDocument, "VertSpacingSetting");
+            xmlNode.AppendChild(VertSpacingSettingNode);
+            XmlElement HorSpacingSettingNode = HorSpacingSetting.SaveToXMLNode(xmlDocument, "HorSpacingSetting");
+            xmlNode.AppendChild(HorSpacingSettingNode);
             return xmlNode;
         }
 
@@ -65,11 +69,33 @@ namespace RCC_Extension.BLL.WallAndColumn
             HorLapping = true;
             HorLappingLength = 400;
             HorBaseLength = 11700;
-
             VertSpacingSetting = new BarSpacingSettings(1);
             HorSpacingSetting = new BarSpacingSettings(2);
-
+            Building = building;
             building.WallTypeList.Add(this);
+        }
+
+        public WallType(Building building, XmlNode xmlNode)
+        {
+            Building = building;
+            foreach (XmlAttribute obj in xmlNode.Attributes)
+            {
+                if (obj.Name == "Name") Name = obj.Value;
+                if (obj.Name == "Thickness") Thickness = Convert.ToDecimal(obj.Value);
+                if (obj.Name == "TopOffset") TopOffset = Convert.ToDecimal(obj.Value);
+                if (obj.Name == "BottomOffset") BottomOffset = Convert.ToDecimal(obj.Value);
+                if (obj.Name == "BarTopOffset") BarTopOffset = Convert.ToDecimal(obj.Value);
+                if (obj.Name == "RoundVertToBaseLength") RoundVertToBaseLength = Convert.ToBoolean(obj.Value);
+                if (obj.Name == "VertBaseLength") VertBaseLength = Convert.ToDecimal(obj.Value);
+                if (obj.Name == "HorLapping") HorLapping = Convert.ToBoolean(obj.Value);
+                if (obj.Name == "HorLappingLength") HorLappingLength = Convert.ToDecimal(obj.Value);
+                if (obj.Name == "HorBaseLength") HorBaseLength = Convert.ToDecimal(obj.Value);
+                foreach (XmlNode childNode in xmlNode.ChildNodes)
+                {
+                    if (childNode.Name == "VertSpacingSetting") VertSpacingSetting = new BarSpacingSettings(childNode);
+                    if (childNode.Name == "HorSpacingSetting") HorSpacingSetting = new BarSpacingSettings(childNode);
+                }
+            }
         }
 
         public object Clone()

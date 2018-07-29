@@ -31,7 +31,8 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmMain));
             this.btnWalls = new System.Windows.Forms.Button();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
-            this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
+            this.tsbSaveToFile = new System.Windows.Forms.ToolStripButton();
+            this.tsbLoadFromFile = new System.Windows.Forms.ToolStripButton();
             this.toolStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -39,7 +40,7 @@
             // 
             this.btnWalls.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnWalls.Location = new System.Drawing.Point(12, 12);
+            this.btnWalls.Location = new System.Drawing.Point(0, 28);
             this.btnWalls.Name = "btnWalls";
             this.btnWalls.Size = new System.Drawing.Size(776, 34);
             this.btnWalls.TabIndex = 0;
@@ -50,22 +51,33 @@
             // toolStrip1
             // 
             this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripButton1});
+            this.tsbLoadFromFile,
+            this.tsbSaveToFile});
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
             this.toolStrip1.Name = "toolStrip1";
             this.toolStrip1.Size = new System.Drawing.Size(800, 25);
             this.toolStrip1.TabIndex = 1;
             this.toolStrip1.Text = "toolStrip1";
             // 
-            // toolStripButton1
+            // tsbSaveToFile
             // 
-            this.toolStripButton1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButton1.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton1.Image")));
-            this.toolStripButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButton1.Name = "toolStripButton1";
-            this.toolStripButton1.Size = new System.Drawing.Size(23, 22);
-            this.toolStripButton1.Text = "toolStripButton1";
-            this.toolStripButton1.Click += new System.EventHandler(this.toolStripButton1_Click);
+            this.tsbSaveToFile.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.tsbSaveToFile.Image = ((System.Drawing.Image)(resources.GetObject("tsbSaveToFile.Image")));
+            this.tsbSaveToFile.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsbSaveToFile.Name = "tsbSaveToFile";
+            this.tsbSaveToFile.Size = new System.Drawing.Size(23, 22);
+            this.tsbSaveToFile.Text = "Сохранить";
+            this.tsbSaveToFile.Click += new System.EventHandler(this.tsbSaveToFile_Click);
+            // 
+            // tsbLoadFromFile
+            // 
+            this.tsbLoadFromFile.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.tsbLoadFromFile.Image = ((System.Drawing.Image)(resources.GetObject("tsbLoadFromFile.Image")));
+            this.tsbLoadFromFile.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsbLoadFromFile.Name = "tsbLoadFromFile";
+            this.tsbLoadFromFile.Size = new System.Drawing.Size(23, 22);
+            this.tsbLoadFromFile.Text = "Открыть";
+            this.tsbLoadFromFile.Click += new System.EventHandler(this.tsbLoadFromFile_Click);
             // 
             // frmMain
             // 
@@ -89,7 +101,8 @@
 
         private System.Windows.Forms.Button btnWalls;
         private System.Windows.Forms.ToolStrip toolStrip1;
-        private System.Windows.Forms.ToolStripButton toolStripButton1;
+        private System.Windows.Forms.ToolStripButton tsbSaveToFile;
+        private System.Windows.Forms.ToolStripButton tsbLoadFromFile;
     }
 }
 

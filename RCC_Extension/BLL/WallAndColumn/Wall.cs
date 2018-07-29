@@ -94,7 +94,6 @@ namespace RCC_Extension.BLL.WallAndColumn
                 { XMLOperations.AddAttribute(xmlNode, xmlDocument, "WallTypeNumber", Convert.ToString(counter)); }
                 counter ++;
             }
-
             XMLOperations.AddAttribute(xmlNode, xmlDocument, "ReWriteHeight", Convert.ToString(ReWriteHeight));
             XMLOperations.AddAttribute(xmlNode, xmlDocument, "Height", Convert.ToString(Height));
             XMLOperations.AddAttribute(xmlNode, xmlDocument, "ConcreteStartOffset", Convert.ToString(ConcreteStartOffset));
@@ -133,6 +132,29 @@ namespace RCC_Extension.BLL.WallAndColumn
             WallType = wallType;
             OpeningPlacingList = new List<OpeningPlacing>();
             level.WallList.Add(this);
+
+        }
+        public Wall(Level level, XmlNode xmlNode)
+        {
+            Level = level;
+            foreach (XmlAttribute obj in xmlNode.Attributes)
+            {     
+                if (obj.Name == "Name") Name = obj.Value; 
+                if (obj.Name == "WallTypeNumber") WallType = level.Building.WallTypeList[Convert.ToInt16(obj.Value)];
+                if (obj.Name == "ReWriteHeight") ReWriteHeight = Convert.ToBoolean(obj.Value);
+                if (obj.Name == "Height") Height = Convert.ToDecimal(obj.Value);
+                if (obj.Name == "ConcreteStartOffset") ConcreteStartOffset = Convert.ToDecimal(obj.Value);
+                if (obj.Name == "ConcreteEndOffset") ConcreteEndOffset = Convert.ToDecimal(obj.Value);
+                if (obj.Name == "ReiforcementStartOffset") ReiforcementStartOffset = Convert.ToDecimal(obj.Value);
+                if (obj.Name == "ReiforcementEndOffset") ReiforcementEndOffset = Convert.ToDecimal(obj.Value);             
+            }
+            OpeningPlacingList = new List<OpeningPlacing>();
+            foreach (XmlNode childNode in xmlNode.ChildNodes)
+            {
+                if (childNode.Name == "StartPoint") StartPoint = new Point2D(childNode);
+                if (childNode.Name == "EndPoint") EndPoint = new Point2D(childNode);
+                if (childNode.Name == "OpeningPlacing") OpeningPlacingList.Add(new OpeningPlacing(this, childNode));
+            }
 
         }
             //Конструктор стены по уровню и типу стены

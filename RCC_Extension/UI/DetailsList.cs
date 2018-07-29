@@ -74,8 +74,8 @@ namespace RCC_Extension.UI
                 case "OpeningPlacings":
                     {
                         this.Text = "Проемы";
-                        List<String> _ColumnName = new List<String>() { "Марка", "Назначение", "Ширина, мм", "Высота, мм", "Привязка от начала, мм", "Привязка снизу, мм", "S_нетто, кв.м" };
-                        List<Int32> _ColumnWidth = new List<Int32>() { 200, 80, 80, 80, 150, 150, 80};
+                        List<String> _ColumnName = new List<String>() { "Марка", "Привязка от начала, мм", "Привязка снизу, мм", "S_нетто, кв.м" };
+                        List<Int32> _ColumnWidth = new List<Int32>() { 250, 150, 150, 80};
                         ColumnName.AddRange(_ColumnName);
                         ColumnWidth.AddRange(_ColumnWidth);
 
@@ -94,8 +94,8 @@ namespace RCC_Extension.UI
                 case "OpeningTypes": 
                     {
                         this.Text = "Типы проемов";
-                        List<String> _ColumnName = new List<String>() { "Марка", "Назначение", "Ширина, мм", "Высота, мм", "Привязка снизу, мм", "Привязка сверху, мм", "Площадь, кв.м" };
-                        List<Int32> _ColumnWidth = new List<Int32>() { 150, 80, 80, 80, 100, 100, 100 };
+                        List<String> _ColumnName = new List<String>() { "Марка", "Назначение", "Ширина", "Высота",  "Привязка снизу, мм", "Привязка сверху, мм", "Площадь, кв.м" };
+                        List<Int32> _ColumnWidth = new List<Int32>() { 250, 100, 100, 100, 100, 100, 100 };
                         ColumnName.AddRange(_ColumnName);
                         ColumnWidth.AddRange(_ColumnWidth);
                         var openingTypeList = (List<OpeningType>)_objectList;
@@ -177,6 +177,7 @@ namespace RCC_Extension.UI
         }
         private void tsbNew_Click(object sender, EventArgs e)
         {
+            ProgrammSettings.IsDataChanged = true;
             switch (_formType) //
             {
                 case "Buildings":
@@ -350,10 +351,7 @@ namespace RCC_Extension.UI
         private void EditItemFromOpeningPlacing(ListViewItem Item, OpeningPlacing openingPlacing)
         {
             Item.SubItems.Clear();
-            Item.Text = openingPlacing.OpeningType.Name;
-            Item.SubItems.Add(openingPlacing.OpeningType.Purpose);
-            Item.SubItems.Add(Convert.ToString(openingPlacing.OpeningType.Width));
-            Item.SubItems.Add(Convert.ToString(openingPlacing.OpeningType.Height));
+            Item.Text = openingPlacing.OpeningType.FullName();
             Item.SubItems.Add(Convert.ToString(openingPlacing.Left ));
             Item.SubItems.Add(Convert.ToString(openingPlacing.GetBottom()));
             Item.SubItems.Add(Convert.ToString(Math.Round(openingPlacing.OpeningType.GetArea() / 1000) / 1000));
@@ -393,8 +391,8 @@ namespace RCC_Extension.UI
 
         private void tsbDelete_Click(object sender, EventArgs e)
         {
+            ProgrammSettings.IsDataChanged = true;
             //Show promt Dialog
-
             if (lvDetails.SelectedIndices.Count == 0)
             { MessageBox.Show("Выберите элемент из списка", "Ничего не выбрано"); }
             //При удалении нескольких объектов учитываем сдвижку номеров в коллекции вызванную удалении

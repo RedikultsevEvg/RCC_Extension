@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using RCC_Extension.BLL.Geometry;
+using System.Xml;
+using RCC_Extension.BLL.Service;
 
 namespace RCC_Extension.BLL.Reinforcement
 {
@@ -19,15 +21,11 @@ namespace RCC_Extension.BLL.Reinforcement
     {
         public bool AddBarsLeft { get; set; }
         public bool AddBarsRight { get; set; }
-
         public decimal AddBarsLeftSpacing { get; set; }
         public decimal AddBarsRightSpacing { get; set; }
-
         public Int32 AddBarsLeftQuant { get; set; }
         public Int32 AddBarsRightQuant { get; set; }
-
         public decimal MainSpacing { get; set; }
-        public Bar Bar { get; set; }
 
         public String SpacingText()
         {
@@ -37,7 +35,18 @@ namespace RCC_Extension.BLL.Reinforcement
             if (AddBarsRight) S += Convert.ToString(AddBarsRightQuant - 1) + "*" + Convert.ToString(AddBarsRightSpacing) + ";";
             return S;
         }
-
+        public XmlElement SaveToXMLNode(XmlDocument xmlDocument, String NodeName)
+        {
+            XmlElement xmlNode = xmlDocument.CreateElement(NodeName);
+            XMLOperations.AddAttribute(xmlNode, xmlDocument, "AddBarsLeft", Convert.ToString(AddBarsLeft));
+            XMLOperations.AddAttribute(xmlNode, xmlDocument, "AddBarsRight", Convert.ToString(AddBarsRight));
+            XMLOperations.AddAttribute(xmlNode, xmlDocument, "AddBarsLeftSpacing", Convert.ToString(AddBarsLeftSpacing));
+            XMLOperations.AddAttribute(xmlNode, xmlDocument, "AddBarsRightSpacing", Convert.ToString(AddBarsRightSpacing));
+            XMLOperations.AddAttribute(xmlNode, xmlDocument, "AddBarsLeftQuant", Convert.ToString(AddBarsLeftQuant));
+            XMLOperations.AddAttribute(xmlNode, xmlDocument, "AddBarsRightQuant", Convert.ToString(AddBarsRightQuant));
+            XMLOperations.AddAttribute(xmlNode, xmlDocument, "MainSpacing", Convert.ToString(MainSpacing));
+            return xmlNode;
+        }
         public BarSpacingSettings(int Type)
         {
             switch (Type) //
@@ -66,6 +75,20 @@ namespace RCC_Extension.BLL.Reinforcement
                     }
             }
         }
+        public BarSpacingSettings(XmlNode xmlNode)
+        {
+            foreach (XmlAttribute obj in xmlNode.Attributes)
+            {
+                if (obj.Name == "AddBarsLeft") AddBarsLeft = Convert.ToBoolean(obj.Value);
+                if (obj.Name == "AddBarsRight") AddBarsRight = Convert.ToBoolean(obj.Value);
+                if (obj.Name == "AddBarsLeftSpacing") AddBarsLeftSpacing = Convert.ToDecimal(obj.Value);
+                if (obj.Name == "AddBarsRightSpacing") AddBarsRightSpacing = Convert.ToDecimal(obj.Value);
+                if (obj.Name == "AddBarsLeftQuant") AddBarsLeftQuant = Convert.ToInt32(obj.Value);
+                if (obj.Name == "AddBarsRightQuant") AddBarsRightQuant = Convert.ToInt32(obj.Value);
+                if (obj.Name == "MainSpacing") MainSpacing = Convert.ToDecimal(obj.Value);
+            }
+        }
+
 
         public object Clone()
         {

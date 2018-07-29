@@ -20,21 +20,27 @@ namespace StartApp
          public frmMain()
         {
             InitializeComponent();
-            ProgrammSettings.buildingSite = new BuildingSite();
-            ProgrammSettings.building = new Building(ProgrammSettings.buildingSite);
+            ProgrammSettings.InicializeNew();
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
-            var detailObjectList = new DetailObjectList("Levels", ProgrammSettings.building, ProgrammSettings.building.LevelList, false);
+            var detailObjectList = 
+                new DetailObjectList("Levels", ProgrammSettings.BuildingSite.BuildingList[0],
+                ProgrammSettings.BuildingSite.BuildingList[0].LevelList, false);
             frmDetailList DetailForm = new frmDetailList(detailObjectList);
             DetailForm.Show();
             
         }
 
-        private void toolStripButton1_Click(object sender, EventArgs e)
+        private void tsbSaveToFile_Click(object sender, EventArgs e)
         {
-            ProgrammSettings.SaveProjectToFile("C:\\Repos\\Project.xml");
+            ProgrammSettings.SaveProjectToFile(false);
+        }
+
+        private void tsbLoadFromFile_Click(object sender, EventArgs e)
+        {
+            if (ProgrammSettings.OpenProjectFromFile()) this.Text = "Калькулятор - " + ProgrammSettings.FilePath;
         }
     }
 }

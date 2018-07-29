@@ -50,6 +50,13 @@ namespace RCC_Extension.BLL.WallAndColumn
             return xmlNode;
         }
 
+        public String FullName()
+        {
+            String S;
+            S = Name + " - " + Purpose + " - " + Convert.ToString(Width) + "*" + Convert.ToString(Height) + "(h)";
+            return S;
+        }
+
         public object Clone()
         {
             return this.MemberwiseClone();
@@ -86,10 +93,27 @@ namespace RCC_Extension.BLL.WallAndColumn
             MoveVert = true;
             QuantVertLeft = 2;
             QuantVertRight = 2;
-
             building.OpeningTypeList.Add(this);
         }
-
+        public OpeningType(Building building, XmlNode xmlNode)
+        {
+            Building = building;
+            foreach (XmlAttribute obj in xmlNode.Attributes)
+            {
+                if (obj.Name == "Name") Name = obj.Value;
+                if (obj.Name == "Purpose") Purpose = obj.Value;
+                if (obj.Name == "Height") Height = Convert.ToDecimal(obj.Value);
+                if (obj.Name == "Width") Width = Convert.ToDecimal(obj.Value);
+                if (obj.Name == "Bottom") Bottom = Convert.ToDecimal(obj.Value);
+                if (obj.Name == "AddEdgeLeft") AddEdgeLeft = Convert.ToBoolean(obj.Value);
+                if (obj.Name == "AddEdgeRight") AddEdgeRight = Convert.ToBoolean(obj.Value);
+                if (obj.Name == "AddEdgeTop") AddEdgeTop = Convert.ToBoolean(obj.Value);
+                if (obj.Name == "AddEdgeBottom") AddEdgeBottom = Convert.ToBoolean(obj.Value);
+                if (obj.Name == "MoveVert") MoveVert = Convert.ToBoolean(obj.Value);
+                if (obj.Name == "QuantVertLeft") QuantVertLeft = Convert.ToInt16(obj.Value);
+                if (obj.Name == "QuantVertRight") QuantVertRight = Convert.ToInt16(obj.Value);
+            }
+        }
     }
     //Класс для вставки проема в стену
     public class OpeningPlacing
@@ -110,7 +134,6 @@ namespace RCC_Extension.BLL.WallAndColumn
         public XmlElement SaveToXMLNode(XmlDocument xmlDocument)
         {
             XmlElement xmlNode = xmlDocument.CreateElement("OpeningPlacing");
-            XMLOperations.AddAttribute(xmlNode, xmlDocument, "WallNumber", Convert.ToString(Wall.Level.WallList.IndexOf(Wall)));
             int counter = 0;
             foreach (OpeningType OpeningTypeItem in Wall.Level.Building.OpeningTypeList)
             {
@@ -135,6 +158,17 @@ namespace RCC_Extension.BLL.WallAndColumn
             OverrideBottom = false;
             Bottom = 0;
             wall.OpeningPlacingList.Add(this);
+        }
+        public OpeningPlacing(Wall wall, XmlNode xmlNode)
+        {
+            Wall = wall;
+            foreach (XmlAttribute obj in xmlNode.Attributes)
+            {
+                if (obj.Name == "OpeningTypeNumber") OpeningType = wall.Level.Building.OpeningTypeList[Convert.ToInt16(obj.Value)];
+                if (obj.Name == "Left") Left = Convert.ToDecimal(obj.Value);
+                if (obj.Name == "OverrideBottom") OverrideBottom = Convert.ToBoolean(obj.Value);
+                if (obj.Name == "Bottom") Bottom = Convert.ToDecimal(obj.Value);            
+            }
         }
     }
 }

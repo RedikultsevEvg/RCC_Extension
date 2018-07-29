@@ -47,7 +47,6 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BLL\BuildingAndSite\Building.cs" />
     <Compile Include="BLL\BuildingAndSite\BuildingSite.cs" />
     <Compile Include="BLL\BuildingAndSite\Level.cs" />
     <Compile Include="BLL\Geometry\Point2D.cs" />

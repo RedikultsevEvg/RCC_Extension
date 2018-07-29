@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using RCC_Extension.BLL.WallAndColumn;
+using RCC_Extension.BLL.Service;
 
 namespace RCC_Extension.UI.Forms
 {
@@ -21,7 +22,7 @@ namespace RCC_Extension.UI.Forms
             int counter = 0;
             foreach (OpeningType openingType in _openingPlacing.Wall.Level.Building.OpeningTypeList)
             {
-                cbOpeningTypes.Items.Add(openingType.Name + " - "+ openingType.Purpose+Convert.ToString(openingType.Width)+"*"+ Convert.ToString(openingType.Height) + "(h)");
+                cbOpeningTypes.Items.Add(openingType.FullName());
                 if (ReferenceEquals(openingType, _openingPlacing.OpeningType)) { cbOpeningTypes.SelectedIndex = counter; }
                 counter++;
             }
@@ -45,6 +46,7 @@ namespace RCC_Extension.UI.Forms
             _openingPlacing.Left = nudLeft.Value;
             _openingPlacing.OverrideBottom = cbOverrideBottom.Checked;
             _openingPlacing.Bottom = nudBottom.Value;
+            ProgrammSettings.IsDataChanged = true;
         }
     }
 }
