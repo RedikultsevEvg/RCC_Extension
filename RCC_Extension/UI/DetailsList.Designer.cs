@@ -40,6 +40,7 @@
             this.tsbOpenings = new System.Windows.Forms.ToolStripButton();
             this.lvDetails = new System.Windows.Forms.ListView();
             this.btnClose = new System.Windows.Forms.Button();
+            this.tsbReport = new System.Windows.Forms.ToolStripButton();
             this.toolStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -54,7 +55,8 @@
             this.tsbWalls,
             this.tsbWallTypes,
             this.tsbOpeningTypes,
-            this.tsbOpenings});
+            this.tsbOpenings,
+            this.tsbReport});
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
             this.toolStrip1.Name = "toolStrip1";
             this.toolStrip1.Size = new System.Drawing.Size(834, 37);
@@ -164,6 +166,16 @@
             this.btnClose.UseVisualStyleBackColor = true;
             this.btnClose.Click += new System.EventHandler(this.btnClose_Click);
             // 
+            // tsbReport
+            // 
+            this.tsbReport.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.tsbReport.Image = ((System.Drawing.Image)(resources.GetObject("tsbReport.Image")));
+            this.tsbReport.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsbReport.Name = "tsbReport";
+            this.tsbReport.Size = new System.Drawing.Size(34, 34);
+            this.tsbReport.Text = "Сумма по выбранным";
+            this.tsbReport.Click += new System.EventHandler(this.tsbReport_Click);
+            // 
             // frmDetailList
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -196,5 +208,6 @@
         private System.Windows.Forms.ToolStripButton tsbWallTypes;
         private System.Windows.Forms.ToolStripButton tsbOpeningTypes;
         private System.Windows.Forms.ToolStripButton tsbOpenings;
+        private System.Windows.Forms.ToolStripButton tsbReport;
     }
 }

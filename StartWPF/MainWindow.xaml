@@ -21,7 +21,7 @@
             <ColumnDefinition Width="200"/>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
-        <WrapPanel Grid.Column="1" Grid.Row="1" Background="White" Opacity="0.6" Margin="10">
+        <WrapPanel Grid.Column="1" Grid.Row="1" Background="#FFE5FEFF" Margin="10">
             <Button x:Name="btnWall" Width="200" Height="100" Margin="5" Background="#FF91D7FF" IsCancel="True" Click="btnWall_Click">
                 <Grid Height="88" Width="190">
                     <Grid.RowDefinitions>
@@ -34,11 +34,11 @@
                         <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
                     <Label x:Name="lb1" Grid.Column="1" Content="Расчитать объем стен" FontSize="14" Background="#FFB5FCFF"/>
-                    <TextBlock Grid.Column="1" Grid.Row="2" Text="Подсчет объема бетона и арматуры для стен многоэтажных зданий с учетом проемов" TextWrapping="Wrap" Background="#FFB5FCFF" FontSize="10"/>
+                    <TextBlock Grid.Column="1" Grid.Row="2" Text="Подсчет объема бетона и арматуры для стен многоэтажных зданий с учетом проемов" TextWrapping="Wrap" Background="#FFFDFFDD" FontSize="10"/>
                 </Grid>
             </Button>
         </WrapPanel>
-        <StackPanel Grid.Row="1" Background="White" Opacity="0.6" Margin="10">
+        <StackPanel Grid.Row="1" Background="#FFE5FEFF" Margin="10">
             <Button x:Name="btnRCC" Height="133" Margin="5" VerticalAlignment="Top">
                 <Grid>
                     <Grid.RowDefinitions>
@@ -79,7 +79,7 @@
                 <Image x:Name="SaveFileAs_png1" Height="40" Source="SaveFileAs.png" Stretch="Fill" Width="40"/>
             </Button>
         </StackPanel>
-        <StackPanel Margin="10,5" Background="White" Orientation="Horizontal" Opacity="0.6">
+        <StackPanel Margin="10,5" Background="#FFE5FEFF" Orientation="Horizontal">
             <Image x:Name="image" Width="30"/>
             <Image x:Name="Logo_sourse_gif" Source="Logo_sourse.gif" Stretch="Fill" Height="66" Width="83"/>
         </StackPanel>

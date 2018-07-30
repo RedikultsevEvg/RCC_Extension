@@ -68,6 +68,7 @@ namespace RCC_Extension.UI
                         tsbWallTypes.Visible = true;
                         tsbOpeningTypes.Visible = true;
                         tsbOpenings.Visible = false;
+                        tsbReport.Visible = true;
                         break;
                     }
                 //Create window for Openings
@@ -88,6 +89,7 @@ namespace RCC_Extension.UI
                         tsbWallTypes.Visible = false;
                         tsbOpeningTypes.Visible = false;
                         tsbOpenings.Visible = false;
+                        tsbReport.Visible = false;
                         break;
                     }
                 //Create window for OpeningType
@@ -107,6 +109,7 @@ namespace RCC_Extension.UI
                         tsbWallTypes.Visible = false;
                         tsbOpeningTypes.Visible = false;
                         tsbOpenings.Visible = false;
+                        tsbReport.Visible = false;
                         break;
                     }
                 //Создаем окно для списка стен
@@ -128,6 +131,7 @@ namespace RCC_Extension.UI
                         tsbWallTypes.Visible = false;
                         tsbOpeningTypes.Visible = false;
                         tsbOpenings.Visible = true;
+                        tsbReport.Visible = true;
                         break;
                 }
 
@@ -147,6 +151,7 @@ namespace RCC_Extension.UI
                         tsbWallTypes.Visible = false;
                         tsbOpeningTypes.Visible = false;
                         tsbOpenings.Visible = false;
+                        tsbReport.Visible = false;
                         break;
                     }
             }
@@ -522,6 +527,42 @@ namespace RCC_Extension.UI
             }
             else
             { MessageBox.Show("Выберите один элемент из списка", "Неверный выбор"); }
+        }
+
+        private void tsbReport_Click(object sender, EventArgs e)
+        {
+            if (lvDetails.SelectedIndices.Count == 0)
+            { MessageBox.Show("Выберите элемент из списка", "Ничего не выбрано"); }
+            //При удалении нескольких объектов учитываем сдвижку номеров в коллекции вызванную удалении
+            decimal sumVolume = 0;
+            switch (_formType) //
+            {
+                case "Levels":
+                    {
+                        Level level;
+                        foreach (int i in lvDetails.SelectedIndices)
+                        {
+                            level = ((List<Level>)_objectList)[i];
+                            sumVolume += level.GetConcreteVolumeNetto();
+                        }
+                        sumVolume = (Math.Round(sumVolume / 1000000)) / 1000;
+                        { MessageBox.Show(Convert.ToString(sumVolume) + "куб.м.", "Суммарный объем бетона по уровням"); }
+                        break;
+                    }
+                case "Walls":
+                    {
+                        Wall wall;
+                        foreach (int i in lvDetails.SelectedIndices)
+                        {
+                            wall = ((List<Wall>)_objectList)[i];
+                            sumVolume += wall.GetConcreteVolumeNetto(); 
+                        }
+                        sumVolume = (Math.Round(sumVolume / 1000000)) / 1000;
+                        { MessageBox.Show(Convert.ToString(sumVolume) + "куб.м.", "Суммарный объем бетона по стенам"); }
+                        break;
+                    }
+            }
+            
         }
     }
 }
