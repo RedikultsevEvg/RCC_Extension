@@ -186,6 +186,7 @@
             this.Controls.Add(this.cbOverrideBottom);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.Name = "frmOpening";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Проем";
             ((System.ComponentModel.ISupportInitialize)(this.nudBottom)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudLeft)).EndInit();

@@ -251,9 +251,9 @@
             this.label7.AutoSize = true;
             this.label7.Location = new System.Drawing.Point(173, 131);
             this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(87, 13);
+            this.label7.Size = new System.Drawing.Size(82, 13);
             this.label7.TabIndex = 8;
-            this.label7.Text = "Офсет в начале";
+            this.label7.Text = "Офсет в конце";
             // 
             // nudConcreteStartOffset
             // 

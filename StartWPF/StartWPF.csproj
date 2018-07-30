@@ -36,6 +36,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -54,6 +55,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Page Include="IconDictionary.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -98,6 +103,24 @@
       <Project>{5abd4ee0-2fd5-4532-a4b2-3c78c9e0bb0d}</Project>
       <Name>RCC_Extension</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="LoadFolder.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="SaveFile.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="SaveFileAs.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Bridge.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Steel.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Logo_sourse.gif" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

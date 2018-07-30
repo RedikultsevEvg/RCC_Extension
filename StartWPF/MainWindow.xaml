@@ -5,16 +5,83 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:StartWPF"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid>
+        Title="Калькулятор" Height="427" Width="904" MinHeight="500" MinWidth="600">
+    <Grid >
+        <Grid.Background>
+            <LinearGradientBrush EndPoint="0.5,1" MappingMode="RelativeToBoundingBox" StartPoint="0.5,0">
+                <GradientStop Color="#FFD3D9FF"/>
+                <GradientStop Color="#FFA4B0F9" Offset="1"/>
+            </LinearGradientBrush>
+        </Grid.Background>
         <Grid.RowDefinitions>
-            <RowDefinition Height="50"/>
-            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="80"/>
+            <RowDefinition/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="200"/>
-            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition/>
         </Grid.ColumnDefinitions>
-        <StackPanel Grid.Column="1" Grid.Row="1" Orientation="Horizontal" Margin="10,11,-580,-358"/>
+        <WrapPanel Grid.Column="1" Grid.Row="1" Background="White" Opacity="0.6" Margin="10">
+            <Button x:Name="btnWall" Width="200" Height="100" Margin="5" Background="#FF91D7FF" IsCancel="True" Click="btnWall_Click">
+                <Grid Height="88" Width="190">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="30"/>
+                        <RowDefinition Height="10"/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="20"/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <Label x:Name="lb1" Grid.Column="1" Content="Расчитать объем стен" FontSize="14" Background="#FFB5FCFF"/>
+                    <TextBlock Grid.Column="1" Grid.Row="2" Text="Подсчет объема бетона и арматуры для стен многоэтажных зданий с учетом проемов" TextWrapping="Wrap" Background="#FFB5FCFF" FontSize="10"/>
+                </Grid>
+            </Button>
+        </WrapPanel>
+        <StackPanel Grid.Row="1" Background="White" Opacity="0.6" Margin="10">
+            <Button x:Name="btnRCC" Height="133" Margin="5" VerticalAlignment="Top">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition Height="30"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <Image x:Name="Bridge_jpg" Height="93" Source="Bridge.jpg" Stretch="Fill" Width="140"/>
+                    <Label x:Name="label" Grid.Row ="1 "  Content="Железобетон" HorizontalAlignment="Center" />
+                </Grid>
+            </Button>
+            <Button x:Name="btnSC" Height="133" Margin="5" VerticalAlignment="Top">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition Height="30"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <Image x:Name="Steel_jpg" Height="93" Source="Steel.jpg" Stretch="Fill" Width="140"/>
+                    <Label x:Name="Steellabel" Grid.Row ="1 "  Content="Металл" HorizontalAlignment="Center" />
+                </Grid>
+            </Button>
+        </StackPanel>
+        <StackPanel Grid.Column="1" Margin="10" Orientation="Horizontal">
+            <Button x:Name="btnLoad" Width="95" Margin="5" Background="#FFB5FCFF" Click="btnLoad_Click">
+                <Image x:Name="LoadFolder_png" Height="40" Source="LoadFolder.png" Stretch="Fill" Width="40"/>
+
+            </Button>
+            <Button x:Name="btnSave" Width="95" Margin="5" Background="#FFB5FCFF" Click="btnSave_Click">
+                <Image x:Name="SaveFile_png" Height="40" Source="SaveFile.png" Stretch="Fill" Width="40"/>
+
+            </Button>
+            <Button x:Name="btnSaveAs" Width="95" Margin="5" Background="#FFB5FCFF" Click="btnSaveAs_Click">
+                <Image x:Name="SaveFileAs_png1" Height="40" Source="SaveFileAs.png" Stretch="Fill" Width="40"/>
+            </Button>
+        </StackPanel>
+        <StackPanel Margin="10,5" Background="White" Orientation="Horizontal" Opacity="0.6">
+            <Image x:Name="image" Width="30"/>
+            <Image x:Name="Logo_sourse_gif" Source="Logo_sourse.gif" Stretch="Fill" Height="66" Width="83"/>
+        </StackPanel>
     </Grid>
 </Window>
