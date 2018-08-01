@@ -61,6 +61,7 @@
             this.label9 = new System.Windows.Forms.Label();
             this.btnCancel = new System.Windows.Forms.Button();
             this.btnOK = new System.Windows.Forms.Button();
+            this.label12 = new System.Windows.Forms.Label();
             this.tbMain.SuspendLayout();
             this.tbpMain.SuspendLayout();
             this.tbpFormWork.SuspendLayout();
@@ -88,6 +89,7 @@
             // 
             // tbpMain
             // 
+            this.tbpMain.Controls.Add(this.label12);
             this.tbpMain.Controls.Add(this.cbWallTypes);
             this.tbpMain.Controls.Add(this.cbLevels);
             this.tbpMain.Controls.Add(this.label3);
@@ -107,9 +109,9 @@
             this.cbWallTypes.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.cbWallTypes.FormattingEnabled = true;
-            this.cbWallTypes.Location = new System.Drawing.Point(31, 130);
+            this.cbWallTypes.Location = new System.Drawing.Point(31, 31);
             this.cbWallTypes.Name = "cbWallTypes";
-            this.cbWallTypes.Size = new System.Drawing.Size(474, 21);
+            this.cbWallTypes.Size = new System.Drawing.Size(191, 21);
             this.cbWallTypes.TabIndex = 6;
             // 
             // cbLevels
@@ -126,7 +128,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(17, 114);
+            this.label3.Location = new System.Drawing.Point(17, 16);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(60, 13);
             this.label3.TabIndex = 3;
@@ -145,15 +147,15 @@
             // 
             this.tbName.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.tbName.Location = new System.Drawing.Point(31, 32);
+            this.tbName.Location = new System.Drawing.Point(280, 32);
             this.tbName.Name = "tbName";
-            this.tbName.Size = new System.Drawing.Size(474, 20);
+            this.tbName.Size = new System.Drawing.Size(225, 20);
             this.tbName.TabIndex = 1;
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(17, 16);
+            this.label1.Location = new System.Drawing.Point(268, 16);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(83, 13);
             this.label1.TabIndex = 0;
@@ -483,6 +485,15 @@
             this.btnOK.UseVisualStyleBackColor = true;
             this.btnOK.Click += new System.EventHandler(this.btnOK_Click);
             // 
+            // label12
+            // 
+            this.label12.AutoSize = true;
+            this.label12.Location = new System.Drawing.Point(240, 34);
+            this.label12.Name = "label12";
+            this.label12.Size = new System.Drawing.Size(19, 13);
+            this.label12.TabIndex = 7;
+            this.label12.Text = "----";
+            // 
             // frmWall
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -545,5 +556,6 @@
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.NumericUpDown nudReinforcementStartOffset;
         private System.Windows.Forms.Label label9;
+        private System.Windows.Forms.Label label12;
     }
 }

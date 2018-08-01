@@ -22,7 +22,7 @@ namespace RCC_Extension.BLL.WallAndColumn
         public bool AddEdgeRight { get; set; } //Справа
         public bool AddEdgeTop { get; set; } //Сверху
         public bool AddEdgeBottom { get; set; } //Снизу
-        public bool MoveVert { get; set; }
+        public bool MoveVert { get; set; } //Смешать вертикальные стержни
         public int QuantVertLeft { get; set; } //Количество вертикальных стержней обрамления, если 0 - Стержни не учащаются
         public int QuantVertRight { get; set; } //Количество вертикальных стержней обрамления, если 0 - Стержни не учащаются
 

@@ -14,41 +14,33 @@ namespace RCC_Extension.BLL.WallAndColumn
     public class Wall :ICloneable
     {
         public String Name { get; set; }
-        public WallType WallType { get; set; }
-        
+        public WallType WallType { get; set; }     
         public Level Level { get; set; }
         public List<OpeningPlacing> OpeningPlacingList { get; set; } //Поменять на OpeningPlacing
         public Point2D StartPoint { get; set; }
         public Point2D EndPoint { get; set; }
-
         public bool ReWriteHeight { get; set; }
         public decimal Height { get; set; }
-
         public decimal ConcreteStartOffset { get; set; }
         public decimal ConcreteEndOffset { get; set; }
-
         public decimal ReiforcementStartOffset { get; set; }
         public decimal ReiforcementEndOffset { get; set; }
 
         //Start of methods
-
         public decimal GetLength()
         {
             Geometry2D Geometry2D = new Geometry2D();
             return Geometry2D.GetDistance(this.StartPoint, this.EndPoint);
         }
-
         public decimal GetConcreteLength()
         {
             return GetLength() + ConcreteStartOffset + ConcreteEndOffset;
         }
-
         public decimal GetHeight()
         {
             if (ReWriteHeight) { return Height; }
             else { return WallType.GetHeight(Level); }
         }
-
         public decimal GetConcreteAreaBrutto()
         {
             decimal Area = 0;
@@ -76,13 +68,52 @@ namespace RCC_Extension.BLL.WallAndColumn
             decimal Volume = GetConcreteAreaBrutto() * WallType.Thickness;
             return Volume;
         }
-
         public decimal GetConcreteVolumeNetto()
         {
             decimal Volume = GetConcreteAreaNetto() * WallType.Thickness;
             return Volume;
         }
-
+        public String GetStringSizes()
+        {
+            String sizes = "";
+            //sizes += WallType.Thickness + " x ";
+            sizes += GetLength() + " x ";
+            sizes += GetHeight() + " (h)";
+            return sizes;
+        }
+        public String GetStringOpenings()
+        {
+            String openings = "";
+            foreach (OpeningPlacing obj in OpeningPlacingList)
+            {
+                openings += obj.OpeningType.Name + "; ";
+            }
+            return openings;
+        }
+        public int VertBarQuantity()
+        {
+            int quant, opening_quant;
+            decimal length = GetLength() + ReiforcementStartOffset + ReiforcementEndOffset - 50 - 50;
+            quant = WallType.VertSpacingSetting.BarQuantity(length);
+            foreach (OpeningPlacing obj in OpeningPlacingList)
+            {
+                if (obj.OpeningType.MoveVert)
+                {
+                    opening_quant = obj.OpeningType.QuantVertLeft + obj.OpeningType.QuantVertRight;
+                    opening_quant -= Convert.ToInt32(Math.Ceiling(obj.OpeningType.Width / WallType.VertSpacingSetting.MainSpacing)) - 1;
+                    quant -= opening_quant;
+                }
+            }
+            quant *= 2;
+            return quant;
+        }
+        public int HorBarQuantity()
+        {
+            int quant;
+            decimal length = GetHeight() - 50 - 50;
+            quant = WallType.VertSpacingSetting.BarQuantity(length);
+            return quant;
+        }
         public XmlElement SaveToXMLNode(XmlDocument xmlDocument)
         {
             XmlElement xmlNode = xmlDocument.CreateElement("Wall");
@@ -110,7 +141,6 @@ namespace RCC_Extension.BLL.WallAndColumn
             }
             return xmlNode;
         }
-
         //Конструктор стены по уровню (выбирается первый из списка или создается)
         public Wall(Level level)
         {

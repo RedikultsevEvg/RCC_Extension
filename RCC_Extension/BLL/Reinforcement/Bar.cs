@@ -35,6 +35,25 @@ namespace RCC_Extension.BLL.Reinforcement
             if (AddBarsRight) S += Convert.ToString(AddBarsRightQuant - 1) + "*" + Convert.ToString(AddBarsRightSpacing) + ";";
             return S;
         }
+        public int BarQuantity(decimal length)
+        {
+            int quant = 0;
+            if (AddBarsLeft)
+            {
+                quant += AddBarsLeftQuant;
+                length -= (AddBarsLeftQuant - 1) * AddBarsLeftSpacing;
+            }
+            else { quant ++; }
+
+            if (AddBarsRight)
+            {
+                quant += AddBarsRightQuant;
+                length -= (AddBarsRightQuant - 1) * AddBarsRightSpacing;
+            }
+            else { quant++; }
+            quant += Convert.ToInt32(Math.Ceiling(length / MainSpacing)) - 1;
+            return quant;
+        }
         public XmlElement SaveToXMLNode(XmlDocument xmlDocument, String NodeName)
         {
             XmlElement xmlNode = xmlDocument.CreateElement(NodeName);
@@ -88,7 +107,6 @@ namespace RCC_Extension.BLL.Reinforcement
                 if (obj.Name == "MainSpacing") MainSpacing = Convert.ToDecimal(obj.Value);
             }
         }
-
 
         public object Clone()
         {

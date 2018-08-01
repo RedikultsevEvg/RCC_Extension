@@ -116,8 +116,8 @@ namespace RCC_Extension.UI
                 case "Walls": 
                 {
                         this.Text = "Стены";
-                        List<String> _ColumnName = new List<String>() { "Марка", "Тип", "Толщина, мм", "Высота, мм", "Длина, мм", "S_брутто, кв.м", "S_нетто, кв.м", "V_брутто, куб.м", "V_нетто, куб.м"};
-                        List<Int32> _ColumnWidth = new List<Int32>() { 100, 60, 80, 80, 80, 100, 100, 100, 100 };
+                        List<String> _ColumnName = new List<String>() { "Марка", "Проемы", "Размеры, мм", "Верт.стерж.", "Гор.стерж.", "S_брутто, кв.м", "S_нетто, кв.м", "V_брутто, куб.м", "V_нетто, куб.м"};
+                        List<Int32> _ColumnWidth = new List<Int32>() { 150, 100, 150, 100, 100, 100, 100, 100, 100 };
                         ColumnName.AddRange(_ColumnName);
                         ColumnWidth.AddRange(_ColumnWidth);
 
@@ -375,11 +375,11 @@ namespace RCC_Extension.UI
         private void EditItemFromWall (ListViewItem Item, Wall wall)
         {
             Item.SubItems.Clear();
-            Item.Text = wall.Name;
-            Item.SubItems.Add(wall.WallType.Name);
-            Item.SubItems.Add(Convert.ToString(wall.WallType.Thickness));
-            Item.SubItems.Add(Convert.ToString(wall.GetHeight()));
-            Item.SubItems.Add(Convert.ToString(Math.Round(wall.GetConcreteLength())));
+            Item.Text = wall.WallType.Name + " - "+ wall.Name + " ("+ Convert.ToString(wall.WallType.Thickness)+"мм)";
+            Item.SubItems.Add(wall.GetStringOpenings());
+            Item.SubItems.Add(wall.GetStringSizes());
+            Item.SubItems.Add(Convert.ToString(wall.VertBarQuantity()));
+            Item.SubItems.Add(Convert.ToString(wall.HorBarQuantity()));
             Item.SubItems.Add(Convert.ToString(Math.Round(wall.GetConcreteAreaBrutto() / 1000)/1000));
             Item.SubItems.Add(Convert.ToString(Math.Round(wall.GetConcreteAreaNetto() / 1000)/1000));
             Item.SubItems.Add(Convert.ToString(Math.Round(wall.GetConcreteVolumeBrutto() / 1000000)/1000));
@@ -393,7 +393,6 @@ namespace RCC_Extension.UI
             Item.SubItems.Add(Convert.ToString(wallType.VertSpacingSetting.MainSpacing));
             Item.SubItems.Add(Convert.ToString(wallType.HorSpacingSetting.MainSpacing));
         }
-
         private void tsbDelete_Click(object sender, EventArgs e)
         {
             ProgrammSettings.IsDataChanged = true;
