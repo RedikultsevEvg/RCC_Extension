@@ -42,6 +42,8 @@
             this.lbRightQuant = new System.Windows.Forms.Label();
             this.btnOK = new System.Windows.Forms.Button();
             this.btnCancel = new System.Windows.Forms.Button();
+            this.cbAdd = new System.Windows.Forms.CheckBox();
+            this.checkBox2 = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.nudMainSpacing)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudLeftQuant)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudLeftSpacing)).BeginInit();
@@ -234,7 +236,7 @@
             // 
             this.btnOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnOK.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.btnOK.Location = new System.Drawing.Point(280, 192);
+            this.btnOK.Location = new System.Drawing.Point(300, 230);
             this.btnOK.Name = "btnOK";
             this.btnOK.Size = new System.Drawing.Size(75, 23);
             this.btnOK.TabIndex = 12;
@@ -246,18 +248,44 @@
             // 
             this.btnCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnCancel.Location = new System.Drawing.Point(371, 192);
+            this.btnCancel.Location = new System.Drawing.Point(391, 230);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(75, 23);
             this.btnCancel.TabIndex = 13;
             this.btnCancel.Text = "Отмена";
             this.btnCancel.UseVisualStyleBackColor = true;
             // 
+            // cbAdd
+            // 
+            this.cbAdd.AutoSize = true;
+            this.cbAdd.Checked = true;
+            this.cbAdd.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.cbAdd.Location = new System.Drawing.Point(15, 192);
+            this.cbAdd.Name = "cbAdd";
+            this.cbAdd.Size = new System.Drawing.Size(208, 17);
+            this.cbAdd.TabIndex = 14;
+            this.cbAdd.Text = "Добавить обрамление слева/снизу";
+            this.cbAdd.UseVisualStyleBackColor = true;
+            // 
+            // checkBox2
+            // 
+            this.checkBox2.AutoSize = true;
+            this.checkBox2.Checked = true;
+            this.checkBox2.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkBox2.Location = new System.Drawing.Point(250, 192);
+            this.checkBox2.Name = "checkBox2";
+            this.checkBox2.Size = new System.Drawing.Size(219, 17);
+            this.checkBox2.TabIndex = 15;
+            this.checkBox2.Text = "Добавить обрамление справа/сверху";
+            this.checkBox2.UseVisualStyleBackColor = true;
+            // 
             // frmBarSpacingSettings
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(459, 227);
+            this.ClientSize = new System.Drawing.Size(479, 265);
+            this.Controls.Add(this.checkBox2);
+            this.Controls.Add(this.cbAdd);
             this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.btnOK);
             this.Controls.Add(this.nudRightSpacing);
@@ -302,5 +330,7 @@
         private System.Windows.Forms.Label lbRightQuant;
         private System.Windows.Forms.Button btnOK;
         private System.Windows.Forms.Button btnCancel;
+        private System.Windows.Forms.CheckBox cbAdd;
+        private System.Windows.Forms.CheckBox checkBox2;
     }
 }

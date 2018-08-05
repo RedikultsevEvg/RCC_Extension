@@ -31,6 +31,11 @@ namespace RCC_Extension.UI
             cbMoveVert.Checked = _Opening.MoveVert;
             nudQuantVertLeft.Value = _Opening.QuantVertLeft;
             nudQuantVertRight.Value = _Opening.QuantVertRight;
+            nudQuantInclined.Value = _Opening.QuantInclined;
+            cbIncTopLeft.Checked = _Opening.AddIncTopLeft;
+            cbIncTopRight.Checked = _Opening.AddIncTopRight;
+            cbIncBottomLeft.Checked = _Opening.AddIncBottomLeft;
+            cbIncBottomRight.Checked = _Opening.AddIncBottomRight;
         }
         
         private void cbMoveVert_CheckedChanged(object sender, EventArgs e)
@@ -55,6 +60,11 @@ namespace RCC_Extension.UI
             _Opening.MoveVert = cbMoveVert.Checked;
             _Opening.QuantVertLeft = Convert.ToInt32(nudQuantVertLeft.Value);
             _Opening.QuantVertRight = Convert.ToInt32(nudQuantVertRight.Value);
+            _Opening.QuantInclined = Convert.ToInt32(nudQuantInclined.Value);
+            _Opening.AddIncTopLeft = cbIncTopLeft.Checked;
+            _Opening.AddIncTopRight = cbIncTopRight.Checked;
+            _Opening.AddIncBottomLeft = cbIncBottomLeft.Checked;
+            _Opening.AddIncBottomRight = cbIncBottomRight.Checked;
         }
     }
 }

@@ -31,6 +31,7 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmWall));
             this.tbMain = new System.Windows.Forms.TabControl();
             this.tbpMain = new System.Windows.Forms.TabPage();
+            this.label12 = new System.Windows.Forms.Label();
             this.cbWallTypes = new System.Windows.Forms.ComboBox();
             this.cbLevels = new System.Windows.Forms.ComboBox();
             this.label3 = new System.Windows.Forms.Label();
@@ -61,7 +62,10 @@
             this.label9 = new System.Windows.Forms.Label();
             this.btnCancel = new System.Windows.Forms.Button();
             this.btnOK = new System.Windows.Forms.Button();
-            this.label12 = new System.Windows.Forms.Label();
+            this.btnVertSpacingSetting = new System.Windows.Forms.Button();
+            this.cbOverrideVertSpacing = new System.Windows.Forms.CheckBox();
+            this.cbOverrideHorSpacing = new System.Windows.Forms.CheckBox();
+            this.btnHorSpacingSetting = new System.Windows.Forms.Button();
             this.tbMain.SuspendLayout();
             this.tbpMain.SuspendLayout();
             this.tbpFormWork.SuspendLayout();
@@ -84,7 +88,7 @@
             this.tbMain.Location = new System.Drawing.Point(12, 12);
             this.tbMain.Name = "tbMain";
             this.tbMain.SelectedIndex = 0;
-            this.tbMain.Size = new System.Drawing.Size(519, 258);
+            this.tbMain.Size = new System.Drawing.Size(519, 270);
             this.tbMain.TabIndex = 0;
             // 
             // tbpMain
@@ -103,6 +107,15 @@
             this.tbpMain.TabIndex = 0;
             this.tbpMain.Text = "Основное";
             this.tbpMain.UseVisualStyleBackColor = true;
+            // 
+            // label12
+            // 
+            this.label12.AutoSize = true;
+            this.label12.Location = new System.Drawing.Point(240, 34);
+            this.label12.Name = "label12";
+            this.label12.Size = new System.Drawing.Size(19, 13);
+            this.label12.TabIndex = 7;
+            this.label12.Text = "----";
             // 
             // cbWallTypes
             // 
@@ -346,6 +359,10 @@
             // 
             // tbpReinforcement
             // 
+            this.tbpReinforcement.Controls.Add(this.cbOverrideHorSpacing);
+            this.tbpReinforcement.Controls.Add(this.btnHorSpacingSetting);
+            this.tbpReinforcement.Controls.Add(this.cbOverrideVertSpacing);
+            this.tbpReinforcement.Controls.Add(this.btnVertSpacingSetting);
             this.tbpReinforcement.Controls.Add(this.tbHorSpacing);
             this.tbpReinforcement.Controls.Add(this.tbVertSpacing);
             this.tbpReinforcement.Controls.Add(this.label11);
@@ -357,7 +374,7 @@
             this.tbpReinforcement.Location = new System.Drawing.Point(4, 22);
             this.tbpReinforcement.Name = "tbpReinforcement";
             this.tbpReinforcement.Padding = new System.Windows.Forms.Padding(3);
-            this.tbpReinforcement.Size = new System.Drawing.Size(511, 232);
+            this.tbpReinforcement.Size = new System.Drawing.Size(511, 244);
             this.tbpReinforcement.TabIndex = 2;
             this.tbpReinforcement.Text = "Армирование";
             this.tbpReinforcement.UseVisualStyleBackColor = true;
@@ -365,7 +382,7 @@
             // tbHorSpacing
             // 
             this.tbHorSpacing.Enabled = false;
-            this.tbHorSpacing.Location = new System.Drawing.Point(33, 147);
+            this.tbHorSpacing.Location = new System.Drawing.Point(28, 148);
             this.tbHorSpacing.Name = "tbHorSpacing";
             this.tbHorSpacing.Size = new System.Drawing.Size(172, 20);
             this.tbHorSpacing.TabIndex = 19;
@@ -381,7 +398,7 @@
             // label11
             // 
             this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(30, 133);
+            this.label11.Location = new System.Drawing.Point(15, 132);
             this.label11.Name = "label11";
             this.label11.Size = new System.Drawing.Size(147, 13);
             this.label11.TabIndex = 15;
@@ -390,7 +407,7 @@
             // label10
             // 
             this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(25, 18);
+            this.label10.Location = new System.Drawing.Point(15, 18);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(136, 13);
             this.label10.TabIndex = 14;
@@ -425,9 +442,9 @@
             this.label8.AutoSize = true;
             this.label8.Location = new System.Drawing.Point(263, 133);
             this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(87, 13);
+            this.label8.Size = new System.Drawing.Size(82, 13);
             this.label8.TabIndex = 12;
-            this.label8.Text = "Офсет в начале";
+            this.label8.Text = "Офсет в конце";
             // 
             // nudReinforcementStartOffset
             // 
@@ -466,7 +483,7 @@
             // 
             this.btnCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnCancel.Location = new System.Drawing.Point(452, 279);
+            this.btnCancel.Location = new System.Drawing.Point(452, 291);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(75, 23);
             this.btnCancel.TabIndex = 1;
@@ -477,7 +494,7 @@
             // 
             this.btnOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnOK.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.btnOK.Location = new System.Drawing.Point(353, 279);
+            this.btnOK.Location = new System.Drawing.Point(353, 291);
             this.btnOK.Name = "btnOK";
             this.btnOK.Size = new System.Drawing.Size(75, 23);
             this.btnOK.TabIndex = 2;
@@ -485,20 +502,61 @@
             this.btnOK.UseVisualStyleBackColor = true;
             this.btnOK.Click += new System.EventHandler(this.btnOK_Click);
             // 
-            // label12
+            // btnVertSpacingSetting
             // 
-            this.label12.AutoSize = true;
-            this.label12.Location = new System.Drawing.Point(240, 34);
-            this.label12.Name = "label12";
-            this.label12.Size = new System.Drawing.Size(19, 13);
-            this.label12.TabIndex = 7;
-            this.label12.Text = "----";
+            this.btnVertSpacingSetting.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnVertSpacingSetting.Enabled = false;
+            this.btnVertSpacingSetting.Image = ((System.Drawing.Image)(resources.GetObject("btnVertSpacingSetting.Image")));
+            this.btnVertSpacingSetting.Location = new System.Drawing.Point(64, 82);
+            this.btnVertSpacingSetting.Name = "btnVertSpacingSetting";
+            this.btnVertSpacingSetting.Size = new System.Drawing.Size(136, 42);
+            this.btnVertSpacingSetting.TabIndex = 20;
+            this.btnVertSpacingSetting.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnVertSpacingSetting.UseVisualStyleBackColor = true;
+            this.btnVertSpacingSetting.Click += new System.EventHandler(this.btnVertSpacingSetting_Click);
+            // 
+            // cbOverrideVertSpacing
+            // 
+            this.cbOverrideVertSpacing.AutoSize = true;
+            this.cbOverrideVertSpacing.Location = new System.Drawing.Point(64, 59);
+            this.cbOverrideVertSpacing.Name = "cbOverrideVertSpacing";
+            this.cbOverrideVertSpacing.Size = new System.Drawing.Size(111, 17);
+            this.cbOverrideVertSpacing.TabIndex = 21;
+            this.cbOverrideVertSpacing.Text = "Переопределить";
+            this.cbOverrideVertSpacing.UseVisualStyleBackColor = true;
+            this.cbOverrideVertSpacing.CheckedChanged += new System.EventHandler(this.cbOverrideVertSpacing_CheckedChanged);
+            // 
+            // cbOverrideHorSpacing
+            // 
+            this.cbOverrideHorSpacing.AutoSize = true;
+            this.cbOverrideHorSpacing.Location = new System.Drawing.Point(64, 173);
+            this.cbOverrideHorSpacing.Name = "cbOverrideHorSpacing";
+            this.cbOverrideHorSpacing.Size = new System.Drawing.Size(111, 17);
+            this.cbOverrideHorSpacing.TabIndex = 23;
+            this.cbOverrideHorSpacing.Text = "Переопределить";
+            this.cbOverrideHorSpacing.UseVisualStyleBackColor = true;
+            this.cbOverrideHorSpacing.CheckedChanged += new System.EventHandler(this.cbOverrideHorSpacing_CheckedChanged);
+            // 
+            // btnHorSpacingSetting
+            // 
+            this.btnHorSpacingSetting.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnHorSpacingSetting.Enabled = false;
+            this.btnHorSpacingSetting.Image = ((System.Drawing.Image)(resources.GetObject("btnHorSpacingSetting.Image")));
+            this.btnHorSpacingSetting.Location = new System.Drawing.Point(64, 196);
+            this.btnHorSpacingSetting.Name = "btnHorSpacingSetting";
+            this.btnHorSpacingSetting.Size = new System.Drawing.Size(136, 42);
+            this.btnHorSpacingSetting.TabIndex = 22;
+            this.btnHorSpacingSetting.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnHorSpacingSetting.UseVisualStyleBackColor = true;
+            this.btnHorSpacingSetting.Click += new System.EventHandler(this.btnHorSpacingSetting_Click);
             // 
             // frmWall
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(543, 314);
+            this.ClientSize = new System.Drawing.Size(543, 326);
             this.Controls.Add(this.btnOK);
             this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.tbMain);
@@ -557,5 +615,9 @@
         private System.Windows.Forms.NumericUpDown nudReinforcementStartOffset;
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.Label label12;
+        private System.Windows.Forms.CheckBox cbOverrideHorSpacing;
+        private System.Windows.Forms.Button btnHorSpacingSetting;
+        private System.Windows.Forms.CheckBox cbOverrideVertSpacing;
+        private System.Windows.Forms.Button btnVertSpacingSetting;
     }
 }

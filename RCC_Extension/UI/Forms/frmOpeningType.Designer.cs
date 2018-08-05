@@ -50,6 +50,13 @@
             this.cbAddEdgeTop = new System.Windows.Forms.CheckBox();
             this.cbAddEdgeRight = new System.Windows.Forms.CheckBox();
             this.cbAddEdgeLeft = new System.Windows.Forms.CheckBox();
+            this.tabPage3 = new System.Windows.Forms.TabPage();
+            this.nudQuantInclined = new System.Windows.Forms.NumericUpDown();
+            this.label5 = new System.Windows.Forms.Label();
+            this.cbIncBottomRight = new System.Windows.Forms.CheckBox();
+            this.cbIncBottomLeft = new System.Windows.Forms.CheckBox();
+            this.cbIncTopRight = new System.Windows.Forms.CheckBox();
+            this.cbIncTopLeft = new System.Windows.Forms.CheckBox();
             this.btnCancel = new System.Windows.Forms.Button();
             this.btnOK = new System.Windows.Forms.Button();
             this.tabControl1.SuspendLayout();
@@ -60,6 +67,8 @@
             this.tabPage2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudQuantVertRight)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudQuantVertLeft)).BeginInit();
+            this.tabPage3.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudQuantInclined)).BeginInit();
             this.SuspendLayout();
             // 
             // tabControl1
@@ -69,10 +78,11 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.tabControl1.Controls.Add(this.tabPage1);
             this.tabControl1.Controls.Add(this.tabPage2);
+            this.tabControl1.Controls.Add(this.tabPage3);
             this.tabControl1.Location = new System.Drawing.Point(12, 12);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(365, 206);
+            this.tabControl1.Size = new System.Drawing.Size(370, 196);
             this.tabControl1.TabIndex = 0;
             // 
             // tabPage1
@@ -90,7 +100,7 @@
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(357, 180);
+            this.tabPage1.Size = new System.Drawing.Size(362, 170);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Основное";
             this.tabPage1.UseVisualStyleBackColor = true;
@@ -232,7 +242,7 @@
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(357, 180);
+            this.tabPage2.Size = new System.Drawing.Size(362, 170);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Обрамления";
             this.tabPage2.UseVisualStyleBackColor = true;
@@ -240,7 +250,7 @@
             // lbQuantVertRight
             // 
             this.lbQuantVertRight.AutoSize = true;
-            this.lbQuantVertRight.Location = new System.Drawing.Point(211, 133);
+            this.lbQuantVertRight.Location = new System.Drawing.Point(210, 116);
             this.lbQuantVertRight.Name = "lbQuantVertRight";
             this.lbQuantVertRight.Size = new System.Drawing.Size(139, 13);
             this.lbQuantVertRight.TabIndex = 8;
@@ -248,7 +258,7 @@
             // 
             // nudQuantVertRight
             // 
-            this.nudQuantVertRight.Location = new System.Drawing.Point(227, 149);
+            this.nudQuantVertRight.Location = new System.Drawing.Point(225, 144);
             this.nudQuantVertRight.Maximum = new decimal(new int[] {
             10,
             0,
@@ -267,7 +277,7 @@
             // lbQuantVertLeft
             // 
             this.lbQuantVertLeft.AutoSize = true;
-            this.lbQuantVertLeft.Location = new System.Drawing.Point(57, 133);
+            this.lbQuantVertLeft.Location = new System.Drawing.Point(56, 116);
             this.lbQuantVertLeft.Name = "lbQuantVertLeft";
             this.lbQuantVertLeft.Size = new System.Drawing.Size(133, 13);
             this.lbQuantVertLeft.TabIndex = 6;
@@ -275,7 +285,7 @@
             // 
             // nudQuantVertLeft
             // 
-            this.nudQuantVertLeft.Location = new System.Drawing.Point(73, 149);
+            this.nudQuantVertLeft.Location = new System.Drawing.Point(71, 144);
             this.nudQuantVertLeft.Maximum = new decimal(new int[] {
             10,
             0,
@@ -294,7 +304,7 @@
             // cbMoveVert
             // 
             this.cbMoveVert.AutoSize = true;
-            this.cbMoveVert.Location = new System.Drawing.Point(24, 113);
+            this.cbMoveVert.Location = new System.Drawing.Point(23, 96);
             this.cbMoveVert.Name = "cbMoveVert";
             this.cbMoveVert.Size = new System.Drawing.Size(201, 17);
             this.cbMoveVert.TabIndex = 4;
@@ -305,7 +315,7 @@
             // cbAddEdgeBottom
             // 
             this.cbAddEdgeBottom.AutoSize = true;
-            this.cbAddEdgeBottom.Location = new System.Drawing.Point(214, 60);
+            this.cbAddEdgeBottom.Location = new System.Drawing.Point(213, 55);
             this.cbAddEdgeBottom.Name = "cbAddEdgeBottom";
             this.cbAddEdgeBottom.Size = new System.Drawing.Size(56, 17);
             this.cbAddEdgeBottom.TabIndex = 3;
@@ -315,7 +325,7 @@
             // cbAddEdgeTop
             // 
             this.cbAddEdgeTop.AutoSize = true;
-            this.cbAddEdgeTop.Location = new System.Drawing.Point(214, 26);
+            this.cbAddEdgeTop.Location = new System.Drawing.Point(213, 21);
             this.cbAddEdgeTop.Name = "cbAddEdgeTop";
             this.cbAddEdgeTop.Size = new System.Drawing.Size(61, 17);
             this.cbAddEdgeTop.TabIndex = 2;
@@ -325,7 +335,7 @@
             // cbAddEdgeRight
             // 
             this.cbAddEdgeRight.AutoSize = true;
-            this.cbAddEdgeRight.Location = new System.Drawing.Point(24, 60);
+            this.cbAddEdgeRight.Location = new System.Drawing.Point(23, 55);
             this.cbAddEdgeRight.Name = "cbAddEdgeRight";
             this.cbAddEdgeRight.Size = new System.Drawing.Size(63, 17);
             this.cbAddEdgeRight.TabIndex = 1;
@@ -335,18 +345,107 @@
             // cbAddEdgeLeft
             // 
             this.cbAddEdgeLeft.AutoSize = true;
-            this.cbAddEdgeLeft.Location = new System.Drawing.Point(24, 26);
+            this.cbAddEdgeLeft.Location = new System.Drawing.Point(23, 21);
             this.cbAddEdgeLeft.Name = "cbAddEdgeLeft";
             this.cbAddEdgeLeft.Size = new System.Drawing.Size(57, 17);
             this.cbAddEdgeLeft.TabIndex = 0;
             this.cbAddEdgeLeft.Text = "Слева";
             this.cbAddEdgeLeft.UseVisualStyleBackColor = true;
             // 
+            // tabPage3
+            // 
+            this.tabPage3.Controls.Add(this.nudQuantInclined);
+            this.tabPage3.Controls.Add(this.label5);
+            this.tabPage3.Controls.Add(this.cbIncBottomRight);
+            this.tabPage3.Controls.Add(this.cbIncBottomLeft);
+            this.tabPage3.Controls.Add(this.cbIncTopRight);
+            this.tabPage3.Controls.Add(this.cbIncTopLeft);
+            this.tabPage3.Location = new System.Drawing.Point(4, 22);
+            this.tabPage3.Name = "tabPage3";
+            this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage3.Size = new System.Drawing.Size(362, 170);
+            this.tabPage3.TabIndex = 2;
+            this.tabPage3.Text = "Диагонали";
+            this.tabPage3.UseVisualStyleBackColor = true;
+            // 
+            // nudQuantInclined
+            // 
+            this.nudQuantInclined.Location = new System.Drawing.Point(105, 16);
+            this.nudQuantInclined.Maximum = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
+            this.nudQuantInclined.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.nudQuantInclined.Name = "nudQuantInclined";
+            this.nudQuantInclined.Size = new System.Drawing.Size(100, 20);
+            this.nudQuantInclined.TabIndex = 7;
+            this.nudQuantInclined.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.nudQuantInclined.ThousandsSeparator = true;
+            this.nudQuantInclined.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(22, 19);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(66, 13);
+            this.label5.TabIndex = 6;
+            this.label5.Text = "Количество";
+            // 
+            // cbIncBottomRight
+            // 
+            this.cbIncBottomRight.AutoSize = true;
+            this.cbIncBottomRight.Location = new System.Drawing.Point(220, 128);
+            this.cbIncBottomRight.Name = "cbIncBottomRight";
+            this.cbIncBottomRight.Size = new System.Drawing.Size(89, 17);
+            this.cbIncBottomRight.TabIndex = 3;
+            this.cbIncBottomRight.Text = "Снизу слева";
+            this.cbIncBottomRight.UseVisualStyleBackColor = true;
+            // 
+            // cbIncBottomLeft
+            // 
+            this.cbIncBottomLeft.AutoSize = true;
+            this.cbIncBottomLeft.Location = new System.Drawing.Point(24, 128);
+            this.cbIncBottomLeft.Name = "cbIncBottomLeft";
+            this.cbIncBottomLeft.Size = new System.Drawing.Size(89, 17);
+            this.cbIncBottomLeft.TabIndex = 2;
+            this.cbIncBottomLeft.Text = "Снизу слева";
+            this.cbIncBottomLeft.UseVisualStyleBackColor = true;
+            // 
+            // cbIncTopRight
+            // 
+            this.cbIncTopRight.AutoSize = true;
+            this.cbIncTopRight.Location = new System.Drawing.Point(220, 52);
+            this.cbIncTopRight.Name = "cbIncTopRight";
+            this.cbIncTopRight.Size = new System.Drawing.Size(100, 17);
+            this.cbIncTopRight.TabIndex = 1;
+            this.cbIncTopRight.Text = "Сверху справа";
+            this.cbIncTopRight.UseVisualStyleBackColor = true;
+            // 
+            // cbIncTopLeft
+            // 
+            this.cbIncTopLeft.AutoSize = true;
+            this.cbIncTopLeft.Location = new System.Drawing.Point(24, 52);
+            this.cbIncTopLeft.Name = "cbIncTopLeft";
+            this.cbIncTopLeft.Size = new System.Drawing.Size(94, 17);
+            this.cbIncTopLeft.TabIndex = 0;
+            this.cbIncTopLeft.Text = "Сверху слева";
+            this.cbIncTopLeft.UseVisualStyleBackColor = true;
+            // 
             // btnCancel
             // 
             this.btnCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnCancel.Location = new System.Drawing.Point(298, 224);
+            this.btnCancel.Location = new System.Drawing.Point(303, 214);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(75, 23);
             this.btnCancel.TabIndex = 1;
@@ -357,7 +456,7 @@
             // 
             this.btnOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnOK.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.btnOK.Location = new System.Drawing.Point(207, 224);
+            this.btnOK.Location = new System.Drawing.Point(212, 214);
             this.btnOK.Name = "btnOK";
             this.btnOK.Size = new System.Drawing.Size(75, 23);
             this.btnOK.TabIndex = 2;
@@ -369,7 +468,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(389, 256);
+            this.ClientSize = new System.Drawing.Size(394, 246);
             this.Controls.Add(this.btnOK);
             this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.tabControl1);
@@ -387,6 +486,9 @@
             this.tabPage2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudQuantVertRight)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudQuantVertLeft)).EndInit();
+            this.tabPage3.ResumeLayout(false);
+            this.tabPage3.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudQuantInclined)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -417,5 +519,12 @@
         private System.Windows.Forms.TextBox tbName;
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.TabPage tabPage3;
+        private System.Windows.Forms.NumericUpDown nudQuantInclined;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.CheckBox cbIncBottomRight;
+        private System.Windows.Forms.CheckBox cbIncBottomLeft;
+        private System.Windows.Forms.CheckBox cbIncTopRight;
+        private System.Windows.Forms.CheckBox cbIncTopLeft;
     }
 }

@@ -50,7 +50,6 @@ namespace RCC_Extension.UI
                         ColumnWidth.AddRange(_ColumnWidth);
                         break;
                     }
-
                 case "Levels": //Создаем окно для списка уровней
                     {
                         this.Text = "Уровни";
@@ -116,8 +115,8 @@ namespace RCC_Extension.UI
                 case "Walls": 
                 {
                         this.Text = "Стены";
-                        List<String> _ColumnName = new List<String>() { "Марка", "Проемы", "Размеры, мм", "Верт.стерж.", "Гор.стерж.", "S_брутто, кв.м", "S_нетто, кв.м", "V_брутто, куб.м", "V_нетто, куб.м"};
-                        List<Int32> _ColumnWidth = new List<Int32>() { 150, 100, 150, 100, 100, 100, 100, 100, 100 };
+                        List<String> _ColumnName = new List<String>() { "Марка", "Проемы", "Размеры, мм", "Верт.стерж.", "Гор.стерж.", "Диаг.стерж.", "S_брутто, кв.м", "S_нетто, кв.м", "V_брутто, куб.м", "V_нетто, куб.м"};
+                        List<Int32> _ColumnWidth = new List<Int32>() { 150, 100, 150, 100, 100, 100, 100, 100, 100, 100 };
                         ColumnName.AddRange(_ColumnName);
                         ColumnWidth.AddRange(_ColumnWidth);
 
@@ -134,7 +133,6 @@ namespace RCC_Extension.UI
                         tsbReport.Visible = true;
                         break;
                 }
-
                 case "WallTypes": //Создаем окно для списка стен
                     {
                         this.Text = "Типы стен";
@@ -160,22 +158,18 @@ namespace RCC_Extension.UI
             {
                 lvDetails.Columns.Add(S);
             }
-
             for (int i = 0; i < lvDetails.Columns.Count; i++)
             {
                 lvDetails.Columns[i].Width= ColumnWidth[i];
             }
-
             for (int i=1; i<lvDetails.Columns.Count; i++)
             {
                 lvDetails.Columns[i].TextAlign = HorizontalAlignment.Center;
             }
-
             if (_isSelectable) { btnClose.Name = "Выбрать"; } else { btnClose.Name = "Закрыть"; }
             lvDetails.MultiSelect = !_isSelectable;
 
         }
-
         private void btnClose_Click(object sender, EventArgs e)
         {
             this.Close();
@@ -380,6 +374,7 @@ namespace RCC_Extension.UI
             Item.SubItems.Add(wall.GetStringSizes());
             Item.SubItems.Add(Convert.ToString(wall.VertBarQuantity()));
             Item.SubItems.Add(Convert.ToString(wall.HorBarQuantity()));
+            Item.SubItems.Add(Convert.ToString(wall.IncBarQuantity()));
             Item.SubItems.Add(Convert.ToString(Math.Round(wall.GetConcreteAreaBrutto() / 1000)/1000));
             Item.SubItems.Add(Convert.ToString(Math.Round(wall.GetConcreteAreaNetto() / 1000)/1000));
             Item.SubItems.Add(Convert.ToString(Math.Round(wall.GetConcreteVolumeBrutto() / 1000000)/1000));
@@ -507,7 +502,6 @@ namespace RCC_Extension.UI
             DetailForm.ShowDialog();
             this.Visible = true;
         }
-
         private void tsbOpenings_Click(object sender, EventArgs e)
         {
             if (lvDetails.SelectedIndices.Count == 1)
@@ -527,7 +521,6 @@ namespace RCC_Extension.UI
             else
             { MessageBox.Show("Выберите один элемент из списка", "Неверный выбор"); }
         }
-
         private void tsbReport_Click(object sender, EventArgs e)
         {
             if (lvDetails.SelectedIndices.Count == 0)
@@ -550,14 +543,15 @@ namespace RCC_Extension.UI
                     }
                 case "Walls":
                     {
+                        List<Wall> objectList = new List<Wall>();
                         Wall wall;
                         foreach (int i in lvDetails.SelectedIndices)
                         {
                             wall = ((List<Wall>)_objectList)[i];
-                            sumVolume += wall.GetConcreteVolumeNetto(); 
+                            objectList.Add(wall); 
                         }
-                        sumVolume = (Math.Round(sumVolume / 1000000)) / 1000;
-                        { MessageBox.Show(Convert.ToString(sumVolume) + "куб.м.", "Суммарный объем бетона по стенам"); }
+                        var frmResult = new frmResult(objectList);
+                        frmResult.ShowDialog();
                         break;
                     }
             }

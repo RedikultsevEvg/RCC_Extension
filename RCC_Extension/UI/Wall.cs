@@ -11,6 +11,7 @@ using RCC_Extension.BLL.WallAndColumn;
 using RCC_Extension.BLL.BuildingAndSite;
 using RCC_Extension.BLL.Geometry;
 using RCC_Extension.UI.Forms;
+using RCC_Extension.BLL.Reinforcement;
 
 namespace RCC_Extension.UI
 {
@@ -24,6 +25,8 @@ namespace RCC_Extension.UI
         private List<WallType> _wallTypeList;
         private Point2D _tmpStartPoint;
         private Point2D _tmpEndPoint;
+        private BarSpacingSettings _tmpVertSpacingSetting;
+        private BarSpacingSettings _tmpHorSpacingSetting;
 
         public frmWall(Wall wall)
         {
@@ -36,6 +39,8 @@ namespace RCC_Extension.UI
             _wallTypeList = _building.WallTypeList;
             _tmpStartPoint = (Point2D)_wall.StartPoint.Clone();
             _tmpEndPoint = (Point2D)_wall.EndPoint.Clone();
+            _tmpVertSpacingSetting = (BarSpacingSettings)_wall.VertSpacingSetting.Clone();
+            _tmpHorSpacingSetting = (BarSpacingSettings)_wallType.HorSpacingSetting.Clone();
 
             tbName.Text = _wall.Name;
             tbStartCoord.Text = _wall.StartPoint.PointText();
@@ -44,8 +49,10 @@ namespace RCC_Extension.UI
             nudConcreteEndOffset.Value = _wall.ConcreteEndOffset;
             cbRewriteHeight.Checked = _wall.ReWriteHeight;
             nudHeight.Value = _wall.Height;
-            tbVertSpacing.Text = _wall.WallType.VertSpacingSetting.SpacingText();
-            tbHorSpacing.Text = _wall.WallType.HorSpacingSetting.SpacingText();
+            if (_wall.OverrideVertSpacing) { tbVertSpacing.Text = _wall.VertSpacingSetting.SpacingText(); } else { tbVertSpacing.Text = _wall.WallType.VertSpacingSetting.SpacingText(); }
+            if (_wall.OverrideHorSpacing) { tbHorSpacing.Text = _wall.HorSpacingSetting.SpacingText(); } else { tbHorSpacing.Text = _wall.WallType.HorSpacingSetting.SpacingText(); }
+            cbOverrideVertSpacing.Checked = _wall.OverrideVertSpacing;
+            cbOverrideHorSpacing.Checked = _wall.OverrideHorSpacing;
             nudReinforcementStartOffset.Value = _wall.ReiforcementStartOffset;
             nudReinforcementEndOffset.Value = _wall.ReiforcementEndOffset;
             int Counter=0;
@@ -74,12 +81,13 @@ namespace RCC_Extension.UI
             _wall.Height = nudHeight.Value;
             _wall.ReiforcementStartOffset = nudReinforcementStartOffset.Value;
             _wall.ReiforcementEndOffset = nudReinforcementEndOffset.Value;
-
-            //_wall.Level = _levelList[cbLevels.SelectedIndex];
             _wall.WallType = _wallTypeList[cbWallTypes.SelectedIndex];
             _wall.StartPoint = _tmpStartPoint;
             _wall.EndPoint = _tmpEndPoint;
-
+            _wall.OverrideVertSpacing = cbOverrideVertSpacing.Checked;
+            _wall.OverrideHorSpacing = cbOverrideHorSpacing.Checked;
+            _wall.VertSpacingSetting = _tmpVertSpacingSetting;
+            _wall.HorSpacingSetting = _tmpHorSpacingSetting;
         }
 
         private void cbRewriteHeight_CheckedChanged(object sender, EventArgs e)
@@ -101,6 +109,32 @@ namespace RCC_Extension.UI
             frmPoint frmPoint = new frmPoint(_tmpEndPoint);
             frmPoint.ShowDialog();
             if (frmPoint.DialogResult == DialogResult.OK) { tbEndCoord.Text = _tmpEndPoint.PointText(); }
+        }
+
+        private void cbOverrideVertSpacing_CheckedChanged(object sender, EventArgs e)
+        {
+            btnVertSpacingSetting.Enabled = ((CheckBox)sender).Checked;
+            if (((CheckBox)sender).Checked) { tbVertSpacing.Text = _tmpVertSpacingSetting.SpacingText(); } else { tbVertSpacing.Text = _wall.WallType.VertSpacingSetting.SpacingText(); }
+        }
+
+        private void cbOverrideHorSpacing_CheckedChanged(object sender, EventArgs e)
+        {
+            btnHorSpacingSetting.Enabled = ((CheckBox)sender).Checked;
+            if (((CheckBox)sender).Checked) { tbHorSpacing.Text = _tmpHorSpacingSetting.SpacingText(); } else { tbVertSpacing.Text = _wall.WallType.HorSpacingSetting.SpacingText(); }
+        }
+
+        private void btnVertSpacingSetting_Click(object sender, EventArgs e)
+        {
+            var obj = new frmBarSpacingSettings(_tmpVertSpacingSetting);
+            obj.ShowDialog();
+            if (obj.DialogResult == DialogResult.OK) { tbVertSpacing.Text = _tmpVertSpacingSetting.SpacingText(); }
+        }
+
+        private void btnHorSpacingSetting_Click(object sender, EventArgs e)
+        {
+            var obj = new frmBarSpacingSettings(_tmpHorSpacingSetting);
+            obj.ShowDialog();
+            if (obj.DialogResult == DialogResult.OK) { tbHorSpacing.Text = _tmpHorSpacingSetting.SpacingText(); }
         }
     }
 }

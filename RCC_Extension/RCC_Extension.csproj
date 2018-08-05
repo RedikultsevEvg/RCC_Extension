@@ -89,10 +89,10 @@
     <Compile Include="UI\Forms\frmPoint.Designer.cs">
       <DependentUpon>frmPoint.cs</DependentUpon>
     </Compile>
-    <Compile Include="UI\frmOpeningType.cs">
+    <Compile Include="UI\Forms\frmOpeningType.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="UI\frmOpeningType.Designer.cs">
+    <Compile Include="UI\Forms\frmOpeningType.Designer.cs">
       <DependentUpon>frmOpeningType.cs</DependentUpon>
     </Compile>
     <Compile Include="UI\DetailsList.cs">
@@ -100,6 +100,12 @@
     </Compile>
     <Compile Include="UI\DetailsList.Designer.cs">
       <DependentUpon>DetailsList.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\Forms\frmResult.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\Forms\frmResult.Designer.cs">
+      <DependentUpon>frmResult.cs</DependentUpon>
     </Compile>
     <Compile Include="UI\Wall.cs">
       <SubType>Form</SubType>
@@ -136,8 +142,11 @@
     <EmbeddedResource Include="UI\Forms\frmPoint.resx">
       <DependentUpon>frmPoint.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="UI\frmOpeningType.resx">
+    <EmbeddedResource Include="UI\Forms\frmOpeningType.resx">
       <DependentUpon>frmOpeningType.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\Forms\frmResult.resx">
+      <DependentUpon>frmResult.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UI\Wall.resx">
       <DependentUpon>Wall.cs</DependentUpon>

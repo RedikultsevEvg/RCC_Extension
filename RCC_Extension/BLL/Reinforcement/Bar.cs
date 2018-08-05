@@ -26,6 +26,8 @@ namespace RCC_Extension.BLL.Reinforcement
         public Int32 AddBarsLeftQuant { get; set; }
         public Int32 AddBarsRightQuant { get; set; }
         public decimal MainSpacing { get; set; }
+        public bool AddBarsEdgeStart { get; set; }
+        public bool AddBarsEdgeEnd { get; set; }
 
         public String SpacingText()
         {
