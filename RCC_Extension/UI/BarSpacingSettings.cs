@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using RCC_Extension.BLL.Service;
 using RCC_Extension.BLL.Reinforcement;
 
 namespace RCC_Extension.UI
@@ -37,6 +38,7 @@ namespace RCC_Extension.UI
             _barSpacingSettings.AddBarsRight = cbAddRightBars.Checked;
             _barSpacingSettings.AddBarsRightQuant = Convert.ToInt32(nudRightQuant.Value);
             _barSpacingSettings.AddBarsRightSpacing = nudRightSpacing.Value;
+            ProgrammSettings.IsDataChanged = true;
         }
 
         private void cbAddLeftBars_CheckedChanged(object sender, EventArgs e)

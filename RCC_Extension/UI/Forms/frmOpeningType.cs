@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using RCC_Extension.BLL.Service;
 using RCC_Extension.BLL.WallAndColumn;
 
 namespace RCC_Extension.UI
@@ -65,6 +66,7 @@ namespace RCC_Extension.UI
             _Opening.AddIncTopRight = cbIncTopRight.Checked;
             _Opening.AddIncBottomLeft = cbIncBottomLeft.Checked;
             _Opening.AddIncBottomRight = cbIncBottomRight.Checked;
+            ProgrammSettings.IsDataChanged = true;
         }
     }
 }

@@ -26,6 +26,8 @@ namespace StartWPF
         {
             InitializeComponent();
             ProgrammSettings.InicializeNew();
+            ProgrammSettings.IsDataChanged = true;
+            ProgrammSettings.FilePath = "bla-bla-bla";
         }
 
         private void btnWall_Click(object sender, RoutedEventArgs e)

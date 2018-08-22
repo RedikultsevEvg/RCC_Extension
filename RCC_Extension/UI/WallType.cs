@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using RCC_Extension.BLL.Service;
 using RCC_Extension.BLL.WallAndColumn;
 using RCC_Extension.BLL.Reinforcement;
 
@@ -70,6 +71,7 @@ namespace RCC_Extension.UI
             _wallType.HorBaseLength = nudHorBaseLength.Value;
             _wallType.VertSpacingSetting = _vertSpacingSetting;
             _wallType.HorSpacingSetting = _horSpacingSetting;
+            ProgrammSettings.IsDataChanged = true;
         }
 
         private void button3_Click(object sender, EventArgs e)

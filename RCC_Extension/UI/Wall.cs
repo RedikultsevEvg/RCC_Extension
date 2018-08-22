@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using RCC_Extension.BLL.Service;
 using RCC_Extension.BLL.WallAndColumn;
 using RCC_Extension.BLL.BuildingAndSite;
 using RCC_Extension.BLL.Geometry;
@@ -88,14 +89,13 @@ namespace RCC_Extension.UI
             _wall.OverrideHorSpacing = cbOverrideHorSpacing.Checked;
             _wall.VertSpacingSetting = _tmpVertSpacingSetting;
             _wall.HorSpacingSetting = _tmpHorSpacingSetting;
+            ProgrammSettings.IsDataChanged = true;
         }
 
         private void cbRewriteHeight_CheckedChanged(object sender, EventArgs e)
         {
             nudHeight.Enabled = ((CheckBox)sender).Checked;
         }
-
-
 
         private void btnStartPoint_Click(object sender, EventArgs e)
         {

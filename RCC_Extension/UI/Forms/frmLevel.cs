@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using RCC_Extension.BLL.Service;
 using RCC_Extension.BLL.BuildingAndSite;
 
 namespace RCC_Extension.UI.Forms
@@ -33,6 +34,7 @@ namespace RCC_Extension.UI.Forms
             _level.Height = nudHeight.Value;
             _level.TopOffset = nudTopOffset.Value;
             _level.Quant = Convert.ToInt32(nudQuant.Value);
+            ProgrammSettings.IsDataChanged = true;
         }
     }
 }

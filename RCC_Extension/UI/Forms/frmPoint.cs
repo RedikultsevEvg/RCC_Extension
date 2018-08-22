@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using RCC_Extension.BLL.Service;
 using RCC_Extension.BLL.Geometry;
 
 namespace RCC_Extension.UI.Forms
@@ -28,6 +29,7 @@ namespace RCC_Extension.UI.Forms
         {
             _point2D.Coord_X = nudCoord_X.Value;
             _point2D.Coord_Y = nudCoord_Y.Value;
+            ProgrammSettings.IsDataChanged = true;
         }
     }
 }
