@@ -177,7 +177,6 @@ namespace RCC_Extension.UI
         private void tsbNew_Click(object sender, EventArgs e)
         {
             ProgrammSettings.IsDataChanged = true;
-            ProgrammSettings.FilePath = "bla-bla-bla";
             switch (_formType) //
             {
                 case "Buildings":

@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:StartWPF"
         xmlns:service="clr-namespace:RCC_Extension.BLL.Service;assembly=RCC_Extension"
         mc:Ignorable="d"
-        Title="Калькулятор" Height="427" Width="904" MinHeight="500" MinWidth="600">
+        Title="RD-Калькулятор" Height="427" Width="904" MinHeight="500" MinWidth="600">
     <Window.Resources>
 
     </Window.Resources>
@@ -23,12 +23,13 @@
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="200"/>
-            <ColumnDefinition Width="557*"/>
+            <ColumnDefinition Width="48*"/>
+            <ColumnDefinition Width="509*"/>
             <ColumnDefinition Width="139*"/>
         </Grid.ColumnDefinitions>
         <Rectangle Grid.Column="0" Grid.Row="1" Fill="White" RadiusX="7" RadiusY="7" Margin="10"/>
-        <Rectangle Grid.Column="1" Grid.Row="1" Fill="White" RadiusX="7" RadiusY="7" Margin="10" Grid.ColumnSpan="2"/>
-        <WrapPanel Grid.Column="1" Grid.Row="1" Margin="10" Grid.ColumnSpan="2" >
+        <Rectangle Grid.Column="1" Grid.Row="1" Fill="White" RadiusX="7" RadiusY="7" Margin="10" Grid.ColumnSpan="3"/>
+        <WrapPanel Grid.Column="1" Grid.Row="1" Margin="10" Grid.ColumnSpan="3" >
             <Button x:Name="btnWall" Width="200" Height="100" Margin="5" Background="#FF91D7FF" IsCancel="True" Click="btnWall_Click">
                 <Button.Effect>
                     <DropShadowEffect Opacity="0.6"/>
@@ -63,7 +64,7 @@
                 </Grid>
             </Button>
         </StackPanel>
-        <StackPanel Grid.Column="1" Margin="10" Orientation="Horizontal" Grid.ColumnSpan="2">
+        <StackPanel Grid.Column="1" Margin="10" Orientation="Horizontal" Grid.ColumnSpan="3">
             <Button x:Name="btnLoad" Width="95" Margin="5" Background="#FFB5FCFF" Click="btnLoad_Click" >
                 <Button.Effect>
                     <DropShadowEffect Opacity="0.6"/>
@@ -82,7 +83,6 @@
                 <Image x:Name="SaveFile_png" Height="40" Source="SaveFile.png" Stretch="Fill" Width="40"/>
                 <Button.ToolTip>
                     <TextBlock Margin="3" Foreground="Black" Text="Сохранить..."></TextBlock>
-
                 </Button.ToolTip>
             </Button>
             <Button x:Name="btnSaveAs" Width="95" Margin="5" Background="#FFB5FCFF" Click="btnSaveAs_Click">
@@ -99,8 +99,5 @@
             <Image x:Name="image" Width="30"/>
             <Image x:Name="Logo_sourse_gif" Source="Logo_sourse.gif" Stretch="Fill" Height="66" Width="83"/>
         </StackPanel>
-        <TextBlock x:Name="textBlock" Grid.Column="1" HorizontalAlignment="Left" Margin="241,171,0,0" Grid.Row="1" TextWrapping="Wrap" VerticalAlignment="Top"
-                   Text="{Binding Path=(service:ProgrammSettings.FilePath)}"
-                   />
     </Grid>
 </Window>

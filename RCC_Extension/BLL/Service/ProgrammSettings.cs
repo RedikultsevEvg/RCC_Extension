@@ -26,21 +26,17 @@ namespace RCC_Extension.BLL.Service
             set
             {
                 _filePath = value;
-                if (OnStaticPropertyChanged != null) OnStaticPropertyChanged(null, EventArgs.Empty);
+                if (FilePathChanged != null) FilePathChanged(null, EventArgs.Empty);
             }
         }
         public static bool IsDataChanged
         {
             get
-            { return true; }
-            //{   MessageBox.Show("Значение присвоено", Convert.ToString(_isDataChanged));
-            //    return _isDataChanged;
-            //}
+            {   return _isDataChanged; }
             set
             {
                 _isDataChanged = value;
-                MessageBox.Show("Значение получено", Convert.ToString(_isDataChanged));
-                if (OnStaticPropertyChanged != null) OnStaticPropertyChanged(null, EventArgs.Empty);
+                if (IsDataChangedChanged != null) IsDataChangedChanged(null, EventArgs.Empty);
             }
         }
 
@@ -48,7 +44,7 @@ namespace RCC_Extension.BLL.Service
         {
             BuildingSite = new BuildingSite();
             BuildingSite.BuildingList.Add(new Building(BuildingSite));
-            //IsDataChanged = false;
+            IsDataChanged = false;
         }
         public static void ClearAll()
         {
@@ -87,6 +83,7 @@ namespace RCC_Extension.BLL.Service
                 saveFileDialog.Filter = "XML file (*.xml)|*.xml";
                 if (FilePath == "" || FilePath == null || InNewFile)
                 {
+                    
                     if (saveFileDialog.ShowDialog() == true)
                         FilePath = saveFileDialog.FileName;
                     else return false;
@@ -113,6 +110,7 @@ namespace RCC_Extension.BLL.Service
         }
 
         // Raise the change event through this static method
-        public static event EventHandler OnStaticPropertyChanged;
+        public static event EventHandler IsDataChangedChanged;
+        public static event EventHandler FilePathChanged;
     }
 }

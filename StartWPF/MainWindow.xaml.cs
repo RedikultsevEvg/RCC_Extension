@@ -14,6 +14,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using RCC_Extension.BLL.Service;
 using RCC_Extension.UI;
+using winForms = System.Windows.Forms;
 
 namespace StartWPF
 {
@@ -26,8 +27,6 @@ namespace StartWPF
         {
             InitializeComponent();
             ProgrammSettings.InicializeNew();
-            ProgrammSettings.IsDataChanged = true;
-            ProgrammSettings.FilePath = "bla-bla-bla";
         }
 
         private void btnWall_Click(object sender, RoutedEventArgs e)
@@ -46,7 +45,35 @@ namespace StartWPF
 
         private void btnLoad_Click(object sender, RoutedEventArgs e)
         {
-            ProgrammSettings.OpenProjectFromFile();
+            if (ProgrammSettings.IsDataChanged)
+            {
+                winForms.DialogResult result = winForms.MessageBox.Show(
+                "Сохранить данные перед открытием нового файла?",
+                "Файл не сохранен",
+                winForms.MessageBoxButtons.YesNoCancel,
+                winForms.MessageBoxIcon.Information,
+                winForms.MessageBoxDefaultButton.Button1,
+                winForms.MessageBoxOptions.DefaultDesktopOnly);
+
+                if (result == winForms.DialogResult.Yes)
+                {
+                    ProgrammSettings.SaveProjectToFile(false);
+                    if (ProgrammSettings.OpenProjectFromFile())
+                    this.Title = "RD-Калькулятор - " + ProgrammSettings.FilePath;
+                }
+
+                if (result == winForms.DialogResult.No)
+                {
+                    if (ProgrammSettings.OpenProjectFromFile())
+                        this.Title = "RD-Калькулятор - " + ProgrammSettings.FilePath;
+                }
+            }
+            else
+            {
+                if (ProgrammSettings.OpenProjectFromFile())
+                    this.Title = "RD-Калькулятор - " + ProgrammSettings.FilePath;
+            }
+            
         }
 
         private void btnSaveAs_Click(object sender, RoutedEventArgs e)
