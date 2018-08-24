@@ -38,9 +38,9 @@
             this.tsbWallTypes = new System.Windows.Forms.ToolStripButton();
             this.tsbOpeningTypes = new System.Windows.Forms.ToolStripButton();
             this.tsbOpenings = new System.Windows.Forms.ToolStripButton();
+            this.tsbReport = new System.Windows.Forms.ToolStripButton();
             this.lvDetails = new System.Windows.Forms.ListView();
             this.btnClose = new System.Windows.Forms.Button();
-            this.tsbReport = new System.Windows.Forms.ToolStripButton();
             this.toolStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -143,6 +143,16 @@
             this.tsbOpenings.Text = "Отверстия";
             this.tsbOpenings.Click += new System.EventHandler(this.tsbOpenings_Click);
             // 
+            // tsbReport
+            // 
+            this.tsbReport.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.tsbReport.Image = ((System.Drawing.Image)(resources.GetObject("tsbReport.Image")));
+            this.tsbReport.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsbReport.Name = "tsbReport";
+            this.tsbReport.Size = new System.Drawing.Size(34, 34);
+            this.tsbReport.Text = "Сумма по выбранным";
+            this.tsbReport.Click += new System.EventHandler(this.tsbReport_Click);
+            // 
             // lvDetails
             // 
             this.lvDetails.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -166,16 +176,6 @@
             this.btnClose.UseVisualStyleBackColor = true;
             this.btnClose.Click += new System.EventHandler(this.btnClose_Click);
             // 
-            // tsbReport
-            // 
-            this.tsbReport.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.tsbReport.Image = ((System.Drawing.Image)(resources.GetObject("tsbReport.Image")));
-            this.tsbReport.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.tsbReport.Name = "tsbReport";
-            this.tsbReport.Size = new System.Drawing.Size(34, 34);
-            this.tsbReport.Text = "Сумма по выбранным";
-            this.tsbReport.Click += new System.EventHandler(this.tsbReport_Click);
-            // 
             // frmDetailList
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -184,6 +184,7 @@
             this.Controls.Add(this.btnClose);
             this.Controls.Add(this.lvDetails);
             this.Controls.Add(this.toolStrip1);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MinimumSize = new System.Drawing.Size(850, 500);
             this.Name = "frmDetailList";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
