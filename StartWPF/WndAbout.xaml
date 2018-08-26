@@ -1,0 +1,34 @@
+﻿<Window x:Name="wndAboutProg" x:Class="StartWPF.WndAbout"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:StartWPF"
+        mc:Ignorable="d"
+        Title="О программе..." Height="450" Width="800" ResizeMode="NoResize" WindowStyle="None">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="36*"/>
+            <RowDefinition Height="131*"/>
+            <RowDefinition Height="23*"/>
+            <RowDefinition Height="35*"/>
+        </Grid.RowDefinitions>
+        <Grid.Background>
+            <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                <GradientStop Color="#FF7DF3FF" Offset="1"/>
+                <GradientStop Color="White"/>
+            </LinearGradientBrush>
+        </Grid.Background>
+        <Button x:Name="btnClose" Content="Закрыть" HorizontalAlignment="Left" Margin="620,10,0,0" VerticalAlignment="Top" Width="162" Height="45" Grid.Row="3" FontSize="16" Click="btnClose_Click"/>
+        <Label x:Name="Authors" Content="Авторский коллектив" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" FontFamily="Arial" FontSize="16" Height="28" Width="166"/>
+
+        <StackPanel HorizontalAlignment="Left" Height="193" Margin="10,10,0,0" Grid.Row="1" VerticalAlignment="Top" Width="772">
+            <Label x:Name="Author1" Content="Петров С.А. - Технический руководитель" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" FontFamily="Arial" FontSize="16" FontWeight="Bold" Background="{x:Null}" Foreground="#FFFF5D5D"/>
+            <Label x:Name="Author2" Content="Редикульцев Е.А. - Консультант" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" FontFamily="Arial" FontSize="16" FontWeight="Bold" Background="{x:Null}" Foreground="#FFFF5D5D"/>
+
+        </StackPanel>
+        <Label x:Name="lbBuild" Content="Сборка" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" FontFamily="Arial" FontSize="14" FontWeight="Bold" Background="{x:Null}" Foreground="Black" Grid.Row="2" Height="26" Width="60"/>
+        <Label x:Name="lbBuildText" Content="Сборка" HorizontalAlignment="Left" Margin="200,10,0,0" VerticalAlignment="Top" FontFamily="Arial" FontSize="14" FontWeight="Bold" Background="{x:Null}" Foreground="Black" Grid.Row="2" Height="26" Width="60"/>
+
+    </Grid>
+</Window>

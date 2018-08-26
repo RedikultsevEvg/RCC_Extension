@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace StartWPF.Properties {
+namespace RDUIL.Properties {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace StartWPF.Properties {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("StartWPF.Properties.Resources", typeof(Resources).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("RDUIL.Properties.Resources", typeof(Resources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -63,29 +63,9 @@ namespace StartWPF.Properties {
         /// <summary>
         ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap Bridge {
+        internal static System.Drawing.Bitmap IconCancel {
             get {
-                object obj = ResourceManager.GetObject("Bridge", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Поиск локализованного ресурса типа System.Drawing.Icon, аналогичного (Значок).
-        /// </summary>
-        internal static System.Drawing.Icon Concrete32 {
-            get {
-                object obj = ResourceManager.GetObject("Concrete32", resourceCulture);
-                return ((System.Drawing.Icon)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap LoadFolder {
-            get {
-                object obj = ResourceManager.GetObject("LoadFolder", resourceCulture);
+                object obj = ResourceManager.GetObject("IconCancel", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -93,9 +73,9 @@ namespace StartWPF.Properties {
         /// <summary>
         ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap Logo_sourse {
+        internal static System.Drawing.Bitmap IconForces {
             get {
-                object obj = ResourceManager.GetObject("Logo_sourse", resourceCulture);
+                object obj = ResourceManager.GetObject("IconForces", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -103,9 +83,9 @@ namespace StartWPF.Properties {
         /// <summary>
         ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap SaveFile {
+        internal static System.Drawing.Bitmap IconOK {
             get {
-                object obj = ResourceManager.GetObject("SaveFile", resourceCulture);
+                object obj = ResourceManager.GetObject("IconOK", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -113,29 +93,10 @@ namespace StartWPF.Properties {
         /// <summary>
         ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap SaveFileAs {
+        internal static System.Drawing.Bitmap IconParts {
             get {
-                object obj = ResourceManager.GetObject("SaveFileAs", resourceCulture);
+                object obj = ResourceManager.GetObject("IconParts", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap Steel {
-            get {
-                object obj = ResourceManager.GetObject("Steel", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Ищет локализованную строку, похожую на application.
-        /// </summary>
-        internal static string String1 {
-            get {
-                return ResourceManager.GetString("String1", resourceCulture);
             }
         }
     }

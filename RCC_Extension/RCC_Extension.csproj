@@ -119,9 +119,6 @@
     <Compile Include="UI\WallType.Designer.cs">
       <DependentUpon>WallType.cs</DependentUpon>
     </Compile>
-    <Compile Include="UI\WPF\frmOpening.xaml.cs">
-      <DependentUpon>frmOpening.xaml</DependentUpon>
-    </Compile>
     <Compile Include="WallCrossSectionCMd.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -159,10 +156,7 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <Page Include="UI\WPF\frmOpening.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
+    <Folder Include="UI\WPF\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

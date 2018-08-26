@@ -13,14 +13,14 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace RCC_Extension.UI.WPF
+namespace RDUIL
 {
     /// <summary>
-    /// Логика взаимодействия для frmOpening.xaml
+    /// Логика взаимодействия для UserControl1.xaml
     /// </summary>
-    public partial class frmOpening : UserControl
+    public partial class UserControl1 : UserControl
     {
-        public frmOpening()
+        public UserControl1()
         {
             InitializeComponent();
         }

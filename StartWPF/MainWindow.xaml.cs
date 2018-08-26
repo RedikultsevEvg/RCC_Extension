@@ -12,9 +12,11 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using RCC_Extension.BLL.Service;
-using RCC_Extension.UI;
+using RDBLL.Common.Service;
+using RDUIL.WinForms;
 using winForms = System.Windows.Forms;
+using RDUIL.WPF_Windows;
+using RDBLL.Entity.SC.Column;
 
 namespace StartWPF
 {
@@ -79,6 +81,18 @@ namespace StartWPF
         private void btnSaveAs_Click(object sender, RoutedEventArgs e)
         {
             ProgrammSettings.SaveProjectToFile(true);
+        }
+
+        private void btnAbout_Click(object sender, RoutedEventArgs e)
+        {
+            WndAbout wndAbout = new WndAbout();
+            wndAbout.Show();
+        }
+
+        private void btnAbout1_Click(object sender, RoutedEventArgs e)
+        {
+            WndSteelColumnBase wndSteelColumnBase = new WndSteelColumnBase(new SteelColumnBase());
+            wndSteelColumnBase.Show();
         }
     }
 }

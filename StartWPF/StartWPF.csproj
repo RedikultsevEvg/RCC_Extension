@@ -64,15 +64,15 @@
   <PropertyGroup>
     <TargetZone>LocalIntranet</TargetZone>
   </PropertyGroup>
+  <PropertyGroup />
   <PropertyGroup>
-    <ApplicationManifest>Properties\app.manifest</ApplicationManifest>
+    <SignManifests>false</SignManifests>
   </PropertyGroup>
-  <PropertyGroup>
-    <SignManifests>true</SignManifests>
-  </PropertyGroup>
+  <PropertyGroup />
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
@@ -92,6 +92,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="WndAbout.xaml.cs">
+      <DependentUpon>WndAbout.xaml</DependentUpon>
+    </Compile>
     <Page Include="CalcKindControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -115,6 +118,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="WndAbout.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">
@@ -145,9 +152,14 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\RCC_Extension\RCC_Extension.csproj">
-      <Project>{5abd4ee0-2fd5-4532-a4b2-3c78c9e0bb0d}</Project>
-      <Name>RCC_Extension</Name>
+    <ProjectReference Include="..\BLL\BLL.csproj">
+      <Project>{4af80724-4ad7-4bef-ae1c-5a2768395fd7}</Project>
+      <Name>BLL</Name>
+      <Aliases>global</Aliases>
+    </ProjectReference>
+    <ProjectReference Include="..\UIL\UIL.csproj">
+      <Project>{e55425da-3fc6-4bd7-b235-87c420d1d041}</Project>
+      <Name>UIL</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
@@ -158,9 +170,6 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="SaveFileAs.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Bridge.jpg" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Steel.jpg" />
@@ -182,6 +191,12 @@
       <ProductName>.NET Framework 3.5 SP1</ProductName>
       <Install>false</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="bridge.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="About.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
