@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:RDUIL.WPF_Windows"
         mc:Ignorable="d"
-        Title="wndForces" Height="328.5" Width="620">
+        Title="Усилие" Height="400" Width="620">
     <Window.Resources>
         <Style x:Key="ServiceButton" TargetType="Button">
             <Setter Property="Width" Value="100" />
@@ -18,8 +18,16 @@
             <Setter Property="Height" Value="40" />
             <Setter Property="Stretch" Value="Fill" />
         </Style>
-        <BitmapImage x:Key="IconOK" CreateOptions="IgnoreImageCache" CacheOption="OnLoad" UriSource="C:\Repos\RCC_Extension\UIL\Resources\IconOK.png"/>
-        <BitmapImage x:Key="IconCancel" CreateOptions="IgnoreImageCache" CacheOption="OnLoad" UriSource="C:\Repos\RCC_Extension\UIL\Resources\IconCancel.png"/>
+        <Style x:Key="PropertyTextBlock" TargetType="TextBlock">
+            <Setter Property="Margin" Value="5" />
+            <Setter Property="TextWrapping" Value="Wrap" />
+            <Setter Property="FontSize" Value="12" />
+        </Style>
+        <Style x:Key="PropertyTextBox" TargetType="TextBox">
+            <Setter Property="Margin" Value="5" />
+            <Setter Property="TextWrapping" Value="Wrap" />
+            <Setter Property="FontSize" Value="12" />
+        </Style>
     </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
@@ -41,43 +49,46 @@
                     <RowDefinition Height="30"/>
                     <RowDefinition Height="30"/>
                     <RowDefinition Height="30"/>
-                </Grid.RowDefinitions>
+                    <RowDefinition Height="30"/>
+                    <RowDefinition Height="30"/>
+                    </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width ="*"/>
-                    <ColumnDefinition Width ="100"/>
-                    <ColumnDefinition Width ="100"/>
-                </Grid.ColumnDefinitions>
-                <TextBlock x:Name="tbForce_N" Margin="5" TextWrapping="Wrap" Text="Продольное усилие Nz, кН" FontSize="12"/>
-                <TextBox x:Name="tbxForce_Nck" Grid.Column="1" Margin="5" TextWrapping="Wrap" Text="TextBox"/>
-                    <TextBox x:Name="tbxForce_Nd" Grid.Column="2" Margin="5" TextWrapping="Wrap" Text="TextBox"/>
-                    <TextBlock x:Name="tbWidth" Grid.Row="1" Margin="5" TextWrapping="Wrap" Text="Ширина (вдоль оси X), мм" FontSize="12"/>
-                <TextBox x:Name="tbxWidth" Grid.Row="1" Grid.Column="1" Margin="5" TextWrapping="Wrap" Text="TextBox"/>
-                <TextBlock x:Name="tbLength" Grid.Row="2" Margin="5" TextWrapping="Wrap" Text="Длина (вдоль оси Y), мм" FontSize="12"/>
-                <TextBox x:Name="tbxLength" Grid.Row="2" Grid.Column="1" Margin="5" TextWrapping="Wrap" Text="TextBox"/>
-                <TextBlock x:Name="tbThicness" Grid.Row="3" Margin="5" TextWrapping="Wrap" Text="Толщина, мм" FontSize="12"/>
-                <TextBox x:Name="tbxThickness" Grid.Row="3" Grid.Column="1" Margin="5" TextWrapping="Wrap" Text="TextBox"/>
-                <TextBlock x:Name="tbWidthBoltDist" Grid.Row="4" Margin="5" TextWrapping="Wrap" Text="Привязка болтов вдоль ширины, мм" FontSize="12"/>
-                <TextBox x:Name="tbxWidthBoltDist" Grid.Row="4" Grid.Column="1" Margin="5" TextWrapping="Wrap" Text="TextBox"/>
-                <TextBlock x:Name="tbLengthBoltDist" Grid.Row="5" Margin="5" TextWrapping="Wrap" Text="Привязка болтов вдоль длины, мм" FontSize="12"/>
-                <TextBox x:Name="tbxLengthBoltDist" Grid.Row="5" Grid.Column="1" Margin="5" TextWrapping="Wrap" Text="TextBox"/>
-                <TextBlock x:Name="tbConcreteStrength" Grid.Row="6" Margin="5" TextWrapping="Wrap" Text="Прочность бетона, МПа" FontSize="12"/>
-                <TextBox x:Name="tbxConcreteStrength" Grid.Row="6" Grid.Column="1" Margin="5" TextWrapping="Wrap" Text="TextBox"/>
-            </Grid>
+                        <ColumnDefinition Width ="150"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock x:Name="tbForce_N" Style="{StaticResource PropertyTextBlock}" Text="Вид нагрузки"/>
+                    <TextBlock x:Name="tbWidth" Grid.Row="1" Style="{StaticResource PropertyTextBlock}" Text="Продольное усилие Nz, кН"/>
+                    <TextBlock x:Name="tbLength" Grid.Row="2" Style="{StaticResource PropertyTextBlock}" Text="Изгибающий момент Mx, кН*м"/>
+                    <TextBlock x:Name="tbThicness" Grid.Row="3" Style="{StaticResource PropertyTextBlock}" Text="Изгибающий момент My, кН*м"/>
+                    <TextBlock x:Name="tbWidthBoltDist" Grid.Row="4" Style="{StaticResource PropertyTextBlock}" Text="Поперечная сила Qx, кН"/>
+                    <TextBlock x:Name="tbLengthBoltDist" Grid.Row="5" Style="{StaticResource PropertyTextBlock}" Text="Поперечная сила Qy, кН"/>
+                    <TextBlock x:Name="tbConcreteStrength" Grid.Row="6" Style="{StaticResource PropertyTextBlock}" Text="Коэффициент надежности"/>
+                    <TextBlock x:Name="textBlock" Grid.Row="7" Style="{StaticResource PropertyTextBlock}" Text="Знакопеременная нагрузка"/>
+                    <TextBox x:Name="tbxWidth" Grid.Row="1" Grid.Column="1" Style="{StaticResource PropertyTextBox}"/>
+                    <TextBox x:Name="tbxLength" Grid.Row="2" Grid.Column="1" Style="{StaticResource PropertyTextBox}"/>
+                    <TextBox x:Name="tbxThickness" Grid.Row="3" Grid.Column="1" Style="{StaticResource PropertyTextBox}"/>
+                    <TextBox x:Name="tbxWidthBoltDist" Grid.Row="4" Grid.Column="1" Style="{StaticResource PropertyTextBox}"/>
+                    <TextBox x:Name="tbxLengthBoltDist" Grid.Row="5" Grid.Column="1" Style="{StaticResource PropertyTextBox}"/>
+                    <TextBox x:Name="tbxConcreteStrength" Grid.Row="6" Grid.Column="1" Style="{StaticResource PropertyTextBox}"/>
+                    <CheckBox x:Name="checkBox" Content="" Grid.Column="1" HorizontalAlignment="Center" Margin="0" Grid.Row="7" VerticalAlignment="Center"/>
+                    <ComboBox x:Name="comboBox" Grid.Column="1" Margin="5"/>
+                </Grid>
         </StackPanel>
+            <Image x:Name="image" Margin="5" Source="pack://siteoforigin:,,,/Resources/FoudationForce.jpg"/>
         </Grid>
         
         <StackPanel Height="60" Grid.Row="1" Margin="10" Orientation="Horizontal" Grid.ColumnSpan="3" HorizontalAlignment="Right" Background="#FFE2E2E2">
-            <Button x:Name="btnOK" Style="{StaticResource ServiceButton}" HorizontalAlignment="Stretch" Click="btnOK_Click">
+            <Button x:Name="btnOK" Style="{StaticResource ServiceButton}" HorizontalAlignment="Stretch">
                 <Button.Effect>
                     <DropShadowEffect Opacity="0.6"/>
                 </Button.Effect>
-                <Image x:Name="OK_png" Style="{StaticResource ServiceButtonImage}" Source="{DynamicResource IconOK}"/>
+                <Image x:Name="OK_png" Style="{StaticResource ServiceButtonImage}" Source="pack://siteoforigin:,,,/Resources/IconOK.png"/>
             </Button>
-            <Button x:Name="btnCancel" Style="{StaticResource ServiceButton}" HorizontalAlignment="Stretch" Click="btnCancel_Click">
+            <Button x:Name="btnCancel" Style="{StaticResource ServiceButton}" HorizontalAlignment="Stretch">
                 <Button.Effect>
                     <DropShadowEffect Opacity="0.6"/>
                 </Button.Effect>
-                <Image x:Name="Cancel_png" Style="{StaticResource ServiceButtonImage}" Source="{DynamicResource IconCancel}"/>
+                <Image x:Name="Cancel_png" Style="{StaticResource ServiceButtonImage}" Source="pack://siteoforigin:,,,/Resources/IconCancel.png"/>
             </Button>
         </StackPanel>
     </Grid>

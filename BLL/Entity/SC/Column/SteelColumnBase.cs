@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using RDBLL.Forces;
+using RDBLL.Entity.Results.SC;
 
 namespace RDBLL.Entity.SC.Column
 {
@@ -11,6 +12,7 @@ namespace RDBLL.Entity.SC.Column
     {
         //Properties
         #region 
+        //public ColumnBaseResult ColumnBaseResult { get; set; }
         public int SteelColumnBaseID { get; set; }
         public String Name { get; set; }
         public int Width { get; set; }
@@ -19,9 +21,12 @@ namespace RDBLL.Entity.SC.Column
         public int WidthBoltDist { get; set; }
         public int LengthBoltDist { get; set; }
         public double ConcreteStrength { get; set; }
-        List<LoadCase> LoadCases { get; set; }
-        List<SteelBasePart> SteelBaseParts { get; set; }
+        public double BoltPrestressForce { get; set; }
+        public List<ColumnLoadSet> Loads { get; set; }
+        public List<SteelBasePart> SteelBaseParts { get; set; }
+
         #endregion
+        
         //Constructors
         #region
         public void SetDefault()
@@ -33,8 +38,9 @@ namespace RDBLL.Entity.SC.Column
             WidthBoltDist = 150;
             LengthBoltDist = 150;
             ConcreteStrength = 1;
-            LoadCases = new List<LoadCase>();
-            LoadCases.Add(new LoadCase());
+            BoltPrestressForce = 0;
+            Loads = new List<ColumnLoadSet>();
+            Loads.Add(new ColumnLoadSet());
             SteelBaseParts = new List<SteelBasePart>();
             SteelBaseParts.Add(new SteelBasePart());
         }

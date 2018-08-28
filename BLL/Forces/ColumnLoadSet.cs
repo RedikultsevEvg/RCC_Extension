@@ -6,13 +6,15 @@ using System.Threading.Tasks;
 
 namespace RDBLL.Forces
 {
-    class LoadCase : ICloneable
+    public class ColumnLoadSet : ICloneable
     {
         //Properties
         #region 
-        public int LoadCaseID { get; set; }
-        public String Name { get; set; }
-        public double Force_N { get; set; }
+        public String Name { get; set; } //Наименование
+        public double PartialSafetyFactor { get; set; } //Коэффициент надежности по нагрузке
+        public bool IsDeadLoad { get; set; }
+        public bool BothSign { get; set; }
+        public double Force_Nz { get; set; }
         public double Force_Mx { get; set; }
         public double Force_My { get; set; }
         public double Force_Qx { get; set; }
@@ -22,14 +24,17 @@ namespace RDBLL.Forces
         #region
         public void SetDefault()
         {
-            Name = "Новая комбинация";
-            Force_N = 100;
+            Name = "Новая нагрузка";
+            PartialSafetyFactor = 1.1;
+            IsDeadLoad = true;
+            BothSign = false;
+            Force_Nz = -100000;
             Force_Mx = 0;
             Force_My = 0;
             Force_Qx = 0;
             Force_Qy = 0;
         }
-        public LoadCase()
+        public ColumnLoadSet()
         {
             SetDefault();
         }

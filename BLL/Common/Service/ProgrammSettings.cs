@@ -10,6 +10,7 @@ using System.IO;
 using win32 = Microsoft.Win32;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using RDBLL.Forces;
 
 
 namespace RDBLL.Common.Service
@@ -45,6 +46,7 @@ namespace RDBLL.Common.Service
             BuildingSite = new BuildingSite();
             BuildingSite.BuildingList.Add(new Building(BuildingSite));
             IsDataChanged = false;
+            LoadKind.KindList = new List<String>() { "Постоянная", "Временная длительная", "Временная кратковременная", "Особая" };
         }
         public static void ClearAll()
         {
