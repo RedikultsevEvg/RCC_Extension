@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:RDUIL.WPF_Windows"
         mc:Ignorable="d"
-        Title="Участок базы колонны" Height="370" Width="450" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
+        Title="Участок базы колонны" Height="393" Width="450" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
     <Window.Resources>
         <Style x:Key="ServiceButton" TargetType="Button">
             <Setter Property="Width" Value="100" />
@@ -21,10 +21,12 @@
     </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
+            <RowDefinition Height="30"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="80"/>
         </Grid.RowDefinitions>
-        <Grid>
+        <TextBox x:Name="tbxName" Margin="5" TextWrapping="Wrap" Text="TextBox"/>
+        <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width ="*"/>
             </Grid.ColumnDefinitions>
@@ -67,13 +69,13 @@
                     <TextBox x:Name="tbxLength" Grid.Column="1" HorizontalAlignment="Right" Height="23" Margin="0,0,10,100" Grid.Row="1" TextWrapping="Wrap" Text="" VerticalAlignment="Bottom" Width="60"/>
                     <TextBlock x:Name="textBlock" Grid.Column="1" HorizontalAlignment="Right" Margin="10,0,120,10" Grid.Row="1" TextWrapping="Wrap" Text="Ширина, мм" VerticalAlignment="Bottom"/>
                     <TextBlock x:Name="textBlock1" Grid.Column="1" HorizontalAlignment="Right" Margin="10,0,80,100" Grid.Row="1" TextWrapping="Wrap" Text="Длина, мм" VerticalAlignment="Bottom" RenderTransformOrigin="0.02,0.562"/>
-                <CheckBox x:Name="checkBox" Content="Защемление" Grid.Column="1" HorizontalAlignment="Left" Margin="120,10,0,0" Grid.Row="2" VerticalAlignment="Top"/>
-                <CheckBox x:Name="checkBox1" Content="Защемление" HorizontalAlignment="Left" Margin="10,120,0,0" Grid.Row="1" VerticalAlignment="Top"/>
-                <CheckBox x:Name="checkBox2" Content="Защемление" Grid.Column="2" HorizontalAlignment="Left" Margin="10,120,0,0" Grid.Row="1" VerticalAlignment="Top"/>
-                <CheckBox x:Name="checkBox3" Content="Защемление" Grid.Column="1" HorizontalAlignment="Left" Margin="120,10,0,0" VerticalAlignment="Top"/>
+                <CheckBox x:Name="checkBox" Content="Защемление" Grid.Column="1" HorizontalAlignment="Left" Margin="120,10,0,0" Grid.Row="2" VerticalAlignment="Top" Visibility="Hidden"/>
+                <CheckBox x:Name="checkBox1" Content="Защемление" HorizontalAlignment="Left" Margin="10,120,0,0" Grid.Row="1" VerticalAlignment="Top" Visibility="Hidden"/>
+                <CheckBox x:Name="checkBox2" Content="Защемление" Grid.Column="2" HorizontalAlignment="Left" Margin="10,120,0,0" Grid.Row="1" VerticalAlignment="Top" Visibility="Hidden"/>
+                <CheckBox x:Name="checkBox3" Content="Защемление" Grid.Column="1" HorizontalAlignment="Left" Margin="120,10,0,0" VerticalAlignment="Top" Visibility="Hidden"/>
             </Grid>
         </Grid>
-        <StackPanel Height="60" Grid.Row="1" Margin="10" Orientation="Horizontal" Grid.ColumnSpan="3" HorizontalAlignment="Right" Background="#FFE2E2E2">
+        <StackPanel Height="60" Grid.Row="2" Margin="10" Orientation="Horizontal" Grid.ColumnSpan="3" HorizontalAlignment="Right" Background="#FFE2E2E2">
             <Button x:Name="btnOK" Style="{StaticResource ServiceButton}" HorizontalAlignment="Stretch" Click="btnOK_Click">
                 <Button.Effect>
                     <DropShadowEffect Opacity="0.6"/>
@@ -87,5 +89,6 @@
                 <Image x:Name="Cancel_png" Style="{StaticResource ServiceButtonImage}" Source="pack://siteoforigin:,,,/Resources/IconCancel.png"/>
             </Button>
         </StackPanel>
+        
     </Grid>
 </Window>

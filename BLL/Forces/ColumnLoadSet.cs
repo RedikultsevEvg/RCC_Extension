@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using RDBLL.Entity.SC.Column;
 
 namespace RDBLL.Forces
 {
@@ -10,6 +11,7 @@ namespace RDBLL.Forces
     {
         //Properties
         #region 
+        public SteelColumnBase SteelColumnBase { get; set; }
         public String Name { get; set; } //Наименование
         public double PartialSafetyFactor { get; set; } //Коэффициент надежности по нагрузке
         public bool IsDeadLoad { get; set; }
@@ -24,6 +26,18 @@ namespace RDBLL.Forces
         #region
         public void SetDefault()
         {
+            Name = "";
+            PartialSafetyFactor = 1;
+            IsDeadLoad = false;
+            BothSign = false;
+            Force_Nz = 0;
+            Force_Mx = 0;
+            Force_My = 0;
+            Force_Qx = 0;
+            Force_Qy = 0;
+        }
+        public void SetDefault1()
+        {
             Name = "Новая нагрузка";
             PartialSafetyFactor = 1.1;
             IsDeadLoad = true;
@@ -34,9 +48,15 @@ namespace RDBLL.Forces
             Force_Qx = 0;
             Force_Qy = 0;
         }
-        public ColumnLoadSet()
+        public ColumnLoadSet(int setDefault)
         {
-            SetDefault();
+            if (setDefault == 0) { SetDefault(); } else { SetDefault1(); }
+        }
+        public ColumnLoadSet(SteelColumnBase steelColumnBase)
+        {
+            SetDefault1();
+            steelColumnBase.Loads.Add(this);
+            SteelColumnBase = steelColumnBase;
         }
         #endregion
         //IClonable

@@ -88,11 +88,5 @@ namespace StartWPF
             WndAbout wndAbout = new WndAbout();
             wndAbout.Show();
         }
-
-        private void btnAbout1_Click(object sender, RoutedEventArgs e)
-        {
-            WndSteelColumnBase wndSteelColumnBase = new WndSteelColumnBase(new SteelColumnBase());
-            wndSteelColumnBase.Show();
-        }
     }
 }

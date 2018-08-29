@@ -28,12 +28,12 @@ namespace RDUIL.WPF_Windows
             _steelColumnBase = steelColumnBase;
             #region Initial parametrs
             tbxName.Text = _steelColumnBase.Name;
-            tbxWidth.Text = Convert.ToString(_steelColumnBase.Width);
-            tbxLength.Text = Convert.ToString(_steelColumnBase.Length);
-            tbxThickness.Text = Convert.ToString(_steelColumnBase.Thickness);
-            tbxWidthBoltDist.Text = Convert.ToString(_steelColumnBase.WidthBoltDist);
-            tbxLengthBoltDist.Text = Convert.ToString(_steelColumnBase.LengthBoltDist);
-            tbxConcreteStrength.Text = Convert.ToString(_steelColumnBase.ConcreteStrength);
+            tbxWidth.Text = Convert.ToString(_steelColumnBase.Width*1000);
+            tbxLength.Text = Convert.ToString(_steelColumnBase.Length*1000);
+            tbxThickness.Text = Convert.ToString(_steelColumnBase.Thickness*1000);
+            tbxWidthBoltDist.Text = Convert.ToString(_steelColumnBase.WidthBoltDist*1000);
+            tbxLengthBoltDist.Text = Convert.ToString(_steelColumnBase.LengthBoltDist*1000);
+            tbxConcreteStrength.Text = Convert.ToString(_steelColumnBase.ConcreteStrength/1000000);
             #endregion
         }
 
@@ -42,12 +42,12 @@ namespace RDUIL.WPF_Windows
             try
             {
                 _steelColumnBase.Name = tbxName.Text;
-                _steelColumnBase.Width = Convert.ToInt16(tbxWidth.Text);
-                _steelColumnBase.Length = Convert.ToInt16(tbxLength.Text);
-                _steelColumnBase.Thickness = Convert.ToInt16(tbxThickness.Text);
-                _steelColumnBase.WidthBoltDist = Convert.ToInt16(tbxWidthBoltDist.Text);
-                _steelColumnBase.LengthBoltDist = Convert.ToInt16(tbxLengthBoltDist.Text);
-                _steelColumnBase.ConcreteStrength = Convert.ToDouble(tbxConcreteStrength.Text);
+                _steelColumnBase.Width = Convert.ToDouble(tbxWidth.Text)/1000;
+                _steelColumnBase.Length = Convert.ToDouble(tbxLength.Text)/1000;
+                _steelColumnBase.Thickness = Convert.ToDouble(tbxThickness.Text)/1000;
+                _steelColumnBase.WidthBoltDist = Convert.ToDouble(tbxWidthBoltDist.Text)/1000;
+                _steelColumnBase.LengthBoltDist = Convert.ToDouble(tbxLengthBoltDist.Text)/1000;
+                _steelColumnBase.ConcreteStrength = Convert.ToDouble(tbxConcreteStrength.Text)*1000000;
                 //this.DialogResult = OK;
                 this.Close();
             }

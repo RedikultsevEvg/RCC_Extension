@@ -39,6 +39,9 @@
             this.tsbOpeningTypes = new System.Windows.Forms.ToolStripButton();
             this.tsbOpenings = new System.Windows.Forms.ToolStripButton();
             this.tsbReport = new System.Windows.Forms.ToolStripButton();
+            this.tsbSteelColumnBase = new System.Windows.Forms.ToolStripButton();
+            this.tsbColumnForces = new System.Windows.Forms.ToolStripButton();
+            this.tsbSteelColumnBaseParts = new System.Windows.Forms.ToolStripButton();
             this.lvDetails = new System.Windows.Forms.ListView();
             this.btnClose = new System.Windows.Forms.Button();
             this.toolStrip1.SuspendLayout();
@@ -56,7 +59,10 @@
             this.tsbWallTypes,
             this.tsbOpeningTypes,
             this.tsbOpenings,
-            this.tsbReport});
+            this.tsbReport,
+            this.tsbSteelColumnBase,
+            this.tsbColumnForces,
+            this.tsbSteelColumnBaseParts});
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
             this.toolStrip1.Name = "toolStrip1";
             this.toolStrip1.Size = new System.Drawing.Size(834, 37);
@@ -153,6 +159,36 @@
             this.tsbReport.Text = "Сумма по выбранным";
             this.tsbReport.Click += new System.EventHandler(this.tsbReport_Click);
             // 
+            // tsbSteelColumnBase
+            // 
+            this.tsbSteelColumnBase.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.tsbSteelColumnBase.Image = ((System.Drawing.Image)(resources.GetObject("tsbSteelColumnBase.Image")));
+            this.tsbSteelColumnBase.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsbSteelColumnBase.Name = "tsbSteelColumnBase";
+            this.tsbSteelColumnBase.Size = new System.Drawing.Size(34, 34);
+            this.tsbSteelColumnBase.Text = "Базы стальных колонн";
+            this.tsbSteelColumnBase.Click += new System.EventHandler(this.tsbSteelColumnBase_Click);
+            // 
+            // tsbColumnForces
+            // 
+            this.tsbColumnForces.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.tsbColumnForces.Image = ((System.Drawing.Image)(resources.GetObject("tsbColumnForces.Image")));
+            this.tsbColumnForces.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsbColumnForces.Name = "tsbColumnForces";
+            this.tsbColumnForces.Size = new System.Drawing.Size(34, 34);
+            this.tsbColumnForces.Text = "Нагружения";
+            this.tsbColumnForces.Click += new System.EventHandler(this.tsbColumnForces_Click);
+            // 
+            // tsbSteelColumnBaseParts
+            // 
+            this.tsbSteelColumnBaseParts.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.tsbSteelColumnBaseParts.Image = ((System.Drawing.Image)(resources.GetObject("tsbSteelColumnBaseParts.Image")));
+            this.tsbSteelColumnBaseParts.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsbSteelColumnBaseParts.Name = "tsbSteelColumnBaseParts";
+            this.tsbSteelColumnBaseParts.Size = new System.Drawing.Size(34, 34);
+            this.tsbSteelColumnBaseParts.Text = "Участки";
+            this.tsbSteelColumnBaseParts.Click += new System.EventHandler(this.tsbSteelBaseParts_Click);
+            // 
             // lvDetails
             // 
             this.lvDetails.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -210,5 +246,8 @@
         private System.Windows.Forms.ToolStripButton tsbOpeningTypes;
         private System.Windows.Forms.ToolStripButton tsbOpenings;
         private System.Windows.Forms.ToolStripButton tsbReport;
+        private System.Windows.Forms.ToolStripButton tsbSteelColumnBase;
+        private System.Windows.Forms.ToolStripButton tsbColumnForces;
+        private System.Windows.Forms.ToolStripButton tsbSteelColumnBaseParts;
     }
 }

@@ -7,6 +7,7 @@ using RDBLL.Common.Geometry;
 using RDBLL.Entity.RCC.WallAndColumn;
 using RDBLL.Common.Service;
 using System.Xml;
+using RDBLL.Entity.SC.Column;
 
 
 namespace RDBLL.Entity.RCC.BuildingAndSite
@@ -15,15 +16,14 @@ namespace RDBLL.Entity.RCC.BuildingAndSite
     {
         public string Name { get; set; }
         public Building Building { get; set; }
-
         public decimal FloorLevel { get; set; }
         public decimal Height { get; set; }
         public decimal TopOffset { get; set; }
         public int Quant { get; set; }
-
         public Point3D BasePoint { get; set; }
         public List<Wall> WallList { get; set; }
         public List<Column> ColumnList { get; set; }
+        public List<SteelColumnBase> SteelColumnBaseList { get; set; }
 
         public decimal GetConcreteVolumeNetto()
         {
@@ -61,6 +61,7 @@ namespace RDBLL.Entity.RCC.BuildingAndSite
             BasePoint = new Point3D(0, 0, 0);
             Quant = 1;
             WallList = new List<Wall>();
+            SteelColumnBaseList = new List<SteelColumnBase>();
             building.LevelList.Add(this);
         }
 
@@ -68,6 +69,7 @@ namespace RDBLL.Entity.RCC.BuildingAndSite
         {
             Building = building;
             WallList = new List<Wall>();
+            SteelColumnBaseList = new List<SteelColumnBase>();
             foreach (XmlAttribute obj in xmlNode.Attributes)
             {          
                 if (obj.Name == "Name") Name = obj.Value;

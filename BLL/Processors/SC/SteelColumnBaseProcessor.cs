@@ -11,11 +11,12 @@ using RDBLL.Processors.Forces;
 
 namespace RDBLL.Processors.SC
 {
-    public class ColumBaseProcessor : ISteelBaseProcessor
+    public class SteelColumnBaseProcessor : ISteelBaseProcessor
     {
         private List<ColumnLoadSet> GetLoadCases (List<ColumnLoadSet> columnLoadSets)
         {
             List<ColumnLoadSet> LoadCases = new List<ColumnLoadSet>();
+            LoadCases.Add(new ColumnLoadSet(0));
             List<ColumnLoadSet> tmpLoadSets = new List<ColumnLoadSet>();
             foreach (ColumnLoadSet columnLoadSet in columnLoadSets )
                 {
@@ -23,16 +24,13 @@ namespace RDBLL.Processors.SC
                 }
             while (tmpLoadSets.Count > 0)
                 {
-                    ColumnLoadSet LoadSet = tmpLoadSets[1];
-                    if (LoadCases.Count == 0) { LoadCases.Add(LoadSet); }
-                    else
-                    {
-                        List<ColumnLoadSet> tmpLoadCases = new List<ColumnLoadSet>();
-                        foreach (ColumnLoadSet LoadCase in LoadCases)
+                    ColumnLoadSet LoadSet = tmpLoadSets[0];
+                    List<ColumnLoadSet> tmpLoadCases = new List<ColumnLoadSet>();
+                    foreach (ColumnLoadSet LoadCase in LoadCases)
                         {
                             tmpLoadCases.Add(LoadCase);
                         }
-                        foreach (ColumnLoadSet LoadCase in tmpLoadCases)
+                    foreach (ColumnLoadSet LoadCase in tmpLoadCases)
                         {
                             if (LoadSet.IsDeadLoad)
                             {
@@ -44,9 +42,8 @@ namespace RDBLL.Processors.SC
                                 if (LoadSet.BothSign) { LoadCases.Add(ColumnLoadSetProcessor.SumForcesInNew(LoadCase, LoadSet, -1.0)); }
                             }
                         }
-                    }
                     tmpLoadSets.Remove(LoadSet);
-                }
+                 }
             return LoadCases;
         }
 
@@ -62,8 +59,8 @@ namespace RDBLL.Processors.SC
             double Wy = columnBase.Length * columnBase.Width * columnBase.Width / 6;
             double Bx = columnBase.WidthBoltDist / 2;
             double By = columnBase.LengthBoltDist / 2;
-            double minStress = 0;
-            double maxStress = 0;
+            double minStress = 10000000;
+            double maxStress = -10000000;
             double minStressTmp;
             double maxStressTmp;
             foreach (ColumnLoadSet LoadCase in columnBaseResult.LoadCases)
@@ -75,6 +72,12 @@ namespace RDBLL.Processors.SC
                 maxStressTmp = Nz / A + Mx / Wx + My / Wy;
                 if (minStressTmp < minStress) { minStress = minStressTmp; }
                 if (maxStressTmp > maxStress) { maxStress = maxStressTmp; }
+                //Console.WriteLine("Time = " + DateTime.Now);
+                //Console.WriteLine("Name = " + LoadCase.Name);
+                //Console.WriteLine("Force_Nz = " + Convert.ToString(LoadCase.Force_Nz));
+                //Console.WriteLine("Force_Mx = " + Convert.ToString(LoadCase.Force_Mx));
+                //Console.WriteLine("PartialSafetyFactor = " + Convert.ToString(LoadCase.PartialSafetyFactor));
+                //Console.ReadLine();
             }
             columnBaseResult.MinStress = minStress;
             columnBaseResult.MaxStress = maxStress;

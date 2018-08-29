@@ -10,8 +10,10 @@ namespace RDBLL.Entity.SC.Column
     {
         //Properties
         #region 
-        public int Width { get; set; }
-        public int Length { get; set; }
+        public SteelColumnBase ColumnBase { get; set; }
+        public String Name { get; set; }
+        public double Width { get; set; }
+        public double Length { get; set; }
         public bool FixLeft { get; set; }
         public bool FixRight { get; set; }
         public bool FixTop { get; set; }
@@ -21,16 +23,19 @@ namespace RDBLL.Entity.SC.Column
         #region
         public void SetDefault()
         {
-            Width = 200;
-            Length = 200;
+            Name = "Новый участок";
+            Width = 0.2;
+            Length = 0.2;
             FixLeft = true;
             FixRight = true;
             FixTop = true;
             FixBottom = true;
         }
-        public SteelBasePart()
+        public SteelBasePart(SteelColumnBase columnBase)
         {
+            ColumnBase = columnBase;
             SetDefault();
+            columnBase.SteelBaseParts.Add(this);
         }
         #endregion
         //IClonable

@@ -27,12 +27,13 @@ namespace RDUIL.WPF_Windows
             InitializeComponent();
             _steelBasePart = steelBasePart;
             #region
+            tbxName.Text = _steelBasePart.Name;
             cbFixLeft.IsChecked = _steelBasePart.FixLeft;
             cbFixRight.IsChecked = _steelBasePart.FixRight;
             cbFixTop.IsChecked = _steelBasePart.FixTop;
             cbFixBottom.IsChecked = _steelBasePart.FixBottom;
-            tbxWidth.Text = Convert.ToString(_steelBasePart.Width);
-            tbxLength.Text = Convert.ToString(_steelBasePart.Length);
+            tbxWidth.Text = Convert.ToString(_steelBasePart.Width * 1000);
+            tbxLength.Text = Convert.ToString(_steelBasePart.Length * 1000);
             #endregion
         }
 
@@ -45,12 +46,13 @@ namespace RDUIL.WPF_Windows
         {
             try
             {
+                _steelBasePart.Name = tbxName.Text;
                 _steelBasePart.FixLeft = Convert.ToBoolean(cbFixLeft.IsChecked);
                 _steelBasePart.FixRight = Convert.ToBoolean(cbFixRight.IsChecked);
                 _steelBasePart.FixTop = Convert.ToBoolean(cbFixTop.IsChecked);
                 _steelBasePart.FixBottom = Convert.ToBoolean(cbFixBottom.IsChecked);
-                _steelBasePart.Width = Convert.ToInt16(tbxWidth.Text);
-                _steelBasePart.Length = Convert.ToInt16(tbxLength.Text);
+                _steelBasePart.Width = Convert.ToDouble(tbxWidth.Text)/1000;
+                _steelBasePart.Length = Convert.ToDouble(tbxLength.Text)/1000;
                 this.Close();
             }
             catch(Exception ex)

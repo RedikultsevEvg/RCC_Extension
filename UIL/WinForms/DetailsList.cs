@@ -13,11 +13,22 @@ using RDBLL.Common.Service;
 using RDBLL.Common.Geometry;
 using RDBLL.Entity.RCC.Reinforcement;
 using RDUIL.WinForms;
+using RDUIL.WPF_Windows;
+using RDBLL.Entity.SC.Column;
+using RDBLL.Forces;
+using RDBLL.Entity.Results.SC;
+using RDBLL.Processors.SC;
 
 namespace RDUIL.WinForms
 {
     public partial class frmDetailList : Form
     {
+        const string ObjLevels = "Levels";
+        const string ObjWalls = "Walls";
+        const string ObjSteelColumnBases = "SteelColumnBases";
+        const string ObjColumnForses = "ColumnForces";
+        const string ObjColumnBaseParts = "ColumnBaseParts";
+
         private DetailObjectList _detailObjectList;
         private String _formType;
         private Object _parentObject;
@@ -26,19 +37,18 @@ namespace RDUIL.WinForms
 
         public frmDetailList(DetailObjectList detailObjectList)
         {
+            #region
             InitializeComponent();
             _detailObjectList = detailObjectList;
-
             _formType = _detailObjectList.DataType;
             _parentObject = _detailObjectList.ParentObject;
             _objectList = _detailObjectList.ObjectList;
             _isSelectable = _detailObjectList.IsSelectable;
-
             lvDetails.Columns.Clear();
 
             List<String> ColumnName = new List<String>();
             List<Int32> ColumnWidth = new List<Int32>();
-
+            #endregion
             switch (_formType) //
             {
                 case "Buildings": //Создаем окно для списка зданий
@@ -50,7 +60,7 @@ namespace RDUIL.WinForms
                         ColumnWidth.AddRange(_ColumnWidth);
                         break;
                     }
-                case "Levels": //Создаем окно для списка уровней
+                case ObjLevels: //Создаем окно для списка уровней
                     {
                         this.Text = "Уровни";
                         List<String> _ColumnName = new List<String>() { "Наименование", "Отметка, м", "Высота, мм", "Перекрытие, мм", "Кол-во, шт.", "V_нетто (на этаж)", "V_нетто (всего)" };
@@ -63,6 +73,10 @@ namespace RDUIL.WinForms
                         {
                             NewItemFromLevel(level);
                         }
+
+                        tsbSteelColumnBase.Visible = true;
+                        tsbColumnForces.Visible = false;
+                        tsbSteelColumnBaseParts.Visible = false;
                         tsbWalls.Visible = true;
                         tsbWallTypes.Visible = true;
                         tsbOpeningTypes.Visible = true;
@@ -111,8 +125,82 @@ namespace RDUIL.WinForms
                         tsbReport.Visible = false;
                         break;
                     }
+                case ObjColumnBaseParts:
+                    {
+                        #region
+                        this.Text = "Участки базы стальных колонн";
+                        List<String> _ColumnName = new List<String>() { "Наименование", "Размеры, мм", "Макс. напряжения, МПа"};
+                        List<Int32> _ColumnWidth = new List<Int32>() { 150, 100, 100};
+                        ColumnName.AddRange(_ColumnName);
+                        ColumnWidth.AddRange(_ColumnWidth);
+                        #endregion
+                        var basePartList = (List<SteelBasePart>)_objectList;
+                        foreach (SteelBasePart basePart in basePartList)
+                        {
+                            NewItemFromColumnBasePart(basePart);
+                        }
+
+                        tsbSteelColumnBase.Visible = false;
+                        tsbColumnForces.Visible = false;
+                        tsbSteelColumnBaseParts.Visible = false;
+                        tsbWalls.Visible = false;
+                        tsbWallTypes.Visible = false;
+                        tsbOpeningTypes.Visible = false;
+                        tsbOpenings.Visible = false;
+                        tsbReport.Visible = false;
+                        break;
+                    }
+                case ObjColumnForses:
+                    {
+                        #region
+                        this.Text = "Нагрузки на базы стальных колонн";
+                        List<String> _ColumnName = new List<String>() { "Наименование", "Nz, кН", "Mx, кН*м", "My, кН*м", "Qx, кН", "Qx, кН" };
+                        List<Int32> _ColumnWidth = new List<Int32>() { 150, 100, 100, 100, 100, 100 };
+                        ColumnName.AddRange(_ColumnName);
+                        ColumnWidth.AddRange(_ColumnWidth);
+                        #endregion
+                        var LoadSetList = (List<ColumnLoadSet>)_objectList;
+                        foreach (ColumnLoadSet loadSet in LoadSetList)
+                        {
+                            NewItemFromColumnLoadSet(loadSet);
+                        }
+
+                        tsbSteelColumnBase.Visible = false;
+                        tsbColumnForces.Visible = false;
+                        tsbSteelColumnBaseParts.Visible = false;
+                        tsbWalls.Visible = false;
+                        tsbWallTypes.Visible = false;
+                        tsbOpeningTypes.Visible = false;
+                        tsbOpenings.Visible = false;
+                        tsbReport.Visible = false;
+                        break;
+                    }
+                case ObjSteelColumnBases:
+                    {
+                        this.Text = "Базы стальных колонн";
+                        List<String> _ColumnName = new List<String>() { "Марка", "Размеры, мм", "Привязки болтов, мм", "Напряжения макс/мин"};
+                        List<Int32> _ColumnWidth = new List<Int32>() { 150, 100, 150, 150};
+                        ColumnName.AddRange(_ColumnName);
+                        ColumnWidth.AddRange(_ColumnWidth);
+
+                        var SteelColumnBaseList = (List<SteelColumnBase>)_objectList;
+                        foreach (SteelColumnBase columnBase in SteelColumnBaseList)
+                        {
+                            NewItemFromSteelColumnBase(columnBase);
+                        }
+
+                        tsbSteelColumnBase.Visible = false;
+                        tsbColumnForces.Visible = true;
+                        tsbSteelColumnBaseParts.Visible = true;
+                        tsbWalls.Visible = false;
+                        tsbWallTypes.Visible = false;
+                        tsbOpeningTypes.Visible = false;
+                        tsbOpenings.Visible = false;
+                        tsbReport.Visible = false;
+                        break;
+                    }
                 //Создаем окно для списка стен
-                case "Walls": 
+                case ObjWalls: 
                 {
                         this.Text = "Стены";
                         List<String> _ColumnName = new List<String>() { "Марка", "Проемы", "Размеры, мм", "Верт.стерж.", "Гор.стерж.", "Диаг.стерж.", "S_брутто, кв.м", "S_нетто, кв.м", "V_брутто, куб.м", "V_нетто, куб.м"};
@@ -153,7 +241,7 @@ namespace RDUIL.WinForms
                         break;
                     }
             }
-
+            #region
             foreach (String S in ColumnName)
             {
                 lvDetails.Columns.Add(S);
@@ -168,7 +256,7 @@ namespace RDUIL.WinForms
             }
             if (_isSelectable) { btnClose.Name = "Выбрать"; } else { btnClose.Name = "Закрыть"; }
             lvDetails.MultiSelect = !_isSelectable;
-
+            #endregion
         }
         private void btnClose_Click(object sender, EventArgs e)
         {
@@ -201,6 +289,24 @@ namespace RDUIL.WinForms
                     {
                         OpeningType openingType = new OpeningType((Building)_parentObject);
                         NewItemFromOpeningType(openingType);
+                        break;
+                    }
+                case ObjColumnBaseParts:
+                    {
+                        SteelBasePart basePart = new SteelBasePart((SteelColumnBase)_parentObject);
+                        NewItemFromColumnBasePart(basePart);
+                        break;
+                    }
+                case ObjColumnForses:
+                    {
+                        ColumnLoadSet columnLoadSet = new ColumnLoadSet((SteelColumnBase)_parentObject);
+                        NewItemFromColumnLoadSet(columnLoadSet);
+                        break;
+                    }
+                case ObjSteelColumnBases:
+                    {
+                        SteelColumnBase steelColumnBase = new SteelColumnBase((Level)_parentObject);
+                        NewItemFromSteelColumnBase(steelColumnBase);
                         break;
                     }
                 case "Walls":
@@ -268,6 +374,39 @@ namespace RDUIL.WinForms
                         }
                         break;
                     }
+                case ObjColumnBaseParts:
+                    {
+                        var BasePartList = (List<SteelBasePart>)_objectList;
+                        foreach (int i in lvDetails.SelectedIndices)
+                        {
+                            WndSteelBasePart wndSteelBasePart = new WndSteelBasePart(BasePartList[i]);
+                            wndSteelBasePart.ShowDialog();
+                            EditItemFromColumnBasePart(lvDetails.Items[i], BasePartList[i]);
+                        }
+                        break;
+                    }
+                case ObjColumnForses:
+                    {
+                        var ColumnLoadSetList = (List<ColumnLoadSet>)_objectList;
+                        foreach (int i in lvDetails.SelectedIndices)
+                        {
+                            wndForces wndForces = new wndForces(ColumnLoadSetList[i]);
+                            wndForces.ShowDialog();
+                            EditItemFromColumnLoadSet(lvDetails.Items[i], ColumnLoadSetList[i]);
+                        }
+                        break;
+                    }      
+                case ObjSteelColumnBases:
+                    {
+                        var steelColumnBaseList = (List<SteelColumnBase>)_objectList;
+                        foreach (int i in lvDetails.SelectedIndices)
+                        {
+                            WndSteelColumnBase wndSteelColumnBase = new WndSteelColumnBase(steelColumnBaseList[i]);
+                            wndSteelColumnBase.ShowDialog();
+                            EditItemFromSteelColumnBase(lvDetails.Items[i], steelColumnBaseList[i]);
+                        }
+                        break;
+                    }
                 case "Walls":
                     {
                         var wallList = (List<Wall>)_objectList;
@@ -321,6 +460,27 @@ namespace RDUIL.WinForms
             lvDetails.Items.Add(NewItem);
             return NewItem;
         }
+        private ListViewItem NewItemFromColumnBasePart(SteelBasePart obj)
+        {
+            ListViewItem NewItem = new ListViewItem();
+            EditItemFromColumnBasePart(NewItem, obj);
+            lvDetails.Items.Add(NewItem);
+            return NewItem;
+        }
+        private ListViewItem NewItemFromColumnLoadSet(ColumnLoadSet obj)
+        {
+            ListViewItem NewItem = new ListViewItem();
+            EditItemFromColumnLoadSet(NewItem, obj);
+            lvDetails.Items.Add(NewItem);
+            return NewItem;
+        }
+        private ListViewItem NewItemFromSteelColumnBase(SteelColumnBase obj)
+        {
+            ListViewItem NewItem = new ListViewItem();
+            EditItemFromSteelColumnBase(NewItem, obj);
+            lvDetails.Items.Add(NewItem);
+            return NewItem;
+        }
         private ListViewItem NewItemFromWall(Wall obj)
         {
             ListViewItem NewItem = new ListViewItem();
@@ -365,6 +525,40 @@ namespace RDUIL.WinForms
             Item.SubItems.Add(Convert.ToString(openingType.Bottom));
             Item.SubItems.Add(Convert.ToString(openingType.Bottom+openingType.Height));
             Item.SubItems.Add(Convert.ToString(Math.Round(openingType.GetArea()/1000)/1000));
+        }
+        private void EditItemFromColumnBasePart(ListViewItem Item, SteelBasePart basePart)
+        {
+            Item.SubItems.Clear();
+            Item.Text = basePart.Name;
+            Item.SubItems.Add(Convert.ToString(basePart.Width * 1000) +"x" + Convert.ToString(basePart.Length * 1000));
+            ColumnBasePartResult result = SteelColumnBasePartProcessor.GetResult(basePart);
+            double maxStress = result.MaxStress;
+            maxStress = Math.Round(maxStress / 1000) / 1000;
+            Item.SubItems.Add(Convert.ToString(maxStress));
+        }
+        private void EditItemFromColumnLoadSet(ListViewItem Item, ColumnLoadSet loadSet)
+        {
+            Item.SubItems.Clear();
+            Item.Text = loadSet.Name;
+            Item.SubItems.Add(Convert.ToString(loadSet.Force_Nz/1000));
+            Item.SubItems.Add(Convert.ToString(loadSet.Force_Mx / 1000));
+            Item.SubItems.Add(Convert.ToString(loadSet.Force_My / 1000));
+            Item.SubItems.Add(Convert.ToString(loadSet.Force_Qx / 1000));
+            Item.SubItems.Add(Convert.ToString(loadSet.Force_Qy / 1000));
+        }
+        private void EditItemFromSteelColumnBase(ListViewItem Item, SteelColumnBase columnBase)
+        {
+            Item.SubItems.Clear();
+            Item.Text = columnBase.Name;
+            Item.SubItems.Add(Convert.ToString(columnBase.Width) + "x" + Convert.ToString(columnBase.Length));
+            Item.SubItems.Add(Convert.ToString(columnBase.WidthBoltDist) + "x" + Convert.ToString(columnBase.LengthBoltDist));
+            SteelColumnBaseProcessor columBaseProcessor = new SteelColumnBaseProcessor();
+            ColumnBaseResult baseResult = columBaseProcessor.GetResult(columnBase);
+            double maxStress = baseResult.MaxStress;
+            maxStress = Math.Round(maxStress / 1000) / 1000;
+            double minStress = baseResult.MinStress;
+            minStress = Math.Round(minStress / 1000) / 1000;
+            Item.SubItems.Add(Convert.ToString(maxStress) + " / " + Convert.ToString(minStress));
         }
         private void EditItemFromWall (ListViewItem Item, Wall wall)
         {
@@ -432,6 +626,39 @@ namespace RDUIL.WinForms
                         foreach (int j in lvDetails.SelectedIndices)
                         {
                             ((List<OpeningType>)_objectList).RemoveAt(j - i);
+                            lvDetails.Items.RemoveAt(j - i);
+                            i++;
+                        }
+                        break;
+                    }
+                case ObjColumnBaseParts:
+                    {
+                        //Необходимо добавить проверку на существование стен имеющих данный тип стены
+                        foreach (int j in lvDetails.SelectedIndices)
+                        {
+                            ((List<SteelBasePart>)_objectList).RemoveAt(j - i);
+                            lvDetails.Items.RemoveAt(j - i);
+                            i++;
+                        }
+                        break;
+                    }
+                case ObjColumnForses:
+                    {
+                        //Необходимо добавить проверку на существование стен имеющих данный тип стены
+                        foreach (int j in lvDetails.SelectedIndices)
+                        {
+                            ((List<ColumnLoadSet>)_objectList).RemoveAt(j - i);
+                            lvDetails.Items.RemoveAt(j - i);
+                            i++;
+                        }
+                        break;
+                    }
+                case ObjSteelColumnBases:
+                    {
+                        //Необходимо добавить проверку на существование стен имеющих данный тип стены
+                        foreach (int j in lvDetails.SelectedIndices)
+                        {
+                            ((List<SteelColumnBase>)_objectList).RemoveAt(j - i);
                             lvDetails.Items.RemoveAt(j - i);
                             i++;
                         }
@@ -556,6 +783,63 @@ namespace RDUIL.WinForms
                     }
             }
             
+        }
+        private void tsbSteelColumnBase_Click(object sender, EventArgs e)
+        {
+            if (lvDetails.SelectedIndices.Count == 1)
+            {
+                Level level;
+                foreach (int i in lvDetails.SelectedIndices)
+                {
+                    level = ((List<Level>)_objectList)[i];
+                    var detailObjectList = new DetailObjectList("SteelColumnBases", level, level.SteelColumnBaseList, false);
+                    frmDetailList DetailForm = new frmDetailList(detailObjectList);
+                    this.Visible = false;
+                    DetailForm.ShowDialog();
+                    this.Visible = true;
+                    EditItemFromLevel(lvDetails.Items[i], level);
+                }
+            }
+            else
+            { MessageBox.Show("Выберите один элемент из списка", "Неверный выбор"); }
+        }
+        private void tsbColumnForces_Click(object sender, EventArgs e)
+        {
+            if (lvDetails.SelectedIndices.Count == 1)
+            {
+                SteelColumnBase steelColumnBase;
+                foreach (int i in lvDetails.SelectedIndices)
+                {
+                    steelColumnBase = ((List<SteelColumnBase>)_objectList)[i];
+                    var detailObjectList = new DetailObjectList("ColumnForces", steelColumnBase, steelColumnBase.Loads, false);
+                    frmDetailList DetailForm = new frmDetailList(detailObjectList);
+                    this.Visible = false;
+                    DetailForm.ShowDialog();
+                    this.Visible = true;
+                    EditItemFromSteelColumnBase(lvDetails.Items[i], steelColumnBase);
+                }
+            }
+            else
+            { MessageBox.Show("Выберите один элемент из списка", "Неверный выбор"); }
+        }
+        private void tsbSteelBaseParts_Click(object sender, EventArgs e)
+        {
+            if (lvDetails.SelectedIndices.Count == 1)
+            {
+                SteelColumnBase steelColumnBase;
+                foreach (int i in lvDetails.SelectedIndices)
+                {
+                    steelColumnBase = ((List<SteelColumnBase>)_objectList)[i];
+                    var detailObjectList = new DetailObjectList("ColumnBaseParts", steelColumnBase, steelColumnBase.SteelBaseParts, false);
+                    frmDetailList DetailForm = new frmDetailList(detailObjectList);
+                    this.Visible = false;
+                    DetailForm.ShowDialog();
+                    this.Visible = true;
+                    EditItemFromSteelColumnBase(lvDetails.Items[i], steelColumnBase);
+                }
+            }
+            else
+            { MessageBox.Show("Выберите один элемент из списка", "Неверный выбор"); }
         }
     }
 }
