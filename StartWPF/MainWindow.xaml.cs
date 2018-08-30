@@ -29,6 +29,11 @@ namespace StartWPF
         {
             InitializeComponent();
             ProgrammSettings.InicializeNew();
+            CalcKindControl calcKindControl = new CalcKindControl();
+            calcKindControl.tbCommandName.Text = "Расчет базы колонны";
+            calcKindControl.Width = 200;
+            calcKindControl.Height = 100;
+            wpCalcPanel.Children.Add(calcKindControl);
         }
 
         private void btnWall_Click(object sender, RoutedEventArgs e)

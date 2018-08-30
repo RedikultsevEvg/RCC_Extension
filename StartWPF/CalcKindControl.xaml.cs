@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Windows.Media.Effects;
 
 namespace StartWPF
 {
@@ -23,6 +24,22 @@ namespace StartWPF
         public CalcKindControl()
         {
             InitializeComponent();
+        }
+
+        private void Button_MouseMove(object sender, MouseEventArgs e)
+        {
+            DropShadowEffect dropShadowEffect = new DropShadowEffect();
+            dropShadowEffect.Opacity = 0.6;
+            dropShadowEffect.BlurRadius = 5;
+            dropShadowEffect.ShadowDepth = 5;
+            Effect = dropShadowEffect;
+            btnMainButton.Opacity = 1;
+        }
+
+        private void Button_MouseLeave(object sender, MouseEventArgs e)
+        {
+            Effect = null;
+            btnMainButton.Opacity = 0.7;
         }
     }
 }

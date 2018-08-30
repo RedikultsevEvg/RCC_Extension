@@ -6,21 +6,26 @@
              xmlns:local="clr-namespace:StartWPF"
              mc:Ignorable="d" 
              d:DesignHeight="100" d:DesignWidth="200">
-    <UserControl.Effect>
-        <DropShadowEffect Opacity="0.6"/>
-    </UserControl.Effect>
     <Grid>
-        <Rectangle Grid.Column="0" Grid.Row="0" Fill="White" RadiusX="7" RadiusY="7" Margin="0"/>
-        <Grid Margin="7">
-        <Grid.RowDefinitions>
-            <RowDefinition/>
-        </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="20"/>
-            <ColumnDefinition/>
-        </Grid.ColumnDefinitions>
-  
-        <Label x:Name="lb1" Grid.Column="1" Content="Расчитать объем стен" FontSize="14" Background="#FFB5FCFF"/>
-        </Grid>
+        <Button x:Name="btnMainButton" Width="200" Height="95" MouseMove="Button_MouseMove" MouseLeave="Button_MouseLeave" Margin="0,5,0,0" Opacity="0.7">
+            <Button.ToolTip>
+                <Grid Width="200" Height="100">
+                    <TextBlock x:Name="tbAddition" TextWrapping="Wrap" Text="Какое-то пояснение, которое может быть достаточно длинным и переноситься по словам"/>
+                </Grid>
+            </Button.ToolTip>
+            <Button.Content>
+                <StackPanel>
+                    <Grid Height="90" Width="195">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="20"/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <Rectangle Fill="#FF79A4FF"/>
+                        <TextBlock x:Name="tbCommandName" Background="#FFA1EAFF" Grid.Column="1" FontSize="14" TextWrapping="Wrap"/>
+                    </Grid>
+                </StackPanel>
+            </Button.Content>
+
+        </Button>
     </Grid>
 </UserControl>

@@ -36,7 +36,7 @@
         </Grid.ColumnDefinitions>
         <Rectangle Grid.Column="0" Grid.Row="1" Fill="White" RadiusX="7" RadiusY="7" Margin="10"/>
         <Rectangle Grid.Column="1" Grid.Row="1" Fill="White" RadiusX="7" RadiusY="7" Margin="10" Grid.ColumnSpan="3"/>
-        <WrapPanel Grid.Column="1" Grid.Row="1" Margin="10" Grid.ColumnSpan="3" >
+        <WrapPanel x:Name="wpCalcPanel" Grid.Column="1" Grid.Row="1" Margin="10" Grid.ColumnSpan="3" >
             <Button x:Name="btnWall" Width="200" Height="100" Margin="5" Background="#FF91D7FF" IsCancel="True" Click="btnWall_Click">
                 <Button.Effect>
                     <DropShadowEffect Opacity="0.6"/>
