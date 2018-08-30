@@ -26,7 +26,7 @@ namespace RDUIL.WinForms
         const string ObjLevels = "Levels";
         const string ObjWalls = "Walls";
         const string ObjSteelColumnBases = "SteelColumnBases";
-        const string ObjColumnForses = "ColumnForces";
+        const string ObjBarForses = "ColumnForces";
         const string ObjColumnBaseParts = "ColumnBaseParts";
 
         private DetailObjectList _detailObjectList;
@@ -37,7 +37,7 @@ namespace RDUIL.WinForms
 
         public frmDetailList(DetailObjectList detailObjectList)
         {
-            #region
+            #region Получение входного объекта в конструкторе
             InitializeComponent();
             _detailObjectList = detailObjectList;
             _formType = _detailObjectList.DataType;
@@ -49,6 +49,7 @@ namespace RDUIL.WinForms
             List<String> ColumnName = new List<String>();
             List<Int32> ColumnWidth = new List<Int32>();
             #endregion
+            //В зависимости от вида объекта показываем нужные столбцы
             switch (_formType) //
             {
                 case "Buildings": //Создаем окно для списка зданий
@@ -127,10 +128,10 @@ namespace RDUIL.WinForms
                     }
                 case ObjColumnBaseParts:
                     {
-                        #region
+                        #region Определение видимых столбцов и их ширины
                         this.Text = "Участки базы стальных колонн";
                         List<String> _ColumnName = new List<String>() { "Наименование", "Размеры, мм", "Макс. напряжения, МПа"};
-                        List<Int32> _ColumnWidth = new List<Int32>() { 150, 100, 100};
+                        List<Int32> _ColumnWidth = new List<Int32>() { 150, 100, 150};
                         ColumnName.AddRange(_ColumnName);
                         ColumnWidth.AddRange(_ColumnWidth);
                         #endregion
@@ -139,7 +140,7 @@ namespace RDUIL.WinForms
                         {
                             NewItemFromColumnBasePart(basePart);
                         }
-
+                        #region Определение видимости кнопок
                         tsbSteelColumnBase.Visible = false;
                         tsbColumnForces.Visible = false;
                         tsbSteelColumnBaseParts.Visible = false;
@@ -148,19 +149,20 @@ namespace RDUIL.WinForms
                         tsbOpeningTypes.Visible = false;
                         tsbOpenings.Visible = false;
                         tsbReport.Visible = false;
+                        #endregion
                         break;
                     }
-                case ObjColumnForses:
+                case ObjBarForses:
                     {
-                        #region
+                        #region Определение видимых столбцов и их ширины
                         this.Text = "Нагрузки на базы стальных колонн";
                         List<String> _ColumnName = new List<String>() { "Наименование", "Nz, кН", "Mx, кН*м", "My, кН*м", "Qx, кН", "Qx, кН" };
                         List<Int32> _ColumnWidth = new List<Int32>() { 150, 100, 100, 100, 100, 100 };
                         ColumnName.AddRange(_ColumnName);
                         ColumnWidth.AddRange(_ColumnWidth);
-                        #endregion
-                        var LoadSetList = (List<ColumnLoadSet>)_objectList;
-                        foreach (ColumnLoadSet loadSet in LoadSetList)
+                        #endregion 
+                        var LoadSetList = (List<BarLoadSet>)_objectList;
+                        foreach (BarLoadSet loadSet in LoadSetList)
                         {
                             NewItemFromColumnLoadSet(loadSet);
                         }
@@ -297,9 +299,9 @@ namespace RDUIL.WinForms
                         NewItemFromColumnBasePart(basePart);
                         break;
                     }
-                case ObjColumnForses:
+                case ObjBarForses:
                     {
-                        ColumnLoadSet columnLoadSet = new ColumnLoadSet((SteelColumnBase)_parentObject);
+                        BarLoadSet columnLoadSet = new BarLoadSet((SteelColumnBase)_parentObject);
                         NewItemFromColumnLoadSet(columnLoadSet);
                         break;
                     }
@@ -385,9 +387,9 @@ namespace RDUIL.WinForms
                         }
                         break;
                     }
-                case ObjColumnForses:
+                case ObjBarForses:
                     {
-                        var ColumnLoadSetList = (List<ColumnLoadSet>)_objectList;
+                        var ColumnLoadSetList = (List<BarLoadSet>)_objectList;
                         foreach (int i in lvDetails.SelectedIndices)
                         {
                             wndForces wndForces = new wndForces(ColumnLoadSetList[i]);
@@ -437,6 +439,7 @@ namespace RDUIL.WinForms
                     }
             }
         }
+        #region Методы создания новых Items
         //Add New ListView Item from Level instance
         private ListViewItem NewItemFromLevel(Level obj)
         {
@@ -467,7 +470,7 @@ namespace RDUIL.WinForms
             lvDetails.Items.Add(NewItem);
             return NewItem;
         }
-        private ListViewItem NewItemFromColumnLoadSet(ColumnLoadSet obj)
+        private ListViewItem NewItemFromColumnLoadSet(BarLoadSet obj)
         {
             ListViewItem NewItem = new ListViewItem();
             EditItemFromColumnLoadSet(NewItem, obj);
@@ -495,6 +498,8 @@ namespace RDUIL.WinForms
             lvDetails.Items.Add(NewItem);
             return NewItem;
         }
+        #endregion
+        #region Методы редактирования существующих Items
         //Edit item of listView from Level
         private void EditItemFromLevel(ListViewItem Item, Level level)
         {
@@ -536,7 +541,7 @@ namespace RDUIL.WinForms
             maxStress = Math.Round(maxStress / 1000) / 1000;
             Item.SubItems.Add(Convert.ToString(maxStress));
         }
-        private void EditItemFromColumnLoadSet(ListViewItem Item, ColumnLoadSet loadSet)
+        private void EditItemFromColumnLoadSet(ListViewItem Item, BarLoadSet loadSet)
         {
             Item.SubItems.Clear();
             Item.Text = loadSet.Name;
@@ -582,6 +587,8 @@ namespace RDUIL.WinForms
             Item.SubItems.Add(Convert.ToString(wallType.VertSpacingSetting.MainSpacing));
             Item.SubItems.Add(Convert.ToString(wallType.HorSpacingSetting.MainSpacing));
         }
+        #endregion
+        #region Обработчики кнопок на панели
         private void tsbDelete_Click(object sender, EventArgs e)
         {
             ProgrammSettings.IsDataChanged = true;
@@ -642,12 +649,12 @@ namespace RDUIL.WinForms
                         }
                         break;
                     }
-                case ObjColumnForses:
+                case ObjBarForses:
                     {
                         //Необходимо добавить проверку на существование стен имеющих данный тип стены
                         foreach (int j in lvDetails.SelectedIndices)
                         {
-                            ((List<ColumnLoadSet>)_objectList).RemoveAt(j - i);
+                            ((List<BarLoadSet>)_objectList).RemoveAt(j - i);
                             lvDetails.Items.RemoveAt(j - i);
                             i++;
                         }
@@ -841,5 +848,6 @@ namespace RDUIL.WinForms
             else
             { MessageBox.Show("Выберите один элемент из списка", "Неверный выбор"); }
         }
+        #endregion
     }
 }

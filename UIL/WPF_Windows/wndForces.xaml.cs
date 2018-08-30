@@ -20,8 +20,8 @@ namespace RDUIL.WPF_Windows
     /// </summary>
     public partial class wndForces : Window
     {
-        private ColumnLoadSet _loadSet;
-        public wndForces(ColumnLoadSet loadSet)
+        private BarLoadSet _loadSet;
+        public wndForces(BarLoadSet loadSet)
         {
             InitializeComponent();
             _loadSet = loadSet;

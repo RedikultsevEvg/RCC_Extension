@@ -13,24 +13,24 @@ namespace RDBLL.Processors.SC
 {
     public class SteelColumnBaseProcessor : ISteelBaseProcessor
     {
-        private List<ColumnLoadSet> GetLoadCases (List<ColumnLoadSet> columnLoadSets)
+        private List<BarLoadSet> GetLoadCases (List<BarLoadSet> columnLoadSets)
         {
-            List<ColumnLoadSet> LoadCases = new List<ColumnLoadSet>();
-            LoadCases.Add(new ColumnLoadSet(0));
-            List<ColumnLoadSet> tmpLoadSets = new List<ColumnLoadSet>();
-            foreach (ColumnLoadSet columnLoadSet in columnLoadSets )
+            List<BarLoadSet> LoadCases = new List<BarLoadSet>();
+            LoadCases.Add(new BarLoadSet(0));
+            List<BarLoadSet> tmpLoadSets = new List<BarLoadSet>();
+            foreach (BarLoadSet columnLoadSet in columnLoadSets )
                 {
                     tmpLoadSets.Add(columnLoadSet);
                 }
             while (tmpLoadSets.Count > 0)
                 {
-                    ColumnLoadSet LoadSet = tmpLoadSets[0];
-                    List<ColumnLoadSet> tmpLoadCases = new List<ColumnLoadSet>();
-                    foreach (ColumnLoadSet LoadCase in LoadCases)
+                    BarLoadSet LoadSet = tmpLoadSets[0];
+                    List<BarLoadSet> tmpLoadCases = new List<BarLoadSet>();
+                    foreach (BarLoadSet LoadCase in LoadCases)
                         {
                             tmpLoadCases.Add(LoadCase);
                         }
-                    foreach (ColumnLoadSet LoadCase in tmpLoadCases)
+                    foreach (BarLoadSet LoadCase in tmpLoadCases)
                         {
                             if (LoadSet.IsDeadLoad)
                             {
@@ -63,7 +63,7 @@ namespace RDBLL.Processors.SC
             double maxStress = -10000000;
             double minStressTmp;
             double maxStressTmp;
-            foreach (ColumnLoadSet LoadCase in columnBaseResult.LoadCases)
+            foreach (BarLoadSet LoadCase in columnBaseResult.LoadCases)
             {
                 Nz = LoadCase.Force_Nz;
                 Mx = Math.Abs(LoadCase.Force_Mx);

@@ -27,7 +27,7 @@ namespace WallTest
             steelColumnBase.Width = 1;
             steelColumnBase.Length = 1;
             steelColumnBase.Thickness = 0.05;
-            ColumnLoadSet columnLoadSet = new ColumnLoadSet(steelColumnBase);
+            BarLoadSet columnLoadSet = new BarLoadSet(steelColumnBase);
             columnLoadSet.Force_Nz = -100000;
             columnLoadSet.PartialSafetyFactor = 1;
             SteelBasePart steelBasePart = new SteelBasePart(steelColumnBase);

@@ -10,7 +10,7 @@ namespace RDBLL.Processors.Forces
 {
     public class ColumnLoadSetProcessor
     {
-        public static void SumForces(ColumnLoadSet oldLoadSet, ColumnLoadSet secondLoadSet, double koeff)
+        public static void SumForces(BarLoadSet oldLoadSet, BarLoadSet secondLoadSet, double koeff)
         {
             if (! String.IsNullOrEmpty(oldLoadSet.Name)) { oldLoadSet.Name += " + "; }
             oldLoadSet.Name += secondLoadSet.Name + "*(" + Convert.ToString(secondLoadSet.PartialSafetyFactor * koeff) + ")";
@@ -23,9 +23,9 @@ namespace RDBLL.Processors.Forces
             return;
         }
 
-        public static ColumnLoadSet SumForcesInNew (ColumnLoadSet firstLoadSet, ColumnLoadSet secondLoadSet, double koeff)
+        public static BarLoadSet SumForcesInNew (BarLoadSet firstLoadSet, BarLoadSet secondLoadSet, double koeff)
         {
-            ColumnLoadSet newLoadSet = new ColumnLoadSet(0);
+            BarLoadSet newLoadSet = new BarLoadSet(0);
             SumForces(newLoadSet, firstLoadSet, 1.0);
             SumForces(newLoadSet, secondLoadSet, koeff);
             return newLoadSet;

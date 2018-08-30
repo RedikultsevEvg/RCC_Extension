@@ -14,12 +14,24 @@ namespace RDBLL.Processors.SC
     {
         public static ColumnBasePartResult GetResult(SteelBasePart basePart)
         {
-            #region
+            /*Алгоритм расчета основан на подходе из учебника Белени по
+             * таблицам Галеркина
+             * Момент определяется в зависимости от количества сторон, по которым имеется опора
+             * Если опора имеется только по одной стороне, то считается что участок консольный
+             * Иначе считаетася, что участок оперт шарнирно
+             * Для участка, опертого по трем сторонам в учебнике есть некоторая нелогичность
+             * При соотношении сторон менее 0,5 происходит резкий скачок в определении момента
+             * Так как данный скачок в запас несущей способности, то решили оставить так
+             */
+            #region Исходные списки для интерполяции коэффициентов
+            //Для участков, опертых по 2-м и 3-м сторонам
             List<double> xValues23 = new List<double>() { 0.5, 0.6, 0.7, 0.8, 0.9, 1.0, 1.2, 1.4, 2 };
             List<double> yValues23 = new List<double>() { 0.06, 0.074, 0.088, 0.097, 0.107, 0.112, 0.120, 0.126, 0.132 };
+            //Для участков, опертых по 4-м сторонам
             List<double> xValues4 = new List<double>() { 1, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8, 1.9, 2 };
             List<double> yValues4 = new List<double>() { 0.048, 0.055, 0.063, 0.069, 0.075, 0.081, 0.086, 0.091, 0.094, 0.098, 0.1 };
             #endregion
+            #region Описание переменных
             SteelColumnBaseProcessor columBaseProcessor = new SteelColumnBaseProcessor();
             ColumnBaseResult baseResult = columBaseProcessor.GetResult(basePart.ColumnBase);
             double maxStress = baseResult.MinStress*(-1.0);
@@ -30,10 +42,14 @@ namespace RDBLL.Processors.SC
             double Wx = thickness * thickness / 6;
             double maxMoment = 0;
             int countFixSides = 0;
+            #endregion
+            #region Определение количества сторон, по которым имеются опоры
             if (basePart.FixLeft) { countFixSides++; }
             if (basePart.FixRight) { countFixSides++; }
             if (basePart.FixTop) { countFixSides++; }
             if (basePart.FixBottom) { countFixSides++; }
+            #endregion
+            //Если ни одна из опор не задана, то это ошибка
             if (countFixSides == 0)
             {
                 MessageBox.Show("Неверное закрепление сторон", "Ошибка");

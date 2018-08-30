@@ -40,13 +40,11 @@ namespace RDBLL.Common.Service
                 if (IsDataChangedChanged != null) IsDataChangedChanged(null, EventArgs.Empty);
             }
         }
-
         public static void InicializeNew()
         {
             BuildingSite = new BuildingSite();
             BuildingSite.BuildingList.Add(new Building(BuildingSite));
             IsDataChanged = false;
-            LoadKind.KindList = new List<String>() { "Постоянная", "Временная длительная", "Временная кратковременная", "Особая" };
         }
         public static void ClearAll()
         {
@@ -110,7 +108,6 @@ namespace RDBLL.Common.Service
             }
 
         }
-
         // Raise the change event through this static method
         public static event EventHandler IsDataChangedChanged;
         public static event EventHandler FilePathChanged;

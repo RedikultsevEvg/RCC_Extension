@@ -24,7 +24,7 @@ namespace RDBLL.Entity.SC.Column
         public double LengthBoltDist { get; set; }
         public double ConcreteStrength { get; set; }
         public double BoltPrestressForce { get; set; }
-        public List<ColumnLoadSet> Loads { get; set; }
+        public List<BarLoadSet> Loads { get; set; }
         public List<SteelBasePart> SteelBaseParts { get; set; }
 
         #endregion
@@ -41,7 +41,7 @@ namespace RDBLL.Entity.SC.Column
             LengthBoltDist = 0.60;
             ConcreteStrength = 1000000;
             BoltPrestressForce = 0;
-            Loads = new List<ColumnLoadSet>();
+            Loads = new List<BarLoadSet>();
             //ColumnLoadSet columnLoadSet = new ColumnLoadSet(this);
             SteelBaseParts = new List<SteelBasePart>();
             //SteelBasePart steelBasePart = new SteelBasePart(this);

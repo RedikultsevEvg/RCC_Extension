@@ -63,8 +63,7 @@
     <Compile Include="Entity\Results\SC\ColumnBaseResult.cs" />
     <Compile Include="Entity\SC\Column\SteelBasePart.cs" />
     <Compile Include="Entity\SC\Column\SteelColumnBase.cs" />
-    <Compile Include="Forces\ColumnLoadSet.cs" />
-    <Compile Include="Forces\LoadKind.cs" />
+    <Compile Include="Forces\BarLoadSet.cs" />
     <Compile Include="Processors\Forces\ColumnLoadSetProcessor.cs" />
     <Compile Include="Processors\SC\SteelColumnBasePartProcessor.cs" />
     <Compile Include="Processors\SC\SteelColumnBaseProcessor.cs" />

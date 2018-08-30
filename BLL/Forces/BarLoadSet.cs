@@ -7,7 +7,7 @@ using RDBLL.Entity.SC.Column;
 
 namespace RDBLL.Forces
 {
-    public class ColumnLoadSet : ICloneable
+    public class BarLoadSet : ICloneable
     {
         //Properties
         #region 
@@ -48,11 +48,11 @@ namespace RDBLL.Forces
             Force_Qx = 0;
             Force_Qy = 0;
         }
-        public ColumnLoadSet(int setDefault)
+        public BarLoadSet(int setDefault)
         {
             if (setDefault == 0) { SetDefault(); } else { SetDefault1(); }
         }
-        public ColumnLoadSet(SteelColumnBase steelColumnBase)
+        public BarLoadSet(SteelColumnBase steelColumnBase)
         {
             SetDefault1();
             steelColumnBase.Loads.Add(this);

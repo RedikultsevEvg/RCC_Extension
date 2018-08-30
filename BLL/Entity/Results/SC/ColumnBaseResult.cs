@@ -9,7 +9,7 @@ namespace RDBLL.Entity.Results.SC
 {
     public class ColumnBaseResult
     {
-        public List<ColumnLoadSet> LoadCases { get; set; }
+        public List<BarLoadSet> LoadCases { get; set; }
         public double MinStress { get; set; }
         public double MaxStress { get; set; }
         public double BoltForce { get; set; }
