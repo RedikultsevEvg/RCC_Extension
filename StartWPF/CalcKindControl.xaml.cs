@@ -13,6 +13,10 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Windows.Media.Effects;
+using RDBLL.Common.Service;
+using RDUIL.WinForms;
+using RDUIL.WPF_Windows.ControlClasses;
+using StartWPF;
 
 namespace StartWPF
 {
@@ -21,9 +25,17 @@ namespace StartWPF
     /// </summary>
     public partial class CalcKindControl : UserControl
     {
-        public CalcKindControl()
+        private CalcKind _calcKind;
+
+        public CalcKindControl(CalcKind calcKind)
         {
             InitializeComponent();
+            _calcKind = calcKind;
+            tbCommandName.Text = _calcKind.KindName;
+            tbAddition.Text = _calcKind.KindAddition;
+            Width = 200;
+            Height = 100;
+            tbCommandName.Background = Brushes.LightBlue;
         }
 
         private void Button_MouseMove(object sender, MouseEventArgs e)
@@ -33,13 +45,18 @@ namespace StartWPF
             dropShadowEffect.BlurRadius = 5;
             dropShadowEffect.ShadowDepth = 5;
             Effect = dropShadowEffect;
-            btnMainButton.Opacity = 1;
+            tbCommandName.Background = Brushes.Cyan;
         }
 
         private void Button_MouseLeave(object sender, MouseEventArgs e)
         {
             Effect = null;
-            btnMainButton.Opacity = 0.7;
+            tbCommandName.Background = Brushes.LightBlue;
+        }
+
+        private void btnMainButton_Click(object sender, RoutedEventArgs e)
+        {
+            _calcKind.RunCommand();
         }
     }
 }

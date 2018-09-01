@@ -12,6 +12,7 @@ namespace RDBLL.Common.Service
         public Object ParentObject { get; set; }
         public Object ObjectList { get; set; }
         public bool IsSelectable { get; set; }
+        public List<Int16> BtnVisibilityList { get; set; }
 
         public DetailObjectList(String dataType, Object parentObject, Object objectList, bool isSelectable)
         {

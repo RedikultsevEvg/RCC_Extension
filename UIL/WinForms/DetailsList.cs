@@ -49,6 +49,27 @@ namespace RDUIL.WinForms
             List<String> ColumnName = new List<String>();
             List<Int32> ColumnWidth = new List<Int32>();
             #endregion
+            #region Определение видимости кнопок
+            for (int i = 0; i < tspMain.Items.Count; i++)
+            {
+                tspMain.Items[i].Visible = false;
+            }
+                if (! (_detailObjectList.BtnVisibilityList == null))
+            {
+                for (int i=0; i< _detailObjectList.BtnVisibilityList.Count; i++)
+                {
+                    if (_detailObjectList.BtnVisibilityList[i] == 0)
+                    {
+                        tspMain.Items[i].Visible = false;
+                    }
+                    else
+                    {
+                        tspMain.Items[i].Visible = true;
+                    }
+                    
+                }
+            }
+            #endregion
             //В зависимости от вида объекта показываем нужные столбцы
             switch (_formType) //
             {
@@ -74,15 +95,6 @@ namespace RDUIL.WinForms
                         {
                             NewItemFromLevel(level);
                         }
-
-                        tsbSteelColumnBase.Visible = true;
-                        tsbColumnForces.Visible = false;
-                        tsbSteelColumnBaseParts.Visible = false;
-                        tsbWalls.Visible = true;
-                        tsbWallTypes.Visible = true;
-                        tsbOpeningTypes.Visible = true;
-                        tsbOpenings.Visible = false;
-                        tsbReport.Visible = true;
                         break;
                     }
                 //Create window for Openings
@@ -99,11 +111,6 @@ namespace RDUIL.WinForms
                         {
                             NewItemFromOpeningPlacing(openingPlacing);
                         }
-                        tsbWalls.Visible = false;
-                        tsbWallTypes.Visible = false;
-                        tsbOpeningTypes.Visible = false;
-                        tsbOpenings.Visible = false;
-                        tsbReport.Visible = false;
                         break;
                     }
                 //Create window for OpeningType
@@ -119,11 +126,6 @@ namespace RDUIL.WinForms
                         {
                             NewItemFromOpeningType(openingType);
                         }
-                        tsbWalls.Visible = false;
-                        tsbWallTypes.Visible = false;
-                        tsbOpeningTypes.Visible = false;
-                        tsbOpenings.Visible = false;
-                        tsbReport.Visible = false;
                         break;
                     }
                 case ObjColumnBaseParts:
@@ -140,16 +142,6 @@ namespace RDUIL.WinForms
                         {
                             NewItemFromColumnBasePart(basePart);
                         }
-                        #region Определение видимости кнопок
-                        tsbSteelColumnBase.Visible = false;
-                        tsbColumnForces.Visible = false;
-                        tsbSteelColumnBaseParts.Visible = false;
-                        tsbWalls.Visible = false;
-                        tsbWallTypes.Visible = false;
-                        tsbOpeningTypes.Visible = false;
-                        tsbOpenings.Visible = false;
-                        tsbReport.Visible = false;
-                        #endregion
                         break;
                     }
                 case ObjBarForses:
@@ -166,15 +158,6 @@ namespace RDUIL.WinForms
                         {
                             NewItemFromColumnLoadSet(loadSet);
                         }
-
-                        tsbSteelColumnBase.Visible = false;
-                        tsbColumnForces.Visible = false;
-                        tsbSteelColumnBaseParts.Visible = false;
-                        tsbWalls.Visible = false;
-                        tsbWallTypes.Visible = false;
-                        tsbOpeningTypes.Visible = false;
-                        tsbOpenings.Visible = false;
-                        tsbReport.Visible = false;
                         break;
                     }
                 case ObjSteelColumnBases:
@@ -190,15 +173,6 @@ namespace RDUIL.WinForms
                         {
                             NewItemFromSteelColumnBase(columnBase);
                         }
-
-                        tsbSteelColumnBase.Visible = false;
-                        tsbColumnForces.Visible = true;
-                        tsbSteelColumnBaseParts.Visible = true;
-                        tsbWalls.Visible = false;
-                        tsbWallTypes.Visible = false;
-                        tsbOpeningTypes.Visible = false;
-                        tsbOpenings.Visible = false;
-                        tsbReport.Visible = false;
                         break;
                     }
                 //Создаем окно для списка стен
@@ -215,12 +189,6 @@ namespace RDUIL.WinForms
                         {
                             NewItemFromWall(wall);
                         }
-
-                        tsbWalls.Visible = false;
-                        tsbWallTypes.Visible = false;
-                        tsbOpeningTypes.Visible = false;
-                        tsbOpenings.Visible = true;
-                        tsbReport.Visible = true;
                         break;
                 }
                 case "WallTypes": //Создаем окно для списка стен
@@ -235,11 +203,6 @@ namespace RDUIL.WinForms
                         {
                             NewItemFromWallType(wallType);
                         }
-                        tsbWalls.Visible = false;
-                        tsbWallTypes.Visible = false;
-                        tsbOpeningTypes.Visible = false;
-                        tsbOpenings.Visible = false;
-                        tsbReport.Visible = false;
                         break;
                     }
             }
@@ -703,6 +666,7 @@ namespace RDUIL.WinForms
                 {
                     level = ((List<Level>)_objectList)[i];
                     var detailObjectList = new DetailObjectList("Walls", level, level.WallList, false);
+                    detailObjectList.BtnVisibilityList = new List<short>() { 1, 1, 0, 1, 0, 0, 0, 1, 1, 0, 0, 0 };
                     frmDetailList DetailForm = new frmDetailList(detailObjectList);
                     this.Visible = false;
                     DetailForm.ShowDialog();
@@ -717,6 +681,7 @@ namespace RDUIL.WinForms
         {
             Building building = (Building)_parentObject;
             var detailObjectList = new DetailObjectList("WallTypes", building, building.WallTypeList, false);
+            detailObjectList.BtnVisibilityList = new List<short>() { 1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0 };
             frmDetailList DetailForm = new frmDetailList(detailObjectList);
             this.Visible = false;
             DetailForm.ShowDialog();
@@ -731,6 +696,7 @@ namespace RDUIL.WinForms
         {
             Building building = (Building)_parentObject;
             var detailObjectList = new DetailObjectList("OpeningTypes", building, building.OpeningTypeList, false);
+            detailObjectList.BtnVisibilityList = new List<short>() { 1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0 };
             frmDetailList DetailForm = new frmDetailList(detailObjectList);
             this.Visible = false;
             DetailForm.ShowDialog();
@@ -745,6 +711,7 @@ namespace RDUIL.WinForms
                 {
                     wall = ((List<Wall>)_objectList)[i];
                     var detailObjectList = new DetailObjectList("OpeningPlacings", wall, wall.OpeningPlacingList , false);
+                    detailObjectList.BtnVisibilityList = new List<short>() { 1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0 };
                     frmDetailList DetailForm = new frmDetailList(detailObjectList);
                     this.Visible = false;
                     DetailForm.ShowDialog();
@@ -759,7 +726,6 @@ namespace RDUIL.WinForms
         {
             if (lvDetails.SelectedIndices.Count == 0)
             { MessageBox.Show("Выберите элемент из списка", "Ничего не выбрано"); }
-            //При удалении нескольких объектов учитываем сдвижку номеров в коллекции вызванную удалении
             decimal sumVolume = 0;
             switch (_formType) //
             {
@@ -800,6 +766,7 @@ namespace RDUIL.WinForms
                 {
                     level = ((List<Level>)_objectList)[i];
                     var detailObjectList = new DetailObjectList("SteelColumnBases", level, level.SteelColumnBaseList, false);
+                    detailObjectList.BtnVisibilityList = new List<short>() { 1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 1, 1 };
                     frmDetailList DetailForm = new frmDetailList(detailObjectList);
                     this.Visible = false;
                     DetailForm.ShowDialog();
@@ -819,6 +786,7 @@ namespace RDUIL.WinForms
                 {
                     steelColumnBase = ((List<SteelColumnBase>)_objectList)[i];
                     var detailObjectList = new DetailObjectList("ColumnForces", steelColumnBase, steelColumnBase.Loads, false);
+                    detailObjectList.BtnVisibilityList = new List<short>() { 1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0 };
                     frmDetailList DetailForm = new frmDetailList(detailObjectList);
                     this.Visible = false;
                     DetailForm.ShowDialog();
@@ -838,6 +806,7 @@ namespace RDUIL.WinForms
                 {
                     steelColumnBase = ((List<SteelColumnBase>)_objectList)[i];
                     var detailObjectList = new DetailObjectList("ColumnBaseParts", steelColumnBase, steelColumnBase.SteelBaseParts, false);
+                    detailObjectList.BtnVisibilityList = new List<short>() { 1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0 };
                     frmDetailList DetailForm = new frmDetailList(detailObjectList);
                     this.Visible = false;
                     DetailForm.ShowDialog();

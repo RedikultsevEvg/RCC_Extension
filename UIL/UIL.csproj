@@ -114,6 +114,8 @@
     <Compile Include="WinForms\WallType.Designer.cs">
       <DependentUpon>WallType.cs</DependentUpon>
     </Compile>
+    <Compile Include="WPF_Windows\ControlClasses\CalcKind.cs" />
+    <Compile Include="WPF_Windows\ControlClasses\CalcType.cs" />
     <Compile Include="WPF_Windows\wndForces.xaml.cs">
       <DependentUpon>wndForces.xaml</DependentUpon>
     </Compile>
@@ -127,14 +129,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="UserControl1.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Compile Include="UserControl1.xaml.cs">
-      <DependentUpon>UserControl1.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
     <Page Include="WPF_Windows\wndForces.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

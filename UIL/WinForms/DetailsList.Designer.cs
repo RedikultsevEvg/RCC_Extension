@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmDetailList));
-            this.toolStrip1 = new System.Windows.Forms.ToolStrip();
+            this.tspMain = new System.Windows.Forms.ToolStrip();
             this.tsbNew = new System.Windows.Forms.ToolStripButton();
             this.tsbEdit = new System.Windows.Forms.ToolStripButton();
             this.tsbClone = new System.Windows.Forms.ToolStripButton();
@@ -44,13 +44,13 @@
             this.tsbSteelColumnBaseParts = new System.Windows.Forms.ToolStripButton();
             this.lvDetails = new System.Windows.Forms.ListView();
             this.btnClose = new System.Windows.Forms.Button();
-            this.toolStrip1.SuspendLayout();
+            this.tspMain.SuspendLayout();
             this.SuspendLayout();
             // 
-            // toolStrip1
+            // tspMain
             // 
-            this.toolStrip1.ImageScalingSize = new System.Drawing.Size(30, 30);
-            this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.tspMain.ImageScalingSize = new System.Drawing.Size(30, 30);
+            this.tspMain.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.tsbNew,
             this.tsbEdit,
             this.tsbClone,
@@ -63,11 +63,11 @@
             this.tsbSteelColumnBase,
             this.tsbColumnForces,
             this.tsbSteelColumnBaseParts});
-            this.toolStrip1.Location = new System.Drawing.Point(0, 0);
-            this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.Size = new System.Drawing.Size(834, 37);
-            this.toolStrip1.TabIndex = 0;
-            this.toolStrip1.Text = "toolStrip1";
+            this.tspMain.Location = new System.Drawing.Point(0, 0);
+            this.tspMain.Name = "tspMain";
+            this.tspMain.Size = new System.Drawing.Size(834, 37);
+            this.tspMain.TabIndex = 0;
+            this.tspMain.Text = "Главное";
             // 
             // tsbNew
             // 
@@ -97,7 +97,6 @@
             this.tsbClone.Name = "tsbClone";
             this.tsbClone.Size = new System.Drawing.Size(34, 34);
             this.tsbClone.Text = "Клонировать";
-            this.tsbClone.Visible = false;
             // 
             // tsbDelete
             // 
@@ -219,14 +218,14 @@
             this.ClientSize = new System.Drawing.Size(834, 462);
             this.Controls.Add(this.btnClose);
             this.Controls.Add(this.lvDetails);
-            this.Controls.Add(this.toolStrip1);
+            this.Controls.Add(this.tspMain);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MinimumSize = new System.Drawing.Size(850, 500);
             this.Name = "frmDetailList";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Стены";
-            this.toolStrip1.ResumeLayout(false);
-            this.toolStrip1.PerformLayout();
+            this.tspMain.ResumeLayout(false);
+            this.tspMain.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -234,7 +233,7 @@
 
         #endregion
 
-        private System.Windows.Forms.ToolStrip toolStrip1;
+        private System.Windows.Forms.ToolStrip tspMain;
         private System.Windows.Forms.ToolStripButton tsbNew;
         private System.Windows.Forms.ToolStripButton tsbEdit;
         private System.Windows.Forms.ToolStripButton tsbClone;

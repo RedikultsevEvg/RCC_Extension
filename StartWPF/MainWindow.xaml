@@ -36,40 +36,8 @@
         </Grid.ColumnDefinitions>
         <Rectangle Grid.Column="0" Grid.Row="1" Fill="White" RadiusX="7" RadiusY="7" Margin="10"/>
         <Rectangle Grid.Column="1" Grid.Row="1" Fill="White" RadiusX="7" RadiusY="7" Margin="10" Grid.ColumnSpan="3"/>
-        <WrapPanel x:Name="wpCalcPanel" Grid.Column="1" Grid.Row="1" Margin="10" Grid.ColumnSpan="3" >
-            <Button x:Name="btnWall" Width="200" Height="100" Margin="5" Background="#FF91D7FF" IsCancel="True" Click="btnWall_Click">
-                <Button.Effect>
-                    <DropShadowEffect Opacity="0.6"/>
-                </Button.Effect>
-                <Grid Height="88" Width="190">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="30"/>
-                        <RowDefinition Height="10"/>
-                        <RowDefinition/>
-                    </Grid.RowDefinitions>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="20"/>
-                        <ColumnDefinition/>
-                    </Grid.ColumnDefinitions>
-                    <Label x:Name="lb1" Grid.Column="1" Content="Расчитать объем стен" FontSize="14" Background="#FFB5FCFF"/>
-                    <TextBlock Grid.Column="1" Grid.Row="2" Text="Подсчет объема бетона и арматуры для стен многоэтажных зданий с учетом проемов" TextWrapping="Wrap" Background="#FFFDFFDD" FontSize="10"/>
-                </Grid>
-            </Button>
-        </WrapPanel>
-        <StackPanel Grid.Row="1" Margin="10">
-            <Button x:Name="btnRCC" Height="133" Margin="5" VerticalAlignment="Top">
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition/>
-                        <RowDefinition Height="30"/>
-                    </Grid.RowDefinitions>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition/>
-                    </Grid.ColumnDefinitions>
-                    <Image x:Name="Bridge_jpg" Height="93" Stretch="Fill" Width="140" Source="Bridge.jpg"/>
-                    <Label x:Name="label" Grid.Row ="1 "  Content="Железобетон" HorizontalAlignment="Center" />
-                </Grid>
-            </Button>
+        <WrapPanel x:Name="wpCalcPanel" Grid.Column="1" Grid.Row="1" Margin="10" Grid.ColumnSpan="3" />
+        <StackPanel x:Name="stpCalcTypes" Grid.Row="1" Margin="10">
         </StackPanel>
         <StackPanel Grid.Column="1" Margin="10" Orientation="Horizontal" Grid.ColumnSpan="3">
             <Button x:Name="btnLoad" Style="{StaticResource ServiceButton}" Click="btnLoad_Click" >

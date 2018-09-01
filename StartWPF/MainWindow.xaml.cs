@@ -15,8 +15,9 @@ using System.Windows.Shapes;
 using RDBLL.Common.Service;
 using RDUIL.WinForms;
 using winForms = System.Windows.Forms;
-using RDUIL.WPF_Windows;
+using RDUIL.WPF_Windows.ControlClasses;
 using RDBLL.Entity.SC.Column;
+using System.Threading;
 
 namespace StartWPF
 {
@@ -29,20 +30,39 @@ namespace StartWPF
         {
             InitializeComponent();
             ProgrammSettings.InicializeNew();
-            CalcKindControl calcKindControl = new CalcKindControl();
-            calcKindControl.tbCommandName.Text = "Расчет базы колонны";
-            calcKindControl.Width = 200;
-            calcKindControl.Height = 100;
-            wpCalcPanel.Children.Add(calcKindControl);
-        }
+            List<CalcType> calcTypes = new List<CalcType>(); 
 
-        private void btnWall_Click(object sender, RoutedEventArgs e)
-        {
-            var detailObjectList =
-            new DetailObjectList("Levels", ProgrammSettings.BuildingSite.BuildingList[0],
-            ProgrammSettings.BuildingSite.BuildingList[0].LevelList, false);
-            frmDetailList DetailForm = new frmDetailList(detailObjectList);
-            DetailForm.Show();
+            CalcType calcTypeRCC = new CalcType();
+            calcTypeRCC.TypeName = "Железобетон";
+            calcTypeRCC.ImageName = "Bridge.jpg";
+            calcTypeRCC.RegisterDelegate(new CalcType.AddCommandDelegate(AddItemWrapPanel));
+            calcTypes.Add(calcTypeRCC);
+
+            CalcType calcTypeSC = new CalcType();
+            calcTypeSC.TypeName = "Металл";
+            calcTypeSC.ImageName = "Steel.jpg";
+            calcTypeSC.RegisterDelegate(new CalcType.AddCommandDelegate(AddItemWrapPanel));
+            calcTypes.Add(calcTypeSC);
+
+            foreach (CalcType calcType in calcTypes)
+            {
+                CalcTypeControl calcTypeControl = new CalcTypeControl(calcType);
+                stpCalcTypes.Children.Add(calcTypeControl);
+            }
+            
+            CalcKind calcKindWall = new CalcKind();
+            calcKindWall.KindName = "Расчет железобетонных стен";
+            calcKindWall.KindAddition = "Подсчет объема бетона для железобетонных стен";
+            calcKindWall.RegisterDelegate(new CalcKind.CommandDelegate(ShowWall));
+            calcTypeRCC.CalcKinds.Add(calcKindWall);
+
+            CalcKind calcKindSteelBase = new CalcKind();
+            calcKindSteelBase.KindName = "Расчет баз стальных колонн";
+            calcKindSteelBase.KindAddition = "Расчет параметров баз колонн с учетом давления под подошвой";
+            calcKindSteelBase.RegisterDelegate(new CalcKind.CommandDelegate(ShowSteelBase));
+            calcTypeSC.CalcKinds.Add(calcKindSteelBase);
+
+            calcTypes[0].RunCommand();
         }
 
         private void btnSave_Click(object sender, RoutedEventArgs e)
@@ -92,6 +112,35 @@ namespace StartWPF
         {
             WndAbout wndAbout = new WndAbout();
             wndAbout.Show();
+        }
+
+        private static void ShowWall()
+        {
+            var detailObjectList = new DetailObjectList("Levels", ProgrammSettings.BuildingSite.BuildingList[0],
+            ProgrammSettings.BuildingSite.BuildingList[0].LevelList, false);
+            detailObjectList.BtnVisibilityList = new List<short>() { 1, 1, 0, 1, 1, 1, 1, 0, 1, 0, 0, 0 };
+            frmDetailList DetailForm = new frmDetailList(detailObjectList);
+            DetailForm.Show();
+        }
+
+        private static void ShowSteelBase()
+        {
+            var detailObjectList = new DetailObjectList("Levels", ProgrammSettings.BuildingSite.BuildingList[0],
+            ProgrammSettings.BuildingSite.BuildingList[0].LevelList, false);
+            detailObjectList.BtnVisibilityList = new List<short>() { 1, 1, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0 };
+            frmDetailList DetailForm = new frmDetailList(detailObjectList);
+            DetailForm.Show();
+        }
+
+        public void AddItemWrapPanel(List<CalcKind> calcKinds)
+        {
+            wpCalcPanel.Children.Clear();
+
+            foreach (CalcKind calcKind in calcKinds)
+            {
+                CalcKindControl calcKindControl = new CalcKindControl(calcKind);
+                wpCalcPanel.Children.Add(calcKindControl);
+            }
         }
     }
 }
