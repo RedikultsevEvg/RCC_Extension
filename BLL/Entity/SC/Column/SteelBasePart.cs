@@ -15,6 +15,10 @@ namespace RDBLL.Entity.SC.Column
         public double Width { get; set; }
         public double Length { get; set; }
         public double[] Center { get; set; }
+        public double LeftOffset { get; set; }
+        public double RightOffset { get; set; }
+        public double TopOffset { get; set; }
+        public double BottomOffset { get; set; }
         public bool FixLeft { get; set; }
         public bool FixRight { get; set; }
         public bool FixTop { get; set; }

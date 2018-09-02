@@ -39,7 +39,16 @@
             <RowDefinition Height="*"/>
             <RowDefinition Height="80"/>
         </Grid.RowDefinitions>
-        
+        <StackPanel Height="60" Grid.Row="1" Margin="0,10,10,10" Orientation="Horizontal" HorizontalAlignment="Right" Background="#FFE2E2E2" Grid.Column="0">
+            <Button x:Name="btnRefresh" Style="{StaticResource ServiceButton}" HorizontalAlignment="Stretch" Click="btnRefresh_Click">
+                <Button.Effect>
+                    <DropShadowEffect Opacity="0.6"/>
+                </Button.Effect>
+                <Image x:Name="Refresh_png" Style="{StaticResource ServiceButtonImage}" Source="pack://siteoforigin:,,,/Resources/IconRefresh40.png"/>
+            </Button>
+        </StackPanel>
+            
+
         <Grid Grid.Row="0" Grid.Column="1">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width ="*"/>
@@ -98,7 +107,7 @@
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition/>
-                <ColumnDefinition Width="100"/>
+                <ColumnDefinition Width="130"/>
             </Grid.ColumnDefinitions>
             <TextBlock x:Name="tbName" Style="{StaticResource PropertyTextBlock}" Text="Наименование"/>
             <TextBlock Style="{StaticResource PropertyTextBlock}" Text="Ширина, мм" Grid.Row="1"/>
@@ -112,8 +121,8 @@
             <TextBox x:Name="tbxLength" Grid.Column="1" Style="{StaticResource PropertyTextBox}" Grid.Row="2"/>
             <TextBox x:Name="tbxCenterX" Grid.Column="1" Style="{StaticResource PropertyTextBox}" Grid.Row="3"/>
             <TextBox x:Name="tbxCenterY" Grid.Column="1" Style="{StaticResource PropertyTextBox}" Grid.Row="4"/>
-            <CheckBox x:Name="cbAddSymmetricX"  Grid.Column="1" Margin="40,7,20,0" Grid.Row="5"/>
-            <CheckBox x:Name="cbAddSymmetricY"  Grid.Column="1" Margin="40,7,20,0" Grid.Row="6"/>
+            <CheckBox x:Name="cbAddSymmetricX"  Grid.Column="1" Margin="5,7,20,0" Grid.Row="5"/>
+            <CheckBox x:Name="cbAddSymmetricY"  Grid.Column="1" Margin="5,7,20,0" Grid.Row="6"/>
         </Grid>
         <StackPanel Height="60" Grid.Row="1" Margin="0,10,10,10" Orientation="Horizontal" HorizontalAlignment="Right" Background="#FFE2E2E2" Grid.Column="2">
             <Button x:Name="btnOK" Style="{StaticResource ServiceButton}" HorizontalAlignment="Stretch" Click="btnOK_Click">
