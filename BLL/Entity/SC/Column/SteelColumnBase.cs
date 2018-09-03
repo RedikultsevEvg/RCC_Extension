@@ -22,9 +22,13 @@ namespace RDBLL.Entity.SC.Column
         public double Thickness { get; set; }
         public double WidthBoltDist { get; set; }
         public double LengthBoltDist { get; set; }
+        public double Koeff_WorkCond { get; set; }
+        public double SteelStrength { get; set; }
         public double ConcreteStrength { get; set; }
         public double BoltPrestressForce { get; set; }
         public List<BarLoadSet> Loads { get; set; }
+        public List<BarForcesGroup> LoadsGroup { get; set; }
+        public bool OnlyOneLoadsGroup { get; set; }
         public List<SteelBasePart> SteelBaseParts { get; set; }
 
         #endregion
@@ -39,12 +43,14 @@ namespace RDBLL.Entity.SC.Column
             Thickness = 0.06;
             WidthBoltDist = 0.15;
             LengthBoltDist = 0.60;
+            Koeff_WorkCond = 1.1;
+            SteelStrength = 245000000;
             ConcreteStrength = 1000000;
             BoltPrestressForce = 0;
             Loads = new List<BarLoadSet>();
-            //ColumnLoadSet columnLoadSet = new ColumnLoadSet(this);
+            LoadsGroup = new List<BarForcesGroup>();
+            OnlyOneLoadsGroup = true;
             SteelBaseParts = new List<SteelBasePart>();
-            //SteelBasePart steelBasePart = new SteelBasePart(this);
         }
         public SteelColumnBase(Level level)
         {

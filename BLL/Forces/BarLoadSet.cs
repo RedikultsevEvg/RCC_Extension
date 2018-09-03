@@ -15,6 +15,8 @@ namespace RDBLL.Forces
         public String Name { get; set; } //Наименование
         public double PartialSafetyFactor { get; set; } //Коэффициент надежности по нагрузке
         public bool IsDeadLoad { get; set; }
+        public bool IsCombination { get; set;}
+        public bool IsDesignLoad { get; set; }
         public bool BothSign { get; set; }
         public double Force_Nz { get; set; }
         public double Force_Mx { get; set; }
@@ -29,6 +31,8 @@ namespace RDBLL.Forces
             Name = "";
             PartialSafetyFactor = 1;
             IsDeadLoad = false;
+            IsCombination = false;
+            IsDesignLoad = false;
             BothSign = false;
             Force_Nz = 0;
             Force_Mx = 0;
@@ -41,6 +45,8 @@ namespace RDBLL.Forces
             Name = "Новая нагрузка";
             PartialSafetyFactor = 1.1;
             IsDeadLoad = true;
+            IsCombination = false;
+            IsDesignLoad = false;
             BothSign = false;
             Force_Nz = -100000;
             Force_Mx = 0;

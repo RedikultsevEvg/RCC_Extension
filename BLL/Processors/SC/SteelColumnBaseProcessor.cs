@@ -13,44 +13,10 @@ namespace RDBLL.Processors.SC
 {
     public class SteelColumnBaseProcessor : ISteelBaseProcessor
     {
-        private List<BarLoadSet> GetLoadCases (List<BarLoadSet> columnLoadSets)
-        {
-            List<BarLoadSet> LoadCases = new List<BarLoadSet>();
-            LoadCases.Add(new BarLoadSet(0));
-            List<BarLoadSet> tmpLoadSets = new List<BarLoadSet>();
-            foreach (BarLoadSet columnLoadSet in columnLoadSets )
-                {
-                    tmpLoadSets.Add(columnLoadSet);
-                }
-            while (tmpLoadSets.Count > 0)
-                {
-                    BarLoadSet LoadSet = tmpLoadSets[0];
-                    List<BarLoadSet> tmpLoadCases = new List<BarLoadSet>();
-                    foreach (BarLoadSet LoadCase in LoadCases)
-                        {
-                            tmpLoadCases.Add(LoadCase);
-                        }
-                    foreach (BarLoadSet LoadCase in tmpLoadCases)
-                        {
-                            if (LoadSet.IsDeadLoad)
-                            {
-                                ColumnLoadSetProcessor.SumForces(LoadCase, LoadSet, 1.0);
-                            }
-                            else
-                            {
-                                LoadCases.Add(ColumnLoadSetProcessor.SumForcesInNew(LoadCase, LoadSet, 1.0));
-                                if (LoadSet.BothSign) { LoadCases.Add(ColumnLoadSetProcessor.SumForcesInNew(LoadCase, LoadSet, -1.0)); }
-                            }
-                        }
-                    tmpLoadSets.Remove(LoadSet);
-                 }
-            return LoadCases;
-        }
-
         public ColumnBaseResult GetResult(SteelColumnBase columnBase)
         {
             ColumnBaseResult columnBaseResult = new ColumnBaseResult();
-            columnBaseResult.LoadCases = GetLoadCases(columnBase.Loads);
+            columnBaseResult.LoadCases = BarLoadSetProcessor.GetLoadCases(columnBase.Loads);
             double Nz;
             double Mx;
             double My;
