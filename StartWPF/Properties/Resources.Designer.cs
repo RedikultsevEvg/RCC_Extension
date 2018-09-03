@@ -123,6 +123,16 @@ namespace StartWPF.Properties {
         /// <summary>
         ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap IconRefresh40 {
+            get {
+                object obj = ResourceManager.GetObject("IconRefresh40", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap LoadFolder {
             get {
                 object obj = ResourceManager.GetObject("LoadFolder", resourceCulture);

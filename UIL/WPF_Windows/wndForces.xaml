@@ -76,7 +76,7 @@
                     <CheckBox x:Name="cbBothSign" Content="" Grid.Column="1" HorizontalAlignment="Center" Margin="0" Grid.Row="8" VerticalAlignment="Center"/>
                 </Grid>
         </StackPanel>
-            <Image x:Name="image" Margin="5" Source="pack://siteoforigin:,,,/Resources/FoudationForce.jpg"/>
+            <Image x:Name="image" Margin="5" Source="{DynamicResource imgFoundationForces}"/>
         </Grid>
         
         <StackPanel Height="60" Grid.Row="1" Margin="10" Orientation="Horizontal" Grid.ColumnSpan="3" HorizontalAlignment="Right" Background="#FFE2E2E2">
@@ -84,13 +84,13 @@
                 <Button.Effect>
                     <DropShadowEffect Opacity="0.6"/>
                 </Button.Effect>
-                <Image x:Name="OK_png" Style="{StaticResource ServiceButtonImage}" Source="pack://siteoforigin:,,,/Resources/IconOK.png"/>
+                <Image x:Name="OK_png" Style="{StaticResource ServiceButtonImage}" Source="{DynamicResource IconOK}"/>
             </Button>
             <Button x:Name="btnCancel" Style="{StaticResource ServiceButton}" HorizontalAlignment="Stretch" Click="btnCancel_Click">
                 <Button.Effect>
                     <DropShadowEffect Opacity="0.6"/>
                 </Button.Effect>
-                <Image x:Name="Cancel_png" Style="{StaticResource ServiceButtonImage}" Source="pack://siteoforigin:,,,/Resources/IconCancel.png"/>
+                <Image x:Name="Cancel_png" Style="{StaticResource ServiceButtonImage}" Source="{DynamicResource IconCancel}"/>
             </Button>
         </StackPanel>
     </Grid>

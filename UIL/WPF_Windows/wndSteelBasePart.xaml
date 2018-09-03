@@ -44,7 +44,7 @@
                 <Button.Effect>
                     <DropShadowEffect Opacity="0.6"/>
                 </Button.Effect>
-                <Image x:Name="Refresh_png" Style="{StaticResource ServiceButtonImage}" Source="pack://siteoforigin:,,,/Resources/IconRefresh40.png"/>
+                <Image x:Name="Refresh_png" Style="{StaticResource ServiceButtonImage}" Source="{DynamicResource IconRefresh40}"/>
             </Button>
         </StackPanel>
             
@@ -129,13 +129,13 @@
                 <Button.Effect>
                     <DropShadowEffect Opacity="0.6"/>
                 </Button.Effect>
-                <Image x:Name="OK_png" Style="{StaticResource ServiceButtonImage}" Source="pack://siteoforigin:,,,/Resources/IconOK.png"/>
+                <Image x:Name="OK_png" Style="{StaticResource ServiceButtonImage}" Source="{DynamicResource IconOK}"/>
             </Button>
             <Button x:Name="btnCancel" Style="{StaticResource ServiceButton}" HorizontalAlignment="Stretch" Click="btnCancel_Click">
                 <Button.Effect>
                     <DropShadowEffect Opacity="0.6"/>
                 </Button.Effect>
-                <Image x:Name="Cancel_png" Style="{StaticResource ServiceButtonImage}" Source="pack://siteoforigin:,,,/Resources/IconCancel.png"/>
+                <Image x:Name="Cancel_png" Style="{StaticResource ServiceButtonImage}" Source="{DynamicResource IconCancel}"/>
             </Button>
         </StackPanel>
         <Canvas x:Name="cvScetch" Width="200" Height="290"/>

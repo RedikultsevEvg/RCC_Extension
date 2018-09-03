@@ -29,10 +29,6 @@
             <Setter Property="TextWrapping" Value="Wrap" />
             <Setter Property="FontSize" Value="12" />
         </Style>
-        <BitmapImage x:Key="IconForces" >pack://siteoforigin:,,,/Resources/IconForces.png</BitmapImage>
-        <BitmapImage x:Key="IconParts" >pack://siteoforigin:,,,/Resources/IconParts.png</BitmapImage>
-        <BitmapImage x:Key="IconOK" >pack://siteoforigin:,,,/Resources/IconOK.png</BitmapImage>
-        <BitmapImage x:Key="IconCancel" >pack://siteoforigin:,,,/Resources/IconCancel.png</BitmapImage>
     </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
@@ -81,11 +77,7 @@
                     <Button.Effect>
                         <DropShadowEffect Opacity="0.6"/>
                     </Button.Effect>
-                    <Image x:Name="Forces_png" Style="{StaticResource ServiceButtonImage}" Source="{DynamicResource IconForces}">
-                        <Image.Resources>
-                            <BitmapImage x:Key="IconForces" >pack://siteoforigin:,,,/Resources/IconForces.png</BitmapImage>
-                        </Image.Resources>
-                    </Image>
+                    <Image x:Name="Forces_png" Style="{StaticResource ServiceButtonImage}" Source="{DynamicResource IconForces}"/>
                     <Button.ToolTip>
                         <TextBlock Margin="3" Foreground="Black">Усилия...</TextBlock>
                     </Button.ToolTip>
@@ -94,7 +86,7 @@
                     <Button.Effect>
                         <DropShadowEffect Opacity="0.6"/>
                     </Button.Effect>
-                    <Image x:Name="Parts_png" Style="{StaticResource ServiceButtonImage}" Source="pack://siteoforigin:,,,/Resources/IconCancel.png"/>
+                    <Image x:Name="Parts_png" Style="{StaticResource ServiceButtonImage}" Source="{DynamicResource IconBasePart}"/>
                     <Button.ToolTip>
                         <TextBlock Margin="3" Foreground="Black">Участки...</TextBlock>
                     </Button.ToolTip>
@@ -106,13 +98,13 @@
                 <Button.Effect>
                     <DropShadowEffect Opacity="0.6"/>
                 </Button.Effect>
-                <Image x:Name="OK_png" Style="{StaticResource ServiceButtonImage}" Source="pack://siteoforigin:,,,/Resources/IconOK.png"/>
+                <Image x:Name="OK_png" Style="{StaticResource ServiceButtonImage}" Source="{DynamicResource IconOK}"/>
             </Button>
             <Button x:Name="btnCancel" Style="{StaticResource ServiceButton}" HorizontalAlignment="Stretch" Click="btnCancel_Click">
                 <Button.Effect>
                     <DropShadowEffect Opacity="0.6"/>
                 </Button.Effect>
-                <Image x:Name="Cancel_png" Style="{StaticResource ServiceButtonImage}" Source="pack://siteoforigin:,,,/Resources/IconCancel.png"/>
+                <Image x:Name="Cancel_png" Style="{StaticResource ServiceButtonImage}" Source="{DynamicResource IconCancel}"/>
             </Button>
         </StackPanel>
     </Grid>

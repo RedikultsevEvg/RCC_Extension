@@ -5,5 +5,11 @@
              xmlns:service="clr-namespace:RDBLL.Common.Service;assembly=BLL"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
+        <BitmapImage x:Key="IconRefresh40" CreateOptions="IgnoreImageCache" CacheOption="OnLoad" UriSource="/UIL;component/Resources/IconRefresh40.png"/>
+        <BitmapImage x:Key="IconForces" CreateOptions="IgnoreImageCache" CacheOption="OnLoad" UriSource="/UIL;component/Resources/IconForces.png"/>
+        <BitmapImage x:Key="IconOK" CreateOptions="IgnoreImageCache" CacheOption="OnLoad" UriSource="/UIL;component/Resources/IconOK.png"/>
+        <BitmapImage x:Key="IconCancel" CreateOptions="IgnoreImageCache" CacheOption="OnLoad" UriSource="/UIL;component/Resources/IconCancel.png"/>
+        <BitmapImage x:Key="imgFoundationForces" CreateOptions="IgnoreImageCache" CacheOption="OnLoad" UriSource="/UIL;component/Resources/FoudationForce.jpg"/>
+        <BitmapImage x:Key="IconBasePart" CreateOptions="IgnoreImageCache" CacheOption="OnLoad" UriSource="/UIL;component/Resources/IconParts.png"/>
     </Application.Resources>
 </Application>
