@@ -18,11 +18,7 @@ namespace RDBLL.Forces
         public bool IsCombination { get; set;}
         public bool IsDesignLoad { get; set; }
         public bool BothSign { get; set; }
-        public double Force_Nz { get; set; }
-        public double Force_Mx { get; set; }
-        public double Force_My { get; set; }
-        public double Force_Qx { get; set; }
-        public double Force_Qy { get; set; }
+        public Force Force { get; set; }
         #endregion
         //Constructors
         #region
@@ -34,11 +30,12 @@ namespace RDBLL.Forces
             IsCombination = false;
             IsDesignLoad = false;
             BothSign = false;
-            Force_Nz = 0;
-            Force_Mx = 0;
-            Force_My = 0;
-            Force_Qx = 0;
-            Force_Qy = 0;
+            Force = new Force();
+            Force.Force_Nz = 0;
+            Force.Force_Mx = 0;
+            Force.Force_My = 0;
+            Force.Force_Qx = 0;
+            Force.Force_Qy = 0;
         }
         public void SetDefault1()
         {
@@ -48,11 +45,12 @@ namespace RDBLL.Forces
             IsCombination = false;
             IsDesignLoad = false;
             BothSign = false;
-            Force_Nz = -100000;
-            Force_Mx = 0;
-            Force_My = 0;
-            Force_Qx = 0;
-            Force_Qy = 0;
+            Force = new Force();
+            Force.Force_Nz = -100000;
+            Force.Force_Mx = 0;
+            Force.Force_My = 0;
+            Force.Force_Qx = 0;
+            Force.Force_Qy = 0;
         }
         public BarLoadSet(int setDefault)
         {

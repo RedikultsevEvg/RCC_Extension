@@ -539,11 +539,11 @@ namespace RDUIL.WinForms
         {
             Item.SubItems.Clear();
             Item.Text = loadSet.Name;
-            Item.SubItems.Add(Convert.ToString(loadSet.Force_Nz/1000));
-            Item.SubItems.Add(Convert.ToString(loadSet.Force_Mx / 1000));
-            Item.SubItems.Add(Convert.ToString(loadSet.Force_My / 1000));
-            Item.SubItems.Add(Convert.ToString(loadSet.Force_Qx / 1000));
-            Item.SubItems.Add(Convert.ToString(loadSet.Force_Qy / 1000));
+            Item.SubItems.Add(Convert.ToString(loadSet.Force.Force_Nz /1000));
+            Item.SubItems.Add(Convert.ToString(loadSet.Force.Force_Mx / 1000));
+            Item.SubItems.Add(Convert.ToString(loadSet.Force.Force_My / 1000));
+            Item.SubItems.Add(Convert.ToString(loadSet.Force.Force_Qx / 1000));
+            Item.SubItems.Add(Convert.ToString(loadSet.Force.Force_Qy / 1000));
         }
         private void EditItemFromSteelColumnBase(ListViewItem Item, SteelColumnBase columnBase)
         {

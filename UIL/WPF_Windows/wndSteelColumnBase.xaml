@@ -73,7 +73,7 @@
                 </Grid>
             </StackPanel>
             <StackPanel Grid.Column="2" Background="#FFE2E2E2" VerticalAlignment="Top">
-                <Button x:Name="btnForces" Style="{StaticResource ServiceButton}" Height="50">
+                <Button x:Name="btnForces" Style="{StaticResource ServiceButton}" Height="50" IsEnabled="False">
                     <Button.Effect>
                         <DropShadowEffect Opacity="0.6"/>
                     </Button.Effect>
@@ -82,7 +82,7 @@
                         <TextBlock Margin="3" Foreground="Black">Усилия...</TextBlock>
                     </Button.ToolTip>
                 </Button>
-                <Button x:Name="btnParts" Style="{StaticResource ServiceButton}" Height="50">
+                <Button x:Name="btnParts" Style="{StaticResource ServiceButton}" Height="50" IsEnabled="False">
                     <Button.Effect>
                         <DropShadowEffect Opacity="0.6"/>
                     </Button.Effect>

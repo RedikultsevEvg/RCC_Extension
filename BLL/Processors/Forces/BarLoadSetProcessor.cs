@@ -4,7 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using RDBLL.Forces;
+using RDBLL.Entity.Results.Forces;
 using System.Windows.Forms;
+using RDBLL.Common.Geometry;
 
 namespace RDBLL.Processors.Forces
 {
@@ -14,11 +16,11 @@ namespace RDBLL.Processors.Forces
         {
             if (! String.IsNullOrEmpty(oldLoadSet.Name)) { oldLoadSet.Name += " + "; }
             oldLoadSet.Name += secondLoadSet.Name + "*(" + Convert.ToString(secondLoadSet.PartialSafetyFactor * koeff) + ")";
-            oldLoadSet.Force_Nz += secondLoadSet.Force_Nz * secondLoadSet.PartialSafetyFactor * koeff;
-            oldLoadSet.Force_Mx += secondLoadSet.Force_Mx * secondLoadSet.PartialSafetyFactor * koeff;
-            oldLoadSet.Force_My += secondLoadSet.Force_My * secondLoadSet.PartialSafetyFactor * koeff;
-            oldLoadSet.Force_Qx += secondLoadSet.Force_Qx * secondLoadSet.PartialSafetyFactor * koeff;
-            oldLoadSet.Force_Qy += secondLoadSet.Force_Qy * secondLoadSet.PartialSafetyFactor * koeff;
+            oldLoadSet.Force.Force_Nz += secondLoadSet.Force.Force_Nz * secondLoadSet.PartialSafetyFactor * koeff;
+            oldLoadSet.Force.Force_Mx += secondLoadSet.Force.Force_Mx * secondLoadSet.PartialSafetyFactor * koeff;
+            oldLoadSet.Force.Force_My += secondLoadSet.Force.Force_My * secondLoadSet.PartialSafetyFactor * koeff;
+            oldLoadSet.Force.Force_Qx += secondLoadSet.Force.Force_Qx * secondLoadSet.PartialSafetyFactor * koeff;
+            oldLoadSet.Force.Force_Qy += secondLoadSet.Force.Force_Qy * secondLoadSet.PartialSafetyFactor * koeff;
             oldLoadSet.PartialSafetyFactor = 1;
             return;
         }
@@ -64,6 +66,44 @@ namespace RDBLL.Processors.Forces
             }
             return LoadCases;
         }
+        public static StressInRect MInMaxStressInBarSection(BarLoadSet loadCase, MassProperty massProperty, double dx, double dy)
+        {
+            StressInRect stress = new StressInRect();
+            double Nz = loadCase.Force.Force_Nz;
+            double Mx = loadCase.Force.Force_Mx;
+            double My = loadCase.Force.Force_My;
+            double A = massProperty.A;
+            double Ix = massProperty.Ix;
+            double Iy = massProperty.Iy;
+            stress.MinStress = Nz / A - Math.Abs(Mx / (Ix / dy)) - Math.Abs(My / (Iy / dx));
+            stress.MaxStress = Nz / A + Math.Abs(Mx / (Ix / dy)) + Math.Abs(My / (Iy / dx));
+            return stress;
+        }
+        public static StressInRect MinMaxStressInBarSection(BarLoadSet loadCase, MassProperty massProperty)
+        {
+            StressInRect stress = new StressInRect();
+            double Nz = loadCase.Force.Force_Nz;
+            double Mx = loadCase.Force.Force_Mx;
+            double My = loadCase.Force.Force_My;
+            double A = massProperty.A;
+            double Wx = massProperty.Wx;
+            double Wy = massProperty.Wy;
+            stress.MinStress = Nz / A - Math.Abs(Mx / Wx) - Math.Abs(My / Wy);
+            stress.MaxStress = Nz / A + Math.Abs(Mx / Wx) + Math.Abs(My / Wy);
+            return stress;
+        }
 
+        public static double StressInBarSection(BarLoadSet loadCase, MassProperty massProperty, double dx, double dy)
+        {
+            double stress;
+            double Nz = loadCase.Force.Force_Nz;
+            double Mx = loadCase.Force.Force_Mx;
+            double My = loadCase.Force.Force_My;
+            double A = massProperty.A;
+            double Ix = massProperty.Ix;
+            double Iy = massProperty.Iy;
+            stress = Nz / A + Mx / (Ix / dy) - My / (Iy / dx);
+            return stress;
+        }
     }
 }

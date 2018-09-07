@@ -22,7 +22,11 @@ namespace RDUIL.WPF_Windows.ControlClasses
 
         public void RunCommand()
         {
-            _commandDelegate.Invoke();
+            if (! (_commandDelegate == null))
+            {
+                _commandDelegate.Invoke();
+            }
+            
         }
     }
 }

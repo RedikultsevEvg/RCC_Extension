@@ -83,6 +83,14 @@ namespace RDUIL.WPF_Windows
             cvScetch.Children.Add(basePartRect);
             Canvas.SetLeft(basePartRect, basePartCenter[0] - basePartRect.Width / 2);
             Canvas.SetTop(basePartRect, basePartCenter[1] - basePartRect.Height / 2);
+            Ellipse centerEllipse = new Ellipse();
+            centerEllipse.Width = 5;
+            centerEllipse.Height = 5;
+            centerEllipse.Fill = Brushes.Red;
+            centerEllipse.Opacity = opacity;
+            cvScetch.Children.Add(centerEllipse);
+            Canvas.SetLeft(centerEllipse, basePartCenter[0] - centerEllipse.Width / 2);
+            Canvas.SetTop(centerEllipse, basePartCenter[1] - centerEllipse.Height / 2);
             #region Если требуются закрепления по сторонам, рисуем соответствующие линии
             if (basePart.FixLeft)
             {

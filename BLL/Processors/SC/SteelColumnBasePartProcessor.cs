@@ -7,6 +7,11 @@ using RDBLL.Entity.Results.SC;
 using RDBLL.Entity.SC.Column;
 using RDBLL.Common.Geometry;
 using System.Windows.Forms;
+using RDBLL.Forces;
+using RDBLL.Entity.Results.SC;
+using RDBLL.Processors.Forces;
+using RDBLL.Common.Geometry;
+using RDBLL.Entity.Results.Forces;
 
 namespace RDBLL.Processors.SC
 {
@@ -34,7 +39,31 @@ namespace RDBLL.Processors.SC
             #region Описание переменных
             SteelColumnBaseProcessor columBaseProcessor = new SteelColumnBaseProcessor();
             ColumnBaseResult baseResult = columBaseProcessor.GetResult(basePart.ColumnBase);
-            double maxStress = baseResult.MinStress*(-1.0);
+            RectCrossSection baseRect = new RectCrossSection(basePart.ColumnBase.Width, basePart.ColumnBase.Length);
+            MassProperty massProperty = RectProcessor.GetRectMassProperty(baseRect);
+            double maxStress = double.NegativeInfinity;
+            double maxStressTmp;
+            foreach (BarLoadSet LoadCase in baseResult.LoadCases)
+            {
+                List<double> dxList = new List<double>();
+                List<double> dyList = new List<double>();
+                dxList.Add(basePart.Center[0] + basePart.Width / 2);
+                dxList.Add(basePart.Center[0] - basePart.Width / 2);
+                dyList.Add(basePart.Center[1] + basePart.Length / 2);
+                dyList.Add(basePart.Center[1] - basePart.Length / 2);
+
+
+                foreach (double dx in dxList)
+                {
+                    foreach (double dy in dyList)
+                    {
+                        double stress = BarLoadSetProcessor.StressInBarSection(LoadCase, massProperty, dx, dy);
+                        if (stress < 0) { maxStressTmp = stress * (-1D); } else { maxStressTmp = 0; }
+                        if (maxStressTmp > maxStress) { maxStress = maxStressTmp; }
+                    }
+                }
+            }
+
             ColumnBasePartResult result = new ColumnBasePartResult();
             double width = basePart.Width;
             double length = basePart.Length;

@@ -23,7 +23,11 @@ namespace RDUIL.WPF_Windows.ControlClasses
         #endregion
         public void RunCommand()
         {
-            _addCommandDelegate.Invoke(CalcKinds);
+            if (! (_addCommandDelegate == null))
+            {
+                _addCommandDelegate.Invoke(CalcKinds);
+            }
+                
         }
 
         public CalcType()

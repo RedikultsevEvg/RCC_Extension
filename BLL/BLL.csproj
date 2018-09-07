@@ -44,7 +44,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Class1.cs" />
+    <Compile Include="Common\Geometry\MassProperty.cs" />
     <Compile Include="Common\Geometry\MathOperation.cs" />
+    <Compile Include="Common\Geometry\RectCrossSection.cs" />
     <Compile Include="Common\Interfaces\IStellBaseProcessor.cs" />
     <Compile Include="Entity\RCC\BuildingAndSite\BuildingSite.cs" />
     <Compile Include="Entity\RCC\BuildingAndSite\Level.cs" />
@@ -59,12 +61,14 @@
     <Compile Include="Entity\RCC\WallAndColumn\Opening.cs" />
     <Compile Include="Entity\RCC\WallAndColumn\Wall.cs" />
     <Compile Include="Entity\RCC\WallAndColumn\WallType.cs" />
+    <Compile Include="Entity\Results\Forces\StressInRect.cs" />
     <Compile Include="Entity\Results\SC\ColumnBasePartResult.cs" />
     <Compile Include="Entity\Results\SC\ColumnBaseResult.cs" />
     <Compile Include="Entity\SC\Column\SteelBasePart.cs" />
     <Compile Include="Entity\SC\Column\SteelColumnBase.cs" />
     <Compile Include="Forces\BarLoadSet.cs" />
     <Compile Include="Forces\BarForcesGroup.cs" />
+    <Compile Include="Forces\Force.cs" />
     <Compile Include="Processors\Forces\BarLoadSetProcessor.cs" />
     <Compile Include="Processors\SC\SteelColumnBasePartProcessor.cs" />
     <Compile Include="Processors\SC\SteelColumnBaseProcessor.cs" />
