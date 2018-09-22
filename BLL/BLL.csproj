@@ -69,6 +69,9 @@
     <Compile Include="Forces\BarLoadSet.cs" />
     <Compile Include="Forces\BarForcesGroup.cs" />
     <Compile Include="Forces\Force.cs" />
+    <Compile Include="Forces\ForceParameter.cs" />
+    <Compile Include="Forces\ForceParamKind.cs" />
+    <Compile Include="Forces\LoadSet.cs" />
     <Compile Include="Processors\Forces\BarLoadSetProcessor.cs" />
     <Compile Include="Processors\SC\SteelColumnBasePartProcessor.cs" />
     <Compile Include="Processors\SC\SteelColumnBaseProcessor.cs" />

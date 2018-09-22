@@ -12,25 +12,21 @@ namespace RDBLL.Forces
         //Properties
         #region 
         public SteelColumnBase SteelColumnBase { get; set; }
-        public String Name { get; set; } //Наименование
-        public double PartialSafetyFactor { get; set; } //Коэффициент надежности по нагрузке
-        public bool IsDeadLoad { get; set; }
-        public bool IsCombination { get; set;}
-        public bool IsDesignLoad { get; set; }
-        public bool BothSign { get; set; }
+        public LoadSet LoadSet { get; set; }
         public Force Force { get; set; }
         #endregion
         //Constructors
         #region
         public void SetDefault()
         {
-            Name = "";
-            PartialSafetyFactor = 1;
-            IsDeadLoad = false;
-            IsCombination = false;
-            IsDesignLoad = false;
-            BothSign = false;
-            Force = new Force();
+            LoadSet = new LoadSet();
+            LoadSet.Name = "";
+            LoadSet.PartialSafetyFactor = 1;
+            LoadSet.IsDeadLoad = false;
+            LoadSet.IsCombination = false;
+            LoadSet.IsDesignLoad = false;
+            LoadSet.BothSign = false;
+            Force = new Force(1);
             Force.Force_Nz = 0;
             Force.Force_Mx = 0;
             Force.Force_My = 0;
@@ -39,13 +35,14 @@ namespace RDBLL.Forces
         }
         public void SetDefault1()
         {
-            Name = "Новая нагрузка";
-            PartialSafetyFactor = 1.1;
-            IsDeadLoad = true;
-            IsCombination = false;
-            IsDesignLoad = false;
-            BothSign = false;
-            Force = new Force();
+            LoadSet = new LoadSet();
+            LoadSet.Name = "Новая нагрузка";
+            LoadSet.PartialSafetyFactor = 1.1;
+            LoadSet.IsDeadLoad = true;
+            LoadSet.IsCombination = false;
+            LoadSet.IsDesignLoad = false;
+            LoadSet.BothSign = false;
+            Force = new Force(1);
             Force.Force_Nz = -100000;
             Force.Force_Mx = 0;
             Force.Force_My = 0;

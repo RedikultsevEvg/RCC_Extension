@@ -19,6 +19,7 @@ namespace RDBLL.Common.Service
     {
         private static String _filePath;
         private static bool _isDataChanged;
+        public static List<ForceParamKind> ForceParamKinds { get; set; } 
 
         public static BuildingSite BuildingSite { get; set; }
         public static String FilePath
@@ -45,6 +46,39 @@ namespace RDBLL.Common.Service
             BuildingSite = new BuildingSite();
             BuildingSite.BuildingList.Add(new Building(BuildingSite));
             IsDataChanged = false;
+            #region
+            ForceParamKinds = new List<ForceParamKind>();
+            ForceParamKinds.Add(new ForceParamKind
+            {
+                Label = "Продольная сила N",
+                UnitLabel = "Н",
+                Addition = "Положительному значению силы соответствует направление вдоль оси Z (направлена вертикально вверх)"
+            });
+            ForceParamKinds.Add(new ForceParamKind
+            {
+                Label = "Изгибающий момент Mx",
+                UnitLabel = "Н*м",
+                Addition = "За положительное значение момента принят момент против часовой стрелки если смотреть с конца оси X"
+            });
+            ForceParamKinds.Add(new ForceParamKind
+            {
+                Label = "Изгибающий момент My",
+                UnitLabel = "Н*м",
+                Addition = "За положительное значение момента принят момент против часовой стрелки если смотреть с конца оси Y"
+            });
+            ForceParamKinds.Add(new ForceParamKind
+            {
+                Label = "Поперечная сила Qx",
+                UnitLabel = "Н",
+                Addition = "Положительному значению силы соответствует направление вдоль оси X (направлена вправо по плану)"
+            });
+            ForceParamKinds.Add(new ForceParamKind
+            {
+                Label = "Поперечная сила Qy",
+                UnitLabel = "Н",
+                Addition = "Положительному значению силы соответствует направление вдоль оси Y (направлена вверх по плану)"
+            });
+            #endregion
         }
         public static void ClearAll()
         {

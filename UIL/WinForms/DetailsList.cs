@@ -275,7 +275,7 @@ namespace RDUIL.WinForms
                         #region Вложенные объекты по умолчанию
                         //Нагрузка
                         BarLoadSet columnLoadSet = new BarLoadSet(steelColumnBase);
-                        columnLoadSet.Name = "Постоянная";
+                        columnLoadSet.LoadSet.Name = "Постоянная";
                         //Участок №1
                         SteelBasePart basePart1 = new SteelBasePart(steelColumnBase);
                         basePart1.Name = "1";
@@ -538,7 +538,7 @@ namespace RDUIL.WinForms
         private void EditItemFromColumnLoadSet(ListViewItem Item, BarLoadSet loadSet)
         {
             Item.SubItems.Clear();
-            Item.Text = loadSet.Name;
+            Item.Text = loadSet.LoadSet.Name;
             Item.SubItems.Add(Convert.ToString(loadSet.Force.Force_Nz /1000));
             Item.SubItems.Add(Convert.ToString(loadSet.Force.Force_Mx / 1000));
             Item.SubItems.Add(Convert.ToString(loadSet.Force.Force_My / 1000));

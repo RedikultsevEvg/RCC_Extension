@@ -14,14 +14,14 @@ namespace RDBLL.Processors.Forces
     {
         public static void SumForces(BarLoadSet oldLoadSet, BarLoadSet secondLoadSet, double koeff)
         {
-            if (! String.IsNullOrEmpty(oldLoadSet.Name)) { oldLoadSet.Name += " + "; }
-            oldLoadSet.Name += secondLoadSet.Name + "*(" + Convert.ToString(secondLoadSet.PartialSafetyFactor * koeff) + ")";
-            oldLoadSet.Force.Force_Nz += secondLoadSet.Force.Force_Nz * secondLoadSet.PartialSafetyFactor * koeff;
-            oldLoadSet.Force.Force_Mx += secondLoadSet.Force.Force_Mx * secondLoadSet.PartialSafetyFactor * koeff;
-            oldLoadSet.Force.Force_My += secondLoadSet.Force.Force_My * secondLoadSet.PartialSafetyFactor * koeff;
-            oldLoadSet.Force.Force_Qx += secondLoadSet.Force.Force_Qx * secondLoadSet.PartialSafetyFactor * koeff;
-            oldLoadSet.Force.Force_Qy += secondLoadSet.Force.Force_Qy * secondLoadSet.PartialSafetyFactor * koeff;
-            oldLoadSet.PartialSafetyFactor = 1;
+            if (! String.IsNullOrEmpty(oldLoadSet.LoadSet.Name)) { oldLoadSet.LoadSet.Name += " + "; }
+            oldLoadSet.LoadSet.Name += secondLoadSet.LoadSet.Name + "*(" + Convert.ToString(secondLoadSet.LoadSet.PartialSafetyFactor * koeff) + ")";
+            oldLoadSet.Force.Force_Nz += secondLoadSet.Force.Force_Nz * secondLoadSet.LoadSet.PartialSafetyFactor * koeff;
+            oldLoadSet.Force.Force_Mx += secondLoadSet.Force.Force_Mx * secondLoadSet.LoadSet.PartialSafetyFactor * koeff;
+            oldLoadSet.Force.Force_My += secondLoadSet.Force.Force_My * secondLoadSet.LoadSet.PartialSafetyFactor * koeff;
+            oldLoadSet.Force.Force_Qx += secondLoadSet.Force.Force_Qx * secondLoadSet.LoadSet.PartialSafetyFactor * koeff;
+            oldLoadSet.Force.Force_Qy += secondLoadSet.Force.Force_Qy * secondLoadSet.LoadSet.PartialSafetyFactor * koeff;
+            oldLoadSet.LoadSet.PartialSafetyFactor = 1;
             return;
         }
 
@@ -52,14 +52,14 @@ namespace RDBLL.Processors.Forces
                 }
                 foreach (BarLoadSet LoadCase in tmpLoadCases)
                 {
-                    if (LoadSet.IsDeadLoad)
+                    if (LoadSet.LoadSet.IsDeadLoad)
                     {
                         BarLoadSetProcessor.SumForces(LoadCase, LoadSet, 1.0);
                     }
                     else
                     {
                         LoadCases.Add(BarLoadSetProcessor.SumForcesInNew(LoadCase, LoadSet, 1.0));
-                        if (LoadSet.BothSign) { LoadCases.Add(BarLoadSetProcessor.SumForcesInNew(LoadCase, LoadSet, -1.0)); }
+                        if (LoadSet.LoadSet.BothSign) { LoadCases.Add(BarLoadSetProcessor.SumForcesInNew(LoadCase, LoadSet, -1.0)); }
                     }
                 }
                 tmpLoadSets.Remove(LoadSet);
