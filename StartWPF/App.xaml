@@ -11,5 +11,7 @@
         <BitmapImage x:Key="IconCancel" CreateOptions="IgnoreImageCache" CacheOption="OnLoad" UriSource="/UIL;component/Resources/IconCancel.png"/>
         <BitmapImage x:Key="imgFoundationForces" CreateOptions="IgnoreImageCache" CacheOption="OnLoad" UriSource="/UIL;component/Resources/FoudationForce.jpg"/>
         <BitmapImage x:Key="IconBasePart" CreateOptions="IgnoreImageCache" CacheOption="OnLoad" UriSource="/UIL;component/Resources/IconParts.png"/>
+        <BitmapImage x:Key="IconAdd32" CreateOptions="IgnoreImageCache" CacheOption="OnLoad" UriSource="/UIL;component/Resources/IconOK.png"/>
+        <BitmapImage x:Key="IconDelete32" CreateOptions="IgnoreImageCache" CacheOption="OnLoad" UriSource="/UIL;component/Resources/IconCancel.png"/>
     </Application.Resources>
 </Application>

@@ -12,6 +12,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using RDBLL.Forces;
+using RDBLL.Entity.SC.Column;
+using System.Collections.ObjectModel;
 
 namespace RDUIL.WPF_Windows
 {
@@ -22,6 +24,8 @@ namespace RDUIL.WPF_Windows
     {
         private Force _force;
         private Force _tmpForce;
+        private SteelColumnBase _steelColumnBase;
+        private ObservableCollection<ForcesGroup> _forcesGroups;
         private BarLoadSet _loadSet;
         public wndForces(BarLoadSet loadSet)
         {
@@ -41,7 +45,15 @@ namespace RDUIL.WPF_Windows
             lvForcesList.ItemsSource = _force.ForceParameters;
         }
 
-        private void btnOK_Click(object sender, RoutedEventArgs e)
+        public wndForces(SteelColumnBase steelColumnBase)
+        {
+            InitializeComponent();
+            _steelColumnBase = steelColumnBase;
+            _forcesGroups = _steelColumnBase.LoadsGroup;
+            lvLoadSet.ItemsSource = _forcesGroups[0].Loads;
+        }
+
+            private void btnOK_Click(object sender, RoutedEventArgs e)
         {
             try
             {
@@ -66,6 +78,26 @@ namespace RDUIL.WPF_Windows
         {
 
             this.Close();
+        }
+
+        private void btnAddLoad_Click(object sender, RoutedEventArgs e)
+        {
+            _forcesGroups[0].Loads.Add(new BarLoadSet(_forcesGroups[0]));
+        }
+
+        private void stpLoadsBtns_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            stpLoadsBtns.Opacity = 1;
+        }
+
+        private void stpLoadsBtns_MouseLeave(object sender, MouseEventArgs e)
+        {
+            stpLoadsBtns.Opacity = 0.6;
+        }
+
+        private void lvLoadSet_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            lvForcesList.ItemsSource = _forcesGroups[0].Loads[lvLoadSet.SelectedIndex].Force.ForceParameters;
         }
     }
 }

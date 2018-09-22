@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using RDBLL.Forces;
 using RDBLL.Entity.Results.SC;
 using RDBLL.Entity.RCC.BuildingAndSite;
+using System.Collections.ObjectModel;
 
 namespace RDBLL.Entity.SC.Column
 {
@@ -27,7 +28,7 @@ namespace RDBLL.Entity.SC.Column
         public double ConcreteStrength { get; set; }
         public double BoltPrestressForce { get; set; }
         public List<BarLoadSet> Loads { get; set; }
-        public List<BarForcesGroup> LoadsGroup { get; set; }
+        public ObservableCollection<ForcesGroup> LoadsGroup { get; set; }
         public bool OnlyOneLoadsGroup { get; set; }
         public List<SteelBasePart> SteelBaseParts { get; set; }
 
@@ -48,7 +49,8 @@ namespace RDBLL.Entity.SC.Column
             ConcreteStrength = 1000000;
             BoltPrestressForce = 0;
             Loads = new List<BarLoadSet>();
-            LoadsGroup = new List<BarForcesGroup>();
+            LoadsGroup = new ObservableCollection<ForcesGroup>();
+            LoadsGroup.Add(new ForcesGroup(this));
             OnlyOneLoadsGroup = true;
             SteelBaseParts = new List<SteelBasePart>();
         }
