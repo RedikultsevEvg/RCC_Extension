@@ -12,6 +12,7 @@ namespace RDBLL.Forces
         //Properties
         #region 
         public SteelColumnBase SteelColumnBase { get; set; }
+        public ForcesGroup ForcesGroup { get; set; }
         public LoadSet LoadSet { get; set; }
         public Force Force { get; set; }
         #endregion
@@ -58,6 +59,11 @@ namespace RDBLL.Forces
             SetDefault1();
             steelColumnBase.Loads.Add(this);
             SteelColumnBase = steelColumnBase;
+        }
+        public BarLoadSet(ForcesGroup forcesGroup)
+        {
+            SetDefault1();
+            ForcesGroup = forcesGroup;
         }
         #endregion
         //IClonable

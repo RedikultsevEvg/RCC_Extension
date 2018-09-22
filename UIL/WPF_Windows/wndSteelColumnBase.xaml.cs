@@ -61,5 +61,11 @@ namespace RDUIL.WPF_Windows
         {
             this.Close();
         }
+
+        private void btnForces_Click(object sender, RoutedEventArgs e)
+        {
+            wndForces wndForces = new wndForces(_steelColumnBase);
+            wndForces.ShowDialog();
+        }
     }
 }

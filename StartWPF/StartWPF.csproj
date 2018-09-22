@@ -220,5 +220,11 @@
   <ItemGroup>
     <None Include="Resources\iconrefresh40.png" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\IconAdd32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\IconDelete32.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
