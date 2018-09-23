@@ -83,9 +83,9 @@ namespace StartWPF.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap IconAdd32 {
+        internal static System.Drawing.Bitmap IconAdd30 {
             get {
-                object obj = ResourceManager.GetObject("IconAdd32", resourceCulture);
+                object obj = ResourceManager.GetObject("IconAdd30", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -103,9 +103,9 @@ namespace StartWPF.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap IconDelete32 {
+        internal static System.Drawing.Bitmap IconDelete30 {
             get {
-                object obj = ResourceManager.GetObject("IconDelete32", resourceCulture);
+                object obj = ResourceManager.GetObject("IconDelete30", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

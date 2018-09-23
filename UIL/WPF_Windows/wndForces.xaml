@@ -66,6 +66,7 @@
                             <RowDefinition Height="30"/>
                             <RowDefinition Height="30"/>
                             <RowDefinition Height="30"/>
+                            <RowDefinition Height="50"/>
                         </Grid.RowDefinitions>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="170"/>
@@ -79,6 +80,15 @@
                         <TextBox x:Name="tbxPartialSafetyFactor" Grid.Row="1" Grid.Column="1" Style="{StaticResource PropertyTextBox}" Text="{Binding Path=LoadSet.PartialSafetyFactor}"/>
                         <CheckBox x:Name="cbIsDeadLoad" Content="" Grid.Column="1" HorizontalAlignment="Center" Margin="0" Grid.Row="2" VerticalAlignment="Center" IsChecked="{Binding Path=LoadSet.IsDeadLoad}" />
                         <CheckBox x:Name="cbBothSign" Content="" Grid.Column="1" HorizontalAlignment="Center" Margin="0" Grid.Row="3" VerticalAlignment="Center" IsChecked="{Binding Path=LoadSet.BothSign}"/>
+                        <StackPanel Grid.Row="4" Orientation="Horizontal" HorizontalAlignment="Right" Background="#FF63D451" Grid.ColumnSpan="2">
+                            <Button x:Name="btnDeleteLoad" Tag="{Binding}" Style="{StaticResource ServiceButton}" HorizontalAlignment="Stretch" Height="35" Width="35" Click="btnDeleteLoad_Click">
+                            <Button.Effect>
+                                <DropShadowEffect Opacity="0.6"/>
+                            </Button.Effect>
+                            <Image x:Name="AddDelete_png" Source="{DynamicResource IconDelete30}" Width="30" />
+                        </Button>
+                        </StackPanel>
+
                     </Grid>
                 </HeaderedContentControl>
                 <Expander.Effect>
@@ -145,22 +155,15 @@
                     <RowDefinition Height="50"/>
                     <RowDefinition/>
                 </Grid.RowDefinitions>
-                <StackPanel x:Name="stpLoadsBtns" Background="#FF63D451" HorizontalAlignment="Right" Orientation="Horizontal" Panel.ZIndex="1" Opacity="0.6" MouseDown="stpLoadsBtns_MouseDown" MouseLeave="stpLoadsBtns_MouseLeave">
+                <StackPanel x:Name="stpLoadsBtns" Background="#FF63D451" HorizontalAlignment="Right" Orientation="Horizontal" Panel.ZIndex="1" Opacity="0.5" MouseLeave="stpLoadsBtns_MouseLeave" MouseMove="stpLoadsBtns_MouseMove">
                     <Button x:Name="btnAddLoad" Style="{StaticResource ServiceButton}" HorizontalAlignment="Stretch" Height="35" Width="35" Click="btnAddLoad_Click">
                         <Button.Effect>
                             <DropShadowEffect Opacity="0.6"/>
                         </Button.Effect>
-                        <Image x:Name="AddLoad_png" Source="{DynamicResource IconAdd32}" Width="24" />
-                    </Button>
-                    <Button x:Name="btnDeleteLoad" Style="{StaticResource ServiceButton}" HorizontalAlignment="Stretch" Height="35" Width="35">
-                        <Button.Effect>
-                            <DropShadowEffect Opacity="0.6"/>
-                        </Button.Effect>
-                        <Image x:Name="AddDelete_png" Source="{DynamicResource IconDelete32}" Width="24" />
+                        <Image x:Name="AddLoad_png" Source="{DynamicResource IconAdd30}" Width="30" />
                     </Button>
                 </StackPanel>
-                <ListView x:Name="lvLoadSet" Grid.Row="0" Margin="5" ItemTemplate="{StaticResource LoadsTemplate}" Grid.RowSpan="2" SelectionChanged="lvLoadSet_SelectionChanged">
-                </ListView>
+                <ListView x:Name="lvLoadSet" Grid.Row="0" Margin="5" ItemTemplate="{StaticResource LoadsTemplate}" Grid.RowSpan="2" SelectionChanged="lvLoadSet_SelectionChanged" SelectionMode="Single" />
             </Grid>
 
         </Grid>

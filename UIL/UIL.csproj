@@ -220,5 +220,15 @@
   <ItemGroup>
     <Resource Include="Resources\IconParts.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\IconAdd30.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\IconDelete30.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
