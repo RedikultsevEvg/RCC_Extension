@@ -27,6 +27,7 @@ namespace RDUIL.WPF_Windows
         private SteelColumnBase _steelColumnBase;
         private ObservableCollection<ForcesGroup> _forcesGroups;
         private BarLoadSet _loadSet;
+        private int _loadSetIndex;
         public wndForces(BarLoadSet loadSet)
         {
             InitializeComponent();
@@ -85,19 +86,41 @@ namespace RDUIL.WPF_Windows
             _forcesGroups[0].Loads.Add(new BarLoadSet(_forcesGroups[0]));
         }
 
-        private void stpLoadsBtns_MouseDown(object sender, MouseButtonEventArgs e)
-        {
-            stpLoadsBtns.Opacity = 1;
-        }
-
         private void stpLoadsBtns_MouseLeave(object sender, MouseEventArgs e)
         {
-            stpLoadsBtns.Opacity = 0.6;
+            stpLoadsBtns.Opacity = 0.5;
         }
 
         private void lvLoadSet_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            lvForcesList.ItemsSource = _forcesGroups[0].Loads[lvLoadSet.SelectedIndex].Force.ForceParameters;
+            if (lvForcesList.SelectedIndex != -1)
+            {
+                _loadSetIndex = lvLoadSet.SelectedIndex;
+                lvForcesList.ItemsSource = _forcesGroups[0].Loads[_loadSetIndex].Force.ForceParameters;
+            }
+                
+        }
+
+        private void stpLoadsBtns_MouseMove(object sender, MouseEventArgs e)
+        {
+            stpLoadsBtns.Opacity = 1;
+        }
+
+        private void btnDeleteLoad_Click(object sender, RoutedEventArgs e)
+        {
+            //if (lvForcesList.SelectedIndex > -1)
+            //{
+                ListViewItem local = ((sender as Button).Tag as ListViewItem);
+                lvForcesList.Items.Remove(local);
+                //_forcesGroups[0].Loads.Remove();
+                //_forcesGroups[0].Loads.Remove((BarLoadSet)lvForcesList.SelectedItem);
+                //((sender as Button).Tag as ListViewItem)
+            //}
+            //else
+            //{
+            //    MessageBox.Show("Ничего не выбрано");
+            //}
+            
         }
     }
 }
