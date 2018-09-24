@@ -51,6 +51,8 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Converters\MultThous.cs" />
+    <Compile Include="Converters\MultThousText.cs" />
     <Compile Include="MSControls\numericupdown.cs" />
     <Compile Include="MSControls\numericupdown.xaml.cs">
       <DependentUpon>numericupdown.xaml</DependentUpon>

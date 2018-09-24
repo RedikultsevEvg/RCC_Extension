@@ -14,6 +14,7 @@ using System.Windows.Shapes;
 using RDBLL.Forces;
 using RDBLL.Entity.SC.Column;
 using System.Collections.ObjectModel;
+using Winforms = System.Windows.Forms;
 
 namespace RDUIL.WPF_Windows
 {
@@ -87,7 +88,7 @@ namespace RDUIL.WPF_Windows
 
         private void stpLoadsBtns_MouseLeave(object sender, MouseEventArgs e)
         {
-            stpLoadsBtns.Opacity = 0.5;
+            ((StackPanel)sender).Opacity = 0.5;
         }
 
         private void lvLoadSet_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -105,18 +106,28 @@ namespace RDUIL.WPF_Windows
 
         private void stpLoadsBtns_MouseMove(object sender, MouseEventArgs e)
         {
-            stpLoadsBtns.Opacity = 1;
+            ((StackPanel)sender).Opacity = 1;
         }
 
         private void btnDeleteLoad_Click(object sender, RoutedEventArgs e)
         {
             if (lvLoadSet.SelectedIndex >= 0)
             {
-                int a = lvLoadSet.SelectedIndex;
-                if (lvLoadSet.Items.Count == 1) lvLoadSet.UnselectAll();
-                else if (a < (lvLoadSet.Items.Count - 1)) lvLoadSet.SelectedIndex = a + 1;
-                else lvLoadSet.SelectedIndex = a - 1;
-                _forcesGroups[0].Loads.RemoveAt(a);
+                Winforms.DialogResult result = Winforms.MessageBox.Show("Элемент будет удален", "Подтверждаете удаление элемента?",
+                    Winforms.MessageBoxButtons.YesNo,
+                    Winforms.MessageBoxIcon.Information,
+                    Winforms.MessageBoxDefaultButton.Button1,
+                    Winforms.MessageBoxOptions.DefaultDesktopOnly);
+
+                if (result == Winforms.DialogResult.Yes)
+                {
+                    int a = lvLoadSet.SelectedIndex;
+                    if (lvLoadSet.Items.Count == 1) lvLoadSet.UnselectAll();
+                    else if (a < (lvLoadSet.Items.Count - 1)) lvLoadSet.SelectedIndex = a + 1;
+                    else lvLoadSet.SelectedIndex = a - 1;
+                    _forcesGroups[0].Loads.RemoveAt(a);
+                }
+
             }
             else
             {
