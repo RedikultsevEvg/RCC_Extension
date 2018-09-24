@@ -27,7 +27,6 @@ namespace RDUIL.WPF_Windows
         private SteelColumnBase _steelColumnBase;
         private ObservableCollection<ForcesGroup> _forcesGroups;
         private BarLoadSet _loadSet;
-        private int _loadSetIndex;
         public wndForces(BarLoadSet loadSet)
         {
             InitializeComponent();
@@ -93,10 +92,13 @@ namespace RDUIL.WPF_Windows
 
         private void lvLoadSet_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (lvForcesList.SelectedIndex != -1)
+            if (lvLoadSet.SelectedIndex >= 0)
             {
-                _loadSetIndex = lvLoadSet.SelectedIndex;
-                lvForcesList.ItemsSource = _forcesGroups[0].Loads[_loadSetIndex].Force.ForceParameters;
+                lvForcesList.ItemsSource = _forcesGroups[0].Loads[lvLoadSet.SelectedIndex].Force.ForceParameters;
+            }
+            else
+            {
+                lvForcesList.ItemsSource = null;
             }
                 
         }
@@ -108,19 +110,19 @@ namespace RDUIL.WPF_Windows
 
         private void btnDeleteLoad_Click(object sender, RoutedEventArgs e)
         {
-            //if (lvForcesList.SelectedIndex > -1)
-            //{
-                ListViewItem local = ((sender as Button).Tag as ListViewItem);
-                lvForcesList.Items.Remove(local);
-                //_forcesGroups[0].Loads.Remove();
-                //_forcesGroups[0].Loads.Remove((BarLoadSet)lvForcesList.SelectedItem);
-                //((sender as Button).Tag as ListViewItem)
-            //}
-            //else
-            //{
-            //    MessageBox.Show("Ничего не выбрано");
-            //}
-            
+            if (lvLoadSet.SelectedIndex >= 0)
+            {
+                int a = lvLoadSet.SelectedIndex;
+                if (lvLoadSet.Items.Count == 1) lvLoadSet.UnselectAll();
+                else if (a < (lvLoadSet.Items.Count - 1)) lvLoadSet.SelectedIndex = a + 1;
+                else lvLoadSet.SelectedIndex = a - 1;
+                _forcesGroups[0].Loads.RemoveAt(a);
+            }
+            else
+            {
+                MessageBox.Show("Ничего не выбрано", "Выберите один из элементов");
+            }
+                       
         }
     }
 }
