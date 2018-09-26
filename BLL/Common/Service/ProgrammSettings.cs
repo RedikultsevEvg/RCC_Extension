@@ -78,6 +78,12 @@ namespace RDBLL.Common.Service
                 UnitLabel = "Н",
                 Addition = "Положительному значению силы соответствует направление вдоль оси Y (направлена вверх по плану)"
             });
+            ForceParamKinds.Add(new ForceParamKind
+            {
+                Label = "Крутящий момент Mz",
+                UnitLabel = "Н*м",
+                Addition = "За положительное значение момента принят момент против часовой стрелки если смотреть с конца оси Z"
+            });
             #endregion
         }
         public static void ClearAll()

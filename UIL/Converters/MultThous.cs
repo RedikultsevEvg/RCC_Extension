@@ -8,6 +8,7 @@ using System.Windows.Data;
 
 namespace RDUIL.Converters
 {
+    //Конвертер для перевода чисел из Н в кН и т.п. и обратно
     public class MultThous : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
