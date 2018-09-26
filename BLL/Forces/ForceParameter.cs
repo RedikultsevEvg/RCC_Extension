@@ -11,13 +11,7 @@ namespace RDBLL.Forces
     {
         public int Id { get; set; }
         public double Value { get; set; }
-        public ForceParamKind ForceParamKind { get; set; }
-        public List<ForceParamKind> ForceParamKinds { get; set; }
-
-        public ForceParameter()
-        {
-            ForceParamKinds = ProgrammSettings.ForceParamKinds;
-        }
+        public int Kind_id { get; set; }
     }
 
 
