@@ -52,6 +52,7 @@ namespace RDUIL.WPF_Windows
             _steelColumnBase = steelColumnBase;
             _forcesGroups = _steelColumnBase.LoadsGroup;
             lvLoadSet.ItemsSource = _forcesGroups[0].Loads;
+           
         }
 
             private void btnOK_Click(object sender, RoutedEventArgs e)

@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:RDUIL.WPF_Windows"
         xmlns:Convert="clr-namespace:RDUIL.Converters" 
+        xmlns:Setting="clr-namespace:RDBLL.Common.Service;assembly=BLL"
         mc:Ignorable="d"
         Title="Усилие" Height="600" Width="1200" WindowStartupLocation="CenterScreen" ResizeMode="NoResize">
     <Window.Resources>
@@ -49,15 +50,21 @@
             <Setter Property="Orientation" Value="Horizontal"/>
             <Setter Property="Panel.ZIndex" Value="1"/>
             <Setter Property="Opacity" Value="0.5"/>
-        </Style>    
-        <DataTemplate x:Key="ParameterTemplate">
+        </Style>
+        <DataTemplate  x:Key="cbTemplate">
+            <TextBlock Text="{Binding Path=Label}"></TextBlock>
+        </DataTemplate>
+        <DataTemplate x:Key="ParameterTemplate" x:Name="MyTemplate">
             <Grid Background="#FFE6FAFB">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="150"/>
                     <ColumnDefinition Width="*" MinWidth="100"/>
                     <ColumnDefinition Width="50"/>
                 </Grid.ColumnDefinitions>
-                <TextBlock Text="{Binding Path=ForceParamKind.Label}"></TextBlock>
+                <ComboBox x:Name="cbForceParamKind" ItemsSource="{Binding Path=ForceParamKinds}" ItemTemplate="{StaticResource cbTemplate}" SelectedIndex="0">
+
+                </ComboBox>
+                <TextBlock Text="{Binding Path=ForceParamKind.Label}" Grid.Column="2"></TextBlock>
                 <TextBox Text="{Binding Path=Value, Converter={StaticResource MultyThousandConverter}}" Grid.Column="1" Background="#FFFFFEDF">
                     <TextBox.ToolTip>
                         <Grid Width="400" Height="200">

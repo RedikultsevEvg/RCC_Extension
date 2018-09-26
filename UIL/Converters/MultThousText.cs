@@ -7,6 +7,7 @@ using System.Windows.Data;
 
 namespace RDUIL.Converters
 {
+    //конвертер для подстановки префикса "к" к единицам измерения, например к+Н.
     public class MultThousText : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
