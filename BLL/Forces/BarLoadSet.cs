@@ -14,6 +14,7 @@ namespace RDBLL.Forces
         public SteelColumnBase SteelColumnBase { get; set; }
         public ForcesGroup ForcesGroup { get; set; }
         public LoadSet LoadSet { get; set; }
+        public List<ForceParameter> ForceParameters { get; set; }
         public Force Force { get; set; }
         #endregion
         //Constructors
