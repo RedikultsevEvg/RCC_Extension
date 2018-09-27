@@ -57,14 +57,12 @@
         <DataTemplate x:Key="ParameterTemplate" x:Name="MyTemplate">
             <Grid Background="#FFE6FAFB">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="150"/>
-                    <ColumnDefinition Width="*" MinWidth="100"/>
+                    <ColumnDefinition Width="170"/>
+                    <ColumnDefinition Width="*" MinWidth="70"/>
                     <ColumnDefinition Width="50"/>
                 </Grid.ColumnDefinitions>
-                <ComboBox x:Name="cbForceParamKind" ItemsSource="{Binding Path=ForceParamKinds}" ItemTemplate="{StaticResource cbTemplate}" SelectedIndex="0">
-
+                <ComboBox ItemsSource="{Binding Source={x:Static Setting:ProgrammSettings.ForceParamKinds}}" ItemTemplate="{StaticResource cbTemplate}" SelectedIndex="0">
                 </ComboBox>
-                <TextBlock Text="{Binding Path=ForceParamKind.Label}" Grid.Column="2"></TextBlock>
                 <TextBox Text="{Binding Path=Value, Converter={StaticResource MultyThousandConverter}}" Grid.Column="1" Background="#FFFFFEDF">
                     <TextBox.ToolTip>
                         <Grid Width="400" Height="200">
