@@ -28,7 +28,6 @@ namespace RDBLL.Forces
             LoadSet.IsCombination = false;
             LoadSet.IsDesignLoad = false;
             LoadSet.BothSign = false;
-            Force = new Force(1);
             Force.Force_Nz = 0;
             Force.Force_Mx = 0;
             Force.Force_My = 0;
@@ -44,7 +43,6 @@ namespace RDBLL.Forces
             LoadSet.IsCombination = false;
             LoadSet.IsDesignLoad = false;
             LoadSet.BothSign = false;
-            Force = new Force(1);
             Force.Force_Nz = -100000;
             Force.Force_Mx = 0;
             Force.Force_My = 0;
