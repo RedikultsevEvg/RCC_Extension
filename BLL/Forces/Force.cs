@@ -11,7 +11,6 @@ namespace RDBLL.Forces
     {
         //Properties
         #region 
-        public List<ForceParameter> ForceParameters { get; set; } 
         public double Force_Nz { get; set; }
         public double Force_Mx { get; set; }
         public double Force_My { get; set; }
@@ -19,39 +18,7 @@ namespace RDBLL.Forces
         public double Force_Qy { get; set; }
         #endregion
         #region Constructors
-        public Force(int type)
-        {
-            if (type == 1)
-            {
-                ForceParameters = new List<ForceParameter>();
-                ForceParameters.Add(new ForceParameter
-                {
-                    Value = -100000,
-                    ForceParamKind = ProgrammSettings.ForceParamKinds[0]
-                });
-                ForceParameters.Add(new ForceParameter
-                {
-                    Value = 0,
-                    ForceParamKind = ProgrammSettings.ForceParamKinds[1]
-                });
-                ForceParameters.Add(new ForceParameter
-                {
-                    Value = 0,
-                    ForceParamKind = ProgrammSettings.ForceParamKinds[2]
-                });
-                ForceParameters.Add(new ForceParameter
-                {
-                    Value = 0,
-                    ForceParamKind = ProgrammSettings.ForceParamKinds[3]
-                });
-                ForceParameters.Add(new ForceParameter
-                {
-                    Value = 0,
-                    ForceParamKind = ProgrammSettings.ForceParamKinds[4]
-                });
-            }
 
-        }
         #endregion
         //IClonable
         public object Clone()
