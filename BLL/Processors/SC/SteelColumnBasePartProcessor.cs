@@ -8,9 +8,7 @@ using RDBLL.Entity.SC.Column;
 using RDBLL.Common.Geometry;
 using System.Windows.Forms;
 using RDBLL.Forces;
-using RDBLL.Entity.Results.SC;
 using RDBLL.Processors.Forces;
-using RDBLL.Common.Geometry;
 using RDBLL.Entity.Results.Forces;
 
 namespace RDBLL.Processors.SC
@@ -89,6 +87,7 @@ namespace RDBLL.Processors.SC
             {
                 result.MaxMoment = 0;
                 result.MaxStress = 0;
+                MessageBox.Show("Неверное приложение нагрузки - полный отрыв базы", "Ошибка");
                 return result;
             }
             //Если опора только по одной стороне, считаем как консоль
