@@ -11,11 +11,8 @@ namespace RDBLL.Forces
     {
         //Properties
         #region 
-        public double Force_Nz { get; set; }
-        public double Force_Mx { get; set; }
-        public double Force_My { get; set; }
-        public double Force_Qx { get; set; }
-        public double Force_Qy { get; set; }
+        public double Value { get; set; }
+        public int Kind_id { get; set; }
         #endregion
         #region Constructors
 

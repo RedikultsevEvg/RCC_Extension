@@ -264,7 +264,7 @@ namespace RDUIL.WinForms
                     }
                 case ObjBarForses:
                     {
-                        BarLoadSet columnLoadSet = new BarLoadSet((SteelColumnBase)_parentObject);
+                        BarLoadSet columnLoadSet = new BarLoadSet(((SteelColumnBase)_parentObject).LoadsGroup[0]);
                         NewItemFromColumnLoadSet(columnLoadSet);
                         break;
                     }
@@ -274,7 +274,7 @@ namespace RDUIL.WinForms
                         NewItemFromSteelColumnBase(steelColumnBase);
                         #region Вложенные объекты по умолчанию
                         //Нагрузка
-                        BarLoadSet columnLoadSet = new BarLoadSet(steelColumnBase);
+                        BarLoadSet columnLoadSet = new BarLoadSet(steelColumnBase.LoadsGroup[0]);
                         columnLoadSet.LoadSet.Name = "Постоянная";
                         //Участок №1
                         SteelBasePart basePart1 = new SteelBasePart(steelColumnBase);
@@ -539,11 +539,11 @@ namespace RDUIL.WinForms
         {
             Item.SubItems.Clear();
             Item.Text = loadSet.LoadSet.Name;
-            Item.SubItems.Add(Convert.ToString(loadSet.Force.Force_Nz /1000));
-            Item.SubItems.Add(Convert.ToString(loadSet.Force.Force_Mx / 1000));
-            Item.SubItems.Add(Convert.ToString(loadSet.Force.Force_My / 1000));
-            Item.SubItems.Add(Convert.ToString(loadSet.Force.Force_Qx / 1000));
-            Item.SubItems.Add(Convert.ToString(loadSet.Force.Force_Qy / 1000));
+            //Item.SubItems.Add(Convert.ToString(loadSet.Force.Force_Nz /1000));
+            //Item.SubItems.Add(Convert.ToString(loadSet.Force.Force_Mx / 1000));
+            //Item.SubItems.Add(Convert.ToString(loadSet.Force.Force_My / 1000));
+            //Item.SubItems.Add(Convert.ToString(loadSet.Force.Force_Qx / 1000));
+            //Item.SubItems.Add(Convert.ToString(loadSet.Force.Force_Qy / 1000));
         }
         private void EditItemFromSteelColumnBase(ListViewItem Item, SteelColumnBase columnBase)
         {
@@ -810,23 +810,23 @@ namespace RDUIL.WinForms
         }
         private void tsbColumnForces_Click(object sender, EventArgs e)
         {
-            if (lvDetails.SelectedIndices.Count == 1)
-            {
-                SteelColumnBase steelColumnBase;
-                foreach (int i in lvDetails.SelectedIndices)
-                {
-                    steelColumnBase = ((List<SteelColumnBase>)_objectList)[i];
-                    var detailObjectList = new DetailObjectList("ColumnForces", steelColumnBase, steelColumnBase.Loads, false);
-                    detailObjectList.BtnVisibilityList = new List<short>() { 1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0 };
-                    frmDetailList DetailForm = new frmDetailList(detailObjectList);
-                    this.Visible = false;
-                    DetailForm.ShowDialog();
-                    this.Visible = true;
-                    EditItemFromSteelColumnBase(lvDetails.Items[i], steelColumnBase);
-                }
-            }
-            else
-            { MessageBox.Show("Выберите один элемент из списка", "Неверный выбор"); }
+            //if (lvDetails.SelectedIndices.Count == 1)
+            //{
+            //    SteelColumnBase steelColumnBase;
+            //    foreach (int i in lvDetails.SelectedIndices)
+            //    {
+            //        steelColumnBase = ((List<SteelColumnBase>)_objectList)[i];
+            //        var detailObjectList = new DetailObjectList("ColumnForces", steelColumnBase, steelColumnBase.Loads, false);
+            //        detailObjectList.BtnVisibilityList = new List<short>() { 1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0 };
+            //        frmDetailList DetailForm = new frmDetailList(detailObjectList);
+            //        this.Visible = false;
+            //        DetailForm.ShowDialog();
+            //        this.Visible = true;
+            //        EditItemFromSteelColumnBase(lvDetails.Items[i], steelColumnBase);
+            //    }
+            //}
+            //else
+            //{ MessageBox.Show("Выберите один элемент из списка", "Неверный выбор"); }
         }
         private void tsbSteelBaseParts_Click(object sender, EventArgs e)
         {

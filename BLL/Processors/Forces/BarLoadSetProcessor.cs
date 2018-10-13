@@ -16,12 +16,12 @@ namespace RDBLL.Processors.Forces
         {
             if (! String.IsNullOrEmpty(oldLoadSet.LoadSet.Name)) { oldLoadSet.LoadSet.Name += " + "; }
             oldLoadSet.LoadSet.Name += secondLoadSet.LoadSet.Name + "*(" + Convert.ToString(secondLoadSet.LoadSet.PartialSafetyFactor * koeff) + ")";
-            oldLoadSet.Force.Force_Nz += secondLoadSet.Force.Force_Nz * secondLoadSet.LoadSet.PartialSafetyFactor * koeff;
-            oldLoadSet.Force.Force_Mx += secondLoadSet.Force.Force_Mx * secondLoadSet.LoadSet.PartialSafetyFactor * koeff;
-            oldLoadSet.Force.Force_My += secondLoadSet.Force.Force_My * secondLoadSet.LoadSet.PartialSafetyFactor * koeff;
-            oldLoadSet.Force.Force_Qx += secondLoadSet.Force.Force_Qx * secondLoadSet.LoadSet.PartialSafetyFactor * koeff;
-            oldLoadSet.Force.Force_Qy += secondLoadSet.Force.Force_Qy * secondLoadSet.LoadSet.PartialSafetyFactor * koeff;
-            oldLoadSet.LoadSet.PartialSafetyFactor = 1;
+            //oldLoadSet.Force.Force_Nz += secondLoadSet.Force.Force_Nz * secondLoadSet.LoadSet.PartialSafetyFactor * koeff;
+            //oldLoadSet.Force.Force_Mx += secondLoadSet.Force.Force_Mx * secondLoadSet.LoadSet.PartialSafetyFactor * koeff;
+            //oldLoadSet.Force.Force_My += secondLoadSet.Force.Force_My * secondLoadSet.LoadSet.PartialSafetyFactor * koeff;
+            //oldLoadSet.Force.Force_Qx += secondLoadSet.Force.Force_Qx * secondLoadSet.LoadSet.PartialSafetyFactor * koeff;
+            //oldLoadSet.Force.Force_Qy += secondLoadSet.Force.Force_Qy * secondLoadSet.LoadSet.PartialSafetyFactor * koeff;
+            //oldLoadSet.LoadSet.PartialSafetyFactor = 1;
             return;
         }
 
@@ -33,45 +33,53 @@ namespace RDBLL.Processors.Forces
             return newLoadSet;
         }
 
-        public static List<BarLoadSet> GetLoadCases(List<BarLoadSet> columnLoadSets)
+        public static List<LoadCase> LoadCases(List<ForcesGroup> forcesGroups)
         {
-            List<BarLoadSet> LoadCases = new List<BarLoadSet>();
-            LoadCases.Add(new BarLoadSet(0));
-            List<BarLoadSet> tmpLoadSets = new List<BarLoadSet>();
-            foreach (BarLoadSet columnLoadSet in columnLoadSets)
+            List<LoadCase> LoadCases = new List<LoadCase>();
+
+            foreach (ForcesGroup forcesGroup in forcesGroups)
             {
-                tmpLoadSets.Add(columnLoadSet);
+                LoadCase loadCase = new LoadCase();
+                LoadCases.Add(loadCase);
             }
-            while (tmpLoadSets.Count > 0)
-            {
-                BarLoadSet LoadSet = tmpLoadSets[0];
-                List<BarLoadSet> tmpLoadCases = new List<BarLoadSet>();
-                foreach (BarLoadSet LoadCase in LoadCases)
-                {
-                    tmpLoadCases.Add(LoadCase);
-                }
-                foreach (BarLoadSet LoadCase in tmpLoadCases)
-                {
-                    if (LoadSet.LoadSet.IsDeadLoad)
-                    {
-                        BarLoadSetProcessor.SumForces(LoadCase, LoadSet, 1.0);
-                    }
-                    else
-                    {
-                        LoadCases.Add(BarLoadSetProcessor.SumForcesInNew(LoadCase, LoadSet, 1.0));
-                        if (LoadSet.LoadSet.BothSign) { LoadCases.Add(BarLoadSetProcessor.SumForcesInNew(LoadCase, LoadSet, -1.0)); }
-                    }
-                }
-                tmpLoadSets.Remove(LoadSet);
-            }
+            
+
+            //LoadCases.Add(new BarLoadSet(0));
+            //List<BarLoadSet> tmpLoadSets = new List<BarLoadSet>();
+            //foreach (BarLoadSet columnLoadSet in columnLoadSets)
+            //{
+            //    tmpLoadSets.Add(columnLoadSet);
+            //}
+            //while (tmpLoadSets.Count > 0)
+            //{
+            //    BarLoadSet LoadSet = tmpLoadSets[0];
+            //    List<BarLoadSet> tmpLoadCases = new List<BarLoadSet>();
+            //    foreach (BarLoadSet LoadCase in LoadCases)
+            //    {
+            //        tmpLoadCases.Add(LoadCase);
+            //    }
+            //    foreach (BarLoadSet LoadCase in tmpLoadCases)
+            //    {
+            //        if (LoadSet.LoadSet.IsDeadLoad)
+            //        {
+            //            BarLoadSetProcessor.SumForces(LoadCase, LoadSet, 1.0);
+            //        }
+            //        else
+            //        {
+            //            LoadCases.Add(BarLoadSetProcessor.SumForcesInNew(LoadCase, LoadSet, 1.0));
+            //            if (LoadSet.LoadSet.BothSign) { LoadCases.Add(BarLoadSetProcessor.SumForcesInNew(LoadCase, LoadSet, -1.0)); }
+            //        }
+            //    }
+            //    tmpLoadSets.Remove(LoadSet);
+            //}
             return LoadCases;
         }
         public static StressInRect MInMaxStressInBarSection(BarLoadSet loadCase, MassProperty massProperty, double dx, double dy)
         {
             StressInRect stress = new StressInRect();
-            double Nz = loadCase.Force.Force_Nz;
-            double Mx = loadCase.Force.Force_Mx;
-            double My = loadCase.Force.Force_My;
+            double Nz = 0; // loadCase.Force.Force_Nz;
+            double Mx = 0; //loadCase.Force.Force_Mx;
+            double My = 0; //loadCase.Force.Force_My;
             double A = massProperty.A;
             double Ix = massProperty.Ix;
             double Iy = massProperty.Iy;
@@ -82,9 +90,9 @@ namespace RDBLL.Processors.Forces
         public static StressInRect MinMaxStressInBarSection(BarLoadSet loadCase, MassProperty massProperty)
         {
             StressInRect stress = new StressInRect();
-            double Nz = loadCase.Force.Force_Nz;
-            double Mx = loadCase.Force.Force_Mx;
-            double My = loadCase.Force.Force_My;
+            double Nz = 0; //loadCase.Force.Force_Nz;
+            double Mx = 0; //loadCase.Force.Force_Mx;
+            double My = 0; //loadCase.Force.Force_My;
             double A = massProperty.A;
             double Wx = massProperty.Wx;
             double Wy = massProperty.Wy;
@@ -96,9 +104,9 @@ namespace RDBLL.Processors.Forces
         public static double StressInBarSection(BarLoadSet loadCase, MassProperty massProperty, double dx, double dy)
         {
             double stress;
-            double Nz = loadCase.Force.Force_Nz;
-            double Mx = loadCase.Force.Force_Mx;
-            double My = loadCase.Force.Force_My;
+            double Nz = 0; //loadCase.Force.Force_Nz;
+            double Mx = 0; //loadCase.Force.Force_Mx;
+            double My = 0; //loadCase.Force.Force_My;
             double A = massProperty.A;
             double Ix = massProperty.Ix;
             double Iy = massProperty.Iy;

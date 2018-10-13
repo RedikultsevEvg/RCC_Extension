@@ -61,6 +61,7 @@
     <Compile Include="Entity\RCC\WallAndColumn\Opening.cs" />
     <Compile Include="Entity\RCC\WallAndColumn\Wall.cs" />
     <Compile Include="Entity\RCC\WallAndColumn\WallType.cs" />
+    <Compile Include="Entity\Results\Forces\LoadCase.cs" />
     <Compile Include="Entity\Results\Forces\StressInRect.cs" />
     <Compile Include="Entity\Results\SC\ColumnBasePartResult.cs" />
     <Compile Include="Entity\Results\SC\ColumnBaseResult.cs" />

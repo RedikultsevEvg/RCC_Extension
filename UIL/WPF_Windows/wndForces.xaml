@@ -7,7 +7,7 @@
         xmlns:Convert="clr-namespace:RDUIL.Converters" 
         xmlns:Setting="clr-namespace:RDBLL.Common.Service;assembly=BLL"
         mc:Ignorable="d"
-        Title="Усилие" Height="600" Width="1200" WindowStartupLocation="CenterScreen" ResizeMode="NoResize">
+        Title="Усилие" Height="600" Width="1000" WindowStartupLocation="CenterScreen" MinWidth="1000" MinHeight="600">
     <Window.Resources>
         <Convert:MultThous x:Key="MultyThousandConverter"/>
         <Convert:MultThousText x:Key="MultyThousandTextConverter"/>
@@ -55,16 +55,19 @@
             <TextBlock Text="{Binding Path=Label}"></TextBlock>
         </DataTemplate>
         <DataTemplate x:Key="ParameterTemplate" x:Name="MyTemplate">
-            <Grid Background="#FFE6FAFB">
+            <Grid Background="{x:Null}" Height="30">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="170"/>
+                    <ColumnDefinition Width="200"/>
                     <ColumnDefinition Width="*" MinWidth="70"/>
                     <ColumnDefinition Width="50"/>
                 </Grid.ColumnDefinitions>
-                <ComboBox ItemsSource="{Binding Source={x:Static Setting:ProgrammSettings.ForceParamKinds}}" ItemTemplate="{StaticResource cbTemplate}" SelectedIndex="0">
+                <ComboBox ItemsSource="{Binding Source={x:Static Setting:ProgrammSettings.ForceParamKinds}}"
+                          ItemTemplate="{StaticResource cbTemplate}"
+                          SelectedValuePath="Id"
+                          SelectedValue="{Binding Path=Kind_id}" Height="22" Margin="30,0,0,0">
                 </ComboBox>
-                <TextBox Text="{Binding Path=Value, Converter={StaticResource MultyThousandConverter}}" Grid.Column="1" Background="#FFFFFEDF">
-                    <TextBox.ToolTip>
+                <TextBox Text="{Binding Path=Value, Converter={StaticResource MultyThousandConverter}}" Grid.Column="1" Background="#FFFFFEDF" Height="22">
+                    <TextBox.ToolTip >
                         <Grid Width="400" Height="200">
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="20"/>
@@ -75,17 +78,17 @@
                                 <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
                             <TextBlock Text="{Binding Path=ForceParamKind.Label}" TextWrapping="Wrap" FontWeight="Bold" Background="#FFB0B0B0" Grid.ColumnSpan="2" Foreground="#FFCF4141" FontSize="14"></TextBlock>
-                            <Image Source="/UIL;component/Resources/FoudationForce.jpg" Grid.Row="1"></Image>
+                            <Image Grid.Row="1" Source="/UIL;component/Resources/FoundationForces.png"/>
                             <TextBlock Text="{Binding Path=ForceParamKind.Addition}" Grid.Column="1" TextWrapping="Wrap" Grid.Row="1"></TextBlock>
                         </Grid>
                     </TextBox.ToolTip>
                 </TextBox>
-                <TextBlock Text="{Binding Path=ForceParamKind.UnitLabel, Converter={StaticResource MultyThousandTextConverter}}" Grid.Column="2"></TextBlock>
+                <TextBlock Text="{Binding Path=ForceParamKind.UnitLabel, Converter={StaticResource MultyThousandTextConverter}}" Grid.Column="2" Height="22"></TextBlock>
             </Grid>
 
         </DataTemplate>
         <DataTemplate x:Key="LoadsTemplate">
-            <Expander Header="{Binding Path=LoadSet.Name}" Background="#FF97FF92" MinWidth="260" MinHeight="30" Margin="5">
+            <Expander Header="{Binding Path=LoadSet.Name}" Background="#FF97FF92" MinWidth="260" MinHeight="30" Margin="30,5,5,5">
                 <HeaderedContentControl >
                     <Grid>
                         <Grid.RowDefinitions>
@@ -123,47 +126,9 @@
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="250"/>
-                <ColumnDefinition Width="300"/>
-                <ColumnDefinition Width="300"/>
-                <ColumnDefinition/>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="1*"/>
             </Grid.ColumnDefinitions>
-            <StackPanel Grid.Column="3">
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="30"/>
-                        <RowDefinition Height="30"/>
-                        <RowDefinition Height="30"/>
-                        <RowDefinition Height="30"/>
-                        <RowDefinition Height="30"/>
-                        <RowDefinition Height="30"/>
-                        <RowDefinition Height="30"/>
-                        <RowDefinition Height="30"/>
-                        <RowDefinition Height="30"/>
-                    </Grid.RowDefinitions>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width ="*"/>
-                        <ColumnDefinition Width ="150"/>
-                    </Grid.ColumnDefinitions>
-                    <TextBlock x:Name="tbName" Style="{StaticResource PropertyTextBlock}" Text="Вид нагрузки"/>
-                    <TextBlock x:Name="tbForce_Nz" Grid.Row="1" Style="{StaticResource PropertyTextBlock}" Text="Продольное усилие Nz, кН"/>
-                    <TextBlock x:Name="tbForce_Mx" Grid.Row="2" Style="{StaticResource PropertyTextBlock}" Text="Изгибающий момент Mx, кН*м"/>
-                    <TextBlock x:Name="tbForce_My" Grid.Row="3" Style="{StaticResource PropertyTextBlock}" Text="Изгибающий момент My, кН*м"/>
-                    <TextBlock x:Name="tbForce_Qx" Grid.Row="4" Style="{StaticResource PropertyTextBlock}" Text="Поперечная сила Qx, кН"/>
-                    <TextBlock x:Name="tbForce_Qy" Grid.Row="5" Style="{StaticResource PropertyTextBlock}" Text="Поперечная сила Qy, кН"/>
-                    <TextBlock x:Name="tbPartiaSafetyFactor" Grid.Row="6" Style="{StaticResource PropertyTextBlock}" Text="Коэффициент надежности"/>
-                    <TextBlock x:Name="tbIsDeadLoad" Grid.Row="7" Style="{StaticResource PropertyTextBlock}" Text="Постоянная нагрузка"/>
-                    <TextBlock x:Name="tbBothSign" Grid.Row="8" Style="{StaticResource PropertyTextBlock}" Text="Знакопеременная нагрузка"/>
-                    <TextBox x:Name="tbxName" Grid.Column="1" Style="{StaticResource PropertyTextBox}"/>
-                    <TextBox x:Name="tbxForce_Nz" Grid.Row="1" Grid.Column="1" Style="{StaticResource PropertyTextBox}"/>
-                    <TextBox x:Name="tbxForce_Mx" Grid.Row="2" Grid.Column="1" Style="{StaticResource PropertyTextBox}"/>
-                    <TextBox x:Name="tbxForce_My" Grid.Row="3" Grid.Column="1" Style="{StaticResource PropertyTextBox}"/>
-                    <TextBox x:Name="tbxForce_Qx" Grid.Row="4" Grid.Column="1" Style="{StaticResource PropertyTextBox}"/>
-                    <TextBox x:Name="tbxForce_Qy" Grid.Row="5" Grid.Column="1" Style="{StaticResource PropertyTextBox}"/>
-                    <TextBox x:Name="tbxPartialSafetyFactor" Grid.Row="6" Grid.Column="1" Style="{StaticResource PropertyTextBox}"/>
-                    <CheckBox x:Name="cbIsDeadLoad" Content="" Grid.Column="1" HorizontalAlignment="Center" Margin="0" Grid.Row="7" VerticalAlignment="Center"/>
-                    <CheckBox x:Name="cbBothSign" Content="" Grid.Column="1" HorizontalAlignment="Center" Margin="0" Grid.Row="8" VerticalAlignment="Center"/>
-                </Grid>
-            </StackPanel>
             <Image x:Name="image" Margin="5" Source="{DynamicResource imgFoundationForces}"/>
             <Grid Grid.Column="2">
                 <Grid.RowDefinitions>
@@ -171,13 +136,13 @@
                     <RowDefinition/>
                 </Grid.RowDefinitions>
                 <StackPanel x:Name="stpForceBtns" Style="{StaticResource OperationStack}" MouseLeave="stpLoadsBtns_MouseLeave" MouseMove="stpLoadsBtns_MouseMove">
-                    <Button x:Name="btnAddForce" Style="{StaticResource OperationButton}" ToolTip="Добавить усилие" Click="btnAddLoad_Click">
+                    <Button x:Name="btnAddForce" Style="{StaticResource OperationButton}" ToolTip="Добавить усилие" Click="btnAddForce_Click">
                         <Button.Effect>
                             <DropShadowEffect Opacity="0.6"/>
                         </Button.Effect>
                         <Image x:Name="AddForce_png" Style="{StaticResource OperationButtonImage}" Source="{DynamicResource IconAdd30}" />
                     </Button>
-                    <Button x:Name="btnDeleteForce" Style="{StaticResource OperationButton}" ToolTip="Удалить усилие" Click="btnDeleteLoad_Click">
+                    <Button x:Name="btnDeleteForce" Style="{StaticResource OperationButton}" ToolTip="Удалить усилие" Click="btnDeleteForce_Click">
                         <Button.Effect>
                             <DropShadowEffect Opacity="0.6"/>
                         </Button.Effect>
@@ -212,14 +177,14 @@
         </Grid>
 
 
-        <StackPanel Height="60" Grid.Row="1" Margin="10" Orientation="Horizontal" Grid.ColumnSpan="3" HorizontalAlignment="Right" Background="#FFE2E2E2">
+        <StackPanel Height="60" Grid.Row="1" Margin="0,10,10,10" Orientation="Horizontal" HorizontalAlignment="Right" Background="#FFE2E2E2" Width="110">
             <Button x:Name="btnOK" Style="{StaticResource ServiceButton}" HorizontalAlignment="Stretch" Click="btnOK_Click">
                 <Button.Effect>
                     <DropShadowEffect Opacity="0.6"/>
                 </Button.Effect>
                 <Image x:Name="OK_png" Style="{StaticResource ServiceButtonImage}" Source="{DynamicResource IconOK}"/>
             </Button>
-            <Button x:Name="btnCancel" Style="{StaticResource ServiceButton}" HorizontalAlignment="Stretch" Click="btnCancel_Click">
+            <Button x:Name="btnCancel" Style="{StaticResource ServiceButton}" HorizontalAlignment="Stretch" Click="btnCancel_Click" Visibility="Hidden">
                 <Button.Effect>
                     <DropShadowEffect Opacity="0.6"/>
                 </Button.Effect>

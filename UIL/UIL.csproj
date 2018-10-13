@@ -199,11 +199,6 @@
     <WCFMetadata Include="Connected Services\" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\FoudationForce.jpg">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Resource>
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="Resources\IconForces.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
@@ -231,6 +226,26 @@
     <Resource Include="Resources\IconDelete30.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\FoundationForces.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Mx.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\My.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Nz.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Qx.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Qy.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -11,11 +11,8 @@ namespace RDBLL.Forces
     {
         //Properties
         #region 
-        public SteelColumnBase SteelColumnBase { get; set; }
         public ForcesGroup ForcesGroup { get; set; }
         public LoadSet LoadSet { get; set; }
-        public List<ForceParameter> ForceParameters { get; set; }
-        public Force Force { get; set; }
         #endregion
         //Constructors
         #region
@@ -28,11 +25,6 @@ namespace RDBLL.Forces
             LoadSet.IsCombination = false;
             LoadSet.IsDesignLoad = false;
             LoadSet.BothSign = false;
-            Force.Force_Nz = 0;
-            Force.Force_Mx = 0;
-            Force.Force_My = 0;
-            Force.Force_Qx = 0;
-            Force.Force_Qy = 0;
         }
         public void SetDefault1()
         {
@@ -43,21 +35,10 @@ namespace RDBLL.Forces
             LoadSet.IsCombination = false;
             LoadSet.IsDesignLoad = false;
             LoadSet.BothSign = false;
-            Force.Force_Nz = -100000;
-            Force.Force_Mx = 0;
-            Force.Force_My = 0;
-            Force.Force_Qx = 0;
-            Force.Force_Qy = 0;
         }
         public BarLoadSet(int setDefault)
         {
             if (setDefault == 0) { SetDefault(); } else { SetDefault1(); }
-        }
-        public BarLoadSet(SteelColumnBase steelColumnBase)
-        {
-            SetDefault1();
-            steelColumnBase.Loads.Add(this);
-            SteelColumnBase = steelColumnBase;
         }
         public BarLoadSet(ForcesGroup forcesGroup)
         {

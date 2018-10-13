@@ -27,10 +27,8 @@ namespace RDBLL.Entity.SC.Column
         public double SteelStrength { get; set; }
         public double ConcreteStrength { get; set; }
         public double BoltPrestressForce { get; set; }
-        public List<BarLoadSet> Loads { get; set; }
         public ObservableCollection<ForcesGroup> LoadsGroup { get; set; }
-        public bool OnlyOneLoadsGroup { get; set; }
-        public List<SteelBasePart> SteelBaseParts { get; set; }
+        public ObservableCollection<SteelBasePart> SteelBaseParts { get; set; }
 
         #endregion
         
@@ -48,11 +46,9 @@ namespace RDBLL.Entity.SC.Column
             SteelStrength = 245000000;
             ConcreteStrength = 1000000;
             BoltPrestressForce = 0;
-            Loads = new List<BarLoadSet>();
             LoadsGroup = new ObservableCollection<ForcesGroup>();
             LoadsGroup.Add(new ForcesGroup(this));
-            OnlyOneLoadsGroup = true;
-            SteelBaseParts = new List<SteelBasePart>();
+            SteelBaseParts = new ObservableCollection<SteelBasePart>();
         }
         public SteelColumnBase(Level level)
         {
