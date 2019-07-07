@@ -10,25 +10,28 @@ using System.Collections.ObjectModel;
 
 namespace RDBLL.Entity.SC.Column
 {
+    /// <summary>
+    /// База стальной колонны
+    /// </summary>
     public class SteelColumnBase : ICloneable
     {
         //Properties
         #region 
         //public ColumnBaseResult ColumnBaseResult { get; set; }
         public Level Level { get; set; }
-        public int SteelColumnBaseID { get; set; }
-        public String Name { get; set; }
-        public double Width { get; set; }
-        public double Length { get; set; }
-        public double Thickness { get; set; }
-        public double WidthBoltDist { get; set; }
-        public double LengthBoltDist { get; set; }
-        public double Koeff_WorkCond { get; set; }
-        public double SteelStrength { get; set; }
-        public double ConcreteStrength { get; set; }
-        public double BoltPrestressForce { get; set; }
-        public ObservableCollection<ForcesGroup> LoadsGroup { get; set; }
-        public ObservableCollection<SteelBasePart> SteelBaseParts { get; set; }
+        public int SteelColumnBaseID { get; set; } //Код стальной базы
+        public String Name { get; set; } //Наименование
+        public double Width { get; set; } //Ширина базы, м
+        public double Length { get; set; } //Длина базы, м
+        public double Thickness { get; set; } //Толщина, м
+        public double WidthBoltDist { get; set; } //Расстояние между болтами по ширине, м
+        public double LengthBoltDist { get; set; } //Расстояние между болтами по длине, м
+        public double Koeff_WorkCond { get; set; } //Коэффициент условий работы
+        public double SteelStrength { get; set; } //Расчетное сопротивление базы
+        public double ConcreteStrength { get; set; } //Прочность бетона подливки
+        public double BoltPrestressForce { get; set; } //Усилия преднатяжения болта
+        public ObservableCollection<ForcesGroup> LoadsGroup { get; set; } //Коллекция групп нагрузок
+        public ObservableCollection<SteelBasePart> SteelBaseParts { get; set; } //Коллекция участков
 
         #endregion
         
@@ -50,6 +53,10 @@ namespace RDBLL.Entity.SC.Column
             LoadsGroup.Add(new ForcesGroup(this));
             SteelBaseParts = new ObservableCollection<SteelBasePart>();
         }
+        /// <summary>
+        /// Создает базу стальной колонны по указанному уровню
+        /// </summary>
+        /// <param name="level">Уровень, по которому создается колонна</param>
         public SteelColumnBase(Level level)
         {
             SetDefault();
@@ -57,6 +64,9 @@ namespace RDBLL.Entity.SC.Column
             level.SteelColumnBaseList.Add(this);
         }
 
+        /// <summary>
+        /// Создает базу стальной колонны со значениями по умолчанию
+        /// </summary>
         public SteelColumnBase()
         {
             SetDefault();

@@ -13,6 +13,7 @@ using RDBLL.Entity.RCC.BuildingAndSite;
 using RDBLL.Common.Geometry;
 using RDUIL.WinForms;
 using RDBLL.Entity.RCC.Reinforcement;
+using System.Collections.ObjectModel;
 
 namespace RDUIL.WinForms
 {
@@ -22,8 +23,8 @@ namespace RDUIL.WinForms
         private Level _level;
         private WallType _wallType;
         private Building _building;
-        private List<Level> _levelList;
-        private List<WallType> _wallTypeList;
+        private ObservableCollection<Level> _levelList;
+        private ObservableCollection<WallType> _wallTypeList;
         private Point2D _tmpStartPoint;
         private Point2D _tmpEndPoint;
         private BarSpacingSettings _tmpVertSpacingSetting;

@@ -7,20 +7,23 @@ using RDBLL.Common.Service;
 
 namespace RDBLL.Forces
 {
-    public class Force : ICloneable
-    {
-        //Properties
-        #region 
-        public double Value { get; set; }
-        public int Kind_id { get; set; }
-        #endregion
-        #region Constructors
+    /// <summary>
+    /// Устаревший класс усилия
+    /// </summary>
+    //public class Force : ICloneable
+    //{
+    //    //Properties
+    //    #region 
+    //    public double Value { get; set; }
+    //    public int Kind_id { get; set; }
+    //    #endregion
+    //    #region Constructors
 
-        #endregion
-        //IClonable
-        public object Clone()
-        {
-            return this.MemberwiseClone();
-        }
-    }
+    //    #endregion
+    //    //IClonable
+    //    public object Clone()
+    //    {
+    //        return this.MemberwiseClone();
+    //    }
+    //}
 }

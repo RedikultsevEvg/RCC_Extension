@@ -27,9 +27,13 @@ namespace WallTest
             steelColumnBase.Width = 1;
             steelColumnBase.Length = 1;
             steelColumnBase.Thickness = 0.05;
-            BarLoadSet columnLoadSet = new BarLoadSet(steelColumnBase);
-            columnLoadSet.Force_Nz = -100000;
-            columnLoadSet.PartialSafetyFactor = 1;
+            //LoadSet loadSet = new LoadSet();
+            LoadSet loadSet = steelColumnBase.LoadsGroup[0].Loads[0].LoadSet;
+            ForceParameter forceParameter = new ForceParameter();
+            loadSet.ForceParameters.Add(forceParameter);
+            forceParameter.Kind_id = 1;
+            forceParameter.Value = -100000;
+            loadSet.PartialSafetyFactor = 1;
             SteelBasePart steelBasePart = new SteelBasePart(steelColumnBase);
             steelBasePart.FixLeft = true;
             steelBasePart.FixRight = true;
@@ -40,7 +44,7 @@ namespace WallTest
             SteelColumnBaseProcessor columBaseProcessor = new SteelColumnBaseProcessor();
             ColumnBaseResult columnResult = columBaseProcessor.GetResult(steelColumnBase);
             ColumnBasePartResult baseResult = SteelColumnBasePartProcessor.GetResult(steelBasePart);
-            Assert.AreEqual(300, baseResult.MaxStress/1000000, 10);
+            Assert.AreEqual(300, baseResult.MaxStress / 1000000, 10);
         }
     }
 }

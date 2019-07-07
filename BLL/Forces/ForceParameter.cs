@@ -7,14 +7,17 @@ using RDBLL.Common.Service;
 
 namespace RDBLL.Forces
 {
+    /// <summary>
+    /// Класс величины усилия
+    /// </summary>
     public class ForceParameter
     {
         private int _kind_id;
         private ForceParamKind _forceParamKind;
 
-        public int Id { get; set; }
-        public double Value { get; set; }
-        public int Kind_id
+        public int Id { get; set; } //Код усилия
+        public double Value { get; set; } //Величина нагрузки (численное значение)
+        public int Kind_id //Код вида усилия (например, продольная сила). Виды нагрузки жестко предустановлены в программе
         {
             get { return _kind_id; }
             set
