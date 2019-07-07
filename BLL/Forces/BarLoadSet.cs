@@ -7,11 +7,14 @@ using RDBLL.Entity.SC.Column;
 
 namespace RDBLL.Forces
 {
+    /// <summary>
+    /// Класс набора усилия для стержня
+    /// </summary>
     public class BarLoadSet : ICloneable
     {
         //Properties
         #region 
-        public ForcesGroup ForcesGroup { get; set; }
+        public ForcesGroup ForcesGroup { get; set; } //Обратная ссылка на родительскую группу нагруок
         public LoadSet LoadSet { get; set; }
         #endregion
         //Constructors
@@ -36,10 +39,11 @@ namespace RDBLL.Forces
             LoadSet.IsDesignLoad = false;
             LoadSet.BothSign = false;
         }
-        public BarLoadSet(int setDefault)
+        public BarLoadSet(int setDefault = 0)
         {
             if (setDefault == 0) { SetDefault(); } else { SetDefault1(); }
         }
+
         public BarLoadSet(ForcesGroup forcesGroup)
         {
             SetDefault1();

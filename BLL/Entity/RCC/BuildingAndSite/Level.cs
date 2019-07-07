@@ -8,6 +8,7 @@ using RDBLL.Entity.RCC.WallAndColumn;
 using RDBLL.Common.Service;
 using System.Xml;
 using RDBLL.Entity.SC.Column;
+using System.Collections.ObjectModel;
 
 
 namespace RDBLL.Entity.RCC.BuildingAndSite
@@ -21,9 +22,9 @@ namespace RDBLL.Entity.RCC.BuildingAndSite
         public decimal TopOffset { get; set; }
         public int Quant { get; set; }
         public Point3D BasePoint { get; set; }
-        public List<Wall> WallList { get; set; }
-        public List<Column> ColumnList { get; set; }
-        public List<SteelColumnBase> SteelColumnBaseList { get; set; }
+        public ObservableCollection<Wall> WallList { get; set; }
+        public ObservableCollection<Column> ColumnList { get; set; }
+        public ObservableCollection<SteelColumnBase> SteelColumnBaseList { get; set; }
 
         public decimal GetConcreteVolumeNetto()
         {
@@ -60,16 +61,16 @@ namespace RDBLL.Entity.RCC.BuildingAndSite
             TopOffset = -200;
             BasePoint = new Point3D(0, 0, 0);
             Quant = 1;
-            WallList = new List<Wall>();
-            SteelColumnBaseList = new List<SteelColumnBase>();
+            WallList = new ObservableCollection<Wall>();
+            SteelColumnBaseList = new ObservableCollection<SteelColumnBase>();
             building.LevelList.Add(this);
         }
 
         public Level(Building building, XmlNode xmlNode)
         {
             Building = building;
-            WallList = new List<Wall>();
-            SteelColumnBaseList = new List<SteelColumnBase>();
+            WallList = new ObservableCollection<Wall>();
+            SteelColumnBaseList = new ObservableCollection<SteelColumnBase>();
             foreach (XmlAttribute obj in xmlNode.Attributes)
             {          
                 if (obj.Name == "Name") Name = obj.Value;

@@ -15,6 +15,8 @@ namespace RDBLL.Processors.SC
 {
     public class SteelColumnBasePartProcessor
     {
+        private static bool PrintConsole = true;
+
         public static ColumnBasePartResult GetResult(SteelBasePart basePart)
         {
             /*Алгоритм расчета основан на подходе из учебника Белени по
@@ -41,26 +43,26 @@ namespace RDBLL.Processors.SC
             MassProperty massProperty = RectProcessor.GetRectMassProperty(baseRect);
             double maxStress = double.NegativeInfinity;
             double maxStressTmp;
-            foreach (BarLoadSet LoadCase in baseResult.LoadCases)
-            {
-                List<double> dxList = new List<double>();
-                List<double> dyList = new List<double>();
-                dxList.Add(basePart.Center[0] + basePart.Width / 2);
-                dxList.Add(basePart.Center[0] - basePart.Width / 2);
-                dyList.Add(basePart.Center[1] + basePart.Length / 2);
-                dyList.Add(basePart.Center[1] - basePart.Length / 2);
+            //foreach (BarLoadSet LoadCase in baseResult.LoadCases)
+            //{
+            //    List<double> dxList = new List<double>();
+            //    List<double> dyList = new List<double>();
+            //    dxList.Add(basePart.Center[0] + basePart.Width / 2);
+            //    dxList.Add(basePart.Center[0] - basePart.Width / 2);
+            //    dyList.Add(basePart.Center[1] + basePart.Length / 2);
+            //    dyList.Add(basePart.Center[1] - basePart.Length / 2);
 
 
-                foreach (double dx in dxList)
-                {
-                    foreach (double dy in dyList)
-                    {
-                        double stress = BarLoadSetProcessor.StressInBarSection(LoadCase, massProperty, dx, dy);
-                        if (stress < 0) { maxStressTmp = stress * (-1D); } else { maxStressTmp = 0; }
-                        if (maxStressTmp > maxStress) { maxStress = maxStressTmp; }
-                    }
-                }
-            }
+            //    foreach (double dx in dxList)
+            //    {
+            //        foreach (double dy in dyList)
+            //        {
+            //            double stress = BarLoadSetProcessor.StressInBarSection(LoadCase, massProperty, dx, dy);
+            //            if (stress < 0) { maxStressTmp = stress * (-1D); } else { maxStressTmp = 0; }
+            //            if (maxStressTmp > maxStress) { maxStress = maxStressTmp; }
+            //        }
+            //    }
+            //}
 
             ColumnBasePartResult result = new ColumnBasePartResult();
             double width = basePart.Width;
@@ -168,20 +170,27 @@ namespace RDBLL.Processors.SC
                 {
                     koeff_betta = 0.5;
                     maxMoment = maxStress * koeff_b1 * koeff_b1 * koeff_betta;
-                    //Console.WriteLine("Три стороны - консоль");
-                    //Console.WriteLine("maxMoment = " + Convert.ToString(maxMoment));
-                    //Console.ReadLine();
+                    Console.WriteLine("Три стороны - консоль");
+                    if (PrintConsole)
+                    {
+                        Console.WriteLine("maxMoment = " + Convert.ToString(maxMoment));
+                        Console.ReadLine();
+                    }
+                    
                 }
                 else
                 {
                     koeff_betta = MathOperation.InterpolateList(xValues23, yValues23, ratio);
                     maxMoment = maxStress * koeff_a1 * koeff_a1 * koeff_betta;
-                    //Console.WriteLine("ratio = " + Convert.ToString(ratio));
-                    //Console.WriteLine("Три стороны - П-образная");
-                    //Console.WriteLine("koeff_a1 = " + Convert.ToString(koeff_a1));
-                    //Console.WriteLine("koeff_betta = " + Convert.ToString(koeff_betta));
-                    //Console.WriteLine("maxMoment = " + Convert.ToString(maxMoment));
-                    //Console.ReadLine();
+                    if (PrintConsole)
+                    {
+                        Console.WriteLine("ratio = " + Convert.ToString(ratio));
+                        Console.WriteLine("Три стороны - П-образная");
+                        Console.WriteLine("koeff_a1 = " + Convert.ToString(koeff_a1));
+                        Console.WriteLine("koeff_betta = " + Convert.ToString(koeff_betta));
+                        Console.WriteLine("maxMoment = " + Convert.ToString(maxMoment));
+                        Console.ReadLine();
+                    }
                 }
 
                 
@@ -207,20 +216,28 @@ namespace RDBLL.Processors.SC
                 else
                 {
                     koeff_betta = MathOperation.InterpolateList(xValues4, yValues4, ratio);
-                    //Console.WriteLine("Четыре стороны - по контуру");
+                    if (PrintConsole)
+                    {
+                        Console.WriteLine("Четыре стороны - по контуру");
+                    }
                 }
                 maxMoment = maxStress * koeff_a * koeff_a * koeff_betta;
-                
-                //Console.WriteLine("maxMoment = " + Convert.ToString(maxMoment));
-                //Console.ReadLine();
+                if (PrintConsole)
+                {
+                    Console.WriteLine("maxMoment = " + Convert.ToString(maxMoment));
+                    Console.ReadLine();
+                }
             }
             result.MaxMoment = maxMoment;
             result.MaxStress = maxMoment / Wx;
-            //Console.WriteLine("Time = " + DateTime.Now);
-            //Console.WriteLine("maxMoment = " + Convert.ToString(maxMoment));
-            //Console.WriteLine("MaxStress = " + Convert.ToString(result.MaxStress));
-            //Console.ReadLine();
-            return result;
+            if (PrintConsole)
+            {
+                Console.WriteLine("Time = " + DateTime.Now);
+                Console.WriteLine("maxMoment = " + Convert.ToString(maxMoment));
+                Console.WriteLine("MaxStress = " + Convert.ToString(result.MaxStress));
+                Console.ReadLine();
+            }
+                return result;
         }
     }
 }

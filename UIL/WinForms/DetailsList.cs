@@ -18,6 +18,7 @@ using RDBLL.Entity.SC.Column;
 using RDBLL.Forces;
 using RDBLL.Entity.Results.SC;
 using RDBLL.Processors.SC;
+using System.Collections.ObjectModel;
 
 namespace RDUIL.WinForms
 {
@@ -90,7 +91,7 @@ namespace RDUIL.WinForms
                         ColumnName.AddRange(_ColumnName);
                         ColumnWidth.AddRange(_ColumnWidth);
 
-                        var levelList = (List<Level>)_objectList;
+                        var levelList = (ObservableCollection<Level>)_objectList;
                         foreach (Level level in levelList)
                         {
                             NewItemFromLevel(level);
@@ -137,7 +138,7 @@ namespace RDUIL.WinForms
                         ColumnName.AddRange(_ColumnName);
                         ColumnWidth.AddRange(_ColumnWidth);
                         #endregion
-                        var basePartList = (List<SteelBasePart>)_objectList;
+                        var basePartList = (ObservableCollection<SteelBasePart>)_objectList;
                         foreach (SteelBasePart basePart in basePartList)
                         {
                             NewItemFromColumnBasePart(basePart);
@@ -168,7 +169,7 @@ namespace RDUIL.WinForms
                         ColumnName.AddRange(_ColumnName);
                         ColumnWidth.AddRange(_ColumnWidth);
 
-                        var SteelColumnBaseList = (List<SteelColumnBase>)_objectList;
+                        var SteelColumnBaseList = (ObservableCollection<SteelColumnBase>)_objectList;
                         foreach (SteelColumnBase columnBase in SteelColumnBaseList)
                         {
                             NewItemFromSteelColumnBase(columnBase);
@@ -372,7 +373,7 @@ namespace RDUIL.WinForms
                     }
                 case ObjColumnBaseParts:
                     {
-                        var BasePartList = (List<SteelBasePart>)_objectList;
+                        var BasePartList = (ObservableCollection<SteelBasePart>)_objectList;
                         foreach (int i in lvDetails.SelectedIndices)
                         {
                             WndSteelBasePart wndSteelBasePart = new WndSteelBasePart(BasePartList[i]);
@@ -394,7 +395,7 @@ namespace RDUIL.WinForms
                     }      
                 case ObjSteelColumnBases:
                     {
-                        var steelColumnBaseList = (List<SteelColumnBase>)_objectList;
+                        var steelColumnBaseList = (ObservableCollection<SteelColumnBase>)_objectList;
                         foreach (int i in lvDetails.SelectedIndices)
                         {
                             WndSteelColumnBase wndSteelColumnBase = new WndSteelColumnBase(steelColumnBaseList[i]);
@@ -795,7 +796,7 @@ namespace RDUIL.WinForms
                 Level level;
                 foreach (int i in lvDetails.SelectedIndices)
                 {
-                    level = ((List<Level>)_objectList)[i];
+                    level = ((ObservableCollection<Level>)_objectList)[i];
                     var detailObjectList = new DetailObjectList("SteelColumnBases", level, level.SteelColumnBaseList, false);
                     detailObjectList.BtnVisibilityList = new List<short>() { 1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 1, 1 };
                     frmDetailList DetailForm = new frmDetailList(detailObjectList);
@@ -835,7 +836,7 @@ namespace RDUIL.WinForms
                 SteelColumnBase steelColumnBase;
                 foreach (int i in lvDetails.SelectedIndices)
                 {
-                    steelColumnBase = ((List<SteelColumnBase>)_objectList)[i];
+                    steelColumnBase = ((ObservableCollection<SteelColumnBase>)_objectList)[i];
                     var detailObjectList = new DetailObjectList("ColumnBaseParts", steelColumnBase, steelColumnBase.SteelBaseParts, false);
                     detailObjectList.BtnVisibilityList = new List<short>() { 1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0 };
                     frmDetailList DetailForm = new frmDetailList(detailObjectList);

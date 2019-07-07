@@ -9,13 +9,20 @@ using System.Collections.ObjectModel;
 
 namespace RDBLL.Forces
 {
+    /// <summary>
+    /// Группа нагрузок, приложенных в одной точке
+    /// </summary>
     public class ForcesGroup
     {
-        public SteelColumnBase SteelColumnBase { get; set; }
-        public ObservableCollection<BarLoadSet> Loads { get; set; }
-        public Point2D Excentricity { get; set; }
+        public SteelColumnBase SteelColumnBase { get; set; } //Обратная ссылка. База стальной колонны к котрой относится группа нагрузок
+        public ObservableCollection<BarLoadSet> Loads { get; set; } //Коллекция набора нагрузок
+        public Point2D Excentricity { get; set; } //Точка, к которой приложена группа нагрузок
 
         #region Constructors
+        /// <summary>
+        /// Конструктор создает экземпляр класса группы нагрузок
+        /// </summary>
+        /// <param name="steelColumnBase"></param>
         public ForcesGroup(SteelColumnBase steelColumnBase)
         {
             Loads = new ObservableCollection<BarLoadSet>();
