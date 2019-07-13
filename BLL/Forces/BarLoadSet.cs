@@ -10,11 +10,11 @@ namespace RDBLL.Forces
     /// <summary>
     /// Класс набора усилия для стержня
     /// </summary>
-    public class BarLoadSet : ICloneable
+    public class BarLoadSet : ICloneable, IEquatable<BarLoadSet>
     {
         //Properties
         #region 
-        public ForcesGroup ForcesGroup { get; set; } //Обратная ссылка на родительскую группу нагруок
+        //public ForcesGroup ForcesGroup { get; set; } //Обратная ссылка на родительскую группу нагруок
         public LoadSet LoadSet { get; set; }
         #endregion
         //Constructors
@@ -47,13 +47,19 @@ namespace RDBLL.Forces
         public BarLoadSet(ForcesGroup forcesGroup)
         {
             SetDefault1();
-            ForcesGroup = forcesGroup;
         }
         #endregion
         //IClonable
         public object Clone()
         {
             return this.MemberwiseClone();
+        }
+
+        //IEquatable
+        public bool Equals(BarLoadSet other)
+        {
+            if (this.LoadSet.Equals(other.LoadSet)) { return true;}
+            else { return false; }
         }
     }
 }

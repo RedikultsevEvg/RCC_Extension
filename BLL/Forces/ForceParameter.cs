@@ -10,7 +10,7 @@ namespace RDBLL.Forces
     /// <summary>
     /// Класс величины усилия
     /// </summary>
-    public class ForceParameter
+    public class ForceParameter :IEquatable<ForceParameter>
     {
         private int _kind_id;
         private ForceParamKind _forceParamKind;
@@ -23,8 +23,8 @@ namespace RDBLL.Forces
             set
             {
                 _kind_id = value;
-                _forceParamKind = ProgrammSettings.ForceParamKinds[_kind_id-1];
-                ForceParamKind = _forceParamKind;
+                //_forceParamKind = ProgrammSettings.ForceParamKinds[_kind_id-1];
+                //ForceParamKind = _forceParamKind;
             }
         }
         public ForceParamKind ForceParamKind
@@ -34,6 +34,17 @@ namespace RDBLL.Forces
                 return _forceParamKind;
             }
             set { _forceParamKind = value; }
+        }
+
+        //IEquatable
+        public bool Equals(ForceParameter other)
+        {
+            if (this.Kind_id == other.Kind_id
+                & Math.Round(this.Value, 3) == Math.Round(other.Value, 3))
+            {
+                return true;
+            }
+            else { return false; }
         }
     }
 

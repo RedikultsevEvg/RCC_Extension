@@ -9,12 +9,28 @@ namespace RDBLL.Common.Geometry
 {
     public class MathOperation
     {
+        /// <summary>
+        /// Линейная интерполяция между двумя точками
+        /// </summary>
+        /// <param name="x1"></param>
+        /// <param name="y1"></param>
+        /// <param name="x2"></param>
+        /// <param name="y2"></param>
+        /// <param name="xn"></param>
+        /// <returns></returns>
         public static double InterpolateNumber(double x1, double y1, double x2, double y2, double xn)
         {
             double result = y1 + (y2-y1)/(x2-x1)*(xn-x1);
             return result;
         }
 
+        /// <summary>
+        /// Линейная интерполяция по диапазону
+        /// </summary>
+        /// <param name="xValue"></param>
+        /// <param name="yValue"></param>
+        /// <param name="xn"></param>
+        /// <returns></returns>
         public static double InterpolateList(List<double> xValue, List<double> yValue, double xn)
         {
             double result;
@@ -35,5 +51,6 @@ namespace RDBLL.Common.Geometry
             result = InterpolateNumber(x1, y1, x2, y2,  xn);
             return result;
         }
+
     }
 }

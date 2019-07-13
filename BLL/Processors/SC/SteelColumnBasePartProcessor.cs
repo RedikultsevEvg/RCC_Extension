@@ -13,10 +13,10 @@ using RDBLL.Entity.Results.Forces;
 
 namespace RDBLL.Processors.SC
 {
+    delegate void EchoDelegate(String S);
+
     public class SteelColumnBasePartProcessor
     {
-        private static bool PrintConsole = true;
-
         public static ColumnBasePartResult GetResult(SteelBasePart basePart)
         {
             /*Алгоритм расчета основан на подходе из учебника Белени по
@@ -43,26 +43,32 @@ namespace RDBLL.Processors.SC
             MassProperty massProperty = RectProcessor.GetRectMassProperty(baseRect);
             double maxStress = double.NegativeInfinity;
             double maxStressTmp;
-            //foreach (BarLoadSet LoadCase in baseResult.LoadCases)
-            //{
-            //    List<double> dxList = new List<double>();
-            //    List<double> dyList = new List<double>();
-            //    dxList.Add(basePart.Center[0] + basePart.Width / 2);
-            //    dxList.Add(basePart.Center[0] - basePart.Width / 2);
-            //    dyList.Add(basePart.Center[1] + basePart.Length / 2);
-            //    dyList.Add(basePart.Center[1] - basePart.Length / 2);
+
+            EchoDelegate echoDelegate;
+            echoDelegate = EchoConsole;
+
+            echoDelegate("Time = " + DateTime.Now);
+
+            foreach (BarLoadSet LoadCase in baseResult.LoadCases)
+            {
+                List<double> dxList = new List<double>();
+                List<double> dyList = new List<double>();
+                dxList.Add(basePart.Center[0] + basePart.Width / 2);
+                dxList.Add(basePart.Center[0] - basePart.Width / 2);
+                dyList.Add(basePart.Center[1] + basePart.Length / 2);
+                dyList.Add(basePart.Center[1] - basePart.Length / 2);
 
 
-            //    foreach (double dx in dxList)
-            //    {
-            //        foreach (double dy in dyList)
-            //        {
-            //            double stress = BarLoadSetProcessor.StressInBarSection(LoadCase, massProperty, dx, dy);
-            //            if (stress < 0) { maxStressTmp = stress * (-1D); } else { maxStressTmp = 0; }
-            //            if (maxStressTmp > maxStress) { maxStress = maxStressTmp; }
-            //        }
-            //    }
-            //}
+                foreach (double dx in dxList)
+                {
+                    foreach (double dy in dyList)
+                    {
+                        double stress = BarLoadSetProcessor.StressInBarSection(LoadCase, massProperty, dx, dy);
+                        if (stress < 0) { maxStressTmp = stress * (-1D); } else { maxStressTmp = 0; }
+                        if (maxStressTmp > maxStress) { maxStress = maxStressTmp; }
+                    }
+                }
+            }
 
             ColumnBasePartResult result = new ColumnBasePartResult();
             double width = basePart.Width;
@@ -96,6 +102,7 @@ namespace RDBLL.Processors.SC
             if (countFixSides == 1)
             {
                 //Если опора слева или справа
+                echoDelegate("Для участка задана опора по одной стороне, участок расчитывается как консоль");
                 if (basePart.FixLeft || basePart.FixRight)
                 {
                     maxMoment = maxStress * width * width / 2;
@@ -112,6 +119,7 @@ namespace RDBLL.Processors.SC
                 //Если опора слева и справа
                 if (basePart.FixLeft && basePart.FixRight)
                 {
+                    echoDelegate("Для участка заданы две опоры по противоположным сторонам, опоры считаются шарнирными");
                     maxMoment = maxStress * width * width / 8;
                 }
                 else
@@ -124,6 +132,7 @@ namespace RDBLL.Processors.SC
                     //Иначе плита оперта по двум смежным сторонам, неважно каким
                     else
                     {
+                        echoDelegate("Для участка заданы две опоры по смежным сторонам, опоры считаются шарнирными");
                         double koeff_a1 = Math.Sqrt(width*width + length*length);
                         double koeff_b1 = width*length*0.25/koeff_a1;
                         double ratio = koeff_b1 / koeff_a1;
@@ -147,9 +156,10 @@ namespace RDBLL.Processors.SC
                 }
             //Если опора с трех сторон    
             if(countFixSides == 3)
-                {
-                    double koeff_a1;
-                    double koeff_b1;
+            {
+                echoDelegate("Для участка заданы три опоры, опоры считаются шарнирными");
+                double koeff_a1;
+                double koeff_b1;
                 #region //Если закрепления слева и справа
                 if (basePart.FixLeft && basePart.FixRight)
                     {
@@ -170,27 +180,14 @@ namespace RDBLL.Processors.SC
                 {
                     koeff_betta = 0.5;
                     maxMoment = maxStress * koeff_b1 * koeff_b1 * koeff_betta;
-                    Console.WriteLine("Три стороны - консоль");
-                    if (PrintConsole)
-                    {
-                        Console.WriteLine("maxMoment = " + Convert.ToString(maxMoment));
-                        Console.ReadLine();
-                    }
-                    
                 }
                 else
                 {
                     koeff_betta = MathOperation.InterpolateList(xValues23, yValues23, ratio);
                     maxMoment = maxStress * koeff_a1 * koeff_a1 * koeff_betta;
-                    if (PrintConsole)
-                    {
-                        Console.WriteLine("ratio = " + Convert.ToString(ratio));
-                        Console.WriteLine("Три стороны - П-образная");
-                        Console.WriteLine("koeff_a1 = " + Convert.ToString(koeff_a1));
-                        Console.WriteLine("koeff_betta = " + Convert.ToString(koeff_betta));
-                        Console.WriteLine("maxMoment = " + Convert.ToString(maxMoment));
-                        Console.ReadLine();
-                    }
+                    echoDelegate($"Отношение сторон ratio =  + {Convert.ToString(ratio)}");
+                    echoDelegate($"Вспомогательный коэффициент koeff_a1 = {Convert.ToString(koeff_a1)}");
+                    echoDelegate($"Вспомогательный коэффициент koeff_betta = {Convert.ToString(koeff_betta)}");
                 }
 
                 
@@ -198,6 +195,7 @@ namespace RDBLL.Processors.SC
             //Если опора с 4-х сторон
             if (countFixSides == 4)
             {
+                echoDelegate("Для участка заданы четыре опоры, опоры считаются шарнирными");
                 double koeff_b;
                 double koeff_a;
                 if (width > length)
@@ -212,32 +210,33 @@ namespace RDBLL.Processors.SC
                 }
                 double ratio = koeff_b / koeff_a;
                 double koeff_betta;
-                if (ratio > 2) { koeff_betta = 0.125; Console.WriteLine("Четыре стороны - по двум сторонам"); }
+                echoDelegate($"Отношение сторон ratio =  + {Convert.ToString(ratio)}");
+
+                if (ratio > 2)
+                {
+                    koeff_betta = 0.125;
+                    echoDelegate("Соотношение сторон превышает 2, расчет ведется по двум сторонам");
+                    echoDelegate($"Вспомогательный коэффициент koeff_betta = {Convert.ToString(koeff_betta)}");
+                }
                 else
                 {
                     koeff_betta = MathOperation.InterpolateList(xValues4, yValues4, ratio);
-                    if (PrintConsole)
-                    {
-                        Console.WriteLine("Четыре стороны - по контуру");
-                    }
+                    echoDelegate("Соотношение сторон не превышает 2, расчет ведется для плиты опертой по контуру");
+                    echoDelegate($"Вспомогательный коэффициент koeff_betta = {Convert.ToString(koeff_betta)}");
                 }
                 maxMoment = maxStress * koeff_a * koeff_a * koeff_betta;
-                if (PrintConsole)
-                {
-                    Console.WriteLine("maxMoment = " + Convert.ToString(maxMoment));
-                    Console.ReadLine();
-                }
             }
             result.MaxMoment = maxMoment;
             result.MaxStress = maxMoment / Wx;
-            if (PrintConsole)
-            {
-                Console.WriteLine("Time = " + DateTime.Now);
-                Console.WriteLine("maxMoment = " + Convert.ToString(maxMoment));
-                Console.WriteLine("MaxStress = " + Convert.ToString(result.MaxStress));
-                Console.ReadLine();
-            }
-                return result;
+            echoDelegate($"Максимальный изгибающий момент M_max={Math.Round(maxMoment) / 1000}кН*м");
+            echoDelegate($"Максимальные напряжения в плите Sigma_max = {Convert.ToString(Math.Round(result.MaxStress)/1000000)}МПа");
+
+            return result;
+        }
+
+        private static void EchoConsole (String S)
+        {
+            Console.WriteLine(S);
         }
     }
 }

@@ -18,25 +18,25 @@ namespace RDBLL.Processors.SC
         public ColumnBaseResult GetResult(SteelColumnBase columnBase)
         {
             ColumnBaseResult columnBaseResult = new ColumnBaseResult();
-            //columnBaseResult.LoadCases = BarLoadSetProcessor.GetLoadCases(columnBase.Loads);
+            columnBaseResult.LoadCases = BarLoadSetProcessor.GetLoadCases(columnBase.LoadsGroup);
             RectCrossSection rect = new RectCrossSection(columnBase.Width, columnBase.Length);
             MassProperty massProperty = RectProcessor.GetRectMassProperty(rect);
             double Bx = columnBase.WidthBoltDist / 2;
             double By = columnBase.LengthBoltDist / 2;
-            //double minStress = double.PositiveInfinity;
-            //double maxStress = double.NegativeInfinity;
-            //double minStressTmp;
-            //double maxStressTmp;
-            //foreach (BarLoadSet LoadCase in columnBaseResult.LoadCases)
-            //{
-            //    StressInRect stress = BarLoadSetProcessor.MinMaxStressInBarSection(LoadCase, massProperty);
-            //    minStressTmp = stress.MinStress;
-            //    maxStressTmp = stress.MaxStress;
-            //    if (minStressTmp < minStress) { minStress = minStressTmp; }
-            //    if (maxStressTmp > maxStress) { maxStress = maxStressTmp; }
-            //}
-            columnBaseResult.MinStress = 0;// minStress;
-            columnBaseResult.MaxStress = 0;// maxStress;
+            double minStress = double.PositiveInfinity;
+            double maxStress = double.NegativeInfinity;
+            double minStressTmp;
+            double maxStressTmp;
+            foreach (BarLoadSet LoadCase in columnBaseResult.LoadCases)
+            {
+                MinMaxStressInRect stress = BarLoadSetProcessor.MinMaxStressInBarSection(LoadCase, massProperty);
+                minStressTmp = stress.MinStress;
+                maxStressTmp = stress.MaxStress;
+                if (minStressTmp < minStress) { minStress = minStressTmp; }
+                if (maxStressTmp > maxStress) { maxStress = maxStressTmp; }
+            }
+            columnBaseResult.Stresses.MinStress = minStress;
+            columnBaseResult.Stresses.MaxStress = maxStress;
             return columnBaseResult;
         }
 
