@@ -10,7 +10,7 @@ namespace RDBLL.Forces
     /// <summary>
     ///Клас комбинации загружений 
     /// </summary>
-    public class LoadSet
+    public class LoadSet : IEquatable<LoadSet>
     {
         #region 
         public String Name { get; set; } //Наименование
@@ -28,5 +28,27 @@ namespace RDBLL.Forces
             ForceParameters = new ObservableCollection<ForceParameter>();
         }
         #endregion
+
+        //IEquatable
+        public bool Equals(LoadSet other)
+        {
+            if (this.Name == other.Name
+                & this.PartialSafetyFactor==other.PartialSafetyFactor
+                & CompareForceParameters(other))
+            {
+                return true;
+            }
+            else { return false; }
+        }
+
+        public bool CompareForceParameters(LoadSet other)
+        {
+            if (! (other.ForceParameters.Count == ForceParameters.Count)) { return false; }
+            for (int i=0; i< ForceParameters.Count; i++)
+            {
+                if (! this.ForceParameters[i].Equals(other.ForceParameters[i])) { return false; }
+            }
+            return true;
+        }
     }
 }
