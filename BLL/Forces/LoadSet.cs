@@ -40,7 +40,6 @@ namespace RDBLL.Forces
             }
             else { return false; }
         }
-
         public bool CompareForceParameters(LoadSet other)
         {
             if (! (other.ForceParameters.Count == ForceParameters.Count)) { return false; }

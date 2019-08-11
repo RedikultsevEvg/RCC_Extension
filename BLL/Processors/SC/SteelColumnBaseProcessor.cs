@@ -11,6 +11,7 @@ using RDBLL.Entity.Results.SC;
 using RDBLL.Processors.Forces;
 using RDBLL.Common.Geometry;
 
+
 namespace RDBLL.Processors.SC
 {
     public class SteelColumnBaseProcessor : ISteelBaseProcessor
@@ -25,15 +26,22 @@ namespace RDBLL.Processors.SC
             double By = columnBase.LengthBoltDist / 2;
             double minStress = double.PositiveInfinity;
             double maxStress = double.NegativeInfinity;
-            double minStressTmp;
-            double maxStressTmp;
-            foreach (BarLoadSet LoadCase in columnBaseResult.LoadCases)
+
+            double dx = massProperty.Xmax;
+            double dy = massProperty.Ymax;
+            double stress;
+
+            foreach (BarLoadSet loadCase in columnBaseResult.LoadCases)
             {
-                MinMaxStressInRect stress = BarLoadSetProcessor.MinMaxStressInBarSection(LoadCase, massProperty);
-                minStressTmp = stress.MinStress;
-                maxStressTmp = stress.MaxStress;
-                if (minStressTmp < minStress) { minStress = minStressTmp; }
-                if (maxStressTmp > maxStress) { maxStress = maxStressTmp; }
+                for (int i = -1; i <= 1; i+=2)
+                {
+                    for (int j = -1; j <= 1; j+=2)
+                    {
+                        stress = BarLoadSetProcessor.StressInBarSection(loadCase, massProperty, dx * i, dy * j);
+                        if (stress > maxStress) { maxStress = stress; }
+                        if (stress < minStress) { minStress = stress; }
+                    }
+                }
             }
             columnBaseResult.Stresses.MinStress = minStress;
             columnBaseResult.Stresses.MaxStress = maxStress;

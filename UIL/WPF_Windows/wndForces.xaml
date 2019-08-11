@@ -172,7 +172,11 @@
                         <Image x:Name="DeleteLoad_png" Style="{StaticResource OperationButtonImage}" Source="{DynamicResource IconDelete30}"/>
                     </Button>
                 </StackPanel>
-                <ListView x:Name="lvLoadSet" Grid.Row="0" Margin="5" ItemTemplate="{StaticResource LoadsTemplate}" Grid.RowSpan="2" SelectionChanged="lvLoadSet_SelectionChanged" SelectionMode="Single" />
+                <ListView x:Name="lvLoadSet"
+                          Grid.Row="0" Margin="5" ItemTemplate="{StaticResource LoadsTemplate}" Grid.RowSpan="2"
+                          ItemsSource="{Binding Path=Loads}"
+                          SelectionChanged="lvLoadSet_SelectionChanged" SelectionMode="Single"
+                          />
             </Grid>
         </Grid>
 
