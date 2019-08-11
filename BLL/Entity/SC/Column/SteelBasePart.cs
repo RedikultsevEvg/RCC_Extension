@@ -14,6 +14,7 @@ namespace RDBLL.Entity.SC.Column
         //Properties
         #region 
         public SteelColumnBase ColumnBase { get; set; } //База стальной колонны к которой относится участок
+        public int Id { get; set; } //Код участка
         public String Name { get; set; } //Имя участка
         public double Width { get; set; } //Ширина участка
         public double Length { get; set; } //Длина участка
@@ -44,6 +45,10 @@ namespace RDBLL.Entity.SC.Column
             FixBottom = true;
             AddSymmetricX = true;
             AddSymmetricY = true;
+        }
+        public SteelBasePart()
+        {
+            SetDefault();
         }
         public SteelBasePart(SteelColumnBase columnBase)
         {

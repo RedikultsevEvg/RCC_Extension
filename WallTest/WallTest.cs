@@ -23,6 +23,8 @@ namespace WallTest
         }
 
         [TestMethod, Timeout(300)]
+        
+        ///
         public void CheckSteelBasePart()
         {
             SteelColumnBase steelColumnBase = new SteelColumnBase();
@@ -46,7 +48,7 @@ namespace WallTest
             SteelColumnBaseProcessor columBaseProcessor = new SteelColumnBaseProcessor();
             ColumnBaseResult columnResult = columBaseProcessor.GetResult(steelColumnBase);
             ColumnBasePartResult baseResult = SteelColumnBasePartProcessor.GetResult(steelBasePart);
-            Assert.AreEqual(300, baseResult.MaxStress / 1000000, 10);
+            Assert.AreEqual(30, baseResult.MaxStress / 1000000, 10);
         }
 
         [TestMethod, Timeout(300)]
@@ -176,7 +178,7 @@ namespace WallTest
             expLoadSet2.Name = "Новая нагрузка*(1,1)*(1) + New_load_1*(1,1)*(1) + New_load_2*(1,1)*(-1)";
             expLoadSet2.ForceParameters.Add(new ForceParameter());
             expLoadSet2.ForceParameters[0].Kind_id = 1; //Продольная сила
-            expLoadSet2.ForceParameters[0].Value = -220000; //Продольная сила
+            expLoadSet2.ForceParameters[0].Value = 0; //Продольная сила
             expLoadSet2.IsDeadLoad = false;
             expLoadSet2.IsDesignLoad = false;
             expLoadSet2.PartialSafetyFactor = 1.0;

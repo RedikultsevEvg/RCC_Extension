@@ -331,7 +331,7 @@ namespace RDUIL.WinForms
                     }
                 case "Levels":
                     {
-                        var objList = (List<Level>)_objectList;
+                        var objList = (ObservableCollection<Level>)_objectList;
                         foreach (int i in lvDetails.SelectedIndices)
                         {
                             frmLevel frmObj = new frmLevel(objList[i]);
@@ -387,9 +387,9 @@ namespace RDUIL.WinForms
                         var ColumnLoadSetList = (List<BarLoadSet>)_objectList;
                         foreach (int i in lvDetails.SelectedIndices)
                         {
-                            wndForces wndForces = new wndForces(ColumnLoadSetList[i]);
-                            wndForces.ShowDialog();
-                            EditItemFromColumnLoadSet(lvDetails.Items[i], ColumnLoadSetList[i]);
+                            //wndForces wndForces = new wndForces(ColumnLoadSetList[i].LoadSet[0]);
+                            //wndForces.ShowDialog();
+                            //EditItemFromColumnLoadSet(lvDetails.Items[i], ColumnLoadSetList[i]);
                         }
                         break;
                     }      

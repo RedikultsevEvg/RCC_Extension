@@ -26,28 +26,13 @@ namespace RDUIL.WPF_Windows
         {
             InitializeComponent();
             _steelColumnBase = steelColumnBase;
-            #region Initial parametrs
-            tbxName.Text = _steelColumnBase.Name;
-            tbxWidth.Text = Convert.ToString(_steelColumnBase.Width*1000);
-            tbxLength.Text = Convert.ToString(_steelColumnBase.Length*1000);
-            tbxThickness.Text = Convert.ToString(_steelColumnBase.Thickness*1000);
-            tbxWidthBoltDist.Text = Convert.ToString(_steelColumnBase.WidthBoltDist*1000);
-            tbxLengthBoltDist.Text = Convert.ToString(_steelColumnBase.LengthBoltDist*1000);
-            tbxConcreteStrength.Text = Convert.ToString(_steelColumnBase.ConcreteStrength/1000000);
-            #endregion
+            this.DataContext = _steelColumnBase;
         }
 
         private void btnOK_Click(object sender, RoutedEventArgs e)
         {
             try
             {
-                _steelColumnBase.Name = tbxName.Text;
-                _steelColumnBase.Width = Convert.ToDouble(tbxWidth.Text)/1000;
-                _steelColumnBase.Length = Convert.ToDouble(tbxLength.Text)/1000;
-                _steelColumnBase.Thickness = Convert.ToDouble(tbxThickness.Text)/1000;
-                _steelColumnBase.WidthBoltDist = Convert.ToDouble(tbxWidthBoltDist.Text)/1000;
-                _steelColumnBase.LengthBoltDist = Convert.ToDouble(tbxLengthBoltDist.Text)/1000;
-                _steelColumnBase.ConcreteStrength = Convert.ToDouble(tbxConcreteStrength.Text)*1000000;
                 //this.DialogResult = OK;
                 this.Close();
             }
@@ -64,7 +49,7 @@ namespace RDUIL.WPF_Windows
 
         private void btnForces_Click(object sender, RoutedEventArgs e)
         {
-            wndForces wndForces = new wndForces(_steelColumnBase);
+            wndForces wndForces = new wndForces(_steelColumnBase.LoadsGroup[0]);
             wndForces.ShowDialog();
         }
     }
