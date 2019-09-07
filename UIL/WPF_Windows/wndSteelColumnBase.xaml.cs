@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using RDBLL.Entity.SC.Column;
+using CSL.Reports;
 
 namespace RDUIL.WPF_Windows
 {
@@ -51,6 +52,13 @@ namespace RDUIL.WPF_Windows
         {
             wndForces wndForces = new wndForces(_steelColumnBase.LoadsGroup[0]);
             wndForces.ShowDialog();
+        }
+
+        private void BtnReport_Click(object sender, RoutedEventArgs e)
+        {
+            ResultReport resultReport = new ResultReport(_steelColumnBase.Level.Building.BuildingSite);
+            resultReport.PrepareReport();
+            resultReport.ShowReport();
         }
     }
 }
