@@ -201,6 +201,10 @@
       <Project>{4af80724-4ad7-4bef-ae1c-5a2768395fd7}</Project>
       <Name>BLL</Name>
     </ProjectReference>
+    <ProjectReference Include="..\CSL\CSL.csproj">
+      <Project>{c582493c-8856-4b0e-acdc-c4e9f1566bca}</Project>
+      <Name>CSL</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Connected Services\" />

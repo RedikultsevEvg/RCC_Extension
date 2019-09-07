@@ -328,25 +328,28 @@ namespace RDBLL.Processors.SC
             if (steelBasePart.AddSymmetricX)
             {
                 SteelBasePart newSteelBasePart = (SteelBasePart)(steelBasePart.Clone());
+                newSteelBasePart.Name = steelBasePart.Name + 'X';
                 newSteelBasePart.ColumnBase = steelBasePart.ColumnBase;
-                newSteelBasePart.Center[0] = (-1) * steelBasePart.Center[0];
-                newSteelBasePart.Center[1] = (1) * steelBasePart.Center[1];
+                newSteelBasePart.Center[0] = (1.0) * steelBasePart.Center[0];
+                newSteelBasePart.Center[1] = (-1.0) * steelBasePart.Center[1];
                 steelBaseParts.Add(newSteelBasePart);
             }
             if (steelBasePart.AddSymmetricY)
             {
                 SteelBasePart newSteelBasePart = (SteelBasePart)(steelBasePart.Clone());
+                newSteelBasePart.Name = steelBasePart.Name + 'Y';
                 newSteelBasePart.ColumnBase = steelBasePart.ColumnBase;
-                newSteelBasePart.Center[0] = (1) * steelBasePart.Center[0];
-                newSteelBasePart.Center[1] = (-1) * steelBasePart.Center[1];
+                newSteelBasePart.Center[0] = (-1.0) * steelBasePart.Center[0];
+                newSteelBasePart.Center[1] = (1.0) * steelBasePart.Center[1];
                 steelBaseParts.Add(newSteelBasePart);
             }
             if (steelBasePart.AddSymmetricX & steelBasePart.AddSymmetricY)
             {
                 SteelBasePart newSteelBasePart = (SteelBasePart)(steelBasePart.Clone());
+                newSteelBasePart.Name = steelBasePart.Name + "XY";
                 newSteelBasePart.ColumnBase = steelBasePart.ColumnBase;
-                newSteelBasePart.Center[0] = (-1) * steelBasePart.Center[0];
-                newSteelBasePart.Center[1] = (-1) * steelBasePart.Center[1];
+                newSteelBasePart.Center[0] = (-1.0) * steelBasePart.Center[0];
+                newSteelBasePart.Center[1] = (-1.0) * steelBasePart.Center[1];
                 steelBaseParts.Add(newSteelBasePart);
             }
             return steelBaseParts;

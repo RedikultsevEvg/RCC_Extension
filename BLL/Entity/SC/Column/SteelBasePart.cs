@@ -60,7 +60,11 @@ namespace RDBLL.Entity.SC.Column
         //IClonable
         public object Clone()
         {
-            return this.MemberwiseClone();
+            SteelBasePart steelBasePart = this.MemberwiseClone() as SteelBasePart;
+            steelBasePart.Center = new double[2] { 0, 0 };
+            steelBasePart.Center[0] = this.Center[0];
+            steelBasePart.Center[1] = this.Center[1];
+            return steelBasePart;
         }
     }
 }
