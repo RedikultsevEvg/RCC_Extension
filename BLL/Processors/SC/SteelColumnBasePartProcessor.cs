@@ -97,6 +97,7 @@ namespace RDBLL.Processors.SC
                     maxMoment = CalcStreessFourSide(maxStress, basePart, echoDelegate);
                     break;
             }
+            result.MaxBedStress = maxStress;
             result.MaxMoment = maxMoment;
             result.MaxStress = maxMoment / Wx;
             echoDelegate($"Максимальный изгибающий момент M_max={Math.Round(maxMoment) / 1000}кН*м");
@@ -332,6 +333,8 @@ namespace RDBLL.Processors.SC
                 newSteelBasePart.ColumnBase = steelBasePart.ColumnBase;
                 newSteelBasePart.Center[0] = (1.0) * steelBasePart.Center[0];
                 newSteelBasePart.Center[1] = (-1.0) * steelBasePart.Center[1];
+                newSteelBasePart.FixTop = steelBasePart.FixBottom;
+                newSteelBasePart.FixBottom = steelBasePart.FixTop;
                 steelBaseParts.Add(newSteelBasePart);
             }
             if (steelBasePart.AddSymmetricY)
@@ -341,6 +344,8 @@ namespace RDBLL.Processors.SC
                 newSteelBasePart.ColumnBase = steelBasePart.ColumnBase;
                 newSteelBasePart.Center[0] = (-1.0) * steelBasePart.Center[0];
                 newSteelBasePart.Center[1] = (1.0) * steelBasePart.Center[1];
+                newSteelBasePart.FixLeft = steelBasePart.FixRight;
+                newSteelBasePart.FixRight = steelBasePart.FixLeft;
                 steelBaseParts.Add(newSteelBasePart);
             }
             if (steelBasePart.AddSymmetricX & steelBasePart.AddSymmetricY)
@@ -350,6 +355,10 @@ namespace RDBLL.Processors.SC
                 newSteelBasePart.ColumnBase = steelBasePart.ColumnBase;
                 newSteelBasePart.Center[0] = (-1.0) * steelBasePart.Center[0];
                 newSteelBasePart.Center[1] = (-1.0) * steelBasePart.Center[1];
+                newSteelBasePart.FixTop = steelBasePart.FixBottom;
+                newSteelBasePart.FixBottom = steelBasePart.FixTop;
+                newSteelBasePart.FixLeft = steelBasePart.FixRight;
+                newSteelBasePart.FixRight = steelBasePart.FixLeft;
                 steelBaseParts.Add(newSteelBasePart);
             }
             return steelBaseParts;

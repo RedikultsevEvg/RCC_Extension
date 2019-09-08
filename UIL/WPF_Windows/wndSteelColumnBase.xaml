@@ -88,7 +88,7 @@
                         <TextBlock Margin="3" Foreground="Black">Усилия...</TextBlock>
                     </Button.ToolTip>
                 </Button>
-                <Button x:Name="btnParts" Style="{StaticResource ServiceButton}" Height="50" IsEnabled="False">
+                <Button x:Name="btnParts" Style="{StaticResource ServiceButton}" Height="50" Click="BtnParts_Click">
                     <Button.Effect>
                         <DropShadowEffect Opacity="0.6"/>
                     </Button.Effect>

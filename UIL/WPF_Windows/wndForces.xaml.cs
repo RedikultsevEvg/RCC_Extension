@@ -31,9 +31,6 @@ namespace RDUIL.WPF_Windows
             _forcesGroup = forcesGroup;
             _loadSets = _forcesGroup.Loads;
             this.DataContext = _forcesGroup;
-            //_force = _loadSet.Force;
-            //_tmpForce = (Force)_loadSet.Force.Clone();
-            //lvForcesList.ItemsSource = _force.ForceParameters;
         }
 
         private void btnOK_Click(object sender, RoutedEventArgs e)
@@ -98,8 +95,7 @@ namespace RDUIL.WPF_Windows
             else
             {
                 MessageBox.Show("Ничего не выбрано", "Выберите один из элементов");
-            }
-                       
+            }              
         }
         private void btnAddForce_Click(object sender, RoutedEventArgs e)
         {

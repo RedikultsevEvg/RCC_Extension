@@ -54,7 +54,6 @@ namespace RDBLL.Entity.SC.Column
         {
             ColumnBase = columnBase;
             SetDefault();
-            columnBase.SteelBaseParts.Add(this);
         }
         #endregion
         //IClonable

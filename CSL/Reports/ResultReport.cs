@@ -35,29 +35,32 @@ namespace CSL.Reports
                 foreach (Level level in building.LevelList)
                 {
                     DataTable SteelBases = dataSet.Tables[0];
+                    int steelBaseId = 1;
                     foreach (SteelColumnBase steelColumnBase in level.SteelColumnBaseList)
                     {
                         DataRow newSteelBase = SteelBases.NewRow();
                         Double A = steelColumnBase.Width * steelColumnBase.Length;
                         Double Wx = steelColumnBase.Width * steelColumnBase.Length * steelColumnBase.Length / 6;
                         Double Wy = steelColumnBase.Length * steelColumnBase.Width * steelColumnBase.Width / 6;
-                        newSteelBase.ItemArray = new object[] { 1, steelColumnBase.Name, steelColumnBase.Width, steelColumnBase.Length, A, Wx, Wy };
+                        newSteelBase.ItemArray = new object[] { steelBaseId, steelColumnBase.Name, steelColumnBase.Width, steelColumnBase.Length, A, Wx, Wy };
                         SteelBases.Rows.Add(newSteelBase);
                         DataTable LoadCases = dataSet.Tables[1];
                         DataTable SteelBasesParts = dataSet.Tables[2];
                         foreach (SteelBasePart steelBasePart in steelColumnBase.SteelBaseParts)
                         {
+                            int steelBasePartId = 1;
                             foreach (SteelBasePart steelBasePartEh in SteelColumnBasePartProcessor.GetSteelBasePartsFromPart(steelBasePart))
                             {
                                 DataRow newSteelBasePart = SteelBasesParts.NewRow();
                                 ColumnBasePartResult columnBasePartResult = SteelColumnBasePartProcessor.GetResult(steelBasePartEh);
-                                double maxMoment = columnBasePartResult.MaxMoment;
+                                double maxBedStress = columnBasePartResult.MaxBedStress;
                                 double maxStress = columnBasePartResult.MaxStress;
-                                newSteelBasePart.ItemArray = new object[] { 1, 1, steelBasePartEh.Name, steelBasePartEh.Center[0], steelBasePartEh.Center[1], steelBasePartEh.Width, steelBasePart.Length, maxMoment/1000000, maxStress/1000000 };
+                                newSteelBasePart.ItemArray = new object[] { steelBasePartId, steelBaseId, steelBasePartEh.Name, steelBasePartEh.Center[0], steelBasePartEh.Center[1], steelBasePartEh.Width, steelBasePart.Length, Math.Round(maxBedStress/1000000,3), Math.Round(maxStress /1000000,3) };
                                 SteelBasesParts.Rows.Add(newSteelBasePart);
+                                steelBasePartId++;
                             }
-                            
                         }
+                        steelBaseId++;
                     }
                 }
             }

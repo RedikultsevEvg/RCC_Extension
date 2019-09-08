@@ -60,5 +60,11 @@ namespace RDUIL.WPF_Windows
             resultReport.PrepareReport();
             resultReport.ShowReport();
         }
+
+        private void BtnParts_Click(object sender, RoutedEventArgs e)
+        {
+            WndSteelBasePart wndSteelBasePart = new WndSteelBasePart(_steelColumnBase);
+            wndSteelBasePart.ShowDialog();
+        }
     }
 }
