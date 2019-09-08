@@ -290,6 +290,7 @@ namespace RDUIL.WinForms
                         basePart1.FixBottom = true;
                         basePart1.AddSymmetricX = true;
                         basePart1.AddSymmetricY = true;
+                        steelColumnBase.SteelBaseParts.Add(basePart1);
                         //Участок №2
                         SteelBasePart basePart2 = new SteelBasePart(steelColumnBase);
                         basePart2.Name = "2";
@@ -303,6 +304,7 @@ namespace RDUIL.WinForms
                         basePart2.FixBottom = true;
                         basePart2.AddSymmetricX = false;
                         basePart2.AddSymmetricY = true;
+                        steelColumnBase.SteelBaseParts.Add(basePart2);
                         #endregion
                         break;
                     }
@@ -373,13 +375,13 @@ namespace RDUIL.WinForms
                     }
                 case ObjColumnBaseParts:
                     {
-                        var BasePartList = (ObservableCollection<SteelBasePart>)_objectList;
-                        foreach (int i in lvDetails.SelectedIndices)
-                        {
-                            WndSteelBasePart wndSteelBasePart = new WndSteelBasePart(BasePartList[i]);
-                            wndSteelBasePart.ShowDialog();
-                            EditItemFromColumnBasePart(lvDetails.Items[i], BasePartList[i]);
-                        }
+                        //var BasePartList = (ObservableCollection<SteelBasePart>)_objectList;
+                        //foreach (int i in lvDetails.SelectedIndices)
+                        //{
+                        //    WndSteelBasePart wndSteelBasePart = new WndSteelBasePart(BasePartList[i]);
+                        //    wndSteelBasePart.ShowDialog();
+                        //    EditItemFromColumnBasePart(lvDetails.Items[i], BasePartList[i]);
+                        //}
                         break;
                     }
                 case ObjBarForses:
@@ -811,23 +813,20 @@ namespace RDUIL.WinForms
         }
         private void tsbColumnForces_Click(object sender, EventArgs e)
         {
-            //if (lvDetails.SelectedIndices.Count == 1)
-            //{
-            //    SteelColumnBase steelColumnBase;
-            //    foreach (int i in lvDetails.SelectedIndices)
-            //    {
-            //        steelColumnBase = ((List<SteelColumnBase>)_objectList)[i];
-            //        var detailObjectList = new DetailObjectList("ColumnForces", steelColumnBase, steelColumnBase.Loads, false);
-            //        detailObjectList.BtnVisibilityList = new List<short>() { 1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0 };
-            //        frmDetailList DetailForm = new frmDetailList(detailObjectList);
-            //        this.Visible = false;
-            //        DetailForm.ShowDialog();
-            //        this.Visible = true;
-            //        EditItemFromSteelColumnBase(lvDetails.Items[i], steelColumnBase);
-            //    }
-            //}
-            //else
-            //{ MessageBox.Show("Выберите один элемент из списка", "Неверный выбор"); }
+            if (lvDetails.SelectedIndices.Count == 1)
+            {
+                SteelColumnBase steelColumnBase;
+                foreach (int i in lvDetails.SelectedIndices)
+                {
+                    steelColumnBase = ((ObservableCollection<SteelColumnBase>)_objectList)[i];
+                    this.Visible = false;
+                    wndForces wndForces = new wndForces(steelColumnBase.LoadsGroup[0]);
+                    wndForces.ShowDialog();
+                    this.Visible = true;
+                }
+            }
+            else
+            { MessageBox.Show("Выберите один элемент из списка", "Неверный выбор"); }
         }
         private void tsbSteelBaseParts_Click(object sender, EventArgs e)
         {
@@ -837,13 +836,10 @@ namespace RDUIL.WinForms
                 foreach (int i in lvDetails.SelectedIndices)
                 {
                     steelColumnBase = ((ObservableCollection<SteelColumnBase>)_objectList)[i];
-                    var detailObjectList = new DetailObjectList("ColumnBaseParts", steelColumnBase, steelColumnBase.SteelBaseParts, false);
-                    detailObjectList.BtnVisibilityList = new List<short>() { 1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0 };
-                    frmDetailList DetailForm = new frmDetailList(detailObjectList);
                     this.Visible = false;
-                    DetailForm.ShowDialog();
+                    WndSteelBasePart wndSteelBasePart = new WndSteelBasePart(steelColumnBase);
+                    wndSteelBasePart.ShowDialog();
                     this.Visible = true;
-                    EditItemFromSteelColumnBase(lvDetails.Items[i], steelColumnBase);
                 }
             }
             else
