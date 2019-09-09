@@ -23,8 +23,6 @@ namespace RDBLL.Forces
             set
             {
                 _kind_id = value;
-                //_forceParamKind = ProgrammSettings.ForceParamKinds[_kind_id-1];
-                //ForceParamKind = _forceParamKind;
             }
         }
         public ForceParamKind ForceParamKind

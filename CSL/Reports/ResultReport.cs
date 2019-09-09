@@ -8,7 +8,9 @@ using System.Data;
 using RDBLL.Entity.RCC.BuildingAndSite;
 using RDBLL.Entity.SC.Column;
 using RDBLL.Processors.SC;
+using RDBLL.Processors.Forces;
 using RDBLL.Entity.Results.SC;
+using RDBLL.Forces;
 
 namespace CSL.Reports
 {
@@ -30,12 +32,16 @@ namespace CSL.Reports
         }
         public void PrepareReport()
         {
+            int steelBaseId = 1;
+            int LoadCaseId = 1;
+            int ForceParameterId = 1;
+            int steelBasePartId = 1;
+
             foreach (Building building in _buildingSite.BuildingList)
             {
                 foreach (Level level in building.LevelList)
                 {
                     DataTable SteelBases = dataSet.Tables[0];
-                    int steelBaseId = 1;
                     foreach (SteelColumnBase steelColumnBase in level.SteelColumnBaseList)
                     {
                         DataRow newSteelBase = SteelBases.NewRow();
@@ -44,11 +50,26 @@ namespace CSL.Reports
                         Double Wy = steelColumnBase.Length * steelColumnBase.Width * steelColumnBase.Width / 6;
                         newSteelBase.ItemArray = new object[] { steelBaseId, steelColumnBase.Name, steelColumnBase.Width, steelColumnBase.Length, A, Wx, Wy };
                         SteelBases.Rows.Add(newSteelBase);
-                        DataTable LoadCases = dataSet.Tables[1];
-                        DataTable SteelBasesParts = dataSet.Tables[2];
+                        DataTable LoadCases = dataSet.Tables[1];                       
+                        foreach (BarLoadSet barLoadSet in BarLoadSetProcessor.GetLoadCases(steelColumnBase.LoadsGroup))
+                        {
+                            DataRow newLoadCase = LoadCases.NewRow();
+                            newLoadCase.ItemArray = new object[] { LoadCaseId, steelBaseId, barLoadSet.LoadSet.Name, barLoadSet.LoadSet.PartialSafetyFactor};
+                            LoadCases.Rows.Add(newLoadCase);
+
+                            DataTable ForceParameters = dataSet.Tables[2];
+                            foreach (ForceParameter forceParameter in barLoadSet.LoadSet.ForceParameters)
+                            {
+                                DataRow newForceParameter = ForceParameters.NewRow();
+                                newForceParameter.ItemArray = new object[] { ForceParameterId, LoadCaseId, "", "", "", 0, forceParameter.Value };
+                                ForceParameters.Rows.Add(newForceParameter);
+                                ForceParameterId++;
+                            }
+                            LoadCaseId++;
+                        }
+                        DataTable SteelBasesParts = dataSet.Tables[3];
                         foreach (SteelBasePart steelBasePart in steelColumnBase.SteelBaseParts)
                         {
-                            int steelBasePartId = 1;
                             foreach (SteelBasePart steelBasePartEh in SteelColumnBasePartProcessor.GetSteelBasePartsFromPart(steelBasePart))
                             {
                                 DataRow newSteelBasePart = SteelBasesParts.NewRow();
@@ -100,14 +121,32 @@ namespace CSL.Reports
             DataColumn LoadCaseId = new DataColumn("Id", Type.GetType("System.Int32"));
             DataColumn SteelBaseIdInLoadCase = new DataColumn("SteelBaseId", Type.GetType("System.Int32"));
             DataColumn LoadCaseDescription = new DataColumn("Description", Type.GetType("System.String"));
-            DataColumn LoadCaseCrcValue = new DataColumn("CrcValue", Type.GetType("System.Double"));
-            DataColumn LoadCaseDesignValue = new DataColumn("DesignValue", Type.GetType("System.Double"));
+            DataColumn LoadCasePartialSafetyFactor = new DataColumn("PartialSafetyFactor", Type.GetType("System.Double"));
 
             LoadCases.Columns.Add(LoadCaseId);
             LoadCases.Columns.Add(SteelBaseIdInLoadCase);
             LoadCases.Columns.Add(LoadCaseDescription);
-            LoadCases.Columns.Add(LoadCaseCrcValue);
-            LoadCases.Columns.Add(LoadCaseDesignValue);
+            LoadCases.Columns.Add(LoadCasePartialSafetyFactor);
+            #endregion
+            #region ForceParameters
+            DataTable ForceParameters = new DataTable("ForceParameters");
+            dataSet.Tables.Add(ForceParameters);
+
+            DataColumn ForceParameterId = new DataColumn("Id", Type.GetType("System.Int32"));
+            DataColumn LoadCaseIdInForceParameter = new DataColumn("LoadCaseId", Type.GetType("System.Int32"));
+            DataColumn ForceParameterDescription = new DataColumn("Description", Type.GetType("System.String"));
+            DataColumn ForceParameterLabel = new DataColumn("Label", Type.GetType("System.String"));
+            DataColumn ForceParameterUnit = new DataColumn("Unit", Type.GetType("System.String"));
+            DataColumn ForceParameterCrcValue = new DataColumn("CrcValue", Type.GetType("System.Double"));
+            DataColumn ForceParameterDesignValue = new DataColumn("DesignValue", Type.GetType("System.Double"));
+
+            ForceParameters.Columns.Add(ForceParameterId);
+            ForceParameters.Columns.Add(LoadCaseIdInForceParameter);
+            ForceParameters.Columns.Add(ForceParameterDescription);
+            ForceParameters.Columns.Add(ForceParameterLabel);
+            ForceParameters.Columns.Add(ForceParameterUnit);
+            ForceParameters.Columns.Add(ForceParameterCrcValue);
+            ForceParameters.Columns.Add(ForceParameterDesignValue);
             #endregion
             #region SteelBasesParts
             DataTable SteelBasesParts = new DataTable("SteelBasesParts");
