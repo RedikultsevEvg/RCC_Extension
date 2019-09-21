@@ -35,8 +35,8 @@ namespace CSL.Reports
             {
                 report.Load("C:\\Repos\\Reports\\SteelBases.frx");
                 report.RegisterData(dataSet);
-                report.Design();
-                //report.Show();
+                //report.Design();
+                report.Show();
             }
         }
         public void PrepareReport()
@@ -96,8 +96,8 @@ namespace CSL.Reports
                                 double maxStress = columnBasePartResult.MaxStress;
                                 #region Picture
                                 Canvas canvasPart = new Canvas();
-                                canvasPart.Width = 600;
-                                canvasPart.Height = 600;
+                                canvasPart.Width = 300;
+                                canvasPart.Height = 300;
                                 double zoom_factor_X = canvasPart.Width / steelBasePartEh.Width / 1.2;
                                 double zoom_factor_Y = canvasPart.Height / steelBasePartEh.Length / 1.2;
                                 double scale_factor;
@@ -105,7 +105,7 @@ namespace CSL.Reports
                                 canvasPart.Width = steelBasePartEh.Width * 1.2 * scale_factor;
                                 canvasPart.Height = steelBasePartEh.Length * 1.2 * scale_factor;
                                 double[] columnBaseCenter = new double[2] { canvasPart.Width/2 - steelBasePartEh.Center[0]*scale_factor, canvasPart.Height/2 + steelBasePartEh.Center[1] * scale_factor };
-                                DrawSteelBase.DrawBasePart(steelBasePartEh, canvasPart, columnBaseCenter, scale_factor, 1, 1, 0.8, false);
+                                DrawSteelBase.DrawBasePart(steelBasePartEh, canvasPart, columnBaseCenter, scale_factor, 1, 1, 1, false);
                                 byte[] bPart = ExportToByte(canvasPart);
                                 #endregion
                                 newSteelBasePart.ItemArray = new object[] { steelBasePartId, steelBaseId, bPart, steelBasePartEh.Name, steelBasePartEh.Center[0], steelBasePartEh.Center[1], steelBasePartEh.Width, steelBasePart.Length, Math.Round(maxBedStress/1000000,3), Math.Round(maxStress /1000000,3) };

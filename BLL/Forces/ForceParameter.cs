@@ -39,7 +39,9 @@ namespace RDBLL.Forces
         public bool Equals(ForceParameter other)
         {
             if (this.Kind_id == other.Kind_id
-                & Math.Round(this.CrcValue, 3) == Math.Round(other.CrcValue, 3))
+                & Math.Round(this.CrcValue, 3) == Math.Round(other.CrcValue, 3)
+                & Math.Round(this.DesignValue, 3) == Math.Round(other.DesignValue, 3)
+                )
             {
                 return true;
             }

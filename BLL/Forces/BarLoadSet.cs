@@ -26,7 +26,6 @@ namespace RDBLL.Forces
             LoadSet.PartialSafetyFactor = 1;
             LoadSet.IsDeadLoad = false;
             LoadSet.IsCombination = false;
-            LoadSet.IsDesignLoad = false;
             LoadSet.BothSign = false;
         }
         public void SetDefault1()
@@ -36,7 +35,6 @@ namespace RDBLL.Forces
             LoadSet.PartialSafetyFactor = 1.1;
             LoadSet.IsDeadLoad = true;
             LoadSet.IsCombination = false;
-            LoadSet.IsDesignLoad = false;
             LoadSet.BothSign = false;
         }
         public BarLoadSet(int setDefault = 0)
@@ -58,7 +56,7 @@ namespace RDBLL.Forces
         //IEquatable
         public bool Equals(BarLoadSet other)
         {
-            if (this.LoadSet.Equals(other.LoadSet)) { return true;}
+            if (this.LoadSet.Equals(other.LoadSet)) { return true; }
             else { return false; }
         }
     }

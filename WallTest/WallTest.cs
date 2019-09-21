@@ -77,8 +77,7 @@ namespace WallTest
             expLoadSet.ForceParameters[0].CrcValue = -200000; //Продольная сила
             expLoadSet.ForceParameters[0].DesignValue = -220000; //Продольная сила
             expLoadSet.IsDeadLoad = false;
-            expLoadSet.IsDesignLoad = false;
-            expLoadSet.PartialSafetyFactor = 1.0;
+            expLoadSet.PartialSafetyFactor = 1.1;
             #endregion
 
             bool actual = CompareBarLoadList(ActualList, ExpectedList);
@@ -113,8 +112,7 @@ namespace WallTest
             expLoadSet.ForceParameters[0].CrcValue = -100000; //Продольная сила
             expLoadSet.ForceParameters[0].DesignValue = -110000; //Продольная сила
             expLoadSet.IsDeadLoad = false;
-            expLoadSet.IsDesignLoad = false;
-            expLoadSet.PartialSafetyFactor = 1.0;
+            expLoadSet.PartialSafetyFactor = 1.1;
             
 
             ExpectedList.Add(new BarLoadSet());
@@ -126,8 +124,7 @@ namespace WallTest
             expLoadSet1.ForceParameters[0].CrcValue = -200000; //Продольная сила
             expLoadSet1.ForceParameters[0].DesignValue = -220000; //Продольная сила
             expLoadSet1.IsDeadLoad = false;
-            expLoadSet1.IsDesignLoad = false;
-            expLoadSet1.PartialSafetyFactor = 1.0;
+            expLoadSet1.PartialSafetyFactor = 1.1;
             #endregion
 
             bool actual = CompareBarLoadList(ActualList, ExpectedList);
@@ -163,8 +160,7 @@ namespace WallTest
             expLoadSet.ForceParameters[0].DesignValue = -110000; //Продольная сила
 
             expLoadSet.IsDeadLoad = false;
-            expLoadSet.IsDesignLoad = false;
-            expLoadSet.PartialSafetyFactor = 1.0;
+            expLoadSet.PartialSafetyFactor = 1.1;
             
             ExpectedList.Add(new BarLoadSet());
             LoadSet expLoadSet1 = new LoadSet();
@@ -176,8 +172,7 @@ namespace WallTest
             expLoadSet1.ForceParameters[0].DesignValue = -220000; //Продольная сила
 
             expLoadSet1.IsDeadLoad = false;
-            expLoadSet1.IsDesignLoad = false;
-            expLoadSet1.PartialSafetyFactor = 1.0;
+            expLoadSet1.PartialSafetyFactor = 1.1;
 
             ExpectedList.Add(new BarLoadSet());
             LoadSet expLoadSet2 = new LoadSet();
@@ -188,8 +183,7 @@ namespace WallTest
             expLoadSet2.ForceParameters[0].CrcValue = 0; //Продольная сила
             expLoadSet2.ForceParameters[0].DesignValue = 0; //Продольная сила
             expLoadSet2.IsDeadLoad = false;
-            expLoadSet2.IsDesignLoad = false;
-            expLoadSet2.PartialSafetyFactor = 1.0;
+            expLoadSet2.PartialSafetyFactor = 1.1;
             #endregion
 
             bool actual = CompareBarLoadList(ActualList, ExpectedList);
@@ -215,7 +209,6 @@ namespace WallTest
             loadSet.ForceParameters[0].Kind_id = 1; //Продольная сила
             loadSet.ForceParameters[0].CrcValue = -100000; //Продольная сила
             loadSet.IsDeadLoad = isDeadLoad;
-            loadSet.IsDesignLoad = false;
             loadSet.BothSign = bothSign;
             loadSet.PartialSafetyFactor = 1.1;
         }

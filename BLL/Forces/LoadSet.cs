@@ -17,7 +17,6 @@ namespace RDBLL.Forces
         public double PartialSafetyFactor { get; set; } //Коэффициент надежности по нагрузке
         public bool IsDeadLoad { get; set; } //Флаг постоянной нагрузки
         public bool IsCombination { get; set; } //Флаг комбинации
-        public bool IsDesignLoad { get; set; } //Флаг расчетной нагрузки
         public bool BothSign { get; set; } //Флаг знакопеременной нагрузки
         public ObservableCollection<ForceParameter> ForceParameters { get; set; }
         #endregion
@@ -42,10 +41,10 @@ namespace RDBLL.Forces
         }
         public bool CompareForceParameters(LoadSet other)
         {
-            if (! (other.ForceParameters.Count == ForceParameters.Count)) { return false; }
-            for (int i=0; i< ForceParameters.Count; i++)
+            if (!(other.ForceParameters.Count == ForceParameters.Count)) { return false; }
+            for (int i = 0; i < ForceParameters.Count; i++)
             {
-                if (! this.ForceParameters[i].Equals(other.ForceParameters[i])) { return false; }
+                if (!this.ForceParameters[i].Equals(other.ForceParameters[i])) { return false; }
             }
             return true;
         }

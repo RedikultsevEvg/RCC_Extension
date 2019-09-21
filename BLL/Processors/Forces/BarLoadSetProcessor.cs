@@ -47,11 +47,13 @@ namespace RDBLL.Processors.Forces
                     ForceParameter forceParameter = new ForceParameter();
                     forceParameter.CrcValue = secondForceParameter.CrcValue * koeff;
                     forceParameter.DesignValue = secondForceParameter.CrcValue * secondLoadSet.LoadSet.PartialSafetyFactor * koeff;
+                    oldLoadSet.LoadSet.PartialSafetyFactor = secondLoadSet.LoadSet.PartialSafetyFactor;
                     forceParameter.Kind_id = secondForceParameter.Kind_id;
                     oldLoadSet.LoadSet.ForceParameters.Add(forceParameter);
                 }
             }
             oldLoadSet.LoadSet.Name += secondLoadSet.LoadSet.Name;
+            //oldLoadSet.LoadSet.PartialSafetyFactor = tmpPartialFactor;
             if (show_koeff) { oldLoadSet.LoadSet.Name += "*(" + Convert.ToString(koeff) + ")"; }
             return;
         }
@@ -59,7 +61,7 @@ namespace RDBLL.Processors.Forces
         {
             BarLoadSet newBarLoadSet = new BarLoadSet();
             SumForces(newBarLoadSet, oldLoadSet,1,false);
-            SumForces(newBarLoadSet, secondLoadSet, 1*koeff, true);
+            SumForces(newBarLoadSet, secondLoadSet, koeff, true);
             return newBarLoadSet;
         }
         /// <summary>
