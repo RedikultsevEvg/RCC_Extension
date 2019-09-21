@@ -66,5 +66,11 @@ namespace RDUIL.WPF_Windows
             WndSteelBasePart wndSteelBasePart = new WndSteelBasePart(_steelColumnBase);
             wndSteelBasePart.ShowDialog();
         }
+
+        private void BtnBolts_Click(object sender, RoutedEventArgs e)
+        {
+            wndSteelBaseBolts wndSteelBaseBolts = new wndSteelBaseBolts(_steelColumnBase);
+            wndSteelBaseBolts.ShowDialog();
+        }
     }
 }

@@ -16,7 +16,8 @@ namespace RDBLL.Forces
         private ForceParamKind _forceParamKind;
 
         public int Id { get; set; } //Код усилия
-        public double Value { get; set; } //Величина нагрузки (численное значение)
+        public double CrcValue { get; set; } //Величина нагрузки (численное значение)
+        public double DesignValue { get; set; } //Величина нагрузки (численное значение)
         public int Kind_id //Код вида усилия (например, продольная сила). Виды нагрузки жестко предустановлены в программе
         {
             get { return _kind_id; }
@@ -38,7 +39,7 @@ namespace RDBLL.Forces
         public bool Equals(ForceParameter other)
         {
             if (this.Kind_id == other.Kind_id
-                & Math.Round(this.Value, 3) == Math.Round(other.Value, 3))
+                & Math.Round(this.CrcValue, 3) == Math.Round(other.CrcValue, 3))
             {
                 return true;
             }

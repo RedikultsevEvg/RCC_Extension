@@ -12,21 +12,19 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using RDBLL.Entity.SC.Column;
-using System.Collections.ObjectModel;
-using RDBLL.Processors.SC;
 using Winforms = System.Windows.Forms;
 using RDBLL.DrawUtils.SteelBase;
 
 namespace RDUIL.WPF_Windows
 {
     /// <summary>
-    /// Логика взаимодействия для SteelBasePart.xaml
+    /// Логика взаимодействия для wndSteelBaseBolts.xaml
     /// </summary>
-    public partial class WndSteelBasePart : Window
+    public partial class wndSteelBaseBolts : Window
     {
         private SteelColumnBase _steelColumnBase;
 
-        public WndSteelBasePart(SteelColumnBase steelColumnBase)
+        public wndSteelBaseBolts(SteelColumnBase steelColumnBase)
         {
             InitializeComponent();
             _steelColumnBase = steelColumnBase;
@@ -34,37 +32,36 @@ namespace RDUIL.WPF_Windows
             this.DataContext = _steelColumnBase;
         }
 
-        private void btnCancel_Click(object sender, RoutedEventArgs e)
-        {
-            this.Close();
-        }
-
-        private void btnOK_Click(object sender, RoutedEventArgs e)
+        private void BtnOK_Click(object sender, RoutedEventArgs e)
         {
             try
             {
                 this.Close();
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 MessageBox.Show("Некорректные данные :" + ex);
             }
         }
-        
 
-        private void btnRefresh_Click(object sender, RoutedEventArgs e)
+        private void BtnCancel_Click(object sender, RoutedEventArgs e)
+        {
+            this.Close();
+        }
+
+        private void BtnRefresh_Click(object sender, RoutedEventArgs e)
         {
             DrawSteelBase.DrawBase(_steelColumnBase, cvScetch);
         }
 
-        private void BtnAddPart_Click(object sender, RoutedEventArgs e)
+        private void BtnAddBolt_Click(object sender, RoutedEventArgs e)
         {
-            _steelColumnBase.SteelBaseParts.Add(new SteelBasePart(_steelColumnBase));
+            _steelColumnBase.SteelBolts.Add(new SteelBolt(_steelColumnBase));
         }
 
-        private void BtnDeletePart_Click(object sender, RoutedEventArgs e)
+        private void BtnDeleteBolt_Click(object sender, RoutedEventArgs e)
         {
-            if (lvPartsList.SelectedIndex >= 0)
+            if (lvBoltsList.SelectedIndex >= 0)
             {
                 Winforms.DialogResult result = Winforms.MessageBox.Show("Элемент будет удален", "Подтверждаете удаление элемента?",
                     Winforms.MessageBoxButtons.YesNo,
@@ -74,27 +71,17 @@ namespace RDUIL.WPF_Windows
 
                 if (result == Winforms.DialogResult.Yes)
                 {
-                    int a = lvPartsList.SelectedIndex;
-                    if (lvPartsList.Items.Count == 1) lvPartsList.UnselectAll();
-                    else if (a < (lvPartsList.Items.Count - 1)) lvPartsList.SelectedIndex = a + 1;
-                    else lvPartsList.SelectedIndex = a - 1;
-                    _steelColumnBase.SteelBaseParts.RemoveAt(a);
+                    int a = lvBoltsList.SelectedIndex;
+                    if (lvBoltsList.Items.Count == 1) lvBoltsList.UnselectAll();
+                    else if (a < (lvBoltsList.Items.Count - 1)) lvBoltsList.SelectedIndex = a + 1;
+                    else lvBoltsList.SelectedIndex = a - 1;
+                    _steelColumnBase.SteelBolts.RemoveAt(a);
                 }
             }
             else
             {
                 MessageBox.Show("Ничего не выбрано", "Выберите один из элементов");
             }
-        }
-
-        private void StpPartBtns_MouseMove(object sender, MouseEventArgs e)
-        {
-            ((StackPanel)sender).Opacity = 1;
-        }
-
-        private void StpPartBtns_MouseLeave(object sender, MouseEventArgs e)
-        {
-            ((StackPanel)sender).Opacity = 0.5;
         }
     }
 }

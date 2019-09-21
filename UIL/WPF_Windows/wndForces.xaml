@@ -52,7 +52,7 @@
             <Setter Property="Opacity" Value="0.5"/>
         </Style>
         <DataTemplate  x:Key="cbTemplate">
-            <TextBlock Text="{Binding Path=Label}"></TextBlock>
+            <TextBlock Text="{Binding Path=LongLabel}"></TextBlock>
         </DataTemplate>
         <DataTemplate x:Key="ParameterTemplate" x:Name="MyTemplate">
             <Grid Background="{x:Null}" Height="30">
@@ -66,7 +66,7 @@
                           SelectedValuePath="Id"
                           SelectedValue="{Binding Path=Kind_id}" Height="22" Margin="30,0,0,0">
                 </ComboBox>
-                <TextBox Text="{Binding Path=Value, Converter={StaticResource MultyThousandConverter}}" Grid.Column="1" Background="#FFFFFEDF" Height="22">
+                <TextBox Text="{Binding Path=CrcValue, Converter={StaticResource MultyThousandConverter}}" Grid.Column="1" Background="#FFFFFEDF" Height="22">
                     <TextBox.ToolTip >
                         <Grid Width="400" Height="200">
                             <Grid.RowDefinitions>

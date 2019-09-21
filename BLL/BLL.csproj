@@ -31,6 +31,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -41,12 +42,15 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
+    <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Common\Geometry\MassProperty.cs" />
     <Compile Include="Common\Geometry\MathOperation.cs" />
     <Compile Include="Common\Geometry\RectCrossSection.cs" />
     <Compile Include="Common\Interfaces\IStellBaseProcessor.cs" />
+    <Compile Include="DrawUtils\SteelBase\DrawSteelBase.cs" />
+    <Compile Include="Entity\Common\NDM\NdmArea.cs" />
     <Compile Include="Entity\RCC\BuildingAndSite\BuildingSite.cs" />
     <Compile Include="Entity\RCC\BuildingAndSite\Level.cs" />
     <Compile Include="Common\Geometry\Path.cs" />
@@ -65,6 +69,7 @@
     <Compile Include="Entity\Results\SC\ColumnBasePartResult.cs" />
     <Compile Include="Entity\Results\SC\ColumnBaseResult.cs" />
     <Compile Include="Entity\SC\Column\SteelBasePart.cs" />
+    <Compile Include="Entity\SC\Column\SteelBolt.cs" />
     <Compile Include="Entity\SC\Column\SteelColumnBase.cs" />
     <Compile Include="Forces\BarLoadSet.cs" />
     <Compile Include="Forces\ForcesGroup.cs" />
@@ -72,6 +77,7 @@
     <Compile Include="Forces\ForceParamKind.cs" />
     <Compile Include="Forces\LoadSet.cs" />
     <Compile Include="Processors\Forces\BarLoadSetProcessor.cs" />
+    <Compile Include="Processors\SC\SteelBoltProcessor.cs" />
     <Compile Include="Processors\SC\SteelColumnBasePartProcessor.cs" />
     <Compile Include="Processors\SC\SteelColumnBaseProcessor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
