@@ -18,7 +18,8 @@ namespace RDBLL.Entity.SC.Column
         //Properties
         #region 
         //public ColumnBaseResult ColumnBaseResult { get; set; }
-        public Level Level { get; set; }
+        public int Id { get; set; } //Код базы
+        public Level Level { get; set; } //Ссылка на уровень
         public int SteelColumnBaseID { get; set; } //Код стальной базы
         public String Name { get; set; } //Наименование
         public double Width { get; set; } //Ширина базы, м
@@ -32,9 +33,9 @@ namespace RDBLL.Entity.SC.Column
         public double BoltPrestressForce { get; set; } //Усилия преднатяжения болта
         public ObservableCollection<ForcesGroup> LoadsGroup { get; set; } //Коллекция групп нагрузок
         public ObservableCollection<SteelBasePart> SteelBaseParts { get; set; } //Коллекция участков
-
+        public ObservableCollection<SteelBolt> SteelBolts { get; set; } //Коллекция болтов
         #endregion
-        
+
         //Constructors
         #region
         public void SetDefault()
@@ -52,6 +53,7 @@ namespace RDBLL.Entity.SC.Column
             LoadsGroup = new ObservableCollection<ForcesGroup>();
             LoadsGroup.Add(new ForcesGroup(this));
             SteelBaseParts = new ObservableCollection<SteelBasePart>();
+            SteelBolts = new ObservableCollection<SteelBolt>();
         }
         /// <summary>
         /// Создает базу стальной колонны по указанному уровню

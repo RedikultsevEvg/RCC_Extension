@@ -9,7 +9,8 @@ namespace RDBLL.Forces
     public class ForceParamKind
     {
         public int Id { get; set; }
-        public string Label { get; set; }
+        public string LongLabel { get; set; }
+        public string ShortLabel { get; set; }
         public string UnitLabel { get; set; }
         public string Addition { get; set; }
     }

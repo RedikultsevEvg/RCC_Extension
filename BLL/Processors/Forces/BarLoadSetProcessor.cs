@@ -34,7 +34,8 @@ namespace RDBLL.Processors.Forces
                 {
                     if (oldForceParameter.Kind_id == secondForceParameter.Kind_id) //Если вид нагрузки совпадает
                     {
-                        oldForceParameter.Value += secondForceParameter.Value * secondLoadSet.LoadSet.PartialSafetyFactor * koeff; //Складываем значения параметра нагрузки
+                        oldForceParameter.CrcValue += secondForceParameter.CrcValue * koeff; //Складываем значения параметра нагрузки
+                        oldForceParameter.DesignValue += secondForceParameter.CrcValue * secondLoadSet.LoadSet.PartialSafetyFactor * koeff; //Складываем значения параметра нагрузки
                         coindence = true;
                         break; //Дальше проходить по циклу смысла нет, так как каждый вид нагрузки встречается только один раз
                     }
@@ -44,13 +45,14 @@ namespace RDBLL.Processors.Forces
                 {
                     //Добавляем в набор новый вид нагрузки нужного типа
                     ForceParameter forceParameter = new ForceParameter();
-                    forceParameter.Value = secondForceParameter.Value * secondLoadSet.LoadSet.PartialSafetyFactor * koeff;
+                    forceParameter.CrcValue = secondForceParameter.CrcValue * koeff;
+                    forceParameter.DesignValue = secondForceParameter.CrcValue * secondLoadSet.LoadSet.PartialSafetyFactor * koeff;
                     forceParameter.Kind_id = secondForceParameter.Kind_id;
                     oldLoadSet.LoadSet.ForceParameters.Add(forceParameter);
                 }
             }
             oldLoadSet.LoadSet.Name += secondLoadSet.LoadSet.Name;
-            if (show_koeff) { oldLoadSet.LoadSet.Name += "*(" + Convert.ToString(secondLoadSet.LoadSet.PartialSafetyFactor * koeff) + ")"; }
+            if (show_koeff) { oldLoadSet.LoadSet.Name += "*(" + Convert.ToString(koeff) + ")"; }
             return;
         }
         public static BarLoadSet SumForcesInNew(BarLoadSet oldLoadSet, BarLoadSet secondLoadSet, double koeff = 1.0)
@@ -69,8 +71,9 @@ namespace RDBLL.Processors.Forces
         {
             BarLoadSet deduplicatedSet = new BarLoadSet();
             deduplicatedSet.LoadSet.IsDeadLoad = barLoadSet.LoadSet.IsDeadLoad;
-            deduplicatedSet.LoadSet.BothSign= barLoadSet.LoadSet.BothSign;
-            SumForces(deduplicatedSet, barLoadSet);
+            deduplicatedSet.LoadSet.BothSign = barLoadSet.LoadSet.BothSign;
+            deduplicatedSet.LoadSet.PartialSafetyFactor = barLoadSet.LoadSet.PartialSafetyFactor;
+            SumForces(deduplicatedSet, barLoadSet, 1, false);
             return deduplicatedSet;
         }
         /// <summary>
@@ -154,13 +157,13 @@ namespace RDBLL.Processors.Forces
                 switch (forceParameter.Kind_id)
                 {
                     case 1:
-                        Nz = forceParameter.Value;
+                        Nz = forceParameter.CrcValue;
                         break;
                     case 2:
-                        Mx = forceParameter.Value;
+                        Mx = forceParameter.CrcValue;
                         break;
                     case 3:
-                        My = forceParameter.Value;
+                        My = forceParameter.CrcValue;
                         break;
                 }                   
             }
@@ -197,13 +200,13 @@ namespace RDBLL.Processors.Forces
                 switch (forceParameter.Kind_id)
                 {
                     case 1:
-                        Nz = forceParameter.Value;
+                        Nz = forceParameter.CrcValue;
                         break;
                     case 2:
-                        Mx = forceParameter.Value;
+                        Mx = forceParameter.CrcValue;
                         break;
                     case 3:
-                        My = forceParameter.Value;
+                        My = forceParameter.CrcValue;
                         break;
                 }
             }

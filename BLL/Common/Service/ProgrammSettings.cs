@@ -15,7 +15,7 @@ using RDBLL.Forces;
 
 namespace RDBLL.Common.Service
 {
-    public class ProgrammSettings
+    public static class ProgrammSettings
     {
         private static String _filePath;
         private static bool _isDataChanged;
@@ -51,42 +51,48 @@ namespace RDBLL.Common.Service
             ForceParamKinds.Add(new ForceParamKind
             {
                 Id = 1,
-                Label = "Продольная сила N",
+                LongLabel = "Продольная сила N",
+                ShortLabel = "N",
                 UnitLabel = "Н",
                 Addition = "Положительному значению силы соответствует направление вдоль оси Z (направлена вертикально вверх)"
             });
             ForceParamKinds.Add(new ForceParamKind
             {
                 Id = 2,
-                Label = "Изгибающий момент Mx",
+                LongLabel = "Изгибающий момент Mx",
+                ShortLabel = "Mx",
                 UnitLabel = "Н*м",
                 Addition = "За положительное значение момента принят момент против часовой стрелки если смотреть с конца оси X"
             });
             ForceParamKinds.Add(new ForceParamKind
             {
                 Id = 3,
-                Label = "Изгибающий момент My",
+                LongLabel = "Изгибающий момент My",
+                ShortLabel = "My",
                 UnitLabel = "Н*м",
                 Addition = "За положительное значение момента принят момент против часовой стрелки если смотреть с конца оси Y"
             });
             ForceParamKinds.Add(new ForceParamKind
             {
                 Id = 4,
-                Label = "Поперечная сила Qx",
+                LongLabel = "Поперечная сила Qx",
+                ShortLabel = "Qx",
                 UnitLabel = "Н",
                 Addition = "Положительному значению силы соответствует направление вдоль оси X (направлена вправо по плану)"
             });
             ForceParamKinds.Add(new ForceParamKind
             {
                 Id = 5,
-                Label = "Поперечная сила Qy",
+                LongLabel = "Поперечная сила Qy",
+                ShortLabel = "Qy",
                 UnitLabel = "Н",
                 Addition = "Положительному значению силы соответствует направление вдоль оси Y (направлена вверх по плану)"
             });
             ForceParamKinds.Add(new ForceParamKind
             {
                 Id = 6,
-                Label = "Крутящий момент Mz",
+                LongLabel = "Крутящий момент Mz",
+                ShortLabel = "Mz",
                 UnitLabel = "Н*м",
                 Addition = "За положительное значение момента принят момент против часовой стрелки если смотреть с конца оси Z"
             });

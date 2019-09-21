@@ -36,7 +36,7 @@ namespace WallTest
             ForceParameter forceParameter = new ForceParameter();
             loadSet.ForceParameters.Add(forceParameter);
             forceParameter.Kind_id = 1;
-            forceParameter.Value = -100000;
+            forceParameter.CrcValue = -100000;
             loadSet.PartialSafetyFactor = 1;
             SteelBasePart steelBasePart = new SteelBasePart(steelColumnBase);
             steelBasePart.FixLeft = true;
@@ -71,10 +71,11 @@ namespace WallTest
             ExpectedList.Add(new BarLoadSet());
             LoadSet expLoadSet = new LoadSet();
             ExpectedList[0].LoadSet = expLoadSet;
-            expLoadSet.Name = "Новая нагрузка*(1,1)*(1) + New_load_1*(1,1)*(1) + New_load_2*(1,1)*(1)";
+            expLoadSet.Name = "Новая нагрузка*(1) + New_load_1*(1) + New_load_2*(1)";
             expLoadSet.ForceParameters.Add(new ForceParameter());
             expLoadSet.ForceParameters[0].Kind_id = 1; //Продольная сила
-            expLoadSet.ForceParameters[0].Value = -220000; //Продольная сила
+            expLoadSet.ForceParameters[0].CrcValue = -200000; //Продольная сила
+            expLoadSet.ForceParameters[0].DesignValue = -220000; //Продольная сила
             expLoadSet.IsDeadLoad = false;
             expLoadSet.IsDesignLoad = false;
             expLoadSet.PartialSafetyFactor = 1.0;
@@ -106,10 +107,11 @@ namespace WallTest
             ExpectedList.Add(new BarLoadSet());
             LoadSet expLoadSet = new LoadSet();
             ExpectedList[0].LoadSet = expLoadSet;
-            expLoadSet.Name = "Новая нагрузка*(1,1)*(1) + New_load_1*(1,1)*(1)";
+            expLoadSet.Name = "Новая нагрузка*(1) + New_load_1*(1)";
             expLoadSet.ForceParameters.Add(new ForceParameter());
             expLoadSet.ForceParameters[0].Kind_id = 1; //Продольная сила
-            expLoadSet.ForceParameters[0].Value = -110000; //Продольная сила
+            expLoadSet.ForceParameters[0].CrcValue = -100000; //Продольная сила
+            expLoadSet.ForceParameters[0].DesignValue = -110000; //Продольная сила
             expLoadSet.IsDeadLoad = false;
             expLoadSet.IsDesignLoad = false;
             expLoadSet.PartialSafetyFactor = 1.0;
@@ -118,10 +120,11 @@ namespace WallTest
             ExpectedList.Add(new BarLoadSet());
             LoadSet expLoadSet1 = new LoadSet();
             ExpectedList[1].LoadSet = expLoadSet1;
-            expLoadSet1.Name = "Новая нагрузка*(1,1)*(1) + New_load_1*(1,1)*(1) + New_load_2*(1,1)*(1)";
+            expLoadSet1.Name = "Новая нагрузка*(1) + New_load_1*(1) + New_load_2*(1)";
             expLoadSet1.ForceParameters.Add(new ForceParameter());
             expLoadSet1.ForceParameters[0].Kind_id = 1; //Продольная сила
-            expLoadSet1.ForceParameters[0].Value = -220000; //Продольная сила
+            expLoadSet1.ForceParameters[0].CrcValue = -200000; //Продольная сила
+            expLoadSet1.ForceParameters[0].DesignValue = -220000; //Продольная сила
             expLoadSet1.IsDeadLoad = false;
             expLoadSet1.IsDesignLoad = false;
             expLoadSet1.PartialSafetyFactor = 1.0;
@@ -153,10 +156,12 @@ namespace WallTest
             ExpectedList.Add(new BarLoadSet());
             LoadSet expLoadSet = new LoadSet();
             ExpectedList[0].LoadSet = expLoadSet;
-            expLoadSet.Name = "Новая нагрузка*(1,1)*(1) + New_load_1*(1,1)*(1)";
+            expLoadSet.Name = "Новая нагрузка*(1) + New_load_1*(1)";
             expLoadSet.ForceParameters.Add(new ForceParameter());
             expLoadSet.ForceParameters[0].Kind_id = 1; //Продольная сила
-            expLoadSet.ForceParameters[0].Value = -110000; //Продольная сила
+            expLoadSet.ForceParameters[0].CrcValue = -100000; //Продольная сила
+            expLoadSet.ForceParameters[0].DesignValue = -110000; //Продольная сила
+
             expLoadSet.IsDeadLoad = false;
             expLoadSet.IsDesignLoad = false;
             expLoadSet.PartialSafetyFactor = 1.0;
@@ -164,10 +169,12 @@ namespace WallTest
             ExpectedList.Add(new BarLoadSet());
             LoadSet expLoadSet1 = new LoadSet();
             ExpectedList[1].LoadSet = expLoadSet1;
-            expLoadSet1.Name = "Новая нагрузка*(1,1)*(1) + New_load_1*(1,1)*(1) + New_load_2*(1,1)*(1)";
+            expLoadSet1.Name = "Новая нагрузка*(1) + New_load_1*(1) + New_load_2*(1)";
             expLoadSet1.ForceParameters.Add(new ForceParameter());
             expLoadSet1.ForceParameters[0].Kind_id = 1; //Продольная сила
-            expLoadSet1.ForceParameters[0].Value = -220000; //Продольная сила
+            expLoadSet1.ForceParameters[0].CrcValue = -200000; //Продольная сила
+            expLoadSet1.ForceParameters[0].DesignValue = -220000; //Продольная сила
+
             expLoadSet1.IsDeadLoad = false;
             expLoadSet1.IsDesignLoad = false;
             expLoadSet1.PartialSafetyFactor = 1.0;
@@ -175,10 +182,11 @@ namespace WallTest
             ExpectedList.Add(new BarLoadSet());
             LoadSet expLoadSet2 = new LoadSet();
             ExpectedList[2].LoadSet = expLoadSet2;
-            expLoadSet2.Name = "Новая нагрузка*(1,1)*(1) + New_load_1*(1,1)*(1) + New_load_2*(1,1)*(-1)";
+            expLoadSet2.Name = "Новая нагрузка*(1) + New_load_1*(1) + New_load_2*(-1)";
             expLoadSet2.ForceParameters.Add(new ForceParameter());
             expLoadSet2.ForceParameters[0].Kind_id = 1; //Продольная сила
-            expLoadSet2.ForceParameters[0].Value = 0; //Продольная сила
+            expLoadSet2.ForceParameters[0].CrcValue = 0; //Продольная сила
+            expLoadSet2.ForceParameters[0].DesignValue = 0; //Продольная сила
             expLoadSet2.IsDeadLoad = false;
             expLoadSet2.IsDesignLoad = false;
             expLoadSet2.PartialSafetyFactor = 1.0;
@@ -205,7 +213,7 @@ namespace WallTest
             loadSet.Name = $"New_load_{i}";
             loadSet.ForceParameters.Add(new ForceParameter());
             loadSet.ForceParameters[0].Kind_id = 1; //Продольная сила
-            loadSet.ForceParameters[0].Value = -100000; //Продольная сила
+            loadSet.ForceParameters[0].CrcValue = -100000; //Продольная сила
             loadSet.IsDeadLoad = isDeadLoad;
             loadSet.IsDesignLoad = false;
             loadSet.BothSign = bothSign;

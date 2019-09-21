@@ -128,6 +128,9 @@
     <Compile Include="WPF_Windows\wndForces.xaml.cs">
       <DependentUpon>wndForces.xaml</DependentUpon>
     </Compile>
+    <Compile Include="WPF_Windows\wndSteelBaseBolts.xaml.cs">
+      <DependentUpon>wndSteelBaseBolts.xaml</DependentUpon>
+    </Compile>
     <Compile Include="WPF_Windows\wndSteelBasePart.xaml.cs">
       <DependentUpon>wndSteelBasePart.xaml</DependentUpon>
     </Compile>
@@ -139,6 +142,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="WPF_Windows\wndForces.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="WPF_Windows\wndSteelBaseBolts.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
