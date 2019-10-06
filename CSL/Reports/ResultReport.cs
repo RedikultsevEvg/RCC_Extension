@@ -33,7 +33,7 @@ namespace CSL.Reports
         {
             using (Report report = new Report())
             {
-                report.Load("C:\\Repos\\Reports\\SteelBases.frx");
+                report.Load(Directory.GetCurrentDirectory()+"\\Reports\\SteelBases.frx");
                 report.RegisterData(dataSet);
                 //report.Design();
                 report.Show();

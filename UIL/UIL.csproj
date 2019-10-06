@@ -32,9 +32,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="FastReport, Version=2019.3.12.0, Culture=neutral, PublicKeyToken=db7e5ce63278458c" />
-    <Reference Include="FastReport.Bars, Version=2019.3.12.0, Culture=neutral, PublicKeyToken=db7e5ce63278458c" />
-    <Reference Include="FastReport.Editor, Version=2019.3.12.0, Culture=neutral, PublicKeyToken=db7e5ce63278458c" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
@@ -264,6 +261,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Qy.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\IconBolt40.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\IconReport40.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

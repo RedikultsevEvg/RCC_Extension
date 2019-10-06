@@ -7,7 +7,7 @@
         xmlns:local="clr-namespace:RDUIL.WPF_Windows"
         xmlns:msControl="clr-namespace:MyCustomControl"
         mc:Ignorable="d"
-        Title="База колонны" Height="370" Width="550" Background="White" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
+        Title="База колонны" Height="500" Width="700" Background="White" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
     <Window.Resources>
         <Convert:MultThous x:Key="MultyThousandConverter"/>
         <Convert:MilliConverter x:Key="MilliConverter"/>
@@ -36,7 +36,7 @@
     </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="377*"/>
+            <RowDefinition Height="375*"/>
             <RowDefinition Height="80"/>
         </Grid.RowDefinitions>
         <Grid>
@@ -53,8 +53,7 @@
                         <RowDefinition Height="30"/>
                         <RowDefinition Height="30"/>
                         <RowDefinition Height="30"/>
-                        <RowDefinition Height="30"/>
-                        <RowDefinition Height="30"/>
+
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width ="*"/>
@@ -71,6 +70,7 @@
                     <TextBox x:Name="tbxThickness" Grid.Row="3" Grid.Column="1" Style="{StaticResource PropertyTextBox}" Text="{Binding Path=Thickness, Converter={StaticResource MilliConverter}}"/>
                     <TextBox x:Name="tbxConcreteStrength" Grid.Row="4" Grid.Column="1" Style="{StaticResource PropertyTextBox}" Text="{Binding Path=ConcreteStrength, Converter={StaticResource MegaConverter}}"/>
                 </Grid>
+                <Canvas x:Name="cvBase" Margin="5" Height="220"/>
             </StackPanel>
             <StackPanel Grid.Column="2" Background="#FFE2E2E2" VerticalAlignment="Top">
                 <Button x:Name="btnForces" Style="{StaticResource ServiceButton}" Height="50" Click="btnForces_Click">
@@ -95,7 +95,11 @@
                     <Button.Effect>
                         <DropShadowEffect Opacity="0.6"/>
                     </Button.Effect>
-                    <Image x:Name="Bolts_png" Style="{StaticResource ServiceButtonImage}" Source="{DynamicResource IconBasePart}"/>
+                    <Image x:Name="Bolts_png" Style="{StaticResource ServiceButtonImage}" Source="{DynamicResource ImgBolt}">
+                        <Image.Resources>
+                            <BitmapImage x:Key="ImgBolt" CreateOptions="IgnoreImageCache" CacheOption="OnLoad" UriSource="C:\Repos\RCCExtension\UIL\Resources\IconBolt40.png"/>
+                        </Image.Resources>
+                    </Image>
                     <Button.ToolTip>
                         <TextBlock Margin="3" Foreground="Black">Болты...</TextBlock>
                     </Button.ToolTip>
@@ -104,7 +108,7 @@
                     <Button.Effect>
                         <DropShadowEffect Opacity="0.6"/>
                     </Button.Effect>
-                    <Image x:Name="Report_png" Style="{StaticResource ServiceButtonImage}" Source="{DynamicResource IconBasePart}"/>
+                    <Image x:Name="Report_png" Style="{StaticResource ServiceButtonImage}" Source="{DynamicResource ImgReport}"/>
                     <Button.ToolTip>
                         <TextBlock Margin="3" Foreground="Black">Отчет</TextBlock>
                     </Button.ToolTip>
