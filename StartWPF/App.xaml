@@ -13,5 +13,6 @@
         <BitmapImage x:Key="IconBasePart" CreateOptions="IgnoreImageCache" CacheOption="OnLoad" UriSource="/UIL;component/Resources/IconParts.png"/>
         <BitmapImage x:Key="IconAdd30" CreateOptions="IgnoreImageCache" CacheOption="OnLoad" UriSource="/UIL;component/Resources/IconAdd30.png"/>
         <BitmapImage x:Key="IconDelete30" CreateOptions="IgnoreImageCache" CacheOption="OnLoad" UriSource="/UIL;component/Resources/IconDelete30.png"/>
+        <BitmapImage x:Key="ImgReport" CreateOptions="IgnoreImageCache" CacheOption="OnLoad" UriSource="C:\Repos\RCCExtension\UIL\Resources\IconReport40.png"/>
     </Application.Resources>
 </Application>
