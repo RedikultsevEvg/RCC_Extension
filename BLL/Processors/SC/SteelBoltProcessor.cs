@@ -9,7 +9,7 @@ namespace RDBLL.Processors.SC
 {
     public class SteelBoltProcessor
     {
-        public static List<SteelBolt> GetSteelDoltsFromBolt (SteelBolt steelBolt)
+        public static List<SteelBolt> GetSteelBoltsFromBolt (SteelBolt steelBolt)
         {
             List<SteelBolt> steelBolts = new List<SteelBolt>();
             steelBolts.Add(steelBolt);

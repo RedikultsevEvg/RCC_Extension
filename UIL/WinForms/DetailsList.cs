@@ -553,9 +553,7 @@ namespace RDUIL.WinForms
             Item.SubItems.Clear();
             Item.Text = columnBase.Name;
             Item.SubItems.Add(Convert.ToString(columnBase.Width) + "x" + Convert.ToString(columnBase.Length));
-            Item.SubItems.Add(Convert.ToString(columnBase.WidthBoltDist) + "x" + Convert.ToString(columnBase.LengthBoltDist));
-            SteelColumnBaseProcessor columBaseProcessor = new SteelColumnBaseProcessor();
-            ColumnBaseResult baseResult = columBaseProcessor.GetResult(columnBase);
+            ColumnBaseResult baseResult = SteelColumnBaseProcessor.GetResult(columnBase);
             double maxStress = baseResult.Stresses.MaxStress;
             maxStress = Math.Round(maxStress / 1000) / 1000;
             double minStress = baseResult.Stresses.MinStress;
