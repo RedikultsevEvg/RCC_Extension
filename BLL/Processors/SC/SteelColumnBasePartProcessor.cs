@@ -26,8 +26,7 @@ namespace RDBLL.Processors.SC
              * Иначе считаетася, что участок оперт шарнирно
              */
             #region Описание переменных
-            SteelColumnBaseProcessor columBaseProcessor = new SteelColumnBaseProcessor();
-            ColumnBaseResult baseResult = columBaseProcessor.GetResult(basePart.ColumnBase);
+            ColumnBaseResult baseResult = SteelColumnBaseProcessor.GetResult(basePart.ColumnBase);
             RectCrossSection baseRect = new RectCrossSection(basePart.ColumnBase.Width, basePart.ColumnBase.Length);
             MassProperty massProperty = RectProcessor.GetRectMassProperty(baseRect);
             double maxStress = double.NegativeInfinity;

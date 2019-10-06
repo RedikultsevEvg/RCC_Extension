@@ -48,7 +48,6 @@
     <Compile Include="Common\Geometry\MassProperty.cs" />
     <Compile Include="Common\Geometry\MathOperation.cs" />
     <Compile Include="Common\Geometry\RectCrossSection.cs" />
-    <Compile Include="Common\Interfaces\IStellBaseProcessor.cs" />
     <Compile Include="DrawUtils\SteelBase\DrawSteelBase.cs" />
     <Compile Include="Entity\Common\NDM\NdmArea.cs" />
     <Compile Include="Entity\RCC\BuildingAndSite\BuildingSite.cs" />
@@ -84,6 +83,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Common\Delegates\" />
+    <Folder Include="Common\Interfaces\" />
     <Folder Include="Entity\Results\RCC\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

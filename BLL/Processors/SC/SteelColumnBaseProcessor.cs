@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using RDBLL.Common.Interfaces;
 using RDBLL.Forces;
 using RDBLL.Entity.Results.Forces;
 using RDBLL.Entity.SC.Column;
@@ -14,16 +13,45 @@ using RDBLL.Common.Geometry;
 
 namespace RDBLL.Processors.SC
 {
-    public class SteelColumnBaseProcessor : ISteelBaseProcessor
+    public static class SteelColumnBaseProcessor
     {
-        public ColumnBaseResult GetResult(SteelColumnBase columnBase)
+        public static void SolveSteelColumnBase(SteelColumnBase columnBase)
+        {
+            columnBase.ActualSteelBaseParts = new List<SteelBasePart>();
+            foreach (SteelBasePart steelBasePart in columnBase.SteelBaseParts)
+            {
+                columnBase.ActualSteelBaseParts.AddRange(SteelColumnBasePartProcessor.GetSteelBasePartsFromPart(steelBasePart));
+            }
+            ActualizeSteelBolts(columnBase);
+            ActualizeLoadCases(columnBase);
+            columnBase.IsActual = true;
+        }
+
+        public static void ActualizeLoadCases(SteelColumnBase columnBase)
+        {
+            if (! columnBase.IsLoadCasesActual)
+            {
+                columnBase.LoadCases = BarLoadSetProcessor.GetLoadCases(columnBase.LoadsGroup);
+                columnBase.IsLoadCasesActual = true;
+            }   
+        }
+
+        public static void ActualizeSteelBolts(SteelColumnBase columnBase)
+        {
+            columnBase.ActualSteelBolts = new List<SteelBolt>();
+            foreach (SteelBolt steelBolt in columnBase.SteelBolts)
+            {
+                columnBase.ActualSteelBolts.AddRange(SteelBoltProcessor.GetSteelBoltsFromBolt(steelBolt));
+            }
+        }
+
+        public static ColumnBaseResult GetResult(SteelColumnBase columnBase)
         {
             ColumnBaseResult columnBaseResult = new ColumnBaseResult();
-            columnBaseResult.LoadCases = BarLoadSetProcessor.GetLoadCases(columnBase.LoadsGroup);
+            ActualizeLoadCases(columnBase);
+            columnBaseResult.LoadCases = columnBase.LoadCases;
             RectCrossSection rect = new RectCrossSection(columnBase.Width, columnBase.Length);
             MassProperty massProperty = RectProcessor.GetRectMassProperty(rect);
-            double Bx = columnBase.WidthBoltDist / 2;
-            double By = columnBase.LengthBoltDist / 2;
             double minStress = double.PositiveInfinity;
             double maxStress = double.NegativeInfinity;
 

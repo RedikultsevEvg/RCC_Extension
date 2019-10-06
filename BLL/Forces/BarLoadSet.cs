@@ -14,7 +14,7 @@ namespace RDBLL.Forces
     {
         //Properties
         #region 
-        //public ForcesGroup ForcesGroup { get; set; } //Обратная ссылка на родительскую группу нагруок
+        public ForcesGroup ForcesGroup { get; set; } //Обратная ссылка на родительскую группу нагруок
         public LoadSet LoadSet { get; set; }
         #endregion
         //Constructors
@@ -44,6 +44,8 @@ namespace RDBLL.Forces
 
         public BarLoadSet(ForcesGroup forcesGroup)
         {
+            this.ForcesGroup = forcesGroup;
+            forcesGroup.SteelColumnBase.IsLoadCasesActual = false;
             SetDefault1();
         }
         #endregion

@@ -69,7 +69,7 @@ namespace RDBLL.DrawUtils.SteelBase
             //Рисуем болты
             foreach (SteelBolt baseBolt in steelColumnBase.SteelBolts)
             {
-                foreach (SteelBolt baseBoltEh in SteelBoltProcessor.GetSteelDoltsFromBolt(baseBolt))
+                foreach (SteelBolt baseBoltEh in SteelBoltProcessor.GetSteelBoltsFromBolt(baseBolt))
                 {
                     DrawBolts(baseBoltEh, canvas, columnBaseCenter, scale_factor, 1, 1, 1, true);
                 }

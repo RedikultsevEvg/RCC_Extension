@@ -25,10 +25,10 @@ namespace RDBLL.Forces
         /// <param name="steelColumnBase"></param>
         public ForcesGroup(SteelColumnBase steelColumnBase)
         {
+            SteelColumnBase = steelColumnBase;
             Loads = new ObservableCollection<BarLoadSet>();
             Loads.Add(new BarLoadSet(this));
             Excentricity = new Point2D(0, 0);
-            SteelColumnBase = steelColumnBase;
         }
         #endregion
     }

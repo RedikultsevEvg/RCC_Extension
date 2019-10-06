@@ -13,6 +13,8 @@ namespace RDBLL.Forces
     public class LoadSet : IEquatable<LoadSet>
     {
         #region 
+        public int Id { get; set; }
+
         public String Name { get; set; } //Наименование
         public double PartialSafetyFactor { get; set; } //Коэффициент надежности по нагрузке
         public bool IsDeadLoad { get; set; } //Флаг постоянной нагрузки

@@ -20,6 +20,7 @@ using System.Windows.Media.Imaging;
 using System.Windows;
 using  SDraw = System.Drawing;
 using RDBLL.DrawUtils.SteelBase;
+using RDBLL.Processors.SC;
 
 namespace CSL.Reports
 {
@@ -53,6 +54,8 @@ namespace CSL.Reports
                     DataTable SteelBases = dataSet.Tables[0];
                     foreach (SteelColumnBase steelColumnBase in level.SteelColumnBaseList)
                     {
+                        if (! steelColumnBase.IsActual) { SteelColumnBaseProcessor.SolveSteelColumnBase(steelColumnBase); }
+
                         DataRow newSteelBase = SteelBases.NewRow();
                         Double A = steelColumnBase.Width * steelColumnBase.Length;
                         Double Wx = steelColumnBase.Width * steelColumnBase.Length * steelColumnBase.Length / 6;
@@ -68,7 +71,7 @@ namespace CSL.Reports
                         
                         SteelBases.Rows.Add(newSteelBase);
                         DataTable LoadCases = dataSet.Tables[1];                       
-                        foreach (BarLoadSet barLoadSet in BarLoadSetProcessor.GetLoadCases(steelColumnBase.LoadsGroup))
+                        foreach (BarLoadSet barLoadSet in steelColumnBase.LoadCases)
                         {
                             DataRow newLoadCase = LoadCases.NewRow();
                             newLoadCase.ItemArray = new object[] { LoadCaseId, steelBaseId, barLoadSet.LoadSet.Name, barLoadSet.LoadSet.PartialSafetyFactor};
@@ -86,32 +89,29 @@ namespace CSL.Reports
                             LoadCaseId++;
                         }
                         DataTable SteelBasesParts = dataSet.Tables[3];
-                        foreach (SteelBasePart steelBasePart in steelColumnBase.SteelBaseParts)
+                        foreach (SteelBasePart steelBasePart in steelColumnBase.ActualSteelBaseParts)
                         {
-                            foreach (SteelBasePart steelBasePartEh in SteelColumnBasePartProcessor.GetSteelBasePartsFromPart(steelBasePart))
-                            {
-                                DataRow newSteelBasePart = SteelBasesParts.NewRow();
-                                ColumnBasePartResult columnBasePartResult = SteelColumnBasePartProcessor.GetResult(steelBasePartEh);
-                                double maxBedStress = columnBasePartResult.MaxBedStress;
-                                double maxStress = columnBasePartResult.MaxStress;
-                                #region Picture
-                                Canvas canvasPart = new Canvas();
-                                canvasPart.Width = 300;
-                                canvasPart.Height = 300;
-                                double zoom_factor_X = canvasPart.Width / steelBasePartEh.Width / 1.2;
-                                double zoom_factor_Y = canvasPart.Height / steelBasePartEh.Length / 1.2;
-                                double scale_factor;
-                                if (zoom_factor_X < zoom_factor_Y) { scale_factor = zoom_factor_X; } else { scale_factor = zoom_factor_Y; }
-                                canvasPart.Width = steelBasePartEh.Width * 1.2 * scale_factor;
-                                canvasPart.Height = steelBasePartEh.Length * 1.2 * scale_factor;
-                                double[] columnBaseCenter = new double[2] { canvasPart.Width/2 - steelBasePartEh.Center[0]*scale_factor, canvasPart.Height/2 + steelBasePartEh.Center[1] * scale_factor };
-                                DrawSteelBase.DrawBasePart(steelBasePartEh, canvasPart, columnBaseCenter, scale_factor, 1, 1, 1, false);
-                                byte[] bPart = ExportToByte(canvasPart);
-                                #endregion
-                                newSteelBasePart.ItemArray = new object[] { steelBasePartId, steelBaseId, bPart, steelBasePartEh.Name, steelBasePartEh.Center[0], steelBasePartEh.Center[1], steelBasePartEh.Width, steelBasePart.Length, Math.Round(maxBedStress/1000000,3), Math.Round(maxStress /1000000,3) };
-                                SteelBasesParts.Rows.Add(newSteelBasePart);
-                                steelBasePartId++;
-                            }
+                            DataRow newSteelBasePart = SteelBasesParts.NewRow();
+                            ColumnBasePartResult columnBasePartResult = SteelColumnBasePartProcessor.GetResult(steelBasePart);
+                            double maxBedStress = columnBasePartResult.MaxBedStress;
+                            double maxStress = columnBasePartResult.MaxStress;
+                            #region Picture
+                            Canvas canvasPart = new Canvas();
+                            canvasPart.Width = 300;
+                            canvasPart.Height = 300;
+                            double zoom_factor_X = canvasPart.Width / steelBasePart.Width / 1.2;
+                            double zoom_factor_Y = canvasPart.Height / steelBasePart.Length / 1.2;
+                            double scale_factor;
+                            if (zoom_factor_X < zoom_factor_Y) { scale_factor = zoom_factor_X; } else { scale_factor = zoom_factor_Y; }
+                            canvasPart.Width = steelBasePart.Width * 1.2 * scale_factor;
+                            canvasPart.Height = steelBasePart.Length * 1.2 * scale_factor;
+                            double[] columnBaseCenter = new double[2] { canvasPart.Width/2 - steelBasePart.Center[0]*scale_factor, canvasPart.Height/2 + steelBasePart.Center[1] * scale_factor };
+                            DrawSteelBase.DrawBasePart(steelBasePart, canvasPart, columnBaseCenter, scale_factor, 1, 1, 1, false);
+                            byte[] bPart = ExportToByte(canvasPart);
+                            #endregion
+                            newSteelBasePart.ItemArray = new object[] { steelBasePartId, steelBaseId, bPart, steelBasePart.Name, steelBasePart.Center[0], steelBasePart.Center[1], steelBasePart.Width, steelBasePart.Length, Math.Round(maxBedStress/1000000,3), Math.Round(maxStress /1000000,3) };
+                            SteelBasesParts.Rows.Add(newSteelBasePart);
+                            steelBasePartId++;
                         }
                         steelBaseId++;
                     }
