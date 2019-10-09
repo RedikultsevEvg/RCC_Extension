@@ -45,8 +45,7 @@ namespace WallTest
             steelBasePart.FixBottom = false;
             steelBasePart.Width = 1;
             steelBasePart.Length = 1;
-            SteelColumnBaseProcessor columBaseProcessor = new SteelColumnBaseProcessor();
-            ColumnBaseResult columnResult = columBaseProcessor.GetResult(steelColumnBase);
+            ColumnBaseResult columnResult = SteelColumnBaseProcessor.GetResult(steelColumnBase);
             ColumnBasePartResult baseResult = SteelColumnBasePartProcessor.GetResult(steelBasePart);
             Assert.AreEqual(30, baseResult.MaxStress / 1000000, 10);
         }

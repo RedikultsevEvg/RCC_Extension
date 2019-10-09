@@ -20,7 +20,6 @@ using System.Windows.Media.Imaging;
 using System.Windows;
 using  SDraw = System.Drawing;
 using RDBLL.DrawUtils.SteelBase;
-using RDBLL.Processors.SC;
 
 namespace CSL.Reports
 {
