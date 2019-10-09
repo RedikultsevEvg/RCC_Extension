@@ -263,10 +263,14 @@
     <None Include="Resources\Qy.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\IconBolt40.png" />
+    <Resource Include="Resources\IconBolt40.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\IconReport40.png" />
+    <Resource Include="Resources\IconReport40.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

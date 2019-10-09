@@ -95,11 +95,7 @@
                     <Button.Effect>
                         <DropShadowEffect Opacity="0.6"/>
                     </Button.Effect>
-                    <Image x:Name="Bolts_png" Style="{StaticResource ServiceButtonImage}" Source="{DynamicResource ImgBolt}">
-                        <Image.Resources>
-                            <BitmapImage x:Key="ImgBolt" CreateOptions="IgnoreImageCache" CacheOption="OnLoad" UriSource="C:\Repos\RCCExtension\UIL\Resources\IconBolt40.png"/>
-                        </Image.Resources>
-                    </Image>
+                    <Image x:Name="Bolts_png" Style="{StaticResource ServiceButtonImage}" Source="{DynamicResource IconBolt}"/>
                     <Button.ToolTip>
                         <TextBlock Margin="3" Foreground="Black">Болты...</TextBlock>
                     </Button.ToolTip>
@@ -108,7 +104,7 @@
                     <Button.Effect>
                         <DropShadowEffect Opacity="0.6"/>
                     </Button.Effect>
-                    <Image x:Name="Report_png" Style="{StaticResource ServiceButtonImage}" Source="{DynamicResource ImgReport}"/>
+                    <Image x:Name="Report_png" Style="{StaticResource ServiceButtonImage}" Source="{DynamicResource IconReport}"/>
                     <Button.ToolTip>
                         <TextBlock Margin="3" Foreground="Black">Отчет</TextBlock>
                     </Button.ToolTip>

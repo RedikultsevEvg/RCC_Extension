@@ -36,6 +36,7 @@ namespace RDUIL.WPF_Windows
         {
             try
             {
+                this.DialogResult = true;
                 this.Close();
             }
             catch (Exception ex)
@@ -46,6 +47,7 @@ namespace RDUIL.WPF_Windows
 
         private void BtnCancel_Click(object sender, RoutedEventArgs e)
         {
+            this.DialogResult = false;
             this.Close();
         }
 
