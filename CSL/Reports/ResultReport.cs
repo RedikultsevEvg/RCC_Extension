@@ -20,6 +20,7 @@ using System.Windows.Media.Imaging;
 using System.Windows;
 using  SDraw = System.Drawing;
 using RDBLL.DrawUtils.SteelBase;
+using RDBLL.Entity.MeasureUnits;
 
 namespace CSL.Reports
 {
@@ -70,18 +71,25 @@ namespace CSL.Reports
                         
                         SteelBases.Rows.Add(newSteelBase);
                         DataTable LoadCases = dataSet.Tables[1];                       
-                        foreach (BarLoadSet barLoadSet in steelColumnBase.LoadCases)
+                        foreach (LoadSet loadSet in steelColumnBase.LoadCases)
                         {
                             DataRow newLoadCase = LoadCases.NewRow();
-                            newLoadCase.ItemArray = new object[] { LoadCaseId, steelBaseId, barLoadSet.LoadSet.Name, barLoadSet.LoadSet.PartialSafetyFactor};
+                            newLoadCase.ItemArray = new object[] { LoadCaseId, steelBaseId, loadSet.Name, loadSet.PartialSafetyFactor};
                             LoadCases.Rows.Add(newLoadCase);
 
                             DataTable ForceParameters = dataSet.Tables[2];
-                            foreach (ForceParameter forceParameter in barLoadSet.LoadSet.ForceParameters)
+                            foreach (ForceParameter forceParameter in loadSet.ForceParameters)
                             {
                                 DataRow newForceParameter = ForceParameters.NewRow();
                                 var tmpForceParamLabels = from t in ProgrammSettings.ForceParamKinds where t.Id == forceParameter.Kind_id select t;
-                                newForceParameter.ItemArray = new object[] { ForceParameterId, LoadCaseId, tmpForceParamLabels.First().LongLabel, tmpForceParamLabels.First().ShortLabel, tmpForceParamLabels.First().UnitLabel, forceParameter.CrcValue, forceParameter.DesignValue };
+                                MeasureUnitLabel measureUnitLabel = tmpForceParamLabels.First().MeasureUnit.GetCurrentLabel();
+                                newForceParameter.ItemArray = new object[] { ForceParameterId,
+                                    LoadCaseId,
+                                    tmpForceParamLabels.First().LongLabel,
+                                    tmpForceParamLabels.First().ShortLabel,
+                                    measureUnitLabel.UnitName,
+                                    forceParameter.CrcValueInCurUnit,
+                                    forceParameter.DesignValue * measureUnitLabel.AddKoeff};
                                 ForceParameters.Rows.Add(newForceParameter);
                                 ForceParameterId++;
                             }

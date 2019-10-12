@@ -50,6 +50,8 @@
     <Compile Include="Common\Geometry\RectCrossSection.cs" />
     <Compile Include="DrawUtils\SteelBase\DrawSteelBase.cs" />
     <Compile Include="Entity\Common\NDM\NdmArea.cs" />
+    <Compile Include="Entity\MeasureUnits\MeasureUnit.cs" />
+    <Compile Include="Entity\MeasureUnits\MeasureUnitLabel.cs" />
     <Compile Include="Entity\RCC\BuildingAndSite\BuildingSite.cs" />
     <Compile Include="Entity\RCC\BuildingAndSite\Level.cs" />
     <Compile Include="Common\Geometry\Path.cs" />
@@ -63,7 +65,6 @@
     <Compile Include="Entity\RCC\WallAndColumn\Opening.cs" />
     <Compile Include="Entity\RCC\WallAndColumn\Wall.cs" />
     <Compile Include="Entity\RCC\WallAndColumn\WallType.cs" />
-    <Compile Include="Entity\Results\Forces\LoadCase.cs" />
     <Compile Include="Entity\Results\Forces\StressInRect.cs" />
     <Compile Include="Entity\Results\SC\ColumnBasePartResult.cs" />
     <Compile Include="Entity\Results\SC\ColumnBaseResult.cs" />
@@ -76,6 +77,7 @@
     <Compile Include="Forces\ForceParamKind.cs" />
     <Compile Include="Forces\LoadSet.cs" />
     <Compile Include="Processors\Forces\BarLoadSetProcessor.cs" />
+    <Compile Include="Processors\Forces\LoadSetProcessor.cs" />
     <Compile Include="Processors\SC\SteelBoltProcessor.cs" />
     <Compile Include="Processors\SC\SteelColumnBasePartProcessor.cs" />
     <Compile Include="Processors\SC\SteelColumnBaseProcessor.cs" />

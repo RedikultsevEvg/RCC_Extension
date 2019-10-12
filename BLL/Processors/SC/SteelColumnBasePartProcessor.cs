@@ -37,7 +37,7 @@ namespace RDBLL.Processors.SC
 
             echoDelegate("Time = " + DateTime.Now);
 
-            foreach (BarLoadSet LoadCase in baseResult.LoadCases)
+            foreach (LoadSet LoadCase in baseResult.LoadCases)
             {
                 List<double> dxList = new List<double>();
                 List<double> dyList = new List<double>();
@@ -51,7 +51,7 @@ namespace RDBLL.Processors.SC
                 {
                     foreach (double dy in dyList)
                     {
-                        double stress = BarLoadSetProcessor.StressInBarSection(LoadCase, massProperty, dx, dy);
+                        double stress = LoadSetProcessor.StressInBarSection(LoadCase, massProperty, dx, dy);
                         if (stress < 0) { maxStressTmp = stress * (-1D); } else { maxStressTmp = 0; }
                         if (maxStressTmp > maxStress) { maxStress = maxStressTmp; }
                     }

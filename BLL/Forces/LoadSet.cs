@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Collections.ObjectModel;
 
+
 namespace RDBLL.Forces
 {
     /// <summary>
@@ -14,7 +15,7 @@ namespace RDBLL.Forces
     {
         #region 
         public int Id { get; set; }
-
+        public ForcesGroup ForcesGroup { get; set; } //Обратная ссылка на родительскую группу нагруок
         public String Name { get; set; } //Наименование
         public double PartialSafetyFactor { get; set; } //Коэффициент надежности по нагрузке
         public bool IsDeadLoad { get; set; } //Флаг постоянной нагрузки
@@ -26,6 +27,18 @@ namespace RDBLL.Forces
         #region
         public LoadSet()
         {
+            ForceParameters = new ObservableCollection<ForceParameter>();
+        }
+
+        public LoadSet(ForcesGroup forcesGroup)
+        {
+            ForcesGroup = forcesGroup;
+            forcesGroup.SteelColumnBase.IsLoadCasesActual = false;
+            Name = "Новая нагрузка";
+            PartialSafetyFactor = 1.1;
+            IsDeadLoad = true;
+            IsCombination = false;
+            BothSign = false;
             ForceParameters = new ObservableCollection<ForceParameter>();
         }
         #endregion

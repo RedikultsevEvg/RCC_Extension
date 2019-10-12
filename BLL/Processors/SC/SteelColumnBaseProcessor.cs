@@ -31,7 +31,7 @@ namespace RDBLL.Processors.SC
         {
             if (! columnBase.IsLoadCasesActual)
             {
-                columnBase.LoadCases = BarLoadSetProcessor.GetLoadCases(columnBase.LoadsGroup);
+                columnBase.LoadCases = LoadSetProcessor.GetLoadCases(columnBase.LoadsGroup);
                 columnBase.IsLoadCasesActual = true;
             }   
         }
@@ -59,13 +59,13 @@ namespace RDBLL.Processors.SC
             double dy = massProperty.Ymax;
             double stress;
 
-            foreach (BarLoadSet loadCase in columnBaseResult.LoadCases)
+            foreach (LoadSet loadCase in columnBaseResult.LoadCases)
             {
                 for (int i = -1; i <= 1; i+=2)
                 {
                     for (int j = -1; j <= 1; j+=2)
                     {
-                        stress = BarLoadSetProcessor.StressInBarSection(loadCase, massProperty, dx * i, dy * j);
+                        stress = LoadSetProcessor.StressInBarSection(loadCase, massProperty, dx * i, dy * j);
                         if (stress > maxStress) { maxStress = stress; }
                         if (stress < minStress) { minStress = stress; }
                     }
