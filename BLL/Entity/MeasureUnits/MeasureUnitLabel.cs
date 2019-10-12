@@ -9,8 +9,8 @@ namespace RDBLL.Entity.MeasureUnits
     public class MeasureUnitLabel
     {
         public int Id { get; set; }
-        public MeasureUnit MeasureUnit { get; set; }
-        public String UnitName { get; set; }
+        public MeasureUnit MeasureUnit { get; set; } //Обратная ссылка
+        public string UnitName { get; set; }
         public double AddKoeff { get; set; }
     }
 }

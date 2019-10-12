@@ -13,12 +13,21 @@ namespace RDBLL.Forces
     /// </summary>
     public class LoadSet : IEquatable<LoadSet>
     {
-        #region 
+        #region
+        private bool _isDeadLoad;
         public int Id { get; set; }
         public ForcesGroup ForcesGroup { get; set; } //Обратная ссылка на родительскую группу нагруок
         public String Name { get; set; } //Наименование
         public double PartialSafetyFactor { get; set; } //Коэффициент надежности по нагрузке
-        public bool IsDeadLoad { get; set; } //Флаг постоянной нагрузки
+        public bool IsDeadLoad //Флаг постоянной нагрузки
+        {
+            get { return _isDeadLoad; }
+            set
+            {
+                if (value) { BothSign = false; }
+                _isDeadLoad = value;
+            }
+        }
         public bool IsCombination { get; set; } //Флаг комбинации
         public bool BothSign { get; set; } //Флаг знакопеременной нагрузки
         public ObservableCollection<ForceParameter> ForceParameters { get; set; }

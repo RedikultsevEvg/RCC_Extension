@@ -1,0 +1,58 @@
+﻿<Window x:Class="RDUIL.WPF_Windows.wndMeasureUnits"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:RDUIL.WPF_Windows"
+        xmlns:Setting="clr-namespace:RDBLL.Common.Service;assembly=BLL"
+        mc:Ignorable="d"
+        Title="wndMeasureUnits" Height="450" Width="620" WindowStartupLocation="CenterScreen">
+    <Window.Resources>
+        <DataTemplate  x:Key="cbTemplate">
+            <TextBlock Text="{Binding Path=UnitName}"></TextBlock>
+        </DataTemplate>
+        <DataTemplate x:Key="MeasureUnitsTemplate">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="300"/>
+                    <ColumnDefinition MinWidth="300"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock x:Name="ParamName"
+                           Grid.Column="0"
+                           Text="{Binding Path=MeasureUnitKind}">
+                </TextBlock>
+                <ComboBox x:Name="cbUnits"
+                    Grid.Column="1"
+                    ItemsSource="{Binding Path=UnitLabels}"
+                    ItemTemplate="{StaticResource cbTemplate}"
+                    SelectedValuePath="Id"
+                    SelectedValue="{Binding Path=CurrentUnitLabelId}">
+                </ComboBox>
+            </Grid>
+        </DataTemplate>
+    </Window.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition Height="80"/>
+        </Grid.RowDefinitions>
+        <ListView x:Name="lvMeasureUnits"
+                  ItemTemplate="{StaticResource MeasureUnitsTemplate}"
+                  ItemsSource="{Binding Source={x:Static Setting:ProgrammSettings.MeasureUnits}}">
+        </ListView>
+        <StackPanel Height="60" Grid.Row="1" Margin="0,10,10,10" Orientation="Horizontal" HorizontalAlignment="Right" Background="#FFE2E2E2" Width="110">
+            <Button x:Name="btnOK" Style="{StaticResource ServiceButton}" HorizontalAlignment="Stretch" Click="BtnOK_Click">
+                <Button.Effect>
+                    <DropShadowEffect Opacity="0.6"/>
+                </Button.Effect>
+                <Image x:Name="OK_png" Style="{StaticResource ServiceButtonImage}" Source="{DynamicResource IconOK}"/>
+            </Button>
+            <Button x:Name="btnCancel" Style="{StaticResource ServiceButton}" HorizontalAlignment="Stretch" Visibility="Hidden">
+                <Button.Effect>
+                    <DropShadowEffect Opacity="0.6"/>
+                </Button.Effect>
+                <Image x:Name="Cancel_png" Style="{StaticResource ServiceButtonImage}" Source="{DynamicResource IconCancel}"/>
+            </Button>
+        </StackPanel>
+    </Grid>
+</Window>

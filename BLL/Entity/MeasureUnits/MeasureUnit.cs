@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Collections.ObjectModel;
 
 namespace RDBLL.Entity.MeasureUnits
 {
@@ -10,11 +11,12 @@ namespace RDBLL.Entity.MeasureUnits
     {
         public int Id { get; set; }
         public int CurrentUnitLabelId { get; set; }
-        public List<MeasureUnitLabel> UnitLabels { get; set; }
+        public string MeasureUnitKind { get; set; }
+        public ObservableCollection<MeasureUnitLabel> UnitLabels { get; set; }
 
         public MeasureUnit()
         {
-            UnitLabels = new List<MeasureUnitLabel>();
+            UnitLabels = new ObservableCollection<MeasureUnitLabel>();
         }
 
         public MeasureUnitLabel GetCurrentLabel()

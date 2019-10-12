@@ -12,6 +12,7 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using RDBLL.Forces;
 using RDBLL.Entity.MeasureUnits;
+using System.Collections.ObjectModel;
 
 
 namespace RDBLL.Common.Service
@@ -20,7 +21,8 @@ namespace RDBLL.Common.Service
     {
         private static String _filePath;
         private static bool _isDataChanged;
-        public static List<ForceParamKind> ForceParamKinds { get; set; } 
+        public static List<ForceParamKind> ForceParamKinds { get; set; }
+        public static ObservableCollection<MeasureUnit> MeasureUnits { get; set; }
 
         public static BuildingSite BuildingSite { get; set; }
         public static String FilePath
@@ -48,27 +50,44 @@ namespace RDBLL.Common.Service
             BuildingSite.BuildingList.Add(new Building(BuildingSite));
             IsDataChanged = false;
             #region
+            MeasureUnit measureUnitLength = new MeasureUnit();
+            measureUnitLength.MeasureUnitKind = "Линейные размеры";
+            measureUnitLength.UnitLabels.Add(new MeasureUnitLabel { Id = 1, UnitName = "м", AddKoeff = 1.0 });
+            measureUnitLength.UnitLabels.Add(new MeasureUnitLabel { Id = 2, UnitName = "мм", AddKoeff = 1000 });
+            measureUnitLength.UnitLabels.Add(new MeasureUnitLabel { Id = 3, UnitName = "см", AddKoeff = 100 });
+            measureUnitLength.UnitLabels.Add(new MeasureUnitLabel { Id = 4, UnitName = "дм", AddKoeff = 10 });
+            measureUnitLength.UnitLabels.Add(new MeasureUnitLabel { Id = 5, UnitName = "км", AddKoeff = 0.1 });
+            measureUnitLength.CurrentUnitLabelId = 2;
             MeasureUnit measureUnitForce = new MeasureUnit();
-            measureUnitForce.UnitLabels.Add(new MeasureUnitLabel { Id=1, UnitName = "Н", AddKoeff= 1.0});
-            measureUnitForce.UnitLabels.Add(new MeasureUnitLabel { Id = 2, UnitName = "кН", AddKoeff = 0.001 });
-            measureUnitForce.UnitLabels.Add(new MeasureUnitLabel { Id = 3, UnitName = "МН", AddKoeff = 0.000001 });
-            measureUnitForce.UnitLabels.Add(new MeasureUnitLabel { Id = 4, UnitName = "кгс", AddKoeff = 1 / 9.81 });
-            measureUnitForce.UnitLabels.Add(new MeasureUnitLabel { Id = 5, UnitName = "тс", AddKoeff = 0.001 / 9.81 });
-            measureUnitForce.CurrentUnitLabelId = 5;
+            measureUnitForce.MeasureUnitKind = "Усилия";
+            measureUnitForce.UnitLabels.Add(new MeasureUnitLabel { Id = 6, UnitName = "Н", AddKoeff= 1.0});
+            measureUnitForce.UnitLabels.Add(new MeasureUnitLabel { Id = 7, UnitName = "кН", AddKoeff = 0.001 });
+            measureUnitForce.UnitLabels.Add(new MeasureUnitLabel { Id = 8, UnitName = "МН", AddKoeff = 0.000001 });
+            measureUnitForce.UnitLabels.Add(new MeasureUnitLabel { Id = 9, UnitName = "кгс", AddKoeff = 1 / 9.81 });
+            measureUnitForce.UnitLabels.Add(new MeasureUnitLabel { Id = 10, UnitName = "тс", AddKoeff = 0.001 / 9.81 });
+            measureUnitForce.CurrentUnitLabelId = 7;
             MeasureUnit measureUnitMoment = new MeasureUnit();
-            measureUnitMoment.UnitLabels.Add(new MeasureUnitLabel { Id = 7, UnitName = "Н*м", AddKoeff = 1.0 });
-            measureUnitMoment.UnitLabels.Add(new MeasureUnitLabel { Id = 8, UnitName = "кН*м", AddKoeff = 0.001 });
-            measureUnitMoment.UnitLabels.Add(new MeasureUnitLabel { Id = 9, UnitName = "МН*м", AddKoeff = 0.000001 });
-            measureUnitMoment.UnitLabels.Add(new MeasureUnitLabel { Id = 10, UnitName = "кгс*м", AddKoeff = 1 / 9.81 });
-            measureUnitMoment.UnitLabels.Add(new MeasureUnitLabel { Id = 11, UnitName = "тс*м", AddKoeff = 0.001 / 9.81 });
-            measureUnitMoment.CurrentUnitLabelId = 11;
+            measureUnitMoment.MeasureUnitKind = "Изгибающие моменты";
+            measureUnitMoment.UnitLabels.Add(new MeasureUnitLabel { Id = 11, UnitName = "Н*м", AddKoeff = 1.0 });
+            measureUnitMoment.UnitLabels.Add(new MeasureUnitLabel { Id = 12, UnitName = "кН*м", AddKoeff = 0.001 });
+            measureUnitMoment.UnitLabels.Add(new MeasureUnitLabel { Id = 13, UnitName = "МН*м", AddKoeff = 0.000001 });
+            measureUnitMoment.UnitLabels.Add(new MeasureUnitLabel { Id = 14, UnitName = "кгс*м", AddKoeff = 1 / 9.81 });
+            measureUnitMoment.UnitLabels.Add(new MeasureUnitLabel { Id = 15, UnitName = "тс*м", AddKoeff = 0.001 / 9.81 });
+            measureUnitMoment.CurrentUnitLabelId = 12;
             MeasureUnit measureUnitStress = new MeasureUnit();
-            measureUnitStress.UnitLabels.Add(new MeasureUnitLabel { Id = 12, UnitName = "Па", AddKoeff = 1.0 });
-            measureUnitStress.UnitLabels.Add(new MeasureUnitLabel { Id = 13, UnitName = "кПа", AddKoeff = 0.001 });
-            measureUnitStress.UnitLabels.Add(new MeasureUnitLabel { Id = 14, UnitName = "МПа", AddKoeff = 0.000001 });
-            measureUnitStress.UnitLabels.Add(new MeasureUnitLabel { Id = 15, UnitName = "кгс/см^2", AddKoeff = 0.00001 / 9.81 });
-            measureUnitStress.UnitLabels.Add(new MeasureUnitLabel { Id = 16, UnitName = "тс/м^2", AddKoeff = 0.0001 / 9.81 });
-            measureUnitStress.CurrentUnitLabelId = 14;
+            measureUnitStress.MeasureUnitKind = "Напряжения";
+            measureUnitStress.UnitLabels.Add(new MeasureUnitLabel { Id = 16, UnitName = "Па", AddKoeff = 1.0 });
+            measureUnitStress.UnitLabels.Add(new MeasureUnitLabel { Id = 17, UnitName = "кПа", AddKoeff = 0.001 });
+            measureUnitStress.UnitLabels.Add(new MeasureUnitLabel { Id = 18, UnitName = "МПа", AddKoeff = 0.000001 });
+            measureUnitStress.UnitLabels.Add(new MeasureUnitLabel { Id = 19, UnitName = "кгс/см^2", AddKoeff = 0.00001 / 9.81 });
+            measureUnitStress.UnitLabels.Add(new MeasureUnitLabel { Id = 20, UnitName = "тс/м^2", AddKoeff = 0.0001 / 9.81 });
+            measureUnitStress.CurrentUnitLabelId = 18;
+
+            MeasureUnits = new ObservableCollection<MeasureUnit>();
+            MeasureUnits.Add(measureUnitLength);
+            MeasureUnits.Add(measureUnitForce);
+            MeasureUnits.Add(measureUnitMoment);
+            MeasureUnits.Add(measureUnitStress);
 
             ForceParamKinds = new List<ForceParamKind>();
             ForceParamKinds.Add(new ForceParamKind
