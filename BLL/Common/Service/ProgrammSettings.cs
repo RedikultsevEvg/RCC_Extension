@@ -11,6 +11,7 @@ using win32 = Microsoft.Win32;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using RDBLL.Forces;
+using RDBLL.Entity.MeasureUnits;
 
 
 namespace RDBLL.Common.Service
@@ -47,54 +48,76 @@ namespace RDBLL.Common.Service
             BuildingSite.BuildingList.Add(new Building(BuildingSite));
             IsDataChanged = false;
             #region
+            MeasureUnit measureUnitForce = new MeasureUnit();
+            measureUnitForce.UnitLabels.Add(new MeasureUnitLabel { Id=1, UnitName = "Н", AddKoeff= 1.0});
+            measureUnitForce.UnitLabels.Add(new MeasureUnitLabel { Id = 2, UnitName = "кН", AddKoeff = 0.001 });
+            measureUnitForce.UnitLabels.Add(new MeasureUnitLabel { Id = 3, UnitName = "МН", AddKoeff = 0.000001 });
+            measureUnitForce.UnitLabels.Add(new MeasureUnitLabel { Id = 4, UnitName = "кгс", AddKoeff = 1 / 9.81 });
+            measureUnitForce.UnitLabels.Add(new MeasureUnitLabel { Id = 5, UnitName = "тс", AddKoeff = 0.001 / 9.81 });
+            measureUnitForce.CurrentUnitLabelId = 5;
+            MeasureUnit measureUnitMoment = new MeasureUnit();
+            measureUnitMoment.UnitLabels.Add(new MeasureUnitLabel { Id = 7, UnitName = "Н*м", AddKoeff = 1.0 });
+            measureUnitMoment.UnitLabels.Add(new MeasureUnitLabel { Id = 8, UnitName = "кН*м", AddKoeff = 0.001 });
+            measureUnitMoment.UnitLabels.Add(new MeasureUnitLabel { Id = 9, UnitName = "МН*м", AddKoeff = 0.000001 });
+            measureUnitMoment.UnitLabels.Add(new MeasureUnitLabel { Id = 10, UnitName = "кгс*м", AddKoeff = 1 / 9.81 });
+            measureUnitMoment.UnitLabels.Add(new MeasureUnitLabel { Id = 11, UnitName = "тс*м", AddKoeff = 0.001 / 9.81 });
+            measureUnitMoment.CurrentUnitLabelId = 11;
+            MeasureUnit measureUnitStress = new MeasureUnit();
+            measureUnitStress.UnitLabels.Add(new MeasureUnitLabel { Id = 12, UnitName = "Па", AddKoeff = 1.0 });
+            measureUnitStress.UnitLabels.Add(new MeasureUnitLabel { Id = 13, UnitName = "кПа", AddKoeff = 0.001 });
+            measureUnitStress.UnitLabels.Add(new MeasureUnitLabel { Id = 14, UnitName = "МПа", AddKoeff = 0.000001 });
+            measureUnitStress.UnitLabels.Add(new MeasureUnitLabel { Id = 15, UnitName = "кгс/см^2", AddKoeff = 0.00001 / 9.81 });
+            measureUnitStress.UnitLabels.Add(new MeasureUnitLabel { Id = 16, UnitName = "тс/м^2", AddKoeff = 0.0001 / 9.81 });
+            measureUnitStress.CurrentUnitLabelId = 14;
+
             ForceParamKinds = new List<ForceParamKind>();
             ForceParamKinds.Add(new ForceParamKind
             {
                 Id = 1,
                 LongLabel = "Продольная сила N",
                 ShortLabel = "N",
-                UnitLabel = "Н",
-                Addition = "Положительному значению силы соответствует направление вдоль оси Z (направлена вертикально вверх)"
+                Addition = "Положительному значению силы соответствует направление вдоль оси Z (направлена вертикально вверх)",
+                MeasureUnit = measureUnitForce
             });
             ForceParamKinds.Add(new ForceParamKind
             {
                 Id = 2,
                 LongLabel = "Изгибающий момент Mx",
                 ShortLabel = "Mx",
-                UnitLabel = "Н*м",
-                Addition = "За положительное значение момента принят момент против часовой стрелки если смотреть с конца оси X"
+                Addition = "За положительное значение момента принят момент против часовой стрелки если смотреть с конца оси X",
+                MeasureUnit = measureUnitMoment
             });
             ForceParamKinds.Add(new ForceParamKind
             {
                 Id = 3,
                 LongLabel = "Изгибающий момент My",
                 ShortLabel = "My",
-                UnitLabel = "Н*м",
-                Addition = "За положительное значение момента принят момент против часовой стрелки если смотреть с конца оси Y"
+                Addition = "За положительное значение момента принят момент против часовой стрелки если смотреть с конца оси Y",
+                MeasureUnit = measureUnitMoment
             });
             ForceParamKinds.Add(new ForceParamKind
             {
                 Id = 4,
                 LongLabel = "Поперечная сила Qx",
                 ShortLabel = "Qx",
-                UnitLabel = "Н",
-                Addition = "Положительному значению силы соответствует направление вдоль оси X (направлена вправо по плану)"
+                Addition = "Положительному значению силы соответствует направление вдоль оси X (направлена вправо по плану)",
+                MeasureUnit = measureUnitForce
             });
             ForceParamKinds.Add(new ForceParamKind
             {
                 Id = 5,
                 LongLabel = "Поперечная сила Qy",
                 ShortLabel = "Qy",
-                UnitLabel = "Н",
-                Addition = "Положительному значению силы соответствует направление вдоль оси Y (направлена вверх по плану)"
+                Addition = "Положительному значению силы соответствует направление вдоль оси Y (направлена вверх по плану)",
+                MeasureUnit = measureUnitForce
             });
             ForceParamKinds.Add(new ForceParamKind
             {
                 Id = 6,
                 LongLabel = "Крутящий момент Mz",
                 ShortLabel = "Mz",
-                UnitLabel = "Н*м",
-                Addition = "За положительное значение момента принят момент против часовой стрелки если смотреть с конца оси Z"
+                Addition = "За положительное значение момента принят момент против часовой стрелки если смотреть с конца оси Z",
+                MeasureUnit = measureUnitMoment
             });
             #endregion
         }

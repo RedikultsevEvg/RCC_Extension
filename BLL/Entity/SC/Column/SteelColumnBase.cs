@@ -16,7 +16,10 @@ namespace RDBLL.Entity.SC.Column
     public class SteelColumnBase : ICloneable
     {
         //Properties
-        #region 
+        #region
+        //private bool _isActual;
+        private bool _isLoadCasesActual;
+        private bool _isBoltsActual;
         //public ColumnBaseResult ColumnBaseResult { get; set; }
         public int Id { get; set; } //Код базы
         public int LevelId { get; set; } //Код базы
@@ -37,8 +40,25 @@ namespace RDBLL.Entity.SC.Column
         public List<SteelBasePart> ActualSteelBaseParts { get; set; } //Коллекция участков с учетом симметрии
         public ObservableCollection<SteelBolt> SteelBolts { get; set; } //Коллекция болтов
         public List<SteelBolt> ActualSteelBolts { get; set; } //Коллекция болтов с учетом симметрии
-        public List<BarLoadSet> LoadCases { get; set; } //Коллекция комбинаций
-        public bool IsLoadCasesActual { get; set; }
+        public List<LoadSet> LoadCases { get; set; } //Коллекция комбинаций
+        public bool IsLoadCasesActual
+        {
+            get {return _isLoadCasesActual; }
+            set
+            {
+                if (!value) SetNotActual();
+                _isLoadCasesActual = value;
+            }
+        }
+        public bool IsBoltsActual
+        {
+            get { return _isBoltsActual; }
+            set
+            {
+                if (!value) SetNotActual();
+                _isBoltsActual = value;
+            }
+        }
         #endregion
 
         //Constructors
@@ -78,6 +98,11 @@ namespace RDBLL.Entity.SC.Column
         public SteelColumnBase()
         {
             SetDefault();
+        }
+
+        public void SetNotActual()
+        {
+            IsActual = false;
         }
 
         #endregion

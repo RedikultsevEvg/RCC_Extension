@@ -9,8 +9,6 @@
         mc:Ignorable="d"
         Title="Усилие" Height="600" Width="1000" WindowStartupLocation="CenterScreen" MinWidth="1000" MinHeight="600">
     <Window.Resources>
-        <Convert:MultThous x:Key="MultyThousandConverter"/>
-        <Convert:MultThousText x:Key="MultyThousandTextConverter"/>
         <Style x:Key="ServiceButton" TargetType="Button">
             <Setter Property="Width" Value="100" />
             <Setter Property="Margin" Value="5" />
@@ -52,21 +50,20 @@
             <Setter Property="Opacity" Value="0.5"/>
         </Style>
         <DataTemplate  x:Key="cbTemplate">
-            <TextBlock Text="{Binding Path=LongLabel}"></TextBlock>
+            <TextBlock Text="{Binding Path=LongLabelInUnit}"></TextBlock>
         </DataTemplate>
         <DataTemplate x:Key="ParameterTemplate" x:Name="MyTemplate">
             <Grid Background="{x:Null}" Height="30">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="200"/>
+                    <ColumnDefinition Width="250"/>
                     <ColumnDefinition Width="*" MinWidth="70"/>
-                    <ColumnDefinition Width="50"/>
                 </Grid.ColumnDefinitions>
                 <ComboBox ItemsSource="{Binding Source={x:Static Setting:ProgrammSettings.ForceParamKinds}}"
                           ItemTemplate="{StaticResource cbTemplate}"
                           SelectedValuePath="Id"
                           SelectedValue="{Binding Path=Kind_id}" Height="22" Margin="30,0,0,0">
                 </ComboBox>
-                <TextBox Text="{Binding Path=CrcValue, Converter={StaticResource MultyThousandConverter}}" Grid.Column="1" Background="#FFFFFEDF" Height="22">
+                <TextBox Text="{Binding Path=CrcValueInCurUnit}" Grid.Column="1" Background="#FFFFFEDF" Height="22">
                     <TextBox.ToolTip >
                         <Grid Width="400" Height="200">
                             <Grid.RowDefinitions>
@@ -83,12 +80,11 @@
                         </Grid>
                     </TextBox.ToolTip>
                 </TextBox>
-                <TextBlock Text="{Binding Path=ForceParamKind.UnitLabel, Converter={StaticResource MultyThousandTextConverter}}" Grid.Column="2" Height="22"></TextBlock>
             </Grid>
 
         </DataTemplate>
         <DataTemplate x:Key="LoadsTemplate">
-            <Expander Header="{Binding Path=LoadSet.Name}" Background="#FF97FF92" MinWidth="260" MinHeight="30" Margin="30,5,5,5">
+            <Expander Header="{Binding Path=Name}" Background="#FF97FF92" MinWidth="260" MinHeight="30" Margin="30,5,5,5">
                 <HeaderedContentControl >
                     <Grid>
                         <Grid.RowDefinitions>
@@ -105,10 +101,10 @@
                         <TextBlock x:Name="tbPartiaSafetyFactor" Grid.Row="1" Style="{StaticResource PropertyTextBlock}" Text="Коэффициент надежности"/>
                         <TextBlock x:Name="tbIsDeadLoad" Grid.Row="2" Style="{StaticResource PropertyTextBlock}" Text="Постоянная нагрузка"/>
                         <TextBlock x:Name="tbBothSign" Grid.Row="3" Style="{StaticResource PropertyTextBlock}" Text="Знакопеременная нагрузка"/>
-                        <TextBox x:Name="tbxName" Style="{StaticResource PropertyTextBox}" Text="{Binding Path=LoadSet.Name}" Grid.Column="1"/>
-                        <TextBox x:Name="tbxPartialSafetyFactor" Grid.Row="1" Grid.Column="1" Style="{StaticResource PropertyTextBox}" Text="{Binding Path=LoadSet.PartialSafetyFactor}"/>
-                        <CheckBox x:Name="cbIsDeadLoad" Content="" Grid.Column="1" HorizontalAlignment="Center" Margin="0" Grid.Row="2" VerticalAlignment="Center" IsChecked="{Binding Path=LoadSet.IsDeadLoad}" />
-                        <CheckBox x:Name="cbBothSign" Content="" Grid.Column="1" HorizontalAlignment="Center" Margin="0" Grid.Row="3" VerticalAlignment="Center" IsChecked="{Binding Path=LoadSet.BothSign}"/>
+                        <TextBox x:Name="tbxName" Style="{StaticResource PropertyTextBox}" Text="{Binding Path=Name}" Grid.Column="1"/>
+                        <TextBox x:Name="tbxPartialSafetyFactor" Grid.Row="1" Grid.Column="1" Style="{StaticResource PropertyTextBox}" Text="{Binding Path=PartialSafetyFactor}"/>
+                        <CheckBox x:Name="cbIsDeadLoad" Content="" Grid.Column="1" HorizontalAlignment="Center" Margin="0" Grid.Row="2" VerticalAlignment="Center" IsChecked="{Binding Path=IsDeadLoad}" />
+                        <CheckBox x:Name="cbBothSign" Content="" Grid.Column="1" HorizontalAlignment="Center" Margin="0" Grid.Row="3" VerticalAlignment="Center" IsChecked="{Binding Path=BothSign}"/>
                     </Grid>
                 </HeaderedContentControl>
                 <Expander.Effect>
@@ -174,7 +170,7 @@
                 </StackPanel>
                 <ListView x:Name="lvLoadSet"
                           Grid.Row="0" Margin="5" ItemTemplate="{StaticResource LoadsTemplate}" Grid.RowSpan="2"
-                          ItemsSource="{Binding Path=Loads}"
+                          ItemsSource="{Binding Path=LoadSets}"
                           SelectionChanged="lvLoadSet_SelectionChanged" SelectionMode="Single"
                           />
             </Grid>

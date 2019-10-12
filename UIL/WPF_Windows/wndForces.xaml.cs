@@ -24,12 +24,12 @@ namespace RDUIL.WPF_Windows
     public partial class wndForces : Window
     {
         private ForcesGroup _forcesGroup;
-        private ObservableCollection<BarLoadSet> _loadSets;
+        private ObservableCollection<LoadSet> _loadSets;
         public wndForces(ForcesGroup forcesGroup)
         {
             InitializeComponent();
             _forcesGroup = forcesGroup;
-            _loadSets = _forcesGroup.Loads;
+            _loadSets = _forcesGroup.LoadSets;
             this.DataContext = _forcesGroup;
         }
 
@@ -37,6 +37,7 @@ namespace RDUIL.WPF_Windows
         {
             try
             {
+                _forcesGroup.SteelColumnBase.IsLoadCasesActual = false;
                 this.Close();
             }
             catch (Exception ex)
@@ -51,7 +52,7 @@ namespace RDUIL.WPF_Windows
         }
         private void btnAddLoad_Click(object sender, RoutedEventArgs e)
         {
-            _forcesGroup.Loads.Add(new BarLoadSet(_forcesGroup));
+            _forcesGroup.LoadSets.Add(new LoadSet(_forcesGroup));
         }
         private void stpLoadsBtns_MouseLeave(object sender, MouseEventArgs e)
         {
@@ -61,7 +62,7 @@ namespace RDUIL.WPF_Windows
         {
             if (lvLoadSet.SelectedIndex >= 0)
             {
-                lvForcesList.ItemsSource = _forcesGroup.Loads[lvLoadSet.SelectedIndex].LoadSet.ForceParameters;
+                lvForcesList.ItemsSource = _forcesGroup.LoadSets[lvLoadSet.SelectedIndex].ForceParameters;
             }
             else
             {
@@ -89,7 +90,7 @@ namespace RDUIL.WPF_Windows
                     if (lvLoadSet.Items.Count == 1) lvLoadSet.UnselectAll();
                     else if (a < (lvLoadSet.Items.Count - 1)) lvLoadSet.SelectedIndex = a + 1;
                     else lvLoadSet.SelectedIndex = a - 1;
-                    _forcesGroup.Loads.RemoveAt(a);
+                    _forcesGroup.LoadSets.RemoveAt(a);
                 }
             }
             else
@@ -101,7 +102,7 @@ namespace RDUIL.WPF_Windows
         {
             if (lvLoadSet.SelectedIndex >= 0)
             {
-                _forcesGroup.Loads[lvLoadSet.SelectedIndex].LoadSet.ForceParameters.Add(new ForceParameter { Kind_id = 1 });
+                _forcesGroup.LoadSets[lvLoadSet.SelectedIndex].ForceParameters.Add(new ForceParameter { Kind_id = 1 });
             }
             else
             {
@@ -124,7 +125,7 @@ namespace RDUIL.WPF_Windows
                     if (lvForcesList.Items.Count == 1) lvForcesList.UnselectAll();
                     else if (a < (lvForcesList.Items.Count - 1)) lvForcesList.SelectedIndex = a + 1;
                     else lvForcesList.SelectedIndex = a - 1;
-                    _forcesGroup.Loads[lvLoadSet.SelectedIndex].LoadSet.ForceParameters.RemoveAt(a);
+                    _forcesGroup.LoadSets[lvLoadSet.SelectedIndex].ForceParameters.RemoveAt(a);
                 }
             }
             else

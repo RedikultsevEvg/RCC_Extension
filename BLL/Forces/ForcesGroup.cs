@@ -15,7 +15,8 @@ namespace RDBLL.Forces
     public class ForcesGroup
     {
         public SteelColumnBase SteelColumnBase { get; set; } //Обратная ссылка. База стальной колонны к котрой относится группа нагрузок
-        public ObservableCollection<BarLoadSet> Loads { get; set; } //Коллекция набора нагрузок
+        //public ObservableCollection<BarLoadSet> Loads { get; set; } //Коллекция набора нагрузок
+        public ObservableCollection<LoadSet> LoadSets { get; set; } //Коллекция набора нагрузок
         public Point2D Excentricity { get; set; } //Точка, к которой приложена группа нагрузок
 
         #region Constructors
@@ -26,8 +27,10 @@ namespace RDBLL.Forces
         public ForcesGroup(SteelColumnBase steelColumnBase)
         {
             SteelColumnBase = steelColumnBase;
-            Loads = new ObservableCollection<BarLoadSet>();
-            Loads.Add(new BarLoadSet(this));
+            //Loads = new ObservableCollection<BarLoadSet>();
+            //Loads.Add(new BarLoadSet(this));
+            LoadSets = new ObservableCollection<LoadSet>();
+            LoadSets.Add(new LoadSet(this));
             Excentricity = new Point2D(0, 0);
         }
         #endregion
