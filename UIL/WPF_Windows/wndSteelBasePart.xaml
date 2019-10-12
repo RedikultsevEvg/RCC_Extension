@@ -9,48 +9,7 @@
         Title="Участок базы колонны" Height="700" WindowStartupLocation="CenterScreen" Width="800" MinWidth="600">
     <Window.Resources>
         <Convert:MilliConverter x:Key="MilliConverter"/>
-        <Convert:MultThousText x:Key="MultyThousandTextConverter"/>
         <BooleanToVisibilityConverter x:Key="VisibleIfTrueConverter" />
-        <Style x:Key="ServiceButton" TargetType="Button">
-            <Setter Property="Width" Value="100" />
-            <Setter Property="Margin" Value="5" />
-            <Setter Property="Background" Value="#FFB5FCFF" />
-            <Setter Property="HorizontalAlignment" Value="Right" />
-        </Style>
-        <Style x:Key="ServiceButtonImage" TargetType="Image">
-            <Setter Property="Width" Value="40" />
-            <Setter Property="Height" Value="40" />
-            <Setter Property="Stretch" Value="Fill" />
-        </Style>
-        <Style x:Key="PropertyTextBlock" TargetType="TextBlock">
-            <Setter Property="Margin" Value="5" />
-            <Setter Property="TextWrapping" Value="Wrap" />
-            <Setter Property="FontSize" Value="12" />
-        </Style>
-        <Style x:Key="PropertyTextBox" TargetType="TextBox">
-            <Setter Property="Margin" Value="5" />
-            <Setter Property="TextWrapping" Value="Wrap" />
-            <Setter Property="FontSize" Value="12" />
-        </Style>
-        <Style x:Key="OperationButton" TargetType="Button">
-            <Setter Property="Width" Value="35" />
-            <Setter Property="Height" Value="35" />
-            <Setter Property="Margin" Value="5" />
-            <Setter Property="Background" Value="#FFB5FCFF" />
-            <Setter Property="HorizontalAlignment" Value="Stretch" />
-        </Style>
-        <Style x:Key="OperationStack" TargetType="StackPanel">
-            <Setter Property="Background" Value="#FF63D451"/>
-            <Setter Property="HorizontalAlignment" Value="Right"/>
-            <Setter Property="Orientation" Value="Horizontal"/>
-            <Setter Property="Panel.ZIndex" Value="1"/>
-            <Setter Property="Opacity" Value="0.5"/>
-        </Style>
-        <Style x:Key="OperationButtonImage" TargetType="Image">
-            <Setter Property="Width" Value="30" />
-            <Setter Property="Height" Value="30" />
-            <Setter Property="Stretch" Value="Uniform" />
-        </Style>
         <DataTemplate x:Key="PartTemplate" x:Name="MyTemplate">
             <Expander Header="{Binding Path=Name}" Background="#FF97FF92" MinWidth="{Binding ActualWidth, ElementName=lvPartsList, Mode=OneWay}" MinHeight="30" Margin="0,5">
                 <HeaderedContentControl>

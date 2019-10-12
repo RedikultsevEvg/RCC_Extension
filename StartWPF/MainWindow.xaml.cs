@@ -18,6 +18,7 @@ using winForms = System.Windows.Forms;
 using RDUIL.WPF_Windows.ControlClasses;
 using RDBLL.Entity.SC.Column;
 using System.Threading;
+using RDUIL.WPF_Windows;
 
 namespace StartWPF
 {
@@ -141,6 +142,12 @@ namespace StartWPF
                 CalcKindControl calcKindControl = new CalcKindControl(calcKind);
                 wpCalcPanel.Children.Add(calcKindControl);
             }
+        }
+
+        private void BtnSettings_Click(object sender, RoutedEventArgs e)
+        {
+            wndMeasureUnits newWindow = new wndMeasureUnits();
+            newWindow.ShowDialog();
         }
     }
 }
