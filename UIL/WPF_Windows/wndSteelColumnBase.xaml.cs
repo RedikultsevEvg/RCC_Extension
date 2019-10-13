@@ -13,6 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using RDBLL.Entity.SC.Column;
 using CSL.Reports;
+using RDBLL.Entity.MeasureUnits;
 
 namespace RDUIL.WPF_Windows
 {
@@ -28,6 +29,10 @@ namespace RDUIL.WPF_Windows
             InitializeComponent();
             _steelColumnBase = steelColumnBase;
             this.DataContext = _steelColumnBase;
+            tbWidthMeasure.Text = MeasureUnitConverter.GetUnitLabelText(0);
+            tbLengthMeasure.Text = MeasureUnitConverter.GetUnitLabelText(0);
+            tbThicknessMeasure.Text = MeasureUnitConverter.GetUnitLabelText(0);
+            tbConcreteStrengthMeasure.Text = MeasureUnitConverter.GetUnitLabelText(3);
         }
 
         private void btnOK_Click(object sender, RoutedEventArgs e)

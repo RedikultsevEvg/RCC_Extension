@@ -24,7 +24,7 @@ namespace RDBLL.Forces
             LoadSet = new LoadSet();
             LoadSet.Name = "";
             LoadSet.PartialSafetyFactor = 1;
-            LoadSet.IsDeadLoad = false;
+            LoadSet.IsLiveLoad = false;
             LoadSet.IsCombination = false;
             LoadSet.BothSign = false;
         }
@@ -33,7 +33,7 @@ namespace RDBLL.Forces
             LoadSet = new LoadSet();
             LoadSet.Name = "Новая нагрузка";
             LoadSet.PartialSafetyFactor = 1.1;
-            LoadSet.IsDeadLoad = true;
+            LoadSet.IsLiveLoad = true;
             LoadSet.IsCombination = false;
             LoadSet.BothSign = false;
         }

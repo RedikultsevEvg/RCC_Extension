@@ -9,13 +9,14 @@
         mc:Ignorable="d"
         Title="Усилие" Height="600" Width="1000" WindowStartupLocation="CenterScreen" MinWidth="1000" MinHeight="600">
     <Window.Resources>
+        <BooleanToVisibilityConverter x:Key="VisibleIfTrueConverter" />
         <DataTemplate  x:Key="cbTemplate">
             <TextBlock Text="{Binding Path=LongLabelInUnit}"></TextBlock>
         </DataTemplate>
         <DataTemplate x:Key="ParameterTemplate" x:Name="MyTemplate">
             <Grid Background="{x:Null}" Height="30">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="250"/>
+                    <ColumnDefinition Width="230"/>
                     <ColumnDefinition Width="*" MinWidth="70"/>
                 </Grid.ColumnDefinitions>
                 <ComboBox ItemsSource="{Binding Source={x:Static Setting:ProgrammSettings.ForceParamKinds}}"
@@ -59,12 +60,15 @@
                         </Grid.ColumnDefinitions>
                         <TextBlock x:Name="tbName" Style="{StaticResource PropertyTextBlock}" Text="Вид нагрузки"/>
                         <TextBlock x:Name="tbPartiaSafetyFactor" Grid.Row="1" Style="{StaticResource PropertyTextBlock}" Text="Коэффициент надежности"/>
-                        <TextBlock x:Name="tbIsDeadLoad" Grid.Row="2" Style="{StaticResource PropertyTextBlock}" Text="Постоянная нагрузка"/>
-                        <TextBlock x:Name="tbBothSign" Grid.Row="3" Style="{StaticResource PropertyTextBlock}" Text="Знакопеременная нагрузка"/>
+                        <TextBlock x:Name="tbIsDeadLoad" Grid.Row="2" Style="{StaticResource PropertyTextBlock}" Text="Временная нагрузка"/>
+                        <TextBlock x:Name="tbBothSign" Grid.Row="3" Style="{StaticResource PropertyTextBlock}" Text="Знакопеременная нагрузка"
+                                   Visibility="{Binding Path=IsLiveLoad, Converter={StaticResource VisibleIfTrueConverter}}"/>
                         <TextBox x:Name="tbxName" Style="{StaticResource PropertyTextBox}" Text="{Binding Path=Name}" Grid.Column="1"/>
                         <TextBox x:Name="tbxPartialSafetyFactor" Grid.Row="1" Grid.Column="1" Style="{StaticResource PropertyTextBox}" Text="{Binding Path=PartialSafetyFactor}"/>
-                        <CheckBox x:Name="cbIsDeadLoad" Content="" Grid.Column="1" HorizontalAlignment="Center" Margin="0" Grid.Row="2" VerticalAlignment="Center" IsChecked="{Binding Path=IsDeadLoad}" />
-                        <CheckBox x:Name="cbBothSign" Content="" Grid.Column="1" HorizontalAlignment="Center" Margin="0" Grid.Row="3" VerticalAlignment="Center" IsChecked="{Binding Path=BothSign}"/>
+                        <CheckBox x:Name="cbIsLiveLoad" Content="" Grid.Column="1" HorizontalAlignment="Center" Margin="0" Grid.Row="2" VerticalAlignment="Center" IsChecked="{Binding Path=IsLiveLoad}" />
+                        <CheckBox x:Name="cbBothSign" Content="" Grid.Column="1" HorizontalAlignment="Center"
+                                  Margin="0" Grid.Row="3" VerticalAlignment="Center" IsChecked="{Binding Path=BothSign}"
+                                  Visibility="{Binding Path=IsLiveLoad, Converter={StaticResource VisibleIfTrueConverter}}"/>
                     </Grid>
                 </HeaderedContentControl>
                 <Expander.Effect>

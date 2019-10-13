@@ -16,6 +16,7 @@ using System.Collections.ObjectModel;
 using RDBLL.Processors.SC;
 using Winforms = System.Windows.Forms;
 using RDBLL.DrawUtils.SteelBase;
+using RDBLL.Entity.MeasureUnits;
 
 namespace RDUIL.WPF_Windows
 {
@@ -36,6 +37,7 @@ namespace RDUIL.WPF_Windows
 
         private void btnCancel_Click(object sender, RoutedEventArgs e)
         {
+            _steelColumnBase.IsBoltsActual = false;
             this.Close();
         }
 

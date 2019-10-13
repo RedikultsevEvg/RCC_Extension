@@ -59,7 +59,7 @@ namespace RDBLL.Processors.Forces
         public static LoadSet DeduplicateLoadSet(LoadSet loadSet)
         {
             LoadSet deduplicatedSet = new LoadSet();
-            deduplicatedSet.IsDeadLoad = loadSet.IsDeadLoad;
+            deduplicatedSet.IsLiveLoad = loadSet.IsLiveLoad;
             deduplicatedSet.BothSign = loadSet.BothSign;
             deduplicatedSet.PartialSafetyFactor = loadSet.PartialSafetyFactor;
             SumForces(deduplicatedSet, loadSet, 1, false);
@@ -78,7 +78,7 @@ namespace RDBLL.Processors.Forces
                     int count = LoadCases.Count;
                     for (int i = 0; i < count; i++)
                     {
-                        if (tmpLoadSet.IsDeadLoad) //Если нагрузка является постоянной, то просто добавляем данную нагрузку
+                        if (! tmpLoadSet.IsLiveLoad) //Если нагрузка является постоянной, то просто добавляем данную нагрузку
                         {
                             SumForces(LoadCases[i], tmpLoadSet);
                         }

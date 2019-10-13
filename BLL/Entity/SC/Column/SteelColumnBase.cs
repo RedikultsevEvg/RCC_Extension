@@ -20,6 +20,7 @@ namespace RDBLL.Entity.SC.Column
         //private bool _isActual;
         private bool _isLoadCasesActual;
         private bool _isBoltsActual;
+        private bool _isBasePartsActual;
         //public ColumnBaseResult ColumnBaseResult { get; set; }
         public int Id { get; set; } //Код базы
         public int LevelId { get; set; } //Код базы
@@ -50,6 +51,15 @@ namespace RDBLL.Entity.SC.Column
                 _isLoadCasesActual = value;
             }
         }
+        public bool IsBasePartsActual
+        {
+            get { return _isBasePartsActual; }
+            set
+            {
+                if (!value) SetNotActual();
+                _isBasePartsActual = value;
+            }
+        }
         public bool IsBoltsActual
         {
             get { return _isBoltsActual; }
@@ -71,7 +81,7 @@ namespace RDBLL.Entity.SC.Column
             Thickness = 0.06;
             Koeff_WorkCond = 1.1;
             SteelStrength = 245000000;
-            ConcreteStrength = 1000000;
+            ConcreteStrength = 10500000;
             BoltPrestressForce = 0;
             LoadsGroup = new ObservableCollection<ForcesGroup>();
             LoadsGroup.Add(new ForcesGroup(this));
