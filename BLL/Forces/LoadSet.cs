@@ -14,20 +14,11 @@ namespace RDBLL.Forces
     public class LoadSet : IEquatable<LoadSet>
     {
         #region
-        private bool _isDeadLoad;
         public int Id { get; set; }
         public ForcesGroup ForcesGroup { get; set; } //Обратная ссылка на родительскую группу нагруок
-        public String Name { get; set; } //Наименование
+        public string Name { get; set; } //Наименование
         public double PartialSafetyFactor { get; set; } //Коэффициент надежности по нагрузке
-        public bool IsDeadLoad //Флаг постоянной нагрузки
-        {
-            get { return _isDeadLoad; }
-            set
-            {
-                if (value) { BothSign = false; }
-                _isDeadLoad = value;
-            }
-        }
+        public bool IsLiveLoad {get; set; }//Флаг временной нагрузки
         public bool IsCombination { get; set; } //Флаг комбинации
         public bool BothSign { get; set; } //Флаг знакопеременной нагрузки
         public ObservableCollection<ForceParameter> ForceParameters { get; set; }
@@ -45,7 +36,7 @@ namespace RDBLL.Forces
             forcesGroup.SteelColumnBase.IsLoadCasesActual = false;
             Name = "Новая нагрузка";
             PartialSafetyFactor = 1.1;
-            IsDeadLoad = true;
+            IsLiveLoad = false;
             IsCombination = false;
             BothSign = false;
             ForceParameters = new ObservableCollection<ForceParameter>();

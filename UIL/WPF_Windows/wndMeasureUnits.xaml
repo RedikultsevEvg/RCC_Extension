@@ -6,16 +6,17 @@
         xmlns:local="clr-namespace:RDUIL.WPF_Windows"
         xmlns:Setting="clr-namespace:RDBLL.Common.Service;assembly=BLL"
         mc:Ignorable="d"
-        Title="wndMeasureUnits" Height="450" Width="620" WindowStartupLocation="CenterScreen">
+        Title="Настройка единиц измерения" Height="300" Width="420" WindowStartupLocation="CenterScreen" MinWidth="420" MinHeight="300">
     <Window.Resources>
         <DataTemplate  x:Key="cbTemplate">
-            <TextBlock Text="{Binding Path=UnitName}"></TextBlock>
+            <TextBlock Text="{Binding Path=UnitName}" VerticalAlignment="Center"></TextBlock>
         </DataTemplate>
         <DataTemplate x:Key="MeasureUnitsTemplate">
-            <Grid>
+            <Grid Height="30">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="300"/>
-                    <ColumnDefinition MinWidth="300"/>
+                    <ColumnDefinition Width="280"/>
+                    <ColumnDefinition Width="100"/>
+                    <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
                 <TextBlock x:Name="ParamName"
                            Grid.Column="0"
@@ -23,10 +24,11 @@
                 </TextBlock>
                 <ComboBox x:Name="cbUnits"
                     Grid.Column="1"
+                    Height="22"
                     ItemsSource="{Binding Path=UnitLabels}"
                     ItemTemplate="{StaticResource cbTemplate}"
                     SelectedValuePath="Id"
-                    SelectedValue="{Binding Path=CurrentUnitLabelId}">
+                    SelectedValue="{Binding Path=CurrentUnitLabelId}" VerticalAlignment="Center">
                 </ComboBox>
             </Grid>
         </DataTemplate>

@@ -37,6 +37,7 @@ namespace RDUIL.WPF_Windows
             try
             {
                 this.DialogResult = true;
+                _steelColumnBase.IsBoltsActual = false;
                 this.Close();
             }
             catch (Exception ex)

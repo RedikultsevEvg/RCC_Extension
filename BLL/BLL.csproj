@@ -51,6 +51,7 @@
     <Compile Include="DrawUtils\SteelBase\DrawSteelBase.cs" />
     <Compile Include="Entity\Common\NDM\NdmArea.cs" />
     <Compile Include="Entity\MeasureUnits\MeasureUnit.cs" />
+    <Compile Include="Entity\MeasureUnits\MeasureUnitConverter.cs" />
     <Compile Include="Entity\MeasureUnits\MeasureUnitLabel.cs" />
     <Compile Include="Entity\RCC\BuildingAndSite\BuildingSite.cs" />
     <Compile Include="Entity\RCC\BuildingAndSite\Level.cs" />
@@ -69,6 +70,7 @@
     <Compile Include="Entity\Results\SC\ColumnBasePartResult.cs" />
     <Compile Include="Entity\Results\SC\ColumnBaseResult.cs" />
     <Compile Include="Entity\SC\Column\SteelBasePart.cs" />
+    <Compile Include="Entity\SC\Column\SteelBaseSubPart.cs" />
     <Compile Include="Entity\SC\Column\SteelBolt.cs" />
     <Compile Include="Entity\SC\Column\SteelColumnBase.cs" />
     <Compile Include="Forces\BarLoadSet.cs" />

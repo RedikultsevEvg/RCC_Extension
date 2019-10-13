@@ -72,7 +72,7 @@ namespace RDBLL.Processors.Forces
         public static BarLoadSet DeduplicateLoadSet (BarLoadSet barLoadSet)
         {
             BarLoadSet deduplicatedSet = new BarLoadSet();
-            deduplicatedSet.LoadSet.IsDeadLoad = barLoadSet.LoadSet.IsDeadLoad;
+            deduplicatedSet.LoadSet.IsLiveLoad = barLoadSet.LoadSet.IsLiveLoad;
             deduplicatedSet.LoadSet.BothSign = barLoadSet.LoadSet.BothSign;
             deduplicatedSet.LoadSet.PartialSafetyFactor = barLoadSet.LoadSet.PartialSafetyFactor;
             SumForces(deduplicatedSet, barLoadSet, 1, false);

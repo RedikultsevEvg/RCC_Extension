@@ -30,6 +30,8 @@ namespace RDBLL.Entity.SC.Column
         public bool AddSymmetricX { get; set; } //Наличие симметричного участка относительно оси X
         public bool AddSymmetricY { get; set; } //Наличие симметричного участка по оси Y
 
+        public List<SteelBaseSubPart> SubParts { get; set; }
+
         #endregion
         //Constructors
         #region
@@ -56,6 +58,28 @@ namespace RDBLL.Entity.SC.Column
             SetDefault();
         }
         #endregion
+        public void GetSubParts()
+        {
+            SubParts = new List<SteelBaseSubPart>();
+            int num = 20;
+            int quant = num ^ 2;
+            double subPartArea = Width * Length / quant;
+            double stepX = Width / num;
+            double stepY = Length / num;
+            double startCenterX = Center[0] - Width/2 + stepX / 2;
+            double startCenterY = Center[1] - Length/2 + stepY / 2;
+            for ( int i = 0; i < num; i++)
+            {
+                for (int j = 0; j < num; j++)
+                {
+                    SteelBaseSubPart subPart = new SteelBaseSubPart();
+                    subPart.Area = subPartArea;
+                    subPart.CenterX = startCenterX + stepX * i;
+                    subPart.CenterY = startCenterY + stepY * j;
+                    SubParts.Add(subPart);
+                }
+            }
+        }
         //IClonable
         public object Clone()
         {
