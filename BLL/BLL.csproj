@@ -47,9 +47,16 @@
   <ItemGroup>
     <Compile Include="Common\Geometry\MassProperty.cs" />
     <Compile Include="Common\Geometry\MathOperation.cs" />
+    <Compile Include="Common\Geometry\Mathematic\Constants.cs" />
+    <Compile Include="Common\Geometry\Mathematic\Matrix.cs" />
     <Compile Include="Common\Geometry\RectCrossSection.cs" />
     <Compile Include="DrawUtils\SteelBase\DrawSteelBase.cs" />
+    <Compile Include="Entity\Common\NDM\Curvature.cs" />
     <Compile Include="Entity\Common\NDM\NdmArea.cs" />
+    <Compile Include="Entity\Common\NDM\NdmConcreteArea.cs" />
+    <Compile Include="Entity\Common\NDM\NDMProcessor.cs" />
+    <Compile Include="Entity\Common\NDM\NDMSteelArea.cs" />
+    <Compile Include="Entity\Common\NDM\StiffnessCoefficient.cs" />
     <Compile Include="Entity\MeasureUnits\MeasureUnit.cs" />
     <Compile Include="Entity\MeasureUnits\MeasureUnitConverter.cs" />
     <Compile Include="Entity\MeasureUnits\MeasureUnitLabel.cs" />

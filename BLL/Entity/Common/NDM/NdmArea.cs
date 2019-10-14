@@ -10,10 +10,15 @@ namespace RDBLL.Entity.Common.NDM
     public class NdmArea
     {
         public double Area { get; set; }
-        public double Coord_X { get; set; }
-        public double Coord_Y { get; set; }
-        public ObservableCollection<double> CompressiveStengthes { get; set; }
-        public ObservableCollection<double> TensionStengthes { get; set; }
-        public ObservableCollection<double> Srains { get; set; }
+        public double CenterX { get; set; }
+        public double CenterY { get; set; }
+        public double ElasticModulus { get; set; }
+        //public ObservableCollection<double> CompressiveStengthes { get; set; }
+        //public ObservableCollection<double> TensionStengthes { get; set; }
+        //public ObservableCollection<double> Srains { get; set; }
+        public NdmArea()
+        {
+
+        }
     }
 }

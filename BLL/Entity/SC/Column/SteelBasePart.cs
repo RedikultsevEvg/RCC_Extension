@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using RDBLL.Entity.Common.NDM;
 
 namespace RDBLL.Entity.SC.Column
 {
@@ -30,7 +31,7 @@ namespace RDBLL.Entity.SC.Column
         public bool AddSymmetricX { get; set; } //Наличие симметричного участка относительно оси X
         public bool AddSymmetricY { get; set; } //Наличие симметричного участка по оси Y
 
-        public List<SteelBaseSubPart> SubParts { get; set; }
+        public List<NdmConcreteArea> SubParts { get; set; }
 
         #endregion
         //Constructors
@@ -60,26 +61,33 @@ namespace RDBLL.Entity.SC.Column
         #endregion
         public void GetSubParts()
         {
-            SubParts = new List<SteelBaseSubPart>();
-            int num = 20;
-            int quant = num ^ 2;
-            double subPartArea = Width * Length / quant;
-            double stepX = Width / num;
-            double stepY = Length / num;
+            SubParts = new List<NdmConcreteArea>();
+            double elementSize = 0.02;
+            int numX = Convert.ToInt32(Width / elementSize);
+            int numY = Convert.ToInt32(Length / elementSize);
+   
+            double stepX = Width / numX;
+            double stepY = Length / numY;
+
             double startCenterX = Center[0] - Width/2 + stepX / 2;
             double startCenterY = Center[1] - Length/2 + stepY / 2;
-            for ( int i = 0; i < num; i++)
+
+            for ( int i = 0; i < numX; i++)
             {
-                for (int j = 0; j < num; j++)
+                for (int j = 0; j < numY; j++)
                 {
-                    SteelBaseSubPart subPart = new SteelBaseSubPart();
-                    subPart.Area = subPartArea;
-                    subPart.CenterX = startCenterX + stepX * i;
-                    subPart.CenterY = startCenterY + stepY * j;
+                    NdmConcreteArea subPart = new NdmConcreteArea();
+                    subPart.Width = stepX;
+                    subPart.Length = stepY;
+                    subPart.ConcreteArea.CenterX = startCenterX + stepX * i;
+                    subPart.ConcreteArea.CenterY = startCenterY + stepY * j;
                     SubParts.Add(subPart);
                 }
             }
         }
+
+
+
         //IClonable
         public object Clone()
         {

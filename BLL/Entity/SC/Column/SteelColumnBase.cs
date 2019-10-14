@@ -7,6 +7,7 @@ using RDBLL.Forces;
 using RDBLL.Entity.Results.SC;
 using RDBLL.Entity.RCC.BuildingAndSite;
 using System.Collections.ObjectModel;
+using RDBLL.Entity.Common.NDM;
 
 namespace RDBLL.Entity.SC.Column
 {
@@ -16,7 +17,7 @@ namespace RDBLL.Entity.SC.Column
     public class SteelColumnBase : ICloneable
     {
         //Properties
-        #region
+        #region Fields
         //private bool _isActual;
         private bool _isLoadCasesActual;
         private bool _isBoltsActual;
@@ -42,6 +43,9 @@ namespace RDBLL.Entity.SC.Column
         public ObservableCollection<SteelBolt> SteelBolts { get; set; } //Коллекция болтов
         public List<SteelBolt> ActualSteelBolts { get; set; } //Коллекция болтов с учетом симметрии
         public List<LoadSet> LoadCases { get; set; } //Коллекция комбинаций
+
+        public List<NdmArea> NdmAreas { get; set; }
+
         public bool IsLoadCasesActual
         {
             get {return _isLoadCasesActual; }
@@ -70,9 +74,7 @@ namespace RDBLL.Entity.SC.Column
             }
         }
         #endregion
-
-        //Constructors
-        #region
+        #region Constructors
         public void SetDefault()
         {
             Name = "Новая база";
@@ -116,6 +118,27 @@ namespace RDBLL.Entity.SC.Column
         }
 
         #endregion
+        #region Methods
+        public void GetNdmAreas()
+        {
+            NdmAreas = new List<NdmArea>();
+
+            foreach (SteelBasePart steelBasePart in ActualSteelBaseParts)
+            {
+                steelBasePart.GetSubParts();
+                foreach (NdmConcreteArea ndmConcreteArea in steelBasePart.SubParts)
+                {
+                    NdmAreas.Add(ndmConcreteArea.ConcreteArea);
+                }
+            }
+            foreach (SteelBolt steelBolt in ActualSteelBolts)
+            {
+                steelBolt.GetSubParts();
+                NdmAreas.Add(steelBolt.SubPart.SteelArea);
+            }
+        }
+        #endregion
+
         //IClonable
         public object Clone()
         {

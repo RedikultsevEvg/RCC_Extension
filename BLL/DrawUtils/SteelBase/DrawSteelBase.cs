@@ -164,8 +164,8 @@ namespace RDBLL.DrawUtils.SteelBase
             centerEllipse.Fill = Brushes.Black;
             centerEllipse.Opacity = opacity;
             canvas.Children.Add(centerEllipse);
-            double leftCornerX = columnBaseCenter[0] + steelBolt.CoordX * scale_factor * koeffX- centerEllipse.Width/2;
-            double topCornerY = columnBaseCenter[1] + steelBolt.CoordY * scale_factor * koeffY- centerEllipse.Width/2;
+            double leftCornerX = columnBaseCenter[0] + steelBolt.CenterX * scale_factor * koeffX- centerEllipse.Width/2;
+            double topCornerY = columnBaseCenter[1] + steelBolt.CenterY * scale_factor * koeffY- centerEllipse.Width/2;
             Canvas.SetLeft(centerEllipse, leftCornerX);
             Canvas.SetTop(centerEllipse, topCornerY);
         }
