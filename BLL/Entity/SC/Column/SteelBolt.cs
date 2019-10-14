@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using RDBLL.Entity.Common.NDM;
 
 namespace RDBLL.Entity.SC.Column
 {
@@ -13,10 +14,11 @@ namespace RDBLL.Entity.SC.Column
         public SteelColumnBase SteelColumnBase { get; set; } //Ссылка на базу
         public String Name { get; set; }
         public double Diameter { get; set; }
-        public double CoordX { get; set; }
-        public double CoordY { get; set; }
+        public double CenterX { get; set; }
+        public double CenterY { get; set; }
         public bool AddSymmetricX { get; set; } //Наличие симметричного участка относительно оси X
         public bool AddSymmetricY { get; set; } //Наличие симметричного участка по оси Y
+        public NdmSteelArea SubPart { get; set; }
 
         //Constructors
         #region
@@ -25,12 +27,20 @@ namespace RDBLL.Entity.SC.Column
             SteelBaseId = steelColumnBase.Id;
             Name = "Новый болт";
             Diameter = 0.030;
-            CoordX = 0.200;
-            CoordY = 0.300;
+            CenterX = 0.200;
+            CenterY = 0.300;
             AddSymmetricX = true;
             AddSymmetricY = true;
         }
         #endregion
+
+        public void GetSubParts()
+        {
+            SubPart = new NdmSteelArea();
+            SubPart.Diametr = Diameter;
+            SubPart.SteelArea.CenterX = CenterX;
+            SubPart.SteelArea.CenterY = CenterY;
+        }
 
         public object Clone()
         {

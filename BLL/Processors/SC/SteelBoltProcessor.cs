@@ -16,20 +16,20 @@ namespace RDBLL.Processors.SC
             if (steelBolt.AddSymmetricX)
             {
                 SteelBolt newSteelBolt = (SteelBolt)steelBolt.Clone();
-                newSteelBolt.CoordX = (-1.0) * steelBolt.CoordX;
+                newSteelBolt.CenterX = (-1.0) * steelBolt.CenterX;
                 steelBolts.Add(newSteelBolt);
             }
             if (steelBolt.AddSymmetricY)
             {
                 SteelBolt newSteelBolt = (SteelBolt)steelBolt.Clone();
-                newSteelBolt.CoordY = (-1.0) * steelBolt.CoordY;
+                newSteelBolt.CenterY = (-1.0) * steelBolt.CenterY;
                 steelBolts.Add(newSteelBolt);
             }
             if (steelBolt.AddSymmetricX & steelBolt.AddSymmetricY)
             {
                 SteelBolt newSteelBolt = (SteelBolt)steelBolt.Clone();
-                newSteelBolt.CoordX = (-1.0) * steelBolt.CoordX;
-                newSteelBolt.CoordY = (-1.0) * steelBolt.CoordY;
+                newSteelBolt.CenterX = (-1.0) * steelBolt.CenterX;
+                newSteelBolt.CenterY = (-1.0) * steelBolt.CenterY;
                 steelBolts.Add(newSteelBolt);
             }
             return steelBolts;
