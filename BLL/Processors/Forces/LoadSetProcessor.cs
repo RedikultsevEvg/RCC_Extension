@@ -112,13 +112,13 @@ namespace RDBLL.Processors.Forces
                 switch (forceParameter.Kind_id)
                 {
                     case 1:
-                        Nz = forceParameter.CrcValue;
+                        Nz = forceParameter.DesignValue;
                         break;
                     case 2:
-                        Mx = forceParameter.CrcValue;
+                        Mx = forceParameter.DesignValue;
                         break;
                     case 3:
-                        My = forceParameter.CrcValue;
+                        My = forceParameter.DesignValue;
                         break;
                 }
             }

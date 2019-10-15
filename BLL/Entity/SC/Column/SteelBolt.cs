@@ -33,15 +33,6 @@ namespace RDBLL.Entity.SC.Column
             AddSymmetricY = true;
         }
         #endregion
-
-        public void GetSubParts()
-        {
-            SubPart = new NdmSteelArea();
-            SubPart.Diametr = Diameter;
-            SubPart.SteelArea.CenterX = CenterX;
-            SubPart.SteelArea.CenterY = CenterY;
-        }
-
         public object Clone()
         {
             SteelBolt steelBolt = this.MemberwiseClone() as SteelBolt;

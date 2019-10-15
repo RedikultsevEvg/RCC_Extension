@@ -59,35 +59,6 @@ namespace RDBLL.Entity.SC.Column
             SetDefault();
         }
         #endregion
-        public void GetSubParts()
-        {
-            SubParts = new List<NdmConcreteArea>();
-            double elementSize = 0.02;
-            int numX = Convert.ToInt32(Width / elementSize);
-            int numY = Convert.ToInt32(Length / elementSize);
-   
-            double stepX = Width / numX;
-            double stepY = Length / numY;
-
-            double startCenterX = Center[0] - Width/2 + stepX / 2;
-            double startCenterY = Center[1] - Length/2 + stepY / 2;
-
-            for ( int i = 0; i < numX; i++)
-            {
-                for (int j = 0; j < numY; j++)
-                {
-                    NdmConcreteArea subPart = new NdmConcreteArea();
-                    subPart.Width = stepX;
-                    subPart.Length = stepY;
-                    subPart.ConcreteArea.CenterX = startCenterX + stepX * i;
-                    subPart.ConcreteArea.CenterY = startCenterY + stepY * j;
-                    SubParts.Add(subPart);
-                }
-            }
-        }
-
-
-
         //IClonable
         public object Clone()
         {

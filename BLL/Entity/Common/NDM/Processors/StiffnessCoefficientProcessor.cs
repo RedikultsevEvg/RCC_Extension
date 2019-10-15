@@ -5,9 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 using RDBLL.Common.Geometry.Mathematic;
 
-namespace RDBLL.Entity.Common.NDM
+namespace RDBLL.Entity.Common.NDM.Processors
 {
-    public static class NDMProcessor
+    public static class StifCoefProcessor
     {
     }
 }

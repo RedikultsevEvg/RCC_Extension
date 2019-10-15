@@ -119,24 +119,7 @@ namespace RDBLL.Entity.SC.Column
 
         #endregion
         #region Methods
-        public void GetNdmAreas()
-        {
-            NdmAreas = new List<NdmArea>();
 
-            foreach (SteelBasePart steelBasePart in ActualSteelBaseParts)
-            {
-                steelBasePart.GetSubParts();
-                foreach (NdmConcreteArea ndmConcreteArea in steelBasePart.SubParts)
-                {
-                    NdmAreas.Add(ndmConcreteArea.ConcreteArea);
-                }
-            }
-            foreach (SteelBolt steelBolt in ActualSteelBolts)
-            {
-                steelBolt.GetSubParts();
-                NdmAreas.Add(steelBolt.SubPart.SteelArea);
-            }
-        }
         #endregion
 
         //IClonable

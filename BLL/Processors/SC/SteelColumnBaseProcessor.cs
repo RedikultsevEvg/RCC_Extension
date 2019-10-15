@@ -9,6 +9,7 @@ using RDBLL.Entity.SC.Column;
 using RDBLL.Entity.Results.SC;
 using RDBLL.Processors.Forces;
 using RDBLL.Common.Geometry;
+using RDBLL.Entity.Common.NDM;
 
 
 namespace RDBLL.Processors.SC
@@ -25,6 +26,17 @@ namespace RDBLL.Processors.SC
             ActualizeSteelBolts(columnBase);
             ActualizeLoadCases(columnBase);
             columnBase.IsActual = true;
+
+            GetNdmAreas(columnBase);
+            foreach (LoadSet loadCase in columnBase.LoadCases)
+            {
+                SumForces sumForces = new SumForces(loadCase);
+                StiffnessCoefficient stiffnessCoefficient = new StiffnessCoefficient(columnBase.NdmAreas);
+                Curvature curvature = new Curvature(sumForces, stiffnessCoefficient);
+                SumForces sumForces2 = new SumForces(stiffnessCoefficient, curvature);
+                Console.WriteLine("Ok");
+            }
+            Console.WriteLine("Ok");
         }
 
         public static void ActualizeLoadCases(SteelColumnBase columnBase)
@@ -75,7 +87,24 @@ namespace RDBLL.Processors.SC
             columnBaseResult.Stresses.MaxStress = maxStress;
             return columnBaseResult;
         }
+        public static void GetNdmAreas(SteelColumnBase columnBase)
+        {
+            columnBase.NdmAreas = new List<NdmArea>();
 
+            foreach (SteelBasePart steelBasePart in columnBase.ActualSteelBaseParts)
+            {
+                SteelColumnBasePartProcessor.GetSubParts(steelBasePart);
+                foreach (NdmConcreteArea ndmConcreteArea in steelBasePart.SubParts)
+                {
+                    columnBase.NdmAreas.Add(ndmConcreteArea.ConcreteArea);
+                }
+            }
+            foreach (SteelBolt steelBolt in columnBase.ActualSteelBolts)
+            {
+                SteelBoltProcessor.GetSubParts(steelBolt);
+                columnBase.NdmAreas.Add(steelBolt.SubPart.SteelArea);
+            }
+        }
     }
 }
 
