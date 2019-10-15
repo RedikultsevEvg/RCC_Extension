@@ -56,7 +56,9 @@
     <Compile Include="Entity\Common\NDM\NdmConcreteArea.cs" />
     <Compile Include="Entity\Common\NDM\NDMProcessor.cs" />
     <Compile Include="Entity\Common\NDM\NDMSteelArea.cs" />
+    <Compile Include="Entity\Common\NDM\Processors\StiffnessCoefficientProcessor.cs" />
     <Compile Include="Entity\Common\NDM\StiffnessCoefficient.cs" />
+    <Compile Include="Entity\Common\NDM\SumForces.cs" />
     <Compile Include="Entity\MeasureUnits\MeasureUnit.cs" />
     <Compile Include="Entity\MeasureUnits\MeasureUnitConverter.cs" />
     <Compile Include="Entity\MeasureUnits\MeasureUnitLabel.cs" />

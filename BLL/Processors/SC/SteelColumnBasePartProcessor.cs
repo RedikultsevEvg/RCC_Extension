@@ -10,12 +10,13 @@ using System.Windows.Forms;
 using RDBLL.Forces;
 using RDBLL.Processors.Forces;
 using RDBLL.Entity.Results.Forces;
+using RDBLL.Entity.Common.NDM;
 
 namespace RDBLL.Processors.SC
 {
     delegate void EchoDelegate(String S);
 
-    public class SteelColumnBasePartProcessor
+    public static class SteelColumnBasePartProcessor
     {
         public static ColumnBasePartResult GetResult(SteelBasePart basePart)
         {
@@ -361,6 +362,32 @@ namespace RDBLL.Processors.SC
                 steelBaseParts.Add(newSteelBasePart);
             }
             return steelBaseParts;
+        }
+        public static void GetSubParts(SteelBasePart steelBasePart)
+        {
+            steelBasePart.SubParts = new List<NdmConcreteArea>();
+            double elementSize = 0.02;
+            int numX = Convert.ToInt32(steelBasePart.Width / elementSize);
+            int numY = Convert.ToInt32(steelBasePart.Length / elementSize);
+
+            double stepX = steelBasePart.Width / numX;
+            double stepY = steelBasePart.Length / numY;
+
+            double startCenterX = steelBasePart.Center[0] - steelBasePart.Width / 2 + stepX / 2;
+            double startCenterY = steelBasePart.Center[1] - steelBasePart.Length / 2 + stepY / 2;
+
+            for (int i = 0; i < numX; i++)
+            {
+                for (int j = 0; j < numY; j++)
+                {
+                    NdmConcreteArea subPart = new NdmConcreteArea();
+                    subPart.Width = stepX;
+                    subPart.Length = stepY;
+                    subPart.ConcreteArea.CenterX = startCenterX + stepX * i;
+                    subPart.ConcreteArea.CenterY = startCenterY + stepY * j;
+                    steelBasePart.SubParts.Add(subPart);
+                }
+            }
         }
     }
 }
