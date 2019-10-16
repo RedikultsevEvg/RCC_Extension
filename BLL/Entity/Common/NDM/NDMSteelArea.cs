@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using RDBLL.Entity.Common.NDM.MaterialModels;
 
 namespace RDBLL.Entity.Common.NDM
 {
@@ -23,7 +24,7 @@ namespace RDBLL.Entity.Common.NDM
         public NdmArea SteelArea { get { return _NdmArea; } set { _NdmArea = value; } }
         public NdmSteelArea()
         {
-            SteelArea = new NdmArea();
+            SteelArea = new NdmArea(new LinearTensioned());
             SteelArea.ElasticModulus = 2e+11;
         }
     }
