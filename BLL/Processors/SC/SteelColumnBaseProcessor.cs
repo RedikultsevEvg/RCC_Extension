@@ -33,7 +33,17 @@ namespace RDBLL.Processors.SC
                 SumForces sumForces = new SumForces(loadCase);
                 StiffnessCoefficient stiffnessCoefficient = new StiffnessCoefficient(columnBase.NdmAreas);
                 Curvature curvature = new Curvature(sumForces, stiffnessCoefficient);
-                SumForces sumForces2 = new SumForces(stiffnessCoefficient, curvature);
+                //Определяем новые жесткостные коэффициенты по полученной кривизне
+                StiffnessCoefficient newStiffnessCoefficient = new StiffnessCoefficient(columnBase.NdmAreas, curvature);
+                Curvature newCurvature = new Curvature(sumForces, newStiffnessCoefficient);
+                SumForces sumForces2 = new SumForces(newStiffnessCoefficient, newCurvature);
+                for (int i = 1; i<=20; i++)
+                {
+                    newCurvature = new Curvature(sumForces, newStiffnessCoefficient);
+                    newStiffnessCoefficient = new StiffnessCoefficient(columnBase.NdmAreas, newCurvature);
+                    sumForces2 = new SumForces(newStiffnessCoefficient, newCurvature);
+                }            
+                sumForces2 = new SumForces(newStiffnessCoefficient, newCurvature);
                 Console.WriteLine("Ok");
             }
             Console.WriteLine("Ok");

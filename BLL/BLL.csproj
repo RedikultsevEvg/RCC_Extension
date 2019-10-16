@@ -52,6 +52,10 @@
     <Compile Include="Common\Geometry\RectCrossSection.cs" />
     <Compile Include="DrawUtils\SteelBase\DrawSteelBase.cs" />
     <Compile Include="Entity\Common\NDM\Curvature.cs" />
+    <Compile Include="Entity\Common\NDM\Interfaces\IMaterialModel.cs" />
+    <Compile Include="Entity\Common\NDM\MaterialModels\LinearCompessed.cs" />
+    <Compile Include="Entity\Common\NDM\MaterialModels\LinearIsotropic.cs" />
+    <Compile Include="Entity\Common\NDM\MaterialModels\LinearTensioned.cs" />
     <Compile Include="Entity\Common\NDM\NdmArea.cs" />
     <Compile Include="Entity\Common\NDM\NdmConcreteArea.cs" />
     <Compile Include="Entity\Common\NDM\NDMProcessor.cs" />
