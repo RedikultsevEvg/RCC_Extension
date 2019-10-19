@@ -533,9 +533,7 @@ namespace RDUIL.WinForms
             Item.SubItems.Clear();
             Item.Text = basePart.Name;
             Item.SubItems.Add(Convert.ToString(basePart.Width * 1000) +"x" + Convert.ToString(basePart.Length * 1000));
-            ColumnBasePartResult result = SteelColumnBasePartProcessor.GetResult(basePart);
-            double maxStress = result.MaxStress;
-            maxStress = Math.Round(maxStress / 1000) / 1000;
+            double maxStress = Math.Round(SteelColumnBasePartProcessor.GetResult(basePart)[1] / 1000) / 1000;
             Item.SubItems.Add(Convert.ToString(maxStress));
         }
         private void EditItemFromColumnLoadSet(ListViewItem Item, BarLoadSet loadSet)

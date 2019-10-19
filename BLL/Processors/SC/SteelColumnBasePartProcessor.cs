@@ -11,6 +11,7 @@ using RDBLL.Forces;
 using RDBLL.Processors.Forces;
 using RDBLL.Entity.Results.Forces;
 using RDBLL.Entity.Common.NDM;
+using RDBLL.Entity.Common.NDM.Processors;
 
 
 namespace RDBLL.Processors.SC
@@ -19,7 +20,7 @@ namespace RDBLL.Processors.SC
 
     public static class SteelColumnBasePartProcessor
     {
-        public static ColumnBasePartResult GetResult(SteelBasePart basePart)
+        public static double[] GetResult(SteelBasePart basePart, double maxStress)
         {
             /*Алгоритм расчета основан на подходе из учебника Белени по
              * таблицам Галеркина
@@ -27,57 +28,25 @@ namespace RDBLL.Processors.SC
              * Если опора имеется только по одной стороне, то считается что участок консольный
              * Иначе считаетася, что участок оперт шарнирно
              */
-            #region Описание переменных
-            ColumnBaseResult baseResult = SteelColumnBaseProcessor.GetResult(basePart.ColumnBase);
-            RectCrossSection baseRect = new RectCrossSection(basePart.ColumnBase.Width, basePart.ColumnBase.Length);
-            MassProperty massProperty = RectProcessor.GetRectMassProperty(baseRect);
-            double maxStress = double.NegativeInfinity;
-            double maxStressTmp;
-
-            EchoDelegate echoDelegate;
-            echoDelegate = EchoConsole;
-
-            echoDelegate("Time = " + DateTime.Now);
-
-            foreach (LoadSet LoadCase in baseResult.LoadCases)
-            {
-                List<double> dxList = new List<double>();
-                List<double> dyList = new List<double>();
-                dxList.Add(basePart.Center[0] + basePart.Width / 2);
-                dxList.Add(basePart.Center[0] - basePart.Width / 2);
-                dyList.Add(basePart.Center[1] + basePart.Length / 2);
-                dyList.Add(basePart.Center[1] - basePart.Length / 2);
-
-
-                foreach (double dx in dxList)
-                {
-                    foreach (double dy in dyList)
-                    {
-                        double stress = LoadSetProcessor.StressInBarSection(LoadCase, massProperty, dx, dy);
-                        if (stress < 0) { maxStressTmp = stress * (-1D); } else { maxStressTmp = 0; }
-                        if (maxStressTmp > maxStress) { maxStress = maxStressTmp; }
-                    }
-                }
-            }
-
-            ColumnBasePartResult result = new ColumnBasePartResult();
+            //double maxStress = GetMinStressLinear(basePart);
+            double[] result = new double[2] { 0, 0 };
             double thickness = basePart.ColumnBase.Thickness;
             double Wx = thickness * thickness / 6;
             double maxMoment = 0;
             int countFixSides = 0;
-            #endregion
+            
             #region Определение количества сторон, по которым имеются опоры
             if (basePart.FixLeft) { countFixSides++; }
             if (basePart.FixRight) { countFixSides++; }
             if (basePart.FixTop) { countFixSides++; }
             if (basePart.FixBottom) { countFixSides++; }
             #endregion
-            //База целиком отрывается
+            //Участок отрывается, напряжения равны нулю
             if (maxStress < 0)
             {
-                result.MaxMoment = 0;
-                result.MaxStress = 0;
-                MessageBox.Show("Неверное приложение нагрузки - полный отрыв базы", "Ошибка");
+                result[0] = 0;
+                result[1] = 0;
+                //MessageBox.Show("Неверное приложение нагрузки - полный отрыв базы", "Ошибка");
                 return result;
             }
             switch (countFixSides)
@@ -86,32 +55,33 @@ namespace RDBLL.Processors.SC
                     MessageBox.Show("Неверное закрепление сторон", "Ошибка");
                     return result;
                 case 1://Если опора только по одной стороне, считаем как консоль
-                    maxMoment = CalcStreessOneSide(maxStress, basePart, echoDelegate);
+                    maxMoment = CalcStreessOneSide(maxStress, basePart);
                     break;
                 case 2://Если опора с двух сторон
-                    maxMoment = CalcStreessTwoSide(maxStress, basePart, echoDelegate);
+                    maxMoment = CalcStreessTwoSide(maxStress, basePart);
                     break;
                 case 3://Если опора с трех сторон 
-                    maxMoment = CalcStreessThreeSide(maxStress, basePart, echoDelegate);
+                    maxMoment = CalcStreessThreeSide(maxStress, basePart);
                     break;
                 case 4://Если опора с 4-х сторон
-                    maxMoment = CalcStreessFourSide(maxStress, basePart, echoDelegate);
+                    maxMoment = CalcStreessFourSide(maxStress, basePart);
                     break;
             }
-            result.MaxBedStress = maxStress;
-            result.MaxMoment = maxMoment;
-            result.MaxStress = maxMoment / Wx;
-            echoDelegate($"Максимальный изгибающий момент M_max={Math.Round(maxMoment) / 1000}кН*м");
-            echoDelegate($"Максимальные напряжения в плите Sigma_max = {Convert.ToString(Math.Round(result.MaxStress)/1000000)}МПа");
-
+            result[0] = maxMoment;
+            result[1] = maxMoment / Wx;
             return result;
         }
 
-        /// <summary>
-        /// Выводит сообщения на консоль
-        /// </summary>
-        /// <param name="S"></param>
-        private static void EchoConsole (String S)
+        public static double[] GetResult(SteelBasePart basePart)
+        {
+            return GetResult(basePart, GetGlobalMinStressLinear(basePart) * (-1D));
+        }
+
+            /// <summary>
+            /// Выводит сообщения на консоль
+            /// </summary>
+            /// <param name="S"></param>
+            private static void EchoConsole (String S)
         {
             Console.WriteLine(S);
         }
@@ -123,13 +93,13 @@ namespace RDBLL.Processors.SC
         /// <param name="basePart">Экземпляр участка</param>
         /// <param name="echoDelegate">Делегат, в который передается результат расчета</param>
         /// <returns></returns>
-        private static double CalcStreessOneSide(double maxStress, SteelBasePart basePart,  EchoDelegate echoDelegate)
+        private static double CalcStreessOneSide(double maxStress, SteelBasePart basePart)
         {
             double maxMoment;
             double width = basePart.Width;
             double length = basePart.Length;
             //Если опора слева или справа
-            echoDelegate("Для участка задана опора по одной стороне, участок расчитывается как консоль");
+            //echoDelegate("Для участка задана опора по одной стороне, участок расчитывается как консоль");
             if (basePart.FixLeft || basePart.FixRight)
             {
                 maxMoment = maxStress * width * width / 2;
@@ -148,7 +118,7 @@ namespace RDBLL.Processors.SC
         /// <param name="basePart">Экземпляр участка</param>
         /// <param name="echoDelegate">Делегат, в который передается результат расчета</param>
         /// <returns></returns>
-        private static double CalcStreessTwoSide(double maxStress, SteelBasePart basePart, EchoDelegate echoDelegate)
+        private static double CalcStreessTwoSide(double maxStress, SteelBasePart basePart)
         {
             #region Исходные списки для интерполяции коэффициентов
             //Для участков, опертых по 2-м и 3-м сторонам
@@ -161,7 +131,7 @@ namespace RDBLL.Processors.SC
             //Если опора слева и справа
             if (basePart.FixLeft && basePart.FixRight)
             {
-                echoDelegate("Для участка заданы две опоры по противоположным сторонам, опоры считаются шарнирными");
+                //echoDelegate("Для участка заданы две опоры по противоположным сторонам, опоры считаются шарнирными");
                 maxMoment = maxStress * width * width / 8;
             }
             else
@@ -174,7 +144,7 @@ namespace RDBLL.Processors.SC
                 //Иначе плита оперта по двум смежным сторонам, неважно каким
                 else
                 {
-                    echoDelegate("Для участка заданы две опоры по смежным сторонам, опоры считаются шарнирными");
+                    //echoDelegate("Для участка заданы две опоры по смежным сторонам, опоры считаются шарнирными");
                     double koeff_a1 = Math.Sqrt(width * width + length * length);
                     double koeff_b1 = width * length * 0.25 / koeff_a1;
                     double ratio = koeff_b1 / koeff_a1;
@@ -203,7 +173,7 @@ namespace RDBLL.Processors.SC
         /// <param name="basePart">Экземпляр участка</param>
         /// <param name="echoDelegate">Делегат, в который передается результат расчета</param>
         /// <returns></returns>
-        private static double CalcStreessThreeSide(double maxStress, SteelBasePart basePart, EchoDelegate echoDelegate)
+        private static double CalcStreessThreeSide(double maxStress, SteelBasePart basePart)
         {
             /*Для участка, опертого по трем сторонам в учебнике есть некоторая нелогичность
             * При соотношении сторон менее 0,5 происходит резкий скачок в определении момента
@@ -219,7 +189,7 @@ namespace RDBLL.Processors.SC
             double koeff_a1;
             double koeff_b1;
             #region //Если закрепления слева и справа
-            echoDelegate("Для участка заданы три опоры, опоры считаются шарнирными");
+            //echoDelegate("Для участка заданы три опоры, опоры считаются шарнирными");
             if (basePart.FixLeft && basePart.FixRight)
             {
                 koeff_a1 = width;
@@ -244,9 +214,9 @@ namespace RDBLL.Processors.SC
             {
                 koeff_betta = MathOperation.InterpolateList(xValues23, yValues23, ratio);
                 maxMoment = maxStress * koeff_a1 * koeff_a1 * koeff_betta;
-                echoDelegate($"Отношение сторон ratio =  + {Convert.ToString(ratio)}");
-                echoDelegate($"Вспомогательный коэффициент koeff_a1 = {Convert.ToString(koeff_a1)}");
-                echoDelegate($"Вспомогательный коэффициент koeff_betta = {Convert.ToString(koeff_betta)}");
+                //echoDelegate($"Отношение сторон ratio =  + {Convert.ToString(ratio)}");
+                //echoDelegate($"Вспомогательный коэффициент koeff_a1 = {Convert.ToString(koeff_a1)}");
+                //echoDelegate($"Вспомогательный коэффициент koeff_betta = {Convert.ToString(koeff_betta)}");
             }
             return maxMoment;
         }
@@ -257,7 +227,7 @@ namespace RDBLL.Processors.SC
         /// <param name="basePart">Экземпляр участка</param>
         /// <param name="echoDelegate">Делегат, в который передается результат расчета</param>
         /// <returns></returns>
-        private static double CalcStreessFourSide(double maxStress, SteelBasePart basePart, EchoDelegate echoDelegate)
+        private static double CalcStreessFourSide(double maxStress, SteelBasePart basePart)
         {
             #region Исходные списки для интерполяции коэффициентов
             //Для участков, опертых по 4-м сторонам
@@ -267,7 +237,7 @@ namespace RDBLL.Processors.SC
             double maxMoment;
             double width = basePart.Width;
             double length = basePart.Length;
-            echoDelegate("Для участка заданы четыре опоры, опоры считаются шарнирными");
+            //echoDelegate("Для участка заданы четыре опоры, опоры считаются шарнирными");
             double koeff_b;
             double koeff_a;
             if (width > length)
@@ -282,19 +252,19 @@ namespace RDBLL.Processors.SC
             }
             double ratio = koeff_b / koeff_a;
             double koeff_betta;
-            echoDelegate($"Отношение сторон ratio =  + {Convert.ToString(ratio)}");
+            //echoDelegate($"Отношение сторон ratio =  + {Convert.ToString(ratio)}");
 
             if (ratio > 2)
             {
                 koeff_betta = 0.125;
-                echoDelegate("Соотношение сторон превышает 2, расчет ведется по двум сторонам");
-                echoDelegate($"Вспомогательный коэффициент koeff_betta = {Convert.ToString(koeff_betta)}");
+                //echoDelegate("Соотношение сторон превышает 2, расчет ведется по двум сторонам");
+                //echoDelegate($"Вспомогательный коэффициент koeff_betta = {Convert.ToString(koeff_betta)}");
             }
             else
             {
                 koeff_betta = MathOperation.InterpolateList(xValues4, yValues4, ratio);
-                echoDelegate("Соотношение сторон не превышает 2, расчет ведется для плиты опертой по контуру");
-                echoDelegate($"Вспомогательный коэффициент koeff_betta = {Convert.ToString(koeff_betta)}");
+                //echoDelegate("Соотношение сторон не превышает 2, расчет ведется для плиты опертой по контуру");
+                //echoDelegate($"Вспомогательный коэффициент koeff_betta = {Convert.ToString(koeff_betta)}");
             }
             maxMoment = maxStress * koeff_a * koeff_a * koeff_betta;
             return maxMoment;
@@ -364,13 +334,17 @@ namespace RDBLL.Processors.SC
             }
             return steelBaseParts;
         }
+        /// <summary>
+        /// Получает коллекцию элементарных участков для участка базы
+        /// </summary>
+        /// <param name="steelBasePart"></param>
         public static void GetSubParts(SteelBasePart steelBasePart)
         {
             steelBasePart.SubParts = new List<NdmConcreteArea>();
             double elementSize = 0.02;
             int numX = Convert.ToInt32(steelBasePart.Width / elementSize);
             int numY = Convert.ToInt32(steelBasePart.Length / elementSize);
-
+            //Шаг элементарных участков (совпадает с соответствующим размером участка)
             double stepX = steelBasePart.Width / numX;
             double stepY = steelBasePart.Length / numY;
 
@@ -389,6 +363,68 @@ namespace RDBLL.Processors.SC
                     steelBasePart.SubParts.Add(subPart);
                 }
             }
+        }
+        /// <summary>
+        /// Вычисляет минимальное напряжение на участке по линейно упругой теории сопротивления материалов
+        /// </summary>
+        /// <param name="basePart">Участок базы колонны</param>
+        /// /// <param name="massProperty">Геометрическая характеристика сечения</param>
+        /// <param name="loadCase"></param>
+        /// <returns>Минимальное напряжение на участке</returns>
+        public static double GetMinStressLinear(SteelBasePart basePart, MassProperty massProperty, LoadSet loadCase)
+        {
+            List<double> stresses = new List<double>();
+            //RectCrossSection baseRect = new RectCrossSection(basePart.ColumnBase.Width, basePart.ColumnBase.Length);
+            //MassProperty massProperty = RectProcessor.GetRectMassProperty(baseRect);
+            List<double> dxList = new List<double>();
+            List<double> dyList = new List<double>();
+            dxList.Add(basePart.Center[0] + basePart.Width / 2);
+            dxList.Add(basePart.Center[0] - basePart.Width / 2);
+            dyList.Add(basePart.Center[1] + basePart.Length / 2);
+            dyList.Add(basePart.Center[1] - basePart.Length / 2);
+            foreach (double dx in dxList)
+            {
+                foreach (double dy in dyList)
+                {
+                    stresses.Add(LoadSetProcessor.StressInBarSection(loadCase, massProperty, dx, dy));
+                }
+            }
+            return stresses.Min();
+        }
+        public static double GetGlobalMinStressLinear(SteelBasePart basePart, MassProperty massProperty, List<LoadSet> loadCases)
+        {
+            List<double> stresses = new List<double>();
+            foreach (LoadSet loadCase in loadCases)
+            {
+                stresses.Add(GetMinStressLinear(basePart, massProperty, loadCase));
+            }
+            return stresses.Min();
+        }
+        public static double GetGlobalMinStressLinear(SteelBasePart basePart, SteelColumnBase columnBase)
+        {
+            List<double> stresses = new List<double>();
+            RectCrossSection baseRect = new RectCrossSection(basePart.ColumnBase.Width, basePart.ColumnBase.Length);
+            MassProperty massProperty = RectProcessor.GetRectMassProperty(baseRect);
+            foreach (LoadSet loadCase in columnBase.LoadCases)
+            {
+                stresses.Add(GetMinStressLinear(basePart, massProperty, loadCase));
+            }
+            return stresses.Min();
+        }
+        public static double GetGlobalMinStressLinear(SteelBasePart basePart)
+        {
+            SteelColumnBase columnBase = basePart.ColumnBase;
+            return GetGlobalMinStressLinear(basePart, columnBase);
+        }
+        public static double GetMinStressNonLinear(SteelBasePart basePart, Curvature curvature)
+        {
+            List<double> stresses = new List<double>();
+            foreach (NdmConcreteArea ndmConcreteArea in basePart.SubParts)
+            {
+                NdmArea ndmArea = ndmConcreteArea.ConcreteArea;
+                stresses.Add(NdmAreaProcessor.GetStrainFromCuvature(ndmArea, curvature)[1]);
+            }
+            return stresses.Min();
         }
     }
 }

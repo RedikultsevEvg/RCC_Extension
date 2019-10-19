@@ -31,23 +31,23 @@ namespace WallTest
             steelColumnBase.Width = 1;
             steelColumnBase.Length = 1;
             steelColumnBase.Thickness = 0.05;
-            //LoadSet loadSet = new LoadSet();
-            LoadSet loadSet = steelColumnBase.LoadsGroup[0].Loads[0].LoadSet;
+            LoadSet loadSet = steelColumnBase.LoadsGroup[0].LoadSets[0];
             ForceParameter forceParameter = new ForceParameter();
             loadSet.ForceParameters.Add(forceParameter);
             forceParameter.Kind_id = 1;
             forceParameter.CrcValue = -100000;
             loadSet.PartialSafetyFactor = 1;
-            SteelBasePart steelBasePart = new SteelBasePart(steelColumnBase);
-            steelBasePart.FixLeft = true;
-            steelBasePart.FixRight = true;
-            steelBasePart.FixTop = false;
-            steelBasePart.FixBottom = false;
-            steelBasePart.Width = 1;
-            steelBasePart.Length = 1;
-            ColumnBaseResult columnResult = SteelColumnBaseProcessor.GetResult(steelColumnBase);
-            ColumnBasePartResult baseResult = SteelColumnBasePartProcessor.GetResult(steelBasePart);
-            Assert.AreEqual(30, baseResult.MaxStress / 1000000, 10);
+            SteelBasePart basePart = new SteelBasePart(steelColumnBase);
+            basePart.FixLeft = true;
+            basePart.FixRight = true;
+            basePart.FixTop = false;
+            basePart.FixBottom = false;
+            basePart.Width = 1;
+            basePart.Length = 1;
+            SteelColumnBaseProcessor.ActualizeLoadCases(steelColumnBase);
+
+            double Actual = SteelColumnBasePartProcessor.GetResult(basePart)[1];
+            Assert.AreEqual(30, Actual / 1000000, 10);
         }
 
         [TestMethod, Timeout(300)]
@@ -57,19 +57,19 @@ namespace WallTest
         {
             SteelColumnBase steelColumnBase = new SteelColumnBase();
             int i = 1;
-            AddForceParameter(steelColumnBase.LoadsGroup[0], i, true);
+            AddForceParameter(steelColumnBase.LoadsGroup[0], i, false);
             
             i = 2;
-            AddForceParameter(steelColumnBase.LoadsGroup[0], i, true);
+            AddForceParameter(steelColumnBase.LoadsGroup[0], i, false);
 
-            List<BarLoadSet> ExpLoadCases = new List<BarLoadSet>();
+            List<LoadSet> ExpLoadCases = new List<LoadSet>();
 
-            List<BarLoadSet> ActualList = BarLoadSetProcessor.GetLoadCases(steelColumnBase.LoadsGroup);
-            List<BarLoadSet> ExpectedList = ExpLoadCases;
+            List<LoadSet> ActualList = LoadSetProcessor.GetLoadCases(steelColumnBase.LoadsGroup);
+            List<LoadSet> ExpectedList = ExpLoadCases;
             #region //Свойства ожидаемой комбинации нагрузок
-            ExpectedList.Add(new BarLoadSet());
+            ExpectedList.Add(new LoadSet());
             LoadSet expLoadSet = new LoadSet();
-            ExpectedList[0].LoadSet = expLoadSet;
+            ExpectedList[0] = expLoadSet;
             expLoadSet.Name = "Новая нагрузка*(1) + New_load_1*(1) + New_load_2*(1)";
             expLoadSet.ForceParameters.Add(new ForceParameter());
             expLoadSet.ForceParameters[0].Kind_id = 1; //Продольная сила
@@ -79,7 +79,7 @@ namespace WallTest
             expLoadSet.PartialSafetyFactor = 1.1;
             #endregion
 
-            bool actual = CompareBarLoadList(ActualList, ExpectedList);
+            bool actual = CompareLoadList(ActualList, ExpectedList);
             bool expected = true;
 
             Assert.AreEqual(actual, expected);
@@ -92,19 +92,19 @@ namespace WallTest
         {
             SteelColumnBase steelColumnBase = new SteelColumnBase();
             int i = 1;
-            AddForceParameter(steelColumnBase.LoadsGroup[0], i, true);
-
-            i = 2;
             AddForceParameter(steelColumnBase.LoadsGroup[0], i, false);
 
-            List<BarLoadSet> ExpLoadCases = new List<BarLoadSet>();
+            i = 2;
+            AddForceParameter(steelColumnBase.LoadsGroup[0], i, true);
 
-            List<BarLoadSet> ActualList = BarLoadSetProcessor.GetLoadCases(steelColumnBase.LoadsGroup);
-            List<BarLoadSet> ExpectedList = ExpLoadCases;
+            List<LoadSet> ExpLoadCases = new List<LoadSet>();
+
+            List<LoadSet> ActualList = LoadSetProcessor.GetLoadCases(steelColumnBase.LoadsGroup);
+            List<LoadSet> ExpectedList = ExpLoadCases;
             #region //Свойства ожидаемой комбинации нагрузок
-            ExpectedList.Add(new BarLoadSet());
+            ExpectedList.Add(new LoadSet());
             LoadSet expLoadSet = new LoadSet();
-            ExpectedList[0].LoadSet = expLoadSet;
+            ExpectedList[0] = expLoadSet;
             expLoadSet.Name = "Новая нагрузка*(1) + New_load_1*(1)";
             expLoadSet.ForceParameters.Add(new ForceParameter());
             expLoadSet.ForceParameters[0].Kind_id = 1; //Продольная сила
@@ -112,11 +112,11 @@ namespace WallTest
             expLoadSet.ForceParameters[0].DesignValue = -110000; //Продольная сила
             expLoadSet.IsLiveLoad = false;
             expLoadSet.PartialSafetyFactor = 1.1;
-            
 
-            ExpectedList.Add(new BarLoadSet());
+
+            ExpectedList.Add(new LoadSet());
             LoadSet expLoadSet1 = new LoadSet();
-            ExpectedList[1].LoadSet = expLoadSet1;
+            ExpectedList[1] = expLoadSet1;
             expLoadSet1.Name = "Новая нагрузка*(1) + New_load_1*(1) + New_load_2*(1)";
             expLoadSet1.ForceParameters.Add(new ForceParameter());
             expLoadSet1.ForceParameters[0].Kind_id = 1; //Продольная сила
@@ -126,10 +126,11 @@ namespace WallTest
             expLoadSet1.PartialSafetyFactor = 1.1;
             #endregion
 
-            bool actual = CompareBarLoadList(ActualList, ExpectedList);
+            bool actual = CompareLoadList(ActualList, ExpectedList);
             bool expected = true;
 
             Assert.AreEqual(actual, expected);
+            Assert.AreEqual(ExpectedList[1].ForceParameters[0].CrcValue, ActualList[1].ForceParameters[0].CrcValue);
         }
 
         [TestMethod, Timeout(300)]
@@ -142,16 +143,16 @@ namespace WallTest
             AddForceParameter(steelColumnBase.LoadsGroup[0], i);
 
             i = 2;
-            AddForceParameter(steelColumnBase.LoadsGroup[0], i, false, true);
+            AddForceParameter(steelColumnBase.LoadsGroup[0], i, true, true);
 
-            List<BarLoadSet> ExpLoadCases = new List<BarLoadSet>();
+            List<LoadSet> ExpLoadCases = new List<LoadSet>();
 
-            List<BarLoadSet> ActualList = BarLoadSetProcessor.GetLoadCases(steelColumnBase.LoadsGroup);
-            List<BarLoadSet> ExpectedList = ExpLoadCases;
+            List<LoadSet> ActualList = LoadSetProcessor.GetLoadCases(steelColumnBase.LoadsGroup);
+            List<LoadSet> ExpectedList = ExpLoadCases;
             #region //Свойства ожидаемой комбинации нагрузок
-            ExpectedList.Add(new BarLoadSet());
+            ExpectedList.Add(new LoadSet());
             LoadSet expLoadSet = new LoadSet();
-            ExpectedList[0].LoadSet = expLoadSet;
+            ExpectedList[0] = expLoadSet;
             expLoadSet.Name = "Новая нагрузка*(1) + New_load_1*(1)";
             expLoadSet.ForceParameters.Add(new ForceParameter());
             expLoadSet.ForceParameters[0].Kind_id = 1; //Продольная сила
@@ -161,31 +162,31 @@ namespace WallTest
             expLoadSet.IsLiveLoad = false;
             expLoadSet.PartialSafetyFactor = 1.1;
             
-            ExpectedList.Add(new BarLoadSet());
+            ExpectedList.Add(new LoadSet());
             LoadSet expLoadSet1 = new LoadSet();
-            ExpectedList[1].LoadSet = expLoadSet1;
+            ExpectedList[1] = expLoadSet1;
             expLoadSet1.Name = "Новая нагрузка*(1) + New_load_1*(1) + New_load_2*(1)";
             expLoadSet1.ForceParameters.Add(new ForceParameter());
             expLoadSet1.ForceParameters[0].Kind_id = 1; //Продольная сила
             expLoadSet1.ForceParameters[0].CrcValue = -200000; //Продольная сила
             expLoadSet1.ForceParameters[0].DesignValue = -220000; //Продольная сила
 
-            expLoadSet1.IsLiveLoad = false;
+            expLoadSet1.IsLiveLoad = true;
             expLoadSet1.PartialSafetyFactor = 1.1;
 
-            ExpectedList.Add(new BarLoadSet());
+            ExpectedList.Add(new LoadSet());
             LoadSet expLoadSet2 = new LoadSet();
-            ExpectedList[2].LoadSet = expLoadSet2;
+            ExpectedList[2] = expLoadSet2;
             expLoadSet2.Name = "Новая нагрузка*(1) + New_load_1*(1) + New_load_2*(-1)";
             expLoadSet2.ForceParameters.Add(new ForceParameter());
             expLoadSet2.ForceParameters[0].Kind_id = 1; //Продольная сила
             expLoadSet2.ForceParameters[0].CrcValue = 0; //Продольная сила
             expLoadSet2.ForceParameters[0].DesignValue = 0; //Продольная сила
-            expLoadSet2.IsLiveLoad = false;
+            expLoadSet2.IsLiveLoad = true;
             expLoadSet2.PartialSafetyFactor = 1.1;
             #endregion
 
-            bool actual = CompareBarLoadList(ActualList, ExpectedList);
+            bool actual = CompareLoadList(ActualList, ExpectedList);
             bool expected = true;
 
             Assert.AreEqual(actual, expected);
@@ -195,19 +196,18 @@ namespace WallTest
         /// Добавляет нагрузку в группу нагрузок
         /// </summary>
         /// <param name="forcesGroup"></param>
-        /// <param name="i"></param>
-        /// <param name="isDeadLoad"></param>
-        public static void AddForceParameter (ForcesGroup forcesGroup, int i, bool isDeadLoad=true, bool bothSign=false)
+        /// <param name="i">Порядковый номер нагрузки</param>
+        /// <param name="isLiveLoad">Флаг временной нагрузки</param>
+        /// /// <param name="bothSign">Флаг знакопеременной нагрузки</param>
+        public static void AddForceParameter (ForcesGroup forcesGroup, int i, bool isLiveLoad=false, bool bothSign=false)
         {
-            BarLoadSet barLoadSet = new BarLoadSet();
             LoadSet loadSet = new LoadSet();
-            barLoadSet.LoadSet = loadSet;
-            forcesGroup.Loads.Add(barLoadSet);
+            forcesGroup.LoadSets.Add(loadSet);
             loadSet.Name = $"New_load_{i}";
             loadSet.ForceParameters.Add(new ForceParameter());
             loadSet.ForceParameters[0].Kind_id = 1; //Продольная сила
             loadSet.ForceParameters[0].CrcValue = -100000; //Продольная сила
-            loadSet.IsLiveLoad = isDeadLoad;
+            loadSet.IsLiveLoad = isLiveLoad;
             loadSet.BothSign = bothSign;
             loadSet.PartialSafetyFactor = 1.1;
         }
@@ -224,6 +224,16 @@ namespace WallTest
             for (int i = 0; i < frstList.Count; i++)
             {
                 if (! frstList[i].Equals(scndtList[i])) { return false; }
+            }
+            return true;
+        }
+
+        public static bool CompareLoadList(List<LoadSet> frstList, List<LoadSet> scndtList)
+        {
+            if (!(scndtList.Count == frstList.Count)) { return false; } //Если количество не совпадает нет смысла сравнивать
+            for (int i = 0; i < frstList.Count; i++)
+            {
+                if (!frstList[i].Equals(scndtList[i])) { return false; }
             }
             return true;
         }

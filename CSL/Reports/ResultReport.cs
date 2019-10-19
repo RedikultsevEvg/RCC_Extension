@@ -99,9 +99,8 @@ namespace CSL.Reports
                         foreach (SteelBasePart steelBasePart in steelColumnBase.ActualSteelBaseParts)
                         {
                             DataRow newSteelBasePart = SteelBasesParts.NewRow();
-                            ColumnBasePartResult columnBasePartResult = SteelColumnBasePartProcessor.GetResult(steelBasePart);
-                            double maxBedStress = columnBasePartResult.MaxBedStress;
-                            double maxStress = columnBasePartResult.MaxStress;
+                            double maxBedStress = SteelColumnBasePartProcessor.GetGlobalMinStressLinear(steelBasePart) * (-1D);
+                            double maxStress = SteelColumnBasePartProcessor.GetResult(steelBasePart, maxBedStress)[1];
                             #region Picture
                             Canvas canvasPart = new Canvas();
                             canvasPart.Width = 300;

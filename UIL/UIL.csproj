@@ -133,6 +133,9 @@
     <Compile Include="WPF_Windows\wndSteelBasePart.xaml.cs">
       <DependentUpon>wndSteelBasePart.xaml</DependentUpon>
     </Compile>
+    <Compile Include="WPF_Windows\wndSteelBaseResult.xaml.cs">
+      <DependentUpon>wndSteelBaseResult.xaml</DependentUpon>
+    </Compile>
     <Compile Include="WPF_Windows\wndSteelColumnBase.xaml.cs">
       <DependentUpon>wndSteelColumnBase.xaml</DependentUpon>
     </Compile>
@@ -153,6 +156,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="WPF_Windows\wndSteelBasePart.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="WPF_Windows\wndSteelBaseResult.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
