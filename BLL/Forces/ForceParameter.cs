@@ -23,7 +23,7 @@ namespace RDBLL.Forces
             get { return _crcValue; }
             set { _crcValue = value; }
         }
-        public double  CrcValueInCurUnit
+        public double CrcValueInCurUnit
         {
             get
             {
@@ -44,8 +44,8 @@ namespace RDBLL.Forces
             set
             {
                 _kind_id = value;
-                var tmpForceParamKind = from t in ProgrammSettings.ForceParamKinds where t.Id == _kind_id select t;
-                _forceParamKind = tmpForceParamKind.First();
+                //var tmpForceParamKind = from t in ProgrammSettings.ForceParamKinds where t.Id == _kind_id select t;
+                //_forceParamKind = tmpForceParamKind.First();
             }
         }
         public ForceParamKind ForceParamKind

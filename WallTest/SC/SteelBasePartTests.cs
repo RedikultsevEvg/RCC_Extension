@@ -27,7 +27,7 @@ namespace WallTest.SC
             steelColumnBase.Length = 1;
             steelColumnBase.Thickness = 0.05;
 
-            LoadSet loadSet = steelColumnBase.LoadsGroup[0].Loads[0].LoadSet;
+            LoadSet loadSet = steelColumnBase.LoadsGroup[0].LoadSets[0];
             ForceParameter forceParameter = new ForceParameter();
             loadSet.ForceParameters.Add(forceParameter);
             forceParameter.Kind_id = 1;
@@ -42,14 +42,13 @@ namespace WallTest.SC
             basePart.FixRight = false;
             basePart.FixTop = false;
             basePart.FixBottom = false;
+            SteelColumnBaseProcessor.ActualizeLoadCases(steelColumnBase);
 
-            ColumnBasePartResult result = SteelColumnBasePartProcessor.GetResult(basePart);
-            double Actual = result.MaxMoment;
+            double Actual = SteelColumnBasePartProcessor.GetResult(basePart)[0];
             double Expected = (100000 / 1 / 1) * width * width / 2;
 
-            Assert.AreEqual(Actual, Expected, Expected / 1000);
+            Assert.AreEqual(Expected, Actual, Expected / 1000);
         }
-
         [TestMethod]
         //Одна сторона, закрепление снизу
         public void CheckMomentPartOneSides2()
@@ -62,7 +61,7 @@ namespace WallTest.SC
             steelColumnBase.Length = 1;
             steelColumnBase.Thickness = 0.05;
 
-            LoadSet loadSet = steelColumnBase.LoadsGroup[0].Loads[0].LoadSet;
+            LoadSet loadSet = steelColumnBase.LoadsGroup[0].LoadSets[0];
             ForceParameter forceParameter = new ForceParameter();
             loadSet.ForceParameters.Add(forceParameter);
             forceParameter.Kind_id = 1;
@@ -77,9 +76,9 @@ namespace WallTest.SC
             basePart.FixRight = false;
             basePart.FixTop = false;
             basePart.FixBottom = true;
+            SteelColumnBaseProcessor.ActualizeLoadCases(steelColumnBase);
 
-            ColumnBasePartResult result = SteelColumnBasePartProcessor.GetResult(basePart);
-            double Actual = result.MaxMoment;
+            double Actual = SteelColumnBasePartProcessor.GetResult(basePart)[0];
             double Expected = (100000 / 1 / 1) * length * length / 2;
 
             Assert.AreEqual(Actual, Expected, Expected / 1000);
@@ -98,7 +97,7 @@ namespace WallTest.SC
             steelColumnBase.Length = 1;
             steelColumnBase.Thickness = 0.05;
 
-            LoadSet loadSet = steelColumnBase.LoadsGroup[0].Loads[0].LoadSet;
+            LoadSet loadSet = steelColumnBase.LoadsGroup[0].LoadSets[0];
             ForceParameter forceParameter = new ForceParameter();
             loadSet.ForceParameters.Add(forceParameter);
             forceParameter.Kind_id = 1;
@@ -113,9 +112,9 @@ namespace WallTest.SC
             basePart.FixRight = false;
             basePart.FixTop = true;
             basePart.FixBottom = true;
+            SteelColumnBaseProcessor.ActualizeLoadCases(steelColumnBase);
 
-            ColumnBasePartResult result = SteelColumnBasePartProcessor.GetResult(basePart);
-            double Actual = result.MaxMoment;
+            double Actual = SteelColumnBasePartProcessor.GetResult(basePart)[0];
             double Expected = (100000/1/1) * length * length / 8;
 
             Assert.AreEqual(Actual, Expected, Expected / 1000);
@@ -132,7 +131,7 @@ namespace WallTest.SC
             steelColumnBase.Length = 1;
             steelColumnBase.Thickness = 0.05;
 
-            LoadSet loadSet = steelColumnBase.LoadsGroup[0].Loads[0].LoadSet;
+            LoadSet loadSet = steelColumnBase.LoadsGroup[0].LoadSets[0];
             ForceParameter forceParameter = new ForceParameter();
             loadSet.ForceParameters.Add(forceParameter);
             forceParameter.Kind_id = 1;
@@ -147,9 +146,9 @@ namespace WallTest.SC
             basePart.FixRight = true;
             basePart.FixTop = false;
             basePart.FixBottom = false;
+            SteelColumnBaseProcessor.ActualizeLoadCases(steelColumnBase);
 
-            ColumnBasePartResult result = SteelColumnBasePartProcessor.GetResult(basePart);
-            double Actual = result.MaxMoment;
+            double Actual = SteelColumnBasePartProcessor.GetResult(basePart)[0];
             double Expected = (100000 / 1 / 1) * width * width / 8;
 
             Assert.AreEqual(Actual, Expected, Expected / 1000);
@@ -166,7 +165,7 @@ namespace WallTest.SC
             steelColumnBase.Length = 1;
             steelColumnBase.Thickness = 0.05;
 
-            LoadSet loadSet = steelColumnBase.LoadsGroup[0].Loads[0].LoadSet;
+            LoadSet loadSet = steelColumnBase.LoadsGroup[0].LoadSets[0];
             ForceParameter forceParameter = new ForceParameter();
             loadSet.ForceParameters.Add(forceParameter);
             forceParameter.Kind_id = 1;
@@ -181,9 +180,9 @@ namespace WallTest.SC
             basePart.FixRight = false;
             basePart.FixTop = false;
             basePart.FixBottom = true;
+            SteelColumnBaseProcessor.ActualizeLoadCases(steelColumnBase);
 
-            ColumnBasePartResult result = SteelColumnBasePartProcessor.GetResult(basePart);
-            double Actual = result.MaxMoment;
+            double Actual = SteelColumnBasePartProcessor.GetResult(basePart)[0];
             double Expected = 1200;
 
             Assert.AreEqual(Actual, Expected, Expected / 1000);
@@ -202,7 +201,7 @@ namespace WallTest.SC
             steelColumnBase.Length = 1;
             steelColumnBase.Thickness = 0.05;
 
-            LoadSet loadSet = steelColumnBase.LoadsGroup[0].Loads[0].LoadSet;
+            LoadSet loadSet = steelColumnBase.LoadsGroup[0].LoadSets[0];
             ForceParameter forceParameter = new ForceParameter();
             loadSet.ForceParameters.Add(forceParameter);
             forceParameter.Kind_id = 1;
@@ -217,9 +216,9 @@ namespace WallTest.SC
             basePart.FixRight = true;
             basePart.FixTop = false;
             basePart.FixBottom = true;
+            SteelColumnBaseProcessor.ActualizeLoadCases(steelColumnBase);
 
-            ColumnBasePartResult result = SteelColumnBasePartProcessor.GetResult(basePart);
-            double Actual = result.MaxMoment;
+            double Actual = SteelColumnBasePartProcessor.GetResult(basePart)[0];
             double Expected = 508;
 
             Assert.AreEqual(Actual, Expected, Expected / 1000);
@@ -238,7 +237,7 @@ namespace WallTest.SC
             steelColumnBase.Length = 1;
             steelColumnBase.Thickness = 0.05;
 
-            LoadSet loadSet = steelColumnBase.LoadsGroup[0].Loads[0].LoadSet;
+            LoadSet loadSet = steelColumnBase.LoadsGroup[0].LoadSets[0];
             ForceParameter forceParameter = new ForceParameter();
             loadSet.ForceParameters.Add(forceParameter);
             forceParameter.Kind_id = 1;
@@ -253,9 +252,9 @@ namespace WallTest.SC
             basePart.FixRight = true;
             basePart.FixTop = true;
             basePart.FixBottom = true;
+            SteelColumnBaseProcessor.ActualizeLoadCases(steelColumnBase);
 
-            ColumnBasePartResult result = SteelColumnBasePartProcessor.GetResult(basePart);
-            double Actual = result.MaxMoment;
+            double Actual = SteelColumnBasePartProcessor.GetResult(basePart)[0];
             double Expected = 324;
 
             Assert.AreEqual(Actual, Expected, Expected / 1000);
