@@ -273,39 +273,6 @@ namespace RDUIL.WinForms
                     {
                         SteelColumnBase steelColumnBase = new SteelColumnBase((Level)_parentObject);
                         NewItemFromSteelColumnBase(steelColumnBase);
-                        #region Вложенные объекты по умолчанию
-                        //Нагрузка
-                        BarLoadSet columnLoadSet = new BarLoadSet(steelColumnBase.LoadsGroup[0]);
-                        columnLoadSet.LoadSet.Name = "Постоянная";
-                        //Участок №1
-                        SteelBasePart basePart1 = new SteelBasePart(steelColumnBase);
-                        basePart1.Name = "1";
-                        basePart1.Width = 0.290;
-                        basePart1.Length = 0.200;
-                        basePart1.Center[0] = 0.155;
-                        basePart1.Center[1] = 0.350;
-                        basePart1.FixLeft = true;
-                        basePart1.FixRight = false;
-                        basePart1.FixTop = false;
-                        basePart1.FixBottom = true;
-                        basePart1.AddSymmetricX = true;
-                        basePart1.AddSymmetricY = true;
-                        steelColumnBase.SteelBaseParts.Add(basePart1);
-                        //Участок №2
-                        SteelBasePart basePart2 = new SteelBasePart(steelColumnBase);
-                        basePart2.Name = "2";
-                        basePart2.Width = 0.290;
-                        basePart2.Length = 0.480;
-                        basePart2.Center[0] = 0.155;
-                        basePart2.Center[1] = 0;
-                        basePart2.FixLeft = true;
-                        basePart2.FixRight = false;
-                        basePart2.FixTop = true;
-                        basePart2.FixBottom = true;
-                        basePart2.AddSymmetricX = false;
-                        basePart2.AddSymmetricY = true;
-                        steelColumnBase.SteelBaseParts.Add(basePart2);
-                        #endregion
                         break;
                     }
                 case "Walls":
@@ -540,11 +507,6 @@ namespace RDUIL.WinForms
         {
             Item.SubItems.Clear();
             Item.Text = loadSet.LoadSet.Name;
-            //Item.SubItems.Add(Convert.ToString(loadSet.Force.Force_Nz /1000));
-            //Item.SubItems.Add(Convert.ToString(loadSet.Force.Force_Mx / 1000));
-            //Item.SubItems.Add(Convert.ToString(loadSet.Force.Force_My / 1000));
-            //Item.SubItems.Add(Convert.ToString(loadSet.Force.Force_Qx / 1000));
-            //Item.SubItems.Add(Convert.ToString(loadSet.Force.Force_Qy / 1000));
         }
         private void EditItemFromSteelColumnBase(ListViewItem Item, SteelColumnBase columnBase)
         {

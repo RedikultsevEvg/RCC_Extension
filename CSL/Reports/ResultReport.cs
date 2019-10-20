@@ -21,6 +21,8 @@ using System.Windows;
 using  SDraw = System.Drawing;
 using RDBLL.DrawUtils.SteelBase;
 using RDBLL.Entity.MeasureUnits;
+using CSL.DataSets.SC;
+
 
 namespace CSL.Reports
 {
@@ -36,8 +38,8 @@ namespace CSL.Reports
             {
                 report.Load(Directory.GetCurrentDirectory()+"\\Reports\\SteelBases.frx");
                 report.RegisterData(dataSet);
-                //report.Design();
-                report.Show();
+                report.Design();
+                //report.Show();
             }
         }
         public void PrepareReport()
@@ -46,6 +48,12 @@ namespace CSL.Reports
             int LoadCaseId = 1;
             int ForceParameterId = 1;
             int steelBasePartId = 1;
+            int steelBaseBoltId = 1;
+
+            double linearSizeCoefficient = MeasureUnitConverter.GetCoefficient(0);
+            double ForceCoefficient = MeasureUnitConverter.GetCoefficient(1);
+            double MomentSizeCoefficient = MeasureUnitConverter.GetCoefficient(2);
+            double stressCoefficient = MeasureUnitConverter.GetCoefficient(3);
 
             foreach (Building building in _buildingSite.BuildingList)
             {
@@ -101,6 +109,8 @@ namespace CSL.Reports
                             DataRow newSteelBasePart = SteelBasesParts.NewRow();
                             double maxBedStress = SteelColumnBasePartProcessor.GetGlobalMinStressLinear(steelBasePart) * (-1D);
                             double maxStress = SteelColumnBasePartProcessor.GetResult(steelBasePart, maxBedStress)[1];
+                            maxBedStress = Math.Round(stressCoefficient * maxBedStress, 3);
+                            maxStress = Math.Round(stressCoefficient * maxStress, 3);
                             #region Picture
                             Canvas canvasPart = new Canvas();
                             canvasPart.Width = 300;
@@ -115,9 +125,31 @@ namespace CSL.Reports
                             DrawSteelBase.DrawBasePart(steelBasePart, canvasPart, columnBaseCenter, scale_factor, 1, 1, 1, false);
                             byte[] bPart = ExportToByte(canvasPart);
                             #endregion
-                            newSteelBasePart.ItemArray = new object[] { steelBasePartId, steelBaseId, bPart, steelBasePart.Name, steelBasePart.Center[0], steelBasePart.Center[1], steelBasePart.Width, steelBasePart.Length, Math.Round(maxBedStress/1000000,3), Math.Round(maxStress /1000000,3) };
+                            newSteelBasePart.ItemArray = new object[]
+                            { steelBasePartId, steelBaseId,
+                                bPart, steelBasePart.Name,
+                                steelBasePart.Center[0] * linearSizeCoefficient,
+                                steelBasePart.Center[1] * linearSizeCoefficient,
+                                steelBasePart.Width * linearSizeCoefficient,
+                                steelBasePart.Length * linearSizeCoefficient,
+                                maxBedStress,
+                                maxStress };
                             SteelBasesParts.Rows.Add(newSteelBasePart);
                             steelBasePartId++;
+                        }
+                        DataTable SteelBasesBolts = dataSet.Tables[4];
+                        foreach (SteelBolt steelBolt in steelColumnBase.ActualSteelBolts)
+                        {
+                            DataRow newSteelBaseBolt = SteelBasesBolts.NewRow();
+                            newSteelBaseBolt.ItemArray = new object[]
+                            {steelBaseBoltId, steelBaseId, steelBolt.Name,
+                                steelBolt.Diameter * linearSizeCoefficient,
+                                steelBolt.CenterX * linearSizeCoefficient,
+                                steelBolt.CenterY * linearSizeCoefficient,
+                                0 * stressCoefficient,
+                                0 * stressCoefficient };
+                            SteelBasesBolts.Rows.Add(newSteelBaseBolt);
+                            steelBaseBoltId++;
                         }
                         steelBaseId++;
                     }
@@ -184,89 +216,7 @@ namespace CSL.Reports
         public ResultReport(BuildingSite buildingSite)
         {
             _buildingSite = buildingSite;
-            dataSet = new DataSet();
-            #region SteelBases
-            //Базы стальных колонн
-            DataTable SteelBases = new DataTable("SteelBases");
-            dataSet.Tables.Add(SteelBases);
-            DataColumn SteelBaseId = new DataColumn("Id", Type.GetType("System.Int32"));
-            DataColumn SteelBasePicture = new DataColumn("Picture", Type.GetType("System.Byte[]"));
-            DataColumn SteelBaseName = new DataColumn("Name", Type.GetType("System.String"));
-            DataColumn SteelBaseWidth = new DataColumn("Width", Type.GetType("System.Double"));
-            DataColumn SteelBaseLength = new DataColumn("Length", Type.GetType("System.Double"));
-            DataColumn SteelBaseArea = new DataColumn("Area", Type.GetType("System.Double"));
-            DataColumn SteelBaseWx = new DataColumn("Wx", Type.GetType("System.Double"));
-            DataColumn SteelBaseWy = new DataColumn("Wy", Type.GetType("System.Double"));
-
-            SteelBases.Columns.Add(SteelBaseId);
-            SteelBases.Columns.Add(SteelBasePicture);
-            SteelBases.Columns.Add(SteelBaseName);
-            SteelBases.Columns.Add(SteelBaseWidth);
-            SteelBases.Columns.Add(SteelBaseLength);
-            SteelBases.Columns.Add(SteelBaseArea);
-            SteelBases.Columns.Add(SteelBaseWx);
-            SteelBases.Columns.Add(SteelBaseWy);
-            #endregion
-            #region LoadCases
-            DataTable LoadCases = new DataTable("LoadCases");
-            dataSet.Tables.Add(LoadCases);
-
-            DataColumn LoadCaseId = new DataColumn("Id", Type.GetType("System.Int32"));
-            DataColumn SteelBaseIdInLoadCase = new DataColumn("SteelBaseId", Type.GetType("System.Int32"));
-            DataColumn LoadCaseDescription = new DataColumn("Description", Type.GetType("System.String"));
-            DataColumn LoadCasePartialSafetyFactor = new DataColumn("PartialSafetyFactor", Type.GetType("System.Double"));
-
-            LoadCases.Columns.Add(LoadCaseId);
-            LoadCases.Columns.Add(SteelBaseIdInLoadCase);
-            LoadCases.Columns.Add(LoadCaseDescription);
-            LoadCases.Columns.Add(LoadCasePartialSafetyFactor);
-            #endregion
-            #region ForceParameters
-            DataTable ForceParameters = new DataTable("ForceParameters");
-            dataSet.Tables.Add(ForceParameters);
-
-            DataColumn ForceParameterId = new DataColumn("Id", Type.GetType("System.Int32"));
-            DataColumn LoadCaseIdInForceParameter = new DataColumn("LoadCaseId", Type.GetType("System.Int32"));
-            DataColumn ForceParameterLongLabel = new DataColumn("LongLabel", Type.GetType("System.String"));
-            DataColumn ForceParameterShortLabel = new DataColumn("ShortLabel", Type.GetType("System.String"));
-            DataColumn ForceParameterUnit = new DataColumn("Unit", Type.GetType("System.String"));
-            DataColumn ForceParameterCrcValue = new DataColumn("CrcValue", Type.GetType("System.Double"));
-            DataColumn ForceParameterDesignValue = new DataColumn("DesignValue", Type.GetType("System.Double"));
-
-            ForceParameters.Columns.Add(ForceParameterId);
-            ForceParameters.Columns.Add(LoadCaseIdInForceParameter);
-            ForceParameters.Columns.Add(ForceParameterLongLabel);
-            ForceParameters.Columns.Add(ForceParameterShortLabel);
-            ForceParameters.Columns.Add(ForceParameterUnit);
-            ForceParameters.Columns.Add(ForceParameterCrcValue);
-            ForceParameters.Columns.Add(ForceParameterDesignValue);
-            #endregion
-            #region SteelBasesParts
-            DataTable SteelBasesParts = new DataTable("SteelBasesParts");
-            dataSet.Tables.Add(SteelBasesParts);
-
-            DataColumn SteelBasesPartId = new DataColumn("Id", Type.GetType("System.Int32"));
-            DataColumn SteelBaseIdInPart = new DataColumn("SteelBaseId", Type.GetType("System.Int32"));
-            DataColumn SteelBasePartPicture = new DataColumn("Picture", Type.GetType("System.Byte[]"));
-            DataColumn SteelBasesPartName = new DataColumn("Name", Type.GetType("System.String"));
-            DataColumn SteelBasesPartCenterX = new DataColumn("CenterX", Type.GetType("System.Double"));
-            DataColumn SteelBasesPartCenterY = new DataColumn("CenterY", Type.GetType("System.Double"));
-            DataColumn SteelBasesPartWidth = new DataColumn("Width", Type.GetType("System.Double"));
-            DataColumn SteelBasesPartLength = new DataColumn("Length", Type.GetType("System.Double"));
-            DataColumn SteelBasesPartMaxBedStrees = new DataColumn("MaxBedStrees", Type.GetType("System.Double"));
-            DataColumn SteelBasesPartMaxSteelStrees = new DataColumn("MaxSteelStrees", Type.GetType("System.Double"));
-
-            SteelBasesParts.Columns.Add(SteelBasesPartId);
-            SteelBasesParts.Columns.Add(SteelBaseIdInPart);
-            SteelBasesParts.Columns.Add(SteelBasePartPicture);
-            SteelBasesParts.Columns.Add(SteelBasesPartName);
-            SteelBasesParts.Columns.Add(SteelBasesPartCenterX);
-            SteelBasesParts.Columns.Add(SteelBasesPartCenterY);
-            SteelBasesParts.Columns.Add(SteelBasesPartWidth);
-            SteelBasesParts.Columns.Add(SteelBasesPartLength);
-            SteelBasesParts.Columns.Add(SteelBasesPartMaxBedStrees);
-            SteelBasesParts.Columns.Add(SteelBasesPartMaxSteelStrees);
-            #endregion
+            dataSet = SteelColumnBaseDataSet.GetDataSet();
         }
         #endregion
 

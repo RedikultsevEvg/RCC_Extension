@@ -88,10 +88,53 @@ namespace RDBLL.Entity.SC.Column
             LoadsGroup = new ObservableCollection<ForcesGroup>();
             LoadsGroup.Add(new ForcesGroup(this));
             SteelBaseParts = new ObservableCollection<SteelBasePart>();
-            //ActualSteelBaseParts = new List<SteelBasePart>();
             SteelBolts = new ObservableCollection<SteelBolt>();
-            //ActualSteelBolts = new List<SteelBolt>();
-            //LoadCases = new List<BarLoadSet>();
+            #region Вложенные объекты по умолчанию
+            //Нагрузка
+            LoadSet loadSet = new LoadSet(this.LoadsGroup[0]);
+            this.LoadsGroup[0].LoadSets.Add(loadSet);
+            loadSet.Name = "Постоянная";
+            loadSet.ForceParameters.Add(new ForceParameter());
+            loadSet.ForceParameters[0].Kind_id = 1; //Продольная сила
+            loadSet.ForceParameters[0].CrcValue = -100000; //Продольная сила
+            loadSet.ForceParameters.Add(new ForceParameter());
+            loadSet.ForceParameters[1].Kind_id = 2; //Изгибающий момент
+            loadSet.ForceParameters[1].CrcValue = 200000; //Изгибающий момент
+            loadSet.IsLiveLoad = false;
+            loadSet.BothSign = false;
+            loadSet.PartialSafetyFactor = 1.1;
+            //Участок №1
+            SteelBasePart basePart1 = new SteelBasePart(this);
+            basePart1.Name = "1";
+            basePart1.Width = 0.290;
+            basePart1.Length = 0.200;
+            basePart1.Center[0] = 0.155;
+            basePart1.Center[1] = 0.350;
+            basePart1.FixLeft = true;
+            basePart1.FixRight = false;
+            basePart1.FixTop = false;
+            basePart1.FixBottom = true;
+            basePart1.AddSymmetricX = true;
+            basePart1.AddSymmetricY = true;
+            this.SteelBaseParts.Add(basePart1);
+            //Участок №2
+            SteelBasePart basePart2 = new SteelBasePart(this);
+            basePart2.Name = "2";
+            basePart2.Width = 0.290;
+            basePart2.Length = 0.480;
+            basePart2.Center[0] = 0.155;
+            basePart2.Center[1] = 0;
+            basePart2.FixLeft = true;
+            basePart2.FixRight = false;
+            basePart2.FixTop = true;
+            basePart2.FixBottom = true;
+            basePart2.AddSymmetricX = false;
+            basePart2.AddSymmetricY = true;
+            this.SteelBaseParts.Add(basePart2);
+            //Болты
+            SteelBolt steelBolt = new SteelBolt(this);
+            this.SteelBolts.Add(steelBolt);
+            #endregion
         }
         /// <summary>
         /// Создает базу стальной колонны по указанному уровню

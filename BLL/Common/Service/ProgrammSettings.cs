@@ -49,7 +49,7 @@ namespace RDBLL.Common.Service
             BuildingSite = new BuildingSite();
             BuildingSite.BuildingList.Add(new Building(BuildingSite));
             IsDataChanged = false;
-            #region
+            #region Исходные данные единиц измерения
             MeasureUnit measureUnitLength = new MeasureUnit();
             measureUnitLength.MeasureUnitKind = "Линейные размеры";
             measureUnitLength.UnitLabels.Add(new MeasureUnitLabel { Id = 1, UnitName = "м", AddKoeff = 1.0 });
@@ -82,13 +82,41 @@ namespace RDBLL.Common.Service
             measureUnitStress.UnitLabels.Add(new MeasureUnitLabel { Id = 19, UnitName = "кгс/см^2", AddKoeff = 0.0001 / 9.81 });
             measureUnitStress.UnitLabels.Add(new MeasureUnitLabel { Id = 20, UnitName = "тс/м^2", AddKoeff = 0.001 / 9.81 });
             measureUnitStress.CurrentUnitLabelId = 18;
-
+            MeasureUnit measureUnitGeometryArea = new MeasureUnit();
+            measureUnitGeometryArea.MeasureUnitKind = "Геометрия. Площадь";
+            measureUnitGeometryArea.UnitLabels.Add(new MeasureUnitLabel { Id = 21, UnitName = "м^2", AddKoeff = 1.0 });
+            measureUnitGeometryArea.UnitLabels.Add(new MeasureUnitLabel { Id = 22, UnitName = "мм^2", AddKoeff = 1000000 });
+            measureUnitGeometryArea.UnitLabels.Add(new MeasureUnitLabel { Id = 22, UnitName = "см^2", AddKoeff = 10000 });
+            measureUnitGeometryArea.CurrentUnitLabelId = 22;
+            MeasureUnit measureUnitGeometrySecMoment = new MeasureUnit();
+            measureUnitGeometrySecMoment.MeasureUnitKind = "Геометрия. Момент сопротивления";
+            measureUnitGeometrySecMoment.UnitLabels.Add(new MeasureUnitLabel { Id = 26, UnitName = "м^3", AddKoeff = 1.0 });
+            measureUnitGeometrySecMoment.UnitLabels.Add(new MeasureUnitLabel { Id = 27, UnitName = "мм^3", AddKoeff = 1e9 });
+            measureUnitGeometrySecMoment.UnitLabels.Add(new MeasureUnitLabel { Id = 28, UnitName = "см^3", AddKoeff = 1e6 });
+            measureUnitGeometrySecMoment.CurrentUnitLabelId = 27;
+            MeasureUnit measureUnitGeometryMoment = new MeasureUnit();
+            measureUnitGeometryMoment.MeasureUnitKind = "Геометрия. Момент инерции";
+            measureUnitGeometryMoment.UnitLabels.Add(new MeasureUnitLabel { Id = 31, UnitName = "м^4", AddKoeff = 1.0 });
+            measureUnitGeometryMoment.UnitLabels.Add(new MeasureUnitLabel { Id = 32, UnitName = "мм^4", AddKoeff = 1e12 });
+            measureUnitGeometryMoment.UnitLabels.Add(new MeasureUnitLabel { Id = 33, UnitName = "см^4", AddKoeff = 1e8 });
+            measureUnitGeometryMoment.CurrentUnitLabelId = 32;
+            MeasureUnit measureUnitMass = new MeasureUnit();
+            measureUnitMass.MeasureUnitKind = "Масса";
+            measureUnitMass.UnitLabels.Add(new MeasureUnitLabel { Id = 36, UnitName = "кг", AddKoeff = 1.0 });
+            measureUnitMass.UnitLabels.Add(new MeasureUnitLabel { Id = 37, UnitName = "г", AddKoeff = 1000 });
+            measureUnitMass.UnitLabels.Add(new MeasureUnitLabel { Id = 38, UnitName = "т", AddKoeff = 0.001 });
+            measureUnitMass.CurrentUnitLabelId = 36;
             MeasureUnits = new ObservableCollection<MeasureUnit>();
             MeasureUnits.Add(measureUnitLength);
             MeasureUnits.Add(measureUnitForce);
             MeasureUnits.Add(measureUnitMoment);
             MeasureUnits.Add(measureUnitStress);
-
+            MeasureUnits.Add(measureUnitGeometryArea);
+            MeasureUnits.Add(measureUnitGeometrySecMoment);
+            MeasureUnits.Add(measureUnitGeometryMoment);
+            MeasureUnits.Add(measureUnitMass);
+            #endregion
+            #region Исходные данные видов нагрузки
             ForceParamKinds = new List<ForceParamKind>();
             ForceParamKinds.Add(new ForceParamKind
             {
