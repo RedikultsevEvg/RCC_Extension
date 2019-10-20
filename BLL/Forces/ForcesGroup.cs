@@ -27,10 +27,7 @@ namespace RDBLL.Forces
         public ForcesGroup(SteelColumnBase steelColumnBase)
         {
             SteelColumnBase = steelColumnBase;
-            //Loads = new ObservableCollection<BarLoadSet>();
-            //Loads.Add(new BarLoadSet(this));
             LoadSets = new ObservableCollection<LoadSet>();
-            LoadSets.Add(new LoadSet(this));
             Excentricity = new Point2D(0, 0);
         }
         #endregion

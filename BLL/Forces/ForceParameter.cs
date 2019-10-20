@@ -44,8 +44,13 @@ namespace RDBLL.Forces
             set
             {
                 _kind_id = value;
-                //var tmpForceParamKind = from t in ProgrammSettings.ForceParamKinds where t.Id == _kind_id select t;
-                //_forceParamKind = tmpForceParamKind.First();
+                try
+                {
+                    var tmpForceParamKind = from t in ProgrammSettings.ForceParamKinds where t.Id == _kind_id select t;
+                    _forceParamKind = tmpForceParamKind.First();
+                }
+                catch { }
+                
             }
         }
         public ForceParamKind ForceParamKind

@@ -7,6 +7,9 @@ using RDBLL.Common.Service;
 
 namespace RDBLL.Entity.MeasureUnits
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public static class MeasureUnitConverter
     {
         public static double GetCoefficient(int index)
