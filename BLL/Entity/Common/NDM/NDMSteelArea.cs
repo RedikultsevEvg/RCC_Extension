@@ -25,6 +25,7 @@ namespace RDBLL.Entity.Common.NDM
         public NdmSteelArea()
         {
             SteelArea = new NdmArea(new LinearTensioned());
+            //SteelArea = new NdmArea(new LinearIsotropic());
             SteelArea.ElasticModulus = 2e+11;
         }
     }

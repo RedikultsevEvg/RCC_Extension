@@ -43,11 +43,13 @@ namespace RDBLL.Entity.Common.NDM
                 #endregion
             }
             #region
-            StifMatrix[0, 0] = D11;
+            //StifMatrix[0, 0] = D11;
+            StifMatrix[0, 0] = D22;
             StifMatrix[0, 1] = D12;
             StifMatrix[0, 2] = D13;
             StifMatrix[1, 0] = D12;
-            StifMatrix[1, 1] = D22;
+            //StifMatrix[1, 1] = D22;
+            StifMatrix[1, 1] = D11;
             StifMatrix[1, 2] = D23;
             StifMatrix[2, 0] = D13;
             StifMatrix[2, 1] = D23;

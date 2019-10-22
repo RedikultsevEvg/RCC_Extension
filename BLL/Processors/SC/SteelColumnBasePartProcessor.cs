@@ -426,5 +426,23 @@ namespace RDBLL.Processors.SC
             }
             return stresses.Min();
         }
+        public static double GetGlobalMinStressNonLinear(SteelBasePart basePart, List<Curvature> curvatures)
+        {
+            List<double> stresses = new List<double>();
+            foreach (Curvature curvature in curvatures)
+            {
+                stresses.Add(GetMinStressNonLinear(basePart, curvature));
+            }
+            return stresses.Min();
+        }
+        public static double GetGlobalMinStressNonLinear(SteelBasePart basePart)
+        {
+            List<double> stresses = new List<double>();
+            foreach (ForceCurvature forceCurvature in basePart.ColumnBase.ForceCurvatures)
+            {
+                stresses.Add(GetMinStressNonLinear(basePart, forceCurvature.Curvature));
+            }
+            return stresses.Min();
+        }
     }
 }

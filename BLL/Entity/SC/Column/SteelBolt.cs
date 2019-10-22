@@ -11,7 +11,7 @@ namespace RDBLL.Entity.SC.Column
     {
         public int Id { get; set; } //Код
         public int SteelBaseId { get; set; } //Код базы
-        public SteelColumnBase SteelColumnBase { get; set; } //Ссылка на базу
+        public SteelColumnBase ColumnBase { get; set; } //Ссылка на базу
         public String Name { get; set; }
         public double Diameter { get; set; }
         public double CenterX { get; set; }
@@ -25,6 +25,7 @@ namespace RDBLL.Entity.SC.Column
         public SteelBolt(SteelColumnBase steelColumnBase)
         {
             SteelBaseId = steelColumnBase.Id;
+            ColumnBase = steelColumnBase;
             Name = "Новый болт";
             Diameter = 0.030;
             CenterX = 0.200;

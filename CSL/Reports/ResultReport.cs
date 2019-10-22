@@ -37,9 +37,17 @@ namespace CSL.Reports
             using (Report report = new Report())
             {
                 report.Load(Directory.GetCurrentDirectory()+"\\Reports\\SteelBases.frx");
+                report.SetParameterValue("Units.LinearSize", MeasureUnitConverter.GetUnitLabelText(0));
+                report.SetParameterValue("Units.Force", MeasureUnitConverter.GetUnitLabelText(1));
+                report.SetParameterValue("Units.Moment", MeasureUnitConverter.GetUnitLabelText(2));
+                report.SetParameterValue("Units.Stress", MeasureUnitConverter.GetUnitLabelText(3));
+                report.SetParameterValue("Units.Geometry.Area", MeasureUnitConverter.GetUnitLabelText(4));
+                report.SetParameterValue("Units.Geometry.SecMoment", MeasureUnitConverter.GetUnitLabelText(5));
+                report.SetParameterValue("Units.Geometry.Moment", MeasureUnitConverter.GetUnitLabelText(6));
+                report.SetParameterValue("Units.Mass", MeasureUnitConverter.GetUnitLabelText(7));
                 report.RegisterData(dataSet);
-                report.Design();
-                //report.Show();
+                //report.Design();
+                report.Show();
             }
         }
         public void PrepareReport()
@@ -51,9 +59,13 @@ namespace CSL.Reports
             int steelBaseBoltId = 1;
 
             double linearSizeCoefficient = MeasureUnitConverter.GetCoefficient(0);
-            double ForceCoefficient = MeasureUnitConverter.GetCoefficient(1);
-            double MomentSizeCoefficient = MeasureUnitConverter.GetCoefficient(2);
+            double forceCoefficient = MeasureUnitConverter.GetCoefficient(1);
+            double momentCoefficient = MeasureUnitConverter.GetCoefficient(2);
             double stressCoefficient = MeasureUnitConverter.GetCoefficient(3);
+            double geometyAreaCoefficient = MeasureUnitConverter.GetCoefficient(4);
+            double geometrySecMomentCoefficient = MeasureUnitConverter.GetCoefficient(5);
+            double geometryMomentCoefficient = MeasureUnitConverter.GetCoefficient(6);
+            double MassCoefficient = MeasureUnitConverter.GetCoefficient(7);
 
             foreach (Building building in _buildingSite.BuildingList)
             {
@@ -62,7 +74,10 @@ namespace CSL.Reports
                     DataTable SteelBases = dataSet.Tables[0];
                     foreach (SteelColumnBase steelColumnBase in level.SteelColumnBaseList)
                     {
-                        if (! steelColumnBase.IsActual) { SteelColumnBaseProcessor.SolveSteelColumnBase(steelColumnBase); }
+                        //if (! steelColumnBase.IsActual)
+                        //{
+                            SteelColumnBaseProcessor.SolveSteelColumnBase(steelColumnBase);
+                        //}
 
                         DataRow newSteelBase = SteelBases.NewRow();
                         Double A = steelColumnBase.Width * steelColumnBase.Length;
@@ -75,7 +90,13 @@ namespace CSL.Reports
                         DrawSteelBase.DrawBase(steelColumnBase, canvas);
                         byte[] b = ExportToByte(canvas);
                         #endregion
-                        newSteelBase.ItemArray = new object[] { steelBaseId, b, steelColumnBase.Name, steelColumnBase.Width, steelColumnBase.Length, A, Wx, Wy };
+                        newSteelBase.ItemArray = new object[]
+                        { steelBaseId, b, steelColumnBase.Name,
+                            steelColumnBase.Width * linearSizeCoefficient,
+                            steelColumnBase.Length * linearSizeCoefficient,
+                            A * geometyAreaCoefficient,
+                            Wx * geometrySecMomentCoefficient,
+                            Wy * geometrySecMomentCoefficient};
                         
                         SteelBases.Rows.Add(newSteelBase);
                         DataTable LoadCases = dataSet.Tables[1];                       
@@ -96,8 +117,8 @@ namespace CSL.Reports
                                     tmpForceParamLabels.First().LongLabel,
                                     tmpForceParamLabels.First().ShortLabel,
                                     measureUnitLabel.UnitName,
-                                    forceParameter.CrcValueInCurUnit,
-                                    forceParameter.DesignValue * measureUnitLabel.AddKoeff};
+                                    Math.Round(forceParameter.CrcValueInCurUnit, 3),
+                                    Math.Round(forceParameter.DesignValue * measureUnitLabel.AddKoeff, 3)};
                                 ForceParameters.Rows.Add(newForceParameter);
                                 ForceParameterId++;
                             }
@@ -107,7 +128,8 @@ namespace CSL.Reports
                         foreach (SteelBasePart steelBasePart in steelColumnBase.ActualSteelBaseParts)
                         {
                             DataRow newSteelBasePart = SteelBasesParts.NewRow();
-                            double maxBedStress = SteelColumnBasePartProcessor.GetGlobalMinStressLinear(steelBasePart) * (-1D);
+                            //double maxBedStress = SteelColumnBasePartProcessor.GetGlobalMinStressLinear(steelBasePart) * (-1D);
+                            double maxBedStress = SteelColumnBasePartProcessor.GetGlobalMinStressNonLinear(steelBasePart) * (-1D);
                             double maxStress = SteelColumnBasePartProcessor.GetResult(steelBasePart, maxBedStress)[1];
                             maxBedStress = Math.Round(stressCoefficient * maxBedStress, 3);
                             maxStress = Math.Round(stressCoefficient * maxStress, 3);
@@ -141,13 +163,16 @@ namespace CSL.Reports
                         foreach (SteelBolt steelBolt in steelColumnBase.ActualSteelBolts)
                         {
                             DataRow newSteelBaseBolt = SteelBasesBolts.NewRow();
+                            double area = steelBolt.Diameter * steelBolt.Diameter * 0.785;
+                            double maxStress = SteelBoltProcessor.GetMaxStressNonLinear(steelBolt);
+                            double force = maxStress * area;
                             newSteelBaseBolt.ItemArray = new object[]
                             {steelBaseBoltId, steelBaseId, steelBolt.Name,
                                 steelBolt.Diameter * linearSizeCoefficient,
                                 steelBolt.CenterX * linearSizeCoefficient,
                                 steelBolt.CenterY * linearSizeCoefficient,
-                                0 * stressCoefficient,
-                                0 * stressCoefficient };
+                                Math.Round(maxStress * stressCoefficient, 3),
+                                Math.Round(force * forceCoefficient, 3) };
                             SteelBasesBolts.Rows.Add(newSteelBaseBolt);
                             steelBaseBoltId++;
                         }
