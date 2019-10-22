@@ -44,7 +44,7 @@ namespace RDBLL.Entity.SC.Column
         public List<SteelBolt> ActualSteelBolts { get; set; } //Коллекция болтов с учетом симметрии
         public List<LoadSet> LoadCases { get; set; } //Коллекция комбинаций
         public List<NdmArea> NdmAreas { get; set; } //Коллекция элементарных участков
-        public ObservableCollection<ForceCurvature> ForceCurvatures { get; set; } //Коллекция комбинаций и кривизны 
+        public List<ForceCurvature> ForceCurvatures { get; set; } //Коллекция комбинаций и кривизны 
 
         public bool IsLoadCasesActual
         {

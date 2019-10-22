@@ -562,7 +562,7 @@ namespace RDUIL.WinForms
                     {
                         foreach (int j in lvDetails.SelectedIndices)
                         {
-                            if (((List<Level>)_objectList)[j-i].WallList.Count == 0)
+                            if (((ObservableCollection<Level>)_objectList)[j-i].WallList.Count == 0)
                             {
                                 ((List<Level>)_objectList).RemoveAt(j - i);
                                 lvDetails.Items.RemoveAt(j - i);
@@ -620,7 +620,7 @@ namespace RDUIL.WinForms
                         //Необходимо добавить проверку на существование стен имеющих данный тип стены
                         foreach (int j in lvDetails.SelectedIndices)
                         {
-                            ((List<SteelColumnBase>)_objectList).RemoveAt(j - i);
+                            ((ObservableCollection<SteelColumnBase>)_objectList).RemoveAt(j - i);
                             lvDetails.Items.RemoveAt(j - i);
                             i++;
                         }

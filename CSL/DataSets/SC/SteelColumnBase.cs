@@ -34,6 +34,9 @@ namespace CSL.DataSets.SC
             SteelBases.Columns.Add(SteelBaseWx);
             SteelBases.Columns.Add(SteelBaseWy);
             #endregion
+            #region Loads
+
+            #endregion
             #region LoadCases
             DataTable LoadCases = new DataTable("LoadCases");
             dataSet.Tables.Add(LoadCases);

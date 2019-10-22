@@ -29,10 +29,10 @@ namespace RDBLL.Processors.SC
 
             foreach (LoadSet loadCase in columnBase.LoadCases)
             {
-                columnBase.ForceCurvatures = new ObservableCollection<ForceCurvature>();
+                columnBase.ForceCurvatures = new List<ForceCurvature>();
                 try
                 {
-                    //columnBase.ForceCurvatures.Add(GetCurvature(loadCase, columnBase));
+                    columnBase.ForceCurvatures.Add(GetCurvature(loadCase, columnBase));
 
                 }
                 catch

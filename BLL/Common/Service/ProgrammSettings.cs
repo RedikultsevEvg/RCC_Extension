@@ -86,7 +86,7 @@ namespace RDBLL.Common.Service
             measureUnitGeometryArea.MeasureUnitKind = "Геометрия. Площадь";
             measureUnitGeometryArea.UnitLabels.Add(new MeasureUnitLabel { Id = 21, UnitName = "м^2", AddKoeff = 1.0 });
             measureUnitGeometryArea.UnitLabels.Add(new MeasureUnitLabel { Id = 22, UnitName = "мм^2", AddKoeff = 1000000 });
-            measureUnitGeometryArea.UnitLabels.Add(new MeasureUnitLabel { Id = 22, UnitName = "см^2", AddKoeff = 10000 });
+            measureUnitGeometryArea.UnitLabels.Add(new MeasureUnitLabel { Id = 23, UnitName = "см^2", AddKoeff = 10000 });
             measureUnitGeometryArea.CurrentUnitLabelId = 22;
             MeasureUnit measureUnitGeometrySecMoment = new MeasureUnit();
             measureUnitGeometrySecMoment.MeasureUnitKind = "Геометрия. Момент сопротивления";

@@ -17,10 +17,10 @@ namespace RDBLL.Entity.Common.NDM.Processors
         /// <returns></returns>
         public static double[] GetStrainFromCuvature(NdmArea ndmArea, Curvature curvature)
         {
-            double strain = ndmArea.CenterX * curvature.CurvMatrix[0, 0];
-            strain += ndmArea.CenterY * curvature.CurvMatrix[1, 0];
+            double strain = ndmArea.CenterY * curvature.CurvMatrix[0, 0];
+            strain += ndmArea.CenterX * curvature.CurvMatrix[1, 0];
             strain += curvature.CurvMatrix[2, 0];
-            double stress = ndmArea.GetSecantModulus(strain);
+            double stress = ndmArea.GetSecantModulus(strain) * strain;
             return new double[2] { strain, stress }; 
         }
     }
