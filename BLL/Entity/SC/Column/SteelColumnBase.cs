@@ -106,9 +106,9 @@ namespace RDBLL.Entity.SC.Column
             //Участок №1
             SteelBasePart basePart1 = new SteelBasePart(this);
             basePart1.Name = "1";
-            basePart1.Width = 0.290;
+            basePart1.Width = 0.300;
             basePart1.Length = 0.200;
-            basePart1.Center[0] = 0.155;
+            basePart1.Center[0] = 0.150;
             basePart1.Center[1] = 0.350;
             basePart1.FixLeft = true;
             basePart1.FixRight = false;
@@ -120,9 +120,9 @@ namespace RDBLL.Entity.SC.Column
             //Участок №2
             SteelBasePart basePart2 = new SteelBasePart(this);
             basePart2.Name = "2";
-            basePart2.Width = 0.290;
-            basePart2.Length = 0.480;
-            basePart2.Center[0] = 0.155;
+            basePart2.Width = 0.300;
+            basePart2.Length = 0.500;
+            basePart2.Center[0] = 0.150;
             basePart2.Center[1] = 0;
             basePart2.FixLeft = true;
             basePart2.FixRight = false;

@@ -341,7 +341,7 @@ namespace RDBLL.Processors.SC
         public static void GetSubParts(SteelBasePart steelBasePart)
         {
             steelBasePart.SubParts = new List<NdmConcreteArea>();
-            double elementSize = 0.02;
+            double elementSize = 0.005;
             int numX = Convert.ToInt32(steelBasePart.Width / elementSize);
             int numY = Convert.ToInt32(steelBasePart.Length / elementSize);
             //Шаг элементарных участков (совпадает с соответствующим размером участка)
@@ -440,7 +440,7 @@ namespace RDBLL.Processors.SC
             List<double> stresses = new List<double>();
             foreach (ForceCurvature forceCurvature in basePart.ColumnBase.ForceCurvatures)
             {
-                stresses.Add(GetMinStressNonLinear(basePart, forceCurvature.Curvature));
+                stresses.Add(GetMinStressNonLinear(basePart, forceCurvature.ConcreteCurvature));
             }
             return stresses.Min();
         }
