@@ -32,8 +32,23 @@ namespace RDBLL.Processors.SC
                 columnBase.ForceCurvatures = new List<ForceCurvature>();
                 try
                 {
-                    columnBase.ForceCurvatures.Add(GetCurvature(loadCase, columnBase));
-
+                    ForceCurvature forceCurvature = GetCurvatureSimpleMethod(loadCase, columnBase);
+                    columnBase.ForceCurvatures.Add(forceCurvature);
+                    List<NdmArea> concreteNdmAreas = GetConcreteNdmAreas(columnBase);
+                    List<NdmArea> steelNdmAreas = GetSteelNdmAreas(columnBase);
+                    Curvature concreteCurvature = forceCurvature.ConcreteCurvature;
+                    Curvature steelCurvature = forceCurvature.SteelCurvature;
+                    StiffnessCoefficient concreteStiffnessCoefficient = new StiffnessCoefficient(concreteNdmAreas, concreteCurvature);
+                    SumForces initForces = new SumForces(loadCase);
+                    SumForces concreteForces = new SumForces(concreteStiffnessCoefficient, concreteCurvature);
+                    SumForces deltaForces = new SumForces(initForces, concreteForces);
+                    for (int i = 1; i <= 20; i++)
+                    {
+                        StiffnessCoefficient steelStiffnessCoefficient = new StiffnessCoefficient(steelNdmAreas, steelCurvature);
+                        //SumForces steelForces = new SumForces(steelStiffnessCoefficient, steelCurvature);
+                        steelCurvature = new Curvature(deltaForces, steelStiffnessCoefficient);
+                    }
+                    forceCurvature.SteelCurvature = steelCurvature;
                 }
                 catch
                 {
@@ -108,21 +123,8 @@ namespace RDBLL.Processors.SC
         /// <param name="columnBase"></param>
         public static void GetNdmAreas(SteelColumnBase columnBase)
         {
-            columnBase.NdmAreas = new List<NdmArea>();
-
-            foreach (SteelBasePart steelBasePart in columnBase.ActualSteelBaseParts)
-            {
-                SteelColumnBasePartProcessor.GetSubParts(steelBasePart);
-                foreach (NdmConcreteArea ndmConcreteArea in steelBasePart.SubParts)
-                {
-                    columnBase.NdmAreas.Add(ndmConcreteArea.ConcreteArea);
-                }
-            }
-            foreach (SteelBolt steelBolt in columnBase.ActualSteelBolts)
-            {
-                SteelBoltProcessor.GetSubParts(steelBolt);
-                columnBase.NdmAreas.Add(steelBolt.SubPart.SteelArea);
-            }
+            columnBase.NdmAreas = GetConcreteNdmAreas(columnBase);
+            columnBase.NdmAreas.AddRange(GetSteelNdmAreas(columnBase));
         }
         public static ForceCurvature GetCurvature(LoadSet loadCase, SteelColumnBase columnBase)
         {
@@ -151,6 +153,38 @@ namespace RDBLL.Processors.SC
             sumForces2 = new SumForces(newStiffnessCoefficient, newCurvature);
             return new ForceCurvature(loadCase, newCurvature);
         }
+        public static List<NdmArea> GetConcreteNdmAreas(SteelColumnBase columnBase)
+        {
+            List<NdmArea>  NdmAreas = new List<NdmArea>();
+            foreach (SteelBasePart steelBasePart in columnBase.ActualSteelBaseParts)
+            {
+                SteelColumnBasePartProcessor.GetSubParts(steelBasePart);
+                foreach (NdmConcreteArea ndmConcreteArea in steelBasePart.SubParts)
+                {
+                    NdmAreas.Add(ndmConcreteArea.ConcreteArea);
+                }
+            }
+            return NdmAreas;
+        }
+        public static List<NdmArea> GetSteelNdmAreas(SteelColumnBase columnBase)
+        {
+            List<NdmArea> NdmAreas = new List<NdmArea>();
+            foreach (SteelBolt steelBolt in columnBase.ActualSteelBolts)
+            {
+                SteelBoltProcessor.GetSubParts(steelBolt);
+                NdmAreas.Add(steelBolt.SubPart.SteelArea);
+            }
+            return NdmAreas;
+        }
+        public static ForceCurvature GetCurvatureSimpleMethod(LoadSet loadCase, SteelColumnBase columnBase)
+        {
+            SumForces sumForces = new SumForces(loadCase);
+            List<NdmArea> NdmAreas = GetConcreteNdmAreas(columnBase);
+            StiffnessCoefficient stiffnessCoefficient = new StiffnessCoefficient(NdmAreas);
+            Curvature curvature = new Curvature(sumForces, stiffnessCoefficient);
+            return new ForceCurvature(loadCase, curvature);
+        }
+
     }
 }
 
