@@ -16,7 +16,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UIL", "UIL\UIL.csproj", "{E
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSL", "CSL\CSL.csproj", "{C582493C-8856-4B0E-ACDC-C4E9F1566BCA}"
 EndProject
-Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "Setup", "Setup\Setup.vdproj", "{38A61ECE-231A-4D25-B3D6-BE3545C33ABD}"
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "SetupWin7", "Setup\Setup.vdproj", "{38A61ECE-231A-4D25-B3D6-BE3545C33ABD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DAL", "DAL\DAL.csproj", "{81DD6EBB-5934-473C-88A7-41EF9811E05F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -46,6 +48,10 @@ Global
 		{C582493C-8856-4B0E-ACDC-C4E9F1566BCA}.Release|Any CPU.Build.0 = Release|Any CPU
 		{38A61ECE-231A-4D25-B3D6-BE3545C33ABD}.Debug|Any CPU.ActiveCfg = Debug
 		{38A61ECE-231A-4D25-B3D6-BE3545C33ABD}.Release|Any CPU.ActiveCfg = Release
+		{81DD6EBB-5934-473C-88A7-41EF9811E05F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{81DD6EBB-5934-473C-88A7-41EF9811E05F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{81DD6EBB-5934-473C-88A7-41EF9811E05F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{81DD6EBB-5934-473C-88A7-41EF9811E05F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

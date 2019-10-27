@@ -15,21 +15,23 @@ namespace RDBLL.Entity.RCC.BuildingAndSite
 {
     public class Level :ICloneable
     {
+        public int Id { get; set; }
         public string Name { get; set; }
+        public int BuildingId { get; set; }
         public Building Building { get; set; }
         public decimal FloorLevel { get; set; }
         public decimal Height { get; set; }
         public decimal TopOffset { get; set; }
         public int Quant { get; set; }
         public Point3D BasePoint { get; set; }
-        public ObservableCollection<Wall> WallList { get; set; }
-        public ObservableCollection<Column> ColumnList { get; set; }
-        public ObservableCollection<SteelColumnBase> SteelColumnBaseList { get; set; }
+        public ObservableCollection<Wall> Walls { get; set; }
+        public ObservableCollection<Column> Columns { get; set; }
+        public ObservableCollection<SteelBase> SteelBases { get; set; }
 
         public decimal GetConcreteVolumeNetto()
         {
             decimal volume = 0;
-            foreach (Wall obj in WallList)
+            foreach (Wall obj in Walls)
             {
                 volume += obj.GetConcreteVolumeNetto();
             }
@@ -45,7 +47,7 @@ namespace RDBLL.Entity.RCC.BuildingAndSite
             XMLOperations.AddAttribute(xmlNode, xmlDocument, "Height", Convert.ToString(Height));
             XMLOperations.AddAttribute(xmlNode, xmlDocument, "TopOffset", Convert.ToString(TopOffset));
             XMLOperations.AddAttribute(xmlNode, xmlDocument, "Quant", Convert.ToString(Quant));
-            foreach (Wall obj in WallList)
+            foreach (Wall obj in Walls)
             {
                 xmlNode.AppendChild(obj.SaveToXMLNode(xmlDocument));
             }
@@ -54,6 +56,7 @@ namespace RDBLL.Entity.RCC.BuildingAndSite
 
         public Level (Building building)
         {
+            Id = ProgrammSettings.CurrentId;
             Name = "Этаж 1";
             Building = building;
             FloorLevel = 0;
@@ -61,16 +64,16 @@ namespace RDBLL.Entity.RCC.BuildingAndSite
             TopOffset = -200;
             BasePoint = new Point3D(0, 0, 0);
             Quant = 1;
-            WallList = new ObservableCollection<Wall>();
-            SteelColumnBaseList = new ObservableCollection<SteelColumnBase>();
+            Walls = new ObservableCollection<Wall>();
+            SteelBases = new ObservableCollection<SteelBase>();
             building.LevelList.Add(this);
         }
 
         public Level(Building building, XmlNode xmlNode)
         {
             Building = building;
-            WallList = new ObservableCollection<Wall>();
-            SteelColumnBaseList = new ObservableCollection<SteelColumnBase>();
+            Walls = new ObservableCollection<Wall>();
+            SteelBases = new ObservableCollection<SteelBase>();
             foreach (XmlAttribute obj in xmlNode.Attributes)
             {          
                 if (obj.Name == "Name") Name = obj.Value;
@@ -82,7 +85,7 @@ namespace RDBLL.Entity.RCC.BuildingAndSite
             }
             foreach (XmlNode childNode in xmlNode.ChildNodes)
             {
-                if (childNode.Name == "Wall") WallList.Add(new Wall(this, childNode));
+                if (childNode.Name == "Wall") Walls.Add(new Wall(this, childNode));
             }
         }
 

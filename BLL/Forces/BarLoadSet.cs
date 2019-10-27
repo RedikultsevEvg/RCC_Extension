@@ -45,7 +45,7 @@ namespace RDBLL.Forces
         public BarLoadSet(ForcesGroup forcesGroup)
         {
             this.ForcesGroup = forcesGroup;
-            forcesGroup.SteelColumnBase.IsLoadCasesActual = false;
+            forcesGroup.SteelBases[0].IsLoadCasesActual = false;
             SetDefault1();
         }
         #endregion

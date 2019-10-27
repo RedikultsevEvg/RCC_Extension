@@ -27,7 +27,7 @@ namespace WallTest
         ///
         public void CheckSteelBasePart()
         {
-            SteelColumnBase steelColumnBase = new SteelColumnBase();
+            SteelBase steelColumnBase = new SteelBase();
             steelColumnBase.Width = 1;
             steelColumnBase.Length = 1;
             steelColumnBase.Thickness = 0.05;
@@ -44,9 +44,9 @@ namespace WallTest
             basePart.FixBottom = false;
             basePart.Width = 1;
             basePart.Length = 1;
-            SteelColumnBaseProcessor.ActualizeLoadCases(steelColumnBase);
+            SteelBaseProcessor.ActualizeLoadCases(steelColumnBase);
 
-            double Actual = SteelColumnBasePartProcessor.GetResult(basePart)[1];
+            double Actual = SteelBasePartProcessor.GetResult(basePart)[1];
             Assert.AreEqual(30, Actual / 1000000, 10);
         }
 
@@ -55,7 +55,7 @@ namespace WallTest
         /// 
         public void CheckLoadCaseOnlyDeadLoad()
         {
-            SteelColumnBase steelColumnBase = new SteelColumnBase();
+            SteelBase steelColumnBase = new SteelBase();
             int i = 1;
             AddForceParameter(steelColumnBase.LoadsGroup[0], i, false);
             
@@ -90,7 +90,7 @@ namespace WallTest
         /// 
         public void CheckLoadCaseLiveLoad()
         {
-            SteelColumnBase steelColumnBase = new SteelColumnBase();
+            SteelBase steelColumnBase = new SteelBase();
             int i = 1;
             AddForceParameter(steelColumnBase.LoadsGroup[0], i, false);
 
@@ -138,7 +138,7 @@ namespace WallTest
         /// 
         public void CheckLoadCaseLiveChangableLoad()
         {
-            SteelColumnBase steelColumnBase = new SteelColumnBase();
+            SteelBase steelColumnBase = new SteelBase();
             int i = 1;
             AddForceParameter(steelColumnBase.LoadsGroup[0], i);
 

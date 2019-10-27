@@ -41,16 +41,13 @@
                     <TextBlock x:Name="tbWidth" Grid.Row="1" Style="{StaticResource PropertyTextBlock}" Text="Ширина (вдоль оси X)"/>
                     <TextBlock x:Name="tbLength" Grid.Row="2" Style="{StaticResource PropertyTextBlock}" Text="Длина (вдоль оси Y)"/>
                     <TextBlock x:Name="tbThicness" Grid.Row="3" Style="{StaticResource PropertyTextBlock}" Text="Толщина"/>
-                    <TextBlock x:Name="tbConcreteStrength" Grid.Row="4" Style="{StaticResource PropertyTextBlock}" Text="Прочность бетона"/>
                     <TextBox x:Name="tbxName" Grid.Column="1" Style="{StaticResource PropertyTextBox}" Text="{Binding Path=Name}"/>
                     <TextBox x:Name="tbxWidth" Grid.Row="1" Grid.Column="1" Style="{StaticResource PropertyTextBox}" Text="{Binding Path=Width, Converter={StaticResource LinearSizeConverter}}"/>
                     <TextBox x:Name="tbxLength" Grid.Row="2" Grid.Column="1" Style="{StaticResource PropertyTextBox}" Text="{Binding Path=Length, Converter={StaticResource LinearSizeConverter}}"/>
                     <TextBox x:Name="tbxThickness" Grid.Row="3" Grid.Column="1" Style="{StaticResource PropertyTextBox}" Text="{Binding Path=Thickness, Converter={StaticResource LinearSizeConverter}}"/>
-                    <TextBox x:Name="tbxConcreteStrength" Grid.Row="4" Grid.Column="1" Style="{StaticResource PropertyTextBox}" Text="{Binding Path=ConcreteStrength, Converter={StaticResource StressConverter}}"/>
                     <TextBlock Grid.Column="2" Grid.Row="1" x:Name="tbWidthMeasure" Style="{StaticResource PropertyTextBlock}" Text="мм" />
                     <TextBlock Grid.Column="2" Grid.Row="2" x:Name="tbLengthMeasure" Style="{StaticResource PropertyTextBlock}" Text="мм" />
                     <TextBlock Grid.Column="2" Grid.Row="3" x:Name="tbThicknessMeasure" Style="{StaticResource PropertyTextBlock}" Text="мм" />
-                    <TextBlock Grid.Column="2" Grid.Row="4" x:Name="tbConcreteStrengthMeasure" Style="{StaticResource PropertyTextBlock}" Text="МПа" />
                 </Grid>
                 <Canvas x:Name="cvBase" Margin="5" Height="220"/>
             </StackPanel>

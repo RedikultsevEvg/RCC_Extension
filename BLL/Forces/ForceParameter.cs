@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using RDBLL.Common.Service;
 using RDBLL.Entity.MeasureUnits;
+using RDBLL.Common.Service;
 
 namespace RDBLL.Forces
 {
@@ -16,7 +17,6 @@ namespace RDBLL.Forces
         private int _kind_id;
         private ForceParamKind _forceParamKind;
         private double _crcValue;
-
         public int Id { get; set; } //Код усилия
         public double CrcValue //Величина нагрузки (численное значение)
         {
@@ -36,7 +36,6 @@ namespace RDBLL.Forces
                 _crcValue = value / measureUnitLabel.AddKoeff;
             }
         }
-
         public double DesignValue { get; set; } //Величина нагрузки (численное значение)
         public int Kind_id //Код вида усилия (например, продольная сила). Виды нагрузки жестко предустановлены в программе
         {
@@ -61,7 +60,12 @@ namespace RDBLL.Forces
             }
             set { _forceParamKind = value; }
         }
-
+        #region Constructors
+        public ForceParameter()
+        {
+            Id = ProgrammSettings.CurrentId;
+        }
+        #endregion
         //IEquatable
         public bool Equals(ForceParameter other)
         {

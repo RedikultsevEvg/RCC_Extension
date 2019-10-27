@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using RDBLL.Common.Geometry;
 using RDBLL.Entity.SC.Column;
 using System.Collections.ObjectModel;
+using RDBLL.Common.Service;
 
 namespace RDBLL.Forces
 {
@@ -14,21 +15,25 @@ namespace RDBLL.Forces
     /// </summary>
     public class ForcesGroup
     {
-        public SteelColumnBase SteelColumnBase { get; set; } //Обратная ссылка. База стальной колонны к котрой относится группа нагрузок
-        //public ObservableCollection<BarLoadSet> Loads { get; set; } //Коллекция набора нагрузок
+        public int Id { get; set; }
+        public List<SteelBase> SteelBases { get; set; } //Обратная ссылка. База стальной колонны к котрой относится группа нагрузок
         public ObservableCollection<LoadSet> LoadSets { get; set; } //Коллекция набора нагрузок
-        public Point2D Excentricity { get; set; } //Точка, к которой приложена группа нагрузок
+        public double CenterX { get; set; } //Точка, к которой приложена группа нагрузок
+        public double CenterY { get; set; } //Точка, к которой приложена группа нагрузок
 
         #region Constructors
         /// <summary>
         /// Конструктор создает экземпляр класса группы нагрузок
         /// </summary>
         /// <param name="steelColumnBase"></param>
-        public ForcesGroup(SteelColumnBase steelColumnBase)
+        public ForcesGroup(SteelBase steelColumnBase)
         {
-            SteelColumnBase = steelColumnBase;
+            Id = ProgrammSettings.CurrentId;
+            SteelBases = new List<SteelBase>();
+            SteelBases.Add(steelColumnBase);
             LoadSets = new ObservableCollection<LoadSet>();
-            Excentricity = new Point2D(0, 0);
+            CenterX = 0;
+            CenterY = 0;
         }
         #endregion
     }
