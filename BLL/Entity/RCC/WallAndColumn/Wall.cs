@@ -242,7 +242,7 @@ namespace RDBLL.Entity.RCC.WallAndColumn
             Level = level;
             WallType = wallType;
             SetDefault();
-            level.WallList.Add(this);
+            level.Walls.Add(this);
 
         }
         public Wall(Level level, XmlNode xmlNode)
@@ -281,7 +281,7 @@ namespace RDBLL.Entity.RCC.WallAndColumn
             EndPoint = new Point2D(6, 0);
             Level = level;
             WallType = wallType;
-            level.WallList.Add(this);
+            level.Walls.Add(this);
         }
         //Построение стены по двум точкам
         public Wall(Point2D StartPoint, Point2D EndPoint)

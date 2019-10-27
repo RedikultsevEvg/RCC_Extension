@@ -13,6 +13,7 @@ namespace RDBLL.Entity.RCC.BuildingAndSite
 {
     public class BuildingSite :ICloneable
     {
+        public int Id { get; set; }
         public string Name { get; set; }
         public List<Building> BuildingList { get; set; }
 
@@ -34,6 +35,7 @@ namespace RDBLL.Entity.RCC.BuildingAndSite
 
         public BuildingSite()
         {
+            Id = ProgrammSettings.CurrentId;
             Name = "Мой объект";
             BuildingList = new List<Building>();
         }
@@ -56,6 +58,7 @@ namespace RDBLL.Entity.RCC.BuildingAndSite
     /// </summary>
     public class Building : ICloneable
     {
+        public int Id { get; set; }
         public string Name { get; set; }
         public BuildingSite BuildingSite { get; set; }
         public ObservableCollection<Level> LevelList { get; set; }
@@ -81,6 +84,7 @@ namespace RDBLL.Entity.RCC.BuildingAndSite
         }
         public Building(BuildingSite buildingSite)
         {
+            Id = ProgrammSettings.CurrentId;
             Name = "Мое здание";
             BuildingSite = buildingSite;
             LevelList = new ObservableCollection<Level>();

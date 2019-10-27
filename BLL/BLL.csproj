@@ -87,7 +87,7 @@
     <Compile Include="Entity\SC\Column\SteelBasePart.cs" />
     <Compile Include="Entity\SC\Column\SteelBaseSubPart.cs" />
     <Compile Include="Entity\SC\Column\SteelBolt.cs" />
-    <Compile Include="Entity\SC\Column\SteelColumnBase.cs" />
+    <Compile Include="Entity\SC\Column\SteelBase.cs" />
     <Compile Include="Forces\BarLoadSet.cs" />
     <Compile Include="Forces\ForcesGroup.cs" />
     <Compile Include="Forces\ForceParameter.cs" />
@@ -96,14 +96,20 @@
     <Compile Include="Processors\Forces\BarLoadSetProcessor.cs" />
     <Compile Include="Processors\Forces\LoadSetProcessor.cs" />
     <Compile Include="Processors\SC\SteelBoltProcessor.cs" />
-    <Compile Include="Processors\SC\SteelColumnBasePartProcessor.cs" />
-    <Compile Include="Processors\SC\SteelColumnBaseProcessor.cs" />
+    <Compile Include="Processors\SC\SteelBasePartProcessor.cs" />
+    <Compile Include="Processors\SC\SteelBaseProcessor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Common\Delegates\" />
     <Folder Include="Common\Interfaces\" />
     <Folder Include="Entity\Results\RCC\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\DAL\DAL.csproj">
+      <Project>{81dd6ebb-5934-473c-88a7-41ef9811e05f}</Project>
+      <Name>DAL</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

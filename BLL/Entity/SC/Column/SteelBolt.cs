@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using RDBLL.Common.Service;
 using RDBLL.Entity.Common.NDM;
+using System;
 
 namespace RDBLL.Entity.SC.Column
 {
@@ -11,7 +8,7 @@ namespace RDBLL.Entity.SC.Column
     {
         public int Id { get; set; } //Код
         public int SteelBaseId { get; set; } //Код базы
-        public SteelColumnBase ColumnBase { get; set; } //Ссылка на базу
+        public SteelBase ColumnBase { get; set; } //Ссылка на базу
         public String Name { get; set; }
         public double Diameter { get; set; }
         public double CenterX { get; set; }
@@ -22,8 +19,9 @@ namespace RDBLL.Entity.SC.Column
 
         //Constructors
         #region
-        public SteelBolt(SteelColumnBase steelColumnBase)
+        public SteelBolt(SteelBase steelColumnBase)
         {
+            Id = ProgrammSettings.CurrentId;
             SteelBaseId = steelColumnBase.Id;
             ColumnBase = steelColumnBase;
             Name = "Новый болт";

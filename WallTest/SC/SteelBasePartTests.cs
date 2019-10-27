@@ -22,7 +22,7 @@ namespace WallTest.SC
             double width = 0.2;
             double length = 0.4;
 
-            SteelColumnBase steelColumnBase = new SteelColumnBase();
+            SteelBase steelColumnBase = new SteelBase();
             steelColumnBase.Width = 1;
             steelColumnBase.Length = 1;
             steelColumnBase.Thickness = 0.05;
@@ -37,14 +37,15 @@ namespace WallTest.SC
             SteelBasePart basePart = new SteelBasePart(steelColumnBase);
             basePart.Width = width;
             basePart.Length = length;
-            basePart.Center = new double[2] { 0, 0 };
+            basePart.CenterX = 0;
+            basePart.CenterY = 0;
             basePart.FixLeft = true;
             basePart.FixRight = false;
             basePart.FixTop = false;
             basePart.FixBottom = false;
-            SteelColumnBaseProcessor.ActualizeLoadCases(steelColumnBase);
+            SteelBaseProcessor.ActualizeLoadCases(steelColumnBase);
 
-            double Actual = SteelColumnBasePartProcessor.GetResult(basePart)[0];
+            double Actual = SteelBasePartProcessor.GetResult(basePart)[0];
             double Expected = (100000 / 1 / 1) * width * width / 2;
 
             Assert.AreEqual(Expected, Actual, Expected / 1000);
@@ -56,7 +57,7 @@ namespace WallTest.SC
             double width = 0.2;
             double length = 0.4;
 
-            SteelColumnBase steelColumnBase = new SteelColumnBase();
+            SteelBase steelColumnBase = new SteelBase();
             steelColumnBase.Width = 1;
             steelColumnBase.Length = 1;
             steelColumnBase.Thickness = 0.05;
@@ -71,14 +72,15 @@ namespace WallTest.SC
             SteelBasePart basePart = new SteelBasePart(steelColumnBase);
             basePart.Width = width;
             basePart.Length = length;
-            basePart.Center = new double[2] { 0, 0 };
+            basePart.CenterX = 0;
+            basePart.CenterY = 0;
             basePart.FixLeft = false;
             basePart.FixRight = false;
             basePart.FixTop = false;
             basePart.FixBottom = true;
-            SteelColumnBaseProcessor.ActualizeLoadCases(steelColumnBase);
+            SteelBaseProcessor.ActualizeLoadCases(steelColumnBase);
 
-            double Actual = SteelColumnBasePartProcessor.GetResult(basePart)[0];
+            double Actual = SteelBasePartProcessor.GetResult(basePart)[0];
             double Expected = (100000 / 1 / 1) * length * length / 2;
 
             Assert.AreEqual(Actual, Expected, Expected / 1000);
@@ -92,7 +94,7 @@ namespace WallTest.SC
             double width = 0.2;
             double length = 0.4;
 
-            SteelColumnBase steelColumnBase = new SteelColumnBase();
+            SteelBase steelColumnBase = new SteelBase();
             steelColumnBase.Width = 1;
             steelColumnBase.Length = 1;
             steelColumnBase.Thickness = 0.05;
@@ -107,14 +109,15 @@ namespace WallTest.SC
             SteelBasePart basePart = new SteelBasePart(steelColumnBase);
             basePart.Width = width;
             basePart.Length = length;
-            basePart.Center = new double[2] { 0, 0 };
+            basePart.CenterX = 0;
+            basePart.CenterY = 0;
             basePart.FixLeft = false;
             basePart.FixRight = false;
             basePart.FixTop = true;
             basePart.FixBottom = true;
-            SteelColumnBaseProcessor.ActualizeLoadCases(steelColumnBase);
+            SteelBaseProcessor.ActualizeLoadCases(steelColumnBase);
 
-            double Actual = SteelColumnBasePartProcessor.GetResult(basePart)[0];
+            double Actual = SteelBasePartProcessor.GetResult(basePart)[0];
             double Expected = (100000/1/1) * length * length / 8;
 
             Assert.AreEqual(Actual, Expected, Expected / 1000);
@@ -126,7 +129,7 @@ namespace WallTest.SC
             double width = 0.2;
             double length = 0.4;
 
-            SteelColumnBase steelColumnBase = new SteelColumnBase();
+            SteelBase steelColumnBase = new SteelBase();
             steelColumnBase.Width = 1;
             steelColumnBase.Length = 1;
             steelColumnBase.Thickness = 0.05;
@@ -141,14 +144,15 @@ namespace WallTest.SC
             SteelBasePart basePart = new SteelBasePart(steelColumnBase);
             basePart.Width = width;
             basePart.Length = length;
-            basePart.Center = new double[2] { 0, 0 };
+            basePart.CenterX = 0;
+            basePart.CenterY = 0;
             basePart.FixLeft = true;
             basePart.FixRight = true;
             basePart.FixTop = false;
             basePart.FixBottom = false;
-            SteelColumnBaseProcessor.ActualizeLoadCases(steelColumnBase);
+            SteelBaseProcessor.ActualizeLoadCases(steelColumnBase);
 
-            double Actual = SteelColumnBasePartProcessor.GetResult(basePart)[0];
+            double Actual = SteelBasePartProcessor.GetResult(basePart)[0];
             double Expected = (100000 / 1 / 1) * width * width / 8;
 
             Assert.AreEqual(Actual, Expected, Expected / 1000);
@@ -160,7 +164,7 @@ namespace WallTest.SC
             double width = 0.2;
             double length = 0.4;
 
-            SteelColumnBase steelColumnBase = new SteelColumnBase();
+            SteelBase steelColumnBase = new SteelBase();
             steelColumnBase.Width = 1;
             steelColumnBase.Length = 1;
             steelColumnBase.Thickness = 0.05;
@@ -175,14 +179,15 @@ namespace WallTest.SC
             SteelBasePart basePart = new SteelBasePart(steelColumnBase);
             basePart.Width = width;
             basePart.Length = length;
-            basePart.Center = new double[2] { 0, 0 };
+            basePart.CenterX = 0;
+            basePart.CenterY = 0;
             basePart.FixLeft = true;
             basePart.FixRight = false;
             basePart.FixTop = false;
             basePart.FixBottom = true;
-            SteelColumnBaseProcessor.ActualizeLoadCases(steelColumnBase);
+            SteelBaseProcessor.ActualizeLoadCases(steelColumnBase);
 
-            double Actual = SteelColumnBasePartProcessor.GetResult(basePart)[0];
+            double Actual = SteelBasePartProcessor.GetResult(basePart)[0];
             double Expected = 1200;
 
             Assert.AreEqual(Actual, Expected, Expected / 1000);
@@ -196,7 +201,7 @@ namespace WallTest.SC
             double width = 0.2;
             double length = 0.3;
 
-            SteelColumnBase steelColumnBase = new SteelColumnBase();
+            SteelBase steelColumnBase = new SteelBase();
             steelColumnBase.Width = 1;
             steelColumnBase.Length = 1;
             steelColumnBase.Thickness = 0.05;
@@ -211,14 +216,15 @@ namespace WallTest.SC
             SteelBasePart basePart = new SteelBasePart(steelColumnBase);
             basePart.Width = width;
             basePart.Length = length;
-            basePart.Center = new double[2] { 0, 0 };
+            basePart.CenterX = 0;
+            basePart.CenterY = 0;
             basePart.FixLeft = true;
             basePart.FixRight = true;
             basePart.FixTop = false;
             basePart.FixBottom = true;
-            SteelColumnBaseProcessor.ActualizeLoadCases(steelColumnBase);
+            SteelBaseProcessor.ActualizeLoadCases(steelColumnBase);
 
-            double Actual = SteelColumnBasePartProcessor.GetResult(basePart)[0];
+            double Actual = SteelBasePartProcessor.GetResult(basePart)[0];
             double Expected = 508;
 
             Assert.AreEqual(Actual, Expected, Expected / 1000);
@@ -232,7 +238,7 @@ namespace WallTest.SC
             double width = 0.2;
             double length = 0.3;
 
-            SteelColumnBase steelColumnBase = new SteelColumnBase();
+            SteelBase steelColumnBase = new SteelBase();
             steelColumnBase.Width = 1;
             steelColumnBase.Length = 1;
             steelColumnBase.Thickness = 0.05;
@@ -247,14 +253,15 @@ namespace WallTest.SC
             SteelBasePart basePart = new SteelBasePart(steelColumnBase);
             basePart.Width = width;
             basePart.Length = length;
-            basePart.Center = new double[2] { 0, 0 };
+            basePart.CenterX = 0;
+            basePart.CenterY = 0;
             basePart.FixLeft = true;
             basePart.FixRight = true;
             basePart.FixTop = true;
             basePart.FixBottom = true;
-            SteelColumnBaseProcessor.ActualizeLoadCases(steelColumnBase);
+            SteelBaseProcessor.ActualizeLoadCases(steelColumnBase);
 
-            double Actual = SteelColumnBasePartProcessor.GetResult(basePart)[0];
+            double Actual = SteelBasePartProcessor.GetResult(basePart)[0];
             double Expected = 324;
 
             Assert.AreEqual(Actual, Expected, Expected / 1000);

@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using RDBLL.Common.Service;
 using RDBLL.Entity.Common.NDM;
+using System;
+using System.Collections.Generic;
 
 namespace RDBLL.Entity.SC.Column
 {
@@ -13,13 +11,14 @@ namespace RDBLL.Entity.SC.Column
     public class SteelBasePart : ICloneable
     {
         //Properties
-        #region 
-        public SteelColumnBase ColumnBase { get; set; } //База стальной колонны к которой относится участок
+        #region
         public int Id { get; set; } //Код участка
+        public SteelBase ColumnBase { get; set; } //База стальной колонны к которой относится участок
         public String Name { get; set; } //Имя участка
         public double Width { get; set; } //Ширина участка
         public double Length { get; set; } //Длина участка
-        public double[] Center { get; set; } //Привязка центра
+        public double CenterX { get; set; } //Привязка центра
+        public double CenterY { get; set; } //Привязка центра
         public double LeftOffset { get; set; } //Смещение левой границы 
         public double RightOffset { get; set; } //Смещение правой границы
         public double TopOffset { get; set; } //Смещение верхней границы
@@ -38,10 +37,12 @@ namespace RDBLL.Entity.SC.Column
         #region
         public void SetDefault()
         {
+            Id = ProgrammSettings.CurrentId;
             Name = "Новый участок";
             Width = 0.2;
             Length = 0.2;
-            Center = new double[2] { 0, 0 };
+            CenterX = 0;
+            CenterY = 0;
             FixLeft = true;
             FixRight = true;
             FixTop = true;
@@ -53,7 +54,7 @@ namespace RDBLL.Entity.SC.Column
         {
             SetDefault();
         }
-        public SteelBasePart(SteelColumnBase columnBase)
+        public SteelBasePart(SteelBase columnBase)
         {
             ColumnBase = columnBase;
             SetDefault();
@@ -63,9 +64,8 @@ namespace RDBLL.Entity.SC.Column
         public object Clone()
         {
             SteelBasePart steelBasePart = this.MemberwiseClone() as SteelBasePart;
-            steelBasePart.Center = new double[2] { 0, 0 };
-            steelBasePart.Center[0] = this.Center[0];
-            steelBasePart.Center[1] = this.Center[1];
+            steelBasePart.CenterX = this.CenterX;
+            steelBasePart.CenterY = this.CenterY;
             return steelBasePart;
         }
     }

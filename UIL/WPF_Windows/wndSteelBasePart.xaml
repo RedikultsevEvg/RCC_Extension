@@ -44,8 +44,8 @@
                             <TextBox x:Name="tbxName" Grid.Column="1" Style="{StaticResource PropertyTextBox}" Grid.Row="0" Text="{Binding Path=Name}"/>
                             <TextBox x:Name="tbxWidth" Grid.Column="1" Style="{StaticResource PropertyTextBox}" Grid.Row="1"  Text="{Binding Path=Width, Converter={StaticResource LinearSizeConverter}}"/>
                             <TextBox x:Name="tbxLength" Grid.Column="1" Style="{StaticResource PropertyTextBox}" Grid.Row="2" Text="{Binding Path=Length, Converter={StaticResource LinearSizeConverter}}"/>
-                            <TextBox x:Name="tbxCenterX" Grid.Column="1" Style="{StaticResource PropertyTextBox}" Grid.Row="3" Text="{Binding Path=Center[0], Converter={StaticResource LinearSizeConverter}}"/>
-                            <TextBox x:Name="tbxCenterY" Grid.Column="1" Style="{StaticResource PropertyTextBox}" Grid.Row="4" Text="{Binding Path=Center[1], Converter={StaticResource LinearSizeConverter}}"/>
+                            <TextBox x:Name="tbxCenterX" Grid.Column="1" Style="{StaticResource PropertyTextBox}" Grid.Row="3" Text="{Binding Path=CenterX, Converter={StaticResource LinearSizeConverter}}"/>
+                            <TextBox x:Name="tbxCenterY" Grid.Column="1" Style="{StaticResource PropertyTextBox}" Grid.Row="4" Text="{Binding Path=CenterY, Converter={StaticResource LinearSizeConverter}}"/>
                             <CheckBox x:Name="cbAddSymmetricX"  Grid.Column="1" Margin="5,7,20,0" Grid.Row="5" IsChecked="{Binding Path=AddSymmetricX}"/>
                             <CheckBox x:Name="cbAddSymmetricY"  Grid.Column="1" Margin="5,7,20,0" Grid.Row="6"  IsChecked="{Binding Path=AddSymmetricY}"/>
                             <TextBlock Grid.Column="2" Grid.Row="1" x:Name="tbWidthMeasure" Style="{StaticResource PropertyTextBlock}" Text="мм" />

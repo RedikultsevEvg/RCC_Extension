@@ -37,7 +37,7 @@ namespace RDUIL.WPF_Windows
         {
             try
             {
-                _forcesGroup.SteelColumnBase.IsLoadCasesActual = false;
+                _forcesGroup.SteelBases[0].IsLoadCasesActual = false;
                 this.Close();
             }
             catch (Exception ex)

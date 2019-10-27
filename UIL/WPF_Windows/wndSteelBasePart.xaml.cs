@@ -25,9 +25,9 @@ namespace RDUIL.WPF_Windows
     /// </summary>
     public partial class WndSteelBasePart : Window
     {
-        private SteelColumnBase _steelColumnBase;
+        private SteelBase _steelColumnBase;
 
-        public WndSteelBasePart(SteelColumnBase steelColumnBase)
+        public WndSteelBasePart(SteelBase steelColumnBase)
         {
             InitializeComponent();
             _steelColumnBase = steelColumnBase;

@@ -28,9 +28,16 @@ namespace CSL.Reports
 {
     public class ResultReport
     {
-        public DataSet dataSet { get; set; }
         private BuildingSite _buildingSite;
-
+        private double linearSizeCoefficient;
+        private double forceCoefficient;
+        private double momentCoefficient;
+        private double stressCoefficient;
+        private double geometryAreaCoefficient;
+        private double geometrySecMomentCoefficient;
+        private double geometryMomentCoefficient;
+        private double MassCoefficient;
+        public DataSet dataSet { get; set; }
 
         public void ShowReport()
         {
@@ -52,131 +59,42 @@ namespace CSL.Reports
         }
         public void PrepareReport()
         {
-            int steelBaseId = 1;
-            int LoadCaseId = 1;
-            int ForceParameterId = 1;
-            int steelBasePartId = 1;
-            int steelBaseBoltId = 1;
-
-            double linearSizeCoefficient = MeasureUnitConverter.GetCoefficient(0);
-            double forceCoefficient = MeasureUnitConverter.GetCoefficient(1);
-            double momentCoefficient = MeasureUnitConverter.GetCoefficient(2);
-            double stressCoefficient = MeasureUnitConverter.GetCoefficient(3);
-            double geometyAreaCoefficient = MeasureUnitConverter.GetCoefficient(4);
-            double geometrySecMomentCoefficient = MeasureUnitConverter.GetCoefficient(5);
-            double geometryMomentCoefficient = MeasureUnitConverter.GetCoefficient(6);
-            double MassCoefficient = MeasureUnitConverter.GetCoefficient(7);
-
             foreach (Building building in _buildingSite.BuildingList)
             {
                 foreach (Level level in building.LevelList)
                 {
                     DataTable SteelBases = dataSet.Tables[0];
-                    foreach (SteelColumnBase steelColumnBase in level.SteelColumnBaseList)
+                    foreach (SteelBase steelBase in level.SteelBases)
                     {
                         //if (! steelColumnBase.IsActual)
                         //{
-                            SteelColumnBaseProcessor.SolveSteelColumnBase(steelColumnBase);
+                            SteelBaseProcessor.SolveSteelColumnBase(steelBase);
                         //}
 
                         DataRow newSteelBase = SteelBases.NewRow();
-                        Double A = steelColumnBase.Width * steelColumnBase.Length;
-                        Double Wx = steelColumnBase.Width * steelColumnBase.Length * steelColumnBase.Length / 6;
-                        Double Wy = steelColumnBase.Length * steelColumnBase.Width * steelColumnBase.Width / 6;
+                        Double A = steelBase.Width * steelBase.Length;
+                        Double Wx = steelBase.Width * steelBase.Length * steelBase.Length / 6;
+                        Double Wy = steelBase.Length * steelBase.Width * steelBase.Width / 6;
                         #region Picture
                         Canvas canvas = new Canvas();
                         canvas.Width = 600;
                         canvas.Height = 600;
-                        DrawSteelBase.DrawBase(steelColumnBase, canvas);
+                        DrawSteelBase.DrawBase(steelBase, canvas);
                         byte[] b = ExportToByte(canvas);
                         #endregion
                         newSteelBase.ItemArray = new object[]
-                        { steelBaseId, b, steelColumnBase.Name,
-                            steelColumnBase.Width * linearSizeCoefficient,
-                            steelColumnBase.Length * linearSizeCoefficient,
-                            A * geometyAreaCoefficient,
+                        { steelBase.Id, b, steelBase.Name,
+                            steelBase.Width * linearSizeCoefficient,
+                            steelBase.Length * linearSizeCoefficient,
+                            A * geometryAreaCoefficient,
                             Wx * geometrySecMomentCoefficient,
                             Wy * geometrySecMomentCoefficient};
                         
                         SteelBases.Rows.Add(newSteelBase);
-                        DataTable LoadCases = dataSet.Tables[1];                       
-                        foreach (LoadSet loadSet in steelColumnBase.LoadCases)
-                        {
-                            DataRow newLoadCase = LoadCases.NewRow();
-                            newLoadCase.ItemArray = new object[] { LoadCaseId, steelBaseId, loadSet.Name, loadSet.PartialSafetyFactor};
-                            LoadCases.Rows.Add(newLoadCase);
 
-                            DataTable ForceParameters = dataSet.Tables[2];
-                            foreach (ForceParameter forceParameter in loadSet.ForceParameters)
-                            {
-                                DataRow newForceParameter = ForceParameters.NewRow();
-                                var tmpForceParamLabels = from t in ProgrammSettings.ForceParamKinds where t.Id == forceParameter.Kind_id select t;
-                                MeasureUnitLabel measureUnitLabel = tmpForceParamLabels.First().MeasureUnit.GetCurrentLabel();
-                                newForceParameter.ItemArray = new object[] { ForceParameterId,
-                                    LoadCaseId,
-                                    tmpForceParamLabels.First().LongLabel,
-                                    tmpForceParamLabels.First().ShortLabel,
-                                    measureUnitLabel.UnitName,
-                                    Math.Round(forceParameter.CrcValueInCurUnit, 3),
-                                    Math.Round(forceParameter.DesignValue * measureUnitLabel.AddKoeff, 3)};
-                                ForceParameters.Rows.Add(newForceParameter);
-                                ForceParameterId++;
-                            }
-                            LoadCaseId++;
-                        }
-                        DataTable SteelBasesParts = dataSet.Tables[3];
-                        foreach (SteelBasePart steelBasePart in steelColumnBase.ActualSteelBaseParts)
-                        {
-                            DataRow newSteelBasePart = SteelBasesParts.NewRow();
-                            //double maxBedStress = SteelColumnBasePartProcessor.GetGlobalMinStressLinear(steelBasePart) * (-1D);
-                            double maxBedStress = SteelColumnBasePartProcessor.GetGlobalMinStressNonLinear(steelBasePart) * (-1D);
-                            double maxStress = SteelColumnBasePartProcessor.GetResult(steelBasePart, maxBedStress)[1];
-                            maxBedStress = Math.Round(stressCoefficient * maxBedStress, 3);
-                            maxStress = Math.Round(stressCoefficient * maxStress, 3);
-                            #region Picture
-                            Canvas canvasPart = new Canvas();
-                            canvasPart.Width = 300;
-                            canvasPart.Height = 300;
-                            double zoom_factor_X = canvasPart.Width / steelBasePart.Width / 1.2;
-                            double zoom_factor_Y = canvasPart.Height / steelBasePart.Length / 1.2;
-                            double scale_factor;
-                            if (zoom_factor_X < zoom_factor_Y) { scale_factor = zoom_factor_X; } else { scale_factor = zoom_factor_Y; }
-                            canvasPart.Width = steelBasePart.Width * 1.2 * scale_factor;
-                            canvasPart.Height = steelBasePart.Length * 1.2 * scale_factor;
-                            double[] columnBaseCenter = new double[2] { canvasPart.Width/2 - steelBasePart.Center[0]*scale_factor, canvasPart.Height/2 + steelBasePart.Center[1] * scale_factor };
-                            DrawSteelBase.DrawBasePart(steelBasePart, canvasPart, columnBaseCenter, scale_factor, 1, 1, 1, false);
-                            byte[] bPart = ExportToByte(canvasPart);
-                            #endregion
-                            newSteelBasePart.ItemArray = new object[]
-                            { steelBasePartId, steelBaseId,
-                                bPart, steelBasePart.Name,
-                                steelBasePart.Center[0] * linearSizeCoefficient,
-                                steelBasePart.Center[1] * linearSizeCoefficient,
-                                steelBasePart.Width * linearSizeCoefficient,
-                                steelBasePart.Length * linearSizeCoefficient,
-                                maxBedStress,
-                                maxStress };
-                            SteelBasesParts.Rows.Add(newSteelBasePart);
-                            steelBasePartId++;
-                        }
-                        DataTable SteelBasesBolts = dataSet.Tables[4];
-                        foreach (SteelBolt steelBolt in steelColumnBase.ActualSteelBolts)
-                        {
-                            DataRow newSteelBaseBolt = SteelBasesBolts.NewRow();
-                            double area = steelBolt.Diameter * steelBolt.Diameter * 0.785;
-                            double maxStress = SteelBoltProcessor.GetMaxStressNonLinear(steelBolt);
-                            double force = maxStress * area;
-                            newSteelBaseBolt.ItemArray = new object[]
-                            {steelBaseBoltId, steelBaseId, steelBolt.Name,
-                                steelBolt.Diameter * linearSizeCoefficient,
-                                steelBolt.CenterX * linearSizeCoefficient,
-                                steelBolt.CenterY * linearSizeCoefficient,
-                                Math.Round(maxStress * stressCoefficient, 3),
-                                Math.Round(force * forceCoefficient, 3) };
-                            SteelBasesBolts.Rows.Add(newSteelBaseBolt);
-                            steelBaseBoltId++;
-                        }
-                        steelBaseId++;
+                        ProcessLoadSets(steelBase);
+                        ProcessPart(steelBase);
+                        ProcessBolt(steelBase);
                     }
                 }
             }
@@ -241,10 +159,118 @@ namespace CSL.Reports
         public ResultReport(BuildingSite buildingSite)
         {
             _buildingSite = buildingSite;
-            dataSet = SteelColumnBaseDataSet.GetDataSet();
+            dataSet = SteelBaseDataSet.GetDataSet();
+
+            linearSizeCoefficient = MeasureUnitConverter.GetCoefficient(0);
+            forceCoefficient = MeasureUnitConverter.GetCoefficient(1);
+            momentCoefficient = MeasureUnitConverter.GetCoefficient(2);
+            stressCoefficient = MeasureUnitConverter.GetCoefficient(3);
+            geometryAreaCoefficient = MeasureUnitConverter.GetCoefficient(4);
+            geometrySecMomentCoefficient = MeasureUnitConverter.GetCoefficient(5);
+            geometryMomentCoefficient = MeasureUnitConverter.GetCoefficient(6);
+            MassCoefficient = MeasureUnitConverter.GetCoefficient(7);
         }
         #endregion
+        /// <summary>
+        /// Добавление в датасет данных сочетаниям нагрузок
+        /// </summary>
+        /// <param name="steelBase">База стальной колонны</param>
+        private void ProcessLoadSets(SteelBase steelBase)
+        {
+            DataTable LoadCases = dataSet.Tables[1];
+            foreach (LoadSet loadSet in steelBase.LoadCases)
+            {
+                string forceDescription = "";
+                DataRow newLoadCase = LoadCases.NewRow();
+                DataTable ForceParameters = dataSet.Tables[2];
+                foreach (ForceParameter forceParameter in loadSet.ForceParameters)
+                {
+                    DataRow newForceParameter = ForceParameters.NewRow();
+                    var tmpForceParamLabels = from t in ProgrammSettings.ForceParamKinds where t.Id == forceParameter.Kind_id select t;
+                    MeasureUnitLabel measureUnitLabel = tmpForceParamLabels.First().MeasureUnit.GetCurrentLabel();
+                    newForceParameter.ItemArray = new object[] { tmpForceParamLabels.First().Id,
+                                    loadSet.Id,
+                                    tmpForceParamLabels.First().LongLabel,
+                                    tmpForceParamLabels.First().ShortLabel,
+                                    measureUnitLabel.UnitName,
+                                    Math.Round(forceParameter.CrcValueInCurUnit, 3),
+                                    Math.Round(forceParameter.DesignValue * measureUnitLabel.AddKoeff, 3)};
+                    ForceParameters.Rows.Add(newForceParameter);
+                    forceDescription += tmpForceParamLabels.First().ShortLabel +"="+ Math.Round(forceParameter.DesignValue * measureUnitLabel.AddKoeff, 3) + measureUnitLabel.UnitName + "; ";
+                }
+                newLoadCase.ItemArray = new object[]
+                    { loadSet.Id, steelBase.Id,
+                    loadSet.Name, loadSet.PartialSafetyFactor,
+                    forceDescription
+                    };
+                LoadCases.Rows.Add(newLoadCase);
+            }
+        }
+        /// <summary>
+        /// Добавление в датасет данных по участку стальной базы
+        /// </summary>
+        /// <param name="steelBase">База стальной колонны</param>
+        private void ProcessPart(SteelBase steelBase)
+        {
+            DataTable dataTable = dataSet.Tables[3];
+            foreach (SteelBasePart steelBasePart in steelBase.ActualSteelBaseParts)
+            {
+                DataRow newSteelBasePart = dataTable.NewRow();
+                //double maxBedStress = SteelColumnBasePartProcessor.GetGlobalMinStressLinear(steelBasePart) * (-1D);
+                double maxBedStress = SteelBasePartProcessor.GetGlobalMinStressNonLinear(steelBasePart) * (-1D);
+                double maxStress = SteelBasePartProcessor.GetResult(steelBasePart, maxBedStress)[1];
+                maxBedStress = Math.Round(stressCoefficient * maxBedStress, 3);
+                maxStress = Math.Round(stressCoefficient * maxStress, 3);
+                #region Picture
+                Canvas canvasPart = new Canvas();
+                canvasPart.Width = 300;
+                canvasPart.Height = 300;
+                double zoom_factor_X = canvasPart.Width / steelBasePart.Width / 1.2;
+                double zoom_factor_Y = canvasPart.Height / steelBasePart.Length / 1.2;
+                double scale_factor;
+                if (zoom_factor_X < zoom_factor_Y) { scale_factor = zoom_factor_X; } else { scale_factor = zoom_factor_Y; }
+                canvasPart.Width = steelBasePart.Width * 1.2 * scale_factor;
+                canvasPart.Height = steelBasePart.Length * 1.2 * scale_factor;
+                double[] columnBaseCenter = new double[2] { canvasPart.Width / 2 - steelBasePart.CenterX * scale_factor, canvasPart.Height / 2 + steelBasePart.CenterY * scale_factor };
+                DrawSteelBase.DrawBasePart(steelBasePart, canvasPart, columnBaseCenter, scale_factor, 1, 1, 1, false);
+                byte[] bPart = ExportToByte(canvasPart);
+                #endregion
+                newSteelBasePart.ItemArray = new object[]
+                { steelBasePart.Id, steelBase.Id,
+                                bPart, steelBasePart.Name,
+                                steelBasePart.CenterX * linearSizeCoefficient,
+                                steelBasePart.CenterY * linearSizeCoefficient,
+                                steelBasePart.Width * linearSizeCoefficient,
+                                steelBasePart.Length * linearSizeCoefficient,
+                                maxBedStress,
+                                maxStress };
+                dataTable.Rows.Add(newSteelBasePart);
+            }
 
+        }
+        /// <summary>
+        /// Добавление в датасет данных по болту стальной базы
+        /// </summary>
+        /// <param name="steelBase">База стальной колонны</param>
+        private void ProcessBolt(SteelBase steelBase)
+        {
+            DataTable dataTable = dataSet.Tables[4];
+            foreach (SteelBolt steelBolt in steelBase.ActualSteelBolts)
+            {
+                DataRow newSteelBaseBolt = dataTable.NewRow();
+                double area = steelBolt.Diameter * steelBolt.Diameter * 0.785;
+                double maxStress = SteelBoltProcessor.GetMaxStressNonLinear(steelBolt);
+                double force = maxStress * area;
+                newSteelBaseBolt.ItemArray = new object[]
+                {steelBolt.Id, steelBase.Id, steelBolt.Name,
+                                steelBolt.Diameter * linearSizeCoefficient,
+                                steelBolt.CenterX * linearSizeCoefficient,
+                                steelBolt.CenterY * linearSizeCoefficient,
+                                Math.Round(maxStress * stressCoefficient, 3),
+                                Math.Round(force * forceCoefficient, 3) };
+                dataTable.Rows.Add(newSteelBaseBolt);
+            }
+        }
 
     }
 }

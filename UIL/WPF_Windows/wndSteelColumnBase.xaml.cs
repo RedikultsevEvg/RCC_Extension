@@ -22,9 +22,9 @@ namespace RDUIL.WPF_Windows
     /// </summary>
     public partial class WndSteelColumnBase : Window
     {
-        private SteelColumnBase _steelColumnBase;
+        private SteelBase _steelColumnBase;
 
-        public WndSteelColumnBase(SteelColumnBase steelColumnBase)
+        public WndSteelColumnBase(SteelBase steelColumnBase)
         {
             InitializeComponent();
             _steelColumnBase = steelColumnBase;
@@ -32,7 +32,6 @@ namespace RDUIL.WPF_Windows
             tbWidthMeasure.Text = MeasureUnitConverter.GetUnitLabelText(0);
             tbLengthMeasure.Text = MeasureUnitConverter.GetUnitLabelText(0);
             tbThicknessMeasure.Text = MeasureUnitConverter.GetUnitLabelText(0);
-            tbConcreteStrengthMeasure.Text = MeasureUnitConverter.GetUnitLabelText(3);
         }
 
         private void btnOK_Click(object sender, RoutedEventArgs e)
