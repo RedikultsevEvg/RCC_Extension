@@ -45,6 +45,10 @@ namespace RDBLL.Entity.Common.NDM
                 }
             }
         }
+        public SumForces(SumForces initForces, SumForces secForces)
+        {
+            ForceMatrix = initForces.ForceMatrix - secForces.ForceMatrix;
+        }
         #endregion
     }
 }

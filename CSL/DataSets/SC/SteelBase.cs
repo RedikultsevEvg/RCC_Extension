@@ -7,7 +7,7 @@ using System.Data;
 
 namespace CSL.DataSets.SC
 {
-    public static class SteelColumnBaseDataSet
+    public static class SteelBaseDataSet
     {
         public static DataSet GetDataSet()
         {
@@ -34,6 +34,9 @@ namespace CSL.DataSets.SC
             SteelBases.Columns.Add(SteelBaseWx);
             SteelBases.Columns.Add(SteelBaseWy);
             #endregion
+            #region Loads
+
+            #endregion
             #region LoadCases
             DataTable LoadCases = new DataTable("LoadCases");
             dataSet.Tables.Add(LoadCases);
@@ -42,11 +45,13 @@ namespace CSL.DataSets.SC
             DataColumn SteelBaseIdInLoadCase = new DataColumn("SteelBaseId", Type.GetType("System.Int32"));
             DataColumn LoadCaseDescription = new DataColumn("Description", Type.GetType("System.String"));
             DataColumn LoadCasePartialSafetyFactor = new DataColumn("PartialSafetyFactor", Type.GetType("System.Double"));
+            DataColumn LoadCaseForceDescription = new DataColumn("ForceDescription", Type.GetType("System.String"));
 
             LoadCases.Columns.Add(LoadCaseId);
             LoadCases.Columns.Add(SteelBaseIdInLoadCase);
             LoadCases.Columns.Add(LoadCaseDescription);
             LoadCases.Columns.Add(LoadCasePartialSafetyFactor);
+            LoadCases.Columns.Add(LoadCaseForceDescription);
             #endregion
             #region ForceParameters
             DataTable ForceParameters = new DataTable("ForceParameters");
@@ -115,6 +120,11 @@ namespace CSL.DataSets.SC
             SteelBasesBolts.Columns.Add(SteelBasesBoltCenterY);
             SteelBasesBolts.Columns.Add(SteelBasesBoltMaxStress);
             SteelBasesBolts.Columns.Add(SteelBasesBoltMaxForce);
+            #endregion
+            #region Relations
+            dataSet.Relations.Add("LoadCases", SteelBases.Columns["Id"], LoadCases.Columns["SteelBaseId"]);
+            dataSet.Relations.Add("SteelPart", SteelBases.Columns["Id"], SteelBasesParts.Columns["SteelBaseId"]);
+            dataSet.Relations.Add("SteelBolt", SteelBases.Columns["Id"], SteelBasesBolts.Columns["SteelBaseId"]);
             #endregion
 
             return dataSet;

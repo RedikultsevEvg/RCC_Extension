@@ -13,6 +13,8 @@ using System.Runtime.CompilerServices;
 using RDBLL.Forces;
 using RDBLL.Entity.MeasureUnits;
 using System.Collections.ObjectModel;
+using System.Data;
+using DAL.DataSets;
 
 
 namespace RDBLL.Common.Service
@@ -21,6 +23,20 @@ namespace RDBLL.Common.Service
     {
         private static String _filePath;
         private static bool _isDataChanged;
+        private static int _CurrentId;
+
+        public static int CurrentId
+        {
+            get
+            {
+                _CurrentId++;
+                return _CurrentId;
+            }
+            set
+            {
+                _CurrentId = value;
+            }
+        }
         public static List<ForceParamKind> ForceParamKinds { get; set; }
         public static ObservableCollection<MeasureUnit> MeasureUnits { get; set; }
 
@@ -86,7 +102,7 @@ namespace RDBLL.Common.Service
             measureUnitGeometryArea.MeasureUnitKind = "Геометрия. Площадь";
             measureUnitGeometryArea.UnitLabels.Add(new MeasureUnitLabel { Id = 21, UnitName = "м^2", AddKoeff = 1.0 });
             measureUnitGeometryArea.UnitLabels.Add(new MeasureUnitLabel { Id = 22, UnitName = "мм^2", AddKoeff = 1000000 });
-            measureUnitGeometryArea.UnitLabels.Add(new MeasureUnitLabel { Id = 22, UnitName = "см^2", AddKoeff = 10000 });
+            measureUnitGeometryArea.UnitLabels.Add(new MeasureUnitLabel { Id = 23, UnitName = "см^2", AddKoeff = 10000 });
             measureUnitGeometryArea.CurrentUnitLabelId = 22;
             MeasureUnit measureUnitGeometrySecMoment = new MeasureUnit();
             measureUnitGeometrySecMoment.MeasureUnitKind = "Геометрия. Момент сопротивления";
@@ -181,13 +197,15 @@ namespace RDBLL.Common.Service
                 if (openFileDialog.ShowDialog() == true) FilePath = openFileDialog.FileName; else return false;
                 ClearAll();
                 InicializeNew();
-                XmlDocument xmlDocument = new XmlDocument();
-                xmlDocument.Load(FilePath);
-                XmlElement xmlRoot = xmlDocument.DocumentElement;
-                foreach (XmlNode childNode in xmlRoot.ChildNodes)
-                {
-                    if (childNode.Name == "BuildingSite") BuildingSite = new BuildingSite(childNode);
-                }
+                OpenExistDataset(FilePath);
+
+                //XmlDocument xmlDocument = new XmlDocument();
+                //xmlDocument.Load(FilePath);
+                //XmlElement xmlRoot = xmlDocument.DocumentElement;
+                //foreach (XmlNode childNode in xmlRoot.ChildNodes)
+                //{
+                //    if (childNode.Name == "BuildingSite") BuildingSite = new BuildingSite(childNode);
+                //}
                 IsDataChanged = false;
                 return true;
             }
@@ -197,7 +215,7 @@ namespace RDBLL.Common.Service
                 return false;
             }
         }
-        public static bool SaveProjectToFile(bool InNewFile)
+        public static bool SaveProjectToFile(bool InNewFile = false)
         {
             try
             {
@@ -205,21 +223,25 @@ namespace RDBLL.Common.Service
                 saveFileDialog.Filter = "XML file (*.xml)|*.xml";
                 if (FilePath == "" || FilePath == null || InNewFile)
                 {
-                    
+
                     if (saveFileDialog.ShowDialog() == true)
                         FilePath = saveFileDialog.FileName;
                     else return false;
                 }
-                XmlTextWriter textWritter = new XmlTextWriter(FilePath, Encoding.UTF8);
-                textWritter.WriteStartDocument();
-                textWritter.WriteStartElement("Project");
-                textWritter.Close();
-                XmlDocument xmlDocument = new XmlDocument();
-                xmlDocument.Load(FilePath);
-                XmlElement xmlRoot = xmlDocument.DocumentElement;
-                XmlElement xmlSite = BuildingSite.SaveToXMLNode(xmlDocument);
-                xmlRoot.AppendChild(xmlSite);
-                xmlDocument.Save(FilePath);
+                DataSet dataSet = GetDataSet();
+                dataSet.WriteXml(FilePath);
+                #region old
+                //XmlTextWriter textWritter = new XmlTextWriter(FilePath, Encoding.UTF8);
+                //textWritter.WriteStartDocument();
+                //textWritter.WriteStartElement("Project");
+                //textWritter.Close();
+                //XmlDocument xmlDocument = new XmlDocument();
+                //xmlDocument.Load(FilePath);
+                //XmlElement xmlRoot = xmlDocument.DocumentElement;
+                //XmlElement xmlSite = BuildingSite.SaveToXMLNode(xmlDocument);
+                //xmlRoot.AppendChild(xmlSite);
+                //xmlDocument.Save(FilePath);
+                #endregion
                 IsDataChanged = false;
                 return true;
             }
@@ -233,5 +255,55 @@ namespace RDBLL.Common.Service
         // Raise the change event through this static method
         public static event EventHandler IsDataChangedChanged;
         public static event EventHandler FilePathChanged;
+        public static DataSet GetDataSet()
+        {
+            DataSet dataSet = MainDataSet.GetNewDataSet();
+            DataTable dataTable;
+            DataRow dataRow;
+            #region Generator
+            dataTable = dataSet.Tables["Generators"];
+            dataRow = dataTable.NewRow();
+            dataRow.ItemArray = new object[] { CurrentId };
+            dataTable.Rows.Add(dataRow);
+            #endregion
+            #region Versions
+            dataTable = dataSet.Tables["Versions"];
+            dataRow = dataTable.NewRow();
+            dataRow.ItemArray = new object[] { 1 };
+            dataTable.Rows.Add(dataRow);
+            #endregion
+            #region MeasurementUnits
+            dataTable = dataSet.Tables["MeasurementUnits"];
+            for (int i = 0; i < MeasureUnits.Count; i++)
+            {
+                dataRow = dataTable.NewRow();
+                dataRow.ItemArray = new object[]
+                {
+                        MeasureUnits[i].CurrentUnitLabelId
+                };
+                dataTable.Rows.Add(dataRow);
+            }
+            #endregion
+            return dataSet;
+        }
+        public static void OpenExistDataset(string fileName)
+        {
+            DataSet dataSet = new DataSet();
+            DataTable dataTable;
+            dataSet.ReadXml(fileName);
+            #region Generator
+            dataTable = dataSet.Tables["Generators"];
+            CurrentId = Convert.ToInt32(dataTable.Rows[0].ItemArray[0]);
+            #endregion
+            #region Versions
+            #endregion
+            #region MeasurementUnits
+            dataTable = dataSet.Tables["MeasurementUnits"];
+            for (int i = 0; i < dataTable.Rows.Count; i++)
+            {
+                MeasureUnits[i].CurrentUnitLabelId = Convert.ToInt32(dataTable.Rows[i].ItemArray[0]);
+            }
+            #endregion
+        }
     }
 }

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Collections.ObjectModel;
-
+using RDBLL.Common.Service;
 
 namespace RDBLL.Forces
 {
@@ -32,8 +32,9 @@ namespace RDBLL.Forces
 
         public LoadSet(ForcesGroup forcesGroup)
         {
+            Id = ProgrammSettings.CurrentId;
             ForcesGroup = forcesGroup;
-            forcesGroup.SteelColumnBase.IsLoadCasesActual = false;
+            forcesGroup.SteelBases[0].IsLoadCasesActual = false;
             Name = "Новая нагрузка";
             PartialSafetyFactor = 1.1;
             IsLiveLoad = false;

@@ -7,7 +7,7 @@
         xmlns:local="clr-namespace:RDUIL.WPF_Windows"
         xmlns:msControl="clr-namespace:MyCustomControl"
         mc:Ignorable="d"
-        Title="База колонны" Height="400" Width="470" Background="White" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
+        Title="База колонны" Height="400" Width="500" Background="White" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
     <Window.Resources>
         <Convert:LinearSizeConverter x:Key="LinearSizeConverter"/>
         <Convert:StressConverter x:Key="StressConverter"/>
@@ -20,7 +20,7 @@
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width ="*"/>
-                <ColumnDefinition Width ="300"/>
+                <ColumnDefinition Width ="330"/>
                 <ColumnDefinition Width ="110"/>
             </Grid.ColumnDefinitions>
             <StackPanel Grid.Column="1">
@@ -35,22 +35,19 @@
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width ="*"/>
                         <ColumnDefinition Width ="100"/>
-                        <ColumnDefinition Width="50"/>
+                        <ColumnDefinition Width="70"/>
                     </Grid.ColumnDefinitions>
                     <TextBlock x:Name="tbName" Style="{StaticResource PropertyTextBlock}" Text="Наименование"/>
                     <TextBlock x:Name="tbWidth" Grid.Row="1" Style="{StaticResource PropertyTextBlock}" Text="Ширина (вдоль оси X)"/>
                     <TextBlock x:Name="tbLength" Grid.Row="2" Style="{StaticResource PropertyTextBlock}" Text="Длина (вдоль оси Y)"/>
                     <TextBlock x:Name="tbThicness" Grid.Row="3" Style="{StaticResource PropertyTextBlock}" Text="Толщина"/>
-                    <TextBlock x:Name="tbConcreteStrength" Grid.Row="4" Style="{StaticResource PropertyTextBlock}" Text="Прочность бетона"/>
                     <TextBox x:Name="tbxName" Grid.Column="1" Style="{StaticResource PropertyTextBox}" Text="{Binding Path=Name}"/>
                     <TextBox x:Name="tbxWidth" Grid.Row="1" Grid.Column="1" Style="{StaticResource PropertyTextBox}" Text="{Binding Path=Width, Converter={StaticResource LinearSizeConverter}}"/>
                     <TextBox x:Name="tbxLength" Grid.Row="2" Grid.Column="1" Style="{StaticResource PropertyTextBox}" Text="{Binding Path=Length, Converter={StaticResource LinearSizeConverter}}"/>
                     <TextBox x:Name="tbxThickness" Grid.Row="3" Grid.Column="1" Style="{StaticResource PropertyTextBox}" Text="{Binding Path=Thickness, Converter={StaticResource LinearSizeConverter}}"/>
-                    <TextBox x:Name="tbxConcreteStrength" Grid.Row="4" Grid.Column="1" Style="{StaticResource PropertyTextBox}" Text="{Binding Path=ConcreteStrength, Converter={StaticResource StressConverter}}"/>
                     <TextBlock Grid.Column="2" Grid.Row="1" x:Name="tbWidthMeasure" Style="{StaticResource PropertyTextBlock}" Text="мм" />
                     <TextBlock Grid.Column="2" Grid.Row="2" x:Name="tbLengthMeasure" Style="{StaticResource PropertyTextBlock}" Text="мм" />
                     <TextBlock Grid.Column="2" Grid.Row="3" x:Name="tbThicknessMeasure" Style="{StaticResource PropertyTextBlock}" Text="мм" />
-                    <TextBlock Grid.Column="2" Grid.Row="4" x:Name="tbConcreteStrengthMeasure" Style="{StaticResource PropertyTextBlock}" Text="МПа" />
                 </Grid>
                 <Canvas x:Name="cvBase" Margin="5" Height="220"/>
             </StackPanel>

@@ -33,7 +33,8 @@ namespace RDBLL.Entity.Common.NDM
         public NdmConcreteArea()
         {
             ConcreteArea = new NdmArea(new LinearCompressed());
-            ConcreteArea.ElasticModulus = 3e+10;
+            //ConcreteArea = new NdmArea(new LinearIsotropic());
+            ConcreteArea.ElasticModulus = 1e+10;
         }
     }
 }

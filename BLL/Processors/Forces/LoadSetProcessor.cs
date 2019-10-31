@@ -124,12 +124,6 @@ namespace RDBLL.Processors.Forces
             }
 
             stress = Nz / A + Mx / (Ix / dy) - My / (Iy / dx);
-
-            if ((!(Mx == 0)) & (!(My == 0)) & (stress > 0))
-            {
-                MessageBox.Show("Программа не предназначена для учета моментов в двух плоскостях при наличии растяжения", "Ошибка");
-            }
-
             return stress;
         }
     }
