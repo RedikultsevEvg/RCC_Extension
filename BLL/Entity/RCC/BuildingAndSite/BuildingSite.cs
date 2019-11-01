@@ -7,25 +7,74 @@ using System.Xml;
 using RDBLL.Common.Service;
 using RDBLL.Entity.RCC.WallAndColumn;
 using System.Collections.ObjectModel;
+using RDBLL.Common.Interfaces;
+using System.Data;
+
 
 
 namespace RDBLL.Entity.RCC.BuildingAndSite
 {
-    public class BuildingSite :ICloneable
+    public class BuildingSite :ICloneable, ISavableToDataSet
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public List<Building> BuildingList { get; set; }
+        public ObservableCollection<Building> Buildings { get; set; }
 
         public XmlElement SaveToXMLNode(XmlDocument xmlDocument)
         {
             XmlElement xmlNode = xmlDocument.CreateElement("BuildingSite");
             XMLOperations.AddAttribute(xmlNode, xmlDocument, "Name", Name);
-            foreach (Building obj in BuildingList)
+            foreach (Building obj in Buildings)
             {
                 xmlNode.AppendChild(obj.SaveToXMLNode(xmlDocument));
             }
             return xmlNode;
+        }
+
+        public void SaveToDataSet(DataSet dataSet)
+        {
+            DataTable dataTable;
+            DataRow dataRow;
+            dataTable = dataSet.Tables["BuildingSites"];
+            dataRow = dataTable.NewRow();
+            dataRow.ItemArray = new object[] { Id, 0, Name };
+            dataTable.Rows.Add(dataRow);
+            foreach (Building building in Buildings)
+            {
+                building.SaveToDataSet(dataSet);
+            }
+        }
+
+        public void OpenFromDataSet(DataSet dataSet, int Id)
+        {
+            DataTable dataTable, childTable;
+            dataTable = dataSet.Tables["BuildingSites"];
+
+            for (int i = 0; i < dataTable.Rows.Count; i++)
+            {
+                if (Convert.ToInt32(dataTable.Rows[i].ItemArray[0]) == Id)
+                {
+                    this.Id = Id;
+                    //У объекта нет родителя, поэтому
+                    //this.ParentId = Convert.ToInt32(dataTable.Rows[i].ItemArray[1]);
+                    this.Name = Convert.ToString(dataTable.Rows[i].ItemArray[2]);
+                    this.Buildings=GetEntity.GetBuildings(dataSet, this);
+                    //childTable = dataSet.Tables["Buildings"];
+                    //if (childTable != null)
+                    //{
+                    //    for (int j = 0; j < childTable.Rows.Count; j++)
+                    //    {
+                    //        if (Convert.ToInt32(childTable.Rows[j].ItemArray[1]) == this.Id)
+                    //        {
+                    //            Building newObject = new Building(this);
+                    //            //где-то тут происходит неправильное присвоение
+                    //            int childId = Convert.ToInt32(childTable.Rows[j].ItemArray[0]);
+                    //            newObject.OpenFromDataSet(dataSet, childId);
+                    //        }
+                    //    }
+                    //}
+                }
+            }
         }
 
         public object Clone()
@@ -37,7 +86,7 @@ namespace RDBLL.Entity.RCC.BuildingAndSite
         {
             Id = ProgrammSettings.CurrentId;
             Name = "Мой объект";
-            BuildingList = new List<Building>();
+            Buildings = new ObservableCollection<Building>();
         }
 
         public BuildingSite(XmlNode xmlNode)
@@ -46,24 +95,28 @@ namespace RDBLL.Entity.RCC.BuildingAndSite
             {
                 if (obj.Name == "Name") Name = obj.Value;
             }
-            BuildingList = new List<Building>();
+            Buildings = new ObservableCollection<Building>();
             foreach (XmlNode childNode in xmlNode.ChildNodes)
             {
-                if (childNode.Name == "Building") BuildingList.Add(new Building(this, childNode));
+                if (childNode.Name == "Building") Buildings.Add(new Building(this, childNode));
             }
         }
+
+
     }
     /// <summary>
     /// 
     /// </summary>
-    public class Building : ICloneable
+    public class Building : ICloneable, ISavableToDataSet
     {
         public int Id { get; set; }
+        public int BuildingSiteId { get; set; }
         public string Name { get; set; }
         public BuildingSite BuildingSite { get; set; }
-        public ObservableCollection<Level> LevelList { get; set; }
+        public ObservableCollection<Level> Levels { get; set; }
         public ObservableCollection<WallType> WallTypeList { get; set; }
         public ObservableCollection<OpeningType> OpeningTypeList { get; set; }
+
         public XmlElement SaveToXMLNode(XmlDocument xmlDocument)
         {
             XmlElement xmlNode = xmlDocument.CreateElement("Building");
@@ -76,41 +129,63 @@ namespace RDBLL.Entity.RCC.BuildingAndSite
             {
                 xmlNode.AppendChild(obj.SaveToXMLNode(xmlDocument));
             }
-            foreach (Level obj in LevelList)
+            foreach (Level obj in Levels)
             {
                 xmlNode.AppendChild(obj.SaveToXMLNode(xmlDocument));
             }
             return xmlNode;
         }
+        public Building()
+        {
+            Levels = new ObservableCollection<Level>();
+            WallTypeList = new ObservableCollection<WallType>();
+            OpeningTypeList = new ObservableCollection<OpeningType>();
+        }
         public Building(BuildingSite buildingSite)
         {
             Id = ProgrammSettings.CurrentId;
+            BuildingSiteId = buildingSite.Id;
             Name = "Мое здание";
             BuildingSite = buildingSite;
-            LevelList = new ObservableCollection<Level>();
+            Levels = new ObservableCollection<Level>();
             WallTypeList = new ObservableCollection<WallType>();
             OpeningTypeList = new ObservableCollection<OpeningType>();
         }
         public Building(BuildingSite buildingSite, XmlNode xmlNode)
         {
-            BuildingSite = buildingSite;
-            foreach (XmlAttribute obj in xmlNode.Attributes)
+        }
+
+        public void SaveToDataSet(DataSet dataSet)
+        {
+            DataTable dataTable;
+            DataRow dataRow;
+            dataTable = dataSet.Tables["Buildings"];
+            dataRow = dataTable.NewRow();
+            dataRow.ItemArray = new object[] { Id, BuildingSiteId, Name };
+            dataTable.Rows.Add(dataRow);
+            foreach (Level level in Levels)
             {
-                if (obj.Name == "Name") Name = obj.Value;
-            }
-            WallTypeList = new ObservableCollection<WallType>();
-            OpeningTypeList = new ObservableCollection<OpeningType>();
-            foreach (XmlNode childNode in xmlNode.ChildNodes)
-            {
-                if (childNode.Name == "WallType") WallTypeList.Add(new WallType(this, childNode));
-                if (childNode.Name == "OpeningType") OpeningTypeList.Add(new OpeningType(this, childNode));
-            }
-            LevelList = new ObservableCollection<Level>();
-            foreach (XmlNode childNode in xmlNode.ChildNodes)
-            {
-                if (childNode.Name == "Level") LevelList.Add(new Level(this, childNode));
+                level.SaveToDataSet(dataSet);
             }
         }
+
+        public void OpenFromDataSet(DataSet dataSet, int Id)
+        {
+            //DataTable dataTable;
+            //dataTable = dataSet.Tables["Buildings"];
+
+            //for (int i = 0; i < dataTable.Rows.Count; i++)
+            //{
+            //    if (Convert.ToInt32(dataTable.Rows[i].ItemArray[0]) == Id)
+            //    {
+            //        this.Id = Id;
+            //        this.BuildingSiteId = Convert.ToInt32(dataTable.Rows[i].ItemArray[1]);
+            //        this.Name = Convert.ToString(dataTable.Rows[i].ItemArray[2]);
+            //        this.Levels = GetEntity.GetLevels(dataSet, this);
+            //    }
+            //}
+        }
+
         public object Clone()
         {
             return this.MemberwiseClone();

@@ -117,8 +117,8 @@ namespace StartWPF
 
         private static void ShowWall()
         {
-            var detailObjectList = new DetailObjectList("Levels", ProgrammSettings.BuildingSite.BuildingList[0],
-            ProgrammSettings.BuildingSite.BuildingList[0].LevelList, false);
+            var detailObjectList = new DetailObjectList("Levels", ProgrammSettings.BuildingSite.Buildings[0],
+            ProgrammSettings.BuildingSite.Buildings[0].Levels, false);
             detailObjectList.BtnVisibilityList = new List<short>() { 1, 1, 0, 1, 1, 1, 1, 0, 1, 0, 0, 0 };
             frmDetailList DetailForm = new frmDetailList(detailObjectList);
             DetailForm.Show();
@@ -126,8 +126,8 @@ namespace StartWPF
 
         private static void ShowSteelBase()
         {
-            var detailObjectList = new DetailObjectList("Levels", ProgrammSettings.BuildingSite.BuildingList[0],
-            ProgrammSettings.BuildingSite.BuildingList[0].LevelList, false);
+            var detailObjectList = new DetailObjectList("Levels", ProgrammSettings.BuildingSite.Buildings[0],
+            ProgrammSettings.BuildingSite.Buildings[0].Levels, false);
             detailObjectList.BtnVisibilityList = new List<short>() { 1, 1, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0 };
             frmDetailList DetailForm = new frmDetailList(detailObjectList);
             DetailForm.Show();

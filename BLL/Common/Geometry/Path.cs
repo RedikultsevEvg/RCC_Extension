@@ -12,9 +12,9 @@ namespace RDBLL.Common.Geometry
         public Point2D StartPoint { get; set; }
         public List<PathPart> PartList { get; set; }
 
-        public decimal GetLength ()
+        public double GetLength ()
         {
-            decimal Sum = 0;
+            double Sum = 0;
             Point2D _StartPoint = this.StartPoint;
             foreach (PathPart _PathPart in PartList)
             {
@@ -48,14 +48,14 @@ namespace RDBLL.Common.Geometry
             PathParts.Add(PathPart);
         }
 
-        public Path(Point2D StartPoint, decimal Angle, decimal Length)
+        public Path(Point2D StartPoint, double Angle, double Length)
         {
             //Путь из одной линии по начальной точке, длине, углу.
             List<PathPart> PathParts = new List<PathPart>();
             this.PartList = PathParts;
             Point2D EndPoint = new Point2D(0,0);
-            EndPoint.Coord_X = StartPoint.Coord_X + Convert.ToDecimal(Math.Cos(Convert.ToDouble(Angle))) * Length;
-            EndPoint.Coord_Y = StartPoint.Coord_Y + Convert.ToDecimal(Math.Sin(Convert.ToDouble(Angle))) * Length;
+            EndPoint.Coord_X = StartPoint.Coord_X + Convert.ToDouble(Math.Cos(Convert.ToDouble(Angle))) * Length;
+            EndPoint.Coord_Y = StartPoint.Coord_Y + Convert.ToDouble(Math.Sin(Convert.ToDouble(Angle))) * Length;
             this.StartPoint = StartPoint;
             PathPart PathPart = new PathPart(EndPoint);
             PathParts.Add(PathPart);
@@ -67,11 +67,11 @@ namespace RDBLL.Common.Geometry
         //Класс для отрезков пути
         public Point2D EndPoint { get; set; }
 
-        public decimal GetDistance(Point2D StartPoint)
+        public double GetDistance(Point2D StartPoint)
         {
-            decimal dX = EndPoint.Coord_X - StartPoint.Coord_X;
-            decimal dY = EndPoint.Coord_Y - StartPoint.Coord_Y;
-            return Convert.ToDecimal(Math.Sqrt(Convert.ToDouble((dX + dY))));
+            double dX = EndPoint.Coord_X - StartPoint.Coord_X;
+            double dY = EndPoint.Coord_Y - StartPoint.Coord_Y;
+            return Convert.ToDouble(Math.Sqrt(Convert.ToDouble((dX + dY))));
         }
 
         public PathPart()

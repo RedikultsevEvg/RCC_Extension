@@ -15,11 +15,11 @@ namespace DAL.DataSets
             DataTable dataTable;
             DataColumn IdColumn, FkIdColumn, NameColumn, NewColumn;
             #region Generators
-            #endregion
             dataTable = new DataTable("Generators");
             dataSet.Tables.Add(dataTable);
             IdColumn = new DataColumn("Id", Type.GetType("System.Int32"));
             dataTable.Columns.Add(IdColumn);
+            #endregion
             #region Version
             dataTable = new DataTable("Versions");
             dataSet.Tables.Add(dataTable);
@@ -31,6 +31,48 @@ namespace DAL.DataSets
             dataSet.Tables.Add(dataTable);
             IdColumn = new DataColumn("Id", Type.GetType("System.Int32"));
             dataTable.Columns.Add(IdColumn);
+            #endregion
+            #region BuildingSites
+            dataTable = new DataTable("BuildingSites");
+            dataSet.Tables.Add(dataTable);
+            IdColumn = new DataColumn("Id", Type.GetType("System.Int32"));
+            dataTable.Columns.Add(IdColumn);
+            FkIdColumn = new DataColumn("ParentId", Type.GetType("System.Int32"));
+            dataTable.Columns.Add(FkIdColumn);
+            NameColumn = new DataColumn("Name", Type.GetType("System.String"));
+            dataTable.Columns.Add(NameColumn);
+            #endregion
+            #region Buildings
+            dataTable = new DataTable("Buildings");
+            dataSet.Tables.Add(dataTable);
+            IdColumn = new DataColumn("Id", Type.GetType("System.Int32"));
+            dataTable.Columns.Add(IdColumn);
+            FkIdColumn = new DataColumn("BuildingSiteId", Type.GetType("System.Int32"));
+            dataTable.Columns.Add(FkIdColumn);
+            NameColumn = new DataColumn("Name", Type.GetType("System.String"));
+            dataTable.Columns.Add(NameColumn);
+            #endregion
+            #region Levels
+            dataTable = new DataTable("Levels");
+            dataSet.Tables.Add(dataTable);
+            IdColumn = new DataColumn("Id", Type.GetType("System.Int32"));
+            dataTable.Columns.Add(IdColumn);
+            FkIdColumn = new DataColumn("BuildingId", Type.GetType("System.Int32"));
+            dataTable.Columns.Add(FkIdColumn);
+            NameColumn = new DataColumn("Name", Type.GetType("System.String"));
+            dataTable.Columns.Add(NameColumn);
+            NewColumn = new DataColumn("FloorLevel", Type.GetType("System.Double"));
+            dataTable.Columns.Add(NewColumn);
+            NewColumn = new DataColumn("Height", Type.GetType("System.Double"));
+            dataTable.Columns.Add(NewColumn);
+            NewColumn = new DataColumn("TopOffset", Type.GetType("System.Double"));
+            dataTable.Columns.Add(NewColumn);
+            NewColumn = new DataColumn("BasePointX", Type.GetType("System.Double"));
+            dataTable.Columns.Add(NewColumn);
+            NewColumn = new DataColumn("BasePointY", Type.GetType("System.Double"));
+            dataTable.Columns.Add(NewColumn);
+            NewColumn = new DataColumn("BasePointZ", Type.GetType("System.Double"));
+            dataTable.Columns.Add(NewColumn);
             #endregion
             #region SteelBases
             dataTable = new DataTable("SteelBases");
@@ -45,6 +87,10 @@ namespace DAL.DataSets
             dataTable.Columns.Add(FkIdColumn);
             NameColumn = new DataColumn("Name", Type.GetType("System.String"));
             dataTable.Columns.Add(NameColumn);
+            NewColumn = new DataColumn("SteelStrength", Type.GetType("System.Double"));
+            dataTable.Columns.Add(NewColumn);
+            NewColumn = new DataColumn("ConcreteStrength", Type.GetType("System.Double"));
+            dataTable.Columns.Add(NewColumn);
             NewColumn = new DataColumn("IsActual", Type.GetType("System.Boolean"));
             dataTable.Columns.Add(NewColumn);
             NewColumn = new DataColumn("Width", Type.GetType("System.Double"));
@@ -55,26 +101,6 @@ namespace DAL.DataSets
             dataTable.Columns.Add(NewColumn);
             NewColumn = new DataColumn("WorkCondCoef", Type.GetType("System.Double"));
             dataTable.Columns.Add(NewColumn);
-            //Базы стальных колонн
-            //DataTable SteelBases = new DataTable("SteelBases");
-            //dataSet.Tables.Add(SteelBases);
-            //DataColumn SteelBaseId = new DataColumn("Id", Type.GetType("System.Int32"));
-            //DataColumn SteelBasePicture = new DataColumn("Picture", Type.GetType("System.Byte[]"));
-            //DataColumn SteelBaseName = new DataColumn("Name", Type.GetType("System.String"));
-            //DataColumn SteelBaseWidth = new DataColumn("Width", Type.GetType("System.Double"));
-            //DataColumn SteelBaseLength = new DataColumn("Length", Type.GetType("System.Double"));
-            //DataColumn SteelBaseArea = new DataColumn("Area", Type.GetType("System.Double"));
-            //DataColumn SteelBaseWx = new DataColumn("Wx", Type.GetType("System.Double"));
-            //DataColumn SteelBaseWy = new DataColumn("Wy", Type.GetType("System.Double"));
-
-            //SteelBases.Columns.Add(SteelBaseId);
-            //SteelBases.Columns.Add(SteelBasePicture);
-            //SteelBases.Columns.Add(SteelBaseName);
-            //SteelBases.Columns.Add(SteelBaseWidth);
-            //SteelBases.Columns.Add(SteelBaseLength);
-            //SteelBases.Columns.Add(SteelBaseArea);
-            //SteelBases.Columns.Add(SteelBaseWx);
-            //SteelBases.Columns.Add(SteelBaseWy);
             #endregion
 
             return dataSet;
