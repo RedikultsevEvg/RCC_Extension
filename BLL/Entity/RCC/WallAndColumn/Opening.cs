@@ -15,9 +15,9 @@ namespace RDBLL.Entity.RCC.WallAndColumn
         public string Name { get; set; } //Наименование отверстия
         public Building Building { get; set; }
         public string Purpose { get; set; } //Назначение отверстия
-        public decimal Width { get; set; } //Ширина отверстия
-        public decimal Height { get; set; } //Высота отверстия
-        public decimal Bottom { get; set; } //Привязка снизу (координата Y)
+        public double Width { get; set; } //Ширина отверстия
+        public double Height { get; set; } //Высота отверстия
+        public double Bottom { get; set; } //Привязка снизу (координата Y)
         public bool AddEdgeLeft { get; set; } //Устанавливать обрамление слева
         public bool AddEdgeRight { get; set; } //Справа
         public bool AddEdgeTop { get; set; } //Сверху
@@ -52,7 +52,7 @@ namespace RDBLL.Entity.RCC.WallAndColumn
             AddIncBottomRight = false;
         }
         //Возвращает площадь проема
-        public decimal GetArea()
+        public double GetArea()
         {
             
             return Width * Height;
@@ -66,7 +66,7 @@ namespace RDBLL.Entity.RCC.WallAndColumn
             return S;
         }
 
-        public int AddEdgeQuant(int Type, decimal Spacing)
+        public int AddEdgeQuant(int Type, double Spacing)
         {
             //Возвращает количество элементов обрамления с соответствующей стороны проема
             //Type
@@ -118,9 +118,9 @@ namespace RDBLL.Entity.RCC.WallAndColumn
             {
                 if (obj.Name == "Name") Name = obj.Value;
                 if (obj.Name == "Purpose") Purpose = obj.Value;
-                if (obj.Name == "Height") Height = Convert.ToDecimal(obj.Value);
-                if (obj.Name == "Width") Width = Convert.ToDecimal(obj.Value);
-                if (obj.Name == "Bottom") Bottom = Convert.ToDecimal(obj.Value);
+                if (obj.Name == "Height") Height = Convert.ToDouble(obj.Value);
+                if (obj.Name == "Width") Width = Convert.ToDouble(obj.Value);
+                if (obj.Name == "Bottom") Bottom = Convert.ToDouble(obj.Value);
                 if (obj.Name == "AddEdgeLeft") AddEdgeLeft = Convert.ToBoolean(obj.Value);
                 if (obj.Name == "AddEdgeRight") AddEdgeRight = Convert.ToBoolean(obj.Value);
                 if (obj.Name == "AddEdgeTop") AddEdgeTop = Convert.ToBoolean(obj.Value);
@@ -145,13 +145,13 @@ namespace RDBLL.Entity.RCC.WallAndColumn
     {
         public Wall Wall { get; set; }
         public OpeningType OpeningType { get; set; }
-        public decimal Left { get; set; }
+        public double Left { get; set; }
         public bool OverrideBottom { get; set; }
-        public decimal Bottom { get; set; }
+        public double Bottom { get; set; }
 
-        public decimal GetBottom()
+        public double GetBottom()
         {
-            decimal bottom = OpeningType.Bottom;
+            double bottom = OpeningType.Bottom;
             if (OverrideBottom) { bottom = Bottom; }
             return bottom;
         }
@@ -190,9 +190,9 @@ namespace RDBLL.Entity.RCC.WallAndColumn
             foreach (XmlAttribute obj in xmlNode.Attributes)
             {
                 if (obj.Name == "OpeningTypeNumber") OpeningType = wall.Level.Building.OpeningTypeList[Convert.ToInt16(obj.Value)];
-                if (obj.Name == "Left") Left = Convert.ToDecimal(obj.Value);
+                if (obj.Name == "Left") Left = Convert.ToDouble(obj.Value);
                 if (obj.Name == "OverrideBottom") OverrideBottom = Convert.ToBoolean(obj.Value);
-                if (obj.Name == "Bottom") Bottom = Convert.ToDecimal(obj.Value);            
+                if (obj.Name == "Bottom") Bottom = Convert.ToDouble(obj.Value);            
             }
         }
     }

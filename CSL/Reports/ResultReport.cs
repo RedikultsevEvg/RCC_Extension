@@ -59,9 +59,9 @@ namespace CSL.Reports
         }
         public void PrepareReport()
         {
-            foreach (Building building in _buildingSite.BuildingList)
+            foreach (Building building in _buildingSite.Buildings)
             {
-                foreach (Level level in building.LevelList)
+                foreach (Level level in building.Levels)
                 {
                     DataTable SteelBases = dataSet.Tables[0];
                     foreach (SteelBase steelBase in level.SteelBases)

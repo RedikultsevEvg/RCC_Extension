@@ -472,9 +472,8 @@ namespace RDUIL.WinForms
             Item.SubItems.Add(Convert.ToString(level.FloorLevel));
             Item.SubItems.Add(Convert.ToString(level.Height));
             Item.SubItems.Add(Convert.ToString(level.TopOffset));
-            Item.SubItems.Add(Convert.ToString(level.Quant));
             Item.SubItems.Add(Convert.ToString(Math.Round(level.GetConcreteVolumeNetto()/1000000)/1000));
-            Item.SubItems.Add(Convert.ToString(Math.Round(level.GetConcreteVolumeNetto() * level.Quant / 1000000) / 1000));
+            Item.SubItems.Add(Convert.ToString(Math.Round(level.GetConcreteVolumeNetto()) / 1000));
         }
         private void EditItemFromOpeningPlacing(ListViewItem Item, OpeningPlacing openingPlacing)
         {
@@ -680,7 +679,7 @@ namespace RDUIL.WinForms
             this.Visible = true;
             foreach (ListViewItem i in lvDetails.Items)
             {
-                EditItemFromLevel(i, building.LevelList[i.Index]);
+                EditItemFromLevel(i, building.Levels[i.Index]);
             }
             
         }
@@ -718,7 +717,7 @@ namespace RDUIL.WinForms
         {
             if (lvDetails.SelectedIndices.Count == 0)
             { MessageBox.Show("Выберите элемент из списка", "Ничего не выбрано"); }
-            decimal sumVolume = 0;
+            double sumVolume = 0;
             switch (_formType) //
             {
                 case "Levels":

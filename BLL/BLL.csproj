@@ -50,6 +50,8 @@
     <Compile Include="Common\Geometry\Mathematic\Constants.cs" />
     <Compile Include="Common\Geometry\Mathematic\Matrix.cs" />
     <Compile Include="Common\Geometry\RectCrossSection.cs" />
+    <Compile Include="Common\Interfaces\ISavableToDataSet.cs" />
+    <Compile Include="Common\Service\GetEntity.cs" />
     <Compile Include="DrawUtils\SteelBase\DrawSteelBase.cs" />
     <Compile Include="Entity\Common\NDM\Curvature.cs" />
     <Compile Include="Entity\Common\NDM\ForceCurvature.cs" />
@@ -102,7 +104,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Common\Delegates\" />
-    <Folder Include="Common\Interfaces\" />
     <Folder Include="Entity\Results\RCC\" />
   </ItemGroup>
   <ItemGroup>

@@ -39,12 +39,12 @@ namespace RDUIL.WinForms
                 lvResult.Columns[i].TextAlign = HorizontalAlignment.Center;
             }
             int vertQuant = 0;
-            decimal horLength = 0;
+            double horLength = 0;
             int incQuant = 0;
             int vertEdgeQuant = 0;
             int horEdgeQuant = 0;
-            decimal sumAreaNetto = 0;
-            decimal sumVolumeNetto = 0;
+            double sumAreaNetto = 0;
+            double sumVolumeNetto = 0;
             foreach (Wall obj in _ObjectlList)
             {
                 vertQuant += obj.VertBarQuantity();

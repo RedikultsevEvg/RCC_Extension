@@ -63,7 +63,7 @@ namespace RDBLL.Common.Service
         public static void InicializeNew()
         {
             BuildingSite = new BuildingSite();
-            BuildingSite.BuildingList.Add(new Building(BuildingSite));
+            BuildingSite.Buildings.Add(new Building(BuildingSite));
             IsDataChanged = false;
             #region Исходные данные единиц измерения
             MeasureUnit measureUnitLength = new MeasureUnit();
@@ -186,7 +186,7 @@ namespace RDBLL.Common.Service
         }
         public static void ClearAll()
         {
-            BuildingSite.BuildingList.Clear();
+            BuildingSite.Buildings.Clear();
         }
         public static bool OpenProjectFromFile()
         {
@@ -283,12 +283,13 @@ namespace RDBLL.Common.Service
                 };
                 dataTable.Rows.Add(dataRow);
             }
+            BuildingSite.SaveToDataSet(dataSet);
             #endregion
             return dataSet;
         }
         public static void OpenExistDataset(string fileName)
         {
-            DataSet dataSet = new DataSet();
+            DataSet dataSet = MainDataSet.GetNewDataSet();// new DataSet();
             DataTable dataTable;
             dataSet.ReadXml(fileName);
             #region Generator
@@ -303,6 +304,7 @@ namespace RDBLL.Common.Service
             {
                 MeasureUnits[i].CurrentUnitLabelId = Convert.ToInt32(dataTable.Rows[i].ItemArray[0]);
             }
+            BuildingSite.OpenFromDataSet(dataSet, 1);
             #endregion
         }
     }

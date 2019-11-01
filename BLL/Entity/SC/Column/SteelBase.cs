@@ -5,13 +5,15 @@ using RDBLL.Forces;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using RDBLL.Common.Interfaces;
+using System.Data;
 
 namespace RDBLL.Entity.SC.Column
 {
     /// <summary>
     /// База стальной колонны
     /// </summary>
-    public class SteelBase : ICloneable
+    public class SteelBase : ICloneable, ISavableToDataSet
     {
         #region Fields
         //private bool _isActual;
@@ -22,9 +24,11 @@ namespace RDBLL.Entity.SC.Column
         public int Id { get; set; } //Код базы
         public int LevelId { get; set; } //Код базы
         public Level Level { get; set; } //Ссылка на уровень
-        public int SteelClassId { get; set; } //Расчетное сопротивление базы
-        public int ConcreteClassId { get; set; } //Прочность бетона подливки
+        public int SteelClassId { get; set; } //Код стали
+        public int ConcreteClassId { get; set; } //Код бетона
         public String Name { get; set; } //Наименование
+        public double SteelStrength { get; set; } //Расчетное сопротивление базы
+        public double ConcreteStrength { get; set; } //Прочность бетона подливки
         public bool IsActual { get; set; } //Признак актуальности расчета
         public double Width { get; set; } //Ширина базы, м
         public double Length { get; set; } //Длина базы, м
@@ -141,6 +145,7 @@ namespace RDBLL.Entity.SC.Column
         public SteelBase(Level level)
         {
             SetDefault();
+            LevelId = level.Id;
             Level = level;
             level.SteelBases.Add(this);
         }
@@ -160,7 +165,19 @@ namespace RDBLL.Entity.SC.Column
 
         #endregion
         #region Methods
+        public void SaveToDataSet(DataSet dataSet)
+        {
+            DataTable dataTable;
+            DataRow dataRow;
+             dataTable = dataSet.Tables["SteelBases"];
+            dataRow = dataTable.NewRow();
+            dataRow.ItemArray = new object[] { Id, LevelId, SteelClassId, ConcreteClassId, Name, SteelStrength, ConcreteStrength, IsActual, Width, Length, Thickness, WorkCondCoef };
+            dataTable.Rows.Add(dataRow);
+        }
+        public void OpenFromDataSet(DataSet dataSet, int Id)
+        {
 
+        }
         #endregion
 
         //IClonable

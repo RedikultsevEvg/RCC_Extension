@@ -21,14 +21,14 @@ namespace RDUIL.WinForms
             InitializeComponent();
             _point2D = point2D;
             tbCoord.Text = _point2D.PointText();
-            nudCoord_X.Value = _point2D.Coord_X;
-            nudCoord_Y.Value = _point2D.Coord_Y;
+            nudCoord_X.Value = Convert.ToDecimal(_point2D.Coord_X);
+            nudCoord_Y.Value = Convert.ToDecimal(_point2D.Coord_Y);
         }
 
         private void btnOK_Click(object sender, EventArgs e)
         {
-            _point2D.Coord_X = nudCoord_X.Value;
-            _point2D.Coord_Y = nudCoord_Y.Value;
+            _point2D.Coord_X = Convert.ToDouble(nudCoord_X.Value);
+            _point2D.Coord_Y = Convert.ToDouble(nudCoord_Y.Value);
             ProgrammSettings.IsDataChanged = true;
         }
     }

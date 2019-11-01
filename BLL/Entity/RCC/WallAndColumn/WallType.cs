@@ -14,19 +14,19 @@ namespace RDBLL.Entity.RCC.WallAndColumn
     {
         public String Name { get; set; }
         public Building Building { get; set; }
-        public decimal Thickness { get; set; }
-        public decimal TopOffset { get; set; }
-        public decimal BottomOffset { get; set; }
-        public decimal BarTopOffset { get; set; }
+        public double Thickness { get; set; }
+        public double TopOffset { get; set; }
+        public double BottomOffset { get; set; }
+        public double BarTopOffset { get; set; }
         public bool RoundVertToBaseLength { get; set; }
-        public decimal VertBaseLength { get; set; }
+        public double VertBaseLength { get; set; }
         public bool HorLapping { get; set; }
-        public decimal HorLappingLength { get; set; }
-        public decimal HorBaseLength { get; set; }
+        public double HorLappingLength { get; set; }
+        public double HorBaseLength { get; set; }
         public BarSpacingSettings VertSpacingSetting { get; set; }
         public BarSpacingSettings HorSpacingSetting { get; set; }
 
-        public decimal GetHeight(Level level)
+        public double GetHeight(Level level)
         {
             return level.Height + level.TopOffset + TopOffset + BottomOffset;
         }
@@ -72,15 +72,15 @@ namespace RDBLL.Entity.RCC.WallAndColumn
             foreach (XmlAttribute obj in xmlNode.Attributes)
             {
                 if (obj.Name == "Name") Name = obj.Value;
-                if (obj.Name == "Thickness") Thickness = Convert.ToDecimal(obj.Value);
-                if (obj.Name == "TopOffset") TopOffset = Convert.ToDecimal(obj.Value);
-                if (obj.Name == "BottomOffset") BottomOffset = Convert.ToDecimal(obj.Value);
-                if (obj.Name == "BarTopOffset") BarTopOffset = Convert.ToDecimal(obj.Value);
+                if (obj.Name == "Thickness") Thickness = Convert.ToDouble(obj.Value);
+                if (obj.Name == "TopOffset") TopOffset = Convert.ToDouble(obj.Value);
+                if (obj.Name == "BottomOffset") BottomOffset = Convert.ToDouble(obj.Value);
+                if (obj.Name == "BarTopOffset") BarTopOffset = Convert.ToDouble(obj.Value);
                 if (obj.Name == "RoundVertToBaseLength") RoundVertToBaseLength = Convert.ToBoolean(obj.Value);
-                if (obj.Name == "VertBaseLength") VertBaseLength = Convert.ToDecimal(obj.Value);
+                if (obj.Name == "VertBaseLength") VertBaseLength = Convert.ToDouble(obj.Value);
                 if (obj.Name == "HorLapping") HorLapping = Convert.ToBoolean(obj.Value);
-                if (obj.Name == "HorLappingLength") HorLappingLength = Convert.ToDecimal(obj.Value);
-                if (obj.Name == "HorBaseLength") HorBaseLength = Convert.ToDecimal(obj.Value);
+                if (obj.Name == "HorLappingLength") HorLappingLength = Convert.ToDouble(obj.Value);
+                if (obj.Name == "HorBaseLength") HorBaseLength = Convert.ToDouble(obj.Value);
                 foreach (XmlNode childNode in xmlNode.ChildNodes)
                 {
                     if (childNode.Name == "VertSpacingSetting") VertSpacingSetting = new BarSpacingSettings(childNode);
