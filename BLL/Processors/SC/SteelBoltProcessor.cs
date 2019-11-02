@@ -66,7 +66,7 @@ namespace RDBLL.Processors.SC
         public static double GetMaxStressNonLinear(SteelBolt steelBolt)
         {
             List<double> stresses = new List<double>();
-            foreach (ForceCurvature forceCurvature in steelBolt.ColumnBase.ForceCurvatures)
+            foreach (ForceCurvature forceCurvature in steelBolt.SteelBase.ForceCurvatures)
             {
                 stresses.Add(GetStressNonLinear(steelBolt, forceCurvature.SteelCurvature));
             }

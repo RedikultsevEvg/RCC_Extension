@@ -22,7 +22,7 @@
                 <ComboBox ItemsSource="{Binding Source={x:Static Setting:ProgrammSettings.ForceParamKinds}}"
                           ItemTemplate="{StaticResource cbTemplate}"
                           SelectedValuePath="Id"
-                          SelectedValue="{Binding Path=Kind_id}" Height="22" Margin="30,0,0,0">
+                          SelectedValue="{Binding Path=KindId}" Height="22" Margin="30,0,0,0">
                 </ComboBox>
                 <TextBox Text="{Binding Path=CrcValueInCurUnit}" Grid.Column="1" Background="#FFFFFEDF" Height="22">
                     <TextBox.ToolTip >

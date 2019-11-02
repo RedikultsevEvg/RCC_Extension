@@ -257,7 +257,9 @@ namespace RDBLL.Common.Service
         public static event EventHandler FilePathChanged;
         public static DataSet GetDataSet()
         {
-            DataSet dataSet = MainDataSet.GetNewDataSet();
+            MainDataSet mainDataSet = new MainDataSet();
+            mainDataSet.GetNewDataSet();
+            DataSet dataSet = mainDataSet.DataSet;
             DataTable dataTable;
             DataRow dataRow;
             #region Generator
@@ -289,7 +291,9 @@ namespace RDBLL.Common.Service
         }
         public static void OpenExistDataset(string fileName)
         {
-            DataSet dataSet = MainDataSet.GetNewDataSet();// new DataSet();
+            MainDataSet mainDataSet = new MainDataSet();
+            mainDataSet.GetNewDataSet();
+            DataSet dataSet = mainDataSet.DataSet;
             DataTable dataTable;
             dataSet.ReadXml(fileName);
             #region Generator

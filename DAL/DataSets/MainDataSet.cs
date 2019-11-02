@@ -4,12 +4,16 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Data;
+using DAL.Common;
 
 namespace DAL.DataSets
 {
-    public static class MainDataSet
+    public class MainDataSet
     {
-        public static DataSet GetNewDataSet()
+        private DataSet _dataSet;
+        public DataSet DataSet { get {return _dataSet; } }
+
+        public void GetNewDataSet()
         {
             DataSet dataSet = new DataSet();
             DataTable dataTable;
@@ -32,10 +36,15 @@ namespace DAL.DataSets
             IdColumn = new DataColumn("Id", Type.GetType("System.Int32"));
             dataTable.Columns.Add(IdColumn);
             #endregion
+            #region SteelClasses
+            #endregion
+            #region ConcreteClasses
+            #endregion
             #region BuildingSites
             dataTable = new DataTable("BuildingSites");
             dataSet.Tables.Add(dataTable);
             IdColumn = new DataColumn("Id", Type.GetType("System.Int32"));
+            IdColumn.Unique = true;
             dataTable.Columns.Add(IdColumn);
             FkIdColumn = new DataColumn("ParentId", Type.GetType("System.Int32"));
             dataTable.Columns.Add(FkIdColumn);
@@ -46,6 +55,7 @@ namespace DAL.DataSets
             dataTable = new DataTable("Buildings");
             dataSet.Tables.Add(dataTable);
             IdColumn = new DataColumn("Id", Type.GetType("System.Int32"));
+            IdColumn.Unique = true;
             dataTable.Columns.Add(IdColumn);
             FkIdColumn = new DataColumn("BuildingSiteId", Type.GetType("System.Int32"));
             dataTable.Columns.Add(FkIdColumn);
@@ -56,6 +66,7 @@ namespace DAL.DataSets
             dataTable = new DataTable("Levels");
             dataSet.Tables.Add(dataTable);
             IdColumn = new DataColumn("Id", Type.GetType("System.Int32"));
+            IdColumn.Unique = true;
             dataTable.Columns.Add(IdColumn);
             FkIdColumn = new DataColumn("BuildingId", Type.GetType("System.Int32"));
             dataTable.Columns.Add(FkIdColumn);
@@ -77,33 +88,97 @@ namespace DAL.DataSets
             #region SteelBases
             dataTable = new DataTable("SteelBases");
             dataSet.Tables.Add(dataTable);
-            IdColumn = new DataColumn("Id", Type.GetType("System.Int32"));
-            dataTable.Columns.Add(IdColumn);
-            FkIdColumn = new DataColumn("LevelId", Type.GetType("System.Int32"));
-            dataTable.Columns.Add(FkIdColumn);
+            DsOperation.AddIdColumn(dataTable);
+            DsOperation.AddFkIdColumn("Levels", "LevelId", dataTable);
             FkIdColumn = new DataColumn("SteelClassId", Type.GetType("System.Int32"));
             dataTable.Columns.Add(FkIdColumn);
             FkIdColumn = new DataColumn("ConcreteClassId", Type.GetType("System.Int32"));
             dataTable.Columns.Add(FkIdColumn);
-            NameColumn = new DataColumn("Name", Type.GetType("System.String"));
-            dataTable.Columns.Add(NameColumn);
-            NewColumn = new DataColumn("SteelStrength", Type.GetType("System.Double"));
-            dataTable.Columns.Add(NewColumn);
-            NewColumn = new DataColumn("ConcreteStrength", Type.GetType("System.Double"));
-            dataTable.Columns.Add(NewColumn);
-            NewColumn = new DataColumn("IsActual", Type.GetType("System.Boolean"));
-            dataTable.Columns.Add(NewColumn);
-            NewColumn = new DataColumn("Width", Type.GetType("System.Double"));
-            dataTable.Columns.Add(NewColumn);
-            NewColumn = new DataColumn("Length", Type.GetType("System.Double"));
-            dataTable.Columns.Add(NewColumn);
-            NewColumn = new DataColumn("Thickness", Type.GetType("System.Double"));
-            dataTable.Columns.Add(NewColumn);
-            NewColumn = new DataColumn("WorkCondCoef", Type.GetType("System.Double"));
-            dataTable.Columns.Add(NewColumn);
+            DsOperation.AddNameColumn(dataTable);
+            DsOperation.AddDoubleColumn(dataTable, "SteelStrength");
+            DsOperation.AddDoubleColumn(dataTable, "ConcreteStrength");
+            DsOperation.AddBoolColumn(dataTable, "IsActual");
+            DsOperation.AddDoubleColumn(dataTable, "Width");
+            DsOperation.AddDoubleColumn(dataTable, "Length");
+            DsOperation.AddDoubleColumn(dataTable, "Thickness");
+            DsOperation.AddDoubleColumn(dataTable, "WorkCondCoef");
             #endregion
-
-            return dataSet;
+            #region SteelBaseParts
+            dataTable = new DataTable("SteelBaseParts");
+            dataSet.Tables.Add(dataTable);
+            DsOperation.AddIdColumn(dataTable);
+            DsOperation.AddFkIdColumn("SteelBases", "SteelBaseId", dataTable);
+            DsOperation.AddNameColumn(dataTable);
+            DsOperation.AddDoubleColumn(dataTable, "Width");
+            DsOperation.AddDoubleColumn(dataTable, "Length");
+            DsOperation.AddDoubleColumn(dataTable, "CenterX");
+            DsOperation.AddDoubleColumn(dataTable, "CenterY");
+            DsOperation.AddDoubleColumn(dataTable, "LeftOffset");
+            DsOperation.AddDoubleColumn(dataTable, "RightOffset");
+            DsOperation.AddDoubleColumn(dataTable, "TopOffset");
+            DsOperation.AddDoubleColumn(dataTable, "BottomOffset");
+            DsOperation.AddBoolColumn(dataTable, "FixLeft");
+            DsOperation.AddBoolColumn(dataTable, "FixRight");
+            DsOperation.AddBoolColumn(dataTable, "FixTop");
+            DsOperation.AddBoolColumn(dataTable, "FixBottom");
+            DsOperation.AddBoolColumn(dataTable, "AddSymmetricX");
+            DsOperation.AddBoolColumn(dataTable, "AddSymmetricY");
+            #endregion
+            #region SteelBolts
+            dataTable = new DataTable("SteelBolts");
+            dataSet.Tables.Add(dataTable);
+            DsOperation.AddIdColumn(dataTable);
+            DsOperation.AddFkIdColumn("SteelBases", "SteelBaseId", dataTable);
+            DsOperation.AddNameColumn(dataTable);
+            DsOperation.AddDoubleColumn(dataTable, "Diameter");
+            DsOperation.AddDoubleColumn(dataTable, "CenterX");
+            DsOperation.AddDoubleColumn(dataTable, "CenterY");
+            DsOperation.AddBoolColumn(dataTable, "AddSymmetricX");
+            DsOperation.AddBoolColumn(dataTable, "AddSymmetricY");
+            #endregion
+            #region ForcesGroups
+            dataTable = new DataTable("ForcesGroups");
+            dataSet.Tables.Add(dataTable);
+            DsOperation.AddIdColumn(dataTable);
+            DsOperation.AddNameColumn(dataTable);
+            DsOperation.AddDoubleColumn(dataTable, "CenterX");
+            DsOperation.AddDoubleColumn(dataTable, "CenterY");
+            #endregion
+            #region SteelBaseForcesGroups
+            dataTable = new DataTable("SteelBaseForcesGroups");
+            dataSet.Tables.Add(dataTable);
+            DsOperation.AddFkIdColumn("SteelBases", "SteelBaseId", dataTable);
+            DsOperation.AddFkIdColumn("ForcesGroups", "ForcesGroupId", dataTable);
+            #endregion
+            #region LoadSets
+            dataTable = new DataTable("LoadSets");
+            dataSet.Tables.Add(dataTable);
+            DsOperation.AddIdColumn(dataTable);
+            DsOperation.AddNameColumn(dataTable);
+            DsOperation.AddDoubleColumn(dataTable, "PartialSafetyFactor");
+            DsOperation.AddBoolColumn(dataTable, "IsLiveLoad");
+            DsOperation.AddBoolColumn(dataTable, "IsCombination");
+            DsOperation.AddBoolColumn(dataTable, "BothSign");
+            #endregion
+            #region ForcesGroupLoadSets
+            dataTable = new DataTable("ForcesGroupLoadSets");
+            dataSet.Tables.Add(dataTable);
+            DsOperation.AddFkIdColumn("ForcesGroups", "ForcesGroupId", dataTable);
+            DsOperation.AddFkIdColumn("LoadSets", "LoadSetId", dataTable);
+            #endregion
+            #region ForceParameters
+            dataTable = new DataTable("ForceParameters");
+            dataSet.Tables.Add(dataTable);
+            DsOperation.AddIdColumn(dataTable);
+            DsOperation.AddFkIdColumn("LoadSets", "LoadSetId", dataTable);
+            DsOperation.AddIntColumn(dataTable, "KindId");
+            DsOperation.AddNameColumn(dataTable);
+            DsOperation.AddDoubleColumn(dataTable, "CrcValue");
+            #endregion
+            #region
+            #endregion
+            _dataSet = dataSet;
         }
+
     }
 }

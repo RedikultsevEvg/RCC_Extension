@@ -36,7 +36,7 @@ namespace RDBLL.Processors.SC
              */
             //double maxStress = GetMinStressLinear(basePart);
             double[] result = new double[2] { 0, 0 };
-            double thickness = basePart.ColumnBase.Thickness;
+            double thickness = basePart.SteelBase.Thickness;
             double Wx = thickness * thickness / 6;
             double maxMoment = 0;
             int countFixSides = 0;
@@ -311,7 +311,7 @@ namespace RDBLL.Processors.SC
             {
                 SteelBasePart newSteelBasePart = (SteelBasePart)(steelBasePart.Clone());
                 newSteelBasePart.Name = steelBasePart.Name + 'X';
-                newSteelBasePart.ColumnBase = steelBasePart.ColumnBase;
+                newSteelBasePart.SteelBase = steelBasePart.SteelBase;
                 newSteelBasePart.CenterX = (1.0) * steelBasePart.CenterX;
                 newSteelBasePart.CenterY = (-1.0) * steelBasePart.CenterY;
                 newSteelBasePart.FixTop = steelBasePart.FixBottom;
@@ -322,7 +322,7 @@ namespace RDBLL.Processors.SC
             {
                 SteelBasePart newSteelBasePart = (SteelBasePart)(steelBasePart.Clone());
                 newSteelBasePart.Name = steelBasePart.Name + 'Y';
-                newSteelBasePart.ColumnBase = steelBasePart.ColumnBase;
+                newSteelBasePart.SteelBase = steelBasePart.SteelBase;
                 newSteelBasePart.CenterX = (-1.0) * steelBasePart.CenterX;
                 newSteelBasePart.CenterY = (1.0) * steelBasePart.CenterY;
                 newSteelBasePart.FixLeft = steelBasePart.FixRight;
@@ -333,7 +333,7 @@ namespace RDBLL.Processors.SC
             {
                 SteelBasePart newSteelBasePart = (SteelBasePart)(steelBasePart.Clone());
                 newSteelBasePart.Name = steelBasePart.Name + "XY";
-                newSteelBasePart.ColumnBase = steelBasePart.ColumnBase;
+                newSteelBasePart.SteelBase = steelBasePart.SteelBase;
                 newSteelBasePart.CenterX = (-1.0) * steelBasePart.CenterX;
                 newSteelBasePart.CenterY = (-1.0) * steelBasePart.CenterY;
                 newSteelBasePart.FixTop = steelBasePart.FixBottom;
@@ -411,7 +411,7 @@ namespace RDBLL.Processors.SC
         public static double GetGlobalMinStressLinear(SteelBasePart basePart, SteelBase columnBase)
         {
             List<double> stresses = new List<double>();
-            RectCrossSection baseRect = new RectCrossSection(basePart.ColumnBase.Width, basePart.ColumnBase.Length);
+            RectCrossSection baseRect = new RectCrossSection(basePart.SteelBase.Width, basePart.SteelBase.Length);
             MassProperty massProperty = RectProcessor.GetRectMassProperty(baseRect);
             foreach (LoadSet loadCase in columnBase.LoadCases)
             {
@@ -421,7 +421,7 @@ namespace RDBLL.Processors.SC
         }
         public static double GetGlobalMinStressLinear(SteelBasePart basePart)
         {
-            SteelBase columnBase = basePart.ColumnBase;
+            SteelBase columnBase = basePart.SteelBase;
             return GetGlobalMinStressLinear(basePart, columnBase);
         }
         /// <summary>
@@ -463,7 +463,7 @@ namespace RDBLL.Processors.SC
         public static double GetGlobalMinStressNonLinear(SteelBasePart basePart)
         {
             List<double> stresses = new List<double>();
-            foreach (ForceCurvature forceCurvature in basePart.ColumnBase.ForceCurvatures)
+            foreach (ForceCurvature forceCurvature in basePart.SteelBase.ForceCurvatures)
             {
                 stresses.Add(GetMinStressNonLinear(basePart, forceCurvature.ConcreteCurvature));
             }

@@ -2,18 +2,21 @@
 using RDBLL.Entity.Common.NDM;
 using System;
 using System.Collections.Generic;
+using RDBLL.Common.Interfaces;
+using System.Data;
 
 namespace RDBLL.Entity.SC.Column
 {
     /// <summary>
     /// Класс участков баз стальных колонн
     /// </summary>
-    public class SteelBasePart : ICloneable
+    public class SteelBasePart : ICloneable, ISavableToDataSet
     {
         //Properties
         #region
         public int Id { get; set; } //Код участка
-        public SteelBase ColumnBase { get; set; } //База стальной колонны к которой относится участок
+        public int SteelBaseId { get; set; } //Код участка
+        public SteelBase SteelBase { get; set; } //База стальной колонны к которой относится участок
         public String Name { get; set; } //Имя участка
         public double Width { get; set; } //Ширина участка
         public double Length { get; set; } //Длина участка
@@ -33,8 +36,8 @@ namespace RDBLL.Entity.SC.Column
         public List<NdmConcreteArea> SubParts { get; set; }
 
         #endregion
-        //Constructors
-        #region
+
+        #region Constructors
         public void SetDefault()
         {
             Id = ProgrammSettings.CurrentId;
@@ -52,12 +55,35 @@ namespace RDBLL.Entity.SC.Column
         }
         public SteelBasePart()
         {
-            SetDefault();
         }
         public SteelBasePart(SteelBase columnBase)
         {
-            ColumnBase = columnBase;
+            SteelBaseId = columnBase.Id;
+            SteelBase = columnBase;
             SetDefault();
+        }
+        #endregion
+        #region Methods
+        public void SaveToDataSet(DataSet dataSet)
+        {
+            DataTable dataTable;
+            DataRow dataRow;
+            dataTable = dataSet.Tables["SteelBaseParts"];
+            dataRow = dataTable.NewRow();
+            dataRow.ItemArray = new object[]
+            { Id, SteelBaseId, Name,
+                Width, Length,
+                CenterX, CenterY,
+                LeftOffset, RightOffset, TopOffset, TopOffset,
+                FixLeft, FixRight, FixTop, FixBottom,
+                AddSymmetricX, AddSymmetricY
+            };
+            dataTable.Rows.Add(dataRow);
+        }
+
+        public void OpenFromDataSet(DataSet dataSet, int Id)
+        {
+
         }
         #endregion
         //IClonable

@@ -32,7 +32,7 @@ namespace RDBLL.Processors.Forces
                 coindence = false; //Обнуляем флаг
                 foreach (ForceParameter oldForceParameter in oldLoadSet.LoadSet.ForceParameters)
                 {
-                    if (oldForceParameter.Kind_id == secondForceParameter.Kind_id) //Если вид нагрузки совпадает
+                    if (oldForceParameter.KindId == secondForceParameter.KindId) //Если вид нагрузки совпадает
                     {
                         oldForceParameter.CrcValue += secondForceParameter.CrcValue * koeff; //Складываем значения параметра нагрузки
                         oldForceParameter.DesignValue += secondForceParameter.CrcValue * secondLoadSet.LoadSet.PartialSafetyFactor * koeff; //Складываем значения параметра нагрузки
@@ -48,7 +48,7 @@ namespace RDBLL.Processors.Forces
                     forceParameter.CrcValue = secondForceParameter.CrcValue * koeff;
                     forceParameter.DesignValue = secondForceParameter.CrcValue * secondLoadSet.LoadSet.PartialSafetyFactor * koeff;
                     oldLoadSet.LoadSet.PartialSafetyFactor = secondLoadSet.LoadSet.PartialSafetyFactor;
-                    forceParameter.Kind_id = secondForceParameter.Kind_id;
+                    forceParameter.KindId = secondForceParameter.KindId;
                     oldLoadSet.LoadSet.ForceParameters.Add(forceParameter);
                 }
             }
@@ -156,7 +156,7 @@ namespace RDBLL.Processors.Forces
 
             foreach (ForceParameter forceParameter in loadCase.LoadSet.ForceParameters)
             {
-                switch (forceParameter.Kind_id)
+                switch (forceParameter.KindId)
                 {
                     case 1:
                         Nz = forceParameter.CrcValue;
@@ -199,7 +199,7 @@ namespace RDBLL.Processors.Forces
 
             foreach (ForceParameter forceParameter in loadCase.LoadSet.ForceParameters)
             {
-                switch (forceParameter.Kind_id)
+                switch (forceParameter.KindId)
                 {
                     case 1:
                         Nz = forceParameter.CrcValue;
