@@ -97,11 +97,11 @@ namespace RDBLL.Entity.SC.Column
             LoadSet loadSet = new LoadSet(this.LoadsGroup[0]);
             this.LoadsGroup[0].LoadSets.Add(loadSet);
             loadSet.Name = "Постоянная";
-            loadSet.ForceParameters.Add(new ForceParameter());
-            loadSet.ForceParameters[0].Kind_id = 1; //Продольная сила
+            loadSet.ForceParameters.Add(new ForceParameter(loadSet));
+            loadSet.ForceParameters[0].KindId = 1; //Продольная сила
             loadSet.ForceParameters[0].CrcValue = -100000; //Продольная сила
-            loadSet.ForceParameters.Add(new ForceParameter());
-            loadSet.ForceParameters[1].Kind_id = 2; //Изгибающий момент
+            loadSet.ForceParameters.Add(new ForceParameter(loadSet));
+            loadSet.ForceParameters[1].KindId = 2; //Изгибающий момент
             loadSet.ForceParameters[1].CrcValue = 200000; //Изгибающий момент
             loadSet.IsLiveLoad = false;
             loadSet.BothSign = false;
@@ -173,6 +173,18 @@ namespace RDBLL.Entity.SC.Column
             dataRow = dataTable.NewRow();
             dataRow.ItemArray = new object[] { Id, LevelId, SteelClassId, ConcreteClassId, Name, SteelStrength, ConcreteStrength, IsActual, Width, Length, Thickness, WorkCondCoef };
             dataTable.Rows.Add(dataRow);
+            foreach (SteelBasePart steelBasePart in SteelBaseParts)
+            {
+                steelBasePart.SaveToDataSet(dataSet);
+            }
+            foreach (SteelBolt steelBolt in SteelBolts)
+            {
+                steelBolt.SaveToDataSet(dataSet);
+            }
+            foreach (ForcesGroup forcesGroup in LoadsGroup)
+            {
+                forcesGroup.SaveToDataSet(dataSet);
+            }
         }
         public void OpenFromDataSet(DataSet dataSet, int Id)
         {

@@ -186,7 +186,7 @@ namespace CSL.Reports
                 foreach (ForceParameter forceParameter in loadSet.ForceParameters)
                 {
                     DataRow newForceParameter = ForceParameters.NewRow();
-                    var tmpForceParamLabels = from t in ProgrammSettings.ForceParamKinds where t.Id == forceParameter.Kind_id select t;
+                    var tmpForceParamLabels = from t in ProgrammSettings.ForceParamKinds where t.Id == forceParameter.KindId select t;
                     MeasureUnitLabel measureUnitLabel = tmpForceParamLabels.First().MeasureUnit.GetCurrentLabel();
                     newForceParameter.ItemArray = new object[] { tmpForceParamLabels.First().Id,
                                     loadSet.Id,

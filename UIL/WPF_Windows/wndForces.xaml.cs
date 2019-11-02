@@ -102,7 +102,7 @@ namespace RDUIL.WPF_Windows
         {
             if (lvLoadSet.SelectedIndex >= 0)
             {
-                _forcesGroup.LoadSets[lvLoadSet.SelectedIndex].ForceParameters.Add(new ForceParameter { Kind_id = 1 });
+                _forcesGroup.LoadSets[lvLoadSet.SelectedIndex].ForceParameters.Add(new ForceParameter { KindId = 1 });
             }
             else
             {

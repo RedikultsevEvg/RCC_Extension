@@ -31,7 +31,7 @@ namespace RDBLL.Entity.Common.NDM
             ForceMatrix = new Matrix(3, 1);
             foreach (ForceParameter forceParameter in loadCase.ForceParameters)
             {
-                switch (forceParameter.Kind_id)
+                switch (forceParameter.KindId)
                 {
                     case 1: //Продольная сила
                         if (designLoad) { ForceMatrix[2, 0] = forceParameter.DesignValue; } else { ForceMatrix[2, 0] = forceParameter.CrcValue; }

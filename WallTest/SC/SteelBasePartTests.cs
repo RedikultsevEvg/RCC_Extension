@@ -30,7 +30,7 @@ namespace WallTest.SC
             LoadSet loadSet = steelColumnBase.LoadsGroup[0].LoadSets[0];
             ForceParameter forceParameter = new ForceParameter();
             loadSet.ForceParameters.Add(forceParameter);
-            forceParameter.Kind_id = 1;
+            forceParameter.KindId = 1;
             forceParameter.CrcValue = -100000;
             loadSet.PartialSafetyFactor = 1;
 
@@ -65,7 +65,7 @@ namespace WallTest.SC
             LoadSet loadSet = steelColumnBase.LoadsGroup[0].LoadSets[0];
             ForceParameter forceParameter = new ForceParameter();
             loadSet.ForceParameters.Add(forceParameter);
-            forceParameter.Kind_id = 1;
+            forceParameter.KindId = 1;
             forceParameter.CrcValue = -100000;
             loadSet.PartialSafetyFactor = 1;
 
@@ -102,7 +102,7 @@ namespace WallTest.SC
             LoadSet loadSet = steelColumnBase.LoadsGroup[0].LoadSets[0];
             ForceParameter forceParameter = new ForceParameter();
             loadSet.ForceParameters.Add(forceParameter);
-            forceParameter.Kind_id = 1;
+            forceParameter.KindId = 1;
             forceParameter.CrcValue = -100000;
             loadSet.PartialSafetyFactor = 1;
 
@@ -137,7 +137,7 @@ namespace WallTest.SC
             LoadSet loadSet = steelColumnBase.LoadsGroup[0].LoadSets[0];
             ForceParameter forceParameter = new ForceParameter();
             loadSet.ForceParameters.Add(forceParameter);
-            forceParameter.Kind_id = 1;
+            forceParameter.KindId = 1;
             forceParameter.CrcValue = -100000;
             loadSet.PartialSafetyFactor = 1;
 
@@ -172,7 +172,7 @@ namespace WallTest.SC
             LoadSet loadSet = steelColumnBase.LoadsGroup[0].LoadSets[0];
             ForceParameter forceParameter = new ForceParameter();
             loadSet.ForceParameters.Add(forceParameter);
-            forceParameter.Kind_id = 1;
+            forceParameter.KindId = 1;
             forceParameter.CrcValue = -100000;
             loadSet.PartialSafetyFactor = 1;
 
@@ -209,7 +209,7 @@ namespace WallTest.SC
             LoadSet loadSet = steelColumnBase.LoadsGroup[0].LoadSets[0];
             ForceParameter forceParameter = new ForceParameter();
             loadSet.ForceParameters.Add(forceParameter);
-            forceParameter.Kind_id = 1;
+            forceParameter.KindId = 1;
             forceParameter.CrcValue = -100000;
             loadSet.PartialSafetyFactor = 1;
 
@@ -246,7 +246,7 @@ namespace WallTest.SC
             LoadSet loadSet = steelColumnBase.LoadsGroup[0].LoadSets[0];
             ForceParameter forceParameter = new ForceParameter();
             loadSet.ForceParameters.Add(forceParameter);
-            forceParameter.Kind_id = 1;
+            forceParameter.KindId = 1;
             forceParameter.CrcValue = -100000;
             loadSet.PartialSafetyFactor = 1;
 

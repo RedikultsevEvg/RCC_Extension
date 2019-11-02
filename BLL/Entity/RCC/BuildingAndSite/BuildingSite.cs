@@ -55,24 +55,8 @@ namespace RDBLL.Entity.RCC.BuildingAndSite
                 if (Convert.ToInt32(dataTable.Rows[i].ItemArray[0]) == Id)
                 {
                     this.Id = Id;
-                    //У объекта нет родителя, поэтому
-                    //this.ParentId = Convert.ToInt32(dataTable.Rows[i].ItemArray[1]);
                     this.Name = Convert.ToString(dataTable.Rows[i].ItemArray[2]);
                     this.Buildings=GetEntity.GetBuildings(dataSet, this);
-                    //childTable = dataSet.Tables["Buildings"];
-                    //if (childTable != null)
-                    //{
-                    //    for (int j = 0; j < childTable.Rows.Count; j++)
-                    //    {
-                    //        if (Convert.ToInt32(childTable.Rows[j].ItemArray[1]) == this.Id)
-                    //        {
-                    //            Building newObject = new Building(this);
-                    //            //где-то тут происходит неправильное присвоение
-                    //            int childId = Convert.ToInt32(childTable.Rows[j].ItemArray[0]);
-                    //            newObject.OpenFromDataSet(dataSet, childId);
-                    //        }
-                    //    }
-                    //}
                 }
             }
         }

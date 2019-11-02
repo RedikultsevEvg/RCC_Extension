@@ -5,45 +5,80 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Collections.ObjectModel;
 using RDBLL.Common.Service;
+using RDBLL.Common.Interfaces;
+using System.Data;
 
 namespace RDBLL.Forces
 {
     /// <summary>
     ///Клас комбинации загружений 
     /// </summary>
-    public class LoadSet : IEquatable<LoadSet>
+    public class LoadSet : IEquatable<LoadSet>, ISavableToDataSet
     {
         #region
         public int Id { get; set; }
-        public ForcesGroup ForcesGroup { get; set; } //Обратная ссылка на родительскую группу нагруок
+        public List<ForcesGroup> ForcesGroups { get; set; } //Обратная ссылка на родительскую группу нагруок
         public string Name { get; set; } //Наименование
         public double PartialSafetyFactor { get; set; } //Коэффициент надежности по нагрузке
         public bool IsLiveLoad {get; set; }//Флаг временной нагрузки
         public bool IsCombination { get; set; } //Флаг комбинации
         public bool BothSign { get; set; } //Флаг знакопеременной нагрузки
         public ObservableCollection<ForceParameter> ForceParameters { get; set; }
-        #endregion
-        //Constructors
-        #region
+        #endregion       
+        #region Constructors
         public LoadSet()
         {
+            ForcesGroups = new List<ForcesGroup>();
             ForceParameters = new ObservableCollection<ForceParameter>();
         }
 
         public LoadSet(ForcesGroup forcesGroup)
         {
             Id = ProgrammSettings.CurrentId;
-            ForcesGroup = forcesGroup;
+            ForcesGroups = new List<ForcesGroup>();
+            ForceParameters = new ObservableCollection<ForceParameter>();
+            ForcesGroups.Add(forcesGroup);
             forcesGroup.SteelBases[0].IsLoadCasesActual = false;
             Name = "Новая нагрузка";
             PartialSafetyFactor = 1.1;
             IsLiveLoad = false;
             IsCombination = false;
             BothSign = false;
-            ForceParameters = new ObservableCollection<ForceParameter>();
+            
         }
         #endregion
+        #region Methods
+        public void SaveToDataSet(DataSet dataSet)
+        {
+            DataTable dataTable;
+            DataRow dataRow;
+            dataTable = dataSet.Tables["LoadSets"];
+            dataRow = dataTable.NewRow();
+            dataRow.ItemArray = new object[]
+            { Id, Name, PartialSafetyFactor, IsLiveLoad, IsCombination, BothSign
+            };
+            dataTable.Rows.Add(dataRow);
 
+            dataTable = dataSet.Tables["ForcesGroupLoadSets"];
+            foreach (ForcesGroup forcesGroup in ForcesGroups)
+            {
+                dataRow = dataTable.NewRow();
+                dataRow.ItemArray = new object[]
+                { forcesGroup.Id, this.Id
+                };
+                dataTable.Rows.Add(dataRow);
+            }
+            foreach (ForceParameter forceParameter in ForceParameters)
+            {
+                forceParameter.SaveToDataSet(dataSet);
+            }
+        }
+
+        public void OpenFromDataSet(DataSet dataSet, int Id)
+        {
+
+        }
+        #endregion
         //IEquatable
         public bool Equals(LoadSet other)
         {
