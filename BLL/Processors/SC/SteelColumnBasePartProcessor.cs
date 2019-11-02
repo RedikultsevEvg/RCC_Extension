@@ -8,9 +8,9 @@ using RDBLL.Entity.SC.Column;
 using RDBLL.Common.Geometry;
 using System.Windows.Forms;
 using RDBLL.Forces;
-using RDBLL.Entity.Results.SC;
+/* using RDBLL.Entity.Results.SC; */
 using RDBLL.Processors.Forces;
-using RDBLL.Common.Geometry;
+/* using RDBLL.Common.Geometry; */
 using RDBLL.Entity.Results.Forces;
 
 namespace RDBLL.Processors.SC
