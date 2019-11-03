@@ -7,7 +7,7 @@
         xmlns:local="clr-namespace:RDUIL.WPF_Windows"
         xmlns:msControl="clr-namespace:MyCustomControl"
         mc:Ignorable="d"
-        Title="База колонны" Height="400" Width="500" Background="White" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
+        Title="База колонны" Height="400" Width="520" Background="White" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
     <Window.Resources>
         <Convert:LinearSizeConverter x:Key="LinearSizeConverter"/>
         <Convert:StressConverter x:Key="StressConverter"/>
@@ -20,12 +20,13 @@
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width ="*"/>
-                <ColumnDefinition Width ="330"/>
+                <ColumnDefinition Width ="380"/>
                 <ColumnDefinition Width ="110"/>
             </Grid.ColumnDefinitions>
             <StackPanel Grid.Column="1">
                 <Grid>
                     <Grid.RowDefinitions>
+                        <RowDefinition Height="30"/>
                         <RowDefinition Height="30"/>
                         <RowDefinition Height="30"/>
                         <RowDefinition Height="30"/>
@@ -40,14 +41,20 @@
                     <TextBlock x:Name="tbName" Style="{StaticResource PropertyTextBlock}" Text="Наименование"/>
                     <TextBlock x:Name="tbWidth" Grid.Row="1" Style="{StaticResource PropertyTextBlock}" Text="Ширина (вдоль оси X)"/>
                     <TextBlock x:Name="tbLength" Grid.Row="2" Style="{StaticResource PropertyTextBlock}" Text="Длина (вдоль оси Y)"/>
-                    <TextBlock x:Name="tbThicness" Grid.Row="3" Style="{StaticResource PropertyTextBlock}" Text="Толщина"/>
+                    <TextBlock x:Name="tbThickness" Grid.Row="3" Style="{StaticResource PropertyTextBlock}" Text="Толщина"/>
+                    <TextBlock x:Name="tbSteelStrength" Grid.Row="4" Style="{StaticResource PropertyTextBlock}" Text="Расчетное сопротивление стали"/>
+                    <TextBlock x:Name="tbConcreteStrength" Grid.Row="5" Style="{StaticResource PropertyTextBlock}" Text="Расчетное сопротивление бетона"/>
                     <TextBox x:Name="tbxName" Grid.Column="1" Style="{StaticResource PropertyTextBox}" Text="{Binding Path=Name}"/>
                     <TextBox x:Name="tbxWidth" Grid.Row="1" Grid.Column="1" Style="{StaticResource PropertyTextBox}" Text="{Binding Path=Width, Converter={StaticResource LinearSizeConverter}}"/>
                     <TextBox x:Name="tbxLength" Grid.Row="2" Grid.Column="1" Style="{StaticResource PropertyTextBox}" Text="{Binding Path=Length, Converter={StaticResource LinearSizeConverter}}"/>
                     <TextBox x:Name="tbxThickness" Grid.Row="3" Grid.Column="1" Style="{StaticResource PropertyTextBox}" Text="{Binding Path=Thickness, Converter={StaticResource LinearSizeConverter}}"/>
+                    <TextBox x:Name="tbxSteelStrength" Grid.Row="4" Grid.Column="1" Style="{StaticResource PropertyTextBox}" Text="{Binding Path=SteelStrength, Converter={StaticResource StressConverter}}"/>
+                    <TextBox x:Name="tbxConcreteStrength" Grid.Row="5" Grid.Column="1" Style="{StaticResource PropertyTextBox}" Text="{Binding Path=ConcreteStrength, Converter={StaticResource StressConverter}}"/>
                     <TextBlock Grid.Column="2" Grid.Row="1" x:Name="tbWidthMeasure" Style="{StaticResource PropertyTextBlock}" Text="мм" />
                     <TextBlock Grid.Column="2" Grid.Row="2" x:Name="tbLengthMeasure" Style="{StaticResource PropertyTextBlock}" Text="мм" />
                     <TextBlock Grid.Column="2" Grid.Row="3" x:Name="tbThicknessMeasure" Style="{StaticResource PropertyTextBlock}" Text="мм" />
+                    <TextBlock Grid.Column="2" Grid.Row="4" x:Name="tbSteelStrengthMeasure" Style="{StaticResource PropertyTextBlock}" Text="МПа" />
+                    <TextBlock Grid.Column="2" Grid.Row="5" x:Name="tbConcreteStrengthMeasure" Style="{StaticResource PropertyTextBlock}" Text="МПа" />
                 </Grid>
                 <Canvas x:Name="cvBase" Margin="5" Height="220"/>
             </StackPanel>
@@ -97,7 +104,7 @@
                 </Button.Effect>
                 <Image x:Name="OK_png" Style="{StaticResource ServiceButtonImage}" Source="{DynamicResource IconOK}"/>
             </Button>
-            <Button x:Name="btnCancel" Style="{StaticResource ServiceButton}" HorizontalAlignment="Stretch" Click="btnCancel_Click">
+            <Button x:Name="btnCancel" Style="{StaticResource ServiceButton}" HorizontalAlignment="Stretch" Click="btnCancel_Click" IsEnabled="False">
                 <Button.Effect>
                     <DropShadowEffect Opacity="0.6"/>
                 </Button.Effect>

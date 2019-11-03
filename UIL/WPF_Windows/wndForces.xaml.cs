@@ -15,6 +15,7 @@ using RDBLL.Forces;
 using RDBLL.Entity.SC.Column;
 using System.Collections.ObjectModel;
 using Winforms = System.Windows.Forms;
+using RDBLL.Common.Service;
 
 namespace RDUIL.WPF_Windows
 {
@@ -38,6 +39,7 @@ namespace RDUIL.WPF_Windows
             try
             {
                 _forcesGroup.SteelBases[0].IsLoadCasesActual = false;
+                ProgrammSettings.IsDataChanged = true;
                 this.Close();
             }
             catch (Exception ex)
@@ -102,7 +104,9 @@ namespace RDUIL.WPF_Windows
         {
             if (lvLoadSet.SelectedIndex >= 0)
             {
-                _forcesGroup.LoadSets[lvLoadSet.SelectedIndex].ForceParameters.Add(new ForceParameter { KindId = 1 });
+                int a = lvLoadSet.SelectedIndex;
+                LoadSet loadSet = _forcesGroup.LoadSets[a];
+                loadSet.ForceParameters.Add(new ForceParameter(loadSet) { KindId = 1 });
             }
             else
             {

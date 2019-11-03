@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Data;
+using DAL.Common;
 
 namespace CSL.DataSets.SC
 {
@@ -12,30 +13,48 @@ namespace CSL.DataSets.SC
         public static DataSet GetDataSet()
         {
             DataSet dataSet = new DataSet();
+            DataTable newTable;
             #region SteelBases
             //Базы стальных колонн
             DataTable SteelBases = new DataTable("SteelBases");
             dataSet.Tables.Add(SteelBases);
-            DataColumn SteelBaseId = new DataColumn("Id", Type.GetType("System.Int32"));
+            DsOperation.AddIdColumn(SteelBases);
             DataColumn SteelBasePicture = new DataColumn("Picture", Type.GetType("System.Byte[]"));
-            DataColumn SteelBaseName = new DataColumn("Name", Type.GetType("System.String"));
-            DataColumn SteelBaseWidth = new DataColumn("Width", Type.GetType("System.Double"));
-            DataColumn SteelBaseLength = new DataColumn("Length", Type.GetType("System.Double"));
-            DataColumn SteelBaseArea = new DataColumn("Area", Type.GetType("System.Double"));
-            DataColumn SteelBaseWx = new DataColumn("Wx", Type.GetType("System.Double"));
-            DataColumn SteelBaseWy = new DataColumn("Wy", Type.GetType("System.Double"));
-
-            SteelBases.Columns.Add(SteelBaseId);
             SteelBases.Columns.Add(SteelBasePicture);
-            SteelBases.Columns.Add(SteelBaseName);
-            SteelBases.Columns.Add(SteelBaseWidth);
-            SteelBases.Columns.Add(SteelBaseLength);
-            SteelBases.Columns.Add(SteelBaseArea);
-            SteelBases.Columns.Add(SteelBaseWx);
-            SteelBases.Columns.Add(SteelBaseWy);
+            DsOperation.AddNameColumn(SteelBases);
+            DsOperation.AddDoubleColumn(SteelBases, "SteelStrength");
+            DsOperation.AddDoubleColumn(SteelBases, "ConcreteStrength");
+            DsOperation.AddDoubleColumn(SteelBases, "Width");
+            DsOperation.AddDoubleColumn(SteelBases, "Length");
+            DsOperation.AddDoubleColumn(SteelBases, "Thickness");
+            DsOperation.AddDoubleColumn(SteelBases, "Area");
+            DsOperation.AddDoubleColumn(SteelBases, "Wx");
+            DsOperation.AddDoubleColumn(SteelBases, "Wy");
             #endregion
             #region Loads
-
+            newTable = new DataTable("LoadSets");
+            dataSet.Tables.Add(newTable);
+            DsOperation.AddIdColumn(newTable);
+            DsOperation.AddFkIdColumn("SteelBases", "SteelBaseId", newTable);
+            DsOperation.AddNameColumn(newTable);
+            DsOperation.AddDoubleColumn(newTable, "PartialSafetyFactor");
+            DsOperation.AddStringColumn(newTable, "CrcForceDescription");
+            DsOperation.AddStringColumn(newTable, "DesignForceDescription");
+            #endregion
+            #region LoadForceParameters
+            newTable = new DataTable("LoadSetsForceParameters");
+            dataSet.Tables.Add(newTable);
+            DsOperation.AddIntColumn(newTable, "Id");
+            DsOperation.AddFkIdColumn("SteelBases", "SteelBaseId", newTable);
+            DsOperation.AddStringColumn(newTable, "SteelBaseName");
+            DsOperation.AddIntColumn(newTable, "LoadSetId");
+            DsOperation.AddStringColumn(newTable, "LoadSetName");
+            DsOperation.AddStringColumn(newTable, "Description");
+            DsOperation.AddStringColumn(newTable, "LongLabel");
+            DsOperation.AddStringColumn(newTable, "ShortLabel");
+            DsOperation.AddStringColumn(newTable, "Unit");
+            DsOperation.AddDoubleColumn(newTable, "CrcValue");
+            DsOperation.AddDoubleColumn(newTable, "DesignValue");
             #endregion
             #region LoadCases
             DataTable LoadCases = new DataTable("LoadCases");
@@ -54,7 +73,7 @@ namespace CSL.DataSets.SC
             LoadCases.Columns.Add(LoadCaseForceDescription);
             #endregion
             #region ForceParameters
-            DataTable ForceParameters = new DataTable("ForceParameters");
+            DataTable ForceParameters = new DataTable("LoadCasesForceParameters");
             dataSet.Tables.Add(ForceParameters);
 
             DataColumn ForceParameterId = new DataColumn("Id", Type.GetType("System.Int32"));
@@ -81,23 +100,17 @@ namespace CSL.DataSets.SC
             DataColumn SteelBaseIdInPart = new DataColumn("SteelBaseId", Type.GetType("System.Int32"));
             DataColumn SteelBasePartPicture = new DataColumn("Picture", Type.GetType("System.Byte[]"));
             DataColumn SteelBasesPartName = new DataColumn("Name", Type.GetType("System.String"));
-            DataColumn SteelBasesPartCenterX = new DataColumn("CenterX", Type.GetType("System.Double"));
-            DataColumn SteelBasesPartCenterY = new DataColumn("CenterY", Type.GetType("System.Double"));
-            DataColumn SteelBasesPartWidth = new DataColumn("Width", Type.GetType("System.Double"));
-            DataColumn SteelBasesPartLength = new DataColumn("Length", Type.GetType("System.Double"));
-            DataColumn SteelBasesPartMaxBedStress = new DataColumn("MaxBedStress", Type.GetType("System.Double"));
-            DataColumn SteelBasesPartMaxSteelStress = new DataColumn("MaxSteelStress", Type.GetType("System.Double"));
-
             SteelBasesParts.Columns.Add(SteelBasesPartId);
             SteelBasesParts.Columns.Add(SteelBaseIdInPart);
             SteelBasesParts.Columns.Add(SteelBasePartPicture);
             SteelBasesParts.Columns.Add(SteelBasesPartName);
-            SteelBasesParts.Columns.Add(SteelBasesPartCenterX);
-            SteelBasesParts.Columns.Add(SteelBasesPartCenterY);
-            SteelBasesParts.Columns.Add(SteelBasesPartWidth);
-            SteelBasesParts.Columns.Add(SteelBasesPartLength);
-            SteelBasesParts.Columns.Add(SteelBasesPartMaxBedStress);
-            SteelBasesParts.Columns.Add(SteelBasesPartMaxSteelStress);
+            DsOperation.AddDoubleColumn(SteelBasesParts, "CenterX");
+            DsOperation.AddDoubleColumn(SteelBasesParts, "CenterY");
+            DsOperation.AddDoubleColumn(SteelBasesParts, "Width");
+            DsOperation.AddDoubleColumn(SteelBasesParts, "Length");
+            DsOperation.AddDoubleColumn(SteelBasesParts, "MaxBedStress");
+            DsOperation.AddDoubleColumn(SteelBasesParts, "MaxSteelStress");
+            DsOperation.AddDoubleColumn(SteelBasesParts, "RecomendedThickness");
             #endregion
             #region SteelBolts
             DataTable SteelBasesBolts = new DataTable("SteelBasesBolts");

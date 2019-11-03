@@ -82,6 +82,8 @@ namespace RDBLL.Entity.SC.Column
             WorkCondCoef = 1.1;
             SteelClassId = 1;
             ConcreteClassId = 1;
+            SteelStrength = 240000000;
+            ConcreteStrength = 10000000;
             LoadsGroup = new ObservableCollection<ForcesGroup>();
             LoadsGroup.Add(new ForcesGroup(this));
             SteelBaseParts = new ObservableCollection<SteelBasePart>();

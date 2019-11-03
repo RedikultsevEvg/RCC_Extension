@@ -1,22 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using RDBLL.Common.Service;
+using RDBLL.DrawUtils.SteelBase;
+using RDBLL.Entity.SC.Column;
+using System;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
-using RDBLL.Entity.SC.Column;
-using System.Collections.ObjectModel;
-using RDBLL.Processors.SC;
 using Winforms = System.Windows.Forms;
-using RDBLL.DrawUtils.SteelBase;
-using RDBLL.Entity.MeasureUnits;
 
 namespace RDUIL.WPF_Windows
 {
@@ -45,6 +34,7 @@ namespace RDUIL.WPF_Windows
         {
             try
             {
+                ProgrammSettings.IsDataChanged = true;
                 this.Close();
             }
             catch(Exception ex)

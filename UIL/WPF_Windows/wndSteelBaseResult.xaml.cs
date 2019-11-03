@@ -23,5 +23,10 @@ namespace RDUIL.WPF_Windows
         {
             InitializeComponent();
         }
+
+        private void BtnOK_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }

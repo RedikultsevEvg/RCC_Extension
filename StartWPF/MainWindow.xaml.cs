@@ -33,11 +33,11 @@ namespace StartWPF
             ProgrammSettings.InicializeNew();
             List<CalcType> calcTypes = new List<CalcType>(); 
 
-            CalcType calcTypeRCC = new CalcType();
-            calcTypeRCC.TypeName = "Железобетон";
-            calcTypeRCC.ImageName = "Bridge.jpg";
-            calcTypeRCC.RegisterDelegate(new CalcType.AddCommandDelegate(AddItemWrapPanel));
-            calcTypes.Add(calcTypeRCC);
+            //CalcType calcTypeRCC = new CalcType();
+            //calcTypeRCC.TypeName = "Железобетон";
+            //calcTypeRCC.ImageName = "Bridge.jpg";
+            //calcTypeRCC.RegisterDelegate(new CalcType.AddCommandDelegate(AddItemWrapPanel));
+            //calcTypes.Add(calcTypeRCC);
 
             CalcType calcTypeSC = new CalcType();
             calcTypeSC.TypeName = "Металл";
@@ -51,11 +51,11 @@ namespace StartWPF
                 stpCalcTypes.Children.Add(calcTypeControl);
             }
             
-            CalcKind calcKindWall = new CalcKind();
-            calcKindWall.KindName = "Расчет железобетонных стен";
-            calcKindWall.KindAddition = "Подсчет объема бетона для железобетонных стен";
-            calcKindWall.RegisterDelegate(new CalcKind.CommandDelegate(ShowWall));
-            calcTypeRCC.CalcKinds.Add(calcKindWall);
+            //CalcKind calcKindWall = new CalcKind();
+            //calcKindWall.KindName = "Расчет железобетонных стен";
+            //calcKindWall.KindAddition = "Подсчет объема бетона для железобетонных стен";
+            //calcKindWall.RegisterDelegate(new CalcKind.CommandDelegate(ShowWall));
+            //calcTypeRCC.CalcKinds.Add(calcKindWall);
 
             CalcKind calcKindSteelBase = new CalcKind();
             calcKindSteelBase.KindName = "Расчет баз стальных колонн";
@@ -148,6 +148,30 @@ namespace StartWPF
         {
             wndMeasureUnits newWindow = new wndMeasureUnits();
             newWindow.ShowDialog();
+        }
+
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            if (ProgrammSettings.IsDataChanged)
+            {
+                winForms.DialogResult result = winForms.MessageBox.Show(
+                "Сохранить данные перед закрытием?",
+                "Файл не сохранен",
+                winForms.MessageBoxButtons.YesNo,
+                winForms.MessageBoxIcon.Information,
+                winForms.MessageBoxDefaultButton.Button1,
+                winForms.MessageBoxOptions.DefaultDesktopOnly);
+
+                if (result == winForms.DialogResult.Yes)
+                {
+                    ProgrammSettings.SaveProjectToFile(false);
+                }
+
+                if (result == winForms.DialogResult.No)
+                {
+                    //Ничего не делаем
+                }
+            }
         }
     }
 }

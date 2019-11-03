@@ -28,6 +28,7 @@ namespace RDUIL.WPF_Windows
 
         private void BtnOK_Click(object sender, RoutedEventArgs e)
         {
+            ProgrammSettings.IsDataChanged = true;
             this.Close();
         }
     }
