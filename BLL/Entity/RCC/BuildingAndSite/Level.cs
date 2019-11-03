@@ -41,20 +41,6 @@ namespace RDBLL.Entity.RCC.BuildingAndSite
             return volume;
 
         }
-        public XmlElement SaveToXMLNode(XmlDocument xmlDocument)
-        {
-            XmlElement xmlNode = xmlDocument.CreateElement("Level");
-            XMLOperations.AddAttribute(xmlNode, xmlDocument, "Name", Name);
-            XMLOperations.AddAttribute(xmlNode, xmlDocument, "FloorLevel", Convert.ToString(FloorLevel));
-            XMLOperations.AddAttribute(xmlNode, xmlDocument, "Height", Convert.ToString(Height));
-            XMLOperations.AddAttribute(xmlNode, xmlDocument, "TopOffset", Convert.ToString(TopOffset));
-            foreach (Wall obj in Walls)
-            {
-                xmlNode.AppendChild(obj.SaveToXMLNode(xmlDocument));
-            }
-            return xmlNode;
-        }
-
         public void SaveToDataSet(DataSet dataSet)
         {
             DataTable dataTable;

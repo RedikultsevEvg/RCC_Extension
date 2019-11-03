@@ -14,6 +14,7 @@ using System.Windows.Shapes;
 using RDBLL.Entity.SC.Column;
 using Winforms = System.Windows.Forms;
 using RDBLL.DrawUtils.SteelBase;
+using RDBLL.Common.Service;
 
 namespace RDUIL.WPF_Windows
 {
@@ -38,6 +39,7 @@ namespace RDUIL.WPF_Windows
             {
                 this.DialogResult = true;
                 _steelColumnBase.IsBoltsActual = false;
+                ProgrammSettings.IsDataChanged = true;
                 this.Close();
             }
             catch (Exception ex)

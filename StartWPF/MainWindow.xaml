@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:StartWPF"
         xmlns:service="clr-namespace:RDBLL.Common.Service;assembly=BLL"
         mc:Ignorable="d"
-        Title="RD-Калькулятор" Height="427" Width="904" MinHeight="500" MinWidth="600">
+        Title="RD-Калькулятор" Height="427" Width="904" MinHeight="500" MinWidth="600" Closing="Window_Closing">
     <Window.Resources>
     </Window.Resources>
     <Grid >

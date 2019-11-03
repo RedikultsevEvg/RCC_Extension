@@ -251,8 +251,6 @@ namespace RDBLL.Common.Service
                         select dataRow;
             foreach (var dataRow in query)
             {
-                //var tmpForceParamKind = from t in ProgrammSettings.ForceParamKinds where t.Id == dataRow.Field<int>("Id") select t;
-                
                 ForceParameter newObject = new ForceParameter
                 {
                     Id = dataRow.Field<int>("Id"),

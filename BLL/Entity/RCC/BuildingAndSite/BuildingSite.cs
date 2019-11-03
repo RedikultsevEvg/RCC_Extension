@@ -19,18 +19,6 @@ namespace RDBLL.Entity.RCC.BuildingAndSite
         public int Id { get; set; }
         public string Name { get; set; }
         public ObservableCollection<Building> Buildings { get; set; }
-
-        public XmlElement SaveToXMLNode(XmlDocument xmlDocument)
-        {
-            XmlElement xmlNode = xmlDocument.CreateElement("BuildingSite");
-            XMLOperations.AddAttribute(xmlNode, xmlDocument, "Name", Name);
-            foreach (Building obj in Buildings)
-            {
-                xmlNode.AppendChild(obj.SaveToXMLNode(xmlDocument));
-            }
-            return xmlNode;
-        }
-
         public void SaveToDataSet(DataSet dataSet)
         {
             DataTable dataTable;
@@ -44,10 +32,9 @@ namespace RDBLL.Entity.RCC.BuildingAndSite
                 building.SaveToDataSet(dataSet);
             }
         }
-
         public void OpenFromDataSet(DataSet dataSet, int Id)
         {
-            DataTable dataTable, childTable;
+            DataTable dataTable;
             dataTable = dataSet.Tables["BuildingSites"];
 
             for (int i = 0; i < dataTable.Rows.Count; i++)
@@ -60,33 +47,16 @@ namespace RDBLL.Entity.RCC.BuildingAndSite
                 }
             }
         }
-
         public object Clone()
         {
             return this.MemberwiseClone();
         }
-
         public BuildingSite()
         {
             Id = ProgrammSettings.CurrentId;
             Name = "Мой объект";
             Buildings = new ObservableCollection<Building>();
         }
-
-        public BuildingSite(XmlNode xmlNode)
-        {
-            foreach (XmlAttribute obj in xmlNode.Attributes)
-            {
-                if (obj.Name == "Name") Name = obj.Value;
-            }
-            Buildings = new ObservableCollection<Building>();
-            foreach (XmlNode childNode in xmlNode.ChildNodes)
-            {
-                if (childNode.Name == "Building") Buildings.Add(new Building(this, childNode));
-            }
-        }
-
-
     }
     /// <summary>
     /// 
@@ -100,25 +70,6 @@ namespace RDBLL.Entity.RCC.BuildingAndSite
         public ObservableCollection<Level> Levels { get; set; }
         public ObservableCollection<WallType> WallTypeList { get; set; }
         public ObservableCollection<OpeningType> OpeningTypeList { get; set; }
-
-        public XmlElement SaveToXMLNode(XmlDocument xmlDocument)
-        {
-            XmlElement xmlNode = xmlDocument.CreateElement("Building");
-            XMLOperations.AddAttribute(xmlNode, xmlDocument, "Name", Name);
-            foreach (WallType obj in WallTypeList)
-            {
-                xmlNode.AppendChild(obj.SaveToXMLNode(xmlDocument));
-            }
-            foreach (OpeningType obj in OpeningTypeList)
-            {
-                xmlNode.AppendChild(obj.SaveToXMLNode(xmlDocument));
-            }
-            foreach (Level obj in Levels)
-            {
-                xmlNode.AppendChild(obj.SaveToXMLNode(xmlDocument));
-            }
-            return xmlNode;
-        }
         public Building()
         {
             Levels = new ObservableCollection<Level>();
@@ -138,7 +89,6 @@ namespace RDBLL.Entity.RCC.BuildingAndSite
         public Building(BuildingSite buildingSite, XmlNode xmlNode)
         {
         }
-
         public void SaveToDataSet(DataSet dataSet)
         {
             DataTable dataTable;
@@ -152,24 +102,9 @@ namespace RDBLL.Entity.RCC.BuildingAndSite
                 level.SaveToDataSet(dataSet);
             }
         }
-
         public void OpenFromDataSet(DataSet dataSet, int Id)
         {
-            //DataTable dataTable;
-            //dataTable = dataSet.Tables["Buildings"];
-
-            //for (int i = 0; i < dataTable.Rows.Count; i++)
-            //{
-            //    if (Convert.ToInt32(dataTable.Rows[i].ItemArray[0]) == Id)
-            //    {
-            //        this.Id = Id;
-            //        this.BuildingSiteId = Convert.ToInt32(dataTable.Rows[i].ItemArray[1]);
-            //        this.Name = Convert.ToString(dataTable.Rows[i].ItemArray[2]);
-            //        this.Levels = GetEntity.GetLevels(dataSet, this);
-            //    }
-            //}
         }
-
         public object Clone()
         {
             return this.MemberwiseClone();

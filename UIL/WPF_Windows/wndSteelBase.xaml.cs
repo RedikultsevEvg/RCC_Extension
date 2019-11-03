@@ -14,6 +14,7 @@ using System.Windows.Shapes;
 using RDBLL.Entity.SC.Column;
 using CSL.Reports;
 using RDBLL.Entity.MeasureUnits;
+using RDBLL.Common.Service;
 
 namespace RDUIL.WPF_Windows
 {
@@ -32,6 +33,8 @@ namespace RDUIL.WPF_Windows
             tbWidthMeasure.Text = MeasureUnitConverter.GetUnitLabelText(0);
             tbLengthMeasure.Text = MeasureUnitConverter.GetUnitLabelText(0);
             tbThicknessMeasure.Text = MeasureUnitConverter.GetUnitLabelText(0);
+            tbSteelStrengthMeasure.Text = MeasureUnitConverter.GetUnitLabelText(3);
+            tbConcreteStrengthMeasure.Text = MeasureUnitConverter.GetUnitLabelText(3);
         }
 
         private void btnOK_Click(object sender, RoutedEventArgs e)
@@ -39,6 +42,7 @@ namespace RDUIL.WPF_Windows
             try
             {
                 //this.DialogResult = OK;
+                ProgrammSettings.IsDataChanged = true;
                 this.Close();
             }
             catch (Exception ex)
@@ -62,7 +66,8 @@ namespace RDUIL.WPF_Windows
         {
             ResultReport resultReport = new ResultReport(_steelColumnBase.Level.Building.BuildingSite);
             resultReport.PrepareReport();
-            resultReport.ShowReport();
+            resultReport.ShowReport("SteelBases.frx");
+            resultReport.ShowReport("Assignment.frx");
         }
 
         private void BtnParts_Click(object sender, RoutedEventArgs e)

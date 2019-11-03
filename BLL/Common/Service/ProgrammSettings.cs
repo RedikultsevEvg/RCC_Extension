@@ -198,14 +198,6 @@ namespace RDBLL.Common.Service
                 ClearAll();
                 InicializeNew();
                 OpenExistDataset(FilePath);
-
-                //XmlDocument xmlDocument = new XmlDocument();
-                //xmlDocument.Load(FilePath);
-                //XmlElement xmlRoot = xmlDocument.DocumentElement;
-                //foreach (XmlNode childNode in xmlRoot.ChildNodes)
-                //{
-                //    if (childNode.Name == "BuildingSite") BuildingSite = new BuildingSite(childNode);
-                //}
                 IsDataChanged = false;
                 return true;
             }
