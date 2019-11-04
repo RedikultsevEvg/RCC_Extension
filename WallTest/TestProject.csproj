@@ -7,8 +7,8 @@
     <ProjectGuid>{C6486C26-66C8-464C-BCC1-C8312CFEA5BA}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>WallTest</RootNamespace>
-    <AssemblyName>WallTest</AssemblyName>
+    <RootNamespace>Test</RootNamespace>
+    <AssemblyName>TestProject</AssemblyName>
     <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -48,7 +48,11 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="SC\SteelBasePartTests.cs" />
+    <Compile Include="Forces\LoadCase.cs" />
+    <Compile Include="SC\SteelBasePart\CheckMoment\FourSides.cs" />
+    <Compile Include="SC\SteelBasePart\CheckMoment\OneSide.cs" />
+    <Compile Include="SC\SteelBasePart\CheckMoment\ThreeSides.cs" />
+    <Compile Include="SC\SteelBasePart\CheckMoment\TwoSides.cs" />
     <Compile Include="WallTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

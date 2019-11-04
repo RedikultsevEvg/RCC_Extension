@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27703.2035
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WallTest", "WallTest\WallTest.csproj", "{C6486C26-66C8-464C-BCC1-C8312CFEA5BA}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestProject", "WallTest\TestProject.csproj", "{C6486C26-66C8-464C-BCC1-C8312CFEA5BA}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StartWPF", "StartWPF\StartWPF.csproj", "{0B54FEC8-E466-4268-92F1-3FBFAA19BDAB}"
 EndProject

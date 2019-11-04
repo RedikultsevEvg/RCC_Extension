@@ -52,7 +52,6 @@ namespace RDBLL.Processors.SC
             {
                 result[0] = 0;
                 result[1] = 0;
-                //MessageBox.Show("Неверное приложение нагрузки - полный отрыв базы", "Ошибка");
                 return result;
             }
             switch (countFixSides)
@@ -97,7 +96,7 @@ namespace RDBLL.Processors.SC
         }
         #region //Функции вычисления изгибающего момента в плите в зависимости от закрепления сторон
         /// <summary>
-        /// Вычисляет изгибающий момент в участке плите для участка, опертого по одной стороне
+        /// Возвращает изгибающий момент в участке плите для участка, опертого по одной стороне
         /// </summary>
         /// <param name="maxStress">Максимальное напряжение по участку</param>
         /// <param name="basePart">Экземпляр участка</param>
@@ -177,7 +176,7 @@ namespace RDBLL.Processors.SC
             return maxMoment;
         }
         /// <summary>
-        /// Вычисляет изгибающий момент в участке плите для участка, опертого по трем сторонам
+        /// Возвращает изгибающий момент в участке плите для участка, опертого по трем сторонам
         /// </summary>
         /// <param name="maxStress">Максимальное напряжение по участку</param>
         /// <param name="basePart">Экземпляр участка</param>
@@ -220,7 +219,12 @@ namespace RDBLL.Processors.SC
                 koeff_betta = 0.5;
                 maxMoment = maxStress * koeff_b1 * koeff_b1 * koeff_betta;
             }
-            else
+            else if (ratio >2)
+            {
+                koeff_betta = 0.125;
+                maxMoment = maxStress * koeff_a1 * koeff_a1 * koeff_betta;
+            }
+            else 
             {
                 koeff_betta = MathOperation.InterpolateList(xValues23, yValues23, ratio);
                 maxMoment = maxStress * koeff_a1 * koeff_a1 * koeff_betta;

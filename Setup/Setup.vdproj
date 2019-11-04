@@ -15,20 +15,14 @@
     {
         "Entry"
         {
-        "MsmKey" = "8:_1ED372C49B207BE717968C4E5BA764BB"
-        "OwnerKey" = "8:_8D2DC15A7D2C4F76A2C7F487529A87B4"
+        "MsmKey" = "8:_14A53020F0B93F1BBD79DBF8AD694850"
+        "OwnerKey" = "8:_D6F950B5DFD8C9DE9E91CFF55A3C32BB"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_1ED372C49B207BE717968C4E5BA764BB"
         "OwnerKey" = "8:_6083FEFFEB5D189E79DD38CA07FFF0BC"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_258523874FC38FE20B11F06C43F804B4"
-        "OwnerKey" = "8:_8D2DC15A7D2C4F76A2C7F487529A87B4"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -51,8 +45,20 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_29CDF1B1B8BB5DF2109B38F36FCF8740"
-        "OwnerKey" = "8:_EC392F64C4C57B2C357A69E7B179D336"
+        "MsmKey" = "8:_29F3529C8DF2F3C487E03D43031CCBB7"
+        "OwnerKey" = "8:_258523874FC38FE20B11F06C43F804B4"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_29F3529C8DF2F3C487E03D43031CCBB7"
+        "OwnerKey" = "8:_1ED372C49B207BE717968C4E5BA764BB"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_43180C1739444EDB8BAADE7DDAA8A70F"
+        "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -63,25 +69,19 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_8BEB252B10D985D781EF95BFB37B2A3D"
-        "OwnerKey" = "8:_EC392F64C4C57B2C357A69E7B179D336"
+        "MsmKey" = "8:_8C7E07FE454A599026300F58086554C4"
+        "OwnerKey" = "8:_D6F950B5DFD8C9DE9E91CFF55A3C32BB"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_8D2DC15A7D2C4F76A2C7F487529A87B4"
+        "MsmKey" = "8:_9EB73F406A14422B85538843952FBBF8"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_CFDBB7B157554564828000AC77990C5B"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_EC392F64C4C57B2C357A69E7B179D336"
+        "MsmKey" = "8:_D6F950B5DFD8C9DE9E91CFF55A3C32BB"
         "OwnerKey" = "8:_1ED372C49B207BE717968C4E5BA764BB"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -94,7 +94,7 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_8D2DC15A7D2C4F76A2C7F487529A87B4"
+        "OwnerKey" = "8:_14A53020F0B93F1BBD79DBF8AD694850"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -118,25 +118,25 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_EC392F64C4C57B2C357A69E7B179D336"
+        "OwnerKey" = "8:_D6F950B5DFD8C9DE9E91CFF55A3C32BB"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_8BEB252B10D985D781EF95BFB37B2A3D"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_29CDF1B1B8BB5DF2109B38F36FCF8740"
+        "OwnerKey" = "8:_8C7E07FE454A599026300F58086554C4"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_258523874FC38FE20B11F06C43F804B4"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_29F3529C8DF2F3C487E03D43031CCBB7"
         "MsmSig" = "8:_UNDEFINED"
         }
     }
@@ -234,6 +234,37 @@
         }
         "File"
         {
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_14A53020F0B93F1BBD79DBF8AD694850"
+            {
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:TRUE"
+            "AssemblyAsmDisplayName" = "8:FastReport.Bars, Version=2019.4.11.0, Culture=neutral, PublicKeyToken=db7e5ce63278458c, processorArchitecture=MSIL"
+                "ScatterAssemblies"
+                {
+                    "_14A53020F0B93F1BBD79DBF8AD694850"
+                    {
+                    "Name" = "8:FastReport.Bars.dll"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:FastReport.Bars.dll"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_431B1DD368354DAA8D3B8069B31E2761"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
             "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_1ED372C49B207BE717968C4E5BA764BB"
             {
             "AssemblyRegister" = "3:1"
@@ -296,20 +327,20 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_29CDF1B1B8BB5DF2109B38F36FCF8740"
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_29F3529C8DF2F3C487E03D43031CCBB7"
             {
             "AssemblyRegister" = "3:1"
-            "AssemblyIsInGAC" = "11:TRUE"
-            "AssemblyAsmDisplayName" = "8:FastReport.Bars, Version=2019.3.12.0, Culture=neutral, PublicKeyToken=db7e5ce63278458c, processorArchitecture=MSIL"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:DAL, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
-                    "_29CDF1B1B8BB5DF2109B38F36FCF8740"
+                    "_29F3529C8DF2F3C487E03D43031CCBB7"
                     {
-                    "Name" = "8:FastReport.Bars.dll"
+                    "Name" = "8:DAL.DLL"
                     "Attributes" = "3:512"
                     }
                 }
-            "SourcePath" = "8:FastReport.Bars.dll"
+            "SourcePath" = "8:DAL.DLL"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_431B1DD368354DAA8D3B8069B31E2761"
@@ -325,6 +356,26 @@
             "Register" = "3:1"
             "Exclude" = "11:FALSE"
             "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_43180C1739444EDB8BAADE7DDAA8A70F"
+            {
+            "SourcePath" = "8:..\\StartWPF\\bin\\Release\\Reports\\SteelBases\\SteelBases.frx"
+            "TargetName" = "8:SteelBases.frx"
+            "Tag" = "8:"
+            "Folder" = "8:_7EB3919F78744B81AA515AD1F63895F2"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
             "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_6083FEFFEB5D189E79DD38CA07FFF0BC"
@@ -358,20 +409,20 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_8BEB252B10D985D781EF95BFB37B2A3D"
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_8C7E07FE454A599026300F58086554C4"
             {
             "AssemblyRegister" = "3:1"
-            "AssemblyIsInGAC" = "11:TRUE"
-            "AssemblyAsmDisplayName" = "8:FastReport.Editor, Version=2019.3.12.0, Culture=neutral, PublicKeyToken=db7e5ce63278458c, processorArchitecture=MSIL"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:FastReport.Editor, Version=2019.4.11.0, Culture=neutral, PublicKeyToken=db7e5ce63278458c, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
-                    "_8BEB252B10D985D781EF95BFB37B2A3D"
+                    "_8C7E07FE454A599026300F58086554C4"
                     {
-                    "Name" = "8:FastReport.Editor.dll"
+                    "Name" = "8:FastReport.Editor.DLL"
                     "Attributes" = "3:512"
                     }
                 }
-            "SourcePath" = "8:FastReport.Editor.dll"
+            "SourcePath" = "8:FastReport.Editor.DLL"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_431B1DD368354DAA8D3B8069B31E2761"
@@ -389,71 +440,40 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_8D2DC15A7D2C4F76A2C7F487529A87B4"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_9EB73F406A14422B85538843952FBBF8"
+            {
+            "SourcePath" = "8:..\\StartWPF\\bin\\Release\\Reports\\SteelBases\\Assignment.frx"
+            "TargetName" = "8:Assignment.frx"
+            "Tag" = "8:"
+            "Folder" = "8:_7EB3919F78744B81AA515AD1F63895F2"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_D6F950B5DFD8C9DE9E91CFF55A3C32BB"
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:UIL, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:FastReport, Version=2019.4.11.0, Culture=neutral, PublicKeyToken=db7e5ce63278458c, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
-                    "_8D2DC15A7D2C4F76A2C7F487529A87B4"
+                    "_D6F950B5DFD8C9DE9E91CFF55A3C32BB"
                     {
-                    "Name" = "8:UIL.dll"
+                    "Name" = "8:FastReport.DLL"
                     "Attributes" = "3:512"
                     }
                 }
-            "SourcePath" = "8:..\\StartWPF\\bin\\Release\\UIL.dll"
-            "TargetName" = "8:"
-            "Tag" = "8:"
-            "Folder" = "8:_431B1DD368354DAA8D3B8069B31E2761"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_CFDBB7B157554564828000AC77990C5B"
-            {
-            "SourcePath" = "8:..\\..\\Reports\\SteelBases.frx"
-            "TargetName" = "8:SteelBases.frx"
-            "Tag" = "8:"
-            "Folder" = "8:_C771476D543B410ABBF6D62FE0333ECD"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_EC392F64C4C57B2C357A69E7B179D336"
-            {
-            "AssemblyRegister" = "3:1"
-            "AssemblyIsInGAC" = "11:TRUE"
-            "AssemblyAsmDisplayName" = "8:FastReport, Version=2019.3.12.0, Culture=neutral, PublicKeyToken=db7e5ce63278458c, processorArchitecture=MSIL"
-                "ScatterAssemblies"
-                {
-                    "_EC392F64C4C57B2C357A69E7B179D336"
-                    {
-                    "Name" = "8:FastReport.dll"
-                    "Attributes" = "3:512"
-                    }
-                }
-            "SourcePath" = "8:FastReport.dll"
+            "SourcePath" = "8:FastReport.DLL"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_431B1DD368354DAA8D3B8069B31E2761"
@@ -475,7 +495,7 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:RD-Calculator, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:RD-Calculator, Version=1.0.0.1, Culture=neutral, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
                     "_F5E39D6AB7E84843B5DDB7C54B350BA4"
@@ -527,6 +547,17 @@
                     "Property" = "8:_87E238F8D9004D989B9CAB55E3D0CD0E"
                         "Folders"
                         {
+                            "{9EF0B969-E518-4E46-987F-47570745A589}:_7EB3919F78744B81AA515AD1F63895F2"
+                            {
+                            "Name" = "8:SteelBases"
+                            "AlwaysCreate" = "11:FALSE"
+                            "Condition" = "8:"
+                            "Transitive" = "11:FALSE"
+                            "Property" = "8:_2FBB65C295A0420F92A012D7C0760B65"
+                                "Folders"
+                                {
+                                }
+                            }
                         }
                     }
                 }
@@ -569,8 +600,8 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:RDCalculator"
-        "ProductCode" = "8:{511632A4-BB3D-4966-8A03-70E396EB4347}"
-        "PackageCode" = "8:{7A0FD8A9-054F-4938-B6ED-0D2AF72A93D3}"
+        "ProductCode" = "8:{2A935A18-0A91-4D7E-BC64-3DDB0CA78E04}"
+        "PackageCode" = "8:{F1D5100D-F0F4-4B38-8B5A-DC0B9C22F21A}"
         "UpgradeCode" = "8:{ABA47D1A-1364-406E-A365-D7A2F30B7D64}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
