@@ -50,7 +50,8 @@ namespace RDBLL.Processors.SC
             double stress;
             NdmArea ndmArea = steelBolt.SubPart.SteelArea;
             stress = NdmAreaProcessor.GetStrainFromCuvature(ndmArea, curvature)[1];
-            return stress;
+            if (stress > 0) { return stress; } else { return 0; } 
+            //return stress;
         }
 
         public static double GetMaxStressNonLinear(SteelBolt steelBolt, List<Curvature> curvatures)

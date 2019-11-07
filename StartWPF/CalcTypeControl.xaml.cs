@@ -23,6 +23,11 @@ namespace StartWPF
     public partial class CalcTypeControl : UserControl
     {
         private CalcType _calcType;
+        /// <summary>
+        /// Конструктор контрола выбора раздела расчета, например
+        /// железобетонные конструкции, металлические конструкции
+        /// </summary>
+        /// <param name="calcType"></param>
         public CalcTypeControl(CalcType calcType)
         {
             InitializeComponent();

@@ -34,7 +34,8 @@ namespace RDBLL.Entity.Common.NDM
         }
         public double GetSecantModulus(double epsilon)
         {
-            return MaterialModel.GetSecantModulus(epsilon);
+            double secantModulus = MaterialModel.GetSecantModulus(epsilon);
+            return secantModulus;
         }
     }
 }

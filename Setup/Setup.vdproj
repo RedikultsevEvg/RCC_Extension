@@ -16,18 +16,12 @@
         "Entry"
         {
         "MsmKey" = "8:_14A53020F0B93F1BBD79DBF8AD694850"
-        "OwnerKey" = "8:_D6F950B5DFD8C9DE9E91CFF55A3C32BB"
+        "OwnerKey" = "8:_6669924B961680127CD75C5A44D6D4A5"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_1ED372C49B207BE717968C4E5BA764BB"
-        "OwnerKey" = "8:_6083FEFFEB5D189E79DD38CA07FFF0BC"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_258523874FC38FE20B11F06C43F804B4"
         "OwnerKey" = "8:_6083FEFFEB5D189E79DD38CA07FFF0BC"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -41,6 +35,12 @@
         {
         "MsmKey" = "8:_258523874FC38FE20B11F06C43F804B4"
         "OwnerKey" = "8:_1ED372C49B207BE717968C4E5BA764BB"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_258523874FC38FE20B11F06C43F804B4"
+        "OwnerKey" = "8:_6083FEFFEB5D189E79DD38CA07FFF0BC"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -69,8 +69,8 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_8C7E07FE454A599026300F58086554C4"
-        "OwnerKey" = "8:_D6F950B5DFD8C9DE9E91CFF55A3C32BB"
+        "MsmKey" = "8:_6669924B961680127CD75C5A44D6D4A5"
+        "OwnerKey" = "8:_1ED372C49B207BE717968C4E5BA764BB"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -81,20 +81,14 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_D6F950B5DFD8C9DE9E91CFF55A3C32BB"
-        "OwnerKey" = "8:_1ED372C49B207BE717968C4E5BA764BB"
+        "MsmKey" = "8:_D8D180F6E73AB478A144B263DDE7AE19"
+        "OwnerKey" = "8:_6669924B961680127CD75C5A44D6D4A5"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_F5E39D6AB7E84843B5DDB7C54B350BA4"
         "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_14A53020F0B93F1BBD79DBF8AD694850"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -118,13 +112,19 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_D6F950B5DFD8C9DE9E91CFF55A3C32BB"
+        "OwnerKey" = "8:_6669924B961680127CD75C5A44D6D4A5"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_8C7E07FE454A599026300F58086554C4"
+        "OwnerKey" = "8:_D8D180F6E73AB478A144B263DDE7AE19"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_14A53020F0B93F1BBD79DBF8AD694850"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -166,10 +166,10 @@
             "ComponentsUrl" = "8:"
                 "Items"
                 {
-                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:.NETFramework,Version=v4.6.1"
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:.NETFramework,Version=v4.7.1"
                     {
-                    "Name" = "8:Microsoft .NET Framework 4.6.1 (x86 and x64)"
-                    "ProductCode" = "8:.NETFramework,Version=v4.6.1"
+                    "Name" = "8:Microsoft .NET Framework 4.7.1 (x86 и x64)"
+                    "ProductCode" = "8:.NETFramework,Version=v4.7.1"
                     }
                 }
             }
@@ -198,10 +198,10 @@
             "ComponentsUrl" = "8:"
                 "Items"
                 {
-                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:.NETFramework,Version=v4.6.1"
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:.NETFramework,Version=v4.7.1"
                     {
-                    "Name" = "8:Microsoft .NET Framework 4.6.1 (x86 and x64)"
-                    "ProductCode" = "8:.NETFramework,Version=v4.6.1"
+                    "Name" = "8:Microsoft .NET Framework 4.7.1 (x86 и x64)"
+                    "ProductCode" = "8:.NETFramework,Version=v4.7.1"
                     }
                 }
             }
@@ -409,20 +409,20 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_8C7E07FE454A599026300F58086554C4"
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_6669924B961680127CD75C5A44D6D4A5"
             {
             "AssemblyRegister" = "3:1"
-            "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:FastReport.Editor, Version=2019.4.11.0, Culture=neutral, PublicKeyToken=db7e5ce63278458c, processorArchitecture=MSIL"
+            "AssemblyIsInGAC" = "11:TRUE"
+            "AssemblyAsmDisplayName" = "8:FastReport, Version=2019.4.11.0, Culture=neutral, PublicKeyToken=db7e5ce63278458c, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
-                    "_8C7E07FE454A599026300F58086554C4"
+                    "_6669924B961680127CD75C5A44D6D4A5"
                     {
-                    "Name" = "8:FastReport.Editor.DLL"
+                    "Name" = "8:FastReport.dll"
                     "Attributes" = "3:512"
                     }
                 }
-            "SourcePath" = "8:FastReport.Editor.DLL"
+            "SourcePath" = "8:FastReport.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_431B1DD368354DAA8D3B8069B31E2761"
@@ -460,20 +460,20 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_D6F950B5DFD8C9DE9E91CFF55A3C32BB"
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_D8D180F6E73AB478A144B263DDE7AE19"
             {
             "AssemblyRegister" = "3:1"
-            "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:FastReport, Version=2019.4.11.0, Culture=neutral, PublicKeyToken=db7e5ce63278458c, processorArchitecture=MSIL"
+            "AssemblyIsInGAC" = "11:TRUE"
+            "AssemblyAsmDisplayName" = "8:FastReport.Editor, Version=2019.4.11.0, Culture=neutral, PublicKeyToken=db7e5ce63278458c, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
-                    "_D6F950B5DFD8C9DE9E91CFF55A3C32BB"
+                    "_D8D180F6E73AB478A144B263DDE7AE19"
                     {
-                    "Name" = "8:FastReport.DLL"
+                    "Name" = "8:FastReport.Editor.dll"
                     "Attributes" = "3:512"
                     }
                 }
-            "SourcePath" = "8:FastReport.DLL"
+            "SourcePath" = "8:FastReport.Editor.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_431B1DD368354DAA8D3B8069B31E2761"
@@ -495,7 +495,7 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:RD-Calculator, Version=1.0.0.1, Culture=neutral, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:RD-Calculator, Version=1.0.0.2, Culture=neutral, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
                     "_F5E39D6AB7E84843B5DDB7C54B350BA4"
@@ -600,8 +600,8 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:RDCalculator"
-        "ProductCode" = "8:{2A935A18-0A91-4D7E-BC64-3DDB0CA78E04}"
-        "PackageCode" = "8:{F1D5100D-F0F4-4B38-8B5A-DC0B9C22F21A}"
+        "ProductCode" = "8:{E52B8051-B20C-45B9-BBAF-B9C23DCA8EE2}"
+        "PackageCode" = "8:{AEC5D09E-31A7-45DD-804E-D47077A56A46}"
         "UpgradeCode" = "8:{ABA47D1A-1364-406E-A365-D7A2F30B7D64}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"

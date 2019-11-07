@@ -27,6 +27,10 @@ namespace StartWPF
     {
         private CalcKind _calcKind;
 
+        /// <summary>
+        /// Конструктор контрола выбора расчета
+        /// </summary>
+        /// <param name="calcKind"></param>
         public CalcKindControl(CalcKind calcKind)
         {
             InitializeComponent();

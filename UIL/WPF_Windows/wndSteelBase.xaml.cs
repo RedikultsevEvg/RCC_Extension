@@ -67,7 +67,7 @@ namespace RDUIL.WPF_Windows
             ResultReport resultReport = new ResultReport(_steelColumnBase.Level.Building.BuildingSite);
             resultReport.PrepareReport();
             resultReport.ShowReport("SteelBases.frx");
-            resultReport.ShowReport("Assignment.frx");
+            //resultReport.ShowReport("Assignment.frx");
         }
 
         private void BtnParts_Click(object sender, RoutedEventArgs e)

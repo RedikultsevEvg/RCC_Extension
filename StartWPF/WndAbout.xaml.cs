@@ -20,6 +20,9 @@ namespace StartWPF
     /// </summary>
     public partial class WndAbout : Window
     {
+        /// <summary>
+        /// Конструктор окна "О программе"
+        /// </summary>
         public WndAbout()
         {
             InitializeComponent();
