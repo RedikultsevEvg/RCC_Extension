@@ -7,6 +7,9 @@ using System.Windows.Forms;
 
 namespace RDBLL.Common.Geometry
 {
+    /// <summary>
+    /// Класс для математических операций
+    /// </summary>
     public class MathOperation
     {
         /// <summary>

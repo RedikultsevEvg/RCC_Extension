@@ -303,7 +303,7 @@ namespace RDBLL.Processors.SC
             return steelBaseParts;
         }
         /// <summary>
-        /// Поллучает коллекцию участков по заданному с учетом симметрии
+        /// Возвращает коллекцию участков по заданному участку с учетом симметрии
         /// </summary>
         /// <param name="steelBasePart"></param>
         /// <returns></returns>
@@ -349,7 +349,7 @@ namespace RDBLL.Processors.SC
             return steelBaseParts;
         }
         /// <summary>
-        /// Получает коллекцию элементарных участков для участка базы
+        /// Возвращает коллекцию элементарных участков для участка базы
         /// </summary>
         /// <param name="steelBasePart"></param>
         public static void GetSubParts(SteelBasePart steelBasePart)

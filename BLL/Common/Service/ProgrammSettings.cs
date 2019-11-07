@@ -245,6 +245,9 @@ namespace RDBLL.Common.Service
 
         }
         // Raise the change event through this static method
+        /// <summary>
+        /// Параметр определяющий, что данные изменились
+        /// </summary>
         public static event EventHandler IsDataChangedChanged;
         public static event EventHandler FilePathChanged;
         public static DataSet GetDataSet()

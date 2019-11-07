@@ -13,12 +13,16 @@ namespace RDBLL.Entity.Common.NDM.MaterialModels
 
         public double GetStress(double Epsilon)
         {
-            if (Epsilon > 0) { return ElasticModulus * Epsilon; } else { return 0; }
+            if (Epsilon > 0)
+            { return ElasticModulus * Epsilon; }
+            else { return ElasticModulus/1000000*Epsilon; }
         }
 
         public double GetSecantModulus(double Epsilon)
         {
-            if (Epsilon > 0) { return ElasticModulus; } else { return 0; }
+            if (Epsilon > 0)
+            { return ElasticModulus; }
+            else { return ElasticModulus / 1000000; }
         }
     }
 }

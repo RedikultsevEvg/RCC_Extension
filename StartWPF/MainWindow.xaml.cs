@@ -27,6 +27,9 @@ namespace StartWPF
     /// </summary>
     public partial class MainWindow : Window
     {
+        /// <summary>
+        /// Конструктор главного окная программы
+        /// </summary>
         public MainWindow()
         {
             InitializeComponent();
@@ -133,6 +136,10 @@ namespace StartWPF
             DetailForm.Show();
         }
 
+        /// <summary>
+        /// Добавляет тип расчета на панель раздела расчетов
+        /// </summary>
+        /// <param name="calcKinds"></param>
         public void AddItemWrapPanel(List<CalcKind> calcKinds)
         {
             wpCalcPanel.Children.Clear();
