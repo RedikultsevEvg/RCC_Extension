@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Drawing;
+
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -15,6 +15,14 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Xml;
 using System.Xml.Linq;
+
+using System.ComponentModel;
+using System.IO;
+using System.Windows.Markup;
+using System.Windows.Media.Animation;
+
+using Brush = System.Windows.Media.Brush;
+using Pen = System.Windows.Media.Pen;
 using Point = System.Windows.Point;
 
 namespace EvgRed01
@@ -30,23 +38,30 @@ namespace EvgRed01
         public MainWindow()
         {
             InitializeComponent();
+            sTitle = this.Title;
             scrollViewer.MouseLeftButtonUp += OnMouseLeftButtonUp;
             scrollViewer.PreviewMouseLeftButtonUp += OnMouseLeftButtonUp;
             scrollViewer.PreviewMouseWheel += OnPreviewMouseWheel;
             scrollViewer.PreviewMouseLeftButtonDown += OnMouseLeftButtonDown;
-
+            scrollViewer.MouseLeave += OnMouseLeave;
             scrollViewer.MouseMove += OnMouseMove;
             slider.ValueChanged += OnSliderValueChanged;
         }
         int width_ = 0;
         int height_ = 0;
+        string sTitle;
+        private void OnMouseLeave(object sender, MouseEventArgs e)
+        {
+            this.Title = sTitle;
+        }
         private void OnMouseMove(object sender, MouseEventArgs e)
         {
-            //this.Title = lastDragPoint.HasValue.ToString();
+            Point posNow = e.GetPosition(scrollViewer);
+            // if (posNow.X<=width_&& posNow.Y<=height_) 
+            this.Title = "X: " + Math.Round(posNow.X).ToString() + " Y: " + Math.Round(posNow.Y).ToString();
+            //this.Title = "X: " + width_.ToString() + " Y: " + height_.ToString();
             if (lastDragPoint.HasValue)
             {
-                Point posNow = e.GetPosition(scrollViewer);
-
                 double dX = posNow.X - lastDragPoint.Value.X;
                 double dY = posNow.Y - lastDragPoint.Value.Y;
 
@@ -59,7 +74,7 @@ namespace EvgRed01
         void OnMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             var mousePos = e.GetPosition(scrollViewer);
-            //this.Title = String.Format("X: {0}, Y: {1},  VX: {2}, VY: {3}", mousePos.X, mousePos.Y, scrollViewer.ViewportWidth, scrollViewer.ViewportHeight);
+            this.Title = String.Format("X: {0}, Y: {1},  VX: {2}, VY: {3}", mousePos.X, mousePos.Y, scrollViewer.ViewportWidth, scrollViewer.ViewportHeight);
             
             if (mousePos.X <= scrollViewer.ViewportWidth && mousePos.Y < scrollViewer.ViewportHeight) //make sure we still can use the scrollbars
             {
@@ -81,7 +96,7 @@ namespace EvgRed01
             {
                 slider.Value -= 1;
             }
-            this.Title = "slider.Value: " + slider.Value.ToString();
+            //this.Title = "slider.Value: " + slider.Value.ToString();
             e.Handled = true;
         }
         private void OnMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
@@ -96,7 +111,7 @@ namespace EvgRed01
             scaleTransform.ScaleX = e.NewValue;
             scaleTransform.ScaleY = e.NewValue;
 
-            this.Title = String.Format("X: {0}, Y: {1}", scaleTransform.ScaleX, scaleTransform.ScaleY);
+            //this.Title = String.Format("X: {0}, Y: {1}", scaleTransform.ScaleX, scaleTransform.ScaleY);
 
             var centerOfViewport = new Point(scrollViewer.ViewportWidth / 2, scrollViewer.ViewportHeight / 2);
             lastCenterPositionOnTarget = scrollViewer.TranslatePoint(centerOfViewport, grid);
@@ -175,6 +190,8 @@ namespace EvgRed01
                     {
                         BitmapImage bi = new BitmapImage(new Uri(@filename));
                         WriteableBitmap eb = new WriteableBitmap(bi);
+                        height_ = eb.PixelHeight;
+                        width_ = eb.PixelWidth;
                         mainPict.Source = eb;
                     }
 
@@ -196,7 +213,7 @@ namespace EvgRed01
                         height_++; width_++; // Нормализуем
                         byte[,,] pixels = new byte[width_, height_, 4]; // Подготовительный массив для картинки
                         WriteableBitmap wbitmap = new WriteableBitmap(height_, width_, 96, 96, PixelFormats.Bgra32, null);
-                        this.Title = "Begin";
+                        //this.Title = "Begin";
                         foreach (XmlNode n in childnodes)
                         {
                             int coordX = int.Parse(n.SelectSingleNode("CoordX").InnerText);
@@ -229,7 +246,7 @@ namespace EvgRed01
       
                         //Set the Image source.
                         mainPict.Source = wbitmap;
-                        this.Title = "mainPict";
+                        //this.Title = "mainPict";
                         
                     }
                 } 
@@ -249,5 +266,120 @@ namespace EvgRed01
         public byte ColorR { get; set; }    // Цвет точки - красная составляющая
         public byte Transp { get; set; }    // Прозрачность точки от 0 до 255 ****  255 - 100% непрозрачности
 
+    }
+    class GridAdorner : Adorner
+    {
+        FrameworkElement elem;
+        public System.Drawing.Brush Pen { get; set; }
+        public GridAdorner(FrameworkElement elem) : base(elem)
+        {
+            this.elem = elem;
+        }
+        protected override void OnRender(DrawingContext dc)
+        {
+            double wid = elem.ActualWidth;
+            double hig = elem.ActualHeight;
+            int size = ExtAdorner.GetSize(elem);
+            Brush penbrush = ExtAdorner.GetPenBrush(elem);
+            Pen pen = new Pen(penbrush, 0.25);
+
+            for (int i = 0; i < wid; i += size)
+                dc.DrawLine(pen, new Point(i, 0), new Point(i, hig));
+            for (int i = 0; i < hig; i += size)
+                dc.DrawLine(pen, new Point(0, i), new Point(wid, i));
+        }
+    }
+
+    class ExtAdorner : FrameworkElement
+    {
+        public static int GetSize(DependencyObject obj)
+        {
+            return (int)obj.GetValue(SizeProperty);
+        }
+        public static void SetSize(DependencyObject obj, int value)
+        {
+            obj.SetValue(SizeProperty, value);
+        }
+        public static readonly DependencyProperty SizeProperty = DependencyProperty.RegisterAttached("Size", typeof(int), typeof(GridAdorner), new PropertyMetadata(0, onsizechanged));
+        private static void onsizechanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            FrameworkElement elem = d as FrameworkElement;
+            elem.Loaded += (s, arg) =>
+            {
+                elem = s as FrameworkElement;
+                GridAdorner ga = new GridAdorner(elem);
+                AdornerLayer layer = AdornerLayer.GetAdornerLayer(elem);
+                layer.Add(ga);
+            };
+        }
+        public static Brush GetPenBrush(DependencyObject obj)
+        {
+            return (Brush)obj.GetValue(PenBrushProperty);
+        }
+        public static void SetPenBrush(DependencyObject obj, Brush value)
+        {
+            obj.SetValue(PenBrushProperty, value);
+        }
+        public static readonly DependencyProperty PenBrushProperty = DependencyProperty.RegisterAttached("PenBrush", typeof(Brush), typeof(ExtAdorner), new PropertyMetadata(Brushes.Red));
+    }
+
+    class JumperItem : ContentControl
+    {
+        TranslateTransform move;
+        public int JSpeed { get; set; } // ms top-down
+        public int JDelayStart { get; set; }// ms delay before start
+        public string JText { get; set; }
+        public JumperItem() : base()
+        {
+            move = new TranslateTransform();
+            RenderTransform = move;
+
+            Loaded += delegate
+            {
+                if (JText != null)
+                    Content = new TextBlock() { Text = JText };
+                Dispatcher.BeginInvoke(new Action(() =>
+                {
+                    if (!DesignerProperties.GetIsInDesignMode(this))
+                        IsRunning = true;
+                }), null);
+            };
+        }
+        // амплитуда зависит только от высоты РОДИТЕЛЬСКОГО КОНТЕЙНЕРА
+        // для смнхронизации коллекции элементов они должны иметь ОДИНАКОВУЮ высоту
+        void run()
+        {
+            FrameworkElement parent = Parent as FrameworkElement;
+            double from = 0, to = 0, dy = parent.ActualHeight - ActualHeight;
+
+            if (VerticalAlignment == VerticalAlignment.Bottom)
+                to = -dy;
+
+            if (VerticalAlignment == VerticalAlignment.Top)
+                to = dy;
+
+            DoubleAnimation da = new DoubleAnimation(from, to, TimeSpan.FromMilliseconds(JSpeed));
+            da.AutoReverse = true;
+            da.RepeatBehavior = RepeatBehavior.Forever;
+            da.BeginTime = TimeSpan.FromMilliseconds(JDelayStart);
+            move.BeginAnimation(TranslateTransform.YProperty, da);
+        }
+        void stop()
+        {
+            move.BeginAnimation(TranslateTransform.YProperty, null);
+        }
+        public bool IsRunning
+        {
+            get { return (bool)GetValue(IsRunningProperty); }
+            set { SetValue(IsRunningProperty, value); }
+        }
+        public static readonly DependencyProperty IsRunningProperty = DependencyProperty.Register("IsRunning", typeof(bool), typeof(JumperItem), new PropertyMetadata(false, isrunningchanged));
+        private static void isrunningchanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            JumperItem jt = d as JumperItem;
+            if ((bool)e.NewValue)
+                jt.run();
+            else jt.stop();
+        }
     }
 }
