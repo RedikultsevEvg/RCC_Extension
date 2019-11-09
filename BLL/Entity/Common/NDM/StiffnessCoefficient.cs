@@ -25,12 +25,12 @@ namespace RDBLL.Entity.Common.NDM
             double secantModulus;
             foreach (NdmArea ndmArea in ndmAreas)
             {
-                if (curvature == null) { secantModulus = ndmArea.ElasticModulus; }
+                if (curvature == null) { secantModulus = ndmArea.MaterialModel.ElasticModulus; }
                 else
                     {
-                        double epsilon = curvature.CurvMatrix[0,0] * ndmArea.CenterY + curvature.CurvMatrix[1, 0] * ndmArea.CenterX + curvature.CurvMatrix[2, 0];
+                        double strain = curvature.CurvMatrix[0,0] * ndmArea.CenterY + curvature.CurvMatrix[1, 0] * ndmArea.CenterX + curvature.CurvMatrix[2, 0];
                     
-                        secantModulus = ndmArea.GetSecantModulus(epsilon);
+                        secantModulus = ndmArea.GetSecantModulus(strain);
                         secantMods.Add(secantModulus);
                     }
                 #region

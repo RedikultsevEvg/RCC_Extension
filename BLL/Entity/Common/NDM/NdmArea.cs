@@ -15,14 +15,14 @@ namespace RDBLL.Entity.Common.NDM
         public double Area { get; set; }
         public double CenterX { get; set; }
         public double CenterY { get; set; }
-        public double ElasticModulus
-        { get {return _ElasticModulus; }
-            set
-            {
-                _ElasticModulus = value;
-                MaterialModel.ElasticModulus = _ElasticModulus;
-            }
-        }
+        //public double ElasticModulus
+        //{ get {return _ElasticModulus; }
+        //    set
+        //    {
+        //        _ElasticModulus = value;
+        //        MaterialModel.ElasticModulus = _ElasticModulus;
+        //    }
+        //}
         public IMaterialModel MaterialModel { get; set; }
 
         //public ObservableCollection<double> CompressiveStengthes { get; set; }

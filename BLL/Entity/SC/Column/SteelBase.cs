@@ -21,8 +21,14 @@ namespace RDBLL.Entity.SC.Column
         private bool _isBoltsActual;
         private bool _isBasePartsActual;
 
-        public int Id { get; set; } //Код базы
-        public int LevelId { get; set; } //Код базы
+        /// <summary>
+        /// Код базы
+        /// </summary>
+        public int Id { get; set; }
+        /// <summary>
+        /// Код уровня
+        /// </summary>
+        public int LevelId { get; set; }
         public Level Level { get; set; } //Ссылка на уровень
         public int SteelClassId { get; set; } //Код стали
         public int ConcreteClassId { get; set; } //Код бетона
@@ -34,6 +40,10 @@ namespace RDBLL.Entity.SC.Column
         public double Length { get; set; } //Длина базы, м
         public double Thickness { get; set; } //Толщина, м
         public double WorkCondCoef { get; set; } //Коэффициент условий работы
+        /// <summary>
+        /// Флаг расчета по упрощенному методу
+        /// </summary>
+        public bool UseSimpleMethod { get; set; }
         public ObservableCollection<ForcesGroup> LoadsGroup { get; set; } //Коллекция групп нагрузок
         public ObservableCollection<SteelBasePart> SteelBaseParts { get; set; } //Коллекция участков
         public List<SteelBasePart> ActualSteelBaseParts { get; set; } //Коллекция участков с учетом симметрии
@@ -84,6 +94,7 @@ namespace RDBLL.Entity.SC.Column
             ConcreteClassId = 1;
             SteelStrength = 240000000;
             ConcreteStrength = 10000000;
+            UseSimpleMethod = true;
             LoadsGroup = new ObservableCollection<ForcesGroup>();
             LoadsGroup.Add(new ForcesGroup(this));
             SteelBaseParts = new ObservableCollection<SteelBasePart>();

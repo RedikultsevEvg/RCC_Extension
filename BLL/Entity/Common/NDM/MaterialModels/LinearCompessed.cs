@@ -8,7 +8,7 @@ using RDBLL.Entity.Common.NDM.Interfaces;
 namespace RDBLL.Entity.Common.NDM.MaterialModels
 {
     /// <summary>
-    /// Интерфейс модели материала
+    /// Модель линейно упругого материала, работающего только на сжатие
     /// </summary>
     public class LinearCompressed :IMaterialModel
     {
@@ -17,22 +17,26 @@ namespace RDBLL.Entity.Common.NDM.MaterialModels
         /// </summary>
         public double ElasticModulus { get; set; }
         /// <summary>
-        /// Возвращает напряжения по известной деформации
+        /// Список констант, интерпретация констант определяется моделью
         /// </summary>
-        /// <param name="Epsilon"></param>
-        /// <returns></returns>
-        public double GetStress(double Epsilon)
+        public List<MaterialConstant> ListOfConsnstants { get; set; }
+        /// <summary>
+        /// Возвращает напряжения
+        /// </summary>
+        /// <param name="strain">Деформации, д.ед.</param>
+        /// <returns>Напряжения, Па</returns>
+        public double GetStress(double strain)
         {
-            if (Epsilon < 0) { return ElasticModulus * Epsilon; } else { return ElasticModulus/1000000 * Epsilon; }
+            if (strain < 0) { return ElasticModulus * strain; } else { return ElasticModulus/1000000 * strain; }
         }
         /// <summary>
-        /// Возвращает секущий модуль упругости по известному напряжению
+        /// Возвращает секущий модуль упругости
         /// </summary>
-        /// <param name="Epsilon"></param>
-        /// <returns></returns>
-        public double GetSecantModulus(double Epsilon)
+        /// <param name="strain">Деформации, д.ед.</param>
+        /// <returns>Секущий модуль упругости, Па</returns>
+        public double GetSecantModulus(double strain)
         {
-            if (Epsilon < 0) { return ElasticModulus; } else { return ElasticModulus / 1000000; }
+            if (strain < 0) { return ElasticModulus; } else { return ElasticModulus / 1000000; }
         }
     }
 }

@@ -98,5 +98,24 @@ namespace RDUIL.WPF_Windows
                 MessageBox.Show("Ничего не выбрано", "Выберите один из элементов");
             }
         }
+
+        private void BtnEdit_Click(object sender, RoutedEventArgs e)
+        {
+            if (lvSteelBases.SelectedIndex >= 0)
+            {
+                int a = lvSteelBases.SelectedIndex;
+                WndSteelColumnBase wndSteelColumnBase = new WndSteelColumnBase(_steelBases[a]);
+                wndSteelColumnBase.ShowDialog();
+            }
+            else
+            {
+                MessageBox.Show("Ничего не выбрано", "Выберите один из элементов");
+            }
+        }
+
+        private void TbxName_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
+        {
+            ProgrammSettings.IsDataChanged = true;
+        }
     }
 }
