@@ -43,7 +43,7 @@ namespace CSL.Reports
         {
             using (Report report = new Report())
             {
-                report.Load(Directory.GetCurrentDirectory()+"\\Reports\\SteelBases\\"+ fileName);
+                report.Load(fileName);
                 report.SetParameterValue("Units.LinearSize", MeasureUnitConverter.GetUnitLabelText(0));
                 report.SetParameterValue("Units.Force", MeasureUnitConverter.GetUnitLabelText(1));
                 report.SetParameterValue("Units.Moment", MeasureUnitConverter.GetUnitLabelText(2));

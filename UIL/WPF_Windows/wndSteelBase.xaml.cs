@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,9 +13,10 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using RDBLL.Entity.SC.Column;
-using CSL.Reports;
+
 using RDBLL.Entity.MeasureUnits;
 using RDBLL.Common.Service;
+
 
 namespace RDUIL.WPF_Windows
 {
@@ -61,15 +63,6 @@ namespace RDUIL.WPF_Windows
             wndForces wndForces = new wndForces(_steelColumnBase.LoadsGroup[0]);
             wndForces.ShowDialog();
         }
-
-        private void BtnReport_Click(object sender, RoutedEventArgs e)
-        {
-            ResultReport resultReport = new ResultReport(_steelColumnBase.Level.Building.BuildingSite);
-            resultReport.PrepareReport();
-            resultReport.ShowReport("SteelBases.frx");
-            //resultReport.ShowReport("Assignment.frx");
-        }
-
         private void BtnParts_Click(object sender, RoutedEventArgs e)
         {
             WndSteelBasePart wndSteelBasePart = new WndSteelBasePart(_steelColumnBase);
