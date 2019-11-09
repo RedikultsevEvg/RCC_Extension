@@ -40,6 +40,8 @@ namespace EvgRed01
             InitializeComponent();
             sTitle = this.Title;
             scrollViewer.MouseLeftButtonUp += OnMouseLeftButtonUp;
+            scrollViewer.MouseRightButtonDown += OnMouseRightButtonDown;
+            // scrollViewer.MouseRightButtonUp += OnMouseRightButtonUp;
             scrollViewer.PreviewMouseLeftButtonUp += OnMouseLeftButtonUp;
             scrollViewer.PreviewMouseWheel += OnPreviewMouseWheel;
             scrollViewer.PreviewMouseLeftButtonDown += OnMouseLeftButtonDown;
@@ -53,6 +55,42 @@ namespace EvgRed01
         private void OnMouseLeave(object sender, MouseEventArgs e)
         {
             this.Title = sTitle;
+        }
+        private void OnMouseRightButtonDown(object sender, MouseEventArgs e)
+        {
+            
+            Point posNow = e.GetPosition(scrollViewer);
+            this.Title = "X: " + Math.Round(posNow.X).ToString() + " Y: " + Math.Round(posNow.Y).ToString();
+
+            // Горизонтальная линия
+            this.lineH.X1 = 0;
+            this.lineH.Y1 = posNow.Y;
+            if (this.lineH.Y1 < 0) this.lineH.Y1 = 0;
+            this.lineH.X2 = 810;     //  width_;
+            this.lineH.Y2 = this.lineH.Y1;
+
+            this.lineH.Stroke = Brushes.Cyan;
+            this.lineH.StrokeThickness = 1;
+            this.lineH.Visibility = Visibility.Visible;
+
+            // Вертикальная линия
+            this.lineV.X1 = posNow.X;
+            this.lineV.Y1 = 0;
+            if (this.lineV.X1 < 0) this.lineV.X1 = 0;
+            this.lineV.X2 = posNow.X;
+            this.lineV.Y2 = 620;
+
+            this.lineV.Stroke = Brushes.Cyan;
+            this.lineV.StrokeThickness = 1;
+            this.lineV.Visibility = Visibility.Visible;
+
+            this.menuAdd.Visibility = Visibility.Visible;
+        }
+        private void exitAdd(object sender, RoutedEventArgs e)
+        {
+            this.lineH.Visibility = Visibility.Hidden;
+            this.lineV.Visibility = Visibility.Hidden;
+            this.menuAdd.Visibility = Visibility.Hidden;
         }
         private void OnMouseMove(object sender, MouseEventArgs e)
         {

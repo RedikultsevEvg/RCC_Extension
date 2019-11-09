@@ -21,9 +21,29 @@
             <RowDefinition Height="250*"/>
             <RowDefinition Height="25*"/>
         </Grid.RowDefinitions>
+        <Line x:Name="lineH" Visibility="Hidden"  Grid.Row="1" Grid.Column="1" Panel.ZIndex="3"></Line>
+        <Line x:Name="lineV" Visibility="Hidden"  Grid.Row="1" Grid.Column="1" Panel.ZIndex="3"></Line>
+
+        <DockPanel Panel.ZIndex="5" Grid.Row="1" Grid.Column="1" >
+            <Menu x:Name="menuAdd" DockPanel.Dock="Left" Panel.ZIndex="5" Height="70"  Width="150" Background="#B0C4DE"
+                  Opacity="16" VerticalAlignment="Top" HorizontalAlignment="Left" Visibility="Hidden">
+                <MenuItem Header="Вертикальная эпюра"></MenuItem>
+                <Separator/>
+                <MenuItem Header="Горизонтальная эпюра"></MenuItem>
+                <Separator/>
+                <MenuItem Header="Выход" Click="exitAdd"></MenuItem>
+                <Menu.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <VirtualizingStackPanel Orientation="Vertical"/>
+                    </ItemsPanelTemplate>
+                </Menu.ItemsPanel>
+
+            </Menu>
+        </DockPanel>
+        
         <Slider Grid.Column="0" Grid.Row="1" Orientation="Vertical" HorizontalAlignment="Left" Minimum="1" x:Name="slider"/>
         <ScrollViewer Name="scrollViewer" Grid.Row="1" Grid.Column="1" VerticalScrollBarVisibility="Visible"
-                      HorizontalScrollBarVisibility="Visible">
+                      HorizontalScrollBarVisibility="Visible" Panel.ZIndex="0" >
           
             <Grid Name="grid" Width="800" Height="600" RenderTransformOrigin="0.5,0.5" local:ExtAdorner.Size="10" local:ExtAdorner.PenBrush="White" >
                 <Grid.LayoutTransform>
@@ -31,11 +51,13 @@
                         <ScaleTransform x:Name="scaleTransform"/>
                     </TransformGroup>
                 </Grid.LayoutTransform>
-                <Viewbox Grid.Column="1" Grid.Row="1" VerticalAlignment="Top" HorizontalAlignment="Left">
-                    <Image x:Name="mainPict" />
+                <Viewbox Grid.Column="1" Grid.Row="1" VerticalAlignment="Top" HorizontalAlignment="Left" 
+                         Margin="0,0,0,0">
+                    <Image x:Name="mainPict" Margin="0,0,0,0" />
                 </Viewbox>
             </Grid>
         </ScrollViewer>
+
         <StackPanel Grid.Column="2" Grid.Row="1">
             <Button x:Name="LoadButton" Content="Загрузить" IsDefault="True" Width="100" Click="loadFile" Cursor="Hand"/>
             <Button x:Name="escButton" Margin="0,1,0,0" Content="Выход" IsCancel="True" Width="100" Click="exitApp" Cursor="Hand"/>
