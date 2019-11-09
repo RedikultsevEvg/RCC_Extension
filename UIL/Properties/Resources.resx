@@ -121,8 +121,17 @@
   <data name="FoundationForces" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\FoundationForces.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="IconAdd40" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\iconadd40.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="IconBase40" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\iconbase40.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="IconBolt40" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\resources\iconbolt40.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="IconDelete40" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\icondelete40.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="IconReport40" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\resources\iconreport40.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>

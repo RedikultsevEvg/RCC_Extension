@@ -121,11 +121,18 @@
     </Compile>
     <Compile Include="WPF_Windows\ControlClasses\CalcKind.cs" />
     <Compile Include="WPF_Windows\ControlClasses\CalcType.cs" />
+    <Compile Include="WPF_Windows\ControlClasses\ReportCard.cs" />
+    <Compile Include="WPF_Windows\UserControls\ReportCardControl.xaml.cs">
+      <DependentUpon>ReportCardControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="WPF_Windows\wndForces.xaml.cs">
       <DependentUpon>wndForces.xaml</DependentUpon>
     </Compile>
     <Compile Include="WPF_Windows\wndMeasureUnits.xaml.cs">
       <DependentUpon>wndMeasureUnits.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="WPF_Windows\wndReports.xaml.cs">
+      <DependentUpon>wndReports.xaml</DependentUpon>
     </Compile>
     <Compile Include="WPF_Windows\wndSteelBaseBolts.xaml.cs">
       <DependentUpon>wndSteelBaseBolts.xaml</DependentUpon>
@@ -139,15 +146,26 @@
     <Compile Include="WPF_Windows\wndSteelBase.xaml.cs">
       <DependentUpon>wndSteelBase.xaml</DependentUpon>
     </Compile>
+    <Compile Include="WPF_Windows\wndSteelBases.xaml.cs">
+      <DependentUpon>wndSteelBases.xaml</DependentUpon>
+    </Compile>
     <Page Include="MSControls\numericupdown.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="WPF_Windows\UserControls\ReportCardControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="WPF_Windows\wndForces.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="WPF_Windows\wndMeasureUnits.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="WPF_Windows\wndReports.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -164,6 +182,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="WPF_Windows\wndSteelBase.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="WPF_Windows\wndSteelBases.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -282,6 +304,21 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\IconReport40.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\IconAdd40.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\IconDelete40.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\IconBase40.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
   </ItemGroup>

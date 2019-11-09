@@ -756,13 +756,8 @@ namespace RDUIL.WinForms
                 foreach (int i in lvDetails.SelectedIndices)
                 {
                     level = ((ObservableCollection<Level>)_objectList)[i];
-                    var detailObjectList = new DetailObjectList("SteelColumnBases", level, level.SteelBases, false);
-                    detailObjectList.BtnVisibilityList = new List<short>() { 1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 1, 1 };
-                    frmDetailList DetailForm = new frmDetailList(detailObjectList);
-                    this.Visible = false;
-                    DetailForm.ShowDialog();
-                    this.Visible = true;
-                    EditItemFromLevel(lvDetails.Items[i], level);
+                    wndSteelBases wndSteelBases = new wndSteelBases(level);
+                    wndSteelBases.ShowDialog();
                 }
             }
             else
