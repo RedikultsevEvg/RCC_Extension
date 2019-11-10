@@ -32,6 +32,7 @@
                         <RowDefinition Height="30"/>
                         <RowDefinition Height="30"/>
                         <RowDefinition Height="30"/>
+                        <RowDefinition Height="30"/>
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width ="*"/>
@@ -44,17 +45,20 @@
                     <TextBlock x:Name="tbThickness" Grid.Row="3" Style="{StaticResource PropertyTextBlock}" Text="Толщина"/>
                     <TextBlock x:Name="tbSteelStrength" Grid.Row="4" Style="{StaticResource PropertyTextBlock}" Text="Расчетное сопротивление стали"/>
                     <TextBlock x:Name="tbConcreteStrength" Grid.Row="5" Style="{StaticResource PropertyTextBlock}" Text="Расчетное сопротивление бетона"/>
+                    <TextBlock x:Name="tbUseSimpleMethod" Grid.Row="6" Style="{StaticResource PropertyTextBlock}" Text="Упрощенный метод"/>
                     <TextBox x:Name="tbxName" Grid.Column="1" Style="{StaticResource PropertyTextBox}" Text="{Binding Path=Name}"/>
                     <TextBox x:Name="tbxWidth" Grid.Row="1" Grid.Column="1" Style="{StaticResource PropertyTextBox}" Text="{Binding Path=Width, Converter={StaticResource LinearSizeConverter}}"/>
                     <TextBox x:Name="tbxLength" Grid.Row="2" Grid.Column="1" Style="{StaticResource PropertyTextBox}" Text="{Binding Path=Length, Converter={StaticResource LinearSizeConverter}}"/>
                     <TextBox x:Name="tbxThickness" Grid.Row="3" Grid.Column="1" Style="{StaticResource PropertyTextBox}" Text="{Binding Path=Thickness, Converter={StaticResource LinearSizeConverter}}"/>
                     <TextBox x:Name="tbxSteelStrength" Grid.Row="4" Grid.Column="1" Style="{StaticResource PropertyTextBox}" Text="{Binding Path=SteelStrength, Converter={StaticResource StressConverter}}"/>
                     <TextBox x:Name="tbxConcreteStrength" Grid.Row="5" Grid.Column="1" Style="{StaticResource PropertyTextBox}" Text="{Binding Path=ConcreteStrength, Converter={StaticResource StressConverter}}"/>
+                    <CheckBox Grid.Column="1" Grid.Row="6" x:Name="cbUseSimpleMethod" IsChecked="{Binding Path=UseSimpleMethod}" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5,0,0,0"/>
                     <TextBlock Grid.Column="2" Grid.Row="1" x:Name="tbWidthMeasure" Style="{StaticResource PropertyTextBlock}" Text="мм" />
                     <TextBlock Grid.Column="2" Grid.Row="2" x:Name="tbLengthMeasure" Style="{StaticResource PropertyTextBlock}" Text="мм" />
                     <TextBlock Grid.Column="2" Grid.Row="3" x:Name="tbThicknessMeasure" Style="{StaticResource PropertyTextBlock}" Text="мм" />
                     <TextBlock Grid.Column="2" Grid.Row="4" x:Name="tbSteelStrengthMeasure" Style="{StaticResource PropertyTextBlock}" Text="МПа" />
                     <TextBlock Grid.Column="2" Grid.Row="5" x:Name="tbConcreteStrengthMeasure" Style="{StaticResource PropertyTextBlock}" Text="МПа" />
+                    
                 </Grid>
                 <Canvas x:Name="cvBase" Margin="5" Height="220"/>
             </StackPanel>
