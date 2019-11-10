@@ -68,24 +68,27 @@ namespace RDBLL.Processors.SC
         /// с учетом возможной симметрии
         /// т.е. заносит все болты как параметр стальной базы
         /// </summary>
-        /// <param name="columnBase"></param>
-        public static void ActualizeSteelBolts(SteelBase columnBase)
+        /// <param name="steelBase"></param>
+        public static void ActualizeSteelBolts(SteelBase steelBase)
         {
-            columnBase.ActualSteelBolts = new List<SteelBolt>();
-            foreach (SteelBolt steelBolt in columnBase.SteelBolts)
+            steelBase.ActualSteelBolts = new List<SteelBolt>();
+            foreach (SteelBolt steelBolt in steelBase.SteelBolts)
             {
-                columnBase.ActualSteelBolts.AddRange(SteelBoltProcessor.GetSteelBoltsFromBolt(steelBolt));
+                steelBase.ActualSteelBolts.AddRange(SteelBoltProcessor.GetSteelBoltsFromBolt(steelBolt));
             }
         }
         /// <summary>
         /// Заносит коллекцию элементарных участков для базы стальной колонны
         /// как параметр стальной базы
         /// </summary>
-        /// <param name="columnBase">База стальной колонны</param>
-        public static void GetNdmAreas(SteelBase columnBase)
+        /// <param name="steelBase">База стальной колонны</param>
+        public static void GetNdmAreas(SteelBase steelBase)
         {
-            columnBase.NdmAreas = GetConcreteNdmAreas(columnBase);
-            columnBase.NdmAreas.AddRange(GetSteelNdmAreas(columnBase));
+            steelBase.ConcreteNdmAreas = GetConcreteNdmAreas(steelBase);
+            steelBase.SteelNdmAreas=GetSteelNdmAreas(steelBase);
+            steelBase.NdmAreas.Clear();
+            steelBase.NdmAreas.AddRange(steelBase.ConcreteNdmAreas);
+            steelBase.NdmAreas.AddRange(steelBase.SteelNdmAreas);
         }
         public static ForceCurvature GetCurvature(LoadSet loadCase, SteelBase columnBase)
         {
@@ -117,14 +120,15 @@ namespace RDBLL.Processors.SC
         /// <summary>
         /// Врзвращает коллекцию элементарных участков бетона для всех участков стальной базы
         /// </summary>
-        /// <param name="columnBase">Стальная база</param>
+        /// <param name="steelBase">Стальная база</param>
         /// <returns>Коллекция элементарных участков</returns>
-        public static List<NdmArea> GetConcreteNdmAreas(SteelBase columnBase)
+        public static List<NdmArea> GetConcreteNdmAreas(SteelBase steelBase)
         {
             List<NdmArea>  NdmAreas = new List<NdmArea>();
-            foreach (SteelBasePart steelBasePart in columnBase.ActualSteelBaseParts)
+            foreach (SteelBasePart steelBasePart in steelBase.ActualSteelBaseParts)
             {
-                SteelBasePartProcessor.GetSubParts(steelBasePart);
+                if (steelBase.UseSimpleMethod) { SteelBasePartProcessor.GetSubParts(steelBasePart); }
+                else { SteelBasePartProcessor.GetSubParts(steelBasePart, steelBase.ConcreteStrength); }
                 foreach (NdmConcreteArea ndmConcreteArea in steelBasePart.SubParts)
                 {
                     NdmAreas.Add(ndmConcreteArea.ConcreteArea);
@@ -151,13 +155,12 @@ namespace RDBLL.Processors.SC
         /// Возвращает набор усилий и кривизн стальной базы
         /// </summary>
         /// <param name="loadCase">Набор сочетаний</param>
-        /// <param name="columnBase">Стальная база</param>
+        /// <param name="steelBase">Стальная база</param>
         /// <returns>Набор усилий и кривизн</returns>
-        public static ForceCurvature GetCurvatureSimpleMethod(LoadSet loadCase, SteelBase columnBase)
+        public static ForceCurvature GetCurvatureSimpleMethod(LoadSet loadCase, SteelBase steelBase)
         {
             SumForces sumForces = new SumForces(loadCase);
-            List<NdmArea> NdmAreas = GetConcreteNdmAreas(columnBase);
-            StiffnessCoefficient stiffnessCoefficient = new StiffnessCoefficient(NdmAreas);
+             StiffnessCoefficient stiffnessCoefficient = new StiffnessCoefficient(steelBase.ConcreteNdmAreas);
             Curvature curvature = new Curvature(sumForces, stiffnessCoefficient);
             return new ForceCurvature(loadCase, curvature);
         }
@@ -172,9 +175,6 @@ namespace RDBLL.Processors.SC
                     ForceCurvature forceCurvature = GetCurvatureSimpleMethod(loadCase, steelBase);
                     //Заносим кривизну как параметр стальной базы
                     steelBase.ForceCurvatures.Add(forceCurvature);
-                    //Получаем элементарные участки стальной базы
-                    List<NdmArea> concreteNdmAreas = GetConcreteNdmAreas(steelBase);
-                    List<NdmArea> steelNdmAreas = GetSteelNdmAreas(steelBase);
                     //Создаем локальную переменную для кривизны соответствующей бетоны
                     //как кривизну, полученную для базы с начальным модулем упругости
                     Curvature concreteCurvature = forceCurvature.ConcreteCurvature;
@@ -184,7 +184,7 @@ namespace RDBLL.Processors.SC
                     //Получаем матрицу жесткостных коэффициентов для бетона с учетом кривизны, полученной на первом этапе
                     //таким образом будут вычислены участки растянутого бетона если они есть
                     //дальнейшие итерации для бетона не требуются
-                    StiffnessCoefficient concreteStiffnessCoefficient = new StiffnessCoefficient(concreteNdmAreas, concreteCurvature);
+                    StiffnessCoefficient concreteStiffnessCoefficient = new StiffnessCoefficient(steelBase.ConcreteNdmAreas, concreteCurvature);
                     //Получаем матрицу усилий по набору нагрузок
                     SumForces initForces = new SumForces(loadCase);
                     //Вычисляем усилия в бетоне с учетом жесткостных коэффициентов учитывающих растянутую зону
@@ -200,7 +200,7 @@ namespace RDBLL.Processors.SC
                     for (int i = 1; i <= 5; i++)
                     {
                         //Уточняем жесткостные коэффициенты с учетом кривизны, полученной на предыдущем этапе
-                        StiffnessCoefficient steelStiffnessCoefficient = new StiffnessCoefficient(steelNdmAreas, steelCurvature);
+                        StiffnessCoefficient steelStiffnessCoefficient = new StiffnessCoefficient(steelBase.SteelNdmAreas, steelCurvature);
                         //Получаем новое значение кривизны для болтов с учетом жесткостных коэффициентов, полученных
                         //на предыдущем этапе
                         steelCurvature = new Curvature(deltaForces, steelStiffnessCoefficient);
@@ -221,53 +221,27 @@ namespace RDBLL.Processors.SC
         {
             foreach (LoadSet loadCase in steelBase.LoadCases)
             {
-                try //Запускаем нелинейный расчет
+                SumForces sumForces = new SumForces(loadCase);
+                StiffnessCoefficient stiffnessCoefficient = new StiffnessCoefficient(steelBase.NdmAreas);
+                Curvature curvature = new Curvature(sumForces, stiffnessCoefficient);
+                //Определяем новые жесткостные коэффициенты по полученной кривизне
+                StiffnessCoefficient newStiffnessCoefficient = new StiffnessCoefficient(steelBase.NdmAreas, curvature);
+                Curvature newCurvature = new Curvature(sumForces, newStiffnessCoefficient);
+                try
                 {
-                    //Получаем кривизну соответствующую начальному модулю упругости
-                    //Кривизна будет единой для бетона и стали
-                    ForceCurvature forceCurvature = GetCurvatureSimpleMethod(loadCase, steelBase);
-                    //Заносим кривизну как параметр стальной базы
-                    steelBase.ForceCurvatures.Add(forceCurvature);
-                    //Получаем элементарные участки стальной базы
-                    List<NdmArea> concreteNdmAreas = GetConcreteNdmAreas(steelBase);
-                    List<NdmArea> steelNdmAreas = GetSteelNdmAreas(steelBase);
-                    //Создаем локальную переменную для кривизны соответствующей бетоны
-                    //как кривизну, полученную для базы с начальным модулем упругости
-                    Curvature concreteCurvature = forceCurvature.ConcreteCurvature;
-                    //Для начала итерационного расчета кривизну стальных участков
-                    //как кривизну базы с начальным модулем упругости
-                    Curvature steelCurvature = forceCurvature.SteelCurvature;
-                    //Получаем матрицу жесткостных коэффициентов для бетона с учетом кривизны, полученной на первом этапе
-                    //таким образом будут вычислены участки растянутого бетона если они есть
-                    //дальнейшие итерации для бетона не требуются
-                    StiffnessCoefficient concreteStiffnessCoefficient = new StiffnessCoefficient(concreteNdmAreas, concreteCurvature);
-                    //Получаем матрицу усилий по набору нагрузок
-                    SumForces initForces = new SumForces(loadCase);
-                    //Вычисляем усилия в бетоне с учетом жесткостных коэффициентов учитывающих растянутую зону
-                    SumForces concreteForces = new SumForces(concreteStiffnessCoefficient, concreteCurvature);
-                    //Вычисляем усилие, которе должно быть воспринято болтами как разницу
-                    //между начальным усилием и усилием, воспринимаемым бетоном
-                    SumForces deltaForces = new SumForces(initForces, concreteForces);
-                    //deltaForces.ForceMatrix[2, 0] = deltaForces.ForceMatrix[2, 0]/2;
-                    //Делаем 20 итерация для более точного расчета
-                    //практика показала, что достаточная точность достигается примерно за 5-7 итераций
-                    //В будущем надо будет сделать проверку погрешности для возможного уменьшения количества итераций
-                    //и вывод хода нелинейного расчета
-                    for (int i = 1; i <= 5; i++)
+                    SumForces sumForces2 = new SumForces(newStiffnessCoefficient, newCurvature);
+                    for (int i = 1; i <= 20; i++)
                     {
-                        //Уточняем жесткостные коэффициенты с учетом кривизны, полученной на предыдущем этапе
-                        StiffnessCoefficient steelStiffnessCoefficient = new StiffnessCoefficient(steelNdmAreas, steelCurvature);
-                        //Получаем новое значение кривизны для болтов с учетом жесткостных коэффициентов, полученных
-                        //на предыдущем этапе
-                        steelCurvature = new Curvature(deltaForces, steelStiffnessCoefficient);
+                        newCurvature = new Curvature(sumForces, newStiffnessCoefficient);
+                        newStiffnessCoefficient = new StiffnessCoefficient(steelBase.NdmAreas, newCurvature);
+                        sumForces2 = new SumForces(newStiffnessCoefficient, newCurvature);
                     }
-                    //заносим полученное значение кривизны стальных участков как параметр базы
-                    forceCurvature.SteelCurvature = steelCurvature;
+                    sumForces2 = new SumForces(newStiffnessCoefficient, newCurvature);
+                    ForceCurvature forceCurvature = new ForceCurvature(loadCase, newCurvature);
+                    steelBase.ForceCurvatures.Add(forceCurvature);
                 }
-                catch //Ошибка нелинейного расчета
+                catch
                 {
-                    //Ошибка нелинейного расчета говорит о том, что сходимость не достигнута,
-                    //например, происходит опрокидывание базы из-за недостаточного количества болтов
                     MessageBox.Show("Проверьте исходные данные", "Ошибка нелинейного расчета");
                 }
             }

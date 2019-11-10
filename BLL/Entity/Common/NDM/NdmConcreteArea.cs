@@ -34,5 +34,10 @@ namespace RDBLL.Entity.Common.NDM
         {
             ConcreteArea = new NdmArea(new LinearIsotropic(1e+10, 1, 0));
         }
+        public NdmConcreteArea(List<double> list)
+        {
+            ConcreteArea = new NdmArea(new DoubleLinear(list));
+            //ConcreteArea = new NdmArea(new LinearIsotropic(1e+10, 1, 0));
+        }
     }
 }

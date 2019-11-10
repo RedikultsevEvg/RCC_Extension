@@ -352,7 +352,7 @@ namespace RDBLL.Processors.SC
         /// Возвращает коллекцию элементарных участков для участка базы
         /// </summary>
         /// <param name="steelBasePart"></param>
-        public static void GetSubParts(SteelBasePart steelBasePart)
+        public static void GetSubParts(SteelBasePart steelBasePart, double Rc = 0)
         {
             steelBasePart.SubParts = new List<NdmConcreteArea>();
             double elementSize = 0.005;
@@ -369,7 +369,9 @@ namespace RDBLL.Processors.SC
             {
                 for (int j = 0; j < numY; j++)
                 {
-                    NdmConcreteArea subPart = new NdmConcreteArea();
+                    NdmConcreteArea subPart;
+                    if (Rc == 0) { subPart = new NdmConcreteArea(); }
+                    else { subPart = new NdmConcreteArea(new List<double>{ Rc * (-1D), -0.0015, -0.0035, 0, 0.0015, 0.0035 }); }
                     subPart.Width = stepX;
                     subPart.Length = stepY;
                     subPart.ConcreteArea.CenterX = startCenterX + stepX * i;

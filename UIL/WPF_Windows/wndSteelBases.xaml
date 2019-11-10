@@ -7,7 +7,7 @@
         xmlns:Convert="clr-namespace:RDUIL.Converters" 
         xmlns:Column="clr-namespace:RDBLL.Entity.SC.Column;assembly=BLL" x:Class="RDUIL.WPF_Windows.wndSteelBases" 
         mc:Ignorable="d"
-        Title="Базы стальных колонн" Height="450" Width="600" MinWidth="500" MinHeight="450" MaxWidth="800">
+        Title="Базы стальных колонн" Height="450" Width="600" MinWidth="500" MinHeight="450" MaxWidth="800" WindowStartupLocation="CenterScreen">
     <Window.Resources>
         <Convert:LinearSizeConverter x:Key="LinearSizeConverter"/>
         <Convert:StressConverter x:Key="StressConverter"/>

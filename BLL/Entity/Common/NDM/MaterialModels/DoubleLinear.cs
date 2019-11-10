@@ -20,24 +20,29 @@ namespace RDBLL.Entity.Common.NDM.MaterialModels
         /// Список констант, интерпретация констант определяется моделью
         /// </summary>
         public List<MaterialConstant> ListOfConsnstants { get; set; }
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="elasticModulus"></param>
-        /// <param name="copmressionStrength"></param>
-        /// <param name="copmressionUltStrain"></param>
-        /// <param name="tensionStrength"></param>
-        /// <param name="tensionUltStrain"></param>
-        public DoubleLinear(double elasticModulus, double copmressionStrength, double copmressionUltStrain, double tensionStrength, double tensionUltStrain)
+
+        public DoubleLinear(List<double> list)
+        //double copmressionStrength, double copmressionStrain, double copmressionUltStrain, double tensionStrength, double tensionStrain, double tensionUltStrain)
         {
-            ElasticModulus = elasticModulus;
+            double copmressionStrength = list[0];
+            double copmressionStrain = list[1];
+            double copmressionUltStrain = list[2];
+            double tensionStrength = list[3];
+            double tensionStrain = list[4];
+            double tensionUltStrain = list[5];
+
+            ElasticModulus = 1e10;
             ListOfConsnstants = new List<MaterialConstant>();
             MaterialConstant NewConstant;
             NewConstant = new MaterialConstant { Name = "CompressionStrength", ConstantValue = copmressionStrength };
             ListOfConsnstants.Add(NewConstant);
+            NewConstant = new MaterialConstant { Name = "copmressionStrain", ConstantValue = copmressionStrain };
+            ListOfConsnstants.Add(NewConstant);
             NewConstant = new MaterialConstant { Name = "copmressionUltStrain", ConstantValue = copmressionUltStrain };
             ListOfConsnstants.Add(NewConstant);
             NewConstant = new MaterialConstant { Name = "TensionStrength", ConstantValue = tensionStrength };
+            ListOfConsnstants.Add(NewConstant);
+            NewConstant = new MaterialConstant { Name = "TensionStrain", ConstantValue = tensionStrain };
             ListOfConsnstants.Add(NewConstant);
             NewConstant = new MaterialConstant { Name = "TensionUltStrain", ConstantValue = tensionUltStrain };
             ListOfConsnstants.Add(NewConstant);
@@ -49,27 +54,30 @@ namespace RDBLL.Entity.Common.NDM.MaterialModels
         /// <returns>Напряжения, Па</returns>
         public double GetStress(double strain)
         {
-            double elasticModulus = ElasticModulus;
             double Rc = ListOfConsnstants[0].ConstantValue;
             double Epsc = ListOfConsnstants[1].ConstantValue;
-            double Rt = ListOfConsnstants[2].ConstantValue;
-            double Epst = ListOfConsnstants[3].ConstantValue;
+            double UltEpsc = ListOfConsnstants[2].ConstantValue;
+            double Rt = ListOfConsnstants[3].ConstantValue;
+            double Epst = ListOfConsnstants[4].ConstantValue;
+            double UltEpst = ListOfConsnstants[5].ConstantValue;
+            double compressionModulus = Rc / Epsc;
+            double tensionModulus = Rt / Epst;
 
             //Если деформации сжимающие
             if (strain < 0)
             {
-                if (strain < Epsc || Rc == 0 || Epsc == 0) //Усли деформации больше предельных 
+                if (strain < UltEpsc || Rc == 0 || UltEpsc == 0) //Усли деформации больше предельных 
                 { return 0; }
-                else if (strain < (Rc/elasticModulus))
-                { return elasticModulus * strain;}
+                else if (strain > Epsc)
+                { return compressionModulus * strain;}
                 else { return Rc; }
             }
             else //Деформации растягивающие
             {
-                if (strain > Epst || Rt == 0 || Epst == 0)
+                if (strain > UltEpst || Rt == 0 || UltEpst == 0)
                 { return 0; }
-                else if (strain > (Rt / elasticModulus))
-                { return elasticModulus * strain; }
+                else if (strain < Epst)
+                { return tensionModulus * strain; }
                 else { return Rt; }
             }
 

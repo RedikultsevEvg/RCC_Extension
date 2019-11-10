@@ -69,10 +69,18 @@ namespace RDBLL.Processors.SC
             foreach (ForceCurvature forceCurvature in steelBolt.SteelBase.ForceCurvatures)
             {
                 //При расчете по упрощенном методу кривизна бетона и болтов не совпадает
-                double stress = GetStressNonLinear(steelBolt, forceCurvature.ConcreteCurvature);
-                //Проверяем, находится ли болт в сжатой зоне бетона
-                if (stress <= 0) { stresses.Add(0); } //Если находится, то напряжения принимаем равными нулю
-                else { stresses.Add(GetStressNonLinear(steelBolt, forceCurvature.SteelCurvature)); }
+                if (steelBolt.SteelBase.UseSimpleMethod)
+                {
+                    double stress = GetStressNonLinear(steelBolt, forceCurvature.ConcreteCurvature);
+                    //Проверяем, находится ли болт в сжатой зоне бетона
+                    if (stress <= 0) { stresses.Add(0); } //Если находится, то напряжения принимаем равными нулю
+                    else { stresses.Add(GetStressNonLinear(steelBolt, forceCurvature.SteelCurvature)); }
+                }
+                else
+                {
+                    stresses.Add(GetStressNonLinear(steelBolt, forceCurvature.SteelCurvature));
+                }
+
             }
             return stresses.Max();
         }

@@ -50,7 +50,18 @@ namespace RDBLL.Entity.SC.Column
         public ObservableCollection<SteelBolt> SteelBolts { get; set; } //Коллекция болтов
         public List<SteelBolt> ActualSteelBolts { get; set; } //Коллекция болтов с учетом симметрии
         public List<LoadSet> LoadCases { get; set; } //Коллекция комбинаций
-        public List<NdmArea> NdmAreas { get; set; } //Коллекция элементарных участков
+        /// <summary>
+        /// Коллекция всех элементарных участков
+        /// </summary>
+        public List<NdmArea> NdmAreas { get; set; }
+        /// <summary>
+        /// Коллекция элементарных участков бетона
+        /// </summary>
+        public List<NdmArea> ConcreteNdmAreas { get; set; }
+        /// <summary>
+        /// Коллекция элементарных участков стали
+        /// </summary>
+        public List<NdmArea> SteelNdmAreas { get; set; }
         public List<ForceCurvature> ForceCurvatures { get; set; } //Коллекция комбинаций и кривизны 
 
         public bool IsLoadCasesActual
@@ -100,6 +111,9 @@ namespace RDBLL.Entity.SC.Column
             SteelBaseParts = new ObservableCollection<SteelBasePart>();
             SteelBolts = new ObservableCollection<SteelBolt>();
             ForceCurvatures = new List<ForceCurvature>();
+            NdmAreas = new List<NdmArea>();
+            ConcreteNdmAreas = new List<NdmArea>();
+            SteelNdmAreas = new List<NdmArea>();
 
             /// Вложенные объекты по умолчанию
             StartObjects();
