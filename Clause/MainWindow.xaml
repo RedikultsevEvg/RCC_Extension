@@ -27,9 +27,9 @@
         <DockPanel Panel.ZIndex="5" Grid.Row="1" Grid.Column="1" >
             <Menu x:Name="menuAdd" DockPanel.Dock="Left" Panel.ZIndex="5" Height="70"  Width="150" Background="#B0C4DE"
                   Opacity="16" VerticalAlignment="Top" HorizontalAlignment="Left" Visibility="Hidden">
-                <MenuItem Header="Вертикальная эпюра"></MenuItem>
+                <MenuItem Header="Вертикальная эпюра" Click="plotV"></MenuItem>
                 <Separator/>
-                <MenuItem Header="Горизонтальная эпюра"></MenuItem>
+                <MenuItem Header="Горизонтальная эпюра" Click="plotH"></MenuItem>
                 <Separator/>
                 <MenuItem Header="Выход" Click="exitAdd"></MenuItem>
                 <Menu.ItemsPanel>
@@ -40,20 +40,21 @@
 
             </Menu>
         </DockPanel>
-        
+
         <Slider Grid.Column="0" Grid.Row="1" Orientation="Vertical" HorizontalAlignment="Left" Minimum="1" x:Name="slider"/>
         <ScrollViewer Name="scrollViewer" Grid.Row="1" Grid.Column="1" VerticalScrollBarVisibility="Visible"
                       HorizontalScrollBarVisibility="Visible" Panel.ZIndex="0" >
-          
-            <Grid Name="grid" Width="800" Height="600" RenderTransformOrigin="0.5,0.5" local:ExtAdorner.Size="10" local:ExtAdorner.PenBrush="White" >
+
+            <Grid Name="grid" RenderTransformOrigin="0.5,0.5" 
+                  local:ExtAdorner.Size="10" local:ExtAdorner.PenBrush="White" 
+                  VerticalAlignment="Top" HorizontalAlignment="Left" >
                 <Grid.LayoutTransform>
                     <TransformGroup>
-                        <ScaleTransform x:Name="scaleTransform"/>
+                        <ScaleTransform x:Name="scaleTransform" ScaleX="1" ScaleY="1" />
                     </TransformGroup>
                 </Grid.LayoutTransform>
-                <Viewbox Grid.Column="1" Grid.Row="1" VerticalAlignment="Top" HorizontalAlignment="Left" 
-                         Margin="0,0,0,0">
-                    <Image x:Name="mainPict" Margin="0,0,0,0" />
+                <Viewbox Grid.Column="1" Grid.Row="1" Margin="0,0,0,0">
+                    <Image x:Name="mainPict" Margin="0,0,0,0" HorizontalAlignment="Left"/>
                 </Viewbox>
             </Grid>
         </ScrollViewer>

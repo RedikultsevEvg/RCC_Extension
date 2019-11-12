@@ -30,11 +30,12 @@ namespace EvgRed01
     /// <summary>
     /// Логика взаимодействия для MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class MainWindow : System.Windows.Window
     {
         Point? lastCenterPositionOnTarget;
         Point? lastMousePositionOnTarget;
         Point? lastDragPoint;
+
         public MainWindow()
         {
             InitializeComponent();
@@ -52,13 +53,14 @@ namespace EvgRed01
         int width_ = 0;
         int height_ = 0;
         string sTitle;
+        public WriteableBitmap wbitmap;
         private void OnMouseLeave(object sender, MouseEventArgs e)
         {
             this.Title = sTitle;
         }
         private void OnMouseRightButtonDown(object sender, MouseEventArgs e)
         {
-            
+
             Point posNow = e.GetPosition(scrollViewer);
             this.Title = "X: " + Math.Round(posNow.X).ToString() + " Y: " + Math.Round(posNow.Y).ToString();
 
@@ -66,7 +68,7 @@ namespace EvgRed01
             this.lineH.X1 = 0;
             this.lineH.Y1 = posNow.Y;
             if (this.lineH.Y1 < 0) this.lineH.Y1 = 0;
-            this.lineH.X2 = 810;     //  width_;
+            this.lineH.X2 = width_;
             this.lineH.Y2 = this.lineH.Y1;
 
             this.lineH.Stroke = Brushes.Cyan;
@@ -78,7 +80,7 @@ namespace EvgRed01
             this.lineV.Y1 = 0;
             if (this.lineV.X1 < 0) this.lineV.X1 = 0;
             this.lineV.X2 = posNow.X;
-            this.lineV.Y2 = 620;
+            this.lineV.Y2 = height_;
 
             this.lineV.Stroke = Brushes.Cyan;
             this.lineV.StrokeThickness = 1;
@@ -96,7 +98,7 @@ namespace EvgRed01
         {
             Point posNow = e.GetPosition(scrollViewer);
             // if (posNow.X<=width_&& posNow.Y<=height_) 
-            this.Title = "X: " + Math.Round(posNow.X).ToString() + " Y: " + Math.Round(posNow.Y).ToString();
+            //this.Title = "X: " + Math.Round(posNow.X).ToString() + " Y: " + Math.Round(posNow.Y).ToString();
             //this.Title = "X: " + width_.ToString() + " Y: " + height_.ToString();
             if (lastDragPoint.HasValue)
             {
@@ -108,12 +110,14 @@ namespace EvgRed01
                 scrollViewer.ScrollToHorizontalOffset(scrollViewer.HorizontalOffset - dX);
                 scrollViewer.ScrollToVerticalOffset(scrollViewer.VerticalOffset - dY);
             }
+
+            this.Title = mainPict.ActualHeight.ToString() + "  :  " + mainPict.ActualWidth.ToString();
         }
         void OnMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             var mousePos = e.GetPosition(scrollViewer);
             this.Title = String.Format("X: {0}, Y: {1},  VX: {2}, VY: {3}", mousePos.X, mousePos.Y, scrollViewer.ViewportWidth, scrollViewer.ViewportHeight);
-            
+
             if (mousePos.X <= scrollViewer.ViewportWidth && mousePos.Y < scrollViewer.ViewportHeight) //make sure we still can use the scrollbars
             {
                 scrollViewer.Cursor = Cursors.SizeAll;
@@ -154,7 +158,7 @@ namespace EvgRed01
             var centerOfViewport = new Point(scrollViewer.ViewportWidth / 2, scrollViewer.ViewportHeight / 2);
             lastCenterPositionOnTarget = scrollViewer.TranslatePoint(centerOfViewport, grid);
         }
-        
+
         void OnScrollViewerScrollChanged(object sender, ScrollChangedEventArgs e)
         {
             if (e.ExtentHeightChange != 0 || e.ExtentWidthChange != 0)
@@ -209,7 +213,7 @@ namespace EvgRed01
             // Set filter for file extension and default file extension 
             loadF.DefaultExt = ".xml";
             loadF.Filter = "PNG Files (*.png)|*.png|XML Files (*.xml)|*.xml";
-            
+
             // Display OpenFileDialog by calling ShowDialog method 
             Nullable<bool> result = loadF.ShowDialog();
 
@@ -223,14 +227,18 @@ namespace EvgRed01
                 if (filename.Length > 0)
                 {
                     iPoint = filename.LastIndexOf(".");
-                    ext = filename.Substring(iPoint+1);
+                    ext = filename.Substring(iPoint + 1);
                     if (ext == "png")   // Загрузка PNG-картинки
                     {
                         BitmapImage bi = new BitmapImage(new Uri(@filename));
-                        WriteableBitmap eb = new WriteableBitmap(bi);
-                        height_ = eb.PixelHeight;
-                        width_ = eb.PixelWidth;
-                        mainPict.Source = eb;
+                        //WriteableBitmap wbitmap = new WriteableBitmap(bi);
+                        wbitmap = new WriteableBitmap(bi);
+                        height_ = wbitmap.PixelHeight;
+                        width_ = wbitmap.PixelWidth;
+
+                        mainPict.Width = width_;
+                        mainPict.Height = height_;
+                        mainPict.Source = wbitmap;
                     }
 
                     if (ext == "xml")       // Загрузка картинки из XML-файла
@@ -242,9 +250,9 @@ namespace EvgRed01
 
                         foreach (XmlNode n in childnodes) // Определяем габариты картинки
                         {
-                            int coordX = int.Parse( n.SelectSingleNode("CoordX").InnerText );
-                            int coordY = int.Parse( n.SelectSingleNode("CoordY").InnerText );
-                            if (coordX > width_)  width_  = coordX;
+                            int coordX = int.Parse(n.SelectSingleNode("CoordX").InnerText);
+                            int coordY = int.Parse(n.SelectSingleNode("CoordY").InnerText);
+                            if (coordX > width_) width_ = coordX;
                             if (coordY > height_) height_ = coordY;
                         }
                         //this.Title = width_.ToString() + "   " + height_.ToString();  // Смотрим ширину и высоту
@@ -265,7 +273,7 @@ namespace EvgRed01
                             pixels[coordX, coordY, 2] = colorR;               // Red
                             pixels[coordX, coordY, 3] = transp;                // Transparency Прозрачность
                         }
-                        this.Title = "Pass 1";
+                        //this.Title = "Pass 1";
                         byte[] pixels1d = new byte[height_ * width_ * 4];
                         int index = 0;
                         for (int row = 0; row < width_; row++)
@@ -276,23 +284,77 @@ namespace EvgRed01
                                     pixels1d[index++] = pixels[row, col, i];
                             }
                         }
-                        this.Title = "Pass 2";
+                        //this.Title = "Pass 2";
                         // Update writeable bitmap with the colorArray to the image.
                         Int32Rect rect = new Int32Rect(0, 0, height_, width_);
                         int stride = 4 * height_;
                         wbitmap.WritePixels(rect, pixels1d, stride, 0);
-      
+
                         //Set the Image source.
                         mainPict.Source = wbitmap;
                         //this.Title = "mainPict";
-                        
+
                     }
-                } 
+                }
             }
         }
         private void exitApp(object sender, RoutedEventArgs e)
         {
             this.Close(); // закрытие программы
+        }
+        private void plotH(object sender, RoutedEventArgs e)
+        {
+
+            this.Title = this.lineH.Y1.ToString();
+            Window1 winPlot = new Window1();
+            winPlot.lineH.X1 = 0;
+            winPlot.lineH.Y1 = 10;
+            winPlot.lineH.X2 = width_;
+            winPlot.lineH.Y2 = 10;
+            winPlot.lineH.Stroke = Brushes.Black;
+            winPlot.lineH.StrokeThickness = 3;
+            winPlot.lineH.Visibility = Visibility.Visible;
+            winPlot.Title = width_.ToString() + "   " + height_.ToString();
+
+            winPlot.Show();
+
+
+            Int32Rect rect = new Int32Rect(0, 0, (int)mainPict.ActualWidth, (int)mainPict.ActualHeight);
+            int stride = 4 * (int)mainPict.ActualWidth;
+
+            int arrayLength = stride * (int)mainPict.ActualHeight;
+            byte[] pixels1d = new byte[arrayLength];
+            this.Title = "plotH aL:" + arrayLength.ToString() + ", H:" +
+                pixels1d.ToString() + ", bytesPerPixel:4, stride:" + stride.ToString();
+            
+            wbitmap.CopyPixels(pixels1d, stride, 0);
+
+            winPlot.Title = "W: " + ((int)mainPict.Source.Width).ToString() +
+                            "  H: " + ((int)mainPict.Source.Height).ToString() +
+                            "   Len: " + ((int)pixels1d.Length).ToString();
+
+            Polygon plot = new Polygon();
+            PointCollection plot_Points = new PointCollection();
+            Point point1 = new Point(0,10);
+            plot_Points.Add(point1);
+            for (int iX = 0; iX <= (int)mainPict.ActualWidth; iX++)
+            {
+                int iZ = 4 * (int)mainPict.Source.Width  * (int)this.lineH.Y1 + iX * 4;
+                int iY = (int)pixels1d[iZ] + (int)pixels1d[iZ + 1] + (int)pixels1d[iZ+2];
+                point1 = new Point(iX, iY);
+                plot_Points.Add(point1);
+            }
+            point1 = new Point((int)mainPict.ActualWidth, 10);
+            plot_Points.Add(point1);
+
+            plot.Points = plot_Points;
+            plot.Fill = Brushes.LightCoral;
+            winPlot.gridPlot.Children.Add(plot);
+            
+        }
+        private void plotV(object sender, RoutedEventArgs e)
+        {
+
         }
     }
     public class PXLS
@@ -304,6 +366,17 @@ namespace EvgRed01
         public byte ColorR { get; set; }    // Цвет точки - красная составляющая
         public byte Transp { get; set; }    // Прозрачность точки от 0 до 255 ****  255 - 100% непрозрачности
 
+    }
+    public class PictConcreteArea
+    {
+        public double CoordX { get; set; }     // Координата Х (на прямоугольнике)
+        public double CoordY { get; set; }     // Координата Y (там же)
+        public double colorPix { get; set; } // Цвет точки
+    }
+    public class plotPoints
+    {
+        public int pointX { get; set; }
+        public int pointY { get; set; }
     }
     class GridAdorner : Adorner
     {

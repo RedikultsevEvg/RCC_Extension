@@ -13,5 +13,7 @@ namespace EvgRed01
     /// </summary>
     public partial class App : Application
     {
+
     }
+
 }
