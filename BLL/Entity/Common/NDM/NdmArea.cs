@@ -10,7 +10,7 @@ namespace RDBLL.Entity.Common.NDM
 {
     public class NdmArea
     {
-        private double _ElasticModulus;
+        //private double _ElasticModulus;
 
         public double Area { get; set; }
         public double CenterX { get; set; }
