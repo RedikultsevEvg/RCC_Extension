@@ -90,6 +90,15 @@
                         <TextBlock Margin="3" Foreground="Black">Болты...</TextBlock>
                     </Button.ToolTip>
                 </Button>
+                <Button x:Name="btnStresses" Style="{StaticResource ServiceButton}" Height="50" Click="BtnStresses_Click">
+                    <Button.Effect>
+                        <DropShadowEffect Opacity="0.6"/>
+                    </Button.Effect>
+                    <Image x:Name="Stresses_png" Style="{StaticResource ServiceButtonImage}" Source="{DynamicResource IconForces}"/>
+                    <Button.ToolTip>
+                        <TextBlock Margin="3" Foreground="Black">Напряжения...</TextBlock>
+                    </Button.ToolTip>
+                </Button>
             </StackPanel>
         </Grid>
         <StackPanel Height="60" Grid.Row="1" Margin="10" Orientation="Horizontal" Grid.ColumnSpan="3" HorizontalAlignment="Right" Background="#FFE2E2E2">

@@ -12,6 +12,8 @@ using RDBLL.Common.Geometry;
 using RDBLL.Entity.Common.NDM;
 using System.Collections.ObjectModel;
 using System.Windows.Forms;
+using RDBLL.Entity.Results.NDM;
+using RDBLL.Entity.Common.NDM.Processors;
 
 
 namespace RDBLL.Processors.SC
@@ -31,11 +33,11 @@ namespace RDBLL.Processors.SC
             ActualizeBaseParts(steelBase);
             ActualizeSteelBolts(steelBase);
             ActualizeLoadCases(steelBase);
-            steelBase.IsActual = true;
             GetNdmAreas(steelBase);
             steelBase.ForceCurvatures.Clear();
             if (steelBase.UseSimpleMethod) { SolveSimpleMethod(steelBase); }
-            else { SolveNDMMethod (steelBase); } 
+            else { SolveNDMMethod (steelBase); }
+            steelBase.IsActual = true;
         }
         /// <summary>
         /// Актуализирует наборы нагрузок
@@ -246,6 +248,38 @@ namespace RDBLL.Processors.SC
                 }
             }
         }
+        /// <summary>
+        /// Возвращает коллекцию прямоугольных участков со значениями и комбинации нагрузок,
+        /// к которой они относятся
+        /// </summary>
+        /// <param name="steelBase"></param>
+        /// <returns></returns>
+        public static List<LoadCaseRectangleValue> GetRectangleValues(SteelBase steelBase)
+        {
+            if (! steelBase.IsActual) { SteelBaseProcessor.SolveSteelColumnBase(steelBase); }
+            List<LoadCaseRectangleValue> loadCaseRectangleValues = new List<LoadCaseRectangleValue>();
+            foreach (ForceCurvature forceCurvature in steelBase.ForceCurvatures)
+            {
+                LoadCaseRectangleValue loadCaseRectangleValue = new LoadCaseRectangleValue();
+                loadCaseRectangleValue.LoadCase = forceCurvature.LoadSet;
+                foreach (SteelBasePart steelBasePart in steelBase.ActualSteelBaseParts)
+                {
+                    foreach (NdmConcreteArea ndmConcreteArea in steelBasePart.SubParts)
+                    {
+                        RectangleValue rectangleValue = new RectangleValue();
+                        rectangleValue.CenterX = ndmConcreteArea.ConcreteArea.CenterX;
+                        rectangleValue.CenterY = ndmConcreteArea.ConcreteArea.CenterY;
+                        rectangleValue.Width = ndmConcreteArea.Width;
+                        rectangleValue.Length = ndmConcreteArea.Length;
+                        rectangleValue.Value = NdmAreaProcessor.GetStrainFromCuvature(ndmConcreteArea.ConcreteArea, forceCurvature.ConcreteCurvature)[1];
+                        loadCaseRectangleValue.RectangleValues.Add(rectangleValue);
+                    }
+                }
+                loadCaseRectangleValues.Add(loadCaseRectangleValue);
+            }
+            return loadCaseRectangleValues;
+        }
+
 
     }
 }

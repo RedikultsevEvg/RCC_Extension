@@ -7,6 +7,7 @@ using RDBLL.Forces;
 using System.Collections.ObjectModel;
 using RDBLL.Common.Geometry;
 using System.Windows.Forms;
+using RDBLL.Entity.Results.NDM;
 
 namespace RDBLL.Processors.Forces
 {

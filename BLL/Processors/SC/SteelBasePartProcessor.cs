@@ -355,7 +355,7 @@ namespace RDBLL.Processors.SC
         public static void GetSubParts(SteelBasePart steelBasePart, double Rc = 0)
         {
             steelBasePart.SubParts = new List<NdmConcreteArea>();
-            double elementSize = 0.005;
+            double elementSize = 0.02;
             int numX = Convert.ToInt32(steelBasePart.Width / elementSize);
             int numY = Convert.ToInt32(steelBasePart.Length / elementSize);
             //Шаг элементарных участков (совпадает с соответствующим размером участка)

@@ -87,6 +87,8 @@
     <Compile Include="Entity\RCC\WallAndColumn\Wall.cs" />
     <Compile Include="Entity\RCC\WallAndColumn\WallType.cs" />
     <Compile Include="Entity\Results\Forces\StressInRect.cs" />
+    <Compile Include="Entity\Results\NDM\LoadCaseRectangleValue.cs" />
+    <Compile Include="Entity\Results\NDM\RectangleValue.cs" />
     <Compile Include="Entity\Results\SC\ColumnBasePartResult.cs" />
     <Compile Include="Entity\Results\SC\ColumnBaseResult.cs" />
     <Compile Include="Entity\SC\Column\SteelBasePart.cs" />

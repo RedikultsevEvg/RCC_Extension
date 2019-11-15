@@ -13,9 +13,10 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using RDBLL.Entity.SC.Column;
-
+using RDBLL.Entity.Results.NDM;
 using RDBLL.Entity.MeasureUnits;
 using RDBLL.Common.Service;
+using RDBLL.Processors.SC;
 
 
 namespace RDUIL.WPF_Windows
@@ -73,6 +74,13 @@ namespace RDUIL.WPF_Windows
         {
             wndSteelBaseBolts wndSteelBaseBolts = new wndSteelBaseBolts(_steelColumnBase);
             wndSteelBaseBolts.ShowDialog();
+        }
+
+        private void BtnStresses_Click(object sender, RoutedEventArgs e)
+        {
+            //Коллекция комбинаций нагрузок и значений по прямоугольникам
+            List<LoadCaseRectangleValue> loadCaseRectangleValues = SteelBaseProcessor.GetRectangleValues(_steelColumnBase);
+            //Здесь необходимо вызывать окно с построением изополей и передавать в него коллекцию комбинаций и значений
         }
     }
 }
