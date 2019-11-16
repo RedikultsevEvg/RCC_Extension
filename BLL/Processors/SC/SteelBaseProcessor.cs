@@ -42,13 +42,13 @@ namespace RDBLL.Processors.SC
         /// <summary>
         /// Актуализирует наборы нагрузок
         /// </summary>
-        /// <param name="columnBase">База стальной колонны</param>
-        public static void ActualizeLoadCases(SteelBase columnBase)
+        /// <param name="steelBase">База стальной колонны</param>
+        public static void ActualizeLoadCases(SteelBase steelBase)
         {
-            if (! columnBase.IsLoadCasesActual)
+            if (! steelBase.IsLoadCasesActual)
             {
-                columnBase.LoadCases = LoadSetProcessor.GetLoadCases(columnBase.LoadsGroup);
-                columnBase.IsLoadCasesActual = true;
+                steelBase.LoadCases = LoadSetProcessor.GetLoadCases(steelBase.LoadsGroup);
+                steelBase.IsLoadCasesActual = true;
             }   
         }
         /// <summary>
@@ -56,14 +56,16 @@ namespace RDBLL.Processors.SC
         /// с учетом возможной симметрии
         /// т.е. заносит все участки как параметр стальной базы
         /// </summary>
-        /// <param name="columnBase"></param>
-        public static void ActualizeBaseParts(SteelBase columnBase)
+        /// <param name="steelBase"></param>
+        public static void ActualizeBaseParts(SteelBase steelBase)
         {
-            columnBase.ActualSteelBaseParts = new List<SteelBasePart>();
-            foreach (SteelBasePart steelBasePart in columnBase.SteelBaseParts)
+            if (steelBase.IsBasePartsActual) { return;}
+            steelBase.ActualSteelBaseParts = new List<SteelBasePart>();
+            foreach (SteelBasePart steelBasePart in steelBase.SteelBaseParts)
             {
-                columnBase.ActualSteelBaseParts.AddRange(SteelBasePartProcessor.GetSteelBasePartsFromPart(steelBasePart));
+                steelBase.ActualSteelBaseParts.AddRange(SteelBasePartProcessor.GetSteelBasePartsFromPart(steelBasePart));
             }
+            steelBase.IsBasePartsActual = true;
         }
         /// <summary>
         /// Актуализирует болты базы стальной колонны
@@ -73,11 +75,13 @@ namespace RDBLL.Processors.SC
         /// <param name="steelBase"></param>
         public static void ActualizeSteelBolts(SteelBase steelBase)
         {
+            if (steelBase.IsBoltsActual) { return;}
             steelBase.ActualSteelBolts = new List<SteelBolt>();
             foreach (SteelBolt steelBolt in steelBase.SteelBolts)
             {
                 steelBase.ActualSteelBolts.AddRange(SteelBoltProcessor.GetSteelBoltsFromBolt(steelBolt));
             }
+            steelBase.IsBoltsActual = true;
         }
         /// <summary>
         /// Заносит коллекцию элементарных участков для базы стальной колонны

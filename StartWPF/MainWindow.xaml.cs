@@ -34,6 +34,7 @@ namespace StartWPF
         {
             InitializeComponent();
             ProgrammSettings.InicializeNew();
+
             List<CalcType> calcTypes = new List<CalcType>(); 
 
             //CalcType calcTypeRCC = new CalcType();

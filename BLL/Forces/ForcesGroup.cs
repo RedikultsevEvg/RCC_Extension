@@ -75,6 +75,15 @@ namespace RDBLL.Forces
         {
 
         }
+
+        public void SetParentsNotActual()
+        {
+            foreach (SteelBase steelBase in SteelBases)
+            {
+                steelBase.IsActual = false;
+                steelBase.IsLoadCasesActual = false;
+            }
+        }
         #endregion
     }
 }

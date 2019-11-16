@@ -39,6 +39,7 @@ namespace RDUIL.WPF_Windows
             {
                 this.DialogResult = true;
                 _steelColumnBase.IsBoltsActual = false;
+                _steelColumnBase.IsActual = false;
                 ProgrammSettings.IsDataChanged = true;
                 this.Close();
             }

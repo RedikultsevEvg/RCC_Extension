@@ -102,6 +102,7 @@ namespace DAL.DataSets
             DsOperation.AddDoubleColumn(dataTable, "Length");
             DsOperation.AddDoubleColumn(dataTable, "Thickness");
             DsOperation.AddDoubleColumn(dataTable, "WorkCondCoef");
+            DsOperation.AddBoolColumn(dataTable, "UseSimpleMethod", true);
             #endregion
             #region SteelBaseParts
             dataTable = new DataTable("SteelBaseParts");

@@ -53,6 +53,7 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Converters\SteelBaseToGeometryConverter.cs" />
     <Compile Include="Converters\StressConverter.cs" />
     <Compile Include="Converters\LinearSizeConverter.cs" />
     <Compile Include="Converters\LinearSizeTextConverter.cs" />

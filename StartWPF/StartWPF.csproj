@@ -207,25 +207,30 @@
     <Resource Include="About.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\IconParts.png" />
+    <Resource Include="Resources\IconParts.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\IconCancel.png" />
+    <Resource Include="Resources\IconCancel.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\IconForces.png" />
+    <Resource Include="Resources\IconForces.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\IconOK.png" />
+    <Resource Include="Resources\IconOK.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\iconrefresh40.png" />
+    <Resource Include="Resources\iconrefresh40.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\IconAdd30.png" />
+    <Resource Include="Resources\IconAdd30.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\IconDelete30.png" />
+    <Resource Include="Resources\IconDelete30.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <SplashScreen Include="Resources\Splash.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -5,10 +5,10 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:StartWPF"
         mc:Ignorable="d"
-        Title="О программе..." Height="450" Width="800" ResizeMode="NoResize" WindowStyle="None">
+        Title="О программе..." Height="450" Width="600" ResizeMode="NoResize" WindowStyle="None" WindowStartupLocation="CenterScreen">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="36*"/>
+            <RowDefinition Height="30*"/>
             <RowDefinition Height="131*"/>
             <RowDefinition Height="23*"/>
             <RowDefinition Height="35*"/>
@@ -19,13 +19,25 @@
                 <GradientStop Color="White"/>
             </LinearGradientBrush>
         </Grid.Background>
-        <Button x:Name="btnClose" Content="Закрыть" HorizontalAlignment="Left" Margin="620,10,0,0" VerticalAlignment="Top" Width="162" Height="45" Grid.Row="3" FontSize="16" Click="btnClose_Click"/>
+        <Button x:Name="btnClose" Content="Закрыть" HorizontalAlignment="Right" Margin="50,10,50,0" VerticalAlignment="Top" Width="162" Height="45" Grid.Row="3" FontSize="16" Click="btnClose_Click"/>
         <Label x:Name="Authors" Content="Авторский коллектив" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" FontFamily="Arial" FontSize="16" Height="28" Width="166"/>
 
-        <StackPanel HorizontalAlignment="Left" Height="193" Margin="10,10,0,0" Grid.Row="1" VerticalAlignment="Top" Width="772">
-            <Label x:Name="Author1" Content="Петров С.А. - Технический руководитель" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" FontFamily="Arial" FontSize="16" FontWeight="Bold" Background="{x:Null}" Foreground="#FFFF5D5D"/>
-            <Label x:Name="Author2" Content="Редикульцев Е.А. - Консультант" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" FontFamily="Arial" FontSize="16" FontWeight="Bold" Background="{x:Null}" Foreground="#FFFF5D5D"/>
-
+        <StackPanel Margin="10,10,0,0" Grid.Row="1">
+            <Label Content="Редикульцев Е.А. - Руководитель, программирование" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" FontFamily="Arial" FontSize="14" FontWeight="Bold" Background="{x:Null}" Foreground="Black"/>
+            <Label Content="Петров С.А. - Технический консультант" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" FontFamily="Arial" FontSize="14" FontWeight="Bold" Background="{x:Null}" Foreground="Black"/>
+            <Label Content="Клаус С.А. - Программирование" HorizontalAlignment="Left" Margin="10,10,0,5" VerticalAlignment="Top" FontFamily="Arial" FontSize="14" FontWeight="Bold" Background="{x:Null}" Foreground="Black"/>
+            <TextBlock Margin="20,0,0,0">
+                <Hyperlink NavigateUri="mailto:myrealdoc@gmail.com"  RequestNavigate="Hyperlink_RequestNavigate">Написать в техподдержку</Hyperlink>
+            </TextBlock>
+            <TextBlock Margin="20,0,0,0">
+                <Hyperlink NavigateUri="http://www.realdoc.info"  RequestNavigate="Hyperlink_RequestNavigate">Перейти на сайт</Hyperlink>
+            </TextBlock>
+            <TextBlock Margin="20,10,0,0">
+                <Hyperlink NavigateUri="https://yadi.sk/d/9LkWLua7suHCtA"  RequestNavigate="Hyperlink_RequestNavigate">Скачать актуальную версию</Hyperlink>
+            </TextBlock>
+            <TextBlock Margin="20,10,0,0">
+                <Hyperlink NavigateUri="https://www.effect-project.ru"  RequestNavigate="Hyperlink_RequestNavigate"> ГК "Эффективное проектирование"</Hyperlink>
+            </TextBlock>
         </StackPanel>
         <Label x:Name="lbBuild" Content="Сборка" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" FontFamily="Arial" FontSize="14" FontWeight="Bold" Background="{x:Null}" Foreground="Black" Grid.Row="2" Height="26" Width="60"/>
         <Label x:Name="lbBuildText" Content="Сборка" HorizontalAlignment="Left" Margin="200,10,0,0" VerticalAlignment="Top" FontFamily="Arial" FontSize="14" FontWeight="Bold" Background="{x:Null}" Foreground="Black" Grid.Row="2" Height="26" Width="60"/>

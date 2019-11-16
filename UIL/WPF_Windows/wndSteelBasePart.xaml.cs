@@ -26,7 +26,8 @@ namespace RDUIL.WPF_Windows
 
         private void btnCancel_Click(object sender, RoutedEventArgs e)
         {
-            _steelColumnBase.IsBoltsActual = false;
+            _steelColumnBase.IsBasePartsActual = false;
+            _steelColumnBase.IsActual = false;
             this.Close();
         }
 

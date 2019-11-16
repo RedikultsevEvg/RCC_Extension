@@ -25,7 +25,7 @@ namespace RDUIL.WPF_Windows
             _level = level;
             _steelBases = _level.SteelBases;
             InitializeComponent();
-            this.DataContext = _steelBases;           
+            this.DataContext = level.SteelBases;           
         }
 
         private void BtnReport_Click(object sender, RoutedEventArgs e)
@@ -75,7 +75,7 @@ namespace RDUIL.WPF_Windows
         private void BtnDelete_Click(object sender, RoutedEventArgs e)
         {
 
-            if (lvSteelBases.SelectedIndex >= 0)
+            if (LvSteelBases.SelectedIndex >= 0)
             {
                 Winforms.DialogResult result = Winforms.MessageBox.Show("Элемент будет удален", "Подтверждаете удаление элемента?",
                     Winforms.MessageBoxButtons.YesNo,
@@ -85,10 +85,10 @@ namespace RDUIL.WPF_Windows
 
                 if (result == Winforms.DialogResult.Yes)
                 {
-                    int a = lvSteelBases.SelectedIndex;
-                    if (lvSteelBases.Items.Count == 1) lvSteelBases.UnselectAll();
-                    else if (a < (lvSteelBases.Items.Count - 1)) lvSteelBases.SelectedIndex = a + 1;
-                    else lvSteelBases.SelectedIndex = a - 1;
+                    int a = LvSteelBases.SelectedIndex;
+                    if (LvSteelBases.Items.Count == 1) LvSteelBases.UnselectAll();
+                    else if (a < (LvSteelBases.Items.Count - 1)) LvSteelBases.SelectedIndex = a + 1;
+                    else LvSteelBases.SelectedIndex = a - 1;
                     _steelBases.RemoveAt(a);
                     ProgrammSettings.IsDataChanged = true;
                 }
@@ -101,9 +101,9 @@ namespace RDUIL.WPF_Windows
 
         private void BtnEdit_Click(object sender, RoutedEventArgs e)
         {
-            if (lvSteelBases.SelectedIndex >= 0)
+            if (LvSteelBases.SelectedIndex >= 0)
             {
-                int a = lvSteelBases.SelectedIndex;
+                int a = LvSteelBases.SelectedIndex;
                 WndSteelColumnBase wndSteelColumnBase = new WndSteelColumnBase(_steelBases[a]);
                 wndSteelColumnBase.ShowDialog();
             }

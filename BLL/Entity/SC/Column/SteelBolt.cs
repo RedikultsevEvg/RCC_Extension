@@ -52,6 +52,12 @@ namespace RDBLL.Entity.SC.Column
         {
 
         }
+
+        public void SetParentNotActual()
+        {
+            SteelBase.IsActual = false;
+            SteelBase.IsBoltsActual = false;
+        }
         #endregion
         public object Clone()
         {

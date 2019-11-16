@@ -60,6 +60,14 @@ namespace DAL.Common
             NewColumn = new DataColumn(columnName, Type.GetType("System.Boolean"));
             dataTable.Columns.Add(NewColumn);
         }
+        public static void AddBoolColumn(DataTable dataTable, string columnName, bool defaultValue)
+        {
+            DataColumn NewColumn;
+            NewColumn = new DataColumn(columnName, Type.GetType("System.Boolean"));
+            NewColumn.AllowDBNull = false;
+            NewColumn.DefaultValue = defaultValue;
+            dataTable.Columns.Add(NewColumn);
+        }
         /// <summary>
         /// Добавляет столбец типа String в таблицу датасета
         /// </summary>
