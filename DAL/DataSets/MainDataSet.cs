@@ -10,12 +10,12 @@ namespace DAL.DataSets
 {
     public class MainDataSet
     {
-        private DataSet _dataSet;
-        public DataSet DataSet { get {return _dataSet; } }
+        public DataSet DataSet { get; private set; }
 
         public void GetNewDataSet()
         {
             DataSet dataSet = new DataSet();
+
             DataTable dataTable;
             DataColumn IdColumn, FkIdColumn, NameColumn, NewColumn;
             #region Generators
@@ -178,7 +178,7 @@ namespace DAL.DataSets
             #endregion
             #region
             #endregion
-            _dataSet = dataSet;
+            DataSet = dataSet;
         }
 
     }
