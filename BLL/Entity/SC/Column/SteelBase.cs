@@ -29,8 +29,14 @@ namespace RDBLL.Entity.SC.Column
         /// Код уровня
         /// </summary>
         public int LevelId { get; set; }
-        public Level Level { get; set; } //Ссылка на уровень
-        public int SteelClassId { get; set; } //Код стали
+        /// <summary>
+        /// Ссылка на уровень
+        /// </summary>
+        public Level Level { get; set; }
+        /// <summary>
+        /// Код стали
+        /// </summary>
+        public int SteelClassId { get; set; }
         public int ConcreteClassId { get; set; } //Код бетона
         public String Name { get; set; } //Наименование
         public double SteelStrength { get; set; } //Расчетное сопротивление базы
@@ -103,6 +109,7 @@ namespace RDBLL.Entity.SC.Column
             WorkCondCoef = 1.1;
             SteelClassId = 1;
             ConcreteClassId = 1;
+            IsActual = false;
             SteelStrength = 240000000;
             ConcreteStrength = 10000000;
             UseSimpleMethod = true;
@@ -198,7 +205,11 @@ namespace RDBLL.Entity.SC.Column
             DataRow dataRow;
              dataTable = dataSet.Tables["SteelBases"];
             dataRow = dataTable.NewRow();
-            dataRow.ItemArray = new object[] { Id, LevelId, SteelClassId, ConcreteClassId, Name, SteelStrength, ConcreteStrength, IsActual, Width, Length, Thickness, WorkCondCoef };
+            dataRow.ItemArray = new object[]
+                { Id, LevelId, SteelClassId, ConcreteClassId,
+                    Name, SteelStrength, ConcreteStrength, IsActual,
+                    Width, Length, Thickness, WorkCondCoef,
+                    UseSimpleMethod };
             dataTable.Rows.Add(dataRow);
             foreach (SteelBasePart steelBasePart in SteelBaseParts)
             {

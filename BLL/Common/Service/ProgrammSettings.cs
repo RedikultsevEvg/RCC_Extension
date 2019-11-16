@@ -183,6 +183,7 @@ namespace RDBLL.Common.Service
                 MeasureUnit = measureUnitMoment
             });
             #endregion
+            
         }
         public static void ClearAll()
         {

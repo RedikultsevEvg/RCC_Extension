@@ -34,7 +34,7 @@ namespace CSL.Reports
         private double momentCoefficient;
         private double stressCoefficient;
         private double geometryAreaCoefficient;
-        private double geometrySecMomentCoefficient;
+        private double geometrySecMomentCoefficient { get; }
         private double geometryMomentCoefficient;
         private double MassCoefficient;
         public DataSet dataSet { get; set; }
@@ -66,10 +66,10 @@ namespace CSL.Reports
                     DataTable SteelBases = dataSet.Tables["SteelBases"];
                     foreach (SteelBase steelBase in level.SteelBases)
                     {
-                        //if (! steelColumnBase.IsActual)
-                        //{
+                        if (!steelBase.IsActual)
+                        {
                             SteelBaseProcessor.SolveSteelColumnBase(steelBase);
-                        //}
+                        }
 
                         DataRow newSteelBase = SteelBases.NewRow();
                         Double A = steelBase.Width * steelBase.Length;

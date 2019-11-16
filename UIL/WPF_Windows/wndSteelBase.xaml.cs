@@ -46,6 +46,7 @@ namespace RDUIL.WPF_Windows
             {
                 //this.DialogResult = OK;
                 ProgrammSettings.IsDataChanged = true;
+                _steelColumnBase.IsActual = false;
                 this.Close();
             }
             catch (Exception ex)

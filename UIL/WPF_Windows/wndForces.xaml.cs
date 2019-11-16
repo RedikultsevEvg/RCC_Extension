@@ -38,7 +38,7 @@ namespace RDUIL.WPF_Windows
         {
             try
             {
-                _forcesGroup.SteelBases[0].IsLoadCasesActual = false;
+                _forcesGroup.SetParentsNotActual();
                 ProgrammSettings.IsDataChanged = true;
                 this.Close();
             }

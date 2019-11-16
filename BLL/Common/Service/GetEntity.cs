@@ -100,11 +100,15 @@ namespace RDBLL.Common.Service
                     Name = dataRow.Field<string>("Name"),
                     SteelStrength = dataRow.Field<double>("SteelStrength"),
                     ConcreteStrength = dataRow.Field<double>("ConcreteStrength"),
-                    IsActual = dataRow.Field<bool>("IsActual"),
+                    IsActual = false, //dataRow.Field<bool>("IsActual"), В любом случае при загрузке данные неактуальны
+                    IsLoadCasesActual = false,
+                    IsBasePartsActual = false,
+                    IsBoltsActual = false,
                     Width = dataRow.Field<double>("Width"),
                     Length = dataRow.Field<double>("Length"),
                     Thickness = dataRow.Field<double>("Thickness"),
-                    WorkCondCoef = dataRow.Field<double>("WorkCondCoef")
+                    WorkCondCoef = dataRow.Field<double>("WorkCondCoef"),
+                    UseSimpleMethod = dataRow.Field<bool>("UseSimpleMethod")
                 };
                 newObject.SteelBaseParts = GetSteelBaseParts(dataSet, newObject);
                 newObject.SteelBolts = GetSteelBolts(dataSet, newObject);
