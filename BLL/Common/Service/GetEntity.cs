@@ -61,7 +61,7 @@ namespace RDBLL.Common.Service
                     BuildingId = dataRow.Field<int>("BuildingId"),
                     Building = building,
                     Name = dataRow.Field<string>("Name"),
-                    FloorLevel = dataRow.Field<double>("FloorLevel"),
+                    Elevation = dataRow.Field<double>("FloorLevel"),
                     Height = dataRow.Field<double>("Height"),
                     TopOffset = dataRow.Field<double>("TopOffset"),
                     BasePointX = dataRow.Field<double>("BasePointX"),

@@ -11,26 +11,77 @@ using RDBLL.Entity.SC.Column;
 using System.Collections.ObjectModel;
 using System.Data;
 using RDBLL.Common.Interfaces;
+using RDBLL.Entity.RCC.Foundations;
 
 
 namespace RDBLL.Entity.RCC.BuildingAndSite
 {
+    /// <summary>
+    /// Уровень
+    /// </summary>
     public class Level :ICloneable, ISavableToDataSet
     {
+        /// <summary>
+        /// Код уровня
+        /// </summary>
         public int Id { get; set; }
+        /// <summary>
+        /// Код здания
+        /// </summary>
         public int BuildingId { get; set; }
+        /// <summary>
+        /// Обратная ссылка на здание
+        /// </summary>
         public Building Building { get; set; }
+        /// <summary>
+        /// Наименование
+        /// </summary>
         public string Name { get; set; }
-        public double FloorLevel { get; set; }
+        /// <summary>
+        /// Отметка уровня
+        /// </summary>
+        public double Elevation { get; set; }
+        /// <summary>
+        /// Высота этажа
+        /// </summary>
         public double Height { get; set; }
+        /// <summary>
+        /// Сдвижка сверху
+        /// </summary>
         public double TopOffset { get; set; }
+        /// <summary>
+        /// Привязка базовой точки
+        /// </summary>
         public double BasePointX { get; set; }
+        /// <summary>
+        /// Привязка базовой точки
+        /// </summary>
         public double BasePointY { get; set; }
+        /// <summary>
+        /// Привязка базовой точки
+        /// </summary>
         public double BasePointZ { get; set; }
+        /// <summary>
+        /// Привязка базовой точки
+        /// </summary>
         public ObservableCollection<Wall> Walls { get; set; }
+        /// <summary>
+        /// Коллекция колонн
+        /// </summary>
         public ObservableCollection<Column> Columns { get; set; }
+        /// <summary>
+        /// Коллекция стальных баз
+        /// </summary>
         public ObservableCollection<SteelBase> SteelBases { get; set; }
+        /// <summary>
+        /// Коллекция фундаментов
+        /// </summary>
+        public ObservableCollection<Foundation> Foundations { get; set; }
 
+        /// <summary>
+        /// Получение суммарного объема бетона
+        /// </summary>
+        /// <returns></returns>
         public double GetConcreteVolumeNetto()
         {
             double volume = 0;
@@ -41,13 +92,17 @@ namespace RDBLL.Entity.RCC.BuildingAndSite
             return volume;
 
         }
+        /// <summary>
+        /// Сохранение в датасет
+        /// </summary>
+        /// <param name="dataSet"></param>
         public void SaveToDataSet(DataSet dataSet)
         {
             DataTable dataTable;
             DataRow dataRow;
             dataTable = dataSet.Tables["Levels"];
             dataRow = dataTable.NewRow();
-            dataRow.ItemArray = new object[] { Id, BuildingId, Name, FloorLevel, Height, TopOffset, BasePointX, BasePointY, BasePointY };
+            dataRow.ItemArray = new object[] { Id, BuildingId, Name, Elevation, Height, TopOffset, BasePointX, BasePointY, BasePointY };
             dataTable.Rows.Add(dataRow);
             foreach (SteelBase steelBase in SteelBases)
             {
@@ -83,12 +138,20 @@ namespace RDBLL.Entity.RCC.BuildingAndSite
             }
         }
 
+        /// <summary>
+        /// Конструктор без параметров
+        /// </summary>
         public Level ()
         {
             Walls = new ObservableCollection<Wall>();
             SteelBases = new ObservableCollection<SteelBase>();
+            Foundations = new ObservableCollection<Foundation>();
         }
 
+        /// <summary>
+        /// Конструктор по зданию
+        /// </summary>
+        /// <param name="building"></param>
         public Level (Building building)
         {
             if (Id == 0) { Id = ProgrammSettings.CurrentId; }
@@ -99,13 +162,18 @@ namespace RDBLL.Entity.RCC.BuildingAndSite
             Name = "Этаж 1";
             Building = building;
             building.Levels.Add(this);
-            FloorLevel = 0;
+            Elevation = 0;
             Height = 3000;
             TopOffset = -200;
             Walls = new ObservableCollection<Wall>();
             SteelBases = new ObservableCollection<SteelBase>();
+            Foundations = new ObservableCollection<Foundation>();
         }
 
+        /// <summary>
+        /// Метод клонирования
+        /// </summary>
+        /// <returns></returns>
         public object Clone()
         {
             return this.MemberwiseClone();

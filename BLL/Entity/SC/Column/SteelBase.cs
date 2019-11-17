@@ -45,17 +45,38 @@ namespace RDBLL.Entity.SC.Column
         public double Width { get; set; } //Ширина базы, м
         public double Length { get; set; } //Длина базы, м
         public double Thickness { get; set; } //Толщина, м
-        public double WorkCondCoef { get; set; } //Коэффициент условий работы
+        /// <summary>
+        /// Коэффициент условий работы
+        /// </summary>
+        public double WorkCondCoef { get; set; }
         /// <summary>
         /// Флаг расчета по упрощенному методу
         /// </summary>
         public bool UseSimpleMethod { get; set; }
-        public ObservableCollection<ForcesGroup> LoadsGroup { get; set; } //Коллекция групп нагрузок
-        public ObservableCollection<SteelBasePart> SteelBaseParts { get; set; } //Коллекция участков
-        public List<SteelBasePart> ActualSteelBaseParts { get; set; } //Коллекция участков с учетом симметрии
-        public ObservableCollection<SteelBolt> SteelBolts { get; set; } //Коллекция болтов
-        public List<SteelBolt> ActualSteelBolts { get; set; } //Коллекция болтов с учетом симметрии
-        public List<LoadSet> LoadCases { get; set; } //Коллекция комбинаций
+        /// <summary>
+        /// Коллекция групп нагрузок
+        /// </summary>
+        public ObservableCollection<ForcesGroup> LoadsGroup { get; set; }
+        /// <summary>
+        /// Коллекция участков
+        /// </summary>
+        public ObservableCollection<SteelBasePart> SteelBaseParts { get; set; }
+        /// <summary>
+        /// Коллекция участков с учетом симметрии
+        /// </summary>
+        public List<SteelBasePart> ActualSteelBaseParts { get; set; }
+        /// <summary>
+        /// Коллекция болтов
+        /// </summary>
+        public ObservableCollection<SteelBolt> SteelBolts { get; set; }
+        /// <summary>
+        /// Коллекция болтов с учетом симметрии
+        /// </summary>
+        public List<SteelBolt> ActualSteelBolts { get; set; }
+        /// <summary>
+        /// Коллекция комбинаций
+        /// </summary>
+        public List<LoadSet> LoadCases { get; set; }
         /// <summary>
         /// Коллекция всех элементарных участков
         /// </summary>
@@ -68,7 +89,10 @@ namespace RDBLL.Entity.SC.Column
         /// Коллекция элементарных участков стали
         /// </summary>
         public List<NdmArea> SteelNdmAreas { get; set; }
-        public List<ForceCurvature> ForceCurvatures { get; set; } //Коллекция комбинаций и кривизны 
+        /// <summary>
+        /// Коллекция комбинаций и кривизны 
+        /// </summary>
+        public List<ForceCurvature> ForceCurvatures { get; set; }
 
         public bool IsLoadCasesActual
         {
