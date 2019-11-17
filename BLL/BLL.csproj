@@ -79,6 +79,8 @@
     <Compile Include="Common\Geometry\Path.cs" />
     <Compile Include="Common\Geometry\Point2D.cs" />
     <Compile Include="Common\Geometry\Point3D.cs" />
+    <Compile Include="Entity\RCC\Foundations\Foundation.cs" />
+    <Compile Include="Entity\RCC\Foundations\FoundationPart.cs" />
     <Compile Include="Entity\RCC\Reinforcement\Bar.cs" />
     <Compile Include="Common\Service\DetailObjectList.cs" />
     <Compile Include="Common\Service\ProgrammSettings.cs" />

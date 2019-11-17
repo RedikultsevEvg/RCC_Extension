@@ -469,7 +469,7 @@ namespace RDUIL.WinForms
         {
             Item.SubItems.Clear();
             Item.Text = level.Name;
-            Item.SubItems.Add(Convert.ToString(level.FloorLevel));
+            Item.SubItems.Add(Convert.ToString(level.Elevation));
             Item.SubItems.Add(Convert.ToString(level.Height));
             Item.SubItems.Add(Convert.ToString(level.TopOffset));
             Item.SubItems.Add(Convert.ToString(Math.Round(level.GetConcreteVolumeNetto()/1000000)/1000));

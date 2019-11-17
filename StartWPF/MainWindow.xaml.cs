@@ -19,6 +19,7 @@ using RDUIL.WPF_Windows.ControlClasses;
 using RDBLL.Entity.SC.Column;
 using System.Threading;
 using RDUIL.WPF_Windows;
+using RDUIL.WPF_Windows.BuildingsAndSites;
 
 namespace StartWPF
 {
@@ -49,6 +50,12 @@ namespace StartWPF
             calcTypeSC.RegisterDelegate(new CalcType.AddCommandDelegate(AddItemWrapPanel));
             calcTypes.Add(calcTypeSC);
 
+            CalcType calcTypeSoil = new CalcType();
+            calcTypeSoil.TypeName = "Грунт";
+            calcTypeSoil.ImageName = "Steel.jpg";
+            calcTypeSoil.RegisterDelegate(new CalcType.AddCommandDelegate(AddItemWrapPanel));
+            calcTypes.Add(calcTypeSoil);
+
             foreach (CalcType calcType in calcTypes)
             {
                 CalcTypeControl calcTypeControl = new CalcTypeControl(calcType);
@@ -66,6 +73,12 @@ namespace StartWPF
             calcKindSteelBase.KindAddition = "Расчет параметров баз колонн с учетом давления под подошвой";
             calcKindSteelBase.RegisterDelegate(new CalcKind.CommandDelegate(ShowSteelBase));
             calcTypeSC.CalcKinds.Add(calcKindSteelBase);
+
+            CalcKind calcKindFoundation = new CalcKind();
+            calcKindFoundation.KindName = "Расчет столбчатых фундаментов";
+            calcKindFoundation.KindAddition = "Расчет параметров фундаментов с учетом давления под подошвой";
+            calcKindFoundation.RegisterDelegate(new CalcKind.CommandDelegate(ShowFoundation));
+            calcTypeSoil.CalcKinds.Add(calcKindFoundation);
 
             calcTypes[0].RunCommand();
         }
@@ -135,6 +148,15 @@ namespace StartWPF
             detailObjectList.BtnVisibilityList = new List<short>() { 1, 1, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0 };
             frmDetailList DetailForm = new frmDetailList(detailObjectList);
             DetailForm.Show();
+        }
+
+        /// <summary>
+        /// Вызов окна уровней для ввода фундаментов
+        /// </summary>
+        private static void ShowFoundation()
+        {
+            wndLevels wndLevels = new wndLevels(ProgrammSettings.BuildingSite.Buildings[0].Levels);
+            wndLevels.ShowDialog();
         }
 
         /// <summary>

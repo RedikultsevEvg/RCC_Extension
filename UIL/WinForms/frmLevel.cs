@@ -21,7 +21,7 @@ namespace RDUIL.WinForms
             InitializeComponent();
             _level = level;
             tbName.Text = _level.Name;
-            nudFlooLevel.Value = Convert.ToDecimal(_level.FloorLevel);
+            nudFlooLevel.Value = Convert.ToDecimal(_level.Elevation);
             nudHeight.Value = Convert.ToDecimal(_level.Height);
             nudTopOffset.Value = Convert.ToDecimal(_level.TopOffset);
         }
@@ -29,7 +29,7 @@ namespace RDUIL.WinForms
         private void btnOK_Click(object sender, EventArgs e)
         {
             _level.Name = tbName.Text;
-            _level.FloorLevel = Convert.ToDouble(nudFlooLevel.Value);
+            _level.Elevation = Convert.ToDouble(nudFlooLevel.Value);
             _level.Height = Convert.ToDouble(nudHeight.Value);
             _level.TopOffset = Convert.ToDouble(nudTopOffset.Value);
             ProgrammSettings.IsDataChanged = true;

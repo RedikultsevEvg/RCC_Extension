@@ -9,6 +9,7 @@ using System.Collections.ObjectModel;
 using RDBLL.Common.Service;
 using RDBLL.Common.Interfaces;
 using System.Data;
+using RDBLL.Entity.RCC.Foundations;
 
 namespace RDBLL.Forces
 {
@@ -17,33 +18,78 @@ namespace RDBLL.Forces
     /// </summary>
     public class ForcesGroup: ISavableToDataSet
     {
+        #region Fields and properties
+        /// <summary>
+        /// Код группы нагрузок
+        /// </summary>
         public int Id { get; set; }
-        public List<SteelBase> SteelBases { get; set; } //Обратная ссылка. База стальной колонны к котрой относится группа нагрузок
-        public ObservableCollection<LoadSet> LoadSets { get; set; } //Коллекция набора нагрузок
-        public string Name { get; set; } //Наименование
-        public double CenterX { get; set; } //Точка, к которой приложена группа нагрузок
-        public double CenterY { get; set; } //Точка, к которой приложена группа нагрузок
-
+        /// <summary>
+        /// Обратная ссылка. База стальной колонны к котрой относится группа нагрузок
+        /// </summary>
+        public List<SteelBase> SteelBases { get; set; }
+        /// <summary>
+        /// Обратная ссылка на коллекцию фундаментов
+        /// </summary>
+        public List<Foundation> Foundations { get; set; }
+        /// <summary>
+        /// Коллекция набора нагрузок
+        /// </summary>
+        public ObservableCollection<LoadSet> LoadSets { get; set; }
+        /// <summary>
+        /// Наименование
+        /// </summary>
+        public string Name { get; set; }
+        /// <summary>
+        /// Точка, к которой приложена группа нагрузок
+        /// </summary>
+        public double CenterX { get; set; }
+        /// <summary>
+        /// Точка, к которой приложена группа нагрузок
+        /// </summary>
+        public double CenterY { get; set; }
+        #endregion
         #region Constructors
+        /// <summary>
+        /// Конструктор без параметров
+        /// </summary>
         public ForcesGroup()
         {
             SteelBases = new List<SteelBase>();
+            Foundations = new List<Foundation>();
             LoadSets = new ObservableCollection<LoadSet>();
         }
         /// <summary>
-        /// Конструктор создает экземпляр класса группы нагрузок
+        /// Конструктор по стальной базе
         /// </summary>
         /// <param name="steelColumnBase"></param>
         public ForcesGroup(SteelBase steelColumnBase)
         {
             Id = ProgrammSettings.CurrentId;
             SteelBases = new List<SteelBase>();
+            Foundations = new List<Foundation>();
             SteelBases.Add(steelColumnBase);
+            LoadSets = new ObservableCollection<LoadSet>();
+            Name = "Новая группа нагрузок";
+        }
+        /// <summary>
+        /// Конструктор по фундаменту
+        /// </summary>
+        /// <param name="foundation"></param>
+        public ForcesGroup(Foundation foundation)
+        {
+            Id = ProgrammSettings.CurrentId;
+            SteelBases = new List<SteelBase>();
+            Foundations = new List<Foundation>();
+            Foundations.Add(foundation);
             LoadSets = new ObservableCollection<LoadSet>();
             Name = "Новая группа нагрузок";
         }
         #endregion
         #region Methods
+        /// <summary>
+        /// Сохранение в датасет
+        /// </summary>
+        /// <param name="dataSet"></param>
         public void SaveToDataSet(DataSet dataSet)
         {
             DataTable dataTable;
@@ -73,15 +119,22 @@ namespace RDBLL.Forces
 
         public void OpenFromDataSet(DataSet dataSet, int Id)
         {
-
+            throw new NotImplementedException();
         }
 
+        /// <summary>
+        /// Установка родителей неактуальными
+        /// </summary>
         public void SetParentsNotActual()
         {
             foreach (SteelBase steelBase in SteelBases)
             {
                 steelBase.IsActual = false;
                 steelBase.IsLoadCasesActual = false;
+            }
+            foreach (Foundation foundation in Foundations)
+            {
+                foundation.IsLoadsActual = false;
             }
         }
         #endregion
