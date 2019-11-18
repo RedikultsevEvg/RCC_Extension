@@ -11,6 +11,8 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using RDBLL.Entity.RCC.BuildingAndSite;
+using RDBLL.Common.Service;
 
 namespace RDUIL.WPF_Windows.BuildingsAndSites
 {
@@ -19,9 +21,30 @@ namespace RDUIL.WPF_Windows.BuildingsAndSites
     /// </summary>
     public partial class wndLevel : Window
     {
-        public wndLevel()
+        private Level _item;
+        public wndLevel(Level level)
         {
+            _item = level;
             InitializeComponent();
+            this.DataContext = _item;
+        }
+
+        private void btnOK_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                ProgrammSettings.IsDataChanged = true;
+                this.Close();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Некорректные данные :" + ex);
+            }
+        }
+
+        private void btnCancel_Click(object sender, RoutedEventArgs e)
+        {
+            throw new NotImplementedException();
         }
     }
 }

@@ -1,22 +1,11 @@
-﻿using System;
-using System.IO;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
-using RDBLL.Entity.SC.Column;
-using RDBLL.Entity.Results.NDM;
+﻿using RDBLL.Common.Service;
 using RDBLL.Entity.MeasureUnits;
-using RDBLL.Common.Service;
+using RDBLL.Entity.Results.NDM;
+using RDBLL.Entity.SC.Column;
 using RDBLL.Processors.SC;
+using System;
+using System.Collections.Generic;
+using System.Windows;
 
 
 namespace RDUIL.WPF_Windows

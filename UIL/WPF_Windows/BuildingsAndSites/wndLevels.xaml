@@ -6,24 +6,26 @@
         xmlns:Convert="clr-namespace:RDUIL.Converters" 
         xmlns:local="clr-namespace:RDUIL.WPF_Windows.BuildingsAndSites"
         mc:Ignorable="d"
-        Title="wndLevels" Height="450" Width="800">
+        Title="wndLevels" Height="450" Width="800" WindowStartupLocation="CenterScreen">
     <Window.Resources>
         <Convert:LinearSizeConverter x:Key="LinearSizeConverter"/>
         <Convert:StressConverter x:Key="StressConverter"/>
         <Convert:SteelBaseToGeometryConverter x:Key="SteelBaseToGeometryConverter"/>
         <DataTemplate x:Key="LevelTemplate">
-            <Grid Height="50" Width="550" Margin="5" Background="Black">
+            <Grid Height="50" Width="550" Margin="5" Background="#FF77DFE4">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition/>
+                    <ColumnDefinition Width="400"/>
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
-                <Grid>
+                <Grid Height="30" Grid.Column="0" VerticalAlignment="Center">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition/>
-                        <ColumnDefinition Width="70"/>
+                        <ColumnDefinition Width="30"/>
+                        <ColumnDefinition Width="230"/>
+                        <ColumnDefinition Width="100"/>
                     </Grid.ColumnDefinitions>
-                    <TextBlock x:Name="tbName" Style="{StaticResource PropertyTextBlock}" Text="Наименование" FontSize="14" FontWeight="Bold"/>
-                    <TextBox x:Name="tbxName" Grid.Column="1" Style="{StaticResource PropertyTextBox}" Text="{Binding Name}"/>
+                    <RadioButton HorizontalAlignment="Center" Background="{x:Null}" BorderBrush="#FF5EFF2E" VerticalAlignment="Center"></RadioButton>
+                    <TextBlock x:Name="tbName" Grid.Column="1" Style="{StaticResource PropertyTextBlock}" Text="Наименование" FontSize="14" FontWeight="Bold"/>
+                    <TextBox x:Name="tbxName" Grid.Column="2" Style="{StaticResource PropertyTextBox}" Text="{Binding Name}"/>
                 </Grid>
             </Grid>
         </DataTemplate>
@@ -70,14 +72,14 @@
                 </Button.ToolTip>
                 <Image x:Name="ReportPng" Style="{StaticResource ServiceButtonImage}" Source="{DynamicResource IconReport}"/>
             </Button>
-            <Button x:Name="BtnChildItem" Style="{StaticResource ServiceButton}" Height="50" Click="BtnReport_Click">
+            <Button x:Name="BtnChildItem" Style="{StaticResource ServiceButton}" Height="50" Click="BtnChildItem_Click">
                 <Button.Effect>
                     <DropShadowEffect Opacity="0.6"/>
                 </Button.Effect>
                 <Button.ToolTip>
                     <TextBlock Margin="3" Foreground="Black"><Run Text="Отчет"/></TextBlock>
                 </Button.ToolTip>
-                <Image x:Name="ChildPng" Style="{StaticResource ServiceButtonImage}" Source="{DynamicResource IconReport}"/>
+                <Image x:Name="ChildPng" Style="{StaticResource ServiceButtonImage}"/>
             </Button>
         </StackPanel>
         <ListView x:Name="LvMain" ItemTemplate="{StaticResource LevelTemplate}" Grid.Row="1" ItemsSource="{Binding}"/>

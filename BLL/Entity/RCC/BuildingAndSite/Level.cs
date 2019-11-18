@@ -163,8 +163,8 @@ namespace RDBLL.Entity.RCC.BuildingAndSite
             Building = building;
             building.Levels.Add(this);
             Elevation = 0;
-            Height = 3000;
-            TopOffset = -200;
+            Height = 3;
+            TopOffset = -0.2;
             Walls = new ObservableCollection<Wall>();
             SteelBases = new ObservableCollection<SteelBase>();
             Foundations = new ObservableCollection<Foundation>();
