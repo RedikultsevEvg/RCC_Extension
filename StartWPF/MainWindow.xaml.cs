@@ -156,6 +156,8 @@ namespace StartWPF
         private static void ShowFoundation()
         {
             wndLevels wndLevels = new wndLevels(ProgrammSettings.BuildingSite.Buildings[0].Levels);
+            wndLevels.Building = ProgrammSettings.BuildingSite.Buildings[0];
+            wndLevels.ChildName = "Foundations";
             wndLevels.ShowDialog();
         }
 

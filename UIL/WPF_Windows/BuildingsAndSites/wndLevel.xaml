@@ -3,10 +3,60 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:Convert="clr-namespace:RDUIL.Converters" 
         xmlns:local="clr-namespace:RDUIL.WPF_Windows.BuildingsAndSites"
         mc:Ignorable="d"
-        Title="wndLevel" Height="450" Width="800">
+        Title="Уровень" Height="300" Width="400" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
+    <Window.Resources>
+        <Convert:LinearSizeConverter x:Key="LinearSizeConverter"/>
+    </Window.Resources>
     <Grid>
-        
+        <Grid.RowDefinitions>
+            <RowDefinition Height="375*"/>
+            <RowDefinition Height="80"/>
+        </Grid.RowDefinitions>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="30"/>
+                <RowDefinition Height="30"/>
+                <RowDefinition Height="30"/>
+                <RowDefinition Height="30"/>
+                <RowDefinition Height="30"/>
+
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width ="*"/>
+                <ColumnDefinition Width ="100"/>
+                <ColumnDefinition Width="70"/>
+            </Grid.ColumnDefinitions>
+            <TextBlock x:Name="tbName" Style="{StaticResource PropertyTextBlock}" Text="Наименование"/>
+            <TextBlock x:Name="tbElevation" Grid.Row="1" Style="{StaticResource PropertyTextBlock}" Text="Уровень пола"/>
+            <TextBlock x:Name="tbHeight" Grid.Row="2" Style="{StaticResource PropertyTextBlock}" Text="Высота этажа"/>
+            <TextBlock x:Name="tbTopOffset" Grid.Row="3" Style="{StaticResource PropertyTextBlock}" Text="Оффсет сверху"/>
+            <TextBox x:Name="tbxName" Grid.Column="1" Style="{StaticResource PropertyTextBox}" Text="{Binding Path=Name}"/>
+            <TextBox x:Name="tbxElevation" Grid.Row="1" Grid.Column="1" Style="{StaticResource PropertyTextBox}" Text="{Binding Path=Elevation, Converter={StaticResource LinearSizeConverter}}"/>
+            <TextBox x:Name="tbxHeight" Grid.Row="2" Grid.Column="1" Style="{StaticResource PropertyTextBox}" Text="{Binding Path=Height, Converter={StaticResource LinearSizeConverter}}"/>
+            <TextBox x:Name="tbxTopOffset" Grid.Row="3" Grid.Column="1" Style="{StaticResource PropertyTextBox}" Text="{Binding Path=TopOffset, Converter={StaticResource LinearSizeConverter}}"/>
+
+            <TextBlock Grid.Column="2" Grid.Row="1" x:Name="tbWidthMeasure" Style="{StaticResource PropertyTextBlock}" Text="мм" />
+            <TextBlock Grid.Column="2" Grid.Row="2" x:Name="tbLengthMeasure" Style="{StaticResource PropertyTextBlock}" Text="мм" />
+            <TextBlock Grid.Column="2" Grid.Row="3" x:Name="tbThicknessMeasure" Style="{StaticResource PropertyTextBlock}" Text="мм" />
+
+
+        </Grid>
+        <StackPanel Height="60" Grid.Row="1" Margin="10" Orientation="Horizontal" Grid.ColumnSpan="3" HorizontalAlignment="Right" Background="#FFE2E2E2">
+            <Button x:Name="btnOK" Style="{StaticResource ServiceButton}" HorizontalAlignment="Stretch" Click="btnOK_Click">
+                <Button.Effect>
+                    <DropShadowEffect Opacity="0.6"/>
+                </Button.Effect>
+                <Image x:Name="OK_png" Style="{StaticResource ServiceButtonImage}" Source="{DynamicResource IconOK}"/>
+            </Button>
+            <Button x:Name="btnCancel" Style="{StaticResource ServiceButton}" HorizontalAlignment="Stretch" Click="btnCancel_Click" IsEnabled="False">
+                <Button.Effect>
+                    <DropShadowEffect Opacity="0.6"/>
+                </Button.Effect>
+                <Image x:Name="Cancel_png" Style="{StaticResource ServiceButtonImage}" Source="{DynamicResource IconCancel}"/>
+            </Button>
+        </StackPanel>
     </Grid>
 </Window>
