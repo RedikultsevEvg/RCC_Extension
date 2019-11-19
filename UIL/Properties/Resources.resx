@@ -117,4 +117,41 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="FoundationForces" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\FoundationForces.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="IconAdd40" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\iconadd40.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="IconBase40" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\iconbase40.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="IconBolt40" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\iconbolt40.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="IconDelete40" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\icondelete40.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="IconEdit40" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\iconedit40.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="IconReport40" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\iconreport40.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Mx" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Mx.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="My" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\My.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Nz" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Nz.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Qx" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Qx.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Qy" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Qy.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
 </root>

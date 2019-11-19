@@ -22,9 +22,9 @@ namespace RDUIL.WinForms
             _Opening = value;
             tbName.Text = _Opening.Name;
             tbPurpose.Text = _Opening.Purpose;
-            nudHeight.Value = _Opening.Height;
-            nudWidth.Value = _Opening.Width;
-            nudBottom.Value = _Opening.Bottom;
+            nudHeight.Value = Convert.ToDecimal(_Opening.Height);
+            nudWidth.Value = Convert.ToDecimal(_Opening.Width);
+            nudBottom.Value = Convert.ToDecimal(_Opening.Bottom);
             cbAddEdgeLeft.Checked = _Opening.AddEdgeLeft;
             cbAddEdgeRight.Checked = _Opening.AddEdgeRight;
             cbAddEdgeTop.Checked = _Opening.AddEdgeTop;
@@ -51,9 +51,9 @@ namespace RDUIL.WinForms
         {
             _Opening.Name = tbName.Text;
             _Opening.Purpose = tbPurpose.Text;
-            _Opening.Height = nudHeight.Value;
-            _Opening.Width = nudWidth.Value;
-            _Opening.Bottom = nudBottom.Value;
+            _Opening.Height = Convert.ToDouble(nudHeight.Value);
+            _Opening.Width = Convert.ToDouble(nudWidth.Value);
+            _Opening.Bottom = Convert.ToDouble(nudBottom.Value);
             _Opening.AddEdgeLeft = cbAddEdgeLeft.Checked;
             _Opening.AddEdgeRight = cbAddEdgeRight.Checked;
             _Opening.AddEdgeTop = cbAddEdgeTop.Checked;

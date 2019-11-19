@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>RDBLL</RootNamespace>
     <AssemblyName>BLL</AssemblyName>
-    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
     <TargetFrameworkProfile />
@@ -22,6 +22,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Debug\BLL.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -32,6 +33,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -42,13 +44,36 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
+    <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Class1.cs" />
     <Compile Include="Common\Geometry\MassProperty.cs" />
     <Compile Include="Common\Geometry\MathOperation.cs" />
+    <Compile Include="Common\Geometry\Mathematic\Constants.cs" />
+    <Compile Include="Common\Geometry\Mathematic\Matrix.cs" />
     <Compile Include="Common\Geometry\RectCrossSection.cs" />
-    <Compile Include="Common\Interfaces\IStellBaseProcessor.cs" />
+    <Compile Include="Common\Interfaces\ISavableToDataSet.cs" />
+    <Compile Include="Common\Service\GetEntity.cs" />
+    <Compile Include="DrawUtils\SteelBase\DrawSteelBase.cs" />
+    <Compile Include="Entity\Common\NDM\Curvature.cs" />
+    <Compile Include="Entity\Common\NDM\ForceCurvature.cs" />
+    <Compile Include="Entity\Common\NDM\Interfaces\IMaterialModel.cs" />
+    <Compile Include="Entity\Common\NDM\MaterialConstant.cs" />
+    <Compile Include="Entity\Common\NDM\MaterialModels\DoubleLinear.cs" />
+    <Compile Include="Entity\Common\NDM\MaterialModels\LinearCompessed.cs" />
+    <Compile Include="Entity\Common\NDM\MaterialModels\LinearIsotropic.cs" />
+    <Compile Include="Entity\Common\NDM\MaterialModels\LinearTensioned.cs" />
+    <Compile Include="Entity\Common\NDM\NdmArea.cs" />
+    <Compile Include="Entity\Common\NDM\NdmConcreteArea.cs" />
+    <Compile Include="Entity\Common\NDM\NDMProcessor.cs" />
+    <Compile Include="Entity\Common\NDM\NDMSteelArea.cs" />
+    <Compile Include="Entity\Common\NDM\Processors\NdmAreaProcessor.cs" />
+    <Compile Include="Entity\Common\NDM\Processors\StiffnessCoefficientProcessor.cs" />
+    <Compile Include="Entity\Common\NDM\StiffnessCoefficient.cs" />
+    <Compile Include="Entity\Common\NDM\SumForces.cs" />
+    <Compile Include="Entity\MeasureUnits\MeasureUnit.cs" />
+    <Compile Include="Entity\MeasureUnits\MeasureUnitConverter.cs" />
+    <Compile Include="Entity\MeasureUnits\MeasureUnitLabel.cs" />
     <Compile Include="Entity\RCC\BuildingAndSite\BuildingSite.cs" />
     <Compile Include="Entity\RCC\BuildingAndSite\Level.cs" />
     <Compile Include="Common\Geometry\Path.cs" />
@@ -63,23 +88,35 @@
     <Compile Include="Entity\RCC\WallAndColumn\Wall.cs" />
     <Compile Include="Entity\RCC\WallAndColumn\WallType.cs" />
     <Compile Include="Entity\Results\Forces\StressInRect.cs" />
+    <Compile Include="Entity\Results\NDM\LoadCaseRectangleValue.cs" />
+    <Compile Include="Entity\Results\NDM\RectangleValue.cs" />
     <Compile Include="Entity\Results\SC\ColumnBasePartResult.cs" />
     <Compile Include="Entity\Results\SC\ColumnBaseResult.cs" />
     <Compile Include="Entity\SC\Column\SteelBasePart.cs" />
-    <Compile Include="Entity\SC\Column\SteelColumnBase.cs" />
+    <Compile Include="Entity\SC\Column\SteelBaseSubPart.cs" />
+    <Compile Include="Entity\SC\Column\SteelBolt.cs" />
+    <Compile Include="Entity\SC\Column\SteelBase.cs" />
     <Compile Include="Forces\BarLoadSet.cs" />
-    <Compile Include="Forces\BarForcesGroup.cs" />
-    <Compile Include="Forces\Force.cs" />
+    <Compile Include="Forces\ForcesGroup.cs" />
     <Compile Include="Forces\ForceParameter.cs" />
     <Compile Include="Forces\ForceParamKind.cs" />
     <Compile Include="Forces\LoadSet.cs" />
     <Compile Include="Processors\Forces\BarLoadSetProcessor.cs" />
-    <Compile Include="Processors\SC\SteelColumnBasePartProcessor.cs" />
-    <Compile Include="Processors\SC\SteelColumnBaseProcessor.cs" />
+    <Compile Include="Processors\Forces\LoadSetProcessor.cs" />
+    <Compile Include="Processors\SC\SteelBoltProcessor.cs" />
+    <Compile Include="Processors\SC\SteelBasePartProcessor.cs" />
+    <Compile Include="Processors\SC\SteelBaseProcessor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Common\Delegates\" />
     <Folder Include="Entity\Results\RCC\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\DAL\DAL.csproj">
+      <Project>{81dd6ebb-5934-473c-88a7-41ef9811e05f}</Project>
+      <Name>DAL</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

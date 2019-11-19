@@ -18,6 +18,7 @@ using RDBLL.Entity.SC.Column;
 using RDBLL.Forces;
 using RDBLL.Entity.Results.SC;
 using RDBLL.Processors.SC;
+using System.Collections.ObjectModel;
 
 namespace RDUIL.WinForms
 {
@@ -90,7 +91,7 @@ namespace RDUIL.WinForms
                         ColumnName.AddRange(_ColumnName);
                         ColumnWidth.AddRange(_ColumnWidth);
 
-                        var levelList = (List<Level>)_objectList;
+                        var levelList = (ObservableCollection<Level>)_objectList;
                         foreach (Level level in levelList)
                         {
                             NewItemFromLevel(level);
@@ -137,7 +138,7 @@ namespace RDUIL.WinForms
                         ColumnName.AddRange(_ColumnName);
                         ColumnWidth.AddRange(_ColumnWidth);
                         #endregion
-                        var basePartList = (List<SteelBasePart>)_objectList;
+                        var basePartList = (ObservableCollection<SteelBasePart>)_objectList;
                         foreach (SteelBasePart basePart in basePartList)
                         {
                             NewItemFromColumnBasePart(basePart);
@@ -168,8 +169,8 @@ namespace RDUIL.WinForms
                         ColumnName.AddRange(_ColumnName);
                         ColumnWidth.AddRange(_ColumnWidth);
 
-                        var SteelColumnBaseList = (List<SteelColumnBase>)_objectList;
-                        foreach (SteelColumnBase columnBase in SteelColumnBaseList)
+                        var SteelColumnBaseList = (ObservableCollection<SteelBase>)_objectList;
+                        foreach (SteelBase columnBase in SteelColumnBaseList)
                         {
                             NewItemFromSteelColumnBase(columnBase);
                         }
@@ -258,51 +259,20 @@ namespace RDUIL.WinForms
                     }
                 case ObjColumnBaseParts:
                     {
-                        SteelBasePart basePart = new SteelBasePart((SteelColumnBase)_parentObject);
+                        SteelBasePart basePart = new SteelBasePart((SteelBase)_parentObject);
                         NewItemFromColumnBasePart(basePart);
                         break;
                     }
                 case ObjBarForses:
                     {
-                        BarLoadSet columnLoadSet = new BarLoadSet((SteelColumnBase)_parentObject);
+                        BarLoadSet columnLoadSet = new BarLoadSet(((SteelBase)_parentObject).LoadsGroup[0]);
                         NewItemFromColumnLoadSet(columnLoadSet);
                         break;
                     }
                 case ObjSteelColumnBases:
                     {
-                        SteelColumnBase steelColumnBase = new SteelColumnBase((Level)_parentObject);
+                        SteelBase steelColumnBase = new SteelBase((Level)_parentObject);
                         NewItemFromSteelColumnBase(steelColumnBase);
-                        #region Вложенные объекты по умолчанию
-                        //Нагрузка
-                        BarLoadSet columnLoadSet = new BarLoadSet(steelColumnBase);
-                        columnLoadSet.LoadSet.Name = "Постоянная";
-                        //Участок №1
-                        SteelBasePart basePart1 = new SteelBasePart(steelColumnBase);
-                        basePart1.Name = "1";
-                        basePart1.Width = 0.290;
-                        basePart1.Length = 0.200;
-                        basePart1.Center[0] = 0.155;
-                        basePart1.Center[1] = 0.350;
-                        basePart1.FixLeft = true;
-                        basePart1.FixRight = false;
-                        basePart1.FixTop = false;
-                        basePart1.FixBottom = true;
-                        basePart1.AddSymmetricX = true;
-                        basePart1.AddSymmetricY = true;
-                        //Участок №2
-                        SteelBasePart basePart2 = new SteelBasePart(steelColumnBase);
-                        basePart2.Name = "2";
-                        basePart2.Width = 0.290;
-                        basePart2.Length = 0.480;
-                        basePart2.Center[0] = 0.155;
-                        basePart2.Center[1] = 0;
-                        basePart2.FixLeft = true;
-                        basePart2.FixRight = false;
-                        basePart2.FixTop = true;
-                        basePart2.FixBottom = true;
-                        basePart2.AddSymmetricX = false;
-                        basePart2.AddSymmetricY = true;
-                        #endregion
                         break;
                     }
                 case "Walls":
@@ -330,7 +300,7 @@ namespace RDUIL.WinForms
                     }
                 case "Levels":
                     {
-                        var objList = (List<Level>)_objectList;
+                        var objList = (ObservableCollection<Level>)_objectList;
                         foreach (int i in lvDetails.SelectedIndices)
                         {
                             frmLevel frmObj = new frmLevel(objList[i]);
@@ -372,13 +342,13 @@ namespace RDUIL.WinForms
                     }
                 case ObjColumnBaseParts:
                     {
-                        var BasePartList = (List<SteelBasePart>)_objectList;
-                        foreach (int i in lvDetails.SelectedIndices)
-                        {
-                            WndSteelBasePart wndSteelBasePart = new WndSteelBasePart(BasePartList[i]);
-                            wndSteelBasePart.ShowDialog();
-                            EditItemFromColumnBasePart(lvDetails.Items[i], BasePartList[i]);
-                        }
+                        //var BasePartList = (ObservableCollection<SteelBasePart>)_objectList;
+                        //foreach (int i in lvDetails.SelectedIndices)
+                        //{
+                        //    WndSteelBasePart wndSteelBasePart = new WndSteelBasePart(BasePartList[i]);
+                        //    wndSteelBasePart.ShowDialog();
+                        //    EditItemFromColumnBasePart(lvDetails.Items[i], BasePartList[i]);
+                        //}
                         break;
                     }
                 case ObjBarForses:
@@ -386,15 +356,15 @@ namespace RDUIL.WinForms
                         var ColumnLoadSetList = (List<BarLoadSet>)_objectList;
                         foreach (int i in lvDetails.SelectedIndices)
                         {
-                            wndForces wndForces = new wndForces(ColumnLoadSetList[i]);
-                            wndForces.ShowDialog();
-                            EditItemFromColumnLoadSet(lvDetails.Items[i], ColumnLoadSetList[i]);
+                            //wndForces wndForces = new wndForces(ColumnLoadSetList[i].LoadSet[0]);
+                            //wndForces.ShowDialog();
+                            //EditItemFromColumnLoadSet(lvDetails.Items[i], ColumnLoadSetList[i]);
                         }
                         break;
                     }      
                 case ObjSteelColumnBases:
                     {
-                        var steelColumnBaseList = (List<SteelColumnBase>)_objectList;
+                        var steelColumnBaseList = (ObservableCollection<SteelBase>)_objectList;
                         foreach (int i in lvDetails.SelectedIndices)
                         {
                             WndSteelColumnBase wndSteelColumnBase = new WndSteelColumnBase(steelColumnBaseList[i]);
@@ -471,7 +441,7 @@ namespace RDUIL.WinForms
             lvDetails.Items.Add(NewItem);
             return NewItem;
         }
-        private ListViewItem NewItemFromSteelColumnBase(SteelColumnBase obj)
+        private ListViewItem NewItemFromSteelColumnBase(SteelBase obj)
         {
             ListViewItem NewItem = new ListViewItem();
             EditItemFromSteelColumnBase(NewItem, obj);
@@ -502,9 +472,8 @@ namespace RDUIL.WinForms
             Item.SubItems.Add(Convert.ToString(level.FloorLevel));
             Item.SubItems.Add(Convert.ToString(level.Height));
             Item.SubItems.Add(Convert.ToString(level.TopOffset));
-            Item.SubItems.Add(Convert.ToString(level.Quant));
             Item.SubItems.Add(Convert.ToString(Math.Round(level.GetConcreteVolumeNetto()/1000000)/1000));
-            Item.SubItems.Add(Convert.ToString(Math.Round(level.GetConcreteVolumeNetto() * level.Quant / 1000000) / 1000));
+            Item.SubItems.Add(Convert.ToString(Math.Round(level.GetConcreteVolumeNetto()) / 1000));
         }
         private void EditItemFromOpeningPlacing(ListViewItem Item, OpeningPlacing openingPlacing)
         {
@@ -530,34 +499,25 @@ namespace RDUIL.WinForms
             Item.SubItems.Clear();
             Item.Text = basePart.Name;
             Item.SubItems.Add(Convert.ToString(basePart.Width * 1000) +"x" + Convert.ToString(basePart.Length * 1000));
-            ColumnBasePartResult result = SteelColumnBasePartProcessor.GetResult(basePart);
-            double maxStress = result.MaxStress;
-            maxStress = Math.Round(maxStress / 1000) / 1000;
+            double maxStress = Math.Round(SteelBasePartProcessor.GetResult(basePart)[1] / 1000) / 1000;
             Item.SubItems.Add(Convert.ToString(maxStress));
         }
         private void EditItemFromColumnLoadSet(ListViewItem Item, BarLoadSet loadSet)
         {
             Item.SubItems.Clear();
             Item.Text = loadSet.LoadSet.Name;
-            Item.SubItems.Add(Convert.ToString(loadSet.Force.Force_Nz /1000));
-            Item.SubItems.Add(Convert.ToString(loadSet.Force.Force_Mx / 1000));
-            Item.SubItems.Add(Convert.ToString(loadSet.Force.Force_My / 1000));
-            Item.SubItems.Add(Convert.ToString(loadSet.Force.Force_Qx / 1000));
-            Item.SubItems.Add(Convert.ToString(loadSet.Force.Force_Qy / 1000));
         }
-        private void EditItemFromSteelColumnBase(ListViewItem Item, SteelColumnBase columnBase)
+        private void EditItemFromSteelColumnBase(ListViewItem Item, SteelBase columnBase)
         {
             Item.SubItems.Clear();
             Item.Text = columnBase.Name;
-            Item.SubItems.Add(Convert.ToString(columnBase.Width) + "x" + Convert.ToString(columnBase.Length));
-            Item.SubItems.Add(Convert.ToString(columnBase.WidthBoltDist) + "x" + Convert.ToString(columnBase.LengthBoltDist));
-            SteelColumnBaseProcessor columBaseProcessor = new SteelColumnBaseProcessor();
-            ColumnBaseResult baseResult = columBaseProcessor.GetResult(columnBase);
-            double maxStress = baseResult.MaxStress;
-            maxStress = Math.Round(maxStress / 1000) / 1000;
-            double minStress = baseResult.MinStress;
-            minStress = Math.Round(minStress / 1000) / 1000;
-            Item.SubItems.Add(Convert.ToString(maxStress) + " / " + Convert.ToString(minStress));
+            //Item.SubItems.Add(Convert.ToString(columnBase.Width) + "x" + Convert.ToString(columnBase.Length));
+            //ColumnBaseResult baseResult = SteelColumnBaseProcessor.GetResult(columnBase);
+            //double maxStress = baseResult.Stresses.MaxStress;
+            //maxStress = Math.Round(maxStress / 1000) / 1000;
+            //double minStress = baseResult.Stresses.MinStress;
+            //minStress = Math.Round(minStress / 1000) / 1000;
+            //Item.SubItems.Add(Convert.ToString(maxStress) + " / " + Convert.ToString(minStress));
         }
         private void EditItemFromWall (ListViewItem Item, Wall wall)
         {
@@ -601,7 +561,7 @@ namespace RDUIL.WinForms
                     {
                         foreach (int j in lvDetails.SelectedIndices)
                         {
-                            if (((List<Level>)_objectList)[j-i].WallList.Count == 0)
+                            if (((ObservableCollection<Level>)_objectList)[j-i].Walls.Count == 0)
                             {
                                 ((List<Level>)_objectList).RemoveAt(j - i);
                                 lvDetails.Items.RemoveAt(j - i);
@@ -659,7 +619,7 @@ namespace RDUIL.WinForms
                         //Необходимо добавить проверку на существование стен имеющих данный тип стены
                         foreach (int j in lvDetails.SelectedIndices)
                         {
-                            ((List<SteelColumnBase>)_objectList).RemoveAt(j - i);
+                            ((ObservableCollection<SteelBase>)_objectList).RemoveAt(j - i);
                             lvDetails.Items.RemoveAt(j - i);
                             i++;
                         }
@@ -696,7 +656,7 @@ namespace RDUIL.WinForms
                 foreach (int i in lvDetails.SelectedIndices)
                 {
                     level = ((List<Level>)_objectList)[i];
-                    var detailObjectList = new DetailObjectList("Walls", level, level.WallList, false);
+                    var detailObjectList = new DetailObjectList("Walls", level, level.Walls, false);
                     detailObjectList.BtnVisibilityList = new List<short>() { 1, 1, 0, 1, 0, 0, 0, 1, 1, 0, 0, 0 };
                     frmDetailList DetailForm = new frmDetailList(detailObjectList);
                     this.Visible = false;
@@ -719,7 +679,7 @@ namespace RDUIL.WinForms
             this.Visible = true;
             foreach (ListViewItem i in lvDetails.Items)
             {
-                EditItemFromLevel(i, building.LevelList[i.Index]);
+                EditItemFromLevel(i, building.Levels[i.Index]);
             }
             
         }
@@ -757,7 +717,7 @@ namespace RDUIL.WinForms
         {
             if (lvDetails.SelectedIndices.Count == 0)
             { MessageBox.Show("Выберите элемент из списка", "Ничего не выбрано"); }
-            decimal sumVolume = 0;
+            double sumVolume = 0;
             switch (_formType) //
             {
                 case "Levels":
@@ -795,14 +755,9 @@ namespace RDUIL.WinForms
                 Level level;
                 foreach (int i in lvDetails.SelectedIndices)
                 {
-                    level = ((List<Level>)_objectList)[i];
-                    var detailObjectList = new DetailObjectList("SteelColumnBases", level, level.SteelColumnBaseList, false);
-                    detailObjectList.BtnVisibilityList = new List<short>() { 1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 1, 1 };
-                    frmDetailList DetailForm = new frmDetailList(detailObjectList);
-                    this.Visible = false;
-                    DetailForm.ShowDialog();
-                    this.Visible = true;
-                    EditItemFromLevel(lvDetails.Items[i], level);
+                    level = ((ObservableCollection<Level>)_objectList)[i];
+                    wndSteelBases wndSteelBases = new wndSteelBases(level);
+                    wndSteelBases.ShowDialog();
                 }
             }
             else
@@ -812,17 +767,14 @@ namespace RDUIL.WinForms
         {
             if (lvDetails.SelectedIndices.Count == 1)
             {
-                SteelColumnBase steelColumnBase;
+                SteelBase steelColumnBase;
                 foreach (int i in lvDetails.SelectedIndices)
                 {
-                    steelColumnBase = ((List<SteelColumnBase>)_objectList)[i];
-                    var detailObjectList = new DetailObjectList("ColumnForces", steelColumnBase, steelColumnBase.Loads, false);
-                    detailObjectList.BtnVisibilityList = new List<short>() { 1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0 };
-                    frmDetailList DetailForm = new frmDetailList(detailObjectList);
+                    steelColumnBase = ((ObservableCollection<SteelBase>)_objectList)[i];
                     this.Visible = false;
-                    DetailForm.ShowDialog();
+                    wndForces wndForces = new wndForces(steelColumnBase.LoadsGroup[0]);
+                    wndForces.ShowDialog();
                     this.Visible = true;
-                    EditItemFromSteelColumnBase(lvDetails.Items[i], steelColumnBase);
                 }
             }
             else
@@ -832,17 +784,14 @@ namespace RDUIL.WinForms
         {
             if (lvDetails.SelectedIndices.Count == 1)
             {
-                SteelColumnBase steelColumnBase;
+                SteelBase steelColumnBase;
                 foreach (int i in lvDetails.SelectedIndices)
                 {
-                    steelColumnBase = ((List<SteelColumnBase>)_objectList)[i];
-                    var detailObjectList = new DetailObjectList("ColumnBaseParts", steelColumnBase, steelColumnBase.SteelBaseParts, false);
-                    detailObjectList.BtnVisibilityList = new List<short>() { 1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0 };
-                    frmDetailList DetailForm = new frmDetailList(detailObjectList);
+                    steelColumnBase = ((ObservableCollection<SteelBase>)_objectList)[i];
                     this.Visible = false;
-                    DetailForm.ShowDialog();
+                    WndSteelBasePart wndSteelBasePart = new WndSteelBasePart(steelColumnBase);
+                    wndSteelBasePart.ShowDialog();
                     this.Visible = true;
-                    EditItemFromSteelColumnBase(lvDetails.Items[i], steelColumnBase);
                 }
             }
             else

@@ -4,41 +4,147 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:RDUIL.WPF_Windows"
+        xmlns:Convert="clr-namespace:RDUIL.Converters"
         mc:Ignorable="d"
-        Title="Участок базы колонны" Height="400" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" Width="800">
+        Title="Участок базы колонны" Height="700" WindowStartupLocation="CenterScreen" Width="800" MinWidth="600">
     <Window.Resources>
-        <Style x:Key="ServiceButton" TargetType="Button">
-            <Setter Property="Width" Value="100" />
-            <Setter Property="Margin" Value="5" />
-            <Setter Property="Background" Value="#FFB5FCFF" />
-            <Setter Property="HorizontalAlignment" Value="Right" />
-        </Style>
-        <Style x:Key="ServiceButtonImage" TargetType="Image">
-            <Setter Property="Width" Value="40" />
-            <Setter Property="Height" Value="40" />
-            <Setter Property="Stretch" Value="Fill" />
-        </Style>
-        <Style x:Key="PropertyTextBlock" TargetType="TextBlock">
-            <Setter Property="Margin" Value="5" />
-            <Setter Property="TextWrapping" Value="Wrap" />
-            <Setter Property="FontSize" Value="12" />
-        </Style>
-        <Style x:Key="PropertyTextBox" TargetType="TextBox">
-            <Setter Property="Margin" Value="5" />
-            <Setter Property="TextWrapping" Value="Wrap" />
-            <Setter Property="FontSize" Value="12" />
-        </Style>
+        <Convert:LinearSizeConverter x:Key="LinearSizeConverter"/>
+        <BooleanToVisibilityConverter x:Key="VisibleIfTrueConverter" />
+        <DataTemplate x:Key="PartTemplate" x:Name="MyTemplate">
+            <Expander Header="{Binding Path=Name}" Background="#FF97FF92" MinWidth="{Binding ActualWidth, ElementName=lvPartsList, Mode=OneWay}" MinHeight="30" Margin="0,5">
+                <HeaderedContentControl>
+                    <Grid Grid.Column="2" Margin="10,0">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="220"/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="30"/>
+                                <RowDefinition Height="30"/>
+                                <RowDefinition Height="30"/>
+                                <RowDefinition Height="30"/>
+                                <RowDefinition Height="30"/>
+                                <RowDefinition Height="30"/>
+                                <RowDefinition Height="30"/>
+                                <RowDefinition/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/>
+                                <ColumnDefinition Width="100"/>
+                                <ColumnDefinition Width="30"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock x:Name="tbName" Style="{StaticResource PropertyTextBlock}" Text="Наименование"/>
+                            <TextBlock Style="{StaticResource PropertyTextBlock}" Text="Ширина" Grid.Row="1"/>
+                            <TextBlock Style="{StaticResource PropertyTextBlock}" Text="Длина" Grid.Row="2"/>
+                            <TextBlock Style="{StaticResource PropertyTextBlock}" Text="Положение центра X" Grid.Row="3"/>
+                            <TextBlock Style="{StaticResource PropertyTextBlock}" Text="Положение центра Y" Grid.Row="4"/>
+                            <TextBlock Style="{StaticResource PropertyTextBlock}" Text="Симметричный по X" Grid.Row="5"/>
+                            <TextBlock Style="{StaticResource PropertyTextBlock}" Text="Симметричный по Y" Grid.Row="6"/>
+                            <TextBox x:Name="tbxName" Grid.Column="1" Style="{StaticResource PropertyTextBox}" Grid.Row="0" Text="{Binding Path=Name}"/>
+                            <TextBox x:Name="tbxWidth" Grid.Column="1" Style="{StaticResource PropertyTextBox}" Grid.Row="1"  Text="{Binding Path=Width, Converter={StaticResource LinearSizeConverter}}"/>
+                            <TextBox x:Name="tbxLength" Grid.Column="1" Style="{StaticResource PropertyTextBox}" Grid.Row="2" Text="{Binding Path=Length, Converter={StaticResource LinearSizeConverter}}"/>
+                            <TextBox x:Name="tbxCenterX" Grid.Column="1" Style="{StaticResource PropertyTextBox}" Grid.Row="3" Text="{Binding Path=CenterX, Converter={StaticResource LinearSizeConverter}}"/>
+                            <TextBox x:Name="tbxCenterY" Grid.Column="1" Style="{StaticResource PropertyTextBox}" Grid.Row="4" Text="{Binding Path=CenterY, Converter={StaticResource LinearSizeConverter}}"/>
+                            <CheckBox x:Name="cbAddSymmetricX"  Grid.Column="1" Margin="5,7,20,0" Grid.Row="5" IsChecked="{Binding Path=AddSymmetricX}"/>
+                            <CheckBox x:Name="cbAddSymmetricY"  Grid.Column="1" Margin="5,7,20,0" Grid.Row="6"  IsChecked="{Binding Path=AddSymmetricY}"/>
+                            <TextBlock Grid.Column="2" Grid.Row="1" x:Name="tbWidthMeasure" Style="{StaticResource PropertyTextBlock}" Text="мм" />
+                            <TextBlock Grid.Column="2" Grid.Row="2" x:Name="tbLengthMeasure" Style="{StaticResource PropertyTextBlock}" Text="мм" />
+                            <TextBlock Grid.Column="2" Grid.Row="3" x:Name="tbCenterXMeasure" Style="{StaticResource PropertyTextBlock}" Text="мм" />
+                            <TextBlock Grid.Column="2" Grid.Row="4" x:Name="tbCenterYMeasure" Style="{StaticResource PropertyTextBlock}" Text="мм" />
+                        </Grid>
+                        <Grid Grid.Row="1">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="30"/>
+                                <RowDefinition/>
+                                <RowDefinition Height="30"/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width ="70"/>
+                                <ColumnDefinition Width ="*"/>
+                                <ColumnDefinition Width ="70"/>
+                            </Grid.ColumnDefinitions>
+                            <CheckBox x:Name="cbFixTop" Content="Опора" Grid.Column="1" HorizontalAlignment="Center" Margin="10,10,0,0" VerticalAlignment="Top" IsChecked="{Binding Path=FixTop}"/>
+                            <CheckBox x:Name="cbFixRight" Content="Опора" Grid.Column="2" HorizontalAlignment="Left" Margin="10,0,0,0" Grid.Row="1" VerticalAlignment="Center" IsChecked="{Binding Path=FixRight}"/>
+                            <CheckBox x:Name="cbFixLeft" Content="Опора" HorizontalAlignment="Left" Margin="10,0,0,0" Grid.Row="1" VerticalAlignment="Center"  IsChecked="{Binding Path=FixLeft}"/>
+                            <CheckBox x:Name="cbFixBottom" Content="Опора" Grid.Column="1" HorizontalAlignment="Center" Margin="10,10,0,0" Grid.Row="2" VerticalAlignment="Top"  IsChecked="{Binding Path=FixBottom}"/>
+                            <Rectangle Grid.Column="1" Margin="0" Grid.Row="1">
+                                <Rectangle.Effect>
+                                    <DropShadowEffect/>
+                                </Rectangle.Effect>
+                                <Rectangle.Fill>
+                                    <LinearGradientBrush EndPoint="0.5,1" MappingMode="RelativeToBoundingBox" StartPoint="0.5,0">
+                                        <LinearGradientBrush.Transform>
+                                            <TransformGroup>
+                                                <ScaleTransform/>
+                                                <SkewTransform/>
+                                                <RotateTransform Angle="-45"/>
+                                                <TranslateTransform/>
+                                            </TransformGroup>
+                                        </LinearGradientBrush.Transform>
+                                        <GradientStop Color="#FFDCA71B"/>
+                                        <GradientStop Color="#FFFFE398" Offset="0.561"/>
+                                        <GradientStop Color="#FFDCA71B" Offset="1"/>
+                                    </LinearGradientBrush>
+                                </Rectangle.Fill>
+                            </Rectangle>
+                            <Grid Grid.Column="1" Margin="0" Grid.Row="1">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="5"/>
+                                    <RowDefinition/>
+                                    <RowDefinition Height="5"/>
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="5"/>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition Width="5"/>
+                                </Grid.ColumnDefinitions>
+                                <Rectangle Grid.ColumnSpan="1" Fill="Red" Visibility="{Binding Path=FixLeft, Converter={StaticResource VisibleIfTrueConverter}}" Grid.RowSpan="3" />
+                                <Rectangle Grid.ColumnSpan="3" Fill="Red" Visibility="{Binding Path=FixTop, Converter={StaticResource VisibleIfTrueConverter}}" />
+                                <Rectangle Grid.ColumnSpan="1" Fill="Red" Visibility="{Binding Path=FixRight, Converter={StaticResource VisibleIfTrueConverter}}" Grid.RowSpan="3" Grid.Column="2" />
+                                <Rectangle Grid.ColumnSpan="3" Fill="Red" Visibility="{Binding Path=FixBottom, Converter={StaticResource VisibleIfTrueConverter}}" Grid.Row="2" />
+                            </Grid>
+                            <CheckBox x:Name="checkBox" Content="Защемление" Grid.Column="1" HorizontalAlignment="Left" Margin="120,10,0,0" Grid.Row="2" VerticalAlignment="Top" Visibility="Hidden"/>
+                            <CheckBox x:Name="checkBox1" Content="Защемление" HorizontalAlignment="Left" Margin="10,120,0,0" Grid.Row="1" VerticalAlignment="Top" Visibility="Hidden"/>
+                            <CheckBox x:Name="checkBox2" Content="Защемление" Grid.Column="2" HorizontalAlignment="Left" Margin="10,120,0,0" Grid.Row="1" VerticalAlignment="Top" Visibility="Hidden"/>
+                            <CheckBox x:Name="checkBox3" Content="Защемление" Grid.Column="1" HorizontalAlignment="Left" Margin="120,10,0,0" VerticalAlignment="Top" Visibility="Hidden"/>
+                        </Grid>
+                    </Grid>
+                </HeaderedContentControl>
+            </Expander>
+        </DataTemplate>
     </Window.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="200"/>
             <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="300"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
             <RowDefinition Height="80"/>
         </Grid.RowDefinitions>
+        <Grid Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="50"/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <StackPanel x:Name="stpPartBtns" Style="{StaticResource OperationStack}" MouseMove="StpPartBtns_MouseMove" MouseLeave="StpPartBtns_MouseLeave">
+                <Button x:Name="btnAddPart" Style="{StaticResource OperationButton}" ToolTip="Добавить участок" Click="BtnAddPart_Click">
+                    <Button.Effect>
+                        <DropShadowEffect Opacity="0.6"/>
+                    </Button.Effect>
+                    <Image x:Name="AddForce_png" Style="{StaticResource OperationButtonImage}" Source="{DynamicResource IconAdd30}" />
+                </Button>
+                <Button x:Name="btnDeletePart" Style="{StaticResource OperationButton}" ToolTip="Удалить участок" Click="BtnDeletePart_Click">
+                    <Button.Effect>
+                        <DropShadowEffect Opacity="0.6"/>
+                    </Button.Effect>
+                    <Image x:Name="DeleteForce_png" Style="{StaticResource OperationButtonImage}" Source="{DynamicResource IconDelete30}"/>
+                </Button>
+            </StackPanel>
+            <ListView x:Name="lvPartsList" Margin="5" ItemTemplate="{StaticResource PartTemplate}" Background="{x:Null}" Grid.RowSpan="2" ItemsSource="{Binding Path=SteelBaseParts, Mode=OneWay}">
+            </ListView>
+        </Grid>
         <StackPanel Height="60" Grid.Row="1" Margin="0,10,10,10" Orientation="Horizontal" HorizontalAlignment="Right" Background="#FFE2E2E2" Grid.Column="0">
             <Button x:Name="btnRefresh" Style="{StaticResource ServiceButton}" HorizontalAlignment="Stretch" Click="btnRefresh_Click">
                 <Button.Effect>
@@ -47,83 +153,7 @@
                 <Image x:Name="Refresh_png" Style="{StaticResource ServiceButtonImage}" Source="{DynamicResource IconRefresh40}"/>
             </Button>
         </StackPanel>
-            
 
-        <Grid Grid.Row="0" Grid.Column="1">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width ="*"/>
-            </Grid.ColumnDefinitions>
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="30"/>
-                    <RowDefinition/>
-                    <RowDefinition Height="30"/>
-                </Grid.RowDefinitions>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width ="70"/>
-                    <ColumnDefinition Width ="*"/>
-                    <ColumnDefinition Width ="70"/>
-                </Grid.ColumnDefinitions>
-                <CheckBox x:Name="cbFixTop" Content="Опора" Grid.Column="1" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
-                <CheckBox x:Name="cbFixRight" Content="Опора" Grid.Column="2" HorizontalAlignment="Left" Margin="10,80,0,0" Grid.Row="1" VerticalAlignment="Top"/>
-                <CheckBox x:Name="cbFixLeft" Content="Опора" HorizontalAlignment="Left" Margin="10,80,0,0" Grid.Row="1" VerticalAlignment="Top"/>
-                <CheckBox x:Name="cbFixBottom" Content="Опора" Grid.Column="1" HorizontalAlignment="Left" Margin="10,10,0,0" Grid.Row="2" VerticalAlignment="Top"/>
-                <Rectangle Grid.Column="1" Margin="0" Grid.Row="1">
-                    <Rectangle.Effect>
-                        <DropShadowEffect/>
-                    </Rectangle.Effect>
-                    <Rectangle.Fill>
-                        <LinearGradientBrush EndPoint="0.5,1" MappingMode="RelativeToBoundingBox" StartPoint="0.5,0">
-                            <LinearGradientBrush.Transform>
-                                <TransformGroup>
-                                    <ScaleTransform/>
-                                    <SkewTransform/>
-                                    <RotateTransform Angle="-45"/>
-                                    <TranslateTransform/>
-                                </TransformGroup>
-                            </LinearGradientBrush.Transform>
-                            <GradientStop Color="#FFDCA71B"/>
-                            <GradientStop Color="#FFFFE398" Offset="0.561"/>
-                            <GradientStop Color="#FFDCA71B" Offset="1"/>
-                        </LinearGradientBrush>
-                    </Rectangle.Fill>
-                </Rectangle>
-                <CheckBox x:Name="checkBox" Content="Защемление" Grid.Column="1" HorizontalAlignment="Left" Margin="120,10,0,0" Grid.Row="2" VerticalAlignment="Top" Visibility="Hidden"/>
-                <CheckBox x:Name="checkBox1" Content="Защемление" HorizontalAlignment="Left" Margin="10,120,0,0" Grid.Row="1" VerticalAlignment="Top" Visibility="Hidden"/>
-                <CheckBox x:Name="checkBox2" Content="Защемление" Grid.Column="2" HorizontalAlignment="Left" Margin="10,120,0,0" Grid.Row="1" VerticalAlignment="Top" Visibility="Hidden"/>
-                <CheckBox x:Name="checkBox3" Content="Защемление" Grid.Column="1" HorizontalAlignment="Left" Margin="120,10,0,0" VerticalAlignment="Top" Visibility="Hidden"/>
-            </Grid>
-        </Grid>
-        <Grid Grid.Column="2">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="30"/>
-                <RowDefinition Height="30"/>
-                <RowDefinition Height="30"/>
-                <RowDefinition Height="30"/>
-                <RowDefinition Height="30"/>
-                <RowDefinition Height="30"/>
-                <RowDefinition Height="30"/>
-                <RowDefinition/>
-            </Grid.RowDefinitions>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition/>
-                <ColumnDefinition Width="130"/>
-            </Grid.ColumnDefinitions>
-            <TextBlock x:Name="tbName" Style="{StaticResource PropertyTextBlock}" Text="Наименование"/>
-            <TextBlock Style="{StaticResource PropertyTextBlock}" Text="Ширина, мм" Grid.Row="1"/>
-            <TextBlock Style="{StaticResource PropertyTextBlock}" Text="Длина, мм" Grid.Row="2"/>
-            <TextBlock Style="{StaticResource PropertyTextBlock}" Text="Положение центра X, мм" Grid.Row="3"/>
-            <TextBlock Style="{StaticResource PropertyTextBlock}" Text="Положение центра Y, мм" Grid.Row="4"/>
-            <TextBlock Style="{StaticResource PropertyTextBlock}" Text="Симметричный по X" Grid.Row="5"/>
-            <TextBlock Style="{StaticResource PropertyTextBlock}" Text="Симметричный по Y" Grid.Row="6"/>
-            <TextBox x:Name="tbxName" Grid.Column="1" Style="{StaticResource PropertyTextBox}" Grid.Row="0"/>
-            <TextBox x:Name="tbxWidth" Grid.Column="1" Style="{StaticResource PropertyTextBox}" Grid.Row="1"/>
-            <TextBox x:Name="tbxLength" Grid.Column="1" Style="{StaticResource PropertyTextBox}" Grid.Row="2"/>
-            <TextBox x:Name="tbxCenterX" Grid.Column="1" Style="{StaticResource PropertyTextBox}" Grid.Row="3"/>
-            <TextBox x:Name="tbxCenterY" Grid.Column="1" Style="{StaticResource PropertyTextBox}" Grid.Row="4"/>
-            <CheckBox x:Name="cbAddSymmetricX"  Grid.Column="1" Margin="5,7,20,0" Grid.Row="5"/>
-            <CheckBox x:Name="cbAddSymmetricY"  Grid.Column="1" Margin="5,7,20,0" Grid.Row="6"/>
-        </Grid>
         <StackPanel Height="60" Grid.Row="1" Margin="0,10,10,10" Orientation="Horizontal" HorizontalAlignment="Right" Background="#FFE2E2E2" Grid.Column="2">
             <Button x:Name="btnOK" Style="{StaticResource ServiceButton}" HorizontalAlignment="Stretch" Click="btnOK_Click">
                 <Button.Effect>
@@ -131,7 +161,7 @@
                 </Button.Effect>
                 <Image x:Name="OK_png" Style="{StaticResource ServiceButtonImage}" Source="{DynamicResource IconOK}"/>
             </Button>
-            <Button x:Name="btnCancel" Style="{StaticResource ServiceButton}" HorizontalAlignment="Stretch" Click="btnCancel_Click">
+            <Button x:Name="btnCancel" Style="{StaticResource ServiceButton}" HorizontalAlignment="Stretch" Click="btnCancel_Click" IsEnabled="False">
                 <Button.Effect>
                     <DropShadowEffect Opacity="0.6"/>
                 </Button.Effect>

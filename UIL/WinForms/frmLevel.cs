@@ -21,19 +21,17 @@ namespace RDUIL.WinForms
             InitializeComponent();
             _level = level;
             tbName.Text = _level.Name;
-            nudFlooLevel.Value = _level.FloorLevel;
-            nudHeight.Value = _level.Height;
-            nudTopOffset.Value =_level.TopOffset;
-            nudQuant.Value = _level.Quant;
+            nudFlooLevel.Value = Convert.ToDecimal(_level.FloorLevel);
+            nudHeight.Value = Convert.ToDecimal(_level.Height);
+            nudTopOffset.Value = Convert.ToDecimal(_level.TopOffset);
         }
 
         private void btnOK_Click(object sender, EventArgs e)
         {
             _level.Name = tbName.Text;
-            _level.FloorLevel = nudFlooLevel.Value;
-            _level.Height = nudHeight.Value;
-            _level.TopOffset = nudTopOffset.Value;
-            _level.Quant = Convert.ToInt32(nudQuant.Value);
+            _level.FloorLevel = Convert.ToDouble(nudFlooLevel.Value);
+            _level.Height = Convert.ToDouble(nudHeight.Value);
+            _level.TopOffset = Convert.ToDouble(nudTopOffset.Value);
             ProgrammSettings.IsDataChanged = true;
         }
     }

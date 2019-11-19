@@ -8,7 +8,7 @@
     <OutputType>library</OutputType>
     <RootNamespace>RDUIL</RootNamespace>
     <AssemblyName>UIL</AssemblyName>
-    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <WarningLevel>4</WarningLevel>
@@ -36,8 +36,10 @@
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Security" />
     <Reference Include="System.Windows" />
     <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Windows.Forms.DataVisualization" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -52,6 +54,10 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Converters\SteelBaseToGeometryConverter.cs" />
+    <Compile Include="Converters\StressConverter.cs" />
+    <Compile Include="Converters\LinearSizeConverter.cs" />
+    <Compile Include="Converters\LinearSizeTextConverter.cs" />
     <Compile Include="MSControls\numericupdown.cs" />
     <Compile Include="MSControls\numericupdown.xaml.cs">
       <DependentUpon>numericupdown.xaml</DependentUpon>
@@ -117,20 +123,55 @@
     </Compile>
     <Compile Include="WPF_Windows\ControlClasses\CalcKind.cs" />
     <Compile Include="WPF_Windows\ControlClasses\CalcType.cs" />
+    <Compile Include="WPF_Windows\ControlClasses\ReportCard.cs" />
+    <Compile Include="WPF_Windows\UserControls\ReportCardControl.xaml.cs">
+      <DependentUpon>ReportCardControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="WPF_Windows\wndForces.xaml.cs">
       <DependentUpon>wndForces.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="WPF_Windows\wndMeasureUnits.xaml.cs">
+      <DependentUpon>wndMeasureUnits.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="WPF_Windows\wndReports.xaml.cs">
+      <DependentUpon>wndReports.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="WPF_Windows\wndSteelBaseBolts.xaml.cs">
+      <DependentUpon>wndSteelBaseBolts.xaml</DependentUpon>
     </Compile>
     <Compile Include="WPF_Windows\wndSteelBasePart.xaml.cs">
       <DependentUpon>wndSteelBasePart.xaml</DependentUpon>
     </Compile>
-    <Compile Include="WPF_Windows\wndSteelColumnBase.xaml.cs">
-      <DependentUpon>wndSteelColumnBase.xaml</DependentUpon>
+    <Compile Include="WPF_Windows\wndSteelBaseResult.xaml.cs">
+      <DependentUpon>wndSteelBaseResult.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="WPF_Windows\wndSteelBase.xaml.cs">
+      <DependentUpon>wndSteelBase.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="WPF_Windows\wndSteelBases.xaml.cs">
+      <DependentUpon>wndSteelBases.xaml</DependentUpon>
     </Compile>
     <Page Include="MSControls\numericupdown.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="WPF_Windows\UserControls\ReportCardControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="WPF_Windows\wndForces.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="WPF_Windows\wndMeasureUnits.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="WPF_Windows\wndReports.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="WPF_Windows\wndSteelBaseBolts.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -138,7 +179,15 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="WPF_Windows\wndSteelColumnBase.xaml">
+    <Page Include="WPF_Windows\wndSteelBaseResult.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="WPF_Windows\wndSteelBase.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="WPF_Windows\wndSteelBases.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -193,14 +242,13 @@
       <Project>{4af80724-4ad7-4bef-ae1c-5a2768395fd7}</Project>
       <Name>BLL</Name>
     </ProjectReference>
+    <ProjectReference Include="..\CSL\CSL.csproj">
+      <Project>{c582493c-8856-4b0e-acdc-c4e9f1566bca}</Project>
+      <Name>CSL</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Connected Services\" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\FoudationForce.jpg">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Resource>
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\IconForces.png">
@@ -220,6 +268,66 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\IconParts.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\IconAdd30.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\IconDelete30.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\FoundationForces.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Mx.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\My.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Nz.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Qx.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Qy.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\IconBolt40.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\IconReport40.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\IconAdd40.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\IconDelete40.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\IconBase40.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\IconEdit40.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -12,7 +12,7 @@ namespace RDBLL.Entity.RCC.Reinforcement
     public class Bar
     {
         public String Name { get; set; }
-        public decimal Diametr { get; set;}
+        public double Diametr { get; set;}
         public String ClassName { get; set; }
         public Path Path { get; set; }
     }
@@ -21,11 +21,11 @@ namespace RDBLL.Entity.RCC.Reinforcement
     {
         public bool AddBarsLeft { get; set; }
         public bool AddBarsRight { get; set; }
-        public decimal AddBarsLeftSpacing { get; set; }
-        public decimal AddBarsRightSpacing { get; set; }
+        public double AddBarsLeftSpacing { get; set; }
+        public double AddBarsRightSpacing { get; set; }
         public Int32 AddBarsLeftQuant { get; set; }
         public Int32 AddBarsRightQuant { get; set; }
-        public decimal MainSpacing { get; set; }
+        public double MainSpacing { get; set; }
         public bool AddBarsEdgeStart { get; set; }
         public bool AddBarsEdgeEnd { get; set; }
 
@@ -37,7 +37,7 @@ namespace RDBLL.Entity.RCC.Reinforcement
             if (AddBarsRight) S += Convert.ToString(AddBarsRightQuant - 1) + "*" + Convert.ToString(AddBarsRightSpacing) + ";";
             return S;
         }
-        public int BarQuantity(decimal length)
+        public int BarQuantity(double length)
         {
             int quant = 0;
             if (AddBarsLeft)
@@ -102,11 +102,11 @@ namespace RDBLL.Entity.RCC.Reinforcement
             {
                 if (obj.Name == "AddBarsLeft") AddBarsLeft = Convert.ToBoolean(obj.Value);
                 if (obj.Name == "AddBarsRight") AddBarsRight = Convert.ToBoolean(obj.Value);
-                if (obj.Name == "AddBarsLeftSpacing") AddBarsLeftSpacing = Convert.ToDecimal(obj.Value);
-                if (obj.Name == "AddBarsRightSpacing") AddBarsRightSpacing = Convert.ToDecimal(obj.Value);
+                if (obj.Name == "AddBarsLeftSpacing") AddBarsLeftSpacing = Convert.ToDouble(obj.Value);
+                if (obj.Name == "AddBarsRightSpacing") AddBarsRightSpacing = Convert.ToDouble(obj.Value);
                 if (obj.Name == "AddBarsLeftQuant") AddBarsLeftQuant = Convert.ToInt32(obj.Value);
                 if (obj.Name == "AddBarsRightQuant") AddBarsRightQuant = Convert.ToInt32(obj.Value);
-                if (obj.Name == "MainSpacing") MainSpacing = Convert.ToDecimal(obj.Value);
+                if (obj.Name == "MainSpacing") MainSpacing = Convert.ToDouble(obj.Value);
             }
         }
 
@@ -121,8 +121,8 @@ namespace RDBLL.Entity.RCC.Reinforcement
         public Point2D StartPoint { get; set; }
         public Point2D EndPoint { get; set; }
 
-        public decimal StartOffset { get; set; }
-        public decimal EndOffset { get; set; }
+        public double StartOffset { get; set; }
+        public double EndOffset { get; set; }
 
         public bool AddStartBar { get; set; }
         public bool AddEndBar { get; set; }
@@ -133,8 +133,8 @@ namespace RDBLL.Entity.RCC.Reinforcement
         {
             Geometry2D geometry2D = new Geometry2D();
             int Quant = 0;
-            decimal length = geometry2D.GetDistance(this.StartPoint, this.EndPoint);
-            decimal mainLength = length - this.StartOffset-this.EndOffset;
+            double length = geometry2D.GetDistance(this.StartPoint, this.EndPoint);
+            double mainLength = length - this.StartOffset-this.EndOffset;
              
             if (this.barSpacingSettings.AddBarsLeft)
             {

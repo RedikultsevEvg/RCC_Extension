@@ -4,58 +4,78 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:RDUIL.WPF_Windows"
+        xmlns:Convert="clr-namespace:RDUIL.Converters" 
+        xmlns:Setting="clr-namespace:RDBLL.Common.Service;assembly=BLL"
         mc:Ignorable="d"
-        Title="Усилие" Height="400" Width="1200" WindowStartupLocation="CenterScreen" ResizeMode="NoResize">
+        Title="Усилие" Height="600" Width="1000" WindowStartupLocation="CenterScreen" MinWidth="1000" MinHeight="600">
     <Window.Resources>
-        <Style x:Key="ServiceButton" TargetType="Button">
-            <Setter Property="Width" Value="100" />
-            <Setter Property="Margin" Value="5" />
-            <Setter Property="Background" Value="#FFB5FCFF" />
-            <Setter Property="HorizontalAlignment" Value="Right" />
-        </Style>
-        <Style x:Key="ServiceButtonImage" TargetType="Image">
-            <Setter Property="Width" Value="40" />
-            <Setter Property="Height" Value="40" />
-            <Setter Property="Stretch" Value="Fill" />
-        </Style>
-        <Style x:Key="PropertyTextBlock" TargetType="TextBlock">
-            <Setter Property="Margin" Value="5" />
-            <Setter Property="TextWrapping" Value="Wrap" />
-            <Setter Property="FontSize" Value="12" />
-        </Style>
-        <Style x:Key="PropertyTextBox" TargetType="TextBox">
-            <Setter Property="Margin" Value="5" />
-            <Setter Property="TextWrapping" Value="Wrap" />
-            <Setter Property="FontSize" Value="12" />
-        </Style>
-        <DataTemplate x:Key="ParameterTemplate">
-            <Grid Background="#FFE6FAFB">
+        <BooleanToVisibilityConverter x:Key="VisibleIfTrueConverter" />
+        <DataTemplate  x:Key="cbTemplate">
+            <TextBlock Text="{Binding Path=LongLabelInUnit}"></TextBlock>
+        </DataTemplate>
+        <DataTemplate x:Key="ParameterTemplate" x:Name="MyTemplate">
+            <Grid Background="{x:Null}" Height="30">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="150"/>
-                    <ColumnDefinition Width="*" MinWidth="100"/>
-                    <ColumnDefinition Width="50"/>
+                    <ColumnDefinition Width="230"/>
+                    <ColumnDefinition Width="*" MinWidth="70"/>
                 </Grid.ColumnDefinitions>
-                <TextBlock Text="{Binding Path=ForceParamKind.Label}"></TextBlock>
-                <TextBox Text="{Binding Path=Value}" Grid.Column="1" Background="#FFFFFEDF">
-                    <TextBox.ToolTip>
-                        <Grid Width="400" Height="200" Background="#FFFFFFDF">
+                <ComboBox ItemsSource="{Binding Source={x:Static Setting:ProgrammSettings.ForceParamKinds}}"
+                          ItemTemplate="{StaticResource cbTemplate}"
+                          SelectedValuePath="Id"
+                          SelectedValue="{Binding Path=KindId}" Height="22" Margin="30,0,0,0">
+                </ComboBox>
+                <TextBox Text="{Binding Path=CrcValueInCurUnit}" Grid.Column="1" Background="#FFFFFEDF" Height="22">
+                    <TextBox.ToolTip >
+                        <Grid Width="400" Height="200">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="20"/>
+                                <RowDefinition/>
+                            </Grid.RowDefinitions>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="200"/>
                                 <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
-                            <Image Source="/UIL;component/Resources/FoudationForce.jpg"></Image>
-                            <TextBlock Text="{Binding Path=ForceParamKind.Addition}" Grid.Column="1" TextWrapping="Wrap"></TextBlock>
+                            <TextBlock Text="{Binding Path=ForceParamKind.Label}" TextWrapping="Wrap" FontWeight="Bold" Background="#FFB0B0B0" Grid.ColumnSpan="2" Foreground="#FFCF4141" FontSize="14"></TextBlock>
+                            <Image Grid.Row="1" Source="/UIL;component/Resources/FoundationForces.png"/>
+                            <TextBlock Text="{Binding Path=ForceParamKind.Addition}" Grid.Column="1" TextWrapping="Wrap" Grid.Row="1"></TextBlock>
                         </Grid>
                     </TextBox.ToolTip>
                 </TextBox>
-                <TextBlock Text="{Binding Path=ForceParamKind.UnitLabel}" Grid.Column="2"></TextBlock>
             </Grid>
-            
+
         </DataTemplate>
         <DataTemplate x:Key="LoadsTemplate">
-            <Expander>
-                
+            <Expander Header="{Binding Path=Name}" Background="#FF97FF92" MinWidth="260" MinHeight="30" Margin="30,5,5,5">
+                <HeaderedContentControl >
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="30"/>
+                            <RowDefinition Height="30"/>
+                            <RowDefinition Height="30"/>
+                            <RowDefinition Height="30"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="170"/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock x:Name="tbName" Style="{StaticResource PropertyTextBlock}" Text="Вид нагрузки"/>
+                        <TextBlock x:Name="tbPartiaSafetyFactor" Grid.Row="1" Style="{StaticResource PropertyTextBlock}" Text="Коэффициент надежности"/>
+                        <TextBlock x:Name="tbIsDeadLoad" Grid.Row="2" Style="{StaticResource PropertyTextBlock}" Text="Временная нагрузка"/>
+                        <TextBlock x:Name="tbBothSign" Grid.Row="3" Style="{StaticResource PropertyTextBlock}" Text="Знакопеременная нагрузка"
+                                   Visibility="{Binding Path=IsLiveLoad, Converter={StaticResource VisibleIfTrueConverter}}"/>
+                        <TextBox x:Name="tbxName" Style="{StaticResource PropertyTextBox}" Text="{Binding Path=Name}" Grid.Column="1"/>
+                        <TextBox x:Name="tbxPartialSafetyFactor" Grid.Row="1" Grid.Column="1" Style="{StaticResource PropertyTextBox}" Text="{Binding Path=PartialSafetyFactor}"/>
+                        <CheckBox x:Name="cbIsLiveLoad" Content="" Grid.Column="1" HorizontalAlignment="Center" Margin="0" Grid.Row="2" VerticalAlignment="Center" IsChecked="{Binding Path=IsLiveLoad}" />
+                        <CheckBox x:Name="cbBothSign" Content="" Grid.Column="1" HorizontalAlignment="Center"
+                                  Margin="0" Grid.Row="3" VerticalAlignment="Center" IsChecked="{Binding Path=BothSign}"
+                                  Visibility="{Binding Path=IsLiveLoad, Converter={StaticResource VisibleIfTrueConverter}}"/>
+                    </Grid>
+                </HeaderedContentControl>
+                <Expander.Effect>
+                    <DropShadowEffect Opacity="0.6"/>
+                </Expander.Effect>
             </Expander>
+
         </DataTemplate>
     </Window.Resources>
     <Grid>
@@ -66,64 +86,69 @@
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="250"/>
-                <ColumnDefinition/>
-                <ColumnDefinition Width="300"/>
-                <ColumnDefinition Width="300"/>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="1*"/>
             </Grid.ColumnDefinitions>
-            <StackPanel Grid.Column="1">
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="30"/>
-                        <RowDefinition Height="30"/>
-                        <RowDefinition Height="30"/>
-                        <RowDefinition Height="30"/>
-                        <RowDefinition Height="30"/>
-                        <RowDefinition Height="30"/>
-                        <RowDefinition Height="30"/>
-                        <RowDefinition Height="30"/>
-                        <RowDefinition Height="30"/>
-                    </Grid.RowDefinitions>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width ="*"/>
-                        <ColumnDefinition Width ="150"/>
-                    </Grid.ColumnDefinitions>
-                    <TextBlock x:Name="tbName" Style="{StaticResource PropertyTextBlock}" Text="Вид нагрузки"/>
-                    <TextBlock x:Name="tbForce_Nz" Grid.Row="1" Style="{StaticResource PropertyTextBlock}" Text="Продольное усилие Nz, кН"/>
-                    <TextBlock x:Name="tbForce_Mx" Grid.Row="2" Style="{StaticResource PropertyTextBlock}" Text="Изгибающий момент Mx, кН*м"/>
-                    <TextBlock x:Name="tbForce_My" Grid.Row="3" Style="{StaticResource PropertyTextBlock}" Text="Изгибающий момент My, кН*м"/>
-                    <TextBlock x:Name="tbForce_Qx" Grid.Row="4" Style="{StaticResource PropertyTextBlock}" Text="Поперечная сила Qx, кН"/>
-                    <TextBlock x:Name="tbForce_Qy" Grid.Row="5" Style="{StaticResource PropertyTextBlock}" Text="Поперечная сила Qy, кН"/>
-                    <TextBlock x:Name="tbPartiaSafetyFactor" Grid.Row="6" Style="{StaticResource PropertyTextBlock}" Text="Коэффициент надежности"/>
-                    <TextBlock x:Name="tbIsDeadLoad" Grid.Row="7" Style="{StaticResource PropertyTextBlock}" Text="Постоянная нагрузка"/>
-                    <TextBlock x:Name="tbBothSign" Grid.Row="8" Style="{StaticResource PropertyTextBlock}" Text="Знакопеременная нагрузка"/>
-                    <TextBox x:Name="tbxName" Grid.Column="1" Style="{StaticResource PropertyTextBox}"/>
-                    <TextBox x:Name="tbxForce_Nz" Grid.Row="1" Grid.Column="1" Style="{StaticResource PropertyTextBox}"/>
-                    <TextBox x:Name="tbxForce_Mx" Grid.Row="2" Grid.Column="1" Style="{StaticResource PropertyTextBox}"/>
-                    <TextBox x:Name="tbxForce_My" Grid.Row="3" Grid.Column="1" Style="{StaticResource PropertyTextBox}"/>
-                    <TextBox x:Name="tbxForce_Qx" Grid.Row="4" Grid.Column="1" Style="{StaticResource PropertyTextBox}"/>
-                    <TextBox x:Name="tbxForce_Qy" Grid.Row="5" Grid.Column="1" Style="{StaticResource PropertyTextBox}"/>
-                    <TextBox x:Name="tbxPartialSafetyFactor" Grid.Row="6" Grid.Column="1" Style="{StaticResource PropertyTextBox}"/>
-                    <CheckBox x:Name="cbIsDeadLoad" Content="" Grid.Column="1" HorizontalAlignment="Center" Margin="0" Grid.Row="7" VerticalAlignment="Center"/>
-                    <CheckBox x:Name="cbBothSign" Content="" Grid.Column="1" HorizontalAlignment="Center" Margin="0" Grid.Row="8" VerticalAlignment="Center"/>
-                </Grid>
-            </StackPanel>
             <Image x:Name="image" Margin="5" Source="{DynamicResource imgFoundationForces}"/>
-            <ListView x:Name="lvForcesList" Grid.Column="2" Margin="5" ItemTemplate="{StaticResource ParameterTemplate}" Background="{x:Null}">
-            </ListView>
-            <ListView x:Name="lvLoadSet" Grid.Column="3" Margin="5" ItemTemplate="{StaticResource LoadsTemplate}">
+            <Grid Grid.Column="2">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="50"/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <StackPanel x:Name="stpForceBtns" Style="{StaticResource OperationStack}" MouseLeave="stpLoadsBtns_MouseLeave" MouseMove="stpLoadsBtns_MouseMove">
+                    <Button x:Name="btnAddForce" Style="{StaticResource OperationButton}" ToolTip="Добавить усилие" Click="btnAddForce_Click">
+                        <Button.Effect>
+                            <DropShadowEffect Opacity="0.6"/>
+                        </Button.Effect>
+                        <Image x:Name="AddForce_png" Style="{StaticResource OperationButtonImage}" Source="{DynamicResource IconAdd30}" />
+                    </Button>
+                    <Button x:Name="btnDeleteForce" Style="{StaticResource OperationButton}" ToolTip="Удалить усилие" Click="btnDeleteForce_Click">
+                        <Button.Effect>
+                            <DropShadowEffect Opacity="0.6"/>
+                        </Button.Effect>
+                        <Image x:Name="DeleteForce_png" Style="{StaticResource OperationButtonImage}" Source="{DynamicResource IconDelete30}"/>
+                    </Button>
+                </StackPanel>
+                <ListView x:Name="lvForcesList" Margin="5" ItemTemplate="{StaticResource ParameterTemplate}" Background="{x:Null}" Grid.RowSpan="2">
+                </ListView>
+            </Grid>
 
-            </ListView>
+            <Grid Grid.Column="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="50"/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <StackPanel x:Name="stpLoadsBtns" Style="{StaticResource OperationStack}" MouseLeave="stpLoadsBtns_MouseLeave" MouseMove="stpLoadsBtns_MouseMove">
+                    <Button x:Name="btnAddLoad" Style="{StaticResource OperationButton}" ToolTip="Добавить нагрузку" Click="btnAddLoad_Click">
+                        <Button.Effect>
+                            <DropShadowEffect Opacity="0.6"/>
+                        </Button.Effect>
+                        <Image x:Name="AddLoad_png" Style="{StaticResource OperationButtonImage}" Source="{DynamicResource IconAdd30}" />
+                    </Button>
+                    <Button x:Name="btnDeleteLoad" Style="{StaticResource OperationButton}" ToolTip="Удалить нагрузку" Click="btnDeleteLoad_Click">
+                        <Button.Effect>
+                            <DropShadowEffect Opacity="0.6"/>
+                        </Button.Effect>
+                        <Image x:Name="DeleteLoad_png" Style="{StaticResource OperationButtonImage}" Source="{DynamicResource IconDelete30}"/>
+                    </Button>
+                </StackPanel>
+                <ListView x:Name="lvLoadSet"
+                          Grid.Row="0" Margin="5" ItemTemplate="{StaticResource LoadsTemplate}" Grid.RowSpan="2"
+                          ItemsSource="{Binding Path=LoadSets}"
+                          SelectionChanged="lvLoadSet_SelectionChanged" SelectionMode="Single"
+                          />
+            </Grid>
         </Grid>
 
 
-        <StackPanel Height="60" Grid.Row="1" Margin="10" Orientation="Horizontal" Grid.ColumnSpan="3" HorizontalAlignment="Right" Background="#FFE2E2E2">
+        <StackPanel Height="60" Grid.Row="1" Margin="0,10,10,10" Orientation="Horizontal" HorizontalAlignment="Right" Background="#FFE2E2E2" Width="110">
             <Button x:Name="btnOK" Style="{StaticResource ServiceButton}" HorizontalAlignment="Stretch" Click="btnOK_Click">
                 <Button.Effect>
                     <DropShadowEffect Opacity="0.6"/>
                 </Button.Effect>
                 <Image x:Name="OK_png" Style="{StaticResource ServiceButtonImage}" Source="{DynamicResource IconOK}"/>
             </Button>
-            <Button x:Name="btnCancel" Style="{StaticResource ServiceButton}" HorizontalAlignment="Stretch" Click="btnCancel_Click">
+            <Button x:Name="btnCancel" Style="{StaticResource ServiceButton}" HorizontalAlignment="Stretch" Click="btnCancel_Click" Visibility="Hidden">
                 <Button.Effect>
                     <DropShadowEffect Opacity="0.6"/>
                 </Button.Effect>

@@ -27,12 +27,12 @@ namespace RDUIL.WinForms
                 counter++;
             }
             tbWall.Text = _openingPlacing.Wall.Name;
-            nudLeft.Minimum = _openingPlacing.OpeningType.Width / 2;
-            nudLeft.Maximum = _openingPlacing.Wall.GetLength() - _openingPlacing.OpeningType.Width / 2;
-            nudLeft.Value = _openingPlacing.Left;
+            nudLeft.Minimum = Convert.ToDecimal(_openingPlacing.OpeningType.Width / 2);
+            nudLeft.Maximum = Convert.ToDecimal(_openingPlacing.Wall.GetLength() - _openingPlacing.OpeningType.Width / 2);
+            nudLeft.Value = Convert.ToDecimal(_openingPlacing.Left);
             cbOverrideBottom.Checked = _openingPlacing.OverrideBottom;
-            nudBottom.Maximum = _openingPlacing.Wall.GetHeight() - _openingPlacing.OpeningType.Height;
-            nudBottom.Value = _openingPlacing.Bottom;
+            nudBottom.Maximum = Convert.ToDecimal(_openingPlacing.Wall.GetHeight() - _openingPlacing.OpeningType.Height);
+            nudBottom.Value = Convert.ToDecimal(_openingPlacing.Bottom);
         }
 
         private void cbOverrideBottom_CheckedChanged(object sender, EventArgs e)
@@ -43,9 +43,9 @@ namespace RDUIL.WinForms
         private void btnOK_Click(object sender, EventArgs e)
         {
             _openingPlacing.OpeningType = _openingPlacing.Wall.Level.Building.OpeningTypeList[cbOpeningTypes.SelectedIndex];
-            _openingPlacing.Left = nudLeft.Value;
+            _openingPlacing.Left = Convert.ToDouble(nudLeft.Value);
             _openingPlacing.OverrideBottom = cbOverrideBottom.Checked;
-            _openingPlacing.Bottom = nudBottom.Value;
+            _openingPlacing.Bottom = Convert.ToDouble(nudBottom.Value);
             ProgrammSettings.IsDataChanged = true;
         }
     }

@@ -18,6 +18,7 @@ using winForms = System.Windows.Forms;
 using RDUIL.WPF_Windows.ControlClasses;
 using RDBLL.Entity.SC.Column;
 using System.Threading;
+using RDUIL.WPF_Windows;
 
 namespace StartWPF
 {
@@ -26,17 +27,21 @@ namespace StartWPF
     /// </summary>
     public partial class MainWindow : Window
     {
+        /// <summary>
+        /// Конструктор главного окная программы
+        /// </summary>
         public MainWindow()
         {
             InitializeComponent();
             ProgrammSettings.InicializeNew();
+
             List<CalcType> calcTypes = new List<CalcType>(); 
 
-            CalcType calcTypeRCC = new CalcType();
-            calcTypeRCC.TypeName = "Железобетон";
-            calcTypeRCC.ImageName = "Bridge.jpg";
-            calcTypeRCC.RegisterDelegate(new CalcType.AddCommandDelegate(AddItemWrapPanel));
-            calcTypes.Add(calcTypeRCC);
+            //CalcType calcTypeRCC = new CalcType();
+            //calcTypeRCC.TypeName = "Железобетон";
+            //calcTypeRCC.ImageName = "Bridge.jpg";
+            //calcTypeRCC.RegisterDelegate(new CalcType.AddCommandDelegate(AddItemWrapPanel));
+            //calcTypes.Add(calcTypeRCC);
 
             CalcType calcTypeSC = new CalcType();
             calcTypeSC.TypeName = "Металл";
@@ -50,11 +55,11 @@ namespace StartWPF
                 stpCalcTypes.Children.Add(calcTypeControl);
             }
             
-            CalcKind calcKindWall = new CalcKind();
-            calcKindWall.KindName = "Расчет железобетонных стен";
-            calcKindWall.KindAddition = "Подсчет объема бетона для железобетонных стен";
-            calcKindWall.RegisterDelegate(new CalcKind.CommandDelegate(ShowWall));
-            calcTypeRCC.CalcKinds.Add(calcKindWall);
+            //CalcKind calcKindWall = new CalcKind();
+            //calcKindWall.KindName = "Расчет железобетонных стен";
+            //calcKindWall.KindAddition = "Подсчет объема бетона для железобетонных стен";
+            //calcKindWall.RegisterDelegate(new CalcKind.CommandDelegate(ShowWall));
+            //calcTypeRCC.CalcKinds.Add(calcKindWall);
 
             CalcKind calcKindSteelBase = new CalcKind();
             calcKindSteelBase.KindName = "Расчет баз стальных колонн";
@@ -116,8 +121,8 @@ namespace StartWPF
 
         private static void ShowWall()
         {
-            var detailObjectList = new DetailObjectList("Levels", ProgrammSettings.BuildingSite.BuildingList[0],
-            ProgrammSettings.BuildingSite.BuildingList[0].LevelList, false);
+            var detailObjectList = new DetailObjectList("Levels", ProgrammSettings.BuildingSite.Buildings[0],
+            ProgrammSettings.BuildingSite.Buildings[0].Levels, false);
             detailObjectList.BtnVisibilityList = new List<short>() { 1, 1, 0, 1, 1, 1, 1, 0, 1, 0, 0, 0 };
             frmDetailList DetailForm = new frmDetailList(detailObjectList);
             DetailForm.Show();
@@ -125,13 +130,17 @@ namespace StartWPF
 
         private static void ShowSteelBase()
         {
-            var detailObjectList = new DetailObjectList("Levels", ProgrammSettings.BuildingSite.BuildingList[0],
-            ProgrammSettings.BuildingSite.BuildingList[0].LevelList, false);
+            var detailObjectList = new DetailObjectList("Levels", ProgrammSettings.BuildingSite.Buildings[0],
+            ProgrammSettings.BuildingSite.Buildings[0].Levels, false);
             detailObjectList.BtnVisibilityList = new List<short>() { 1, 1, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0 };
             frmDetailList DetailForm = new frmDetailList(detailObjectList);
             DetailForm.Show();
         }
 
+        /// <summary>
+        /// Добавляет тип расчета на панель раздела расчетов
+        /// </summary>
+        /// <param name="calcKinds"></param>
         public void AddItemWrapPanel(List<CalcKind> calcKinds)
         {
             wpCalcPanel.Children.Clear();
@@ -140,6 +149,36 @@ namespace StartWPF
             {
                 CalcKindControl calcKindControl = new CalcKindControl(calcKind);
                 wpCalcPanel.Children.Add(calcKindControl);
+            }
+        }
+
+        private void BtnSettings_Click(object sender, RoutedEventArgs e)
+        {
+            wndMeasureUnits newWindow = new wndMeasureUnits();
+            newWindow.ShowDialog();
+        }
+
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            if (ProgrammSettings.IsDataChanged)
+            {
+                winForms.DialogResult result = winForms.MessageBox.Show(
+                "Сохранить данные перед закрытием?",
+                "Файл не сохранен",
+                winForms.MessageBoxButtons.YesNo,
+                winForms.MessageBoxIcon.Information,
+                winForms.MessageBoxDefaultButton.Button1,
+                winForms.MessageBoxOptions.DefaultDesktopOnly);
+
+                if (result == winForms.DialogResult.Yes)
+                {
+                    ProgrammSettings.SaveProjectToFile(false);
+                }
+
+                if (result == winForms.DialogResult.No)
+                {
+                    //Ничего не делаем
+                }
             }
         }
     }

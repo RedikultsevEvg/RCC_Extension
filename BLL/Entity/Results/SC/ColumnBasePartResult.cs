@@ -8,6 +8,7 @@ namespace RDBLL.Entity.Results.SC
 {
     public class ColumnBasePartResult
     {
+        public double MaxBedStress { get; set; }
         public double MaxMoment { get; set; }
         public double MaxStress { get; set; }
     }

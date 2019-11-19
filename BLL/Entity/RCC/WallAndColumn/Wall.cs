@@ -21,11 +21,11 @@ namespace RDBLL.Entity.RCC.WallAndColumn
         public Point2D StartPoint { get; set; }
         public Point2D EndPoint { get; set; }
         public bool ReWriteHeight { get; set; }
-        public decimal Height { get; set; }
-        public decimal ConcreteStartOffset { get; set; }
-        public decimal ConcreteEndOffset { get; set; }
-        public decimal ReiforcementStartOffset { get; set; }
-        public decimal ReiforcementEndOffset { get; set; }
+        public double Height { get; set; }
+        public double ConcreteStartOffset { get; set; }
+        public double ConcreteEndOffset { get; set; }
+        public double ReiforcementStartOffset { get; set; }
+        public double ReiforcementEndOffset { get; set; }
         public bool OverrideVertSpacing { get; set; }
         public bool OverrideHorSpacing { get; set; }
         public BarSpacingSettings VertSpacingSetting { get; set; }
@@ -49,35 +49,35 @@ namespace RDBLL.Entity.RCC.WallAndColumn
             VertSpacingSetting = new BarSpacingSettings(1);
             HorSpacingSetting = new BarSpacingSettings(2);
         }
-        public decimal GetLength()
+        public double GetLength()
         {
             Geometry2D Geometry2D = new Geometry2D();
             return Geometry2D.GetDistance(this.StartPoint, this.EndPoint);
         }
-        public decimal GetConcreteLength()
+        public double GetConcreteLength()
         {
             return GetLength() + ConcreteStartOffset + ConcreteEndOffset;
         }
-        public decimal GetHeight()
+        public double GetHeight()
         {
             if (ReWriteHeight) { return Height; }
             else { return WallType.GetHeight(Level); }
         }
-        public decimal GetConcreteAreaBrutto()
+        public double GetConcreteAreaBrutto()
         {
-            decimal Area = 0;
+            double Area = 0;
             Area = GetConcreteLength() * GetHeight();
             return Area;
         }
-        public decimal GetConcreteAreaNetto()
+        public double GetConcreteAreaNetto()
         {
-            decimal Area = 0;
+            double Area = 0;
             Area = GetConcreteAreaBrutto() - GetOpeningsArea();
             return Area;
         }
-        public decimal GetOpeningsArea()
+        public double GetOpeningsArea()
         {
-            decimal Area = 0;
+            double Area = 0;
             //Возвращает суммарную площадь всех проемов
             foreach (OpeningPlacing _openingPlacing in OpeningPlacingList)
             {
@@ -85,21 +85,21 @@ namespace RDBLL.Entity.RCC.WallAndColumn
             }
             return Area;
         }
-        public decimal GetConcreteVolumeBrutto()
+        public double GetConcreteVolumeBrutto()
         {
-            decimal Volume = GetConcreteAreaBrutto() * WallType.Thickness;
+            double Volume = GetConcreteAreaBrutto() * WallType.Thickness;
             return Volume;
         }
-        public decimal GetConcreteVolumeNetto()
+        public double GetConcreteVolumeNetto()
         {
-            decimal Volume = GetConcreteAreaNetto() * WallType.Thickness;
+            double Volume = GetConcreteAreaNetto() * WallType.Thickness;
             return Volume;
         }
-        public decimal ReinforcementLength()
+        public double ReinforcementLength()
         {
             return GetLength() + ReiforcementStartOffset + ReiforcementEndOffset;
         }
-        public decimal ReinforcementArea()
+        public double ReinforcementArea()
         {
             return ReinforcementLength() * GetHeight();
         }
@@ -125,7 +125,7 @@ namespace RDBLL.Entity.RCC.WallAndColumn
             int quant, opening_quant;
             BarSpacingSettings barSpacingSettings;
             if (OverrideVertSpacing) { barSpacingSettings = VertSpacingSetting; } else { barSpacingSettings = WallType.VertSpacingSetting; }
-            decimal length = GetLength() + ReiforcementStartOffset + ReiforcementEndOffset - 50 - 50;
+            double length = GetLength() + ReiforcementStartOffset + ReiforcementEndOffset - 50 - 50;
             quant = barSpacingSettings.BarQuantity(length);
             foreach (OpeningPlacing obj in OpeningPlacingList)
             {
@@ -144,16 +144,16 @@ namespace RDBLL.Entity.RCC.WallAndColumn
             int quant;
             BarSpacingSettings barSpacingSettings;
             if (OverrideHorSpacing) { barSpacingSettings = HorSpacingSetting; } else { barSpacingSettings = WallType.HorSpacingSetting; }
-            decimal length = GetHeight() - 50 - 50;
+            double length = GetHeight() - 50 - 50;
             quant = barSpacingSettings.BarQuantity(length);
             return quant;
         }
-        public decimal HorBarLength()
+        public double HorBarLength()
         {
-            decimal length;
-            decimal area = ReinforcementArea();
-            decimal openingsArea = GetOpeningsArea();
-            decimal lapCoefficient = 1;
+            double length;
+            double area = ReinforcementArea();
+            double openingsArea = GetOpeningsArea();
+            double lapCoefficient = 1;
             if (WallType.HorLapping) { lapCoefficient += WallType.HorLappingLength / WallType.HorBaseLength; }
             length = HorBarQuantity() * ReinforcementLength() * lapCoefficient * (area- openingsArea) / area;
             length *= 2;
@@ -242,7 +242,7 @@ namespace RDBLL.Entity.RCC.WallAndColumn
             Level = level;
             WallType = wallType;
             SetDefault();
-            level.WallList.Add(this);
+            level.Walls.Add(this);
 
         }
         public Wall(Level level, XmlNode xmlNode)
@@ -254,11 +254,11 @@ namespace RDBLL.Entity.RCC.WallAndColumn
                 if (obj.Name == "WallTypeNumber") WallType = level.Building.WallTypeList[Convert.ToInt16(obj.Value)];
                 if (obj.Name == "Name") Name = obj.Value; 
                 if (obj.Name == "ReWriteHeight") ReWriteHeight = Convert.ToBoolean(obj.Value);
-                if (obj.Name == "Height") Height = Convert.ToDecimal(obj.Value);
-                if (obj.Name == "ConcreteStartOffset") ConcreteStartOffset = Convert.ToDecimal(obj.Value);
-                if (obj.Name == "ConcreteEndOffset") ConcreteEndOffset = Convert.ToDecimal(obj.Value);
-                if (obj.Name == "ReiforcementStartOffset") ReiforcementStartOffset = Convert.ToDecimal(obj.Value);
-                if (obj.Name == "ReiforcementEndOffset") ReiforcementEndOffset = Convert.ToDecimal(obj.Value);
+                if (obj.Name == "Height") Height = Convert.ToDouble(obj.Value);
+                if (obj.Name == "ConcreteStartOffset") ConcreteStartOffset = Convert.ToDouble(obj.Value);
+                if (obj.Name == "ConcreteEndOffset") ConcreteEndOffset = Convert.ToDouble(obj.Value);
+                if (obj.Name == "ReiforcementStartOffset") ReiforcementStartOffset = Convert.ToDouble(obj.Value);
+                if (obj.Name == "ReiforcementEndOffset") ReiforcementEndOffset = Convert.ToDouble(obj.Value);
                 if (obj.Name == "OverrideVertSpacing") OverrideVertSpacing = Convert.ToBoolean(obj.Value);
                 if (obj.Name == "OverrideHorSpacing") OverrideHorSpacing = Convert.ToBoolean(obj.Value);
             }
@@ -281,7 +281,7 @@ namespace RDBLL.Entity.RCC.WallAndColumn
             EndPoint = new Point2D(6, 0);
             Level = level;
             WallType = wallType;
-            level.WallList.Add(this);
+            level.Walls.Add(this);
         }
         //Построение стены по двум точкам
         public Wall(Point2D StartPoint, Point2D EndPoint)
@@ -292,7 +292,7 @@ namespace RDBLL.Entity.RCC.WallAndColumn
 
         }
         //Построение стены по начальной точке, углу и длине
-        public Wall(Point2D StartPoint, decimal Angle, decimal Length)
+        public Wall(Point2D StartPoint, double Angle, double Length)
         {       
             Name = "Новая стена";
             this.StartPoint = StartPoint;
