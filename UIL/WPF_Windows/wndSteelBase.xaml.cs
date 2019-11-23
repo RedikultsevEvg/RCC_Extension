@@ -51,7 +51,7 @@ namespace RDUIL.WPF_Windows
 
         private void btnForces_Click(object sender, RoutedEventArgs e)
         {
-            wndForces wndForces = new wndForces(_steelColumnBase.LoadsGroup[0]);
+            wndForces wndForces = new wndForces(_steelColumnBase);
             wndForces.ShowDialog();
         }
         private void BtnParts_Click(object sender, RoutedEventArgs e)

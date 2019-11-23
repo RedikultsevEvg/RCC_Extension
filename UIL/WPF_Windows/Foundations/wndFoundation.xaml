@@ -4,9 +4,89 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:RDUIL.WPF_Windows.Foundations"
+        xmlns:Convert="clr-namespace:RDUIL.Converters" 
         mc:Ignorable="d"
-        Title="wndFoundation" Height="450" Width="800">
+        Title="Фундамент" Height="450" Width="650" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
+    <Window.Resources>
+        <Convert:FoundationToGeometryConverter x:Key="FoundationToGeometry"/>
+    </Window.Resources>
     <Grid>
-        
+        <Grid.RowDefinitions>
+            <RowDefinition Height="375*"/>
+            <RowDefinition Height="80"/>
+        </Grid.RowDefinitions>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="200"/>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="110"/>
+            </Grid.ColumnDefinitions>
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition Height="80"/>
+                </Grid.RowDefinitions>
+                <Canvas x:Name="cvScetch" Width="200" Height="260"/>
+                <StackPanel Height="60" Grid.Row="1" Margin="0,10,10,10" Orientation="Horizontal" HorizontalAlignment="Right" Background="#FFE2E2E2">
+                    <Button x:Name="btnRefresh" Style="{StaticResource ServiceButton}" HorizontalAlignment="Stretch" Click="BtnRefresh_Click">
+                        <Button.Effect>
+                            <DropShadowEffect Opacity="0.6"/>
+                        </Button.Effect>
+                        <Image x:Name="Refresh_png" Style="{StaticResource ServiceButtonImage}" Source="{DynamicResource IconRefresh40}"/>
+                    </Button>
+                </StackPanel>
+            </Grid>
+            <Grid Grid.Column="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="30"/>
+                    <RowDefinition Height="30"/>
+                    <RowDefinition Height="30"/>
+                    <RowDefinition Height="30"/>
+                    <RowDefinition Height="30"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width ="*"/>
+                    <ColumnDefinition Width ="200"/>
+                    <ColumnDefinition Width="10"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock x:Name="tbName" Style="{StaticResource PropertyTextBlock}" Text="Наименование"/>
+                <TextBox x:Name="tbxName" Grid.Column="1" Style="{StaticResource PropertyTextBox}" Text="{Binding Path=Name}"/>
+            </Grid>
+            <StackPanel Grid.Column="2" Background="#FFE2E2E2" VerticalAlignment="Top">
+                <Button x:Name="btnForces" Style="{StaticResource ServiceButton}" Height="50" Click="BtnForces_Click">
+                    <Button.Effect>
+                        <DropShadowEffect Opacity="0.6"/>
+                    </Button.Effect>
+                    <Image x:Name="Forces_png" Style="{StaticResource ServiceButtonImage}" Source="{DynamicResource IconForces}"/>
+                    <Button.ToolTip>
+                        <TextBlock Margin="3" Foreground="Black">Усилия...</TextBlock>
+                    </Button.ToolTip>
+                </Button>
+                <Button x:Name="btnParts" Style="{StaticResource ServiceButton}" Height="50" Click="BtnParts_Click">
+                    <Button.Effect>
+                        <DropShadowEffect Opacity="0.6"/>
+                    </Button.Effect>
+                    <Image x:Name="Parts_png" Style="{StaticResource ServiceButtonImage}" Source="{DynamicResource IconBasePart}"/>
+                    <Button.ToolTip>
+                        <TextBlock Margin="3" Foreground="Black">Ступени фундамента...</TextBlock>
+                    </Button.ToolTip>
+                </Button>
+            </StackPanel>
+        </Grid>
+
+        <StackPanel Height="60" Grid.Row="1" Margin="10" Orientation="Horizontal" Grid.ColumnSpan="3" HorizontalAlignment="Right" Background="#FFE2E2E2">
+            <Button x:Name="btnOK" Style="{StaticResource ServiceButton}" HorizontalAlignment="Stretch" Click="BtnOK_Click">
+                <Button.Effect>
+                    <DropShadowEffect Opacity="0.6"/>
+                </Button.Effect>
+                <Image x:Name="OK_png" Style="{StaticResource ServiceButtonImage}" Source="{DynamicResource IconOK}"/>
+            </Button>
+            <Button x:Name="btnCancel" Style="{StaticResource ServiceButton}" HorizontalAlignment="Stretch" IsEnabled="False">
+                <Button.Effect>
+                    <DropShadowEffect Opacity="0.6"/>
+                </Button.Effect>
+                <Image x:Name="Cancel_png" Style="{StaticResource ServiceButtonImage}" Source="{DynamicResource IconCancel}"/>
+            </Button>
+        </StackPanel>
     </Grid>
 </Window>

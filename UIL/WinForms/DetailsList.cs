@@ -265,7 +265,7 @@ namespace RDUIL.WinForms
                     }
                 case ObjBarForses:
                     {
-                        BarLoadSet columnLoadSet = new BarLoadSet(((SteelBase)_parentObject).LoadsGroup[0]);
+                        BarLoadSet columnLoadSet = new BarLoadSet(((SteelBase)_parentObject).ForcesGroups[0]);
                         NewItemFromColumnLoadSet(columnLoadSet);
                         break;
                     }
@@ -772,7 +772,7 @@ namespace RDUIL.WinForms
                 {
                     steelColumnBase = ((ObservableCollection<SteelBase>)_objectList)[i];
                     this.Visible = false;
-                    wndForces wndForces = new wndForces(steelColumnBase.LoadsGroup[0]);
+                    wndForces wndForces = new wndForces(steelColumnBase);
                     wndForces.ShowDialog();
                     this.Visible = true;
                 }

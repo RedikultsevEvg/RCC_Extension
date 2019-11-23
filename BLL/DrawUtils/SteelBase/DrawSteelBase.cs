@@ -13,52 +13,33 @@ namespace RDBLL.DrawUtils.SteelBase
 {
     public static class DrawSteelBase
     {
-        public static void DrawBase(Entity.SC.Column.SteelBase steelColumnBase, Canvas canvas)
+        public static void DrawBase(Entity.SC.Column.SteelBase steelBase, Canvas canvas)
         {
             canvas.Children.Clear();
-            double zoom_factor_X = canvas.Width / steelColumnBase.Width / 1.2;
-            double zoom_factor_Y = canvas.Height / steelColumnBase.Length / 1.2;
+            double zoom_factor_X = canvas.Width / steelBase.Width / 1.2;
+            double zoom_factor_Y = canvas.Height / steelBase.Length / 1.2;
             double scale_factor;
             double[] columnBaseCenter = new double[2] { canvas.Width / 2, canvas.Height / 2 };
             if (zoom_factor_X < zoom_factor_Y) { scale_factor = zoom_factor_X; } else { scale_factor = zoom_factor_Y; }
             #region Рисуем прямоугольник для базы
-            Rectangle columnBaseRect = new Rectangle();
-            columnBaseRect.Width = steelColumnBase.Width * scale_factor;
-            columnBaseRect.Height = steelColumnBase.Length * scale_factor;
-            columnBaseRect.Fill = Brushes.Gray;
-            columnBaseRect.Opacity = 0.3;
-            columnBaseRect.Stroke = Brushes.Black;
-            columnBaseRect.StrokeThickness = 3;
-            canvas.Children.Add(columnBaseRect);
-            Canvas.SetLeft(columnBaseRect, columnBaseCenter[0] - columnBaseRect.Width / 2);
-            Canvas.SetTop(columnBaseRect, columnBaseCenter[1] - columnBaseRect.Height / 2);
+            Rectangle steelBaseRect = new Rectangle();
+            steelBaseRect.Width = steelBase.Width * scale_factor;
+            steelBaseRect.Height = steelBase.Length * scale_factor;
+            steelBaseRect.Fill = Brushes.Gray;
+            steelBaseRect.Opacity = 0.3;
+            steelBaseRect.Stroke = Brushes.Black;
+            steelBaseRect.StrokeThickness = 3;
+            canvas.Children.Add(steelBaseRect);
+            Canvas.SetLeft(steelBaseRect, columnBaseCenter[0] - steelBaseRect.Width / 2);
+            Canvas.SetTop(steelBaseRect, columnBaseCenter[1] - steelBaseRect.Height / 2);
             #endregion
-            #region Рисуем оси координат
-            //Рисуем ось X
-            Line axisX = new Line();
-            axisX.X1 = columnBaseCenter[0] - columnBaseRect.Width / 2 * 1.2;
-            axisX.Y1 = columnBaseCenter[1];
-            axisX.X2 = columnBaseCenter[0] + columnBaseRect.Width / 2 * 1.2;
-            axisX.Y2 = columnBaseCenter[1];
-            axisX.Stroke = Brushes.Red;
-            axisX.StrokeThickness = 1;
-            axisX.StrokeDashArray = new DoubleCollection { 10, 4 };
-            canvas.Children.Add(axisX);
-            //Рисуем ось Y
-            Line axisY = new Line();
-            axisY.X1 = columnBaseCenter[0];
-            axisY.Y1 = columnBaseCenter[1] - columnBaseRect.Height / 2 * 1.2;
-            axisY.X2 = columnBaseCenter[0];
-            axisY.Y2 = columnBaseCenter[1] + columnBaseRect.Height / 2 * 1.2;
-            axisY.Stroke = Brushes.Red;
-            axisY.StrokeThickness = 1;
-            axisY.StrokeDashArray = new DoubleCollection { 10, 4 };
-            canvas.Children.Add(axisY);
-            #endregion
+            // Рисуем оси координат
+            DrawUtils.DrawAxis(canvas);
+
             //Рисуем участки
-            foreach (SteelBasePart basePart in steelColumnBase.SteelBaseParts)
+            foreach (SteelBasePart basePart in steelBase.SteelBaseParts)
             {
-                foreach (SteelBasePart steelBasePart in steelColumnBase.SteelBaseParts)
+                foreach (SteelBasePart steelBasePart in steelBase.SteelBaseParts)
                 {
                     foreach (SteelBasePart steelBasePartEh in SteelBasePartProcessor.GetSteelBasePartsFromPart(steelBasePart))
                     {
@@ -67,7 +48,7 @@ namespace RDBLL.DrawUtils.SteelBase
                 }
             }
             //Рисуем болты
-            foreach (SteelBolt baseBolt in steelColumnBase.SteelBolts)
+            foreach (SteelBolt baseBolt in steelBase.SteelBolts)
             {
                 foreach (SteelBolt baseBoltEh in SteelBoltProcessor.GetSteelBoltsFromBolt(baseBolt))
                 {

@@ -8,10 +8,10 @@ using RDBLL.Entity.Common.NDM;
 using RDBLL.Entity.RCC.BuildingAndSite;
 using RDBLL.Forces;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using RDBLL.Common.Interfaces;
 using System.Data;
+
 
 
 namespace RDBLL.Entity.RCC.Foundations
@@ -19,7 +19,7 @@ namespace RDBLL.Entity.RCC.Foundations
     /// <summary>
     /// Класс столбчатого фундамента
     /// </summary>
-    public class Foundation
+    public class Foundation : IHaveForcesGroups
     {
         /// <summary>
         /// Код фундамента
@@ -40,7 +40,7 @@ namespace RDBLL.Entity.RCC.Foundations
         /// <summary>
         /// Коллекция групп нагрузок
         /// </summary>
-        public ObservableCollection<ForcesGroup> LoadsGroup { get; set; }
+        public ObservableCollection<ForcesGroup> ForcesGroups { get; set; }
         /// <summary>
         /// Коллекция ступеней столбчатого фундамента
         /// </summary>
@@ -52,10 +52,35 @@ namespace RDBLL.Entity.RCC.Foundations
         /// <summary>
         /// Признак актуальности нагрузок
         /// </summary>
-        public bool IsLoadsActual { get; set; }
+        public bool IsLoadCasesActual { get; set; }
         /// <summary>
         /// Признак актуальности ступеней
         /// </summary>
         public bool IsPartsActual { get; set; }
+
+        /// <summary>
+        /// Конструктор без параметров
+        /// </summary>
+        public Foundation()
+        {
+
+        }
+        /// <summary>
+        /// Конструктор по уровню
+        /// </summary>
+        /// <param name="level">Уровень</param>
+        public Foundation(Level level)
+        {
+            Id = ProgrammSettings.CurrentId;
+            LevelId = level.Id;
+            Level = level;
+            Name = "Новый фундамент";
+            ForcesGroups = new ObservableCollection<ForcesGroup>();
+            ForcesGroups.Add(new ForcesGroup(this));
+            Parts = new ObservableCollection<FoundationPart>();
+            ForceCurvatures = new List<ForceCurvature>();
+            IsLoadCasesActual = true;
+            IsPartsActual = true;
+        }
     }
 }

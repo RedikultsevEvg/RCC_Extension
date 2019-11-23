@@ -20,14 +20,14 @@ namespace Test.Forces
         {
             SteelBase steelColumnBase = new SteelBase();
             int i = 1;
-            AddForceParameter(steelColumnBase.LoadsGroup[0], i, false);
+            AddForceParameter(steelColumnBase.ForcesGroups[0], i, false);
 
             i = 2;
-            AddForceParameter(steelColumnBase.LoadsGroup[0], i, false);
+            AddForceParameter(steelColumnBase.ForcesGroups[0], i, false);
 
             List<LoadSet> ExpLoadCases = new List<LoadSet>();
 
-            List<LoadSet> ActualList = LoadSetProcessor.GetLoadCases(steelColumnBase.LoadsGroup);
+            List<LoadSet> ActualList = LoadSetProcessor.GetLoadCases(steelColumnBase.ForcesGroups);
             List<LoadSet> ExpectedList = ExpLoadCases;
             #region //Свойства ожидаемой комбинации нагрузок
             ExpectedList.Add(new LoadSet());
@@ -55,14 +55,14 @@ namespace Test.Forces
         {
             SteelBase steelColumnBase = new SteelBase();
             int i = 1;
-            AddForceParameter(steelColumnBase.LoadsGroup[0], i, false);
+            AddForceParameter(steelColumnBase.ForcesGroups[0], i, false);
 
             i = 2;
-            AddForceParameter(steelColumnBase.LoadsGroup[0], i, true);
+            AddForceParameter(steelColumnBase.ForcesGroups[0], i, true);
 
             List<LoadSet> ExpLoadCases = new List<LoadSet>();
 
-            List<LoadSet> ActualList = LoadSetProcessor.GetLoadCases(steelColumnBase.LoadsGroup);
+            List<LoadSet> ActualList = LoadSetProcessor.GetLoadCases(steelColumnBase.ForcesGroups);
             List<LoadSet> ExpectedList = ExpLoadCases;
             #region //Свойства ожидаемой комбинации нагрузок
             ExpectedList.Add(new LoadSet());
@@ -103,14 +103,14 @@ namespace Test.Forces
         {
             SteelBase steelColumnBase = new SteelBase();
             int i = 1;
-            AddForceParameter(steelColumnBase.LoadsGroup[0], i);
+            AddForceParameter(steelColumnBase.ForcesGroups[0], i);
 
             i = 2;
-            AddForceParameter(steelColumnBase.LoadsGroup[0], i, true, true);
+            AddForceParameter(steelColumnBase.ForcesGroups[0], i, true, true);
 
             List<LoadSet> ExpLoadCases = new List<LoadSet>();
 
-            List<LoadSet> ActualList = LoadSetProcessor.GetLoadCases(steelColumnBase.LoadsGroup);
+            List<LoadSet> ActualList = LoadSetProcessor.GetLoadCases(steelColumnBase.ForcesGroups);
             List<LoadSet> ExpectedList = ExpLoadCases;
             #region //Свойства ожидаемой комбинации нагрузок
             ExpectedList.Add(new LoadSet());

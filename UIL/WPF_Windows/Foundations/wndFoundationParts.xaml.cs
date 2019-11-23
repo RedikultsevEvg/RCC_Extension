@@ -1,16 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using RDBLL.Common.Service;
+using RDBLL.Entity.RCC.Foundations;
+using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
+using Winforms = System.Windows.Forms;
+using RDBLL.DrawUtils.SteelBase;
+
 
 namespace RDUIL.WPF_Windows.Foundations
 {
@@ -19,9 +16,67 @@ namespace RDUIL.WPF_Windows.Foundations
     /// </summary>
     public partial class wndFoundationParts : Window
     {
-        public wndFoundationParts()
+        private Foundation _foundation;
+        private ObservableCollection<FoundationPart> _collection;
+        public wndFoundationParts(Foundation foundation)
         {
+            _foundation = foundation;
+            _collection = _foundation.Parts;
             InitializeComponent();
+            this.DataContext = _collection;
+            DrawFoundation.DrawScatch(_foundation, cvScetch);
+        }
+
+        private void StpPartBtns_MouseMove(object sender, MouseEventArgs e)
+        {
+            ((StackPanel)sender).Opacity = 1;
+        }
+
+        private void StpPartBtns_MouseLeave(object sender, MouseEventArgs e)
+        {
+            ((StackPanel)sender).Opacity = 0.5;
+        }
+
+        private void BtnAddPart_Click(object sender, RoutedEventArgs e)
+        {
+            FoundationPart foundationPart = new FoundationPart(_foundation);
+            _collection.Add(foundationPart);
+        }
+
+        private void BtnDeletePart_Click(object sender, RoutedEventArgs e)
+        {
+            if (LvMain.SelectedIndex >= 0)
+            {
+                Winforms.DialogResult result = Winforms.MessageBox.Show("Элемент будет удален", "Подтверждаете удаление элемента?",
+                    Winforms.MessageBoxButtons.YesNo,
+                    Winforms.MessageBoxIcon.Information,
+                    Winforms.MessageBoxDefaultButton.Button1,
+                    Winforms.MessageBoxOptions.DefaultDesktopOnly);
+
+                if (result == Winforms.DialogResult.Yes)
+                {
+                    int a = LvMain.SelectedIndex;
+                    if (LvMain.Items.Count == 1) LvMain.UnselectAll();
+                    else if (a < (LvMain.Items.Count - 1)) LvMain.SelectedIndex = a + 1;
+                    else LvMain.SelectedIndex = a - 1;
+                    _collection.RemoveAt(a);
+                    ProgrammSettings.IsDataChanged = true;
+                }
+            }
+            else
+            {
+                MessageBox.Show("Ничего не выбрано", "Выберите один из элементов");
+            }
+        }
+
+        private void BtnOK_Click(object sender, RoutedEventArgs e)
+        {
+            this.Close();
+        }
+
+        private void BtnRefresh_Click(object sender, RoutedEventArgs e)
+        {
+            DrawFoundation.DrawScatch(_foundation, cvScetch);
         }
     }
 }
