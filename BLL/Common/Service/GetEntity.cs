@@ -112,7 +112,7 @@ namespace RDBLL.Common.Service
                 };
                 newObject.SteelBaseParts = GetSteelBaseParts(dataSet, newObject);
                 newObject.SteelBolts = GetSteelBolts(dataSet, newObject);
-                newObject.LoadsGroup = GetForcesGroups(dataSet, newObject);
+                newObject.ForcesGroups = GetForcesGroups(dataSet, newObject);
                 newObjects.Add(newObject);
             }
             return newObjects;

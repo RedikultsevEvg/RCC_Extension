@@ -134,7 +134,7 @@ namespace RDBLL.Forces
             }
             foreach (Foundation foundation in Foundations)
             {
-                foundation.IsLoadsActual = false;
+                foundation.IsLoadCasesActual = false;
             }
         }
         #endregion

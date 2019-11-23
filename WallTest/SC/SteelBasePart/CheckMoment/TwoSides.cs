@@ -21,7 +21,7 @@ namespace Test.SC.SteelBasePart.CheckMoment
             steelColumnBase.Length = 1;
             steelColumnBase.Thickness = 0.05;
 
-            LoadSet loadSet = steelColumnBase.LoadsGroup[0].LoadSets[0];
+            LoadSet loadSet = steelColumnBase.ForcesGroups[0].LoadSets[0];
             ForceParameter forceParameter = new ForceParameter();
             loadSet.ForceParameters.Add(forceParameter);
             forceParameter.KindId = 1;
@@ -57,7 +57,7 @@ namespace Test.SC.SteelBasePart.CheckMoment
             steelColumnBase.Length = 1;
             steelColumnBase.Thickness = 0.05;
 
-            LoadSet loadSet = steelColumnBase.LoadsGroup[0].LoadSets[0];
+            LoadSet loadSet = steelColumnBase.ForcesGroups[0].LoadSets[0];
             ForceParameter forceParameter = new ForceParameter();
             loadSet.ForceParameters.Add(forceParameter);
             forceParameter.KindId = 1;
@@ -96,7 +96,7 @@ namespace Test.SC.SteelBasePart.CheckMoment
             steelColumnBase.Length = baseLength;
             steelColumnBase.Thickness = 0.05;
 
-            LoadSet loadSet = steelColumnBase.LoadsGroup[0].LoadSets[0];
+            LoadSet loadSet = steelColumnBase.ForcesGroups[0].LoadSets[0];
             ForceParameter forceParameter = new ForceParameter();
             loadSet.ForceParameters.Add(forceParameter);
             forceParameter.KindId = 1;
@@ -135,7 +135,7 @@ namespace Test.SC.SteelBasePart.CheckMoment
             steelColumnBase.Length = baseLength;
             steelColumnBase.Thickness = 0.05;
 
-            LoadSet loadSet = steelColumnBase.LoadsGroup[0].LoadSets[0];
+            LoadSet loadSet = steelColumnBase.ForcesGroups[0].LoadSets[0];
             ForceParameter forceParameter = new ForceParameter();
             loadSet.ForceParameters.Add(forceParameter);
             forceParameter.KindId = 1;
@@ -174,7 +174,7 @@ namespace Test.SC.SteelBasePart.CheckMoment
             steelColumnBase.Length = baseLength;
             steelColumnBase.Thickness = 0.05;
 
-            LoadSet loadSet = steelColumnBase.LoadsGroup[0].LoadSets[0];
+            LoadSet loadSet = steelColumnBase.ForcesGroups[0].LoadSets[0];
             ForceParameter forceParameter = new ForceParameter();
             loadSet.ForceParameters.Add(forceParameter);
             forceParameter.KindId = 1;
@@ -213,7 +213,7 @@ namespace Test.SC.SteelBasePart.CheckMoment
             steelColumnBase.Length = baseLength;
             steelColumnBase.Thickness = 0.05;
 
-            LoadSet loadSet = steelColumnBase.LoadsGroup[0].LoadSets[0];
+            LoadSet loadSet = steelColumnBase.ForcesGroups[0].LoadSets[0];
             ForceParameter forceParameter = new ForceParameter();
             loadSet.ForceParameters.Add(forceParameter);
             forceParameter.KindId = 1;
@@ -252,7 +252,7 @@ namespace Test.SC.SteelBasePart.CheckMoment
             steelColumnBase.Length = baseLength;
             steelColumnBase.Thickness = 0.05;
 
-            LoadSet loadSet = steelColumnBase.LoadsGroup[0].LoadSets[0];
+            LoadSet loadSet = steelColumnBase.ForcesGroups[0].LoadSets[0];
             ForceParameter forceParameter = new ForceParameter();
             loadSet.ForceParameters.Add(forceParameter);
             forceParameter.KindId = 1;

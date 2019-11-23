@@ -52,9 +52,12 @@
     <Compile Include="Common\Geometry\Mathematic\Constants.cs" />
     <Compile Include="Common\Geometry\Mathematic\Matrix.cs" />
     <Compile Include="Common\Geometry\RectCrossSection.cs" />
+    <Compile Include="Common\Interfaces\IHaveForcesGroups.cs" />
     <Compile Include="Common\Interfaces\ISavableToDataSet.cs" />
     <Compile Include="Common\Service\GetEntity.cs" />
+    <Compile Include="DrawUtils\SteelBase\DrawFoundation.cs" />
     <Compile Include="DrawUtils\SteelBase\DrawSteelBase.cs" />
+    <Compile Include="DrawUtils\SteelBase\DrawUtils.cs" />
     <Compile Include="Entity\Common\NDM\Curvature.cs" />
     <Compile Include="Entity\Common\NDM\ForceCurvature.cs" />
     <Compile Include="Entity\Common\NDM\Interfaces\IMaterialModel.cs" />
@@ -81,6 +84,7 @@
     <Compile Include="Common\Geometry\Point3D.cs" />
     <Compile Include="Entity\RCC\Foundations\Foundation.cs" />
     <Compile Include="Entity\RCC\Foundations\FoundationPart.cs" />
+    <Compile Include="Entity\RCC\Foundations\Processors\FoundationProcessor.cs" />
     <Compile Include="Entity\RCC\Reinforcement\Bar.cs" />
     <Compile Include="Common\Service\DetailObjectList.cs" />
     <Compile Include="Common\Service\ProgrammSettings.cs" />

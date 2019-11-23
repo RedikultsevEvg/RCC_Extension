@@ -38,7 +38,7 @@ namespace RDBLL.Forces
             ForcesGroups = new List<ForcesGroup>();
             ForceParameters = new ObservableCollection<ForceParameter>();
             ForcesGroups.Add(forcesGroup);
-            forcesGroup.SteelBases[0].IsLoadCasesActual = false;
+            forcesGroup.SetParentsNotActual();
             Name = "Новая нагрузка";
             PartialSafetyFactor = 1.1;
             IsLiveLoad = false;

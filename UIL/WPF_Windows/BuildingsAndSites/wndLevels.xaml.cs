@@ -15,6 +15,7 @@ using RDBLL.Entity.RCC.BuildingAndSite;
 using System.Collections.ObjectModel;
 using RDBLL.Common.Service;
 using Winforms = System.Windows.Forms;
+using RDUIL.WPF_Windows.Foundations;
 
 
 namespace RDUIL.WPF_Windows.BuildingsAndSites
@@ -24,21 +25,24 @@ namespace RDUIL.WPF_Windows.BuildingsAndSites
     /// </summary>
     public partial class wndLevels : Window
     {
-        private ObservableCollection<Level> _collections;
-        public Building Building { get; set; }
-        public string ChildName { get; set; }
-        public wndLevels(ObservableCollection<Level> levels)
+        private ObservableCollection<Level> _collection;
+        private string _childName;
+        private Building _building;
+
+        public wndLevels(Building building, ObservableCollection<Level> levels, string childName)
         {
-            _collections = levels;
+            _building = building;
+            _collection = levels;
+            _childName = childName;
             InitializeComponent();
-            if (ChildName == "SteelBases") { ChildPng.SetResourceReference(Image.SourceProperty, "IconBase40"); }
-            else if (ChildName == "Foundations") { ChildPng.SetResourceReference(Image.SourceProperty, "IconBase40"); }
-            this.DataContext = _collections;
+            if (_childName == "SteelBases") { ChildPng.SetResourceReference(Image.SourceProperty, "IconBase40"); }
+            else if (_childName == "Foundations") { ChildPng.SetResourceReference(Image.SourceProperty, "IconBase40"); }
+            this.DataContext = _collection;
         }
 
         private void BtnAdd_Click(object sender, RoutedEventArgs e)
         {
-            Level level = new Level(Building);
+            Level level = new Level(_building);
             ProgrammSettings.IsDataChanged = true;
         }
 
@@ -58,7 +62,7 @@ namespace RDUIL.WPF_Windows.BuildingsAndSites
                     if (LvMain.Items.Count == 1) LvMain.UnselectAll();
                     else if (a < (LvMain.Items.Count - 1)) LvMain.SelectedIndex = a + 1;
                     else LvMain.SelectedIndex = a - 1;
-                    _collections.RemoveAt(a);
+                    _collection.RemoveAt(a);
                     ProgrammSettings.IsDataChanged = true;
                 }
             }
@@ -73,7 +77,7 @@ namespace RDUIL.WPF_Windows.BuildingsAndSites
             if (LvMain.SelectedIndex >= 0)
             {
                 int a = LvMain.SelectedIndex;
-                wndLevel wndLevel = new wndLevel(_collections[a]);
+                wndLevel wndLevel = new wndLevel(_collection[a]);
                 wndLevel.ShowDialog();
             }
             else
@@ -92,8 +96,19 @@ namespace RDUIL.WPF_Windows.BuildingsAndSites
             if (LvMain.SelectedIndex >= 0)
             {
                 int a = LvMain.SelectedIndex;
-                wndSteelBases childWindow = new wndSteelBases(_collections[a]);
-                childWindow.ShowDialog();
+                
+                if (_childName == "SteelBases")
+                {
+                    wndSteelBases childWindow;
+                    childWindow = new wndSteelBases(_collection[a]);
+                    childWindow.ShowDialog();
+                }
+                else if (_childName == "Foundations")
+                {
+                    wndFoundations childWindow;
+                    childWindow = new wndFoundations(_collection[a]);
+                    childWindow.ShowDialog();
+                }              
             }
             else
             {

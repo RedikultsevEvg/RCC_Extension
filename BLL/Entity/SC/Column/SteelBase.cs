@@ -1,11 +1,11 @@
-﻿using RDBLL.Common.Service;
+﻿using RDBLL.Common.Interfaces;
+using RDBLL.Common.Service;
 using RDBLL.Entity.Common.NDM;
 using RDBLL.Entity.RCC.BuildingAndSite;
 using RDBLL.Forces;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using RDBLL.Common.Interfaces;
 using System.Data;
 
 namespace RDBLL.Entity.SC.Column
@@ -13,7 +13,7 @@ namespace RDBLL.Entity.SC.Column
     /// <summary>
     /// База стальной колонны
     /// </summary>
-    public class SteelBase : ICloneable, ISavableToDataSet
+    public class SteelBase : ICloneable, ISavableToDataSet, IHaveForcesGroups
     {
         #region Fields
         //private bool _isActual;
@@ -56,7 +56,7 @@ namespace RDBLL.Entity.SC.Column
         /// <summary>
         /// Коллекция групп нагрузок
         /// </summary>
-        public ObservableCollection<ForcesGroup> LoadsGroup { get; set; }
+        public ObservableCollection<ForcesGroup> ForcesGroups { get; set; }
         /// <summary>
         /// Коллекция участков
         /// </summary>
@@ -137,8 +137,8 @@ namespace RDBLL.Entity.SC.Column
             SteelStrength = 240000000;
             ConcreteStrength = 10000000;
             UseSimpleMethod = true;
-            LoadsGroup = new ObservableCollection<ForcesGroup>();
-            LoadsGroup.Add(new ForcesGroup(this));
+            ForcesGroups = new ObservableCollection<ForcesGroup>();
+            ForcesGroups.Add(new ForcesGroup(this));
             SteelBaseParts = new ObservableCollection<SteelBasePart>();
             SteelBolts = new ObservableCollection<SteelBolt>();
             ForceCurvatures = new List<ForceCurvature>();
@@ -152,8 +152,8 @@ namespace RDBLL.Entity.SC.Column
         public void StartObjects()
         {
             //Нагрузка
-            LoadSet loadSet = new LoadSet(this.LoadsGroup[0]);
-            this.LoadsGroup[0].LoadSets.Add(loadSet);
+            LoadSet loadSet = new LoadSet(this.ForcesGroups[0]);
+            this.ForcesGroups[0].LoadSets.Add(loadSet);
             loadSet.Name = "Постоянная";
             loadSet.ForceParameters.Add(new ForceParameter(loadSet));
             loadSet.ForceParameters[0].KindId = 1; //Продольная сила
@@ -243,7 +243,7 @@ namespace RDBLL.Entity.SC.Column
             {
                 steelBolt.SaveToDataSet(dataSet);
             }
-            foreach (ForcesGroup forcesGroup in LoadsGroup)
+            foreach (ForcesGroup forcesGroup in ForcesGroups)
             {
                 forcesGroup.SaveToDataSet(dataSet);
             }

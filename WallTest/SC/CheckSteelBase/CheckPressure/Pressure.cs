@@ -28,7 +28,7 @@ namespace Test.SC.CheckSteelBase.CheckPressure
             steelColumnBase.Length = baseLength;
             steelColumnBase.Thickness = 0.05;
 
-            LoadSet loadSet = steelColumnBase.LoadsGroup[0].LoadSets[0];
+            LoadSet loadSet = steelColumnBase.ForcesGroups[0].LoadSets[0];
             loadSet.ForceParameters.Clear();
             ForceParameter forceParameter = new ForceParameter();
             loadSet.ForceParameters.Add(forceParameter);
@@ -104,7 +104,7 @@ namespace Test.SC.CheckSteelBase.CheckPressure
             steelColumnBase.Length = baseLength;
             steelColumnBase.Thickness = 0.05;
 
-            LoadSet loadSet = steelColumnBase.LoadsGroup[0].LoadSets[0];
+            LoadSet loadSet = steelColumnBase.ForcesGroups[0].LoadSets[0];
             loadSet.ForceParameters.Clear();
             ForceParameter forceParameter = new ForceParameter();
             loadSet.ForceParameters.Add(forceParameter);
@@ -180,7 +180,7 @@ namespace Test.SC.CheckSteelBase.CheckPressure
             steelColumnBase.Length = baseLength;
             steelColumnBase.Thickness = 0.05;
 
-            LoadSet loadSet = steelColumnBase.LoadsGroup[0].LoadSets[0];
+            LoadSet loadSet = steelColumnBase.ForcesGroups[0].LoadSets[0];
             loadSet.ForceParameters.Clear();
             ForceParameter forceParameter = new ForceParameter();
             loadSet.ForceParameters.Add(forceParameter);
@@ -256,7 +256,7 @@ namespace Test.SC.CheckSteelBase.CheckPressure
             steelColumnBase.Length = baseLength;
             steelColumnBase.Thickness = 0.05;
 
-            LoadSet loadSet = steelColumnBase.LoadsGroup[0].LoadSets[0];
+            LoadSet loadSet = steelColumnBase.ForcesGroups[0].LoadSets[0];
             loadSet.ForceParameters.Clear();
             ForceParameter forceParameter = new ForceParameter();
             loadSet.ForceParameters.Add(forceParameter);
