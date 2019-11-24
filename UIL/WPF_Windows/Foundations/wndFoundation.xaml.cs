@@ -13,6 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using RDBLL.Entity.RCC.Foundations;
 using RDBLL.DrawUtils.SteelBase;
+using RDBLL.Entity.MeasureUnits;
 
 namespace RDUIL.WPF_Windows.Foundations
 {
@@ -27,7 +28,9 @@ namespace RDUIL.WPF_Windows.Foundations
             _element = foundation;
             InitializeComponent();
             this.DataContext = _element;
-            DrawFoundation.DrawScatch(_element, cvScetch);
+            tbSoilWeightMeasure.Text = MeasureUnitConverter.GetUnitLabelText(9);
+            tbConcreteWeightMeasure.Text = MeasureUnitConverter.GetUnitLabelText(9);
+            DrawFoundation.DrawTopScatch(_element, cvScetch);
         }
 
         private void BtnForces_Click(object sender, RoutedEventArgs e)
@@ -44,7 +47,7 @@ namespace RDUIL.WPF_Windows.Foundations
 
         private void BtnRefresh_Click(object sender, RoutedEventArgs e)
         {
-            DrawFoundation.DrawScatch(_element, cvScetch);
+            DrawFoundation.DrawTopScatch(_element, cvScetch);
         }
 
         private void BtnOK_Click(object sender, RoutedEventArgs e)

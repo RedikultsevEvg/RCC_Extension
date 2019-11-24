@@ -11,8 +11,16 @@ using RDBLL.Processors.SC;
 
 namespace RDBLL.DrawUtils.SteelBase
 {
+    /// <summary>
+    /// Рисует стальную базу на канвасе
+    /// </summary>
     public static class DrawSteelBase
     {
+        /// <summary>
+        /// Рисует стальную базу на канваса
+        /// </summary>
+        /// <param name="steelBase">Стальная база</param>
+        /// <param name="canvas">Канвас</param>
         public static void DrawBase(Entity.SC.Column.SteelBase steelBase, Canvas canvas)
         {
             canvas.Children.Clear();
@@ -34,7 +42,7 @@ namespace RDBLL.DrawUtils.SteelBase
             Canvas.SetTop(steelBaseRect, columnBaseCenter[1] - steelBaseRect.Height / 2);
             #endregion
             // Рисуем оси координат
-            DrawUtils.DrawAxis(canvas);
+            DrawUtils.DrawAxis(canvas, true, true);
 
             //Рисуем участки
             foreach (SteelBasePart basePart in steelBase.SteelBaseParts)
@@ -56,7 +64,17 @@ namespace RDBLL.DrawUtils.SteelBase
                 }
             }
         }
-        //метод отрисовки участков базы
+        /// <summary>
+        /// Рисует участок стальной базы на канвасе
+        /// </summary>
+        /// <param name="basePart">Участок стальной базы</param>
+        /// <param name="canvas">Канвас</param>
+        /// <param name="columnBaseCenter">Массив координат центра базы</param>
+        /// <param name="scale_factor">масштабный фактор</param>
+        /// <param name="koeffX">Коэффициент по X</param>
+        /// <param name="koeffY">Коэффициент по Y</param>
+        /// <param name="opacity">Значение прозрачности 1 - непрозрачный</param>
+        /// <param name="showName">Флаг отрисовки имени участка</param>
         public static void DrawBasePart(SteelBasePart basePart, Canvas canvas, double[] columnBaseCenter, double scale_factor, int koeffX, int koeffY, double opacity, bool showName)
         {
             double[] basePartCenter = new double[2] { columnBaseCenter[0] + basePart.CenterX * scale_factor * koeffX, columnBaseCenter[1] - basePart.CenterY * scale_factor * koeffY };
@@ -137,6 +155,17 @@ namespace RDBLL.DrawUtils.SteelBase
                 Canvas.SetTop(basePartNameText, basePartCenter[1] - basePartNameText.FontSize);
             }
         }
+        /// <summary>
+        /// Рисует болт стальной базы на канвасе
+        /// </summary>
+        /// <param name="steelBolt">Болт стальной базы</param>
+        /// <param name="canvas">Кпнвас</param>
+        /// <param name="columnBaseCenter">Массив координат центра базы</param>
+        /// <param name="scale_factor">Масштабный фактор</param>
+        /// <param name="koeffX">Коэффициент по X</param>
+        /// <param name="koeffY">Коэффициент по Y</param>
+        /// <param name="opacity">Значение прозрачности 1 - непрозрачный</param>
+        /// <param name="showName">Флаг отображения имени болта</param>
         public static void DrawBolts(SteelBolt steelBolt, Canvas canvas, double[] columnBaseCenter, double scale_factor, int koeffX, int koeffY, double opacity, bool showName)
         {
             Ellipse centerEllipse = new Ellipse();

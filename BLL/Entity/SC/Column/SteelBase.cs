@@ -146,7 +146,7 @@ namespace RDBLL.Entity.SC.Column
             ConcreteNdmAreas = new List<NdmArea>();
             SteelNdmAreas = new List<NdmArea>();
 
-            /// Вложенные объекты по умолчанию
+            // Вложенные объекты по умолчанию
             StartObjects();
         }
         public void StartObjects()

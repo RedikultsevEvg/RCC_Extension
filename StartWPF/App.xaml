@@ -40,6 +40,18 @@
             <Setter Property="TextWrapping" Value="Wrap" />
             <Setter Property="FontSize" Value="12" />
         </Style>
+        <Style x:Key="PropertyTextBoxError" TargetType="TextBox" BasedOn="{StaticResource PropertyTextBox}">
+            <Style.Triggers>
+                <Trigger Property="Validation.HasError" Value="true">
+                    <Setter Property="Foreground" Value="Red"/>
+                    <Setter Property="FontWeight" Value="Bold"/>
+                    <Setter Property="ToolTip"
+              Value="{Binding RelativeSource={x:Static RelativeSource.Self},
+              Path=(Validation.Errors)[0].ErrorContent}"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
         <Style x:Key="OperationStack" TargetType="StackPanel">
             <Setter Property="Background" Value="#FF63D451"/>
             <Setter Property="HorizontalAlignment" Value="Right"/>

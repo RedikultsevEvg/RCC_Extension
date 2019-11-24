@@ -11,7 +11,7 @@
         <Convert:LinearSizeConverter x:Key="LinearSizeConverter"/>
         <Convert:StressConverter x:Key="StressConverter"/>
     </Window.Resources>
-    <Grid>
+    <Grid x:Name="GridMain">
         <Grid.RowDefinitions>
             <RowDefinition/>
             <RowDefinition Height="80"/>
@@ -93,11 +93,27 @@
                                                             <TextBlock x:Name="tbCenterX" Grid.Column="1" Grid.Row="4" Style="{StaticResource PropertyTextBlock}" Text="Положение центра по X"/>
                                                             <TextBlock x:Name="tbCenterY" Grid.Column="1" Grid.Row="5" Style="{StaticResource PropertyTextBlock}" Text="Положение центра по Y"/>
                                                             <TextBox x:Name="tbxName" Grid.Column="2" Style="{StaticResource PropertyTextBox}" Text="{Binding Name}"/>
-                                                            <TextBox x:Name="tbxWidth" Grid.Column="2" Grid.Row="1" Style="{StaticResource PropertyTextBox}" Text="{Binding Width, Converter={StaticResource LinearSizeConverter}}"/>
-                                                            <TextBox x:Name="tbxLength" Grid.Column="2" Grid.Row="2" Style="{StaticResource PropertyTextBox}" Text="{Binding Length, Converter={StaticResource LinearSizeConverter}}"/>
-                                                            <TextBox x:Name="tbxHeight" Grid.Column="2" Grid.Row="3" Style="{StaticResource PropertyTextBox}" Text="{Binding Height, Converter={StaticResource LinearSizeConverter}}"/>
-                                                            <TextBox x:Name="tbxCenterX" Grid.Column="2" Grid.Row="4" Style="{StaticResource PropertyTextBox}" Text="{Binding CenterX, Converter={StaticResource LinearSizeConverter}}"/>
-                                                            <TextBox x:Name="tbxCenterY" Grid.Column="2" Grid.Row="5" Style="{StaticResource PropertyTextBox}" Text="{Binding CenterY, Converter={StaticResource LinearSizeConverter}}"/>
+                                                            <TextBox x:Name="tbxWidth" Grid.Column="2" Grid.Row="1" Style="{StaticResource PropertyTextBoxError}"
+                                                                     Text="{Binding Width, Converter={StaticResource LinearSizeConverter}, ValidatesOnDataErrors=True}"/>
+                                                            <TextBox x:Name="tbxLength" Grid.Column="2" Grid.Row="2" Style="{StaticResource PropertyTextBoxError}"
+                                                                     Text="{Binding Length, Converter={StaticResource LinearSizeConverter}, ValidatesOnDataErrors=True}"/>
+                                                            <TextBox x:Name="tbxHeight" Grid.Column="2" Grid.Row="3" Style="{StaticResource PropertyTextBoxError}"
+                                                                     Text="{Binding Height, Converter={StaticResource LinearSizeConverter}, ValidatesOnDataErrors=True}"/>
+                                                            <TextBox x:Name="tbxCenterX" Grid.Column="2" Grid.Row="4" Style="{StaticResource PropertyTextBoxError}">
+                                                                <Binding Path="CenterX"  Converter="{StaticResource LinearSizeConverter}">
+                                                                    <Binding.ValidationRules>
+                                                                        <ExceptionValidationRule/>
+                                                                    </Binding.ValidationRules>
+                                                                </Binding>
+                                                            </TextBox>
+                                                            <TextBox x:Name="tbxCenterY" Grid.Column="2" Grid.Row="5" Style="{StaticResource PropertyTextBoxError}">
+                                                                <Binding Path="CenterY" Converter="{StaticResource LinearSizeConverter}">
+                                                                    <Binding.ValidationRules>
+                                                                        <ExceptionValidationRule/>
+                                                                    </Binding.ValidationRules>
+                                                                </Binding>
+                                                            </TextBox>
+                                                                     
                                                             <TextBlock Grid.Column="3" Grid.Row="1" Style="{StaticResource PropertyTextBlock}" Text="{Binding LinearMeasure}" />
                                                             <TextBlock Grid.Column="3" Grid.Row="2" Style="{StaticResource PropertyTextBlock}" Text="{Binding LinearMeasure}" />
                                                             <TextBlock Grid.Column="3" Grid.Row="3" Style="{StaticResource PropertyTextBlock}" Text="{Binding LinearMeasure}" />

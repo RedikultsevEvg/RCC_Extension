@@ -7,6 +7,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using Winforms = System.Windows.Forms;
 using RDBLL.DrawUtils.SteelBase;
+using RDUIL.Validations;
 
 
 namespace RDUIL.WPF_Windows.Foundations
@@ -24,7 +25,7 @@ namespace RDUIL.WPF_Windows.Foundations
             _collection = _foundation.Parts;
             InitializeComponent();
             this.DataContext = _collection;
-            DrawFoundation.DrawScatch(_foundation, cvScetch);
+            DrawFoundation.DrawTopScatch(_foundation, cvScetch);
         }
 
         private void StpPartBtns_MouseMove(object sender, MouseEventArgs e)
@@ -71,12 +72,19 @@ namespace RDUIL.WPF_Windows.Foundations
 
         private void BtnOK_Click(object sender, RoutedEventArgs e)
         {
-            this.Close();
+            string message = ErrorProcessor.cmdGetErrorString(GridMain);
+            if (message != "") { MessageBox.Show(message); }
+            else
+            {
+                this.DialogResult = true;
+                this.Close();
+            }
+            
         }
 
         private void BtnRefresh_Click(object sender, RoutedEventArgs e)
         {
-            DrawFoundation.DrawScatch(_foundation, cvScetch);
+            DrawFoundation.DrawTopScatch(_foundation, cvScetch);
         }
     }
 }
