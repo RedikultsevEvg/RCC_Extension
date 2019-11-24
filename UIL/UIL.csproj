@@ -59,6 +59,7 @@
     <Compile Include="Converters\StressConverter.cs" />
     <Compile Include="Converters\LinearSizeConverter.cs" />
     <Compile Include="Converters\LinearSizeTextConverter.cs" />
+    <Compile Include="Converters\VolumeWeightConverter.cs" />
     <Compile Include="MSControls\numericupdown.cs" />
     <Compile Include="MSControls\numericupdown.xaml.cs">
       <DependentUpon>numericupdown.xaml</DependentUpon>
@@ -68,6 +69,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="Validations\ErrorProcessor.cs" />
     <Compile Include="WinForms\BarSpacingSettings.cs">
       <SubType>Form</SubType>
     </Compile>

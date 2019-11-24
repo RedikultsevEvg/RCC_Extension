@@ -1,19 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using RDBLL.Common.Interfaces;
 using RDBLL.Common.Service;
-using RDBLL.Entity.Common.NDM;
-using RDBLL.Entity.RCC.BuildingAndSite;
-using RDBLL.Forces;
-using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using RDBLL.Common.Interfaces;
-using System.Data;
 using RDBLL.Entity.MeasureUnits;
-using RDBLL.Common.Interfaces;
+using System;
+using System.ComponentModel;
 using System.Data;
 
 namespace RDBLL.Entity.RCC.Foundations
@@ -21,7 +10,7 @@ namespace RDBLL.Entity.RCC.Foundations
     /// <summary>
     /// Класс части (ступени) фундамента
     /// </summary>
-    public class FoundationPart :ISavableToDataSet
+    public class FoundationPart :ISavableToDataSet, IDataErrorInfo
     {
         #region fields and properties
         /// <summary>
@@ -113,5 +102,41 @@ namespace RDBLL.Entity.RCC.Foundations
             throw new NotImplementedException();
         }
         #endregion
+        public string Error { get { throw new NotImplementedException(); } }
+        public string this[string columnName]
+        {
+            get
+            {
+                string error = String.Empty;
+                switch (columnName)
+                {
+                    case "Width":
+                        {
+                            if (Width <= 0)
+                            {
+                                error = "Ширина ступени не может быть меньше нуля";
+                            }
+                        }
+                        break;
+                    case "Length":
+                        {
+                            if (Length <= 0)
+                            {
+                                error = "Длина ступени не может быть меньше нуля";
+                            }
+                        }
+                        break;
+                    case "Height":
+                        {
+                            if (Height <= 0)
+                            {
+                                error = "Высота ступени не может быть меньше нуля";
+                            }
+                        }
+                        break;
+                }
+                return error;
+            }
+        }
     }
 }

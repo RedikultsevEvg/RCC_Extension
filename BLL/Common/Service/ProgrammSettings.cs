@@ -122,15 +122,31 @@ namespace RDBLL.Common.Service
             measureUnitMass.UnitLabels.Add(new MeasureUnitLabel { Id = 37, UnitName = "г", AddKoeff = 1000 });
             measureUnitMass.UnitLabels.Add(new MeasureUnitLabel { Id = 38, UnitName = "т", AddKoeff = 0.001 });
             measureUnitMass.CurrentUnitLabelId = 36;
+            MeasureUnit measureUnitDensity = new MeasureUnit();
+            measureUnitDensity.MeasureUnitKind = "Плотность";
+            measureUnitDensity.UnitLabels.Add(new MeasureUnitLabel { Id = 39, UnitName = "кг/м^3", AddKoeff = 1.0 });
+            measureUnitDensity.UnitLabels.Add(new MeasureUnitLabel { Id = 40, UnitName = "г/см^3", AddKoeff = 0.001 });
+            measureUnitDensity.UnitLabels.Add(new MeasureUnitLabel { Id = 41, UnitName = "т/м^3", AddKoeff = 0.001 });
+            measureUnitDensity.CurrentUnitLabelId = 39;
+            MeasureUnit measureUnitVolumeWeight = new MeasureUnit();
+            measureUnitVolumeWeight.MeasureUnitKind = "Объемный вес";
+            measureUnitVolumeWeight.UnitLabels.Add(new MeasureUnitLabel { Id = 42, UnitName = "Н/м^3", AddKoeff = 1.0 });
+            measureUnitVolumeWeight.UnitLabels.Add(new MeasureUnitLabel { Id = 43, UnitName = "кН/м^3", AddKoeff = 0.001 });
+            measureUnitVolumeWeight.UnitLabels.Add(new MeasureUnitLabel { Id = 44, UnitName = "кг/м^3", AddKoeff = 1 / 9.81 });
+            measureUnitVolumeWeight.UnitLabels.Add(new MeasureUnitLabel { Id = 45, UnitName = "г/см^3", AddKoeff = 0.001 / 9.81 });
+            measureUnitVolumeWeight.UnitLabels.Add(new MeasureUnitLabel { Id = 46, UnitName = "т/м^3", AddKoeff = 0.001 / 9.81 });
+            measureUnitVolumeWeight.CurrentUnitLabelId = 43;
             MeasureUnits = new ObservableCollection<MeasureUnit>();
-            MeasureUnits.Add(measureUnitLength);
-            MeasureUnits.Add(measureUnitForce);
-            MeasureUnits.Add(measureUnitMoment);
-            MeasureUnits.Add(measureUnitStress);
-            MeasureUnits.Add(measureUnitGeometryArea);
-            MeasureUnits.Add(measureUnitGeometrySecMoment);
-            MeasureUnits.Add(measureUnitGeometryMoment);
-            MeasureUnits.Add(measureUnitMass);
+            MeasureUnits.Add(measureUnitLength); //0
+            MeasureUnits.Add(measureUnitForce); //1
+            MeasureUnits.Add(measureUnitMoment); //2
+            MeasureUnits.Add(measureUnitStress); //3
+            MeasureUnits.Add(measureUnitGeometryArea); //4
+            MeasureUnits.Add(measureUnitGeometrySecMoment); //5
+            MeasureUnits.Add(measureUnitGeometryMoment); //6
+            MeasureUnits.Add(measureUnitMass); //7
+            MeasureUnits.Add(measureUnitDensity); //8
+            MeasureUnits.Add(measureUnitVolumeWeight); //9
             #endregion
             #region Исходные данные видов нагрузки
             ForceParamKinds = new List<ForceParamKind>();

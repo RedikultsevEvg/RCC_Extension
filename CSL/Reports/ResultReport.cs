@@ -102,8 +102,6 @@ namespace CSL.Reports
                     }
                 }
             }
-
-
         }
 
         public byte[] ExportToByte(Canvas surface)
