@@ -1,0 +1,14 @@
+﻿<Window x:Class="EvgRed01.Window1"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:EvgRed01"
+        mc:Ignorable="d"
+        Title="Window1" Height="600" Width="800">
+    <Grid x:Name="gridPlot">
+        <Line x:Name="lineH" Visibility="Hidden" Panel.ZIndex="3"></Line>
+        <Line x:Name="lineV" Visibility="Hidden" Panel.ZIndex="3"></Line>
+    </Grid>
+
+</Window>
