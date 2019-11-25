@@ -11,6 +11,9 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using RDBLL.Entity.RCC.Foundations;
+using RDBLL.DrawUtils.SteelBase;
+using RDBLL.Entity.MeasureUnits;
 
 namespace RDUIL.WPF_Windows.Foundations
 {
@@ -19,9 +22,37 @@ namespace RDUIL.WPF_Windows.Foundations
     /// </summary>
     public partial class wndFoundation : Window
     {
-        public wndFoundation()
+        private Foundation _element;
+        public wndFoundation(Foundation foundation)
         {
+            _element = foundation;
             InitializeComponent();
+            this.DataContext = _element;
+            tbSoilWeightMeasure.Text = MeasureUnitConverter.GetUnitLabelText(9);
+            tbConcreteWeightMeasure.Text = MeasureUnitConverter.GetUnitLabelText(9);
+            DrawFoundation.DrawTopScatch(_element, cvScetch);
+        }
+
+        private void BtnForces_Click(object sender, RoutedEventArgs e)
+        {
+            wndForces wndForces = new wndForces(_element);
+            wndForces.ShowDialog();
+        }
+
+        private void BtnParts_Click(object sender, RoutedEventArgs e)
+        {
+            wndFoundationParts wndFoundationParts = new wndFoundationParts(_element);
+            wndFoundationParts.ShowDialog();
+        }
+
+        private void BtnRefresh_Click(object sender, RoutedEventArgs e)
+        {
+            DrawFoundation.DrawTopScatch(_element, cvScetch);
+        }
+
+        private void BtnOK_Click(object sender, RoutedEventArgs e)
+        {
+            this.Close();
         }
     }
 }

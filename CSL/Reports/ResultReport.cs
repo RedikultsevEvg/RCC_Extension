@@ -102,8 +102,6 @@ namespace CSL.Reports
                     }
                 }
             }
-
-
         }
 
         public byte[] ExportToByte(Canvas surface)
@@ -178,7 +176,7 @@ namespace CSL.Reports
         private void ProcessLoadSets(SteelBase steelBase)
         {
             DataTable LoadSets = dataSet.Tables["LoadSets"];
-            foreach (LoadSet loadSet in steelBase.LoadsGroup[0].LoadSets)
+            foreach (LoadSet loadSet in steelBase.ForcesGroups[0].LoadSets)
             {
                 string loadSetDescription, crcForceDescription = "", designForceDescription = "";
                 DataRow newLoadSet = LoadSets.NewRow();

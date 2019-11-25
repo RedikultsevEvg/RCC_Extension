@@ -54,10 +54,12 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Converters\FoundationToGeometryConverter.cs" />
     <Compile Include="Converters\SteelBaseToGeometryConverter.cs" />
     <Compile Include="Converters\StressConverter.cs" />
     <Compile Include="Converters\LinearSizeConverter.cs" />
     <Compile Include="Converters\LinearSizeTextConverter.cs" />
+    <Compile Include="Converters\VolumeWeightConverter.cs" />
     <Compile Include="MSControls\numericupdown.cs" />
     <Compile Include="MSControls\numericupdown.xaml.cs">
       <DependentUpon>numericupdown.xaml</DependentUpon>
@@ -67,6 +69,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="Validations\ErrorProcessor.cs" />
     <Compile Include="WinForms\BarSpacingSettings.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -133,9 +136,6 @@
     <Compile Include="WPF_Windows\Foundations\wndFoundation.xaml.cs">
       <DependentUpon>wndFoundation.xaml</DependentUpon>
     </Compile>
-    <Compile Include="WPF_Windows\Foundations\wndFoundationPart.xaml.cs">
-      <DependentUpon>wndFoundationPart.xaml</DependentUpon>
-    </Compile>
     <Compile Include="WPF_Windows\Foundations\wndFoundationParts.xaml.cs">
       <DependentUpon>wndFoundationParts.xaml</DependentUpon>
     </Compile>
@@ -182,10 +182,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="WPF_Windows\Foundations\wndFoundation.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="WPF_Windows\Foundations\wndFoundationPart.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -6,7 +6,7 @@
         xmlns:Convert="clr-namespace:RDUIL.Converters" 
         xmlns:local="clr-namespace:RDUIL.WPF_Windows.BuildingsAndSites"
         mc:Ignorable="d"
-        Title="wndLevels" Height="450" Width="800" WindowStartupLocation="CenterScreen">
+        Title="Уровни" Height="450" Width="800" WindowStartupLocation="CenterScreen">
     <Window.Resources>
         <Convert:LinearSizeConverter x:Key="LinearSizeConverter"/>
         <Convert:StressConverter x:Key="StressConverter"/>
@@ -23,7 +23,6 @@
                         <ColumnDefinition Width="230"/>
                         <ColumnDefinition Width="100"/>
                     </Grid.ColumnDefinitions>
-                    <RadioButton HorizontalAlignment="Center" Background="{x:Null}" BorderBrush="#FF5EFF2E" VerticalAlignment="Center"></RadioButton>
                     <TextBlock x:Name="tbName" Grid.Column="1" Style="{StaticResource PropertyTextBlock}" Text="Наименование" FontSize="14" FontWeight="Bold"/>
                     <TextBox x:Name="tbxName" Grid.Column="2" Style="{StaticResource PropertyTextBox}" Text="{Binding Name}"/>
                 </Grid>

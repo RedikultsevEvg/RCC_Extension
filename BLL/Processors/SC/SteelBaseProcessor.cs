@@ -47,7 +47,7 @@ namespace RDBLL.Processors.SC
         {
             if (! steelBase.IsLoadCasesActual)
             {
-                steelBase.LoadCases = LoadSetProcessor.GetLoadCases(steelBase.LoadsGroup);
+                steelBase.LoadCases = LoadSetProcessor.GetLoadCases(steelBase.ForcesGroups);
                 steelBase.IsLoadCasesActual = true;
             }   
         }

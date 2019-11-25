@@ -6,6 +6,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using Winforms = System.Windows.Forms;
+using RDBLL.Common.Interfaces;
 
 namespace RDUIL.WPF_Windows
 {
@@ -15,11 +16,13 @@ namespace RDUIL.WPF_Windows
     public partial class wndForces : Window
     {
         private ForcesGroup _forcesGroup;
+        private IHaveForcesGroups _haveForcesGroups;
         private ObservableCollection<LoadSet> _loadSets;
-        public wndForces(ForcesGroup forcesGroup)
+        public wndForces(IHaveForcesGroups haveForcesGroups)
         {
             InitializeComponent();
-            _forcesGroup = forcesGroup;
+            _haveForcesGroups = haveForcesGroups;
+            _forcesGroup = _haveForcesGroups.ForcesGroups[0];
             _loadSets = _forcesGroup.LoadSets;
             this.DataContext = _forcesGroup;
         }
