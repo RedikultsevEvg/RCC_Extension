@@ -18,10 +18,22 @@ namespace RDBLL.Forces
         private int _KindId;
         private ForceParamKind _forceParamKind;
         private double _crcValue;
-        public int Id { get; set; } //Код усилия
+        /// <summary>
+        /// Код усилия
+        /// </summary>
+        public int Id { get; set; }
+        /// <summary>
+        /// Код комбинации загружения
+        /// </summary>
         public int LoadSetId { get; set; }
+        /// <summary>
+        /// Обратная ссылка на комбинацию загружений
+        /// </summary>
         public LoadSet LoadSet { get; set; }
-        public int KindId //Код вида усилия (например, продольная сила). Виды нагрузки жестко предустановлены в программе
+        /// <summary>
+        /// Код вида усилия (например, продольная сила). Виды нагрузки жестко предустановлены в программе
+        /// </summary>
+        public int KindId
         {
             get { return _KindId; }
             set
@@ -36,6 +48,9 @@ namespace RDBLL.Forces
 
             }
         }
+        /// <summary>
+        /// Ссылка на вид усилия
+        /// </summary>
         public ForceParamKind ForceParamKind
         {
             get
@@ -44,12 +59,21 @@ namespace RDBLL.Forces
             }
             set { _forceParamKind = value; }
         }
-        public string Name { get; set; } //Наименование
-        public double CrcValue //Величина нагрузки (численное значение)
+        /// <summary>
+        /// Наименование
+        /// </summary>
+        public string Name { get; set; }
+        /// <summary>
+        /// Нормативное (характеристическое) значение нагрузки
+        /// </summary>
+        public double CrcValue
         {
             get { return _crcValue; }
             set { _crcValue = value; }
         }
+        /// <summary>
+        /// Нормативное (характеристическое) значение нагрузки в текущих единицах измерения
+        /// </summary>
         public double CrcValueInCurUnit
         {
             get
@@ -63,11 +87,21 @@ namespace RDBLL.Forces
                 _crcValue = value / measureUnitLabel.AddKoeff;
             }
         }
-        public double DesignValue { get; set; } //Величина нагрузки (численное значение)
+        /// <summary>
+        /// Расчетное значение нагрузки
+        /// </summary>
+        public double DesignValue { get; set; }
         #region Constructors
+        /// <summary>
+        /// Конструктор без параметров
+        /// </summary>
         public ForceParameter()
         {
         }
+        /// <summary>
+        /// Конструктор по комбинации нагрузок
+        /// </summary>
+        /// <param name="loadSet"></param>
         public ForceParameter(LoadSet loadSet)
         {
             Id = ProgrammSettings.CurrentId;
@@ -76,6 +110,10 @@ namespace RDBLL.Forces
         }
         #endregion
         #region Methods
+        /// <summary>
+        /// Сохранение в указанный датасет
+        /// </summary>
+        /// <param name="dataSet">Датасет</param>
         public void SaveToDataSet(DataSet dataSet)
         {
             DataTable dataTable;
@@ -94,6 +132,11 @@ namespace RDBLL.Forces
         }
         #endregion
         //IEquatable
+        /// <summary>
+        /// Сравнение
+        /// </summary>
+        /// <param name="other"></param>
+        /// <returns></returns>
         public bool Equals(ForceParameter other)
         {
             if (this.KindId == other.KindId

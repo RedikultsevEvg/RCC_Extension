@@ -54,6 +54,7 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Common\Reports\ShowReport.cs" />
     <Compile Include="Converters\FoundationToGeometryConverter.cs" />
     <Compile Include="Converters\SteelBaseToGeometryConverter.cs" />
     <Compile Include="Converters\StressConverter.cs" />
@@ -364,6 +365,17 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\IconEdit40.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\IconBasePart40.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\IconForces40.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\IconFoundation40.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
   </ItemGroup>

@@ -52,7 +52,7 @@ namespace StartWPF
 
             CalcType calcTypeSoil = new CalcType();
             calcTypeSoil.TypeName = "Грунт";
-            calcTypeSoil.ImageName = "Steel.jpg";
+            calcTypeSoil.ImageName = "Soil.jpg";
             calcTypeSoil.RegisterDelegate(new CalcType.AddCommandDelegate(AddItemWrapPanel));
             calcTypes.Add(calcTypeSoil);
 

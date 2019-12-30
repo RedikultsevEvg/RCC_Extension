@@ -8,6 +8,7 @@ using System.Collections.ObjectModel;
 using RDBLL.Common.Geometry;
 using System.Windows.Forms;
 using RDBLL.Entity.Results.NDM;
+using RDBLL.Common.Service;
 
 namespace RDBLL.Processors.Forces
 {
@@ -67,7 +68,7 @@ namespace RDBLL.Processors.Forces
         /// <returns></returns>
         public static LoadSet SumForcesInNew(LoadSet oldLoadSet, LoadSet secondLoadSet, double koeff = 1.0)
         {
-            LoadSet newLoadSet = new LoadSet();
+            LoadSet newLoadSet = new LoadSet() { Id = ProgrammSettings.CurrentTmpId };
             SumForces(newLoadSet, oldLoadSet, 1, false);
             SumForces(newLoadSet, secondLoadSet, koeff, true);
             return newLoadSet;

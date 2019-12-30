@@ -73,6 +73,9 @@
         <BitmapImage x:Key="IconEdit40" CreateOptions="IgnoreImageCache" CacheOption="OnLoad" UriSource="/UIL;component/Resources/IconEdit40.png"/>
         <BitmapImage x:Key="IconBolt" CreateOptions="IgnoreImageCache" CacheOption="OnLoad" UriSource="/UIL;component/Resources/IconBolt40.png"/>
         <BitmapImage x:Key="IconBase40" CreateOptions="IgnoreImageCache" CacheOption="OnLoad" UriSource="/UIL;component/Resources/IconBase40.png"/>
+        <BitmapImage x:Key="IconBasePart40" CreateOptions="IgnoreImageCache" CacheOption="OnLoad" UriSource="/UIL;component/Resources/IconBasePart40.png"/>
+        <BitmapImage x:Key="IconForces40" CreateOptions="IgnoreImageCache" CacheOption="OnLoad" UriSource="/UIL;component/Resources/IconForces40.png"/>
+        <BitmapImage x:Key="IconFoundation40" CreateOptions="IgnoreImageCache" CacheOption="OnLoad" UriSource="/UIL;component/Resources/IconFoundation40.png"/>
         <BitmapImage x:Key="IconReport" CreateOptions="IgnoreImageCache" CacheOption="OnLoad" UriSource="/UIL;component/Resources/IconReport40.png"/>
     </Application.Resources>
 </Application>

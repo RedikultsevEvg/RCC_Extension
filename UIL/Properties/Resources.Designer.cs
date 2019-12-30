@@ -123,6 +123,26 @@ namespace RDUIL.Properties {
         /// <summary>
         ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
         /// </summary>
+        public static System.Drawing.Bitmap IconForces40 {
+            get {
+                object obj = ResourceManager.GetObject("IconForces40", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap IconFoundation40 {
+            get {
+                object obj = ResourceManager.GetObject("IconFoundation40", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
+        /// </summary>
         public static System.Drawing.Bitmap IconReport40 {
             get {
                 object obj = ResourceManager.GetObject("IconReport40", resourceCulture);

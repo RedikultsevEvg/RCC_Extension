@@ -41,6 +41,15 @@
                 </Button.ToolTip>
                 <Image x:Name="EditPng" Style="{StaticResource ServiceButtonImage}" Source="{DynamicResource IconEdit40}"/>
             </Button>
+            <Button x:Name="BtnReport" Style="{StaticResource ServiceButton}" Height="50" Click="BtnReport_Click">
+                <Button.Effect>
+                    <DropShadowEffect Opacity="0.6"/>
+                </Button.Effect>
+                <Button.ToolTip>
+                    <TextBlock Margin="3" Foreground="Black"><Run Text="Отчет"/></TextBlock>
+                </Button.ToolTip>
+                <Image x:Name="ReportPng" Style="{StaticResource ServiceButtonImage}" Source="{DynamicResource IconReport}"/>
+            </Button>
         </StackPanel>
         <ListView x:Name="LvMain" Grid.Row="1" ItemsSource="{Binding}" SelectionMode="Single">
             <ListView.ItemContainerStyle>

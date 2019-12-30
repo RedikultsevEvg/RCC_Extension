@@ -13,9 +13,9 @@ namespace DAL.Common
         {
             DataColumn IdColumn;
             IdColumn = new DataColumn("Id", Type.GetType("System.Int32"));
-            IdColumn.Unique = true;
+            //IdColumn.Unique = true;
             dataTable.Columns.Add(IdColumn);
-            dataTable.PrimaryKey = new DataColumn[] { dataTable.Columns["Id"] };
+            //dataTable.PrimaryKey = new DataColumn[] { dataTable.Columns["Id"] };
         }
         public static void AddFkIdColumn(string parentDataTableName, string parentColumnName, DataTable childDataTable)
         {
@@ -77,6 +77,13 @@ namespace DAL.Common
         {
             DataColumn NewColumn;
             NewColumn = new DataColumn(columnName, Type.GetType("System.String"));
+            dataTable.Columns.Add(NewColumn);
+        }
+
+        public static void AddByteColumn(DataTable dataTable, string columnName)
+        {
+            DataColumn NewColumn;
+            NewColumn = new DataColumn(columnName, Type.GetType("System.Byte[]"));
             dataTable.Columns.Add(NewColumn);
         }
     }

@@ -65,7 +65,7 @@
                     <Button.Effect>
                         <DropShadowEffect Opacity="0.6"/>
                     </Button.Effect>
-                    <Image x:Name="Forces_png" Style="{StaticResource ServiceButtonImage}" Source="{DynamicResource IconForces}"/>
+                    <Image x:Name="Forces_png" Style="{StaticResource ServiceButtonImage}" Source="{DynamicResource IconForces40}"/>
                     <Button.ToolTip>
                         <TextBlock Margin="3" Foreground="Black">Усилия...</TextBlock>
                     </Button.ToolTip>

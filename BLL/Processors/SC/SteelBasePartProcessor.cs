@@ -12,7 +12,9 @@ using RDBLL.Processors.Forces;
 using RDBLL.Entity.Results.Forces;
 using RDBLL.Entity.Common.NDM;
 using RDBLL.Entity.Common.NDM.Processors;
-
+using RDBLL.Common.Service;
+using RDBLL.Entity.Common.NDM.Interfaces;
+using RDBLL.Entity.Common.NDM.MaterialModels;
 
 namespace RDBLL.Processors.SC
 {
@@ -314,6 +316,7 @@ namespace RDBLL.Processors.SC
             if (steelBasePart.AddSymmetricX)
             {
                 SteelBasePart newSteelBasePart = (SteelBasePart)(steelBasePart.Clone());
+                newSteelBasePart.Id = ProgrammSettings.CurrentTmpId;
                 newSteelBasePart.Name = steelBasePart.Name + 'X';
                 newSteelBasePart.SteelBase = steelBasePart.SteelBase;
                 newSteelBasePart.CenterX = (1.0) * steelBasePart.CenterX;
@@ -325,6 +328,7 @@ namespace RDBLL.Processors.SC
             if (steelBasePart.AddSymmetricY)
             {
                 SteelBasePart newSteelBasePart = (SteelBasePart)(steelBasePart.Clone());
+                newSteelBasePart.Id = ProgrammSettings.CurrentTmpId;
                 newSteelBasePart.Name = steelBasePart.Name + 'Y';
                 newSteelBasePart.SteelBase = steelBasePart.SteelBase;
                 newSteelBasePart.CenterX = (-1.0) * steelBasePart.CenterX;
@@ -336,6 +340,7 @@ namespace RDBLL.Processors.SC
             if (steelBasePart.AddSymmetricX & steelBasePart.AddSymmetricY)
             {
                 SteelBasePart newSteelBasePart = (SteelBasePart)(steelBasePart.Clone());
+                newSteelBasePart.Id = ProgrammSettings.CurrentTmpId;
                 newSteelBasePart.Name = steelBasePart.Name + "XY";
                 newSteelBasePart.SteelBase = steelBasePart.SteelBase;
                 newSteelBasePart.CenterX = (-1.0) * steelBasePart.CenterX;
@@ -354,7 +359,7 @@ namespace RDBLL.Processors.SC
         /// <param name="steelBasePart"></param>
         public static void GetSubParts(SteelBasePart steelBasePart, double Rc = 0)
         {
-            steelBasePart.SubParts = new List<NdmConcreteArea>();
+            steelBasePart.SubParts = new List<NdmRectangleArea>();
             double elementSize = 0.02;
             int numX = Convert.ToInt32(steelBasePart.Width / elementSize);
             int numY = Convert.ToInt32(steelBasePart.Length / elementSize);
@@ -369,13 +374,22 @@ namespace RDBLL.Processors.SC
             {
                 for (int j = 0; j < numY; j++)
                 {
-                    NdmConcreteArea subPart;
-                    if (Rc == 0) { subPart = new NdmConcreteArea(); }
-                    else { subPart = new NdmConcreteArea(new List<double>{ Rc * (-1D), -0.0015, -0.0035, 0, 0.0015, 0.0035 }); }
+                    NdmRectangleArea subPart;
+                    if (Rc == 0)
+                    {
+                        IMaterialModel materialModel = new LinearIsotropic(1e+10, 1, 0);
+                        subPart = new NdmRectangleArea(materialModel);
+                    }
+                    else
+                    {
+                        List<double> constantList = new List<double> { Rc * (-1D), -0.0015, -0.0035, 0, 0.0015, 0.0035 };
+                        IMaterialModel materialModel = new DoubleLinear(constantList);
+                        subPart = new NdmRectangleArea(materialModel);
+                    }
                     subPart.Width = stepX;
                     subPart.Length = stepY;
-                    subPart.ConcreteArea.CenterX = startCenterX + stepX * i;
-                    subPart.ConcreteArea.CenterY = startCenterY + stepY * j;
+                    subPart.CenterX = startCenterX + stepX * i;
+                    subPart.CenterY = startCenterY + stepY * j;
                     steelBasePart.SubParts.Add(subPart);
                 }
             }
@@ -439,9 +453,9 @@ namespace RDBLL.Processors.SC
         public static double GetMinStressNonLinear(SteelBasePart basePart, Curvature curvature)
         {
             List<double> stresses = new List<double>();
-            foreach (NdmConcreteArea ndmConcreteArea in basePart.SubParts)
+            foreach (NdmRectangleArea ndmConcreteArea in basePart.SubParts)
             {
-                NdmArea ndmArea = ndmConcreteArea.ConcreteArea;
+                NdmArea ndmArea = ndmConcreteArea;
                 stresses.Add(NdmAreaProcessor.GetStrainFromCuvature(ndmArea, curvature)[1]);
             }
             return stresses.Min();

@@ -19,11 +19,15 @@ using DAL.DataSets;
 
 namespace RDBLL.Common.Service
 {
+    /// <summary>
+    /// Класс хранения основных настроек программы
+    /// </summary>
     public static class ProgrammSettings
     {
         private static String _filePath;
         private static bool _isDataChanged;
         private static int _CurrentId;
+        private static int _CurrentTmpId;
 
         public static int CurrentId
         {
@@ -35,6 +39,18 @@ namespace RDBLL.Common.Service
             set
             {
                 _CurrentId = value;
+            }
+        }
+        public static int CurrentTmpId
+        {
+            get
+            {
+                _CurrentTmpId++;
+                return _CurrentTmpId;
+            }
+            set
+            {
+                _CurrentTmpId = value;
             }
         }
         public static List<ForceParamKind> ForceParamKinds { get; set; }
@@ -65,6 +81,8 @@ namespace RDBLL.Common.Service
             BuildingSite = new BuildingSite();
             BuildingSite.Buildings.Add(new Building(BuildingSite));
             IsDataChanged = false;
+            CurrentId = 0;
+            CurrentTmpId = 1000000;
             #region Исходные данные единиц измерения
             MeasureUnit measureUnitLength = new MeasureUnit();
             measureUnitLength.MeasureUnitKind = "Линейные размеры";
@@ -311,6 +329,7 @@ namespace RDBLL.Common.Service
             #region Generator
             dataTable = dataSet.Tables["Generators"];
             CurrentId = Convert.ToInt32(dataTable.Rows[0].ItemArray[0]);
+            CurrentTmpId = CurrentId + 1000000;
             #endregion
             #region Versions
             #endregion

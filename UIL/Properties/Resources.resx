@@ -136,6 +136,12 @@
   <data name="IconEdit40" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\resources\iconedit40.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="IconForces40" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\iconforces40.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="IconFoundation40" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\iconfoundation40.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="IconReport40" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\resources\iconreport40.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
