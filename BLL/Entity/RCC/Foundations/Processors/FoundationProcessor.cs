@@ -86,7 +86,7 @@ namespace RDBLL.Entity.RCC.Foundations.Processors
             double PartialSafetyFactor = 1.2;
             Nz[0] -= GetConcreteVolume(foundation) * foundation.ConcreteVolumeWeight + GetSoilVolume(foundation) * foundation.SoilVolumeWeight;
             Nz[1] -= GetConcreteVolume(foundation) * foundation.ConcreteVolumeWeight * 1.1 + GetSoilVolume(foundation) * foundation.SoilVolumeWeight*1.2;
-            if (Nz[0] != 0 & Nz[0] != 0) { PartialSafetyFactor = Math.Round(Nz[1]/ Nz[0], 3)};
+            if (Nz[0] != 0 & Nz[0] != 0) { PartialSafetyFactor = Math.Round(Nz[1] / Nz[0], 3); }
             ForcesGroup forcesGroup  = new ForcesGroup();
             LoadSet loadSet = new LoadSet(forcesGroup);
             loadSet.Name = "Вес фундамента и грунта на уступах";

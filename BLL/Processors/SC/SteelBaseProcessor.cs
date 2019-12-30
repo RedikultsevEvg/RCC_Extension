@@ -135,9 +135,9 @@ namespace RDBLL.Processors.SC
             {
                 if (steelBase.UseSimpleMethod) { SteelBasePartProcessor.GetSubParts(steelBasePart); }
                 else { SteelBasePartProcessor.GetSubParts(steelBasePart, steelBase.ConcreteStrength); }
-                foreach (NdmConcreteArea ndmConcreteArea in steelBasePart.SubParts)
+                foreach (NdmRectangleArea ndmConcreteArea in steelBasePart.SubParts)
                 {
-                    NdmAreas.Add(ndmConcreteArea.ConcreteArea);
+                    NdmAreas.Add(ndmConcreteArea);
                 }
             }
             return NdmAreas;
@@ -153,7 +153,7 @@ namespace RDBLL.Processors.SC
             foreach (SteelBolt steelBolt in columnBase.ActualSteelBolts)
             {
                 SteelBoltProcessor.GetSubParts(steelBolt);
-                NdmAreas.Add(steelBolt.SubPart.SteelArea);
+                NdmAreas.Add(steelBolt.SubPart);
             }
             return NdmAreas;
         }
@@ -268,14 +268,14 @@ namespace RDBLL.Processors.SC
                 loadCaseRectangleValue.LoadCase = forceCurvature.LoadSet;
                 foreach (SteelBasePart steelBasePart in steelBase.ActualSteelBaseParts)
                 {
-                    foreach (NdmConcreteArea ndmConcreteArea in steelBasePart.SubParts)
+                    foreach (NdmRectangleArea ndmConcreteArea in steelBasePart.SubParts)
                     {
                         RectangleValue rectangleValue = new RectangleValue();
-                        rectangleValue.CenterX = ndmConcreteArea.ConcreteArea.CenterX;
-                        rectangleValue.CenterY = ndmConcreteArea.ConcreteArea.CenterY;
+                        rectangleValue.CenterX = ndmConcreteArea.CenterX;
+                        rectangleValue.CenterY = ndmConcreteArea.CenterY;
                         rectangleValue.Width = ndmConcreteArea.Width;
                         rectangleValue.Length = ndmConcreteArea.Length;
-                        rectangleValue.Value = NdmAreaProcessor.GetStrainFromCuvature(ndmConcreteArea.ConcreteArea, forceCurvature.ConcreteCurvature)[1];
+                        rectangleValue.Value = NdmAreaProcessor.GetStrainFromCuvature(ndmConcreteArea, forceCurvature.ConcreteCurvature)[1];
                         loadCaseRectangleValue.RectangleValues.Add(rectangleValue);
                     }
                 }

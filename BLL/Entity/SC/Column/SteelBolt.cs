@@ -17,7 +17,7 @@ namespace RDBLL.Entity.SC.Column
         public double CenterY { get; set; }
         public bool AddSymmetricX { get; set; } //Наличие симметричного участка относительно оси X
         public bool AddSymmetricY { get; set; } //Наличие симметричного участка по оси Y
-        public NdmSteelArea SubPart { get; set; }
+        public NdmCircleArea SubPart { get; set; }
 
         #region Constructors
         public SteelBolt()

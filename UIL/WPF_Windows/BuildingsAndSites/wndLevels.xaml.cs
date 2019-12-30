@@ -16,6 +16,7 @@ using System.Collections.ObjectModel;
 using RDBLL.Common.Service;
 using Winforms = System.Windows.Forms;
 using RDUIL.WPF_Windows.Foundations;
+using RDUIL.Common.Reports;
 
 
 namespace RDUIL.WPF_Windows.BuildingsAndSites
@@ -36,7 +37,7 @@ namespace RDUIL.WPF_Windows.BuildingsAndSites
             _childName = childName;
             InitializeComponent();
             if (_childName == "SteelBases") { ChildPng.SetResourceReference(Image.SourceProperty, "IconBase40"); }
-            else if (_childName == "Foundations") { ChildPng.SetResourceReference(Image.SourceProperty, "IconBase40"); }
+            else if (_childName == "Foundations") { ChildPng.SetResourceReference(Image.SourceProperty, "IconFoundation40"); }
             this.DataContext = _collection;
         }
 
@@ -88,7 +89,7 @@ namespace RDUIL.WPF_Windows.BuildingsAndSites
 
         private void BtnReport_Click(object sender, RoutedEventArgs e)
         {
-
+            ShowReportProcessor.ShowSteelBasesReport();
         }
 
         private void BtnChildItem_Click(object sender, RoutedEventArgs e)

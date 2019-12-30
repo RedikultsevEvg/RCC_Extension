@@ -16,22 +16,53 @@ namespace RDBLL.Forces
     public class LoadSet : IEquatable<LoadSet>, ISavableToDataSet
     {
         #region
+        /// <summary>
+        /// Код комбинации загружений
+        /// </summary>
         public int Id { get; set; }
-        public List<ForcesGroup> ForcesGroups { get; set; } //Обратная ссылка на родительскую группу нагруок
-        public string Name { get; set; } //Наименование
-        public double PartialSafetyFactor { get; set; } //Коэффициент надежности по нагрузке
-        public bool IsLiveLoad {get; set; }//Флаг временной нагрузки
-        public bool IsCombination { get; set; } //Флаг комбинации
-        public bool BothSign { get; set; } //Флаг знакопеременной нагрузки
+        /// <summary>
+        /// Обратная ссылка на родительскую группу нагруок
+        /// </summary>
+        public List<ForcesGroup> ForcesGroups { get; set; }
+        /// <summary>
+        /// Наименование
+        /// </summary>
+        public string Name { get; set; }
+        /// <summary>
+        /// Коэффициент надежности по нагрузке
+        /// </summary>
+        public double PartialSafetyFactor { get; set; }
+        /// <summary>
+        /// Флаг временной нагрузки
+        /// </summary>
+        public bool IsLiveLoad {get; set; }
+        /// <summary>
+        /// Флаг комбинации
+        /// </summary>
+        public bool IsCombination { get; set; }
+        /// <summary>
+        /// Флаг знакопеременной нагрузки
+        /// </summary>
+        public bool BothSign { get; set; }
+        /// <summary>
+        /// Коллекция нагрузок, входящих в загружение
+        /// </summary>
         public ObservableCollection<ForceParameter> ForceParameters { get; set; }
         #endregion       
         #region Constructors
+        /// <summary>
+        /// Конструктор без параметров
+        /// </summary>
         public LoadSet()
         {
             ForcesGroups = new List<ForcesGroup>();
             ForceParameters = new ObservableCollection<ForceParameter>();
         }
 
+        /// <summary>
+        /// Конструктор по группе нагрузок
+        /// </summary>
+        /// <param name="forcesGroup"></param>
         public LoadSet(ForcesGroup forcesGroup)
         {
             Id = ProgrammSettings.CurrentId;

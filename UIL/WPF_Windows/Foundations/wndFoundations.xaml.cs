@@ -58,5 +58,10 @@ namespace RDUIL.WPF_Windows.Foundations
                 MessageBox.Show("Ничего не выбрано", "Выберите один из элементов");
             }
         }
+
+        private void BtnReport_Click(object sender, RoutedEventArgs e)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -1,32 +1,22 @@
-﻿using System;
-using System.IO;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using CSL.Common;
+using CSL.DataSets.SC;
+using CSL.Reports.Interfaces;
 using FastReport;
-using System.Data;
-using RDBLL.Entity.RCC.BuildingAndSite;
-using RDBLL.Entity.SC.Column;
-using RDBLL.Processors.SC;
-using RDBLL.Processors.Forces;
-using RDBLL.Entity.Results.SC;
-using RDBLL.Forces;
 using RDBLL.Common.Service;
-using System.Windows.Controls;
-using System.Windows.Shapes;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows;
-using  SDraw = System.Drawing;
 using RDBLL.DrawUtils.SteelBase;
 using RDBLL.Entity.MeasureUnits;
-using CSL.DataSets.SC;
-
+using RDBLL.Entity.RCC.BuildingAndSite;
+using RDBLL.Entity.SC.Column;
+using RDBLL.Forces;
+using RDBLL.Processors.SC;
+using System;
+using System.Data;
+using System.Linq;
+using System.Windows.Controls;
 
 namespace CSL.Reports
 {
-    public class ResultReport
+    public class SteelBaseReport :IReport
     {
         private BuildingSite _buildingSite;
         private double linearSizeCoefficient;
@@ -41,23 +31,17 @@ namespace CSL.Reports
 
         public void ShowReport(string fileName)
         {
+            PrepareReport();
             using (Report report = new Report())
             {
                 report.Load(fileName);
-                report.SetParameterValue("Units.LinearSize", MeasureUnitConverter.GetUnitLabelText(0));
-                report.SetParameterValue("Units.Force", MeasureUnitConverter.GetUnitLabelText(1));
-                report.SetParameterValue("Units.Moment", MeasureUnitConverter.GetUnitLabelText(2));
-                report.SetParameterValue("Units.Stress", MeasureUnitConverter.GetUnitLabelText(3));
-                report.SetParameterValue("Units.Geometry.Area", MeasureUnitConverter.GetUnitLabelText(4));
-                report.SetParameterValue("Units.Geometry.SecMoment", MeasureUnitConverter.GetUnitLabelText(5));
-                report.SetParameterValue("Units.Geometry.Moment", MeasureUnitConverter.GetUnitLabelText(6));
-                report.SetParameterValue("Units.Mass", MeasureUnitConverter.GetUnitLabelText(7));
+                CommonServices.PrepareMeasureUnit(report);
                 report.RegisterData(dataSet);
-                //report.Design();
-                report.Show();
+                report.Design();
+                //report.Show();
             }
         }
-        public void PrepareReport()
+        private void PrepareReport()
         {
             foreach (Building building in _buildingSite.Buildings)
             {
@@ -80,7 +64,7 @@ namespace CSL.Reports
                         canvas.Width = 600;
                         canvas.Height = 600;
                         DrawSteelBase.DrawBase(steelBase, canvas);
-                        byte[] b = ExportToByte(canvas);
+                        byte[] b = CommonServices.ExportToByte(canvas);
                         #endregion
                         newSteelBase.ItemArray = new object[]
                         { steelBase.Id, b, steelBase.Name,
@@ -104,61 +88,10 @@ namespace CSL.Reports
             }
         }
 
-        public byte[] ExportToByte(Canvas surface)
-        {
-            // Save current canvas transform
-            Transform transform = surface.LayoutTransform;
-            // reset current transform (in case it is scaled or rotated)
-            surface.LayoutTransform = null;
-
-            // Get the size of canvas
-            Size size = new Size(surface.Width, surface.Height);
-            // Measure and arrange the surface
-            // VERY IMPORTANT
-            surface.Measure(size);
-            surface.Arrange(new Rect(size));
-
-            // Create a render bitmap and push the surface to it
-            RenderTargetBitmap renderBitmap =
-              new RenderTargetBitmap(
-                (int)size.Width,
-                (int)size.Height,
-                96d,
-                96d,
-                PixelFormats.Pbgra32);
-            renderBitmap.Render(surface);
-
-            // Create a file stream for saving image
-            //using (FileStream outStream = new FileStream(path.LocalPath, FileMode.Create))
-            //{
-            //    // Use png encoder for our data
-            //    PngBitmapEncoder encoder = new PngBitmapEncoder();
-            //    // push the rendered bitmap to it
-            //    encoder.Frames.Add(BitmapFrame.Create(renderBitmap));
-            //    // save the data to the stream
-            //    encoder.Save(outStream);
-            //}
-
-            // Use png encoder for our data
-            PngBitmapEncoder encoder = new PngBitmapEncoder();
-            // push the rendered bitmap to it
-            encoder.Frames.Add(BitmapFrame.Create(renderBitmap));
-            // save the data to the stream
-
-            // Restore previously saved layout
-            surface.LayoutTransform = transform;
-
-            using (MemoryStream s = new MemoryStream())
-            {
-                encoder.Save(s);
-                //imageIn.Save(ms, System.Drawing.Imaging.ImageFormat.Gif);
-                //SDraw.Bitmap myBitmap = new SDraw.Bitmap(s);
-                return s.ToArray();
-            }
-        }
+        
 
         #region Constructors
-        public ResultReport(BuildingSite buildingSite)
+        public SteelBaseReport(BuildingSite buildingSite)
         {
             _buildingSite = buildingSite;
             dataSet = SteelBaseDataSet.GetDataSet();
@@ -287,7 +220,7 @@ namespace CSL.Reports
                 canvasPart.Height = steelBasePart.Length * 1.2 * scale_factor;
                 double[] columnBaseCenter = new double[2] { canvasPart.Width / 2 - steelBasePart.CenterX * scale_factor, canvasPart.Height / 2 + steelBasePart.CenterY * scale_factor };
                 DrawSteelBase.DrawBasePart(steelBasePart, canvasPart, columnBaseCenter, scale_factor, 1, 1, 1, false);
-                byte[] bPart = ExportToByte(canvasPart);
+                byte[] bPart = CommonServices.ExportToByte(canvasPart);
                 #endregion
                 newSteelBasePart.ItemArray = new object[]
                 { steelBasePart.Id, steelBase.Id,

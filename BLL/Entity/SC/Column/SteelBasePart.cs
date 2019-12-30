@@ -12,32 +12,91 @@ namespace RDBLL.Entity.SC.Column
     /// </summary>
     public class SteelBasePart : ICloneable, ISavableToDataSet
     {
-        //Properties
-        #region
-        public int Id { get; set; } //Код участка
-        public int SteelBaseId { get; set; } //Код участка
+        #region Properties
+        /// <summary>
+        /// Код участка
+        /// </summary>
+        public int Id { get; set; }
+        /// <summary>
+        /// Код стальной базы
+        /// </summary>
+        public int SteelBaseId { get; set; }
+        /// <summary>
+        /// Обратная ссылка на базу стальной колонны
+        /// </summary>
         public SteelBase SteelBase { get; set; } //База стальной колонны к которой относится участок
-        public String Name { get; set; } //Имя участка
-        public double Width { get; set; } //Ширина участка
-        public double Length { get; set; } //Длина участка
-        public double CenterX { get; set; } //Привязка центра
-        public double CenterY { get; set; } //Привязка центра
-        public double LeftOffset { get; set; } //Смещение левой границы 
-        public double RightOffset { get; set; } //Смещение правой границы
-        public double TopOffset { get; set; } //Смещение верхней границы
-        public double BottomOffset { get; set; } //Смещение нижней границы
-        public bool FixLeft { get; set; } //Опора по левой границе
-        public bool FixRight { get; set; } //Опора по правой границе
-        public bool FixTop { get; set; } //Опора по верхней границе
-        public bool FixBottom { get; set; } //Опора по нижней границе
-        public bool AddSymmetricX { get; set; } //Наличие симметричного участка относительно оси X
-        public bool AddSymmetricY { get; set; } //Наличие симметричного участка по оси Y
+        /// <summary>
+        /// Наименование
+        /// </summary>
+        public String Name { get; set; }
+        /// <summary>
+        /// Ширина участка
+        /// </summary>
+        public double Width { get; set; }
+        /// <summary>
+        /// Длина участка
+        /// </summary>
+        public double Length { get; set; }
+        /// <summary>
+        /// Привязка центра
+        /// </summary>
+        public double CenterX { get; set; }
+        /// <summary>
+        /// Привязка центра
+        /// </summary>
+        public double CenterY { get; set; }
+        /// <summary>
+        /// Смещение левой границы 
+        /// </summary>
+        public double LeftOffset { get; set; }
+        /// <summary>
+        /// Смещение правой границы
+        /// </summary>
+        public double RightOffset { get; set; }
+        /// <summary>
+        /// Смещение верхней границы
+        /// </summary>
+        public double TopOffset { get; set; }
+        /// <summary>
+        /// Смещение нижней границы
+        /// </summary>
+        public double BottomOffset { get; set; }
+        /// <summary>
+        /// Опора по левой границе
+        /// </summary>
+        public bool FixLeft { get; set; }
+        /// <summary>
+        /// Опора по правой границе
+        /// </summary>
+        public bool FixRight { get; set; }
+        /// <summary>
+        /// Опора по верхней границе
+        /// </summary>
+        public bool FixTop { get; set; }
+        /// <summary>
+        /// Опора по нижней границе
+        /// </summary>
+        public bool FixBottom { get; set; }
+        /// <summary>
+        /// Наличие симметричного участка относительно оси X
+        /// </summary>
+        public bool AddSymmetricX { get; set; }
+        /// <summary>
+        /// Наличие симметричного участка по оси Y
+        /// </summary>
+        public bool AddSymmetricY { get; set; }
 
-        public List<NdmConcreteArea> SubParts { get; set; }
+        /// <summary>
+        /// Коллекция элементарных участков
+        /// </summary>
+        public List<NdmRectangleArea> SubParts { get; set; }
 
         #endregion
 
         #region Constructors
+        /// <summary>
+        /// Метод настройки параметров по умолчания
+        /// </summary>
         public void SetDefault()
         {
             Id = ProgrammSettings.CurrentId;
@@ -53,9 +112,16 @@ namespace RDBLL.Entity.SC.Column
             AddSymmetricX = true;
             AddSymmetricY = true;
         }
+        /// <summary>
+        /// Конструктор без параметров
+        /// </summary>
         public SteelBasePart()
         {
         }
+        /// <summary>
+        /// Конструктор по стальной базе
+        /// </summary>
+        /// <param name="columnBase"></param>
         public SteelBasePart(SteelBase columnBase)
         {
             SteelBaseId = columnBase.Id;
@@ -64,6 +130,10 @@ namespace RDBLL.Entity.SC.Column
         }
         #endregion
         #region Methods
+        /// <summary>
+        /// Сохранение в датасет
+        /// </summary>
+        /// <param name="dataSet">Датасет</param>
         public void SaveToDataSet(DataSet dataSet)
         {
             DataTable dataTable;
@@ -87,6 +157,10 @@ namespace RDBLL.Entity.SC.Column
         }
         #endregion
         //IClonable
+        /// <summary>
+        /// Клонирование объекта
+        /// </summary>
+        /// <returns></returns>
         public object Clone()
         {
             SteelBasePart steelBasePart = this.MemberwiseClone() as SteelBasePart;
