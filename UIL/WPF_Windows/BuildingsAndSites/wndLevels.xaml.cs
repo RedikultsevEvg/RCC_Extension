@@ -36,8 +36,16 @@ namespace RDUIL.WPF_Windows.BuildingsAndSites
             _collection = levels;
             _childName = childName;
             InitializeComponent();
-            if (_childName == "SteelBases") { ChildPng.SetResourceReference(Image.SourceProperty, "IconBase40"); }
-            else if (_childName == "Foundations") { ChildPng.SetResourceReference(Image.SourceProperty, "IconFoundation40"); }
+            if (_childName == "SteelBases")
+            {
+                BtnChildItem.ToolTip = "Новая база стальной колонны";
+                ChildPng.SetResourceReference(Image.SourceProperty, "IconBase40");
+            }
+            else if (_childName == "Foundations")
+            {
+                BtnChildItem.ToolTip = "Новый столбчатый фундамент";
+                ChildPng.SetResourceReference(Image.SourceProperty, "IconFoundation40");
+            }
             this.DataContext = _collection;
         }
 
@@ -89,7 +97,8 @@ namespace RDUIL.WPF_Windows.BuildingsAndSites
 
         private void BtnReport_Click(object sender, RoutedEventArgs e)
         {
-            ShowReportProcessor.ShowSteelBasesReport();
+            if (_childName == "SteelBases") { ShowReportProcessor.ShowSteelBasesReport(); }
+            if (_childName == "Foundations") { ShowReportProcessor.ShowFoundationsReport(); }
         }
 
         private void BtnChildItem_Click(object sender, RoutedEventArgs e)

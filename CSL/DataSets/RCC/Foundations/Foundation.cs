@@ -12,7 +12,7 @@ namespace CSL.DataSets.RCC.Foundations
     /// <summary>
     /// Датасет для отчета по фундаментам
     /// </summary>
-    public class Foundation
+    public class FoundationDataSet
     {
         public static DataSet GetDataSet()
         {
@@ -23,11 +23,17 @@ namespace CSL.DataSets.RCC.Foundations
             dataSet.Tables.Add(newTable);
             DsOperation.AddIdColumn(newTable);
             DsOperation.AddNameColumn(newTable);
+            DsOperation.AddByteColumn(newTable, "Picture");
+            DsOperation.AddDoubleColumn(newTable, "Width");
+            DsOperation.AddDoubleColumn(newTable, "Length");
+            DsOperation.AddDoubleColumn(newTable, "Height");
             DsOperation.AddDoubleColumn(newTable, "SoilVolumeWeight");
             DsOperation.AddDoubleColumn(newTable, "ConcreteVolumeWeight");
             DsOperation.AddDoubleColumn(newTable, "SoilVolume");
             DsOperation.AddDoubleColumn(newTable, "ConcreteVolume");
-            DsOperation.AddDoubleColumn(newTable, "Volume");
+            DsOperation.AddDoubleColumn(newTable, "Area");
+            DsOperation.AddDoubleColumn(newTable, "Wx");
+            DsOperation.AddDoubleColumn(newTable, "Wy");
             #endregion
             #region FoundationParts
             newTable = new DataTable("FoundationParts");
@@ -42,10 +48,8 @@ namespace CSL.DataSets.RCC.Foundations
             DsOperation.AddDoubleColumn(newTable, "CentrY");
             #endregion
             //Добавляем общие таблицы работы нагрузок и сочетаний
-            CommonServices.AddLoadsTableToDataSet(dataSet, "Foundations", "FoundationId");
-            #region Relations
-
-            #endregion
+            //CommonServices.AddLoadsTableToDataSet(dataSet, "LoadSets", "Foundations", "FoundationId");
+            //CommonServices.AddLoadsTableToDataSet(dataSet, "LoadCases", "Foundations", "FoundationId");
 
             return dataSet;
         }

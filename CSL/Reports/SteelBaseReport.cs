@@ -37,8 +37,8 @@ namespace CSL.Reports
                 report.Load(fileName);
                 CommonServices.PrepareMeasureUnit(report);
                 report.RegisterData(dataSet);
-                report.Design();
-                //report.Show();
+                //report.Design();
+                report.Show();
             }
         }
         private void PrepareReport()
@@ -56,9 +56,9 @@ namespace CSL.Reports
                         }
 
                         DataRow newSteelBase = SteelBases.NewRow();
-                        Double A = steelBase.Width * steelBase.Length;
-                        Double Wx = steelBase.Width * steelBase.Length * steelBase.Length / 6;
-                        Double Wy = steelBase.Length * steelBase.Width * steelBase.Width / 6;
+                        double A = steelBase.Width * steelBase.Length;
+                        double Wx = steelBase.Width * steelBase.Length * steelBase.Length / 6;
+                        double Wy = steelBase.Length * steelBase.Width * steelBase.Width / 6;
                         #region Picture
                         Canvas canvas = new Canvas();
                         canvas.Width = 600;
@@ -80,7 +80,7 @@ namespace CSL.Reports
                         SteelBases.Rows.Add(newSteelBase);
 
                         ProcessLoadSets(steelBase);
-                        ProcessLoadCases(steelBase);
+                        //ProcessLoadCases(steelBase);
                         ProcessPart(steelBase);
                         ProcessBolt(steelBase);
                     }
@@ -106,90 +106,50 @@ namespace CSL.Reports
             MassCoefficient = MeasureUnitConverter.GetCoefficient(7);
         }
         #endregion
+        /// <summary>
+        /// Добавление в датасет данных по нагрузкам
+        /// </summary>
+        /// <param name="steelBase"></param>
         private void ProcessLoadSets(SteelBase steelBase)
         {
-            DataTable LoadSets = dataSet.Tables["LoadSets"];
-            foreach (LoadSet loadSet in steelBase.ForcesGroups[0].LoadSets)
-            {
-                string loadSetDescription, crcForceDescription = "", designForceDescription = "";
-                DataRow newLoadSet = LoadSets.NewRow();
-                DataTable ForceParameters = dataSet.Tables["LoadSetsForceParameters"];
-                foreach (ForceParameter forceParameter in loadSet.ForceParameters)
-                {
-                    DataRow newForceParameter = ForceParameters.NewRow();
-                    loadSetDescription = loadSet.Name;
-                    loadSetDescription += " (n=" + loadSet.PartialSafetyFactor;
-                    if (loadSet.BothSign) { loadSetDescription += " знакопеременная"; }
-                    loadSetDescription += ")";
-                    var tmpForceParamLabels = from t in ProgrammSettings.ForceParamKinds where t.Id == forceParameter.KindId select t;
-                    MeasureUnitLabel measureUnitLabel = tmpForceParamLabels.First().MeasureUnit.GetCurrentLabel();
-                    newForceParameter.ItemArray = new object[] { tmpForceParamLabels.First().Id,
-                        steelBase.Id,
-                        steelBase.Name,
-                        loadSet.Id,
-                        loadSet.Name,
-                        loadSetDescription,
-                        tmpForceParamLabels.First().LongLabel,
-                        tmpForceParamLabels.First().ShortLabel,
-                        measureUnitLabel.UnitName,
-                        Math.Round(forceParameter.CrcValueInCurUnit, 3),
-                        Math.Round(forceParameter.CrcValue * loadSet.PartialSafetyFactor * measureUnitLabel.AddKoeff, 3)
-                    };
-                    ForceParameters.Rows.Add(newForceParameter);
-                    crcForceDescription += tmpForceParamLabels.First().ShortLabel + "=";
-                    crcForceDescription += Math.Round(forceParameter.CrcValue * measureUnitLabel.AddKoeff, 3);
-                    crcForceDescription += measureUnitLabel.UnitName + "; ";
-
-                    designForceDescription += tmpForceParamLabels.First().ShortLabel + "=";
-                    designForceDescription += Math.Round(forceParameter.CrcValue * loadSet.PartialSafetyFactor * measureUnitLabel.AddKoeff, 3);
-                    designForceDescription += measureUnitLabel.UnitName + "; ";
-                }
-                newLoadSet.ItemArray = new object[]
-                    {   loadSet.Id,
-                        steelBase.Id,
-                        loadSet.Name,
-                        loadSet.PartialSafetyFactor,
-                        crcForceDescription,
-                        designForceDescription
-                    };
-                LoadSets.Rows.Add(newLoadSet);
-            }
+            CommonServices.AddLoadsToDataset(dataSet, "LoadSets", "SteelBases", "SteelBaseId", steelBase.ForcesGroups[0].LoadSets, steelBase.Id, steelBase.Name);
+            CommonServices.AddLoadsToDataset(dataSet, "LoadCases", "SteelBases", "SteelBaseId", steelBase.LoadCases, steelBase.Id, steelBase.Name);
         }
         /// <summary>
-        /// Добавление в датасет данных сочетаниям нагрузок
+        /// Оставлено 2020_01_03 на всякий случай. Добавление в датасет данных сочетаниям нагрузок
         /// </summary>
         /// <param name="steelBase">База стальной колонны</param>
         private void ProcessLoadCases(SteelBase steelBase)
         {
-            DataTable LoadCases = dataSet.Tables["LoadCases"];
-            foreach (LoadSet loadSet in steelBase.LoadCases)
-            {
-                string forceDescription = "";
-                DataRow newLoadCase = LoadCases.NewRow();
-                DataTable ForceParameters = dataSet.Tables["LoadCasesForceParameters"];
-                foreach (ForceParameter forceParameter in loadSet.ForceParameters)
-                {
-                    DataRow newForceParameter = ForceParameters.NewRow();
-                    var tmpForceParamLabels = from t in ProgrammSettings.ForceParamKinds where t.Id == forceParameter.KindId select t;
-                    MeasureUnitLabel measureUnitLabel = tmpForceParamLabels.First().MeasureUnit.GetCurrentLabel();
-                    newForceParameter.ItemArray = new object[] { tmpForceParamLabels.First().Id,
-                        loadSet.Id,
-                        tmpForceParamLabels.First().LongLabel,
-                        tmpForceParamLabels.First().ShortLabel,
-                        measureUnitLabel.UnitName,
-                        Math.Round(forceParameter.CrcValueInCurUnit, 3),
-                        Math.Round(forceParameter.DesignValue * measureUnitLabel.AddKoeff, 3)
-                    };
-                    ForceParameters.Rows.Add(newForceParameter);
-                    forceDescription += tmpForceParamLabels.First().ShortLabel +"="+ Math.Round(forceParameter.DesignValue * measureUnitLabel.AddKoeff, 3) + measureUnitLabel.UnitName + "; ";
-                }
-                newLoadCase.ItemArray = new object[]
-                    { loadSet.Id, steelBase.Id,
-                    loadSet.Name, loadSet.PartialSafetyFactor,
-                    forceDescription
-                    };
-                LoadCases.Rows.Add(newLoadCase);
-            }
+            //DataTable dataTable = dataSet.Tables["LoadCases"];
+            //foreach (LoadSet loadSet in steelBase.LoadCases)
+            //{
+            //    string forceDescription = "";
+            //    DataRow newLoadCase = dataTable.NewRow();
+            //    DataTable ForceParameters = dataSet.Tables["LoadCasesForceParameters"];
+            //    foreach (ForceParameter forceParameter in loadSet.ForceParameters)
+            //    {
+            //        DataRow newForceParameter = ForceParameters.NewRow();
+            //        var tmpForceParamLabels = from t in ProgrammSettings.ForceParamKinds where t.Id == forceParameter.KindId select t;
+            //        MeasureUnitLabel measureUnitLabel = tmpForceParamLabels.First().MeasureUnit.GetCurrentLabel();
+            //        newForceParameter.ItemArray = new object[] { tmpForceParamLabels.First().Id,
+            //            loadSet.Id,
+            //            tmpForceParamLabels.First().LongLabel,
+            //            tmpForceParamLabels.First().ShortLabel,
+            //            measureUnitLabel.UnitName,
+            //            Math.Round(forceParameter.CrcValueInCurUnit, 3),
+            //            Math.Round(forceParameter.DesignValue * measureUnitLabel.AddKoeff, 3)
+            //        };
+            //        ForceParameters.Rows.Add(newForceParameter);
+            //        forceDescription += tmpForceParamLabels.First().ShortLabel +"="+ Math.Round(forceParameter.DesignValue * measureUnitLabel.AddKoeff, 3) + measureUnitLabel.UnitName + "; ";
+            //    }
+            //    newLoadCase.ItemArray = new object[]
+            //        { loadSet.Id, steelBase.Id,
+            //        loadSet.Name, loadSet.PartialSafetyFactor,
+            //        forceDescription
+            //        };
+            //    dataTable.Rows.Add(newLoadCase);
+            //}
         }
         /// <summary>
         /// Добавление в датасет данных по участку стальной базы

@@ -33,7 +33,8 @@ namespace CSL.DataSets.SC
             DsOperation.AddDoubleColumn(newTable, "Wy");
             #endregion
             //Добавляем общие таблицы работы нагрузок и сочетаний
-            CommonServices.AddLoadsTableToDataSet(dataSet, "SteelBases", "SteelBaseId");
+            //CommonServices.AddLoadsTableToDataSet(dataSet, "LoadSets", "SteelBases", "SteelBaseId");
+            //CommonServices.AddLoadsTableToDataSet(dataSet, "LoadCases", "SteelBases", "SteelBaseId");
             #region SteelBasesParts
             newTable = new DataTable("SteelBasesParts");
             dataSet.Tables.Add(newTable);
@@ -60,8 +61,6 @@ namespace CSL.DataSets.SC
             DsOperation.AddDoubleColumn(newTable, "CenterY");
             DsOperation.AddDoubleColumn(newTable, "MaxStress");
             DsOperation.AddDoubleColumn(newTable, "MaxForce");
-            #endregion
-            #region Relations
             #endregion
 
             return dataSet;

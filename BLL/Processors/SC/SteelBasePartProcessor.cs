@@ -15,6 +15,7 @@ using RDBLL.Entity.Common.NDM.Processors;
 using RDBLL.Common.Service;
 using RDBLL.Entity.Common.NDM.Interfaces;
 using RDBLL.Entity.Common.NDM.MaterialModels;
+using RDBLL.Entity.Common.NDM.Processors;
 
 namespace RDBLL.Processors.SC
 {
@@ -356,43 +357,22 @@ namespace RDBLL.Processors.SC
         /// <summary>
         /// Возвращает коллекцию элементарных участков для участка базы
         /// </summary>
-        /// <param name="steelBasePart"></param>
+        /// <param name="steelBasePart">Участок базы стальной колонны</param>
+        /// <param name="Rc">Расчетное сопротивление растяжению</param>
         public static void GetSubParts(SteelBasePart steelBasePart, double Rc = 0)
-        {
-            steelBasePart.SubParts = new List<NdmRectangleArea>();
-            double elementSize = 0.02;
-            int numX = Convert.ToInt32(steelBasePart.Width / elementSize);
-            int numY = Convert.ToInt32(steelBasePart.Length / elementSize);
-            //Шаг элементарных участков (совпадает с соответствующим размером участка)
-            double stepX = steelBasePart.Width / numX;
-            double stepY = steelBasePart.Length / numY;
-
-            double startCenterX = steelBasePart.CenterX - steelBasePart.Width / 2 + stepX / 2;
-            double startCenterY = steelBasePart.CenterY - steelBasePart.Length / 2 + stepY / 2;
-
-            for (int i = 0; i < numX; i++)
+        {     
+            if (Rc == 0)
             {
-                for (int j = 0; j < numY; j++)
-                {
-                    NdmRectangleArea subPart;
-                    if (Rc == 0)
-                    {
-                        IMaterialModel materialModel = new LinearIsotropic(1e+10, 1, 0);
-                        subPart = new NdmRectangleArea(materialModel);
-                    }
-                    else
-                    {
-                        List<double> constantList = new List<double> { Rc * (-1D), -0.0015, -0.0035, 0, 0.0015, 0.0035 };
-                        IMaterialModel materialModel = new DoubleLinear(constantList);
-                        subPart = new NdmRectangleArea(materialModel);
-                    }
-                    subPart.Width = stepX;
-                    subPart.Length = stepY;
-                    subPart.CenterX = startCenterX + stepX * i;
-                    subPart.CenterY = startCenterY + stepY * j;
-                    steelBasePart.SubParts.Add(subPart);
-                }
+                IMaterialModel materialModel = new LinearIsotropic(1e+10, 1, 0);
+                steelBasePart.SubParts = NdmAreaProcessor.MeshRectangle(materialModel, steelBasePart.Width, steelBasePart.Length, steelBasePart.CenterX, steelBasePart.CenterY, 0.02);
             }
+            else
+            {
+                List<double> constantList = new List<double> { Rc * (-1D), -0.0015, -0.0035, 0, 0.0015, 0.0035 };
+                IMaterialModel materialModel = new DoubleLinear(constantList);
+                steelBasePart.SubParts = NdmAreaProcessor.MeshRectangle(materialModel, steelBasePart.Width, steelBasePart.Length, steelBasePart.CenterX, steelBasePart.CenterY, 0.02);
+            }
+            
         }
         /// <summary>
         /// Вычисляет минимальное напряжение на участке по линейно упругой теории сопротивления материалов

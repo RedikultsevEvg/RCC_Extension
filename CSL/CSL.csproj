@@ -40,6 +40,7 @@
     <Reference Include="FastReport.Bars, Version=2019.4.11.0, Culture=neutral, PublicKeyToken=db7e5ce63278458c, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\Program Files (x86)\FastReports\FastReport.Net\FastReport.Bars.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="FastReport.Editor, Version=2019.4.11.0, Culture=neutral, PublicKeyToken=db7e5ce63278458c, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -64,6 +65,7 @@
     <Compile Include="DataSets\RCC\Foundations\Foundation.cs" />
     <Compile Include="DataSets\SC\SteelBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Reports\FoundationReport.cs" />
     <Compile Include="Reports\Interfaces\IReport.cs" />
     <Compile Include="Reports\SteelBaseReport.cs" />
   </ItemGroup>

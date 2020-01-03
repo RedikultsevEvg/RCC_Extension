@@ -68,9 +68,9 @@
     <Compile Include="Entity\Common\NDM\MaterialModels\LinearTensioned.cs" />
     <Compile Include="Entity\Common\NDM\NdmArea.cs" />
     <Compile Include="Entity\Common\NDM\NdmRectangleArea.cs" />
-    <Compile Include="Entity\Common\NDM\NDMProcessor.cs" />
     <Compile Include="Entity\Common\NDM\NdmCircleArea.cs" />
     <Compile Include="Entity\Common\NDM\Processors\NdmAreaProcessor.cs" />
+    <Compile Include="Entity\Common\NDM\Processors\NdmProcessor.cs" />
     <Compile Include="Entity\Common\NDM\Processors\StiffnessCoefficientProcessor.cs" />
     <Compile Include="Entity\Common\NDM\StiffnessCoefficient.cs" />
     <Compile Include="Entity\Common\NDM\SumForces.cs" />

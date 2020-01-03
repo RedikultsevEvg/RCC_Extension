@@ -142,18 +142,30 @@ namespace RDBLL.Common.Service
             measureUnitMass.CurrentUnitLabelId = 36;
             MeasureUnit measureUnitDensity = new MeasureUnit();
             measureUnitDensity.MeasureUnitKind = "Плотность";
-            measureUnitDensity.UnitLabels.Add(new MeasureUnitLabel { Id = 39, UnitName = "кг/м^3", AddKoeff = 1.0 });
-            measureUnitDensity.UnitLabels.Add(new MeasureUnitLabel { Id = 40, UnitName = "г/см^3", AddKoeff = 0.001 });
-            measureUnitDensity.UnitLabels.Add(new MeasureUnitLabel { Id = 41, UnitName = "т/м^3", AddKoeff = 0.001 });
-            measureUnitDensity.CurrentUnitLabelId = 39;
+            measureUnitDensity.UnitLabels.Add(new MeasureUnitLabel { Id = 41, UnitName = "кг/м^3", AddKoeff = 1.0 });
+            measureUnitDensity.UnitLabels.Add(new MeasureUnitLabel { Id = 42, UnitName = "г/см^3", AddKoeff = 0.001 });
+            measureUnitDensity.UnitLabels.Add(new MeasureUnitLabel { Id = 43, UnitName = "т/м^3", AddKoeff = 0.001 });
+            measureUnitDensity.CurrentUnitLabelId = 41;
             MeasureUnit measureUnitVolumeWeight = new MeasureUnit();
             measureUnitVolumeWeight.MeasureUnitKind = "Объемный вес";
-            measureUnitVolumeWeight.UnitLabels.Add(new MeasureUnitLabel { Id = 42, UnitName = "Н/м^3", AddKoeff = 1.0 });
-            measureUnitVolumeWeight.UnitLabels.Add(new MeasureUnitLabel { Id = 43, UnitName = "кН/м^3", AddKoeff = 0.001 });
-            measureUnitVolumeWeight.UnitLabels.Add(new MeasureUnitLabel { Id = 44, UnitName = "кг/м^3", AddKoeff = 1 / 9.81 });
-            measureUnitVolumeWeight.UnitLabels.Add(new MeasureUnitLabel { Id = 45, UnitName = "г/см^3", AddKoeff = 0.001 / 9.81 });
-            measureUnitVolumeWeight.UnitLabels.Add(new MeasureUnitLabel { Id = 46, UnitName = "т/м^3", AddKoeff = 0.001 / 9.81 });
-            measureUnitVolumeWeight.CurrentUnitLabelId = 43;
+            measureUnitVolumeWeight.UnitLabels.Add(new MeasureUnitLabel { Id = 45, UnitName = "Н/м^3", AddKoeff = 1.0 });
+            measureUnitVolumeWeight.UnitLabels.Add(new MeasureUnitLabel { Id = 46, UnitName = "кН/м^3", AddKoeff = 0.001 });
+            measureUnitVolumeWeight.UnitLabels.Add(new MeasureUnitLabel { Id = 47, UnitName = "кг/м^3", AddKoeff = 1 / 9.81 });
+            measureUnitVolumeWeight.UnitLabels.Add(new MeasureUnitLabel { Id = 48, UnitName = "г/см^3", AddKoeff = 0.001 / 9.81 });
+            measureUnitVolumeWeight.UnitLabels.Add(new MeasureUnitLabel { Id = 49, UnitName = "т/м^3", AddKoeff = 0.001 / 9.81 });
+            measureUnitVolumeWeight.CurrentUnitLabelId = 46;
+            MeasureUnit measureUnitSizeArea = new MeasureUnit();
+            measureUnitSizeArea.MeasureUnitKind = "Размеры. Площадь";
+            measureUnitSizeArea.UnitLabels.Add(new MeasureUnitLabel { Id = 51, UnitName = "м^2", AddKoeff = 1.0 });
+            measureUnitSizeArea.UnitLabels.Add(new MeasureUnitLabel { Id = 52, UnitName = "мм^2", AddKoeff = 1000000 });
+            measureUnitSizeArea.UnitLabels.Add(new MeasureUnitLabel { Id = 53, UnitName = "см^2", AddKoeff = 10000 });
+            measureUnitSizeArea.CurrentUnitLabelId = 51;
+            MeasureUnit measureUnitSizeVolume = new MeasureUnit();
+            measureUnitSizeVolume.MeasureUnitKind = "Размеры. Объем";
+            measureUnitSizeVolume.UnitLabels.Add(new MeasureUnitLabel { Id = 56, UnitName = "м^3", AddKoeff = 1.0 });
+            measureUnitSizeVolume.UnitLabels.Add(new MeasureUnitLabel { Id = 57, UnitName = "мм^3", AddKoeff = 1000000000 });
+            measureUnitSizeVolume.UnitLabels.Add(new MeasureUnitLabel { Id = 58, UnitName = "см^3", AddKoeff = 1000000 });
+            measureUnitSizeVolume.CurrentUnitLabelId = 56;
             MeasureUnits = new ObservableCollection<MeasureUnit>();
             MeasureUnits.Add(measureUnitLength); //0
             MeasureUnits.Add(measureUnitForce); //1
@@ -165,6 +177,8 @@ namespace RDBLL.Common.Service
             MeasureUnits.Add(measureUnitMass); //7
             MeasureUnits.Add(measureUnitDensity); //8
             MeasureUnits.Add(measureUnitVolumeWeight); //9
+            MeasureUnits.Add(measureUnitSizeArea); //11
+            MeasureUnits.Add(measureUnitSizeVolume); //12
             #endregion
             #region Исходные данные видов нагрузки
             ForceParamKinds = new List<ForceParamKind>();
