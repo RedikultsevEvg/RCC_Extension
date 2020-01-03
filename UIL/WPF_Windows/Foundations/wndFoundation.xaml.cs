@@ -37,12 +37,14 @@ namespace RDUIL.WPF_Windows.Foundations
         {
             wndForces wndForces = new wndForces(_element);
             wndForces.ShowDialog();
+            DrawFoundation.DrawTopScatch(_element, cvScetch);
         }
 
         private void BtnParts_Click(object sender, RoutedEventArgs e)
         {
             wndFoundationParts wndFoundationParts = new wndFoundationParts(_element);
             wndFoundationParts.ShowDialog();
+            DrawFoundation.DrawTopScatch(_element, cvScetch);
         }
 
         private void BtnRefresh_Click(object sender, RoutedEventArgs e)

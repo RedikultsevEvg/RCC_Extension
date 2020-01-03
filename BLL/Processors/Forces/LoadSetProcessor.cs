@@ -92,9 +92,9 @@ namespace RDBLL.Processors.Forces
         /// </summary>
         /// <param name="forcesGroups">Коллекция нагрузок</param>
         /// <returns></returns>
-        public static List<LoadSet> GetLoadCases(ObservableCollection<ForcesGroup> forcesGroups)
+        public static ObservableCollection<LoadSet> GetLoadCases(ObservableCollection<ForcesGroup> forcesGroups)
         {
-            List<LoadSet> LoadCases = new List<LoadSet>(); //Комбинация нагрузок, которую будем в итоге получать
+            ObservableCollection<LoadSet> LoadCases = new ObservableCollection<LoadSet>(); //Комбинация нагрузок, которую будем в итоге получать
             LoadCases.Add(new LoadSet());
             foreach (ForcesGroup forcesGroup in forcesGroups)
             {
@@ -271,9 +271,9 @@ namespace RDBLL.Processors.Forces
         /// <param name="loadCases">Исходная коллекция комбинаций нагрузок</param>
         /// <param name="delta">Массив разницы координат dX, dY, dZ</param>
         /// <returns></returns>
-        public static List<LoadSet> GetLoadSetsTransform(List<LoadSet> loadCases, double[] delta)
+        public static ObservableCollection<LoadSet> GetLoadSetsTransform(ObservableCollection<LoadSet> loadCases, double[] delta)
         {
-            List<LoadSet> newLoadSets = new List<LoadSet>();
+            ObservableCollection<LoadSet> newLoadSets = new ObservableCollection<LoadSet>();
             foreach (LoadSet loadSet in loadCases)
             {
                 newLoadSets.Add(GetLoadSetTransform(loadSet, delta));

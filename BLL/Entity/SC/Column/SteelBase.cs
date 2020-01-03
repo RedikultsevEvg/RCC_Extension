@@ -76,7 +76,7 @@ namespace RDBLL.Entity.SC.Column
         /// <summary>
         /// Коллекция комбинаций
         /// </summary>
-        public List<LoadSet> LoadCases { get; set; }
+        public ObservableCollection<LoadSet> LoadCases { get; set; }
         /// <summary>
         /// Коллекция всех элементарных участков
         /// </summary>
@@ -136,7 +136,7 @@ namespace RDBLL.Entity.SC.Column
             IsActual = false;
             SteelStrength = 240000000;
             ConcreteStrength = 10000000;
-            UseSimpleMethod = true;
+            UseSimpleMethod = false;
             ForcesGroups = new ObservableCollection<ForcesGroup>();
             ForcesGroups.Add(new ForcesGroup(this));
             SteelBaseParts = new ObservableCollection<SteelBasePart>();

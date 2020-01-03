@@ -40,7 +40,7 @@
                     <DropShadowEffect Opacity="0.6"/>
                 </Button.Effect>
                 <Button.ToolTip>
-                    <TextBlock Margin="3" Foreground="Black"><Run Text="Новая база"/></TextBlock>
+                    <TextBlock Margin="3" Foreground="Black"><Run Text="Новый уровень"/></TextBlock>
                 </Button.ToolTip>
                 <Image x:Name="Add_png" Style="{StaticResource ServiceButtonImage}" Source="{DynamicResource IconAdd40}"/>
             </Button>

@@ -1,12 +1,19 @@
-﻿using FastReport;
+﻿using DAL.Common;
+using FastReport;
+using RDBLL.Common.Interfaces;
+using RDBLL.Common.Service;
 using RDBLL.Entity.MeasureUnits;
+using RDBLL.Forces;
+using System;
+using System.Data;
 using System.IO;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Data;
-using DAL.Common;
+using System.Collections.ObjectModel;
+using System.Collections.Generic;
 
 namespace CSL.Common
 {
@@ -14,21 +21,18 @@ namespace CSL.Common
     {
         public static void PrepareMeasureUnit(Report report)
         {
-            using (report)
-            {
-                report.SetParameterValue("Units.LinearSize", MeasureUnitConverter.GetUnitLabelText(0));
-                report.SetParameterValue("Units.Force", MeasureUnitConverter.GetUnitLabelText(1));
-                report.SetParameterValue("Units.Moment", MeasureUnitConverter.GetUnitLabelText(2));
-                report.SetParameterValue("Units.Stress", MeasureUnitConverter.GetUnitLabelText(3));
-                report.SetParameterValue("Units.Geometry.Area", MeasureUnitConverter.GetUnitLabelText(4));
-                report.SetParameterValue("Units.Geometry.SecMoment", MeasureUnitConverter.GetUnitLabelText(5));
-                report.SetParameterValue("Units.Geometry.Moment", MeasureUnitConverter.GetUnitLabelText(6));
-                report.SetParameterValue("Units.Mass", MeasureUnitConverter.GetUnitLabelText(7));
-                report.SetParameterValue("Units.Density", MeasureUnitConverter.GetUnitLabelText(8));
-                report.SetParameterValue("Units.VolumeWeight", MeasureUnitConverter.GetUnitLabelText(9));
-            }
-
-
+            report.SetParameterValue("Units.LinearSize", MeasureUnitConverter.GetUnitLabelText(0));
+            report.SetParameterValue("Units.Force", MeasureUnitConverter.GetUnitLabelText(1));
+            report.SetParameterValue("Units.Moment", MeasureUnitConverter.GetUnitLabelText(2));
+            report.SetParameterValue("Units.Stress", MeasureUnitConverter.GetUnitLabelText(3));
+            report.SetParameterValue("Units.Geometry.Area", MeasureUnitConverter.GetUnitLabelText(4));
+            report.SetParameterValue("Units.Geometry.SecMoment", MeasureUnitConverter.GetUnitLabelText(5));
+            report.SetParameterValue("Units.Geometry.Moment", MeasureUnitConverter.GetUnitLabelText(6));
+            report.SetParameterValue("Units.Mass", MeasureUnitConverter.GetUnitLabelText(7));
+            report.SetParameterValue("Units.Density", MeasureUnitConverter.GetUnitLabelText(8));
+            report.SetParameterValue("Units.VolumeWeight", MeasureUnitConverter.GetUnitLabelText(9));
+            report.SetParameterValue("Units.SizeArea", MeasureUnitConverter.GetUnitLabelText(10));
+            report.SetParameterValue("Units.SizeVolume", MeasureUnitConverter.GetUnitLabelText(11));
         }
 
         public static byte[] ExportToByte(Canvas surface)
@@ -84,55 +88,103 @@ namespace CSL.Common
             }
         }
 
-        public static void AddLoadsTableToDataSet(DataSet dataSet, string parentTableName, string ParentNameId)
+        private static void AddLoadsTableToDataSet(DataSet dataSet, string dataTableName, string parentTableName, string ParentNameId)
         {
             DataTable newTable;
             #region Loads
-            newTable = new DataTable("LoadSets");
-            dataSet.Tables.Add(newTable);
-            DsOperation.AddIdColumn(newTable);
-            DsOperation.AddFkIdColumn(parentTableName, ParentNameId, newTable);
-            DsOperation.AddNameColumn(newTable);
-            DsOperation.AddDoubleColumn(newTable, "PartialSafetyFactor");
-            DsOperation.AddStringColumn(newTable, "CrcForceDescription");
-            DsOperation.AddStringColumn(newTable, "DesignForceDescription");
+            //Таблица нагрузок
+            try
+            {
+                newTable = new DataTable(dataTableName);
+                dataSet.Tables.Add(newTable);
+                DsOperation.AddIdColumn(newTable);
+                DsOperation.AddFkIdColumn(parentTableName, ParentNameId, newTable);
+                DsOperation.AddNameColumn(newTable);
+                DsOperation.AddStringColumn(newTable, "Description");
+                DsOperation.AddDoubleColumn(newTable, "PartialSafetyFactor");
+                DsOperation.AddStringColumn(newTable, "CrcForceDescription");
+                DsOperation.AddStringColumn(newTable, "DesignForceDescription");
+                DsOperation.AddStringColumn(newTable, "ForceDescription");
+            }
+            catch { }
             #endregion
             #region LoadForceParameters
-            newTable = new DataTable("LoadSetsForceParameters");
-            dataSet.Tables.Add(newTable);
-            DsOperation.AddIntColumn(newTable, "Id");
-            DsOperation.AddFkIdColumn(parentTableName, ParentNameId, newTable);
-            DsOperation.AddStringColumn(newTable, "ElementName");
-            DsOperation.AddIntColumn(newTable, "LoadSetId");
-            DsOperation.AddStringColumn(newTable, "LoadSetName");
-            DsOperation.AddStringColumn(newTable, "Description");
-            DsOperation.AddStringColumn(newTable, "LongLabel");
-            DsOperation.AddStringColumn(newTable, "ShortLabel");
-            DsOperation.AddStringColumn(newTable, "Unit");
-            DsOperation.AddDoubleColumn(newTable, "CrcValue");
-            DsOperation.AddDoubleColumn(newTable, "DesignValue");
+            //Таблица параметров нагрузок
+            try
+            {
+                newTable = new DataTable(dataTableName+"ForceParameters");
+                dataSet.Tables.Add(newTable);
+                DsOperation.AddIntColumn(newTable, "Id");
+                DsOperation.AddFkIdColumn(parentTableName, ParentNameId, newTable);
+                DsOperation.AddStringColumn(newTable, "ElementName");
+                DsOperation.AddIntColumn(newTable, "LoadSetId");
+                DsOperation.AddStringColumn(newTable, "LoadSetName");
+                DsOperation.AddStringColumn(newTable, "Description");
+                DsOperation.AddStringColumn(newTable, "LongLabel");
+                DsOperation.AddStringColumn(newTable, "ShortLabel");
+                DsOperation.AddStringColumn(newTable, "Unit");
+                DsOperation.AddDoubleColumn(newTable, "CrcValue");
+                DsOperation.AddDoubleColumn(newTable, "DesignValue");
+            }
+            catch { }
             #endregion
-            #region LoadCases
-            newTable = new DataTable("LoadCases");
-            dataSet.Tables.Add(newTable);
-            DsOperation.AddIdColumn(newTable);
-            DsOperation.AddIntColumn(newTable, ParentNameId);
-            DsOperation.AddStringColumn(newTable, "Description");
-            DsOperation.AddDoubleColumn(newTable, "PartialSafetyFactor");
-            DsOperation.AddStringColumn(newTable, "ForceDescription");
-            #endregion
-            #region ForceParameters
-            newTable = new DataTable("LoadCasesForceParameters");
-            dataSet.Tables.Add(newTable);
-            DsOperation.AddIdColumn(newTable);
-            DsOperation.AddStringColumn(newTable, "LoadCaseId");
-            DsOperation.AddStringColumn(newTable, "LongLabel");
-            DsOperation.AddStringColumn(newTable, "ShortLabel");
-            DsOperation.AddStringColumn(newTable, "Unit");
-            DsOperation.AddDoubleColumn(newTable, "CrcValue");
-            DsOperation.AddDoubleColumn(newTable, "DesignValue");
-            #endregion
-            dataSet.Relations.Add("LoadCases", dataSet.Tables[parentTableName].Columns["Id"], dataSet.Tables["LoadCases"].Columns[ParentNameId]);
+        }
+
+        public static void AddLoadsToDataset(DataSet dataSet, string dataTableName, string parentTableName, string ParentNameId, ObservableCollection<LoadSet> loadSets, int parentId, string parentName)
+        {
+            AddLoadsTableToDataSet(dataSet, dataTableName, parentTableName, ParentNameId);
+
+            DataTable dataTable = dataSet.Tables[dataTableName];
+            foreach (LoadSet loadSet in loadSets)
+            {
+                string loadSetDescription, crcForceDescription = "", designForceDescription = "";
+                string forceDescription = "";
+                DataRow newLoadSet = dataTable.NewRow();
+                DataTable ForceParameters = dataSet.Tables[dataTableName + "ForceParameters"];
+                foreach (ForceParameter forceParameter in loadSet.ForceParameters)
+                {
+                    DataRow newForceParameter = ForceParameters.NewRow();
+                    loadSetDescription = loadSet.Name;
+                    loadSetDescription += " (n=" + loadSet.PartialSafetyFactor;
+                    if (loadSet.BothSign) { loadSetDescription += " знакопеременная"; }
+                    loadSetDescription += ")";
+                    var tmpForceParamLabels = from t in ProgrammSettings.ForceParamKinds where t.Id == forceParameter.KindId select t;
+                    MeasureUnitLabel measureUnitLabel = tmpForceParamLabels.First().MeasureUnit.GetCurrentLabel();
+                    newForceParameter.ItemArray = new object[] { tmpForceParamLabels.First().Id,
+                        parentId,
+                        parentName,
+                        loadSet.Id,
+                        loadSet.Name,
+                        loadSetDescription,
+                        tmpForceParamLabels.First().LongLabel,
+                        tmpForceParamLabels.First().ShortLabel,
+                        measureUnitLabel.UnitName,
+                        Math.Round(forceParameter.CrcValueInCurUnit, 3),
+                        Math.Round(forceParameter.CrcValue * loadSet.PartialSafetyFactor * measureUnitLabel.AddKoeff, 3)
+                    };
+                    ForceParameters.Rows.Add(newForceParameter);
+                    crcForceDescription += tmpForceParamLabels.First().ShortLabel + "=";
+                    crcForceDescription += Math.Round(forceParameter.CrcValue * measureUnitLabel.AddKoeff, 3);
+                    crcForceDescription += measureUnitLabel.UnitName + "; ";
+
+                    designForceDescription += tmpForceParamLabels.First().ShortLabel + "=";
+                    designForceDescription += Math.Round(forceParameter.CrcValue * loadSet.PartialSafetyFactor * measureUnitLabel.AddKoeff, 3);
+                    designForceDescription += measureUnitLabel.UnitName + "; ";
+
+                    forceDescription += tmpForceParamLabels.First().ShortLabel + "=" + Math.Round(forceParameter.DesignValue * measureUnitLabel.AddKoeff, 3) + measureUnitLabel.UnitName + "; ";
+                }
+                newLoadSet.ItemArray = new object[]
+                    {   loadSet.Id,
+                        parentId,
+                        loadSet.Name,
+                        "",
+                        loadSet.PartialSafetyFactor,
+                        crcForceDescription,
+                        designForceDescription,
+                        forceDescription
+                    };
+                dataTable.Rows.Add(newLoadSet);
+            }
         }
     }
 }

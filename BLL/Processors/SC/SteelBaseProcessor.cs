@@ -35,9 +35,8 @@ namespace RDBLL.Processors.SC
             ActualizeLoadCases(steelBase);
             GetNdmAreas(steelBase);
             steelBase.ForceCurvatures.Clear();
-            if (steelBase.UseSimpleMethod) { SolveSimpleMethod(steelBase); }
-            else { SolveNDMMethod (steelBase); }
-            steelBase.IsActual = true;
+            if (steelBase.UseSimpleMethod) { steelBase.IsActual = SolveSimpleMethod(steelBase); }
+            else { steelBase.IsActual = SolveNDMMethod(steelBase); }
         }
         /// <summary>
         /// Актуализирует наборы нагрузок
@@ -170,8 +169,9 @@ namespace RDBLL.Processors.SC
             Curvature curvature = new Curvature(sumForces, stiffnessCoefficient);
             return new ForceCurvature(loadCase, curvature);
         }
-        public static void SolveSimpleMethod(SteelBase steelBase)
+        public static bool SolveSimpleMethod(SteelBase steelBase)
         {
+            bool result = true;
             foreach (LoadSet loadCase in steelBase.LoadCases)
             {
                 try //Запускаем нелинейный расчет
@@ -219,38 +219,38 @@ namespace RDBLL.Processors.SC
                     //Ошибка нелинейного расчета говорит о том, что сходимость не достигнута,
                     //например, происходит опрокидывание базы из-за недостаточного количества болтов
                     MessageBox.Show("Проверьте исходные данные", "Ошибка нелинейного расчета");
+                    result = false;
                 }
             }
+            return result;
         }
 
-        public static void SolveNDMMethod(SteelBase steelBase)
+        /// <summary>
+        /// Решение базы стальной колонны нелинейным методом
+        /// </summary>
+        /// <param name="steelBase"></param>
+        /// <returns>true - расчет выполнен успешно</returns>
+        public static bool SolveNDMMethod(SteelBase steelBase)
         {
+            bool result = true;
             foreach (LoadSet loadCase in steelBase.LoadCases)
             {
                 SumForces sumForces = new SumForces(loadCase);
-                StiffnessCoefficient stiffnessCoefficient = new StiffnessCoefficient(steelBase.NdmAreas);
-                Curvature curvature = new Curvature(sumForces, stiffnessCoefficient);
-                //Определяем новые жесткостные коэффициенты по полученной кривизне
-                StiffnessCoefficient newStiffnessCoefficient = new StiffnessCoefficient(steelBase.NdmAreas, curvature);
-                Curvature newCurvature = new Curvature(sumForces, newStiffnessCoefficient);
+                List<NdmArea> ndmAreas = steelBase.NdmAreas;
                 try
                 {
-                    SumForces sumForces2 = new SumForces(newStiffnessCoefficient, newCurvature);
-                    for (int i = 1; i <= 20; i++)
-                    {
-                        newCurvature = new Curvature(sumForces, newStiffnessCoefficient);
-                        newStiffnessCoefficient = new StiffnessCoefficient(steelBase.NdmAreas, newCurvature);
-                        sumForces2 = new SumForces(newStiffnessCoefficient, newCurvature);
-                    }
-                    sumForces2 = new SumForces(newStiffnessCoefficient, newCurvature);
-                    ForceCurvature forceCurvature = new ForceCurvature(loadCase, newCurvature);
+                    //Если нелинейный расчет не выполнится, то будет сгенерировано исключение
+                    ForceCurvature forceCurvature = new ForceCurvature(loadCase, NdmProcessor.GetCurvature(sumForces, ndmAreas));
                     steelBase.ForceCurvatures.Add(forceCurvature);
                 }
+                //Если хотя бы один случай нагружения даст ошибку, то общий результат будет false
                 catch
                 {
-                    MessageBox.Show("Проверьте исходные данные", "Ошибка нелинейного расчета");
+                    MessageBox.Show("Ошибка нелинейного расчета", $"Сочетание: {loadCase.Name}");
+                    result = false;
                 }
             }
+            return result;
         }
         /// <summary>
         /// Возвращает коллекцию прямоугольных участков со значениями и комбинации нагрузок,

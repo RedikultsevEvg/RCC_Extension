@@ -7,8 +7,14 @@ using System.IO;
 
 namespace RDUIL.Common.Reports
 {
+    /// <summary>
+    /// Процессор показа отчетов
+    /// </summary>
     public static class ShowReportProcessor
     {
+        /// <summary>
+        /// Отчеты для баз стальных колонн
+        /// </summary>
         public static void ShowSteelBasesReport()
         {
             List<ReportCard> reportCards = new List<ReportCard>();
@@ -18,7 +24,7 @@ namespace RDUIL.Common.Reports
             {
                 Name = "Основной отчет по базам колонн",
                 FileName = directory + "SteelBases.frx",
-                Description = "Краткий отчет с выводом давления под подошвой фундамента, напряжений в опорной плите и усилий в болтах",
+                Description = "Краткий отчет с выводом давления под подошвой базы колонны, напряжений в опорной плите и усилий в болтах",
                 ImageName = directory + "SteelBases.png",
                 ToolTip = ""
             };
@@ -40,9 +46,35 @@ namespace RDUIL.Common.Reports
             wndReports.ShowDialog();
         }
 
+        public static void ShowFoundationsReport()
+        {
+            List<ReportCard> reportCards = new List<ReportCard>();
+            ReportCard newReportCard;
+            string directory = Directory.GetCurrentDirectory() + "\\Reports\\Foundations\\";
+            newReportCard = new ReportCard
+            {
+                Name = "Основной отчет по фундаментам",
+                FileName = directory + "Foundations.frx",
+                Description = "Краткий отчет с выводом давления под подошвой фундамента",
+                ImageName = directory + "Foundation.png",
+                ToolTip = ""
+            };
+            newReportCard.RegisterDelegate(new ReportCard.CommandDelegate(ShowFoundationReport));
+            reportCards.Add(newReportCard);
+
+            wndReports wndReports = new wndReports(reportCards);
+            wndReports.ShowDialog();
+        }
+
         private static void ShowSteelReport(string reportFileName)
         {
             SteelBaseReport resultReport = new SteelBaseReport(ProgrammSettings.BuildingSite);
+            resultReport.ShowReport(reportFileName);
+        }
+
+        private static void ShowFoundationReport(string reportFileName)
+        {
+            FoundationReport resultReport = new FoundationReport(ProgrammSettings.BuildingSite);
             resultReport.ShowReport(reportFileName);
         }
     }

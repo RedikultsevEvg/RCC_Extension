@@ -18,6 +18,10 @@ namespace RDBLL.Common.Interfaces
         /// </summary>
         ObservableCollection<ForcesGroup> ForcesGroups { get; set; }
         /// <summary>
+        /// Коллекция комбинаций
+        /// </summary>
+        ObservableCollection<LoadSet> LoadCases { get; set; }
+        /// <summary>
         /// Флаг актуальности нагрузок
         /// </summary>
         bool IsLoadCasesActual { get; set; }

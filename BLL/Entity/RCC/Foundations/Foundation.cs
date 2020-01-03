@@ -44,6 +44,22 @@ namespace RDBLL.Entity.RCC.Foundations
         /// </summary>
         public double ConcreteVolumeWeight { get; set; }
         /// <summary>
+        /// Полезная нагрузка на пол
+        /// </summary>
+        public double FloorLoad { get; set; }
+        /// <summary>
+        /// Коэффициент надежности по нагрузке для нагрузки на пол
+        /// </summary>
+        public double FloorLoadFactor { get; set; }
+        /// <summary>
+        /// Нагрузка от веса пола
+        /// </summary>
+        public double ConcreteFloorLoad { get; set; }
+        /// <summary>
+        /// Коэффициент надежности по нагрузке для нагрузки от веса пола
+        /// </summary>
+        public double ConcreteFloorLoadFactor { get; set; }
+        /// <summary>
         /// Коллекция групп нагрузок
         /// </summary>
         public ObservableCollection<ForcesGroup> ForcesGroups { get; set; }
@@ -51,6 +67,10 @@ namespace RDBLL.Entity.RCC.Foundations
         /// Коллекция ступеней столбчатого фундамента
         /// </summary>
         public ObservableCollection<FoundationPart> Parts { get; set; }
+        /// <summary>
+        /// Коллекция комбинаций
+        /// </summary>
+        public ObservableCollection<LoadSet> LoadCases { get; set; }
         /// <summary>
         /// Коллекция комбинаций и кривизны
         /// </summary>
