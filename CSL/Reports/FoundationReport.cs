@@ -1,18 +1,18 @@
 ﻿using CSL.Common;
-using CSL.DataSets.SC;
+using CSL.DataSets.RCC.Foundations;
 using CSL.Reports.Interfaces;
 using FastReport;
+using RDBLL.DrawUtils.SteelBase;
 using RDBLL.Entity.MeasureUnits;
 using RDBLL.Entity.RCC.BuildingAndSite;
-using System.Data;
 using RDBLL.Entity.RCC.Foundations;
 using RDBLL.Entity.RCC.Foundations.Processors;
-using System.Windows.Controls;
-using RDBLL.DrawUtils.SteelBase;
-using CSL.DataSets.RCC.Foundations;
 using RDBLL.Forces;
-using System.Collections.ObjectModel;
 using RDBLL.Processors.Forces;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Data;
+using System.Windows.Controls;
 
 namespace CSL.Reports
 {
@@ -80,6 +80,9 @@ namespace CSL.Reports
                         Foundations.Rows.Add(newFoundation);
                         ProcessFoundationParts(foundation);
                         ProcessLoadSets(foundation);
+
+                        List<double[]> stressesWithWeigth = FoundationProcessor.GetStresses(foundation, foundation.ForceCurvaturesWithWeight);
+                        List<double[]> stressesWithoutWeigth = FoundationProcessor.GetStresses(foundation, foundation.ForceCurvaturesWithoutWeight);
                     }
                 }
             }
@@ -99,8 +102,12 @@ namespace CSL.Reports
         {
             CommonServices.AddLoadsToDataset(dataSet, "LoadSets", "Foundations", "FoundationId", foundation.ForcesGroups[0].LoadSets, foundation.Id, foundation.Name);
             CommonServices.AddLoadsToDataset(dataSet, "LoadCases", "Foundations", "FoundationId", foundation.LoadCases, foundation.Id, foundation.Name);
-            CommonServices.AddLoadsToDataset(dataSet, "BottomLoadCasesWithWeight", "Foundations", "FoundationId", foundation.btmLoadSetsWithWeight, foundation.Id, foundation.Name);
-            CommonServices.AddLoadsToDataset(dataSet, "BottomLoadCases", "Foundations", "FoundationId", foundation.btmLoadSetsWithoutWeight, foundation.Id, foundation.Name);
+
+            ObservableCollection<LoadSet> loadSetsWith = LoadSetProcessor.GetLoadSetsTransform(foundation.btmLoadSetsWithWeight, FoundationProcessor.GetDeltaDistance(foundation));
+            CommonServices.AddLoadsToDataset(dataSet, "BottomLoadCasesWithWeight", "Foundations", "FoundationId", loadSetsWith, foundation.Id, foundation.Name);
+
+            ObservableCollection<LoadSet> loadSetsWithout = LoadSetProcessor.GetLoadSetsTransform(foundation.btmLoadSetsWithoutWeight, FoundationProcessor.GetDeltaDistance(foundation));
+            CommonServices.AddLoadsToDataset(dataSet, "BottomLoadCases", "Foundations", "FoundationId", loadSetsWithout, foundation.Id, foundation.Name);
         }
 
         private void ProcessFoundationParts(Foundation foundation)
