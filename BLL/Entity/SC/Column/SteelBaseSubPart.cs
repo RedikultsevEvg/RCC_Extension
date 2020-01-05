@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace RDBLL.Entity.SC.Column
 {
+    /// <summary>
+    /// Элементарный участок стальной базы
+    /// </summary>
     public class SteelBaseSubPart
     {
         public int Id { get; set; }

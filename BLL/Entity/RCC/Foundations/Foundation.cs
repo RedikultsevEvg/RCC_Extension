@@ -109,6 +109,7 @@ namespace RDBLL.Entity.RCC.Foundations
         /// Коллекция комбинаций и кривизны без учета веса фундамента и грунта
         /// </summary>
         public List<ForceCurvature> ForceCurvaturesWithoutWeight { get; set; }
+        public List<NdmArea> NdmAreas { get; set; }
         /// <summary>
         /// Признак актуальности нагрузок
         /// </summary>

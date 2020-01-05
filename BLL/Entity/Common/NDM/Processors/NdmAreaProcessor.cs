@@ -29,6 +29,23 @@ namespace RDBLL.Entity.Common.NDM.Processors
         }
 
         /// <summary>
+        /// Возвращает массив пары деформации-напряжения по модели материалов, координатам точки и кривизне
+        /// </summary>
+        /// <param name="materialModel"></param>
+        /// <param name="pointX"></param>
+        /// <param name="pointY"></param>
+        /// <param name="curvature"></param>
+        /// <returns></returns>
+        public static double[] GetStrainFromCuvature(IMaterialModel materialModel, double pointX, double pointY, Curvature curvature)
+        {
+            double strain = pointY * curvature.CurvMatrix[0, 0];
+            strain += pointX * curvature.CurvMatrix[1, 0];
+            strain += curvature.CurvMatrix[2, 0];
+            double stress = materialModel.GetSecantModulus(strain) * strain;
+            return new double[2] { strain, stress };
+        }
+
+        /// <summary>
         /// Возвращает коллекцию прямоугольных элементарных участков по модели материалов, заданному прямоугольнику, размеру элемента
         /// </summary>
         /// <param name="materialModel">Модель материала</param>

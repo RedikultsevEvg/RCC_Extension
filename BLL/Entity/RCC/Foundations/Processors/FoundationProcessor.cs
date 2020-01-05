@@ -1,12 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using RDBLL.Processors.Forces;
+﻿using RDBLL.Entity.Common.NDM;
+using RDBLL.Entity.Common.NDM.Interfaces;
+using RDBLL.Entity.Common.NDM.MaterialModels;
+using RDBLL.Entity.Common.NDM.Processors;
 using RDBLL.Forces;
+using RDBLL.Processors.Forces;
+using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using RDBLL.Entity.Common.NDM;
+using System.Linq;
 
 namespace RDBLL.Entity.RCC.Foundations.Processors
 {
@@ -72,13 +73,16 @@ namespace RDBLL.Entity.RCC.Foundations.Processors
                 {
                     foundation.LoadCases = LoadSetProcessor.GetLoadCases(foundation.ForcesGroups);
                     //Загружения с учетом веса фундамента и грунта
-                    foundation.btmLoadSetsWithWeight = LoadSetProcessor.GetLoadSetsTransform(GetBottomLoadCasesWithWeight(foundation), GetDeltaDistance(foundation));
+                    foundation.btmLoadSetsWithWeight = GetBottomLoadCasesWithWeight(foundation);
                     //Загружения без учета веса фундамента и грунта
-                    foundation.btmLoadSetsWithoutWeight = LoadSetProcessor.GetLoadSetsTransform(foundation.LoadCases, GetDeltaDistance(foundation));
+                    foundation.btmLoadSetsWithoutWeight = foundation.LoadCases;
                     foundation.IsLoadCasesActual = true;
                 }
-
                 foundation.IsPartsActual = true;
+
+                foundation.NdmAreas = GetNdmAreas(foundation);
+                foundation.ForceCurvaturesWithoutWeight = GetForceCurvatures(foundation, foundation.btmLoadSetsWithoutWeight);
+                foundation.ForceCurvaturesWithWeight = GetForceCurvatures(foundation, foundation.btmLoadSetsWithWeight);
             }
         }
         /// <summary>
@@ -180,15 +184,117 @@ namespace RDBLL.Entity.RCC.Foundations.Processors
         /// </summary>
         /// <param name="loadSets"></param>
         /// <returns></returns>
-        public static List<ForceCurvature> GetForceCurvatures(ObservableCollection<LoadSet> loadSets)
+        public static List<ForceCurvature> GetForceCurvatures(Foundation foundation, ObservableCollection<LoadSet> loadSets)
         {
+
             List<ForceCurvature> forceCurvatures = new List<ForceCurvature>();
+
             foreach (LoadSet loadSet in loadSets)
             {
                 ForceCurvature forceCurvature = new ForceCurvature(loadSet);
-
+                SumForces crcSumForces = new SumForces(loadSet, false);
+                SumForces designSumForces = new SumForces(loadSet, true);
+                forceCurvature.CrcCurvature = NdmProcessor.GetCurvature(crcSumForces, foundation.NdmAreas);
+                forceCurvature.DesignCurvature = NdmProcessor.GetCurvature(designSumForces, foundation.NdmAreas);
+                forceCurvatures.Add(forceCurvature);
             }
             return forceCurvatures;
+        }
+
+        /// <summary>
+        /// Возвращает коллекцию элементарных участков для подошвы фундамента
+        /// </summary>
+        /// <param name="foundation"></param>
+        /// <returns></returns>
+        public static List<NdmArea> GetNdmAreas(Foundation foundation)
+        {
+            IMaterialModel materialModel = new LinearIsotropic(1e+10, 1, 0);
+            double[] sizes = GetContourSize(foundation);
+            double centerX = foundation.Parts[foundation.Parts.Count - 1].CenterX;
+            double centerY = foundation.Parts[foundation.Parts.Count - 1].CenterY;
+            List<NdmRectangleArea> ndmRectangleAreas = NdmAreaProcessor.MeshRectangle(materialModel, sizes[0], sizes[1], centerX, centerY, 0.05);
+            List<NdmArea> ndmAreas = new List<NdmArea>();
+            foreach (NdmRectangleArea ndmRectangleArea in ndmRectangleAreas)
+            {
+                ndmAreas.Add(ndmRectangleArea);
+            }
+            return ndmAreas;
+        }
+
+        public static double[] GetFoundationCenter(Foundation foundation)
+        {
+            double[] delta = GetDeltaDistance(foundation);
+            return new double[2] { delta[0], delta[1]};
+        }
+
+        public static List<double[]> GetFoundationMidllePoints(Foundation foundation)
+        {
+            List<double[]> points = new List<double[]>();
+            FoundationPart foundationPart = foundation.Parts[foundation.Parts.Count - 1];
+            double[] point1 = new double[2] { foundationPart.CenterX + foundationPart.Width / 2, foundationPart.CenterY };
+            double[] point2 = new double[2] { foundationPart.CenterX - foundationPart.Width / 2, foundationPart.CenterY };
+            double[] point3 = new double[2] { foundationPart.CenterX, foundationPart.CenterY + foundationPart.Length / 2 };
+            double[] point4 = new double[2] { foundationPart.CenterX, foundationPart.CenterY - foundationPart.Length / 2 };
+            points.Add(point1);
+            points.Add(point2);
+            points.Add(point3);
+            points.Add(point4);
+            return points;
+        }
+
+        public static List<double[]> GetFoundationCornerPoints(Foundation foundation)
+        {
+            List<double[]> points = new List<double[]>();
+            FoundationPart foundationPart = foundation.Parts[foundation.Parts.Count - 1];
+            double[] point1 = new double[2] { foundationPart.CenterX + foundationPart.Width / 2, foundationPart.CenterY + foundationPart.Length / 2 };
+            double[] point2 = new double[2] { foundationPart.CenterX - foundationPart.Width / 2, foundationPart.CenterY - foundationPart.Length / 2 };
+            double[] point3 = new double[2] { foundationPart.CenterX + foundationPart.Width / 2, foundationPart.CenterY - foundationPart.Length / 2 };
+            double[] point4 = new double[2] { foundationPart.CenterX - foundationPart.Width / 2, foundationPart.CenterY + foundationPart.Length / 2 };
+            points.Add(point1);
+            points.Add(point2);
+            points.Add(point3);
+            points.Add(point4);
+            return points;
+        }
+
+        /// <summary>
+        /// Возвращает коллекцию срединных, краевых, угловых напряжения для фундамента
+        /// </summary>
+        /// <param name="foundation"></param>
+        /// <param name="forceCurvatures"></param>
+        /// <returns></returns>
+        public static List<double[]> GetStresses(Foundation foundation, List<ForceCurvature> forceCurvatures)
+        {
+            List<double[]> stresses = new List<double[]>();
+            IMaterialModel materialModel = new LinearIsotropic(1e+10, 1, 0);
+            double[] centerPoint = GetFoundationCenter(foundation);
+            List<double[]> midllePoints = GetFoundationMidllePoints(foundation);
+            List<double[]> cornerPoints = GetFoundationCornerPoints(foundation);
+            foreach (ForceCurvature forceCurvature in forceCurvatures)
+            {
+                double crcCenterStress = NdmAreaProcessor.GetStrainFromCuvature(materialModel, centerPoint[0], centerPoint[1], forceCurvature.CrcCurvature)[1];
+                double designCenterStress = NdmAreaProcessor.GetStrainFromCuvature(materialModel, centerPoint[0], centerPoint[1], forceCurvature.DesignCurvature)[1];
+                List<double> crcMiddleSresses = new List<double>();
+                List<double> designMiddleSresses = new List<double>();
+                foreach (double[] point in midllePoints)
+                {
+                    crcMiddleSresses.Add(NdmAreaProcessor.GetStrainFromCuvature(materialModel, point[0], point[1], forceCurvature.CrcCurvature)[1]);
+                    designMiddleSresses.Add(NdmAreaProcessor.GetStrainFromCuvature(materialModel, point[0], point[1], forceCurvature.DesignCurvature)[1]);
+                }
+                List<double> crcCornerSresses = new List<double>();
+                List<double> designCornerSresses = new List<double>();
+                foreach (double[] point in cornerPoints)
+                {
+                    crcCornerSresses.Add(NdmAreaProcessor.GetStrainFromCuvature(materialModel, point[0], point[1], forceCurvature.CrcCurvature)[1]);
+                    designCornerSresses.Add(NdmAreaProcessor.GetStrainFromCuvature(materialModel, point[0], point[1], forceCurvature.DesignCurvature)[1]);
+                }
+                double[] stress = new double[8]
+                { crcCenterStress, crcMiddleSresses.Min(), crcCornerSresses.Min(), crcCornerSresses.Max(),
+                    designCenterStress, designMiddleSresses.Min(), designCornerSresses.Min(), designCornerSresses.Max()
+                };
+                stresses.Add(stress);
+            }
+            return stresses;
         }
     }
 }
