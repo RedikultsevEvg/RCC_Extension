@@ -166,6 +166,22 @@ namespace RDBLL.Common.Service
             measureUnitSizeVolume.UnitLabels.Add(new MeasureUnitLabel { Id = 57, UnitName = "мм^3", AddKoeff = 1000000000 });
             measureUnitSizeVolume.UnitLabels.Add(new MeasureUnitLabel { Id = 58, UnitName = "см^3", AddKoeff = 1000000 });
             measureUnitSizeVolume.CurrentUnitLabelId = 56;
+            MeasureUnit measureUnitDisributedForce = new MeasureUnit();
+            measureUnitDisributedForce.MeasureUnitKind = "Распределенная нагрузка на погонный метр";
+            measureUnitDisributedForce.UnitLabels.Add(new MeasureUnitLabel { Id = 60, UnitName = "Н/м", AddKoeff = 1.0 });
+            measureUnitDisributedForce.UnitLabels.Add(new MeasureUnitLabel { Id = 61, UnitName = "кН/м", AddKoeff = 0.001 });
+            measureUnitDisributedForce.UnitLabels.Add(new MeasureUnitLabel { Id = 62, UnitName = "МН/м", AddKoeff = 0.000001 });
+            measureUnitDisributedForce.UnitLabels.Add(new MeasureUnitLabel { Id = 63, UnitName = "кгс/м", AddKoeff = 1 / 9.81 });
+            measureUnitDisributedForce.UnitLabels.Add(new MeasureUnitLabel { Id = 64, UnitName = "тс/м", AddKoeff = 0.001 / 9.81 });
+            measureUnitDisributedForce.CurrentUnitLabelId = 61;
+            MeasureUnit measureUnitDisributedLoad = new MeasureUnit();
+            measureUnitDisributedLoad.MeasureUnitKind = "Распределенная нагрузка на погонный метр";
+            measureUnitDisributedLoad.UnitLabels.Add(new MeasureUnitLabel { Id = 70, UnitName = "Н/м^2", AddKoeff = 1.0 });
+            measureUnitDisributedLoad.UnitLabels.Add(new MeasureUnitLabel { Id = 71, UnitName = "кН/м^2", AddKoeff = 0.001 });
+            measureUnitDisributedLoad.UnitLabels.Add(new MeasureUnitLabel { Id = 72, UnitName = "МН/м^2", AddKoeff = 0.000001 });
+            measureUnitDisributedLoad.UnitLabels.Add(new MeasureUnitLabel { Id = 73, UnitName = "кгс/м^2", AddKoeff = 1 / 9.81 });
+            measureUnitDisributedLoad.UnitLabels.Add(new MeasureUnitLabel { Id = 74, UnitName = "тс/м^2", AddKoeff = 0.001 / 9.81 });
+            measureUnitDisributedLoad.CurrentUnitLabelId = 71;
             MeasureUnits = new ObservableCollection<MeasureUnit>();
             MeasureUnits.Add(measureUnitLength); //0
             MeasureUnits.Add(measureUnitForce); //1
@@ -177,8 +193,10 @@ namespace RDBLL.Common.Service
             MeasureUnits.Add(measureUnitMass); //7
             MeasureUnits.Add(measureUnitDensity); //8
             MeasureUnits.Add(measureUnitVolumeWeight); //9
-            MeasureUnits.Add(measureUnitSizeArea); //11
-            MeasureUnits.Add(measureUnitSizeVolume); //12
+            MeasureUnits.Add(measureUnitSizeArea); //10
+            MeasureUnits.Add(measureUnitSizeVolume); //11
+            MeasureUnits.Add(measureUnitDisributedForce); //12
+            MeasureUnits.Add(measureUnitDisributedLoad); //13
             #endregion
             #region Исходные данные видов нагрузки
             ForceParamKinds = new List<ForceParamKind>();

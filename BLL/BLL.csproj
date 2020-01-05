@@ -60,6 +60,7 @@
     <Compile Include="DrawUtils\SteelBase\DrawUtils.cs" />
     <Compile Include="Entity\Common\NDM\Curvature.cs" />
     <Compile Include="Entity\Common\NDM\ForceCurvature.cs" />
+    <Compile Include="Entity\Common\NDM\ForceDoubleCurvature.cs" />
     <Compile Include="Entity\Common\NDM\Interfaces\IMaterialModel.cs" />
     <Compile Include="Entity\Common\NDM\MaterialConstant.cs" />
     <Compile Include="Entity\Common\NDM\MaterialModels\DoubleLinear.cs" />

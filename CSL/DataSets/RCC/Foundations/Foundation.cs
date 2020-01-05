@@ -39,6 +39,7 @@ namespace CSL.DataSets.RCC.Foundations
             newTable = new DataTable("FoundationParts");
             dataSet.Tables.Add(newTable);
             DsOperation.AddIdColumn(newTable);
+            DsOperation.AddFkIdColumn("Foundations", "FoundationId", newTable);
             DsOperation.AddNameColumn(newTable);
             DsOperation.AddDoubleColumn(newTable, "Width");
             DsOperation.AddDoubleColumn(newTable, "Length");
@@ -47,10 +48,6 @@ namespace CSL.DataSets.RCC.Foundations
             DsOperation.AddDoubleColumn(newTable, "CenterX");
             DsOperation.AddDoubleColumn(newTable, "CentrY");
             #endregion
-            //Добавляем общие таблицы работы нагрузок и сочетаний
-            //CommonServices.AddLoadsTableToDataSet(dataSet, "LoadSets", "Foundations", "FoundationId");
-            //CommonServices.AddLoadsTableToDataSet(dataSet, "LoadCases", "Foundations", "FoundationId");
-
             return dataSet;
         }
     }

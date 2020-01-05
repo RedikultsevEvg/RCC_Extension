@@ -37,14 +37,32 @@ namespace RDBLL.Entity.SC.Column
         /// Код стали
         /// </summary>
         public int SteelClassId { get; set; }
-        public int ConcreteClassId { get; set; } //Код бетона
+        /// <summary>
+        /// Код бетона
+        /// </summary>
+        public int ConcreteClassId { get; set; }
+        /// <summary>
+        /// Наименование
+        /// </summary>
         public String Name { get; set; } //Наименование
         public double SteelStrength { get; set; } //Расчетное сопротивление базы
         public double ConcreteStrength { get; set; } //Прочность бетона подливки
-        public bool IsActual { get; set; } //Признак актуальности расчета
-        public double Width { get; set; } //Ширина базы, м
-        public double Length { get; set; } //Длина базы, м
-        public double Thickness { get; set; } //Толщина, м
+        /// <summary>
+        /// Признак актуальности расчета
+        /// </summary>
+        public bool IsActual { get; set; }
+        /// <summary>
+        /// Ширина базы, м
+        /// </summary>
+        public double Width { get; set; }
+        /// <summary>
+        /// Длина базы, м
+        /// </summary>
+        public double Length { get; set; }
+        /// <summary>
+        /// Толщина, м
+        /// </summary>
+        public double Thickness { get; set; }
         /// <summary>
         /// Коэффициент условий работы
         /// </summary>
@@ -92,8 +110,10 @@ namespace RDBLL.Entity.SC.Column
         /// <summary>
         /// Коллекция комбинаций и кривизны 
         /// </summary>
-        public List<ForceCurvature> ForceCurvatures { get; set; }
-
+        public List<ForceDoubleCurvature> ForceCurvatures { get; set; }
+        /// <summary>
+        /// Флаг актуальности нагрузок
+        /// </summary>
         public bool IsLoadCasesActual
         {
             get {return _isLoadCasesActual; }
@@ -103,6 +123,9 @@ namespace RDBLL.Entity.SC.Column
                 _isLoadCasesActual = value;
             }
         }
+        /// <summary>
+        /// Флаг актуальности участков
+        /// </summary>
         public bool IsBasePartsActual
         {
             get { return _isBasePartsActual; }
@@ -112,6 +135,9 @@ namespace RDBLL.Entity.SC.Column
                 _isBasePartsActual = value;
             }
         }
+        /// <summary>
+        /// Флаг актуальности болтов
+        /// </summary>
         public bool IsBoltsActual
         {
             get { return _isBoltsActual; }
@@ -123,6 +149,9 @@ namespace RDBLL.Entity.SC.Column
         }
         #endregion
         #region Constructors
+        /// <summary>
+        /// Функция установки начальных параметров
+        /// </summary>
         public void SetDefault()
         {
             Id = ProgrammSettings.CurrentId;
@@ -141,7 +170,7 @@ namespace RDBLL.Entity.SC.Column
             ForcesGroups.Add(new ForcesGroup(this));
             SteelBaseParts = new ObservableCollection<SteelBasePart>();
             SteelBolts = new ObservableCollection<SteelBolt>();
-            ForceCurvatures = new List<ForceCurvature>();
+            ForceCurvatures = new List<ForceDoubleCurvature>();
             NdmAreas = new List<NdmArea>();
             ConcreteNdmAreas = new List<NdmArea>();
             SteelNdmAreas = new List<NdmArea>();
@@ -149,6 +178,9 @@ namespace RDBLL.Entity.SC.Column
             // Вложенные объекты по умолчанию
             StartObjects();
         }
+        /// <summary>
+        /// Создание вложенных объектов по умолчанию
+        /// </summary>
         public void StartObjects()
         {
             //Нагрузка
@@ -223,6 +255,10 @@ namespace RDBLL.Entity.SC.Column
 
         #endregion
         #region Methods
+        /// <summary>
+        /// Сохраняет данные базы стальной колонны в указанный датасет
+        /// </summary>
+        /// <param name="dataSet">Датасет</param>
         public void SaveToDataSet(DataSet dataSet)
         {
             DataTable dataTable;

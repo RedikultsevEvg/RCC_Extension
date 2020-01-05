@@ -73,19 +73,19 @@ namespace RDBLL.Processors.SC
         public static double GetMaxStressNonLinear(SteelBolt steelBolt)
         {
             List<double> stresses = new List<double>();
-            foreach (ForceCurvature forceCurvature in steelBolt.SteelBase.ForceCurvatures)
+            foreach (ForceDoubleCurvature forceCurvature in steelBolt.SteelBase.ForceCurvatures)
             {
                 //При расчете по упрощенном методу кривизна бетона и болтов не совпадает
                 if (steelBolt.SteelBase.UseSimpleMethod)
                 {
-                    double stress = GetStressNonLinear(steelBolt, forceCurvature.ConcreteCurvature);
+                    double stress = GetStressNonLinear(steelBolt, forceCurvature.DesignCurvature);
                     //Проверяем, находится ли болт в сжатой зоне бетона
                     if (stress <= 0) { stresses.Add(0); } //Если находится, то напряжения принимаем равными нулю
-                    else { stresses.Add(GetStressNonLinear(steelBolt, forceCurvature.SteelCurvature)); }
+                    else { stresses.Add(GetStressNonLinear(steelBolt, forceCurvature.SecondDesignCurvature)); }
                 }
                 else
                 {
-                    stresses.Add(GetStressNonLinear(steelBolt, forceCurvature.SteelCurvature));
+                    stresses.Add(GetStressNonLinear(steelBolt, forceCurvature.SecondDesignCurvature));
                 }
 
             }

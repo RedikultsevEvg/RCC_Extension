@@ -51,10 +51,9 @@ namespace CSL.Reports
                         double foundationLength = FoundationProcessor.GetContourSize(foundation)[1];
                         double foundationHeight = FoundationProcessor.GetContourSize(foundation)[2];
                         double foundationSoilVolume = FoundationProcessor.GetSoilVolume(foundation);
-                        double foundationConcreteVolume = FoundationProcessor.GetConcreteVolume(foundation);
-                        
+                        double foundationConcreteVolume = FoundationProcessor.GetConcreteVolume(foundation);                  
 
-                        DataRow newSteelBase = Foundations.NewRow();
+                        DataRow newFoundation = Foundations.NewRow();
                         double A = foundationWidth * foundationLength;
                         double Wx = foundationWidth * foundationLength * foundationLength / 6;
                         double Wy = foundationWidth * foundationWidth * foundationLength / 6;
@@ -65,7 +64,7 @@ namespace CSL.Reports
                         DrawFoundation.DrawTopScatch(foundation, canvas);
                         byte[] b = CommonServices.ExportToByte(canvas);
                         #endregion
-                        newSteelBase.ItemArray = new object[]
+                        newFoundation.ItemArray = new object[]
                         { foundation.Id, foundation.Name, b,
                             foundationWidth * MeasureUnitConverter.GetCoefficient(0),
                             foundationLength * MeasureUnitConverter.GetCoefficient(0),
@@ -78,8 +77,8 @@ namespace CSL.Reports
                             Wx * MeasureUnitConverter.GetCoefficient(5),
                             Wy * MeasureUnitConverter.GetCoefficient(5)};
 
-                        Foundations.Rows.Add(newSteelBase);
-
+                        Foundations.Rows.Add(newFoundation);
+                        ProcessFoundationParts(foundation);
                         ProcessLoadSets(foundation);
                     }
                 }
@@ -100,14 +99,31 @@ namespace CSL.Reports
         {
             CommonServices.AddLoadsToDataset(dataSet, "LoadSets", "Foundations", "FoundationId", foundation.ForcesGroups[0].LoadSets, foundation.Id, foundation.Name);
             CommonServices.AddLoadsToDataset(dataSet, "LoadCases", "Foundations", "FoundationId", foundation.LoadCases, foundation.Id, foundation.Name);
+            CommonServices.AddLoadsToDataset(dataSet, "BottomLoadCasesWithWeight", "Foundations", "FoundationId", foundation.btmLoadSetsWithWeight, foundation.Id, foundation.Name);
+            CommonServices.AddLoadsToDataset(dataSet, "BottomLoadCases", "Foundations", "FoundationId", foundation.btmLoadSetsWithoutWeight, foundation.Id, foundation.Name);
+        }
 
-            ObservableCollection<LoadSet> btmLoadSetsWithWeight = FoundationProcessor.GetBottomLoadCasesWithWeight(foundation);
-            //btmLoadSetsWithWeight = LoadSetProcessor.GetLoadSetsTransform(btmLoadSetsWithWeight, FoundationProcessor.GetDeltaDistance(foundation));
-            CommonServices.AddLoadsToDataset(dataSet, "BottomLoadCasesWithWeight", "Foundations", "FoundationId", btmLoadSetsWithWeight, foundation.Id, foundation.Name);
+        private void ProcessFoundationParts(Foundation foundation)
+        {
+            DataTable FoundationParts = dataSet.Tables["FoundationParts"];
+            foreach (FoundationPart foundationPart in foundation.Parts)
+            {
+                DataRow newFoundationPart = FoundationParts.NewRow();
+                newFoundationPart.ItemArray = new object[]
+                        {
+                            foundationPart.Id,
+                            foundationPart.Foundation.Id,
+                            foundationPart.Name,
+                            foundationPart.Width * MeasureUnitConverter.GetCoefficient(0),
+                            foundationPart.Length * MeasureUnitConverter.GetCoefficient(0),
+                            foundationPart.Height * MeasureUnitConverter.GetCoefficient(0),
+                            foundationPart.Width * foundationPart.Length * foundationPart.Height * MeasureUnitConverter.GetCoefficient(11),
+                            foundationPart.CenterX * MeasureUnitConverter.GetCoefficient(0),
+                            foundationPart.CenterY * MeasureUnitConverter.GetCoefficient(0)
+                        };
 
-            ObservableCollection<LoadSet> btmLoadSets = foundation.LoadCases;
-            //btmLoadSets = LoadSetProcessor.GetLoadSetsTransform(btmLoadSetsWithWeight, FoundationProcessor.GetDeltaDistance(foundation));
-            CommonServices.AddLoadsToDataset(dataSet, "BottomLoadCases", "Foundations", "FoundationId", btmLoadSets, foundation.Id, foundation.Name);
+                FoundationParts.Rows.Add(newFoundationPart);
+            }
         }
     }
 }

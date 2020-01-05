@@ -111,6 +111,17 @@ namespace RDBLL.Forces
                 };
                 dataTable.Rows.Add(dataRow);
             }
+
+            dataTable = dataSet.Tables["FoundationForcesGroups"];
+            foreach (Foundation foundation in Foundations)
+            {
+                dataRow = dataTable.NewRow();
+                dataRow.ItemArray = new object[]
+                { foundation.Id, this.Id
+                };
+                dataTable.Rows.Add(dataRow);
+            }
+
             foreach (LoadSet loadSet in LoadSets)
             {
                 loadSet.SaveToDataSet(dataSet);

@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using RDBLL.Processors.Forces;
 using RDBLL.Forces;
 using System.Collections.ObjectModel;
+using RDBLL.Entity.Common.NDM;
 
 namespace RDBLL.Entity.RCC.Foundations.Processors
 {
@@ -59,6 +60,10 @@ namespace RDBLL.Entity.RCC.Foundations.Processors
             }          
             return delta;
         }
+        /// <summary>
+        /// Основной решатель фундамента
+        /// </summary>
+        /// <param name="foundation"></param>
         public static void SolveFoundation(Foundation foundation)
         {
             if (!foundation.IsLoadCasesActual || !foundation.IsPartsActual)
@@ -66,14 +71,14 @@ namespace RDBLL.Entity.RCC.Foundations.Processors
                 if (!foundation.IsLoadCasesActual)
                 {
                     foundation.LoadCases = LoadSetProcessor.GetLoadCases(foundation.ForcesGroups);
+                    //Загружения с учетом веса фундамента и грунта
+                    foundation.btmLoadSetsWithWeight = LoadSetProcessor.GetLoadSetsTransform(GetBottomLoadCasesWithWeight(foundation), GetDeltaDistance(foundation));
+                    //Загружения без учета веса фундамента и грунта
+                    foundation.btmLoadSetsWithoutWeight = LoadSetProcessor.GetLoadSetsTransform(foundation.LoadCases, GetDeltaDistance(foundation));
                     foundation.IsLoadCasesActual = true;
                 }
 
-                if (!foundation.IsPartsActual)
-                {
-
-                    foundation.IsPartsActual = true;
-                }
+                foundation.IsPartsActual = true;
             }
         }
         /// <summary>
@@ -152,6 +157,11 @@ namespace RDBLL.Entity.RCC.Foundations.Processors
             return volume;
         }
 
+        /// <summary>
+        /// Возвращает усилия к подошве фундамента с учетом веса фундамента и грунта на его уступах
+        /// </summary>
+        /// <param name="foundation"></param>
+        /// <returns></returns>
         public static ObservableCollection<LoadSet> GetBottomLoadCasesWithWeight(Foundation foundation)
         {
             ObservableCollection<ForcesGroup> forcesGroups = new ObservableCollection<ForcesGroup>();
@@ -165,5 +175,20 @@ namespace RDBLL.Entity.RCC.Foundations.Processors
             return loadSets;
         }
 
+        /// <summary>
+        /// Возвращает коллекцию кривизн по коллекции комбинаций нагрузок
+        /// </summary>
+        /// <param name="loadSets"></param>
+        /// <returns></returns>
+        public static List<ForceCurvature> GetForceCurvatures(ObservableCollection<LoadSet> loadSets)
+        {
+            List<ForceCurvature> forceCurvatures = new List<ForceCurvature>();
+            foreach (LoadSet loadSet in loadSets)
+            {
+                ForceCurvature forceCurvature = new ForceCurvature(loadSet);
+
+            }
+            return forceCurvatures;
+        }
     }
 }

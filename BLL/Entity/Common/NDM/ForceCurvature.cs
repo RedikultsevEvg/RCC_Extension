@@ -7,10 +7,6 @@ using RDBLL.Forces;
 
 namespace RDBLL.Entity.Common.NDM
 {
-    /// <summary>
-    /// Класс для хранения набора нагрузок, суммарных усилий для определения кривизны
-    /// и двух кривизн - для бетона и арматуры
-    /// </summary>
     public class ForceCurvature
     {
         /// <summary>
@@ -22,52 +18,55 @@ namespace RDBLL.Entity.Common.NDM
         /// </summary>
         public SumForces SumForces { get; set; }
         /// <summary>
-        /// Кривизна для бетона
+        /// Кривизна для второй группы предельных состояний
         /// </summary>
-        public Curvature ConcreteCurvature { get; set; }
+        public Curvature CrcCurvature { get; set; }
         /// <summary>
-        /// Кривизна для стали
+        /// Кривизна для первой группы предельных состояний
         /// </summary>
-        public Curvature SteelCurvature { get; set; }
+        public Curvature DesignCurvature { get; set; }
+
+        /// <summary>
+        /// Конструктор без параметров
+        /// </summary>
+        public ForceCurvature()
+        {
+
+        }
+        /// <summary>
+        /// Конструктор по комбинации нагрузок
+        /// </summary>
+        /// <param name="loadSet"></param>
+        /// <param name="sumForces"></param>
+        public ForceCurvature(LoadSet loadSet)
+        {
+            this.LoadSet = loadSet;
+            this.SumForces = new SumForces(loadSet);
+        }
         /// <summary>
         /// Конструктор по всем параметрам
         /// </summary>
         /// <param name="loadSet"></param>
         /// <param name="sumForces"></param>
         /// <param name="concreteCurvature"></param>
-        /// <param name="steelCurvature"></param>
-        public ForceCurvature(LoadSet loadSet, SumForces sumForces, Curvature concreteCurvature, Curvature steelCurvature)
+        public ForceCurvature(LoadSet loadSet, SumForces sumForces, Curvature concreteCurvature)
         {
             this.LoadSet = loadSet;
             this.SumForces = sumForces;
-            this.ConcreteCurvature = concreteCurvature;
-            this.SteelCurvature = steelCurvature;
+            this.DesignCurvature = concreteCurvature;
         }
-        /// <summary>
-        /// Конструктор по наборну нагрузок и двум кривизнам
-        /// </summary>
-        /// <param name="loadSet"></param>
-        /// <param name="concreteCurvature"></param>
-        /// <param name="steelCurvature"></param>
-        public ForceCurvature(LoadSet loadSet, Curvature concreteCurvature, Curvature steelCurvature)
-        {
-            this.LoadSet = loadSet;
-            this.SumForces = new SumForces(loadSet);
-            this.ConcreteCurvature = concreteCurvature;
-            this.SteelCurvature = steelCurvature;
-        }
+       
         /// <summary>
         /// Конструктор по набору нагрузок и значению кривизны
         /// Предполагается одинаковая кривизна для стали и бетона
         /// </summary>
         /// <param name="loadSet"></param>
-        /// <param name="curvature"></param>
-        public ForceCurvature(LoadSet loadSet, Curvature curvature)
+        /// <param name="designCurvature"></param>
+        public ForceCurvature(LoadSet loadSet, Curvature designCurvature)
         {
             this.LoadSet = loadSet;
             this.SumForces = new SumForces(loadSet);
-            this.ConcreteCurvature = curvature;
-            this.SteelCurvature = curvature;
+            this.DesignCurvature = designCurvature;
         }
     }
 }
