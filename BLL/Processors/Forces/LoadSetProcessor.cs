@@ -220,10 +220,15 @@ namespace RDBLL.Processors.Forces
 
             LoadSet newLoadSet = new LoadSet();
             newLoadSet.Name = deduplicatedSet.Name;
+            newLoadSet.PartialSafetyFactor = deduplicatedSet.PartialSafetyFactor;
+            newLoadSet.IsLiveLoad = deduplicatedSet.IsLiveLoad;
+            newLoadSet.IsCombination = deduplicatedSet.IsCombination;
+            newLoadSet.BothSign = deduplicatedSet.BothSign;
             ForceParameter newForceParameter;
             if (Nz[0] !=0 || Nz[1] != 0)
             {
                 newForceParameter = new ForceParameter(newLoadSet);
+                newLoadSet.ForceParameters.Add(newForceParameter);
                 newForceParameter.KindId = 1;
                 newForceParameter.CrcValue = Nz[0];
                 newForceParameter.DesignValue = Nz[1];
@@ -231,6 +236,7 @@ namespace RDBLL.Processors.Forces
             if (Mx[0] != 0 || Mx[1] != 0)
             {
                 newForceParameter = new ForceParameter(newLoadSet);
+                newLoadSet.ForceParameters.Add(newForceParameter);
                 newForceParameter.KindId = 2;
                 newForceParameter.CrcValue = Mx[0];
                 newForceParameter.DesignValue = Mx[1];
@@ -238,6 +244,7 @@ namespace RDBLL.Processors.Forces
             if (My[0] != 0 || My[1] != 0)
             {
                 newForceParameter = new ForceParameter(newLoadSet);
+                newLoadSet.ForceParameters.Add(newForceParameter);
                 newForceParameter.KindId = 3;
                 newForceParameter.CrcValue = My[0];
                 newForceParameter.DesignValue = My[1];
@@ -245,6 +252,7 @@ namespace RDBLL.Processors.Forces
             if (Qx[0] != 0 || Qx[1] != 0)
             {
                 newForceParameter = new ForceParameter(newLoadSet);
+                newLoadSet.ForceParameters.Add(newForceParameter);
                 newForceParameter.KindId = 4;
                 newForceParameter.CrcValue = Qx[0];
                 newForceParameter.DesignValue = Qx[1];
@@ -252,6 +260,7 @@ namespace RDBLL.Processors.Forces
             if (Qy[0] != 0 || Qy[1] != 0)
             {
                 newForceParameter = new ForceParameter(newLoadSet);
+                newLoadSet.ForceParameters.Add(newForceParameter);
                 newForceParameter.KindId = 5;
                 newForceParameter.CrcValue = Qy[0];
                 newForceParameter.DesignValue = Qy[1];
@@ -259,6 +268,7 @@ namespace RDBLL.Processors.Forces
             if (Mz[0] != 0 || Mz[1] != 0)
             {
                 newForceParameter = new ForceParameter(newLoadSet);
+                newLoadSet.ForceParameters.Add(newForceParameter);
                 newForceParameter.KindId = 6;
                 newForceParameter.CrcValue = Mz[0];
                 newForceParameter.DesignValue = Mz[1];

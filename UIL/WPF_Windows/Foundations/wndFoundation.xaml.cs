@@ -1,19 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
-using RDBLL.Entity.RCC.Foundations;
+﻿using RDBLL.Common.Service;
 using RDBLL.DrawUtils.SteelBase;
 using RDBLL.Entity.MeasureUnits;
+using RDBLL.Entity.RCC.Foundations;
+using System.Windows;
+using RDUIL.Validations;
 
 namespace RDUIL.WPF_Windows.Foundations
 {
@@ -54,7 +44,15 @@ namespace RDUIL.WPF_Windows.Foundations
 
         private void BtnOK_Click(object sender, RoutedEventArgs e)
         {
-            this.Close();
+            string message = ErrorProcessor.cmdGetErrorString(GridMain);
+            if (message != "") { MessageBox.Show(message); }
+            else
+            {
+                _element.IsLoadCasesActual = false;
+                ProgrammSettings.IsDataChanged = true;
+                this.DialogResult = true;
+                this.Close();
+            }
         }
     }
 }

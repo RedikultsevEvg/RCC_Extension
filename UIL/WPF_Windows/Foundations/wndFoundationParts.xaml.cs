@@ -78,8 +78,7 @@ namespace RDUIL.WPF_Windows.Foundations
             {
                 this.DialogResult = true;
                 this.Close();
-            }
-            
+            }            
         }
 
         private void BtnRefresh_Click(object sender, RoutedEventArgs e)

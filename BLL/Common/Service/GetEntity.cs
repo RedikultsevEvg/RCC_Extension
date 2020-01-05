@@ -8,6 +8,7 @@ using System.Collections.ObjectModel;
 using System.Data;
 using RDBLL.Entity.SC.Column;
 using RDBLL.Forces;
+using RDBLL.Entity.RCC.Foundations;
 
 namespace RDBLL.Common.Service
 {
@@ -69,6 +70,7 @@ namespace RDBLL.Common.Service
                     BasePointZ = dataRow.Field<double>("BasePointZ")
                 };
                 newObject.SteelBases = GetSteelBases(dataSet, newObject);
+                newObject.Foundations = GetFoundations(dataSet, newObject);
                 newObjects.Add(newObject);
             }
             return newObjects;
@@ -112,7 +114,7 @@ namespace RDBLL.Common.Service
                 };
                 newObject.SteelBaseParts = GetSteelBaseParts(dataSet, newObject);
                 newObject.SteelBolts = GetSteelBolts(dataSet, newObject);
-                newObject.ForcesGroups = GetForcesGroups(dataSet, newObject);
+                newObject.ForcesGroups = GetSteelBaseForcesGroups(dataSet, newObject);
                 newObjects.Add(newObject);
             }
             return newObjects;
@@ -188,7 +190,13 @@ namespace RDBLL.Common.Service
             }
             return newObjects;
         }
-        public static ObservableCollection<ForcesGroup> GetForcesGroups(DataSet dataSet, SteelBase steelBase)
+        /// <summary>
+        /// Получает коллекцию групп усилий по датасету и стальной базе
+        /// </summary>
+        /// <param name="dataSet"></param>
+        /// <param name="steelBase"></param>
+        /// <returns></returns>
+        public static ObservableCollection<ForcesGroup> GetSteelBaseForcesGroups(DataSet dataSet, SteelBase steelBase)
         {
             ObservableCollection<ForcesGroup> newObjects = new ObservableCollection<ForcesGroup>();
             DataTable adjDataTable = dataSet.Tables["SteelBaseForcesGroups"];
@@ -216,6 +224,46 @@ namespace RDBLL.Common.Service
             }
             return newObjects;
         }
+        /// <summary>
+        /// Получает коллекцию групп усилий по датасету и фундаменту
+        /// </summary>
+        /// <param name="dataSet"></param>
+        /// <param name="foundation"></param>
+        /// <returns></returns>
+        public static ObservableCollection<ForcesGroup> GetFoundationForcesGroups(DataSet dataSet, Foundation foundation)
+        {
+            ObservableCollection<ForcesGroup> newObjects = new ObservableCollection<ForcesGroup>();
+            DataTable adjDataTable = dataSet.Tables["FoundationForcesGroups"];
+            DataTable dataTable = dataSet.Tables["ForcesGroups"];
+            var query = from adjDataRow in adjDataTable.AsEnumerable()
+                        from dataRow in dataTable.AsEnumerable()
+                        where adjDataRow.Field<int>("FoundationId") == foundation.Id
+                        where adjDataRow.Field<int>("ForcesGroupId") == dataRow.Field<int>("Id")
+                        select dataRow;
+            foreach (var dataRow in query)
+            {
+                ForcesGroup newObject = new ForcesGroup
+                {
+                    Id = dataRow.Field<int>("Id"),
+                    Name = dataRow.Field<string>("Name"),
+                    CenterX = dataRow.Field<double>("CenterX"),
+                    CenterY = dataRow.Field<double>("CenterY"),
+                };
+                newObject.Foundations.Add(foundation);
+                newObjects.Add(newObject);
+            }
+            foreach (ForcesGroup forcesGroup in newObjects)
+            {
+                forcesGroup.LoadSets = GetLoadSets(dataSet, forcesGroup);
+            }
+            return newObjects;
+        }
+        /// <summary>
+        /// Получает коллекцию наборов усилий по датасету и группе нагрузок
+        /// </summary>
+        /// <param name="dataSet"></param>
+        /// <param name="forcesGroup"></param>
+        /// <returns></returns>
         public static ObservableCollection<LoadSet> GetLoadSets(DataSet dataSet, ForcesGroup forcesGroup)
         {
             ObservableCollection<LoadSet> newObjects = new ObservableCollection<LoadSet>();
@@ -246,6 +294,12 @@ namespace RDBLL.Common.Service
             }
             return newObjects;
         }
+        /// <summary>
+        /// Получает коллекцию параметров усилий по датасету и набору усилий
+        /// </summary>
+        /// <param name="dataSet"></param>
+        /// <param name="loadSet"></param>
+        /// <returns></returns>
         public static ObservableCollection<ForceParameter> GetForceParameters(DataSet dataSet, LoadSet loadSet)
         {
             ObservableCollection<ForceParameter> newObjects = new ObservableCollection<ForceParameter>();
@@ -264,6 +318,81 @@ namespace RDBLL.Common.Service
                     Name = dataRow.Field<string>("Name"),
                     CrcValue = dataRow.Field<double>("CrcValue")
             };
+                newObjects.Add(newObject);
+            }
+            return newObjects;
+        }
+        /// <summary>
+        /// Возвращает коллекцию фундаментов по датасету и уровню
+        /// </summary>
+        /// <param name="dataSet"></param>
+        /// <param name="level"></param>
+        /// <returns></returns>
+        public static ObservableCollection<Foundation> GetFoundations(DataSet dataSet, Level level)
+        {
+            ObservableCollection<Foundation> newObjects = new ObservableCollection<Foundation>();
+            DataTable dataTable = dataSet.Tables["Foundations"];
+            var query = from dataRow in dataTable.AsEnumerable()
+                        where dataRow.Field<int>("LevelId") == level.Id
+                        select dataRow;
+            foreach (var dataRow in query)
+            {
+                Foundation newObject = new Foundation
+                {
+                    Id = dataRow.Field<int>("Id"),
+                    LevelId = dataRow.Field<int>("LevelId"),
+                    Level = level,
+                    SteelClassId = dataRow.Field<int>("SteelClassId"),
+                    ConcreteClassId = dataRow.Field<int>("ConcreteClassId"),
+                    //Надо получить ссылки на сталь и бетон
+
+                    Name = dataRow.Field<string>("Name"),
+                    SoilVolumeWeight = dataRow.Field<double>("SoilVolumeWeight"),
+                    ConcreteVolumeWeight = dataRow.Field<double>("ConcreteVolumeWeight"),
+                    FloorLoad = dataRow.Field<double>("FloorLoad"),
+                    FloorLoadFactor = dataRow.Field<double>("FloorLoadFactor"),
+                    ConcreteFloorLoad = dataRow.Field<double>("ConcreteFloorLoad"),
+                    ConcreteFloorLoadFactor = dataRow.Field<double>("ConcreteFloorLoadFactor"),
+                    CoveringLayerX = dataRow.Field<double>("CoveringLayerX"),
+                    CoveringLayerY = dataRow.Field<double>("CoveringLayerY"),
+                    CompressedLayerRatio = dataRow.Field<double>("CompressedLayerRatio"),
+                    IsLoadCasesActual = false,
+                    IsPartsActual = false               
+                };
+                newObject.Parts = GetFoundationParts(dataSet, newObject);
+                
+                newObject.ForcesGroups = GetFoundationForcesGroups(dataSet, newObject);
+                newObjects.Add(newObject);
+            }
+            return newObjects;
+        }
+        /// <summary>
+        /// Возвращает коллекцию ступеней фундамента по датасуту и фундаменту
+        /// </summary>
+        /// <param name="dataSet"></param>
+        /// <param name="foundation"></param>
+        /// <returns></returns>
+        public static ObservableCollection<FoundationPart> GetFoundationParts(DataSet dataSet, Foundation foundation)
+        {
+            ObservableCollection<FoundationPart> newObjects = new ObservableCollection<FoundationPart>();
+            DataTable dataTable = dataSet.Tables["FoundationParts"];
+            var query = from dataRow in dataTable.AsEnumerable()
+                        where dataRow.Field<int>("FoundationId") == foundation.Id
+                        select dataRow;
+            foreach (var dataRow in query)
+            {
+                FoundationPart newObject = new FoundationPart
+                {
+                    Id = dataRow.Field<int>("Id"),
+                    FoundationId = dataRow.Field<int>("FoundationId"),
+                    Foundation = foundation,
+                    Name = dataRow.Field<string>("Name"),
+                    Width = dataRow.Field<double>("Width"),
+                    Length = dataRow.Field<double>("Length"),
+                    Height = dataRow.Field<double>("Height"),
+                    CenterX = dataRow.Field<double>("CenterX"),
+                    CenterY = dataRow.Field<double>("CenterY")
+                };
                 newObjects.Add(newObject);
             }
             return newObjects;

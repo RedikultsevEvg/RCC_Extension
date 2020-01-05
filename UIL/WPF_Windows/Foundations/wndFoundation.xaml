@@ -6,11 +6,13 @@
         xmlns:local="clr-namespace:RDUIL.WPF_Windows.Foundations"
         xmlns:Convert="clr-namespace:RDUIL.Converters" 
         mc:Ignorable="d"
-        Title="Фундамент" Height="450" Width="650" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
+        Title="Фундамент" Height="500" Width="650" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
     <Window.Resources>
         <Convert:VolumeWeightConverter x:Key="VolumeWeightConverter"/>
+        <Convert:LinearSizeConverter x:Key="LinearSizeConverter"/>
+        <Convert:DistributedLoadConverter x:Key="DistributedLoadConverter"/>
     </Window.Resources>
-    <Grid>
+    <Grid x:Name="GridMain">
         <Grid.RowDefinitions>
             <RowDefinition Height="375*"/>
             <RowDefinition Height="80"/>
@@ -22,19 +24,7 @@
                 <ColumnDefinition Width="110"/>
             </Grid.ColumnDefinitions>
             <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition/>
-                    <RowDefinition Height="80"/>
-                </Grid.RowDefinitions>
-                <Canvas x:Name="cvScetch" Width="200" Height="260"/>
-                <StackPanel Height="60" Grid.Row="1" Margin="0,10,10,10" Orientation="Horizontal" HorizontalAlignment="Right" Background="#FFE2E2E2">
-                    <Button x:Name="btnRefresh" Style="{StaticResource ServiceButton}" HorizontalAlignment="Stretch" Click="BtnRefresh_Click">
-                        <Button.Effect>
-                            <DropShadowEffect Opacity="0.6"/>
-                        </Button.Effect>
-                        <Image x:Name="Refresh_png" Style="{StaticResource ServiceButtonImage}" Source="{DynamicResource IconRefresh40}"/>
-                    </Button>
-                </StackPanel>
+                <Canvas x:Name="cvScetch" Width="200" Height="390"/>
             </Grid>
             <Grid Grid.Column="1">
                 <Grid.RowDefinitions>
@@ -42,23 +32,54 @@
                     <RowDefinition Height="30"/>
                     <RowDefinition Height="30"/>
                     <RowDefinition Height="30"/>
+                    <RowDefinition Height="45"/>
+                    <RowDefinition Height="30"/>
+                    <RowDefinition Height="40"/>
+                    <RowDefinition Height="40"/>
+                    <RowDefinition Height="40"/>
+                    <RowDefinition Height="40"/>
                     <RowDefinition Height="30"/>
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width ="*"/>
-                    <ColumnDefinition Width ="130"/>
+                    <ColumnDefinition Width ="100"/>
                     <ColumnDefinition Width="70"/>
                 </Grid.ColumnDefinitions>
                 <TextBlock x:Name="tbName" Style="{StaticResource PropertyTextBlock}" Text="Наименование"/>
                 <TextBlock x:Name="tbSoilWeight" Grid.Row="1" Style="{StaticResource PropertyTextBlock}" Text="Вес грунта засыпки"/>
                 <TextBlock x:Name="tbConcreteWeight" Grid.Row="2" Style="{StaticResource PropertyTextBlock}" Text="Вес бетона"/>
+                <TextBlock x:Name="tbFloorLoad" Grid.Row="3" Style="{StaticResource PropertyTextBlock}" Text="Нагрузка на пол"/>
+                <TextBlock x:Name="tbFloorLoadFactor" Grid.Row="4" Style="{StaticResource PropertyTextBlock}" TextWrapping="Wrap" Text="Коэффициент надежности для нагрузки на пол"/>
+                <TextBlock x:Name="tbConcreteFloorLoad" Grid.Row="5" Style="{StaticResource PropertyTextBlock}" Text="Нагрузка от пола"/>
+                <TextBlock x:Name="tbConcreteFloorLoadFactor" Grid.Row="6" Style="{StaticResource PropertyTextBlock}" TextWrapping="Wrap" Text="Коэффициент надежности для нагрузки от пола"/>
+                <TextBlock x:Name="tbCoveringLayerX" Grid.Row="7" Style="{StaticResource PropertyTextBlock}" TextWrapping="Wrap" Text="Защитный слой бетона подошвы вдоль оси X"/>
+                <TextBlock x:Name="tbCoveringLayerY" Grid.Row="8" Style="{StaticResource PropertyTextBlock}" TextWrapping="Wrap" Text="Защитный слой бетона подошвы вдоль оси Y"/>
+                <TextBlock x:Name="tbCompressedLayerRatio" Grid.Row="9" Style="{StaticResource PropertyTextBlock}" TextWrapping="Wrap" Text="Отношение для ограничения глубины сжимаемой толщи"/>
                 <TextBox x:Name="tbxName" Grid.Column="1" Style="{StaticResource PropertyTextBox}" Text="{Binding Path=Name}"/>
                 <TextBox x:Name="tbxSoilWeight" Grid.Column="1" Grid.Row="1" Style="{StaticResource PropertyTextBoxError}"
                     Text="{Binding SoilVolumeWeight, Converter={StaticResource VolumeWeightConverter}, ValidatesOnDataErrors=True}"/>
                 <TextBox x:Name="tbxConcreteWeight" Grid.Column="1" Grid.Row="2" Style="{StaticResource PropertyTextBoxError}"
                     Text="{Binding ConcreteVolumeWeight, Converter={StaticResource VolumeWeightConverter}, ValidatesOnDataErrors=True}"/>
-                <TextBlock Grid.Column="2" Grid.Row="1" x:Name="tbSoilWeightMeasure" Style="{StaticResource PropertyTextBlock}" Text="кН/м^3" />
-                <TextBlock Grid.Column="2" Grid.Row="2" x:Name="tbConcreteWeightMeasure" Style="{StaticResource PropertyTextBlock}" Text="кН/м^3" />
+                <TextBox x:Name="tbxFloorLoad" Grid.Column="1" Grid.Row="3" Style="{StaticResource PropertyTextBoxError}"
+                    Text="{Binding FloorLoad, Converter={StaticResource DistributedLoadConverter}, ValidatesOnDataErrors=True}"/>
+                <TextBox x:Name="tbxFloorLoadFactor" Grid.Column="1" Grid.Row="4" Style="{StaticResource PropertyTextBoxError}"
+                    Text="{Binding FloorLoadFactor, ValidatesOnDataErrors=True}"/>
+                <TextBox x:Name="tbxConcreteFloorLoad" Grid.Column="1" Grid.Row="5" Style="{StaticResource PropertyTextBoxError}"
+                    Text="{Binding ConcreteFloorLoad, Converter={StaticResource DistributedLoadConverter}, ValidatesOnDataErrors=True}"/>
+                <TextBox x:Name="tbxConcreteFloorLoadFactor" Grid.Column="1" Grid.Row="6" Style="{StaticResource PropertyTextBoxError}"
+                    Text="{Binding ConcreteFloorLoadFactor, ValidatesOnDataErrors=True}"/>
+                <TextBox x:Name="tbxCoveringLayerX" Grid.Column="1" Grid.Row="7" Style="{StaticResource PropertyTextBoxError}"
+                    Text="{Binding CoveringLayerX, Converter={StaticResource LinearSizeConverter}, ValidatesOnDataErrors=True}"/>
+                <TextBox x:Name="tbxCoveringLayerY" Grid.Column="1" Grid.Row="8" Style="{StaticResource PropertyTextBoxError}"
+                    Text="{Binding CoveringLayerY, Converter={StaticResource LinearSizeConverter}, ValidatesOnDataErrors=True}"/>
+                <TextBox x:Name="tbxCompressedLayerRatio" Grid.Column="1" Grid.Row="9" Style="{StaticResource PropertyTextBoxError}"
+                    Text="{Binding CompressedLayerRatio, ValidatesOnDataErrors=True}"/>
+                <TextBlock Grid.Column="2" Grid.Row="1" x:Name="tbSoilWeightMeasure" Style="{StaticResource PropertyTextBlock}" Text="{Binding VolumeWeightMeasure}" />
+                <TextBlock Grid.Column="2" Grid.Row="2" x:Name="tbConcreteWeightMeasure" Style="{StaticResource PropertyTextBlock}" Text="{Binding VolumeWeightMeasure}" />
+                <TextBlock Grid.Column="2" Grid.Row="3" x:Name="tbFloorLoadMeasure" Style="{StaticResource PropertyTextBlock}" Text="{Binding DistributedLoadMeasure}" />
+                <TextBlock Grid.Column="2" Grid.Row="5" x:Name="tbConcreteFloorLoadMeasure" Style="{StaticResource PropertyTextBlock}" Text="{Binding DistributedLoadMeasure}" />
+                <TextBlock Grid.Column="2" Grid.Row="7" Style="{StaticResource PropertyTextBlock}" Text="{Binding LinearMeasure}" />
+                <TextBlock Grid.Column="2" Grid.Row="8" Style="{StaticResource PropertyTextBlock}" Text="{Binding LinearMeasure}" />
             </Grid>
             <StackPanel Grid.Column="2" Background="#FFE2E2E2" VerticalAlignment="Top">
                 <Button x:Name="btnForces" Style="{StaticResource ServiceButton}" Height="50" Click="BtnForces_Click">

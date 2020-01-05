@@ -95,7 +95,7 @@ namespace RDBLL.Processors.SC
             steelBase.NdmAreas.AddRange(steelBase.ConcreteNdmAreas);
             steelBase.NdmAreas.AddRange(steelBase.SteelNdmAreas);
         }
-        public static ForceCurvature GetCurvature(LoadSet loadCase, SteelBase columnBase)
+        public static ForceDoubleCurvature GetCurvature(LoadSet loadCase, SteelBase columnBase)
         {
             SumForces sumForces = new SumForces(loadCase);
             StiffnessCoefficient stiffnessCoefficient = new StiffnessCoefficient(columnBase.NdmAreas);
@@ -120,7 +120,7 @@ namespace RDBLL.Processors.SC
                 sumForces2 = new SumForces(newStiffnessCoefficient, newCurvature);
             }
             sumForces2 = new SumForces(newStiffnessCoefficient, newCurvature);
-            return new ForceCurvature(loadCase, newCurvature);
+            return new ForceDoubleCurvature(loadCase, newCurvature);
         }
         /// <summary>
         /// Врзвращает коллекцию элементарных участков бетона для всех участков стальной базы
@@ -162,12 +162,12 @@ namespace RDBLL.Processors.SC
         /// <param name="loadCase">Набор сочетаний</param>
         /// <param name="steelBase">Стальная база</param>
         /// <returns>Набор усилий и кривизн</returns>
-        public static ForceCurvature GetCurvatureSimpleMethod(LoadSet loadCase, SteelBase steelBase)
+        public static ForceDoubleCurvature GetCurvatureSimpleMethod(LoadSet loadCase, SteelBase steelBase)
         {
             SumForces sumForces = new SumForces(loadCase);
              StiffnessCoefficient stiffnessCoefficient = new StiffnessCoefficient(steelBase.ConcreteNdmAreas);
             Curvature curvature = new Curvature(sumForces, stiffnessCoefficient);
-            return new ForceCurvature(loadCase, curvature);
+            return new ForceDoubleCurvature(loadCase, curvature);
         }
         public static bool SolveSimpleMethod(SteelBase steelBase)
         {
@@ -178,15 +178,15 @@ namespace RDBLL.Processors.SC
                 {
                     //Получаем кривизну соответствующую начальному модулю упругости
                     //Кривизна будет единой для бетона и стали
-                    ForceCurvature forceCurvature = GetCurvatureSimpleMethod(loadCase, steelBase);
+                    ForceDoubleCurvature forceCurvature = GetCurvatureSimpleMethod(loadCase, steelBase);
                     //Заносим кривизну как параметр стальной базы
                     steelBase.ForceCurvatures.Add(forceCurvature);
                     //Создаем локальную переменную для кривизны соответствующей бетоны
                     //как кривизну, полученную для базы с начальным модулем упругости
-                    Curvature concreteCurvature = forceCurvature.ConcreteCurvature;
+                    Curvature concreteCurvature = forceCurvature.DesignCurvature;
                     //Для начала итерационного расчета кривизну стальных участков
                     //как кривизну базы с начальным модулем упругости
-                    Curvature steelCurvature = forceCurvature.SteelCurvature;
+                    Curvature steelCurvature = forceCurvature.SecondDesignCurvature;
                     //Получаем матрицу жесткостных коэффициентов для бетона с учетом кривизны, полученной на первом этапе
                     //таким образом будут вычислены участки растянутого бетона если они есть
                     //дальнейшие итерации для бетона не требуются
@@ -212,7 +212,7 @@ namespace RDBLL.Processors.SC
                         steelCurvature = new Curvature(deltaForces, steelStiffnessCoefficient);
                     }
                     //заносим полученное значение кривизны стальных участков как параметр базы
-                    forceCurvature.SteelCurvature = steelCurvature;
+                    forceCurvature.SecondDesignCurvature = steelCurvature;
                 }
                 catch //Ошибка нелинейного расчета
                 {
@@ -240,7 +240,7 @@ namespace RDBLL.Processors.SC
                 try
                 {
                     //Если нелинейный расчет не выполнится, то будет сгенерировано исключение
-                    ForceCurvature forceCurvature = new ForceCurvature(loadCase, NdmProcessor.GetCurvature(sumForces, ndmAreas));
+                    ForceDoubleCurvature forceCurvature = new ForceDoubleCurvature(loadCase, NdmProcessor.GetCurvature(sumForces, ndmAreas));
                     steelBase.ForceCurvatures.Add(forceCurvature);
                 }
                 //Если хотя бы один случай нагружения даст ошибку, то общий результат будет false
@@ -262,7 +262,7 @@ namespace RDBLL.Processors.SC
         {
             if (! steelBase.IsActual) { SteelBaseProcessor.SolveSteelColumnBase(steelBase); }
             List<LoadCaseRectangleValue> loadCaseRectangleValues = new List<LoadCaseRectangleValue>();
-            foreach (ForceCurvature forceCurvature in steelBase.ForceCurvatures)
+            foreach (ForceDoubleCurvature forceCurvature in steelBase.ForceCurvatures)
             {
                 LoadCaseRectangleValue loadCaseRectangleValue = new LoadCaseRectangleValue();
                 loadCaseRectangleValue.LoadCase = forceCurvature.LoadSet;
@@ -275,7 +275,7 @@ namespace RDBLL.Processors.SC
                         rectangleValue.CenterY = ndmConcreteArea.CenterY;
                         rectangleValue.Width = ndmConcreteArea.Width;
                         rectangleValue.Length = ndmConcreteArea.Length;
-                        rectangleValue.Value = NdmAreaProcessor.GetStrainFromCuvature(ndmConcreteArea, forceCurvature.ConcreteCurvature)[1];
+                        rectangleValue.Value = NdmAreaProcessor.GetStrainFromCuvature(ndmConcreteArea, forceCurvature.DesignCurvature)[1];
                         loadCaseRectangleValue.RectangleValues.Add(rectangleValue);
                     }
                 }

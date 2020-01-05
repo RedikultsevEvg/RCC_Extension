@@ -33,6 +33,8 @@ namespace CSL.Common
             report.SetParameterValue("Units.VolumeWeight", MeasureUnitConverter.GetUnitLabelText(9));
             report.SetParameterValue("Units.SizeArea", MeasureUnitConverter.GetUnitLabelText(10));
             report.SetParameterValue("Units.SizeVolume", MeasureUnitConverter.GetUnitLabelText(11));
+            report.SetParameterValue("Units.DisributedForce", MeasureUnitConverter.GetUnitLabelText(12));
+            report.SetParameterValue("Units.DisributedLoad", MeasureUnitConverter.GetUnitLabelText(13));
         }
 
         public static byte[] ExportToByte(Canvas surface)

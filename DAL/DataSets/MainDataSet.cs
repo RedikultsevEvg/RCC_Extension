@@ -8,10 +8,19 @@ using DAL.Common;
 
 namespace DAL.DataSets
 {
+    /// <summary>
+    /// Класс датасета для хранения исходных данных элементов
+    /// </summary>
     public class MainDataSet
     {
+        /// <summary>
+        /// Датасет
+        /// </summary>
         public DataSet DataSet { get; private set; }
 
+        /// <summary>
+        /// Задает новый датасет с необходимыми свойствами
+        /// </summary>
         public void GetNewDataSet()
         {
             DataSet dataSet = new DataSet();
@@ -175,6 +184,44 @@ namespace DAL.DataSets
             DsOperation.AddIntColumn(dataTable, "KindId");
             DsOperation.AddNameColumn(dataTable);
             DsOperation.AddDoubleColumn(dataTable, "CrcValue");
+            #endregion
+            #region Foundations
+            dataTable = new DataTable("Foundations");
+            dataSet.Tables.Add(dataTable);
+            DsOperation.AddIdColumn(dataTable);
+            DsOperation.AddFkIdColumn("Levels", "LevelId", dataTable);
+            FkIdColumn = new DataColumn("SteelClassId", Type.GetType("System.Int32"));
+            dataTable.Columns.Add(FkIdColumn);
+            FkIdColumn = new DataColumn("ConcreteClassId", Type.GetType("System.Int32"));
+            dataTable.Columns.Add(FkIdColumn);
+            DsOperation.AddNameColumn(dataTable);
+            DsOperation.AddDoubleColumn(dataTable, "SoilVolumeWeight");
+            DsOperation.AddDoubleColumn(dataTable, "ConcreteVolumeWeight");
+            DsOperation.AddDoubleColumn(dataTable, "FloorLoad");
+            DsOperation.AddDoubleColumn(dataTable, "FloorLoadFactor");
+            DsOperation.AddDoubleColumn(dataTable, "ConcreteFloorLoad");
+            DsOperation.AddDoubleColumn(dataTable, "ConcreteFloorLoadFactor");
+            DsOperation.AddDoubleColumn(dataTable, "CoveringLayerX");
+            DsOperation.AddDoubleColumn(dataTable, "CoveringLayerY");
+            DsOperation.AddDoubleColumn(dataTable, "CompressedLayerRatio");
+            #endregion
+            #region FoundationParts
+            dataTable = new DataTable("FoundationParts");
+            dataSet.Tables.Add(dataTable);
+            DsOperation.AddIdColumn(dataTable);
+            DsOperation.AddFkIdColumn("Foundations", "FoundationId", dataTable);
+            DsOperation.AddNameColumn(dataTable);
+            DsOperation.AddDoubleColumn(dataTable, "Width");
+            DsOperation.AddDoubleColumn(dataTable, "Length");
+            DsOperation.AddDoubleColumn(dataTable, "Height");
+            DsOperation.AddDoubleColumn(dataTable, "CenterX");
+            DsOperation.AddDoubleColumn(dataTable, "CenterY");
+            #endregion
+            #region FoundationForcesGroups
+            dataTable = new DataTable("FoundationForcesGroups");
+            dataSet.Tables.Add(dataTable);
+            DsOperation.AddFkIdColumn("Foundations", "FoundationId", dataTable);
+            DsOperation.AddFkIdColumn("ForcesGroups", "ForcesGroupId", dataTable);
             #endregion
             #region
             #endregion

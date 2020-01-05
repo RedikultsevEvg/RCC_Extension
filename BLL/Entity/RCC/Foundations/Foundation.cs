@@ -8,7 +8,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Data;
-
+using RDBLL.Entity.MeasureUnits;
 
 
 namespace RDBLL.Entity.RCC.Foundations
@@ -31,6 +31,14 @@ namespace RDBLL.Entity.RCC.Foundations
         /// Обратная ссылка на уровень
         /// </summary>
         public Level Level { get; set; }
+        /// <summary>
+        /// Код стали
+        /// </summary>
+        public int SteelClassId { get; set; }
+        /// <summary>
+        /// Код бетона
+        /// </summary>
+        public int ConcreteClassId { get; set; }
         /// <summary>
         /// Наименование
         /// </summary>
@@ -68,13 +76,39 @@ namespace RDBLL.Entity.RCC.Foundations
         /// </summary>
         public ObservableCollection<FoundationPart> Parts { get; set; }
         /// <summary>
+        /// Защитный слой арматуры подошвы вдоль оси X
+        /// </summary>
+        public double CoveringLayerX { get; set; }
+        /// <summary>
+        /// Защитный слой арматуры подошвы вдоль оси Y
+        /// </summary>
+        public double CoveringLayerY { get; set; }
+        /// <summary>
+        /// Отношение давления для ограничения глубины сжимаемой толщи
+        /// </summary>
+        public double CompressedLayerRatio { get; set; }
+        /// <summary>
         /// Коллекция комбинаций
         /// </summary>
         public ObservableCollection<LoadSet> LoadCases { get; set; }
         /// <summary>
-        /// Коллекция комбинаций и кривизны
+        /// Коллекция комбинаций с учетом веса фундамента и грунта
+        /// приведенная к центру подошвы
         /// </summary>
-        public List<ForceCurvature> ForceCurvatures { get; set; }
+        public ObservableCollection<LoadSet> btmLoadSetsWithWeight { get; set; }
+        /// <summary>
+        /// Коллекция комбинаций без учета веса фундамента и грунта
+        /// приведенная к центру подошвы
+        /// </summary>
+        public ObservableCollection<LoadSet> btmLoadSetsWithoutWeight { get; set; }
+        /// <summary>
+        /// Коллекция комбинаций и кривизны с учетом веса фундамента и грунта
+        /// </summary>
+        public List<ForceCurvature> ForceCurvaturesWithWeight { get; set; }
+        /// <summary>
+        /// Коллекция комбинаций и кривизны без учета веса фундамента и грунта
+        /// </summary>
+        public List<ForceCurvature> ForceCurvaturesWithoutWeight { get; set; }
         /// <summary>
         /// Признак актуальности нагрузок
         /// </summary>
@@ -83,6 +117,12 @@ namespace RDBLL.Entity.RCC.Foundations
         /// Признак актуальности ступеней
         /// </summary>
         public bool IsPartsActual { get; set; }
+        /// <summary>
+        /// Наименование линейных единиц измерения
+        /// </summary>
+        public string LinearMeasure { get { return MeasureUnitConverter.GetUnitLabelText(0); } }
+        public string VolumeWeightMeasure { get { return MeasureUnitConverter.GetUnitLabelText(9); } }
+        public string DistributedLoadMeasure { get { return MeasureUnitConverter.GetUnitLabelText(13); } }
         #endregion
         #region Constructors
         /// <summary>
@@ -101,13 +141,24 @@ namespace RDBLL.Entity.RCC.Foundations
             Id = ProgrammSettings.CurrentId;
             LevelId = level.Id;
             Level = level;
+            SteelClassId = 1;
+            ConcreteClassId = 1;
             Name = "Новый фундамент";
             SoilVolumeWeight = 18000;
             ConcreteVolumeWeight = 25000;
+            FloorLoad = 0;
+            FloorLoadFactor = 1.2;
+            ConcreteFloorLoad = 0;
+            ConcreteFloorLoadFactor = 1.2;
+            CoveringLayerX = 0.09;
+            CoveringLayerY = 0.07;
+            CompressedLayerRatio = 0.2;
             ForcesGroups = new ObservableCollection<ForcesGroup>();
             ForcesGroups.Add(new ForcesGroup(this));
             Parts = new ObservableCollection<FoundationPart>();
-            ForceCurvatures = new List<ForceCurvature>();
+            LoadCases = new ObservableCollection<LoadSet>();
+            ForceCurvaturesWithWeight = new List<ForceCurvature>();
+            ForceCurvaturesWithoutWeight = new List<ForceCurvature>();
             IsLoadCasesActual = true;
             IsPartsActual = true;
         }
@@ -118,7 +169,26 @@ namespace RDBLL.Entity.RCC.Foundations
         /// </summary>
         public void SaveToDataSet(DataSet dataSet)
         {
-            throw new NotImplementedException();
+            DataTable dataTable;
+            DataRow dataRow;
+            dataTable = dataSet.Tables["Foundations"];
+            dataRow = dataTable.NewRow();
+            dataRow.ItemArray = new object[]
+                { Id, LevelId,SteelClassId, ConcreteClassId,
+                Name, SoilVolumeWeight, ConcreteVolumeWeight,
+                FloorLoad, FloorLoadFactor, ConcreteFloorLoad,
+                ConcreteFloorLoadFactor, CoveringLayerX, CoveringLayerY,
+                CompressedLayerRatio
+                };
+            dataTable.Rows.Add(dataRow);
+            foreach (FoundationPart foundationPart in Parts)
+            {
+                foundationPart.SaveToDataSet(dataSet);
+            }
+            foreach (ForcesGroup forcesGroup in ForcesGroups)
+            {
+                forcesGroup.SaveToDataSet(dataSet);
+            }
         }
         public void OpenFromDataSet(DataSet dataSet, int i)
         {

@@ -108,6 +108,10 @@ namespace RDBLL.Entity.RCC.BuildingAndSite
             {
                 steelBase.SaveToDataSet(dataSet);
             }
+            foreach (Foundation foundation in Foundations)
+            {
+                foundation.SaveToDataSet(dataSet);
+            }
         }
 
         public void OpenFromDataSet(DataSet dataSet, int Id)

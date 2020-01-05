@@ -15,6 +15,7 @@ using System.Collections.ObjectModel;
 using RDBLL.Entity.RCC.BuildingAndSite;
 using RDBLL.Entity.RCC.Foundations;
 using RDBLL.Common.Service;
+using RDUIL.Common.Reports;
 
 namespace RDUIL.WPF_Windows.Foundations
 {
@@ -61,7 +62,7 @@ namespace RDUIL.WPF_Windows.Foundations
 
         private void BtnReport_Click(object sender, RoutedEventArgs e)
         {
-            throw new NotImplementedException();
+            ShowReportProcessor.ShowFoundationsReport();
         }
     }
 }
