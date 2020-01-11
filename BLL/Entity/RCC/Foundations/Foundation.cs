@@ -109,6 +109,9 @@ namespace RDBLL.Entity.RCC.Foundations
         /// Коллекция комбинаций и кривизны без учета веса фундамента и грунта
         /// </summary>
         public List<ForceCurvature> ForceCurvaturesWithoutWeight { get; set; }
+        /// <summary>
+        /// Коллекция элементарных участков подошвы
+        /// </summary>
         public List<NdmArea> NdmAreas { get; set; }
         /// <summary>
         /// Признак актуальности нагрузок
@@ -122,6 +125,9 @@ namespace RDBLL.Entity.RCC.Foundations
         /// Наименование линейных единиц измерения
         /// </summary>
         public string LinearMeasure { get { return MeasureUnitConverter.GetUnitLabelText(0); } }
+        /// <summary>
+        /// Единица измере
+        /// </summary>
         public string VolumeWeightMeasure { get { return MeasureUnitConverter.GetUnitLabelText(9); } }
         public string DistributedLoadMeasure { get { return MeasureUnitConverter.GetUnitLabelText(13); } }
         #endregion

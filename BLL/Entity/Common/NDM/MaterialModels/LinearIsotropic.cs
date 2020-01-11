@@ -51,7 +51,7 @@ namespace RDBLL.Entity.Common.NDM.MaterialModels
         {
             double elasticModulus = ElasticModulus;
             if (strain < 0) { elasticModulus *= ListOfConsnstants[0].ConstantValue; }
-            else { elasticModulus *= ListOfConsnstants[1].ConstantValue; }
+            else if (strain > 0) { elasticModulus *= ListOfConsnstants[1].ConstantValue; }
             return elasticModulus;
         }
     }
