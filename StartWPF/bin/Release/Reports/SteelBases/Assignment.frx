@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Report ScriptLanguage="CSharp" ReportInfo.Created="08/11/2019 20:16:27" ReportInfo.Modified="11/03/2019 18:28:20" ReportInfo.CreatorVersion="2019.4.11.0">
+<Report ScriptLanguage="CSharp" ReportInfo.Created="08/11/2019 20:16:27" ReportInfo.Modified="12/30/2019 22:24:10" ReportInfo.CreatorVersion="2020.1.0.0">
   <Dictionary>
     <TableDataSource Name="LoadCases" ReferenceName="Data.LoadCases" DataType="System.Int32" Enabled="true">
       <Column Name="Id" DataType="System.Int32"/>
@@ -7,15 +7,6 @@
       <Column Name="SteelBaseId" DataType="System.Int32"/>
       <Column Name="PartialSafetyFactor" DataType="System.Double"/>
       <Column Name="ForceDescription" DataType="System.String"/>
-    </TableDataSource>
-    <TableDataSource Name="LoadCasesForceParameters" ReferenceName="Data.LoadCasesForceParameters" DataType="System.Int32" Enabled="true">
-      <Column Name="Id" DataType="System.Int32"/>
-      <Column Name="LoadCaseId" DataType="System.Int32"/>
-      <Column Name="LongLabel" DataType="System.String"/>
-      <Column Name="ShortLabel" DataType="System.String"/>
-      <Column Name="Unit" DataType="System.String"/>
-      <Column Name="CrcValue" DataType="System.Double"/>
-      <Column Name="DesignValue" DataType="System.Double"/>
     </TableDataSource>
     <TableDataSource Name="LoadSets" ReferenceName="Data.LoadSets" DataType="System.Int32" Enabled="true">
       <Column Name="Id" DataType="System.Int32"/>
@@ -36,7 +27,7 @@
       <Column Name="CrcValue" DataType="System.Double"/>
       <Column Name="DesignValue" DataType="System.Double"/>
       <Column Name="SteelBaseId" DataType="System.Int32"/>
-      <Column Name="SteelBaseName" DataType="System.String"/>
+      <Column Name="ElementName" DataType="System.String"/>
     </TableDataSource>
     <TableDataSource Name="SteelBases" ReferenceName="Data.SteelBases" DataType="System.Int32" Enabled="true">
       <Column Name="Name" DataType="System.String"/>
@@ -80,6 +71,9 @@
     <Relation Name="SteelBasesLoadSets" ReferenceName="Data.SteelBasesLoadSets" ParentDataSource="SteelBases" ChildDataSource="LoadSets" ParentColumns="Id" ChildColumns="SteelBaseId" Enabled="true"/>
     <Relation Name="SteelPart" ReferenceName="Data.SteelPart" ParentDataSource="SteelBases" ChildDataSource="SteelBasesParts" ParentColumns="Id" ChildColumns="SteelBaseId" Enabled="true"/>
     <Relation Name="SteelBolt" ReferenceName="Data.SteelBolt" ParentDataSource="SteelBases" ChildDataSource="SteelBasesBolts" ParentColumns="Id" ChildColumns="SteelBaseId" Enabled="true"/>
+    <Relation Name="SteelBasesLoadSetsForceParameters" ReferenceName="Data.SteelBasesLoadSetsForceParameters" ParentDataSource="SteelBases" ChildDataSource="LoadSetsForceParameters" ParentColumns="Id" ChildColumns="SteelBaseId" Enabled="true"/>
+    <Relation Name="SteelBasesSteelBasesParts" ReferenceName="Data.SteelBasesSteelBasesParts" ParentDataSource="SteelBases" ChildDataSource="SteelBasesParts" ParentColumns="Id" ChildColumns="SteelBaseId" Enabled="true"/>
+    <Relation Name="SteelBasesSteelBasesBolts" ReferenceName="Data.SteelBasesSteelBasesBolts" ParentDataSource="SteelBases" ChildDataSource="SteelBasesBolts" ParentColumns="Id" ChildColumns="SteelBaseId" Enabled="true"/>
     <Parameter Name="Units" DataType="System.String">
       <Parameter Name="LinearSize" DataType="System.String"/>
       <Parameter Name="Force" DataType="System.String"/>
@@ -91,6 +85,8 @@
         <Parameter Name="Moment" DataType="System.String"/>
       </Parameter>
       <Parameter Name="Mass" DataType="System.String"/>
+      <Parameter Name="Density" DataType="System.String"/>
+      <Parameter Name="VolumeWeight" DataType="System.String"/>
     </Parameter>
   </Dictionary>
   <ReportPage Name="Page1" Watermark.Font="Arial, 60pt">
@@ -102,7 +98,7 @@
           <Header Expression="[LoadSetsForceParameters.Description]" Sort="None" Totals="false"/>
         </MatrixColumns>
         <MatrixRows>
-          <Header Expression="[LoadSetsForceParameters.SteelBaseName]" Sort="None" Totals="false"/>
+          <Header Expression="[LoadSetsForceParameters.ElementName]" Sort="None" Totals="false"/>
           <Header Expression="[LoadSetsForceParameters.LongLabel]" Sort="None" Totals="false"/>
           <Header Expression="[LoadSetsForceParameters.Unit]" Totals="false"/>
         </MatrixRows>
@@ -120,7 +116,7 @@
           <TableCell Name="Cell7" Border.Lines="All" Text="[Description]" HorzAlign="Center" VertAlign="Center" Angle="270" Font="Arial, 10pt"/>
         </TableRow>
         <TableRow Name="Row2" Height="19.56">
-          <TableCell Name="Cell3" Border.Lines="All" CanBreak="false" Text="[SteelBaseName]" HorzAlign="Center" VertAlign="Center" Font="Arial, 10pt"/>
+          <TableCell Name="Cell3" Border.Lines="All" CanBreak="false" Text="[ElementName]" HorzAlign="Center" VertAlign="Center" Font="Arial, 10pt"/>
           <TableCell Name="Cell4" Border.Lines="All" Text="[LongLabel]" AllowExpressions="false" VertAlign="Center" Font="Arial, 10pt"/>
           <TableCell Name="Cell6" Border.Lines="All" CanBreak="false" Text="[Unit]" HorzAlign="Center" VertAlign="Center" Font="Arial, 10pt"/>
           <TableCell Name="Cell8" Border.Lines="All" Text="[DesignValue]" HorzAlign="Right" VertAlign="Center" Font="Arial, 10pt"/>

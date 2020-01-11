@@ -13,6 +13,9 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data;
 using System.Windows.Controls;
+using System.Windows;
+using System;
+using RDBLL.Common.Service;
 
 namespace CSL.Reports
 {
@@ -42,47 +45,24 @@ namespace CSL.Reports
                     DataTable Foundations = dataSet.Tables["Foundations"];
                     foreach (Foundation foundation in level.Foundations)
                     {
-                        if (!(foundation.IsLoadCasesActual & foundation.IsPartsActual))
+                        try
                         {
-                            FoundationProcessor.SolveFoundation(foundation);
+                            if (!(foundation.IsLoadCasesActual & foundation.IsPartsActual))
+                            {
+                                FoundationProcessor.SolveFoundation(foundation);
+                            }
+
+                            ProcessFoundation(Foundations, foundation);
+                            ProcessFoundationParts(foundation);
+                            ProcessLoadSets(foundation);
+                            ProcessBtmStresses(foundation);
                         }
+                        catch (Exception e)
+                        {
+                            MessageBox.Show(e+ " фундамент: "+foundation.Name, "Ошибка расчета");
+                        }
+                            
 
-                        double foundationWidth = FoundationProcessor.GetContourSize(foundation)[0];
-                        double foundationLength = FoundationProcessor.GetContourSize(foundation)[1];
-                        double foundationHeight = FoundationProcessor.GetContourSize(foundation)[2];
-                        double foundationSoilVolume = FoundationProcessor.GetSoilVolume(foundation);
-                        double foundationConcreteVolume = FoundationProcessor.GetConcreteVolume(foundation);                  
-
-                        DataRow newFoundation = Foundations.NewRow();
-                        double A = foundationWidth * foundationLength;
-                        double Wx = foundationWidth * foundationLength * foundationLength / 6;
-                        double Wy = foundationWidth * foundationWidth * foundationLength / 6;
-                        #region Picture
-                        Canvas canvas = new Canvas();
-                        canvas.Width = 600;
-                        canvas.Height = 600;
-                        DrawFoundation.DrawTopScatch(foundation, canvas);
-                        byte[] b = CommonServices.ExportToByte(canvas);
-                        #endregion
-                        newFoundation.ItemArray = new object[]
-                        { foundation.Id, foundation.Name, b,
-                            foundationWidth * MeasureUnitConverter.GetCoefficient(0),
-                            foundationLength * MeasureUnitConverter.GetCoefficient(0),
-                            foundationHeight * MeasureUnitConverter.GetCoefficient(0),
-                            foundation.SoilVolumeWeight * MeasureUnitConverter.GetCoefficient(9),
-                            foundation.ConcreteVolumeWeight * MeasureUnitConverter.GetCoefficient(9),
-                            foundationSoilVolume * MeasureUnitConverter.GetCoefficient(11),
-                            foundationConcreteVolume * MeasureUnitConverter.GetCoefficient(11),
-                            A * MeasureUnitConverter.GetCoefficient(4),
-                            Wx * MeasureUnitConverter.GetCoefficient(5),
-                            Wy * MeasureUnitConverter.GetCoefficient(5)};
-
-                        Foundations.Rows.Add(newFoundation);
-                        ProcessFoundationParts(foundation);
-                        ProcessLoadSets(foundation);
-
-                        List<double[]> stressesWithWeigth = FoundationProcessor.GetStresses(foundation, foundation.ForceCurvaturesWithWeight);
-                        List<double[]> stressesWithoutWeigth = FoundationProcessor.GetStresses(foundation, foundation.ForceCurvaturesWithoutWeight);
                     }
                 }
             }
@@ -95,6 +75,45 @@ namespace CSL.Reports
         }
 
         /// <summary>
+        /// Добавление в датасет данных по фундаменту
+        /// </summary>
+        /// <param name="dataTable"></param>
+        /// <param name="foundation"></param>
+        private void ProcessFoundation(DataTable dataTable, Foundation foundation)
+        {
+            double foundationWidth = FoundationProcessor.GetContourSize(foundation)[0];
+            double foundationLength = FoundationProcessor.GetContourSize(foundation)[1];
+            double foundationHeight = FoundationProcessor.GetContourSize(foundation)[2];
+            double foundationSoilVolume = FoundationProcessor.GetSoilVolume(foundation);
+            double foundationConcreteVolume = FoundationProcessor.GetConcreteVolume(foundation);
+
+            DataRow newFoundation = dataTable.NewRow();
+            double A = foundationWidth * foundationLength;
+            double Wx = foundationWidth * foundationLength * foundationLength / 6;
+            double Wy = foundationWidth * foundationWidth * foundationLength / 6;
+            #region Picture
+            Canvas canvas = new Canvas();
+            canvas.Width = 600;
+            canvas.Height = 600;
+            DrawFoundation.DrawTopScatch(foundation, canvas);
+            byte[] b = CommonServices.ExportToByte(canvas);
+            #endregion
+            newFoundation.ItemArray = new object[]
+            { foundation.Id, foundation.Name, b,
+                            foundationWidth * MeasureUnitConverter.GetCoefficient(0),
+                            foundationLength * MeasureUnitConverter.GetCoefficient(0),
+                            foundationHeight * MeasureUnitConverter.GetCoefficient(0),
+                            foundation.SoilVolumeWeight * MeasureUnitConverter.GetCoefficient(9),
+                            foundation.ConcreteVolumeWeight * MeasureUnitConverter.GetCoefficient(9),
+                            foundationSoilVolume * MeasureUnitConverter.GetCoefficient(11),
+                            foundationConcreteVolume * MeasureUnitConverter.GetCoefficient(11),
+                            A * MeasureUnitConverter.GetCoefficient(4),
+                            Wx * MeasureUnitConverter.GetCoefficient(5),
+                            Wy * MeasureUnitConverter.GetCoefficient(5)};
+
+            dataTable.Rows.Add(newFoundation);
+        }
+        /// <summary>
         /// Добавление в датасет данных по нагрузкам
         /// </summary>
         /// <param name="foundation"></param>
@@ -103,13 +122,16 @@ namespace CSL.Reports
             CommonServices.AddLoadsToDataset(dataSet, "LoadSets", "Foundations", "FoundationId", foundation.ForcesGroups[0].LoadSets, foundation.Id, foundation.Name);
             CommonServices.AddLoadsToDataset(dataSet, "LoadCases", "Foundations", "FoundationId", foundation.LoadCases, foundation.Id, foundation.Name);
 
-            ObservableCollection<LoadSet> loadSetsWith = LoadSetProcessor.GetLoadSetsTransform(foundation.btmLoadSetsWithWeight, FoundationProcessor.GetDeltaDistance(foundation));
+            ObservableCollection<LoadSet> loadSetsWith = foundation.btmLoadSetsWithWeight;
             CommonServices.AddLoadsToDataset(dataSet, "BottomLoadCasesWithWeight", "Foundations", "FoundationId", loadSetsWith, foundation.Id, foundation.Name);
 
-            ObservableCollection<LoadSet> loadSetsWithout = LoadSetProcessor.GetLoadSetsTransform(foundation.btmLoadSetsWithoutWeight, FoundationProcessor.GetDeltaDistance(foundation));
+            ObservableCollection<LoadSet> loadSetsWithout = foundation.btmLoadSetsWithoutWeight;
             CommonServices.AddLoadsToDataset(dataSet, "BottomLoadCases", "Foundations", "FoundationId", loadSetsWithout, foundation.Id, foundation.Name);
         }
-
+        /// <summary>
+        /// Добавление в датасет данных по ступеням фундаментов
+        /// </summary>
+        /// <param name="foundation"></param>
         private void ProcessFoundationParts(Foundation foundation)
         {
             DataTable FoundationParts = dataSet.Tables["FoundationParts"];
@@ -130,6 +152,57 @@ namespace CSL.Reports
                         };
 
                 FoundationParts.Rows.Add(newFoundationPart);
+            }
+        }
+        private void ProcessBtmStresses(Foundation foundation)
+        {
+            List<double[]> stressesWithWeigth = FoundationProcessor.GetStresses(foundation, foundation.ForceCurvaturesWithWeight);
+            DataTable FoundationStresses = dataSet.Tables["FoundationStressesWithWeight"];
+            foreach (double[] stresses in stressesWithWeigth)
+            {
+                DataRow newTableItem = FoundationStresses.NewRow();
+                double stressCoefficient = MeasureUnitConverter.GetCoefficient(3);
+                newTableItem.ItemArray = new object[]
+                        { ProgrammSettings.CurrentTmpId,
+                        foundation.Id,
+                        Math.Round(stresses[0] * stressCoefficient, 3),
+                        Math.Round(stresses[1] * stressCoefficient, 3),
+                        Math.Round(stresses[2] * stressCoefficient, 3),
+                        Math.Round(stresses[3] * stressCoefficient, 3),
+                        Math.Round(stresses[4] * stressCoefficient, 3),
+                        Math.Round(stresses[5] * stressCoefficient, 3),
+                        Math.Round(stresses[6] * stressCoefficient, 3),
+                        Math.Round(stresses[7] * stressCoefficient, 3),
+                        Math.Round(stresses[8] * stressCoefficient, 3),
+                        Math.Round(stresses[9] * stressCoefficient, 3),
+                        Math.Round(stresses[10]/(stresses[10]+stresses[11]), 3)*100,
+                        Math.Round(stresses[12]/(stresses[12]+stresses[13]), 3)*100
+                        };
+                FoundationStresses.Rows.Add(newTableItem);
+            }
+            List<double[]> stressesWithoutWeigth = FoundationProcessor.GetStresses(foundation, foundation.ForceCurvaturesWithoutWeight);
+            FoundationStresses = dataSet.Tables["FoundationStressesWithoutWeight"];
+            foreach (double[] stresses in stressesWithoutWeigth)
+            {
+                DataRow newTableItem = FoundationStresses.NewRow();
+                double stressCoefficient = MeasureUnitConverter.GetCoefficient(3);
+                newTableItem.ItemArray = new object[]
+                        { ProgrammSettings.CurrentTmpId,
+                        foundation.Id,
+                        Math.Round(stresses[0] * stressCoefficient, 3),
+                        Math.Round(stresses[1] * stressCoefficient, 3),
+                        Math.Round(stresses[2] * stressCoefficient, 3),
+                        Math.Round(stresses[3] * stressCoefficient, 3),
+                        Math.Round(stresses[4] * stressCoefficient, 3),
+                        Math.Round(stresses[5] * stressCoefficient, 3),
+                        Math.Round(stresses[6] * stressCoefficient, 3),
+                        Math.Round(stresses[7] * stressCoefficient, 3),
+                        Math.Round(stresses[8] * stressCoefficient, 3),
+                        Math.Round(stresses[9] * stressCoefficient, 3),
+                        Math.Round(stresses[10]/(stresses[10]+stresses[11]), 3)*100,
+                        Math.Round(stresses[12]/(stresses[12]+stresses[13]), 3)*100
+                        };
+                FoundationStresses.Rows.Add(newTableItem);
             }
         }
     }

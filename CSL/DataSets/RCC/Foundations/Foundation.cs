@@ -48,6 +48,42 @@ namespace CSL.DataSets.RCC.Foundations
             DsOperation.AddDoubleColumn(newTable, "CenterX");
             DsOperation.AddDoubleColumn(newTable, "CentrY");
             #endregion
+            #region StressesWithWeight
+            newTable = new DataTable("FoundationStressesWithWeight");
+            dataSet.Tables.Add(newTable);
+            DsOperation.AddIdColumn(newTable);
+            DsOperation.AddFkIdColumn("Foundations", "FoundationId", newTable);
+            DsOperation.AddDoubleColumn(newTable, "crcAvgStress");
+            DsOperation.AddDoubleColumn(newTable, "crcCenterStress");
+            DsOperation.AddDoubleColumn(newTable, "crcMiddleSresses");
+            DsOperation.AddDoubleColumn(newTable, "crcCornerSressesMin");
+            DsOperation.AddDoubleColumn(newTable, "crcCornerSressesMax");
+            DsOperation.AddDoubleColumn(newTable, "designAvgStress");
+            DsOperation.AddDoubleColumn(newTable, "designCenterStress");
+            DsOperation.AddDoubleColumn(newTable, "designMiddleSresses");
+            DsOperation.AddDoubleColumn(newTable, "designCornerSressesMin");
+            DsOperation.AddDoubleColumn(newTable, "designCornerSressesMax");
+            DsOperation.AddDoubleColumn(newTable, "CrcTensionAreaRatio");
+            DsOperation.AddDoubleColumn(newTable, "DesignTensionAreaRatio");
+            #endregion
+            #region StressesWithoutWeight
+            newTable = new DataTable("FoundationStressesWithoutWeight");
+            dataSet.Tables.Add(newTable);
+            DsOperation.AddIdColumn(newTable);
+            DsOperation.AddFkIdColumn("Foundations", "FoundationId", newTable);
+            DsOperation.AddDoubleColumn(newTable, "crcAvgStress");
+            DsOperation.AddDoubleColumn(newTable, "crcCenterStress");
+            DsOperation.AddDoubleColumn(newTable, "crcMiddleSresses");
+            DsOperation.AddDoubleColumn(newTable, "crcCornerSressesMin");
+            DsOperation.AddDoubleColumn(newTable, "crcCornerSressesMax");
+            DsOperation.AddDoubleColumn(newTable, "designAvgStress");
+            DsOperation.AddDoubleColumn(newTable, "designCenterStress");
+            DsOperation.AddDoubleColumn(newTable, "designMiddleSresses");
+            DsOperation.AddDoubleColumn(newTable, "designCornerSressesMin");
+            DsOperation.AddDoubleColumn(newTable, "designCornerSressesMax");
+            DsOperation.AddDoubleColumn(newTable, "CrcTensionAreaRatio");
+            DsOperation.AddDoubleColumn(newTable, "DesignTensionAreaRatio");
+            #endregion
             return dataSet;
         }
     }

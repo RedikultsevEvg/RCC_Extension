@@ -14,9 +14,13 @@ namespace RDBLL.Entity.Common.NDM
         /// </summary>
         public LoadSet LoadSet { get; set; }
         /// <summary>
-        /// Суммарные усилия для определения кривизны
+        /// Сумммарные нормативные усилия для кривизны
         /// </summary>
-        public SumForces SumForces { get; set; }
+        public SumForces CrcSumForces { get; set; }
+        /// <summary>
+        /// Суммарные расчетные усилия для определения кривизны
+        /// </summary>
+        public SumForces DesignSumForces { get; set; }
         /// <summary>
         /// Кривизна для второй группы предельных состояний
         /// </summary>
@@ -37,11 +41,11 @@ namespace RDBLL.Entity.Common.NDM
         /// Конструктор по комбинации нагрузок
         /// </summary>
         /// <param name="loadSet"></param>
-        /// <param name="sumForces"></param>
         public ForceCurvature(LoadSet loadSet)
         {
             this.LoadSet = loadSet;
-            this.SumForces = new SumForces(loadSet);
+            this.CrcSumForces = new SumForces(loadSet, false);
+            this.DesignSumForces = new SumForces(loadSet, true);
         }
         /// <summary>
         /// Конструктор по всем параметрам
@@ -52,7 +56,7 @@ namespace RDBLL.Entity.Common.NDM
         public ForceCurvature(LoadSet loadSet, SumForces sumForces, Curvature concreteCurvature)
         {
             this.LoadSet = loadSet;
-            this.SumForces = sumForces;
+            this.DesignSumForces = sumForces;
             this.DesignCurvature = concreteCurvature;
         }
        
@@ -65,7 +69,7 @@ namespace RDBLL.Entity.Common.NDM
         public ForceCurvature(LoadSet loadSet, Curvature designCurvature)
         {
             this.LoadSet = loadSet;
-            this.SumForces = new SumForces(loadSet);
+            this.DesignSumForces = new SumForces(loadSet);
             this.DesignCurvature = designCurvature;
         }
     }
