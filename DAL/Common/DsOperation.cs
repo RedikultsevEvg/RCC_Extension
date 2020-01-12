@@ -48,11 +48,21 @@ namespace DAL.Common
             NewColumn = new DataColumn(columnName, Type.GetType("System.Int32"));
             dataTable.Columns.Add(NewColumn);
         }
-        public static void AddDoubleColumn(DataTable dataTable, string columnName)
+        public static DataColumn AddDoubleColumn(DataTable dataTable, string columnName)
         {
             DataColumn NewColumn;
             NewColumn = new DataColumn(columnName, Type.GetType("System.Double"));
             dataTable.Columns.Add(NewColumn);
+            return NewColumn;
+        }
+
+        public static DataColumn AddDoubleColumn(DataTable dataTable, string columnName, double defaultValue)
+        {
+            DataColumn NewColumn;
+            NewColumn = new DataColumn(columnName, Type.GetType("System.Double"));
+            NewColumn.DefaultValue = defaultValue;
+            dataTable.Columns.Add(NewColumn);
+            return NewColumn;
         }
         public static void AddBoolColumn(DataTable dataTable, string columnName)
         {

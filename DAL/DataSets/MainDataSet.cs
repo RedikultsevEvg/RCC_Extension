@@ -195,15 +195,17 @@ namespace DAL.DataSets
             FkIdColumn = new DataColumn("ConcreteClassId", Type.GetType("System.Int32"));
             dataTable.Columns.Add(FkIdColumn);
             DsOperation.AddNameColumn(dataTable);
-            DsOperation.AddDoubleColumn(dataTable, "SoilVolumeWeight");
-            DsOperation.AddDoubleColumn(dataTable, "ConcreteVolumeWeight");
-            DsOperation.AddDoubleColumn(dataTable, "FloorLoad");
-            DsOperation.AddDoubleColumn(dataTable, "FloorLoadFactor");
-            DsOperation.AddDoubleColumn(dataTable, "ConcreteFloorLoad");
-            DsOperation.AddDoubleColumn(dataTable, "ConcreteFloorLoadFactor");
-            DsOperation.AddDoubleColumn(dataTable, "CoveringLayerX");
-            DsOperation.AddDoubleColumn(dataTable, "CoveringLayerY");
-            DsOperation.AddDoubleColumn(dataTable, "CompressedLayerRatio");
+            DsOperation.AddDoubleColumn(dataTable, "RelativeTopLevel", -0.2);
+            DsOperation.AddDoubleColumn(dataTable, "SoilRelativeTopLevel", -0.2);
+            DsOperation.AddDoubleColumn(dataTable, "SoilVolumeWeight", 18000);
+            DsOperation.AddDoubleColumn(dataTable, "ConcreteVolumeWeight", 25000);
+            DsOperation.AddDoubleColumn(dataTable, "FloorLoad", 0);
+            DsOperation.AddDoubleColumn(dataTable, "FloorLoadFactor", 1.2);
+            DsOperation.AddDoubleColumn(dataTable, "ConcreteFloorLoad", 0);
+            DsOperation.AddDoubleColumn(dataTable, "ConcreteFloorLoadFactor", 1.2);
+            DsOperation.AddDoubleColumn(dataTable, "CoveringLayerX", 0.09);
+            DsOperation.AddDoubleColumn(dataTable, "CoveringLayerY", 0.07);
+            DsOperation.AddDoubleColumn(dataTable, "CompressedLayerRatio", 0.2);
             #endregion
             #region FoundationParts
             dataTable = new DataTable("FoundationParts");

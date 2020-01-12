@@ -56,7 +56,7 @@ namespace RDUIL.Common.Reports
                 Name = "Основной отчет по фундаментам",
                 FileName = directory + "Foundations.frx",
                 Description = "Краткий отчет с выводом давления под подошвой фундамента",
-                ImageName = directory + "Foundation.png",
+                ImageName = directory + "Foundations.png",
                 ToolTip = ""
             };
             newReportCard.RegisterDelegate(new ReportCard.CommandDelegate(ShowFoundationReport));

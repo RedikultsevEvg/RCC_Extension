@@ -16,6 +16,7 @@ using RDBLL.Entity.RCC.BuildingAndSite;
 using RDBLL.Entity.RCC.Foundations;
 using RDBLL.Common.Service;
 using RDUIL.Common.Reports;
+using Winforms = System.Windows.Forms;
 
 namespace RDUIL.WPF_Windows.Foundations
 {
@@ -43,7 +44,28 @@ namespace RDUIL.WPF_Windows.Foundations
 
         private void BtnDelete_Click(object sender, RoutedEventArgs e)
         {
-            ProgrammSettings.IsDataChanged = true;
+            if (LvMain.SelectedIndex >= 0)
+            {
+                Winforms.DialogResult result = Winforms.MessageBox.Show("Элемент будет удален", "Подтверждаете удаление элемента?",
+                    Winforms.MessageBoxButtons.YesNo,
+                    Winforms.MessageBoxIcon.Information,
+                    Winforms.MessageBoxDefaultButton.Button1,
+                    Winforms.MessageBoxOptions.DefaultDesktopOnly);
+
+                if (result == Winforms.DialogResult.Yes)
+                {
+                    int a = LvMain.SelectedIndex;
+                    if (LvMain.Items.Count == 1) LvMain.UnselectAll();
+                    else if (a < (LvMain.Items.Count - 1)) LvMain.SelectedIndex = a + 1;
+                    else LvMain.SelectedIndex = a - 1;
+                    _collection.RemoveAt(a);
+                    ProgrammSettings.IsDataChanged = true;
+                }
+            }
+            else
+            {
+                MessageBox.Show("Ничего не выбрано", "Выберите один из элементов");
+            }
         }
 
         private void BtnEdit_Click(object sender, RoutedEventArgs e)

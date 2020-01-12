@@ -32,8 +32,8 @@ namespace CSL.Reports
                 report.Load(fileName);
                 CommonServices.PrepareMeasureUnit(report);
                 report.RegisterData(dataSet);
-                report.Design();
-                //report.Show();
+                //report.Design();
+                report.Show();
             }
         }
         private void PrepareReport()

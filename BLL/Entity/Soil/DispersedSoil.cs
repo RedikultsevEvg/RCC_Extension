@@ -9,12 +9,31 @@ namespace RDBLL.Entity.Soil
     /// <summary>
     /// Класс дисперсного грунта
     /// </summary>
-    public class DispersedSoil :Soil
+    public class DispersedSoil :BearingSoil
     {
-        public override double[] GetSoilResistance()
-        {
-            double[] resistance = new double[2];
-            return resistance;
-        }
+        /// <summary>
+        /// Нормативное значение угла внутреннего трения
+        /// </summary>
+        public double CrcFi { get; set; }
+        /// <summary>
+        /// Расчетное значение угла внутреннего трения для 1-й группы ПС
+        /// </summary>
+        public double FstDesignFi { get; set; }
+        /// <summary>
+        /// Расчетное значение угла внутреннего трения для 2-й группы ПС
+        /// </summary>
+        public double SndDesignFi { get; set; }
+        /// <summary>
+        /// Нормативное значение сцепления, Па
+        /// </summary>
+        public double CrcCohesion { get; set; }
+        /// <summary>
+        /// Расчетное значение сцепления для 1-й группы ПС
+        /// </summary>
+        public double FstDesigncCohesion { get; set; }
+        /// <summary>
+        /// Расчетное значение сцепления для 2-й группы ПС
+        /// </summary>
+        public double SndDesigncCohesion { get; set; }
     }
 }

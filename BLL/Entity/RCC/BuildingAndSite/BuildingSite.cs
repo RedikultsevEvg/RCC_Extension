@@ -9,16 +9,40 @@ using RDBLL.Entity.RCC.WallAndColumn;
 using System.Collections.ObjectModel;
 using RDBLL.Common.Interfaces;
 using System.Data;
-
+using RDBLL.Entity.Soil;
 
 
 namespace RDBLL.Entity.RCC.BuildingAndSite
 {
+    /// <summary>
+    /// Класс строительного объекта
+    /// </summary>
     public class BuildingSite :ICloneable, ISavableToDataSet
     {
+        /// <summary>
+        /// Код строительного объекта
+        /// </summary>
         public int Id { get; set; }
+        /// <summary>
+        /// Наименование
+        /// </summary>
         public string Name { get; set; }
+        /// <summary>
+        /// Коллекция зданий
+        /// </summary>
         public ObservableCollection<Building> Buildings { get; set; }
+        /// <summary>
+        /// Коллекция грунтов строительного объекта
+        /// </summary>
+        public ObservableCollection<SoilBase> SoilBases { get; set; }
+        /// <summary>
+        /// Коллекция геологических разрезов
+        /// </summary>
+        public ObservableCollection<SoilSection> SoilSections { get; set; }
+        /// <summary>
+        /// Сохранение в датасет
+        /// </summary>
+        /// <param name="dataSet"></param>
         public void SaveToDataSet(DataSet dataSet)
         {
             DataTable dataTable;
@@ -32,6 +56,11 @@ namespace RDBLL.Entity.RCC.BuildingAndSite
                 building.SaveToDataSet(dataSet);
             }
         }
+        /// <summary>
+        /// Открытие из датасета по Id
+        /// </summary>
+        /// <param name="dataSet"></param>
+        /// <param name="Id"></param>
         public void OpenFromDataSet(DataSet dataSet, int Id)
         {
             DataTable dataTable;
@@ -47,40 +76,86 @@ namespace RDBLL.Entity.RCC.BuildingAndSite
                 }
             }
         }
+        /// <summary>
+        /// Клонирование объекта
+        /// </summary>
+        /// <returns></returns>
         public object Clone()
         {
             return this.MemberwiseClone();
         }
+        /// <summary>
+        /// Конструктор без параметров
+        /// </summary>
         public BuildingSite()
         {
             Id = ProgrammSettings.CurrentId;
             Name = "Мой объект";
             Buildings = new ObservableCollection<Building>();
+            SoilSections = new ObservableCollection<SoilSection>();
         }
     }
     /// <summary>
-    /// 
+    /// Класс здания
     /// </summary>
     public class Building : ICloneable, ISavableToDataSet
     {
+        /// <summary>
+        /// Код здания
+        /// </summary>
         public int Id { get; set; }
+        /// <summary>
+        /// Код строительного объекта
+        /// </summary>
         public int BuildingSiteId { get; set; }
-        public string Name { get; set; }
+        /// <summary>
+        /// Обратная ссылка на строительный объект
+        /// </summary>
         public BuildingSite BuildingSite { get; set; }
+        /// <summary>
+        /// Наименование
+        /// </summary>
+        public string Name { get; set; }
+        /// <summary>
+        /// Относительная отметка
+        /// </summary>
+        public double RelativeLevel { get; set; }
+        /// <summary>
+        /// Абсолютная отметка, соответствующая указанной относительной отметке
+        /// </summary>
+        public double AbsoluteLevel { get; set; }
+        /// <summary>
+        /// Коллекция уровней
+        /// </summary>
         public ObservableCollection<Level> Levels { get; set; }
+        /// <summary>
+        /// Коллекция типов стен
+        /// </summary>
         public ObservableCollection<WallType> WallTypeList { get; set; }
+        /// <summary>
+        /// Коллекция отверстий
+        /// </summary>
         public ObservableCollection<OpeningType> OpeningTypeList { get; set; }
+        /// <summary>
+        /// Конструктор без параметров
+        /// </summary>
         public Building()
         {
             Levels = new ObservableCollection<Level>();
             WallTypeList = new ObservableCollection<WallType>();
             OpeningTypeList = new ObservableCollection<OpeningType>();
         }
+        /// <summary>
+        /// Конструктор по строительному объекту
+        /// </summary>
+        /// <param name="buildingSite"></param>
         public Building(BuildingSite buildingSite)
         {
             Id = ProgrammSettings.CurrentId;
             BuildingSiteId = buildingSite.Id;
             Name = "Мое здание";
+            RelativeLevel = 0;
+            AbsoluteLevel = 260;
             BuildingSite = buildingSite;
             Levels = new ObservableCollection<Level>();
             WallTypeList = new ObservableCollection<WallType>();
@@ -89,6 +164,10 @@ namespace RDBLL.Entity.RCC.BuildingAndSite
         public Building(BuildingSite buildingSite, XmlNode xmlNode)
         {
         }
+        /// <summary>
+        /// Сохранение в датасет
+        /// </summary>
+        /// <param name="dataSet"></param>
         public void SaveToDataSet(DataSet dataSet)
         {
             DataTable dataTable;
@@ -105,6 +184,10 @@ namespace RDBLL.Entity.RCC.BuildingAndSite
         public void OpenFromDataSet(DataSet dataSet, int Id)
         {
         }
+        /// <summary>
+        /// Клонирование объекта
+        /// </summary>
+        /// <returns></returns>
         public object Clone()
         {
             return this.MemberwiseClone();

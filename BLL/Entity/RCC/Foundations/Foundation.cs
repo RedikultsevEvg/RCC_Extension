@@ -44,6 +44,14 @@ namespace RDBLL.Entity.RCC.Foundations
         /// </summary>
         public string Name { get; set; }
         /// <summary>
+        /// Относительная отметка верха фундамента
+        /// </summary>
+        public double RelativeTopLevel { get; set; }
+        /// <summary>
+        /// Относительная отметка верха грунта после планировки
+        /// </summary>
+        public double  SoilRelativeTopLevel { get; set; }
+        /// <summary>
         /// Объемный вес грунта на уступах фундамента
         /// </summary>
         public double SoilVolumeWeight { get; set; }
@@ -151,6 +159,8 @@ namespace RDBLL.Entity.RCC.Foundations
             SteelClassId = 1;
             ConcreteClassId = 1;
             Name = "Новый фундамент";
+            RelativeTopLevel = -0.2;
+            SoilRelativeTopLevel = -0.2;
             SoilVolumeWeight = 18000;
             ConcreteVolumeWeight = 25000;
             FloorLoad = 0;
@@ -182,7 +192,7 @@ namespace RDBLL.Entity.RCC.Foundations
             dataRow = dataTable.NewRow();
             dataRow.ItemArray = new object[]
                 { Id, LevelId,SteelClassId, ConcreteClassId,
-                Name, SoilVolumeWeight, ConcreteVolumeWeight,
+                Name, RelativeTopLevel, SoilRelativeTopLevel, SoilVolumeWeight, ConcreteVolumeWeight,
                 FloorLoad, FloorLoadFactor, ConcreteFloorLoad,
                 ConcreteFloorLoadFactor, CoveringLayerX, CoveringLayerY,
                 CompressedLayerRatio
