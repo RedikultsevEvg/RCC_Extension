@@ -161,8 +161,8 @@ namespace CSL.Common
                         tmpForceParamLabels.First().LongLabel,
                         tmpForceParamLabels.First().ShortLabel,
                         measureUnitLabel.UnitName,
-                        Math.Round(forceParameter.CrcValueInCurUnit, 3),
-                        Math.Round(forceParameter.CrcValue * loadSet.PartialSafetyFactor * measureUnitLabel.AddKoeff, 3)
+                        Math.Round(forceParameter.CrcValue * measureUnitLabel.AddKoeff, 3),
+                        Math.Round(forceParameter.DesignValue * measureUnitLabel.AddKoeff, 3)
                     };
                     ForceParameters.Rows.Add(newForceParameter);
                     crcForceDescription += tmpForceParamLabels.First().ShortLabel + "=";
@@ -170,7 +170,7 @@ namespace CSL.Common
                     crcForceDescription += measureUnitLabel.UnitName + "; ";
 
                     designForceDescription += tmpForceParamLabels.First().ShortLabel + "=";
-                    designForceDescription += Math.Round(forceParameter.CrcValue * loadSet.PartialSafetyFactor * measureUnitLabel.AddKoeff, 3);
+                    designForceDescription += Math.Round(forceParameter.DesignValue * measureUnitLabel.AddKoeff, 3);
                     designForceDescription += measureUnitLabel.UnitName + "; ";
 
                     forceDescription += tmpForceParamLabels.First().ShortLabel + "=" + Math.Round(forceParameter.DesignValue * measureUnitLabel.AddKoeff, 3) + measureUnitLabel.UnitName + "; ";

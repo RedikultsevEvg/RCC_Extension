@@ -32,6 +32,14 @@ namespace RDUIL.WPF_Windows
             try
             {
                 _forcesGroup.SetParentsNotActual();
+                foreach (LoadSet loadSet in _forcesGroup.LoadSets)
+                {
+                    foreach (ForceParameter forceParameter in loadSet.ForceParameters)
+                    {
+                        forceParameter.DesignValue = forceParameter.CrcValue * loadSet.PartialSafetyFactor;
+                    }
+                }
+                
                 ProgrammSettings.IsDataChanged = true;
                 this.Close();
             }

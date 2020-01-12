@@ -9,12 +9,19 @@ namespace RDBLL.Entity.Soil
     /// <summary>
     /// Класс скального грунта
     /// </summary>
-    public class RockSoil :Soil
-    {       
-        public override double[] GetSoilResistance()
-        {
-            double[] resistance = new double[2];
-            return resistance;
-        }
+    public class RockSoil :BearingSoil
+    {
+        /// <summary>
+        /// Нормативное сопротивление
+        /// </summary>
+        public double CrcStrength { get; set; }
+        /// <summary>
+        /// Расчетное сопротивление по 1-й группе ПС
+        /// </summary>
+        public double FstDesignStrength { get; set; }
+        /// <summary>
+        /// Расчетное сопротивление по 2-й группе ПС
+        /// </summary>
+        public double SndDesignStrength { get; set; }
     }
 }

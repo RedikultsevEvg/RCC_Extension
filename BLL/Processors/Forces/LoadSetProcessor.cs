@@ -37,7 +37,7 @@ namespace RDBLL.Processors.Forces
                     if (oldForceParameter.KindId == secondForceParameter.KindId) //Если вид нагрузки совпадает
                     {
                         oldForceParameter.CrcValue += secondForceParameter.CrcValue * koeff; //Складываем значения параметра нагрузки
-                        oldForceParameter.DesignValue += secondForceParameter.CrcValue * secondLoadSet.PartialSafetyFactor * koeff; //Складываем значения параметра нагрузки
+                        oldForceParameter.DesignValue += secondForceParameter.DesignValue * koeff; //Складываем значения параметра нагрузки
                         coindence = true;
                         break; //Дальше проходить по циклу смысла нет, так как каждый вид нагрузки встречается только один раз
                     }
@@ -45,11 +45,10 @@ namespace RDBLL.Processors.Forces
 
                 if (!coindence) //Если вид нагрузки так и не совпал
                 {
-                    //Добавляем в набор новый вид нагрузки нужного типа
+                    //Добавляем в набор новый вид нагрузки нужного типа                  
                     ForceParameter forceParameter = new ForceParameter();
                     forceParameter.CrcValue = secondForceParameter.CrcValue * koeff;
-                    forceParameter.DesignValue = secondForceParameter.CrcValue * secondLoadSet.PartialSafetyFactor * koeff;
-                    oldLoadSet.PartialSafetyFactor = secondLoadSet.PartialSafetyFactor;
+                    forceParameter.DesignValue = secondForceParameter.DesignValue * koeff;
                     forceParameter.KindId = secondForceParameter.KindId;
                     oldLoadSet.ForceParameters.Add(forceParameter);
                 }
@@ -68,7 +67,9 @@ namespace RDBLL.Processors.Forces
         /// <returns></returns>
         public static LoadSet SumForcesInNew(LoadSet oldLoadSet, LoadSet secondLoadSet, double koeff = 1.0)
         {
-            LoadSet newLoadSet = new LoadSet() { Id = ProgrammSettings.CurrentTmpId };
+            LoadSet newLoadSet = new LoadSet()
+            { Id = ProgrammSettings.CurrentTmpId,
+                IsCombination = true };
             SumForces(newLoadSet, oldLoadSet, 1, false);
             SumForces(newLoadSet, secondLoadSet, koeff, true);
             return newLoadSet;
@@ -84,6 +85,7 @@ namespace RDBLL.Processors.Forces
             deduplicatedSet.IsLiveLoad = loadSet.IsLiveLoad;
             deduplicatedSet.BothSign = loadSet.BothSign;
             deduplicatedSet.PartialSafetyFactor = loadSet.PartialSafetyFactor;
+            deduplicatedSet.IsCombination = true;
             SumForces(deduplicatedSet, loadSet, 1, false);
             return deduplicatedSet;
         }
@@ -98,9 +100,16 @@ namespace RDBLL.Processors.Forces
             LoadCases.Add(new LoadSet());
             foreach (ForcesGroup forcesGroup in forcesGroups)
             {
-                foreach (LoadSet LoadSet in forcesGroup.LoadSets)
+                foreach (LoadSet loadSet in forcesGroup.LoadSets)
                 {
-                    LoadSet tmpLoadSet = DeduplicateLoadSet(LoadSet);
+                    if (!loadSet.IsCombination)
+                    {
+                        foreach (ForceParameter forceParameter in loadSet.ForceParameters)
+                        {
+                            forceParameter.DesignValue = forceParameter.CrcValue * loadSet.PartialSafetyFactor;
+                        }
+                    }
+                    LoadSet tmpLoadSet = DeduplicateLoadSet(loadSet);
                     int count = LoadCases.Count;
                     for (int i = 0; i < count; i++)
                     {
