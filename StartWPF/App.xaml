@@ -3,14 +3,30 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:StartWPF"
              xmlns:service="clr-namespace:RDBLL.Common.Service;assembly=BLL"
-             xmlns:Convert="clr-namespace:RDUIL.Converters" 
+             xmlns:Convert="clr-namespace:RDUIL.Converters;assembly=UIL" 
              StartupUri="MainWindow.xaml">
     <Application.Resources>
+        <Convert:StressConverter x:Key="StressConverter"/>
+        <Convert:DensityConverter x:Key="DensityConverter"/>
+        <Convert:VolumeWeightConverter x:Key="VolumeWeightConverter"/>
+        <Convert:FiltrationConverter x:Key="FiltrationConverter"/>
+        
         <Style x:Key="ServiceButton" TargetType="Button">
             <Setter Property="Width" Value="100" />
+            <Setter Property="Height" Value="50" />
             <Setter Property="Margin" Value="5" />
             <Setter Property="Background" Value="#FFB5FCFF" />
             <Setter Property="HorizontalAlignment" Value="Right" />
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect Opacity="0.6"/>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="ToolTip">
+                <Setter.Value>
+                    <TextBlock Margin="3" Foreground="Black"></TextBlock>
+                </Setter.Value>
+            </Setter>
         </Style>
         <Style x:Key="OperationButton" TargetType="Button">
             <Setter Property="Width" Value="35" />
@@ -59,7 +75,173 @@
             <Setter Property="Panel.ZIndex" Value="1"/>
             <Setter Property="Opacity" Value="0.5"/>
         </Style>
-        
+
+        <Style x:Key="AddServiceButton" TargetType="Button" BasedOn="{StaticResource ServiceButton}">
+            <Setter Property="ToolTip">
+                <Setter.Value>
+                    <Run Text="Добавить"/>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="Content">
+                <Setter.Value>
+                    <Image x:Name="Add_png" Style="{StaticResource ServiceButtonImage}" Source="{DynamicResource IconAdd40}"/>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="DeleteServiceButton" TargetType="Button" BasedOn="{StaticResource ServiceButton}">
+            <Setter Property="ToolTip">
+                <Setter.Value>
+                    <Run Text="Удалить"/>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="Content">
+                <Setter.Value>
+                    <Image x:Name="DeletePng" Style="{StaticResource ServiceButtonImage}" Source="{DynamicResource IconDelete40}"/>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="EditServiceButton" TargetType="Button" BasedOn="{StaticResource ServiceButton}">
+            <Setter Property="ToolTip">
+                <Setter.Value>
+                    <Run Text="Редактировать"/>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="Content">
+                <Setter.Value>
+                    <Image x:Name="EditPng" Style="{StaticResource ServiceButtonImage}" Source="{DynamicResource IconEdit40}"/>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="ReportServiceButton" TargetType="Button" BasedOn="{StaticResource ServiceButton}">
+            <Setter Property="ToolTip">
+                <Setter.Value>
+                    <Run Text="Отчет"/>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="Content">
+                <Setter.Value>
+                    <Image x:Name="ReportPng" Style="{StaticResource ServiceButtonImage}" Source="{DynamicResource IconReport}"/>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="SoilServiceButton" TargetType="Button" BasedOn="{StaticResource ServiceButton}">
+            <Setter Property="ToolTip">
+                <Setter.Value>
+                    <Run Text="Грунты"/>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="Content">
+                <Setter.Value>
+                    <Image Style="{StaticResource ServiceButtonImage}" Source="{DynamicResource IconReport}"/>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <DataTemplate x:Key="GeneralSoilProps">
+            <Expander x:Name="General" Header="Общие свойства">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="30"/>
+                        <RowDefinition Height="30"/>
+                        <RowDefinition Height="30"/>
+                        <RowDefinition Height="30"/>
+                        <RowDefinition Height="30"/>
+                        <RowDefinition Height="30"/>
+                        <RowDefinition Height="30"/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition Width="100"/>
+                        <ColumnDefinition Width="100"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Style="{StaticResource PropertyTextBlock}" Text="Наименование"/>
+                    <TextBlock Grid.Row="1" Style="{StaticResource PropertyTextBlock}" Text="Плотность грунта" FontWeight="Bold"/>
+                    <TextBlock Grid.Row="2" Style="{StaticResource PropertyTextBlock}" Text="Нормативное значение"/>
+                    <TextBlock Grid.Row="3" Style="{StaticResource PropertyTextBlock}" Text="Расчетное значение по 1-й группе предельных состояний"/>
+                    <TextBlock Grid.Row="4" Style="{StaticResource PropertyTextBlock}" Text="Расчетное значение по 2-й группе предельных состояний"/>
+                    <TextBlock Grid.Row="5" Style="{StaticResource PropertyTextBlock}" Text="Коэффициент фильтрации"/>
+                    <TextBox Grid.Column="1" Style="{StaticResource PropertyTextBox}" Text="{Binding Path=Name}"/>
+                    <TextBox Grid.Column="1" Grid.Row="2" Style="{StaticResource PropertyTextBoxError}" Text="{Binding CrcDensity, Converter={StaticResource DensityConverter}, ValidatesOnDataErrors=True}"/>
+                    <TextBox Grid.Column="1" Grid.Row="3" Style="{StaticResource PropertyTextBoxError}" Text="{Binding FstDesignDensity, Converter={StaticResource DensityConverter}, ValidatesOnDataErrors=True}"/>
+                    <TextBox Grid.Column="1" Grid.Row="4" Style="{StaticResource PropertyTextBoxError}" Text="{Binding SndDesignDensity, Converter={StaticResource DensityConverter}, ValidatesOnDataErrors=True}"/>
+                    <TextBox Grid.Column="1" Grid.Row="5" Style="{StaticResource PropertyTextBoxError}" Text="{Binding FiltrationCoeff, Converter={StaticResource FiltrationConverter}, ValidatesOnDataErrors=True}"/>
+                    <TextBlock Grid.Column="2" Grid.Row="2" Style="{StaticResource PropertyTextBlock}" Text="{Binding DensityMeasure}" />
+                    <TextBlock Grid.Column="2" Grid.Row="3" Style="{StaticResource PropertyTextBlock}" Text="{Binding DensityMeasure}" />
+                    <TextBlock Grid.Column="2" Grid.Row="4" Style="{StaticResource PropertyTextBlock}" Text="{Binding DensityMeasure}" />
+                    <TextBlock Grid.Column="2" Grid.Row="5" Style="{StaticResource PropertyTextBlock}" Text="{Binding FiltrationMeasure}" />
+                </Grid>
+            </Expander>
+        </DataTemplate>
+        <DataTemplate x:Key="MechanicalSoilProps">
+            <Expander x:Name="Mechanical" Header="Механические свойства">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="30"/>
+                        <RowDefinition Height="30"/>
+                        <RowDefinition Height="30"/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition Width="100"/>
+                        <ColumnDefinition Width="100"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Grid.Row="0" Style="{StaticResource PropertyTextBlock}" Text="Модуль деформации при первичном нагружении"/>
+                    <TextBlock Grid.Row="1" Style="{StaticResource PropertyTextBlock}" Text="Модуль деформации при вторичном нагружении"/>
+                    <TextBlock Grid.Row="2" Style="{StaticResource PropertyTextBlock}" Text="Коэффициент Пуассона"/>
+                    <TextBox Grid.Column="1" Grid.Row="0" Style="{StaticResource PropertyTextBoxError}" Text="{Binding ElasticModulus, Converter={StaticResource StressConverter}, ValidatesOnDataErrors=True}"/>
+                    <TextBox Grid.Column="1" Grid.Row="1" Style="{StaticResource PropertyTextBoxError}" Text="{Binding SndElasticModulus, Converter={StaticResource StressConverter}, ValidatesOnDataErrors=True}"/>
+                    <TextBox Grid.Column="1" Grid.Row="2" Style="{StaticResource PropertyTextBoxError}" Text="{Binding PoissonRatio, ValidatesOnDataErrors=True}"/>
+                    <TextBlock Grid.Column="2" Grid.Row="0" Style="{StaticResource PropertyTextBlock}" Text="{Binding StressMeasure}"/>
+                    <TextBlock Grid.Column="2" Grid.Row="1" Style="{StaticResource PropertyTextBlock}" Text="{Binding StressMeasure}"/>
+                    <TextBlock Grid.Column="2" Grid.Row="2" Style="{StaticResource PropertyTextBlock}" Text="Д.ед."/>
+                </Grid>
+            </Expander>
+        </DataTemplate>
+        <DataTemplate x:Key="MCSoilProps">
+            <Expander x:Name="MC" Header="Свойства модели Мора-Кулона">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="30"/>
+                        <RowDefinition Height="30"/>
+                        <RowDefinition Height="30"/>
+                        <RowDefinition Height="30"/>
+                        <RowDefinition Height="30"/>
+                        <RowDefinition Height="30"/>
+                        <RowDefinition Height="30"/>
+                        <RowDefinition Height="30"/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition Width="100"/>
+                        <ColumnDefinition Width="100"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Grid.Row="0" Style="{StaticResource PropertyTextBlock}" Text="Угол внутреннего трения" FontWeight="Bold"/>
+                    <TextBlock Grid.Row="1" Style="{StaticResource PropertyTextBlock}" Text="Нормативное значение"/>
+                    <TextBlock Grid.Row="2" Style="{StaticResource PropertyTextBlock}" Text="Расчетное значение по 1-й группе предельных состояний"/>
+                    <TextBlock Grid.Row="3" Style="{StaticResource PropertyTextBlock}" Text="Расчетное значение по 2-й группе предельных состояний"/>
+                    <TextBlock Grid.Row="4" Style="{StaticResource PropertyTextBlock}" Text="Сцепление" FontWeight="Bold"/>
+                    <TextBlock Grid.Row="5" Style="{StaticResource PropertyTextBlock}" Text="Нормативное значение"/>
+                    <TextBlock Grid.Row="6" Style="{StaticResource PropertyTextBlock}" Text="Расчетное значение по 1-й группе предельных состояний"/>
+                    <TextBlock Grid.Row="7" Style="{StaticResource PropertyTextBlock}" Text="Расчетное значение по 2-й группе предельных состояний"/>
+                    <TextBox Grid.Column="1" Grid.Row="1" Style="{StaticResource PropertyTextBoxError}" Text="{Binding CrcFi, ValidatesOnDataErrors=True}"/>
+                    <TextBox Grid.Column="1" Grid.Row="2" Style="{StaticResource PropertyTextBoxError}" Text="{Binding FstDesignFi, ValidatesOnDataErrors=True}"/>
+                    <TextBox Grid.Column="1" Grid.Row="3" Style="{StaticResource PropertyTextBoxError}" Text="{Binding SndDesignFi, ValidatesOnDataErrors=True}"/>
+                    <TextBox Grid.Column="1" Grid.Row="5" Style="{StaticResource PropertyTextBoxError}" Text="{Binding CrcCohesion, Converter={StaticResource StressConverter}, ValidatesOnDataErrors=True}"/>
+                    <TextBox Grid.Column="1" Grid.Row="6" Style="{StaticResource PropertyTextBoxError}" Text="{Binding FstDesignCohesion, Converter={StaticResource StressConverter}, ValidatesOnDataErrors=True}"/>
+                    <TextBox Grid.Column="1" Grid.Row="7" Style="{StaticResource PropertyTextBoxError}" Text="{Binding SndDesignCohesion, Converter={StaticResource StressConverter}, ValidatesOnDataErrors=True}"/>
+                    <TextBlock Grid.Column="2" Grid.Row="1" Style="{StaticResource PropertyTextBlock}" Text="Град."/>
+                    <TextBlock Grid.Column="2" Grid.Row="2" Style="{StaticResource PropertyTextBlock}" Text="Град."/>
+                    <TextBlock Grid.Column="2" Grid.Row="3" Style="{StaticResource PropertyTextBlock}" Text="Град."/>
+                    <TextBlock Grid.Column="2" Grid.Row="5" Style="{StaticResource PropertyTextBlock}" Text="{Binding StressMeasure}"/>
+                    <TextBlock Grid.Column="2" Grid.Row="6" Style="{StaticResource PropertyTextBlock}" Text="{Binding StressMeasure}"/>
+                    <TextBlock Grid.Column="2" Grid.Row="7" Style="{StaticResource PropertyTextBlock}" Text="{Binding StressMeasure}"/>
+                </Grid>
+            </Expander>
+        </DataTemplate>
+
         <BitmapImage x:Key="IconRefresh40" CreateOptions="IgnoreImageCache" CacheOption="OnLoad" UriSource="/UIL;component/Resources/IconRefresh40.png"/>
         <BitmapImage x:Key="IconForces" CreateOptions="IgnoreImageCache" CacheOption="OnLoad" UriSource="/UIL;component/Resources/IconForces.png"/>
         <BitmapImage x:Key="IconOK" CreateOptions="IgnoreImageCache" CacheOption="OnLoad" UriSource="/UIL;component/Resources/IconOK.png"/>
@@ -77,5 +259,6 @@
         <BitmapImage x:Key="IconForces40" CreateOptions="IgnoreImageCache" CacheOption="OnLoad" UriSource="/UIL;component/Resources/IconForces40.png"/>
         <BitmapImage x:Key="IconFoundation40" CreateOptions="IgnoreImageCache" CacheOption="OnLoad" UriSource="/UIL;component/Resources/IconFoundation40.png"/>
         <BitmapImage x:Key="IconReport" CreateOptions="IgnoreImageCache" CacheOption="OnLoad" UriSource="/UIL;component/Resources/IconReport40.png"/>
+        
     </Application.Resources>
 </Application>

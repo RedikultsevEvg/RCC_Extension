@@ -175,13 +175,18 @@ namespace RDBLL.Common.Service
             measureUnitDisributedForce.UnitLabels.Add(new MeasureUnitLabel { Id = 64, UnitName = "тс/м", AddKoeff = 0.001 / 9.81 });
             measureUnitDisributedForce.CurrentUnitLabelId = 61;
             MeasureUnit measureUnitDisributedLoad = new MeasureUnit();
-            measureUnitDisributedLoad.MeasureUnitKind = "Распределенная нагрузка на погонный метр";
+            measureUnitDisributedLoad.MeasureUnitKind = "Распределенная нагрузка на квадратный метр";
             measureUnitDisributedLoad.UnitLabels.Add(new MeasureUnitLabel { Id = 70, UnitName = "Н/м^2", AddKoeff = 1.0 });
             measureUnitDisributedLoad.UnitLabels.Add(new MeasureUnitLabel { Id = 71, UnitName = "кН/м^2", AddKoeff = 0.001 });
             measureUnitDisributedLoad.UnitLabels.Add(new MeasureUnitLabel { Id = 72, UnitName = "МН/м^2", AddKoeff = 0.000001 });
             measureUnitDisributedLoad.UnitLabels.Add(new MeasureUnitLabel { Id = 73, UnitName = "кгс/м^2", AddKoeff = 1 / 9.81 });
             measureUnitDisributedLoad.UnitLabels.Add(new MeasureUnitLabel { Id = 74, UnitName = "тс/м^2", AddKoeff = 0.001 / 9.81 });
             measureUnitDisributedLoad.CurrentUnitLabelId = 71;
+            MeasureUnit measureUnitFiltration = new MeasureUnit();
+            measureUnitFiltration.MeasureUnitKind = "Коэффициент фильтрации";
+            measureUnitFiltration.UnitLabels.Add(new MeasureUnitLabel { Id = 80, UnitName = "м/с", AddKoeff = 1.0 });
+            measureUnitFiltration.UnitLabels.Add(new MeasureUnitLabel { Id = 81, UnitName = "м/сут", AddKoeff = 3600 });
+            measureUnitFiltration.CurrentUnitLabelId = 81;
             MeasureUnits = new ObservableCollection<MeasureUnit>();
             MeasureUnits.Add(measureUnitLength); //0
             MeasureUnits.Add(measureUnitForce); //1
@@ -197,6 +202,7 @@ namespace RDBLL.Common.Service
             MeasureUnits.Add(measureUnitSizeVolume); //11
             MeasureUnits.Add(measureUnitDisributedForce); //12
             MeasureUnits.Add(measureUnitDisributedLoad); //13
+            MeasureUnits.Add(measureUnitFiltration); //14
             #endregion
             #region Исходные данные видов нагрузки
             ForceParamKinds = new List<ForceParamKind>();

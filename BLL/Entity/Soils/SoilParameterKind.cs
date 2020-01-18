@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RDBLL.Entity.Soil
+namespace RDBLL.Entity.Soils
 {
     public class SoilParameterKind
     {

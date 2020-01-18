@@ -92,9 +92,6 @@
                     </Button.ToolTip>
                 </Button>
                 <Button x:Name="btnParts" Style="{StaticResource ServiceButton}" Height="50" Click="BtnParts_Click">
-                    <Button.Effect>
-                        <DropShadowEffect Opacity="0.6"/>
-                    </Button.Effect>
                     <Image x:Name="Parts_png" Style="{StaticResource ServiceButtonImage}" Source="{DynamicResource IconBasePart}"/>
                     <Button.ToolTip>
                         <TextBlock Margin="3" Foreground="Black">Ступени фундамента...</TextBlock>

@@ -4,13 +4,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using RDBLL.Entity.RCC.BuildingAndSite;
+using RDBLL.Common.Service;
+using RDBLL.Entity.MeasureUnits;
 
-namespace RDBLL.Entity.Soil
+namespace RDBLL.Entity.Soils
 {
     /// <summary>
     /// Абстрактный класс грунта
     /// </summary>
-    public abstract class SoilBase
+    public abstract class Soil
     {
         /// <summary>
         /// Код грунта
@@ -45,5 +47,21 @@ namespace RDBLL.Entity.Soil
         /// Необходим, так как влияет на напряжения в грунте при послойном суммировании
         /// </summary>
         public double FiltrationCoeff { get; set; }
+        public string StressMeasure { get { return MeasureUnitConverter.GetUnitLabelText(3); } }
+        public string DensityMeasure { get { return MeasureUnitConverter.GetUnitLabelText(8); } }
+        public string FiltrationMeasure { get { return MeasureUnitConverter.GetUnitLabelText(14); } }
+
+        /// <summary>
+        /// Конструктор по строительному объекту
+        /// </summary>
+        /// <param name="buildingSite"></param>
+        public Soil(BuildingSite buildingSite)
+        {
+            Id = ProgrammSettings.CurrentId;
+            BuildingSiteId = buildingSite.Id;
+            BuildingSite = buildingSite;
+            Name = "ИГЭ-" + (buildingSite.Soils.Count + 1);
+            FiltrationCoeff = 0.0001;
+        }
     }
 }

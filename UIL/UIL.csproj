@@ -56,7 +56,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Common\Reports\ShowReport.cs" />
+    <Compile Include="Converters\DensityConverter.cs" />
     <Compile Include="Converters\DistributedLoadConverter.cs" />
+    <Compile Include="Converters\FiltrationConverter.cs" />
     <Compile Include="Converters\FoundationToGeometryConverter.cs" />
     <Compile Include="Converters\SteelBaseToGeometryConverter.cs" />
     <Compile Include="Converters\StressConverter.cs" />
@@ -136,6 +138,15 @@
     <Compile Include="WPF_Windows\ControlClasses\CalcKind.cs" />
     <Compile Include="WPF_Windows\ControlClasses\CalcType.cs" />
     <Compile Include="WPF_Windows\ControlClasses\ReportCard.cs" />
+    <Compile Include="WPF_Windows\Foundations\Soils\WndClaySoil.xaml.cs">
+      <DependentUpon>WndClaySoil.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="WPF_Windows\Foundations\Soils\WndSoilCrossSection.xaml.cs">
+      <DependentUpon>WndSoilCrossSection.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="WPF_Windows\Foundations\Soils\WndSoils.xaml.cs">
+      <DependentUpon>WndSoils.xaml</DependentUpon>
+    </Compile>
     <Compile Include="WPF_Windows\Foundations\wndFoundation.xaml.cs">
       <DependentUpon>wndFoundation.xaml</DependentUpon>
     </Compile>
@@ -181,6 +192,18 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="WPF_Windows\BuildingsAndSites\wndLevels.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="WPF_Windows\Foundations\Soils\WndClaySoil.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="WPF_Windows\Foundations\Soils\WndSoilCrossSection.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="WPF_Windows\Foundations\Soils\WndSoils.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -381,5 +404,6 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

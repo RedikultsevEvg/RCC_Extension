@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using RDBLL.Entity.RCC.BuildingAndSite;
 
-namespace RDBLL.Entity.Soil
+namespace RDBLL.Entity.Soils
 {
     /// <summary>
     /// Класс геологического разреза

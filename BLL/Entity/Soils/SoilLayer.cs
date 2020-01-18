@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RDBLL.Entity.Soil
+namespace RDBLL.Entity.Soils
 {
     /// <summary>
     /// Класс слоя грунта
@@ -19,7 +19,7 @@ namespace RDBLL.Entity.Soil
         /// <summary>
         /// Ссылка на модель грунта
         /// </summary>
-        public SoilBase Soil { get; set; }
+        public Soil Soil { get; set; }
         /// <summary>
         /// Отметка верха слоя
         /// </summary>
