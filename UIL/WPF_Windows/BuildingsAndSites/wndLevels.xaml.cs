@@ -17,6 +17,7 @@ using RDBLL.Common.Service;
 using Winforms = System.Windows.Forms;
 using RDUIL.WPF_Windows.Foundations;
 using RDUIL.Common.Reports;
+using RDUIL.WPF_Windows.Foundations.Soils;
 
 
 namespace RDUIL.WPF_Windows.BuildingsAndSites
@@ -125,6 +126,12 @@ namespace RDUIL.WPF_Windows.BuildingsAndSites
                 MessageBox.Show("Ничего не выбрано", "Выберите один из элементов");
             }
             
+        }
+
+        private void BtnSoils_Click(object sender, RoutedEventArgs e)
+        {
+            WndSoils wndSoils = new WndSoils(_building.BuildingSite);
+            wndSoils.ShowDialog();
         }
     }
 }

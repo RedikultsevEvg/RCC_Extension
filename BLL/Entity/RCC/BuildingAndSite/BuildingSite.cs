@@ -9,7 +9,7 @@ using RDBLL.Entity.RCC.WallAndColumn;
 using System.Collections.ObjectModel;
 using RDBLL.Common.Interfaces;
 using System.Data;
-using RDBLL.Entity.Soil;
+using RDBLL.Entity.Soils;
 
 
 namespace RDBLL.Entity.RCC.BuildingAndSite
@@ -34,7 +34,7 @@ namespace RDBLL.Entity.RCC.BuildingAndSite
         /// <summary>
         /// Коллекция грунтов строительного объекта
         /// </summary>
-        public ObservableCollection<SoilBase> SoilBases { get; set; }
+        public ObservableCollection<Soil> Soils { get; set; }
         /// <summary>
         /// Коллекция геологических разрезов
         /// </summary>
@@ -92,6 +92,7 @@ namespace RDBLL.Entity.RCC.BuildingAndSite
             Id = ProgrammSettings.CurrentId;
             Name = "Мой объект";
             Buildings = new ObservableCollection<Building>();
+            Soils = new ObservableCollection<Soil>();
             SoilSections = new ObservableCollection<SoilSection>();
         }
     }

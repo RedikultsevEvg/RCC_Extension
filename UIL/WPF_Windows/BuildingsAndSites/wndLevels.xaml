@@ -35,51 +35,17 @@
             <RowDefinition/>
         </Grid.RowDefinitions>
         <StackPanel Margin="10" Orientation="Horizontal">
-            <Button x:Name="BtnAdd" Style="{StaticResource ServiceButton}" Height="50" Click="BtnAdd_Click">
-                <Button.Effect>
-                    <DropShadowEffect Opacity="0.6"/>
-                </Button.Effect>
+            <Button x:Name="BtnAdd" Style="{StaticResource AddServiceButton}" Click="BtnAdd_Click"/>
+            <Button x:Name="BtnDelete" Style="{StaticResource DeleteServiceButton}" Click="BtnDelete_Click"/>
+            <Button x:Name="BtnEdit" Style="{StaticResource EditServiceButton}" Click="BtnEdit_Click"/>
+            <Button x:Name="BtnReport" Style="{StaticResource ReportServiceButton}" Click="BtnReport_Click"/>
+            <Button x:Name="BtnChildItem" Style="{StaticResource ServiceButton}" Click="BtnChildItem_Click">
                 <Button.ToolTip>
-                    <TextBlock Margin="3" Foreground="Black"><Run Text="Новый уровень"/></TextBlock>
-                </Button.ToolTip>
-                <Image x:Name="Add_png" Style="{StaticResource ServiceButtonImage}" Source="{DynamicResource IconAdd40}"/>
-            </Button>
-            <Button x:Name="BtnDelete" Style="{StaticResource ServiceButton}" Height="50" Click="BtnDelete_Click">
-                <Button.Effect>
-                    <DropShadowEffect Opacity="0.6"/>
-                </Button.Effect>
-                <Button.ToolTip>
-                    <TextBlock Margin="3" Foreground="Black"><Run Text="Удалить"/></TextBlock>
-                </Button.ToolTip>
-                <Image x:Name="DeletePng" Style="{StaticResource ServiceButtonImage}" Source="{DynamicResource IconDelete40}"/>
-            </Button>
-            <Button x:Name="BtnEdit" Style="{StaticResource ServiceButton}" Height="50" Click="BtnEdit_Click">
-                <Button.Effect>
-                    <DropShadowEffect Opacity="0.6"/>
-                </Button.Effect>
-                <Button.ToolTip>
-                    <TextBlock Margin="3" Foreground="Black"><Run Text="Редактировать"/></TextBlock>
-                </Button.ToolTip>
-                <Image x:Name="EditPng" Style="{StaticResource ServiceButtonImage}" Source="{DynamicResource IconEdit40}"/>
-            </Button>
-            <Button x:Name="BtnReport" Style="{StaticResource ServiceButton}" Height="50" Click="BtnReport_Click">
-                <Button.Effect>
-                    <DropShadowEffect Opacity="0.6"/>
-                </Button.Effect>
-                <Button.ToolTip>
-                    <TextBlock Margin="3" Foreground="Black"><Run Text="Отчет"/></TextBlock>
-                </Button.ToolTip>
-                <Image x:Name="ReportPng" Style="{StaticResource ServiceButtonImage}" Source="{DynamicResource IconReport}"/>
-            </Button>
-            <Button x:Name="BtnChildItem" Style="{StaticResource ServiceButton}" Height="50" Click="BtnChildItem_Click">
-                <Button.Effect>
-                    <DropShadowEffect Opacity="0.6"/>
-                </Button.Effect>
-                <Button.ToolTip>
-                    <TextBlock Margin="3" Foreground="Black"><Run Text="Отчет"/></TextBlock>
+                    <TextBlock Margin="3" Foreground="Black"><Run Text="..."/></TextBlock>
                 </Button.ToolTip>
                 <Image x:Name="ChildPng" Style="{StaticResource ServiceButtonImage}"/>
             </Button>
+            <Button x:Name="BtnSoils" Style="{StaticResource SoilServiceButton}" Click="BtnSoils_Click"/>
         </StackPanel>
         <ListView x:Name="LvMain" ItemTemplate="{StaticResource LevelTemplate}" Grid.Row="1" ItemsSource="{Binding}"/>
     </Grid>

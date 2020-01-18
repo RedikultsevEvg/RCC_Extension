@@ -3,13 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using RDBLL.Entity.RCC.BuildingAndSite;
+using RDBLL.Common.Service;
 
-namespace RDBLL.Entity.Soil
+namespace RDBLL.Entity.Soils
 {
     /// <summary>
     /// Абстрактный класс несущего грунта
     /// </summary>
-    public abstract class BearingSoil :SoilBase
+    public abstract class BearingSoil :Soil
     {
         /// <summary>
         /// Модуль деформации
@@ -23,5 +25,9 @@ namespace RDBLL.Entity.Soil
         /// Коэффициент Пуассона
         /// </summary>
         public double PoissonRatio { get; set; }
+
+        public BearingSoil(BuildingSite buildingSite) : base(buildingSite)
+        {
+        }
     }
 }

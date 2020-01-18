@@ -103,17 +103,17 @@
     <Compile Include="Entity\SC\Column\SteelBaseSubPart.cs" />
     <Compile Include="Entity\SC\Column\SteelBolt.cs" />
     <Compile Include="Entity\SC\Column\SteelBase.cs" />
-    <Compile Include="Entity\Soil\BearingSoil.cs" />
-    <Compile Include="Entity\Soil\DispersedSoil.cs" />
-    <Compile Include="Entity\Soil\NominalSoil.cs" />
-    <Compile Include="Entity\Soil\NonBearingSoil.cs" />
-    <Compile Include="Entity\Soil\RockSoil.cs" />
-    <Compile Include="Entity\Soil\SoilBase.cs" />
-    <Compile Include="Entity\Soil\SoilElementaryLayer.cs" />
-    <Compile Include="Entity\Soil\SoilLayer.cs" />
-    <Compile Include="Entity\Soil\SoilParameter.cs" />
-    <Compile Include="Entity\Soil\SoilParameterKind.cs" />
-    <Compile Include="Entity\Soil\SoilSection.cs" />
+    <Compile Include="Entity\Soils\BearingSoil.cs" />
+    <Compile Include="Entity\Soils\DispersedSoil.cs" />
+    <Compile Include="Entity\Soils\NominalSoil.cs" />
+    <Compile Include="Entity\Soils\NonBearingSoil.cs" />
+    <Compile Include="Entity\Soils\RockSoil.cs" />
+    <Compile Include="Entity\Soils\Soil.cs" />
+    <Compile Include="Entity\Soils\SoilElementaryLayer.cs" />
+    <Compile Include="Entity\Soils\SoilLayer.cs" />
+    <Compile Include="Entity\Soils\SoilParameter.cs" />
+    <Compile Include="Entity\Soils\SoilParameterKind.cs" />
+    <Compile Include="Entity\Soils\SoilSection.cs" />
     <Compile Include="Forces\BarLoadSet.cs" />
     <Compile Include="Forces\ForcesGroup.cs" />
     <Compile Include="Forces\ForceParameter.cs" />
@@ -129,7 +129,7 @@
   <ItemGroup>
     <Folder Include="Common\Delegates\" />
     <Folder Include="Entity\Results\RCC\" />
-    <Folder Include="Entity\Soil\Processors\" />
+    <Folder Include="Entity\Soils\Processors\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DAL\DAL.csproj">
