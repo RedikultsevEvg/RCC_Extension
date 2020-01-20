@@ -21,25 +21,24 @@ using Winforms = System.Windows.Forms;
 namespace RDUIL.WPF_Windows.Foundations.Soils
 {
     /// <summary>
-    /// Логика взаимодействия для WndSoils.xaml
+    /// Логика взаимодействия для WndSoilCrossSections.xaml
     /// </summary>
-    public partial class WndSoils : Window
+    public partial class WndSoilSections : Window
     {
         private BuildingSite _buildingSite;
-        private ObservableCollection<Soil> _collection;
-        public WndSoils(BuildingSite buildingSite)
+        private ObservableCollection<SoilSection> _collection;
+        public WndSoilSections(BuildingSite buildingSite)
         {
             _buildingSite = buildingSite;
-            _collection = _buildingSite.Soils;
+            _collection = _buildingSite.SoilSections;
             this.DataContext = _collection;
             InitializeComponent();
-            if (_collection.Count>0) { LvMain.SelectedIndex = 0; }
         }
 
         private void BtnAdd_Click(object sender, RoutedEventArgs e)
         {
-            DispersedSoil dispersedSoil = new DispersedSoil(_buildingSite);
-            _buildingSite.Soils.Add(dispersedSoil);
+            SoilSection soilSection = new SoilSection(_buildingSite);
+            _buildingSite.SoilSections.Add(soilSection);
             ProgrammSettings.IsDataChanged = true;
         }
 
@@ -74,23 +73,14 @@ namespace RDUIL.WPF_Windows.Foundations.Soils
             if (LvMain.SelectedIndex >= 0)
             {
                 int a = LvMain.SelectedIndex;
-                Soil soil = _collection[a];
-                if (soil is DispersedSoil)
-                {
-                    WndClaySoil wndSoil = new WndClaySoil(soil as DispersedSoil);
-                    wndSoil.ShowDialog();
-                }               
+                SoilSection soilSection = _collection[a];
+                WndSoilSection wndSoilSection = new WndSoilSection(soilSection);
+                wndSoilSection.ShowDialog();
             }
             else
             {
                 MessageBox.Show("Ничего не выбрано", "Выберите один из элементов");
             }
-        }
-
-        private void BtnReport_Click(object sender, RoutedEventArgs e)
-        {
-            throw new NotImplementedException();
-            //ShowReportProcessor.ShowFoundationsReport();
         }
     }
 }

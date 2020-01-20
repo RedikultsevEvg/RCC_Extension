@@ -82,7 +82,7 @@ namespace RDBLL.Entity.RCC.Foundations
         /// <summary>
         /// Коллекция ступеней столбчатого фундамента
         /// </summary>
-        public ObservableCollection<FoundationPart> Parts { get; set; }
+        public ObservableCollection<RectFoundationPart> Parts { get; set; }
         /// <summary>
         /// Защитный слой арматуры подошвы вдоль оси X
         /// </summary>
@@ -134,9 +134,12 @@ namespace RDBLL.Entity.RCC.Foundations
         /// </summary>
         public string LinearMeasure { get { return MeasureUnitConverter.GetUnitLabelText(0); } }
         /// <summary>
-        /// Единица измере
+        /// Единица измерения объемного веса
         /// </summary>
         public string VolumeWeightMeasure { get { return MeasureUnitConverter.GetUnitLabelText(9); } }
+        /// <summary>
+        /// Единица измерения нагрузки, распределенной по площади
+        /// </summary>
         public string DistributedLoadMeasure { get { return MeasureUnitConverter.GetUnitLabelText(13); } }
         #endregion
         #region Constructors
@@ -172,7 +175,7 @@ namespace RDBLL.Entity.RCC.Foundations
             CompressedLayerRatio = 0.2;
             ForcesGroups = new ObservableCollection<ForcesGroup>();
             ForcesGroups.Add(new ForcesGroup(this));
-            Parts = new ObservableCollection<FoundationPart>();
+            Parts = new ObservableCollection<RectFoundationPart>();
             LoadCases = new ObservableCollection<LoadSet>();
             ForceCurvaturesWithWeight = new List<ForceCurvature>();
             ForceCurvaturesWithoutWeight = new List<ForceCurvature>();
@@ -198,7 +201,7 @@ namespace RDBLL.Entity.RCC.Foundations
                 CompressedLayerRatio
                 };
             dataTable.Rows.Add(dataRow);
-            foreach (FoundationPart foundationPart in Parts)
+            foreach (RectFoundationPart foundationPart in Parts)
             {
                 foundationPart.SaveToDataSet(dataSet);
             }
@@ -207,12 +210,20 @@ namespace RDBLL.Entity.RCC.Foundations
                 forcesGroup.SaveToDataSet(dataSet);
             }
         }
-        public void OpenFromDataSet(DataSet dataSet, int i)
+        public void OpenFromDataSet(DataSet dataSet, int id)
         {
             throw new NotImplementedException();
         }
         #endregion
+        /// <summary>
+        /// Поле для ошибки
+        /// </summary>
         public string Error { get { throw new NotImplementedException(); } }
+        /// <summary>
+        /// Поле для проверки на ошибки
+        /// </summary>
+        /// <param name="columnName"></param>
+        /// <returns></returns>
         public string this[string columnName]
         {
             get

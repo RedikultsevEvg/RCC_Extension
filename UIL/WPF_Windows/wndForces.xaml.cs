@@ -57,10 +57,6 @@ namespace RDUIL.WPF_Windows
         {
             _forcesGroup.LoadSets.Add(new LoadSet(_forcesGroup));
         }
-        private void stpLoadsBtns_MouseLeave(object sender, MouseEventArgs e)
-        {
-            ((StackPanel)sender).Opacity = 0.5;
-        }
         private void lvLoadSet_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (lvLoadSet.SelectedIndex >= 0)
@@ -72,10 +68,6 @@ namespace RDUIL.WPF_Windows
                 lvForcesList.ItemsSource = null;
             }
                 
-        }
-        private void stpLoadsBtns_MouseMove(object sender, MouseEventArgs e)
-        {
-            ((StackPanel)sender).Opacity = 1;
         }
         private void btnDeleteLoad_Click(object sender, RoutedEventArgs e)
         {

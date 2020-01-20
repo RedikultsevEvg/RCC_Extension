@@ -6,11 +6,14 @@
              xmlns:Convert="clr-namespace:RDUIL.Converters;assembly=UIL" 
              StartupUri="MainWindow.xaml">
     <Application.Resources>
+        <Convert:LinearSizeConverter x:Key="LinearSizeConverter"/>
+        <!--<Convert:ForceConverter x:Key="ForceConverter"/>
+        <Convert:BendingMomentConverter x:Key="BendingMomentConverter"/>-->
         <Convert:StressConverter x:Key="StressConverter"/>
         <Convert:DensityConverter x:Key="DensityConverter"/>
         <Convert:VolumeWeightConverter x:Key="VolumeWeightConverter"/>
         <Convert:FiltrationConverter x:Key="FiltrationConverter"/>
-        
+
         <Style x:Key="ServiceButton" TargetType="Button">
             <Setter Property="Width" Value="100" />
             <Setter Property="Height" Value="50" />
@@ -34,6 +37,11 @@
             <Setter Property="Margin" Value="5" />
             <Setter Property="Background" Value="#FFB5FCFF" />
             <Setter Property="HorizontalAlignment" Value="Stretch" />
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect Opacity="0.6"/>
+                </Setter.Value>
+            </Setter>
         </Style>
         <Style x:Key="ServiceButtonImage" TargetType="Image">
             <Setter Property="Width" Value="40" />
@@ -69,13 +77,44 @@
         </Style>
 
         <Style x:Key="OperationStack" TargetType="StackPanel">
-            <Setter Property="Background" Value="#FF63D451"/>
-            <Setter Property="HorizontalAlignment" Value="Right"/>
-            <Setter Property="Orientation" Value="Horizontal"/>
-            <Setter Property="Panel.ZIndex" Value="1"/>
-            <Setter Property="Opacity" Value="0.5"/>
+            <Style.Setters>
+                <Setter Property="Background" Value="#FF63D451"/>
+                <Setter Property="HorizontalAlignment" Value="Right"/>
+                <Setter Property="Orientation" Value="Horizontal"/>
+                <Setter Property="Panel.ZIndex" Value="1"/>
+                <Setter Property="Opacity" Value="0.5"/>
+            </Style.Setters>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="true">
+                    <Setter Property="Opacity" Value="1"/>
+                </Trigger>
+            </Style.Triggers>
         </Style>
 
+        <Style x:Key="OkServiceButton" TargetType="Button" BasedOn="{StaticResource ServiceButton}">
+            <Setter Property="ToolTip">
+                <Setter.Value>
+                    <Run Text="Подтвердить"/>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="Content">
+                <Setter.Value>
+                    <Image x:Name="Add_png" Style="{StaticResource ServiceButtonImage}" Source="{DynamicResource IconOK}"/>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="CancelServiceButton" TargetType="Button" BasedOn="{StaticResource ServiceButton}">
+            <Setter Property="ToolTip">
+                <Setter.Value>
+                    <Run Text="Отмена"/>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="Content">
+                <Setter.Value>
+                    <Image x:Name="Add_png" Style="{StaticResource ServiceButtonImage}" Source="{DynamicResource IconCancel}"/>
+                </Setter.Value>
+            </Setter>
+        </Style>
         <Style x:Key="AddServiceButton" TargetType="Button" BasedOn="{StaticResource ServiceButton}">
             <Setter Property="ToolTip">
                 <Setter.Value>
@@ -124,15 +163,29 @@
                 </Setter.Value>
             </Setter>
         </Style>
-        <Style x:Key="SoilServiceButton" TargetType="Button" BasedOn="{StaticResource ServiceButton}">
+
+
+        <Style x:Key="AddOperationButton" TargetType="Button" BasedOn="{StaticResource OperationButton}">
             <Setter Property="ToolTip">
                 <Setter.Value>
-                    <Run Text="Грунты"/>
+                    <Run Text="Добавить"/>
                 </Setter.Value>
             </Setter>
             <Setter Property="Content">
                 <Setter.Value>
-                    <Image Style="{StaticResource ServiceButtonImage}" Source="{DynamicResource IconReport}"/>
+                    <Image Style="{StaticResource OperationButtonImage}" Source="{DynamicResource IconAdd30}"/>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="DeleteOperationButton" TargetType="Button" BasedOn="{StaticResource OperationButton}">
+            <Setter Property="ToolTip">
+                <Setter.Value>
+                    <Run Text="Удалить"/>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="Content">
+                <Setter.Value>
+                    <Image Style="{StaticResource OperationButtonImage}" Source="{StaticResource IconDelete30}" />
                 </Setter.Value>
             </Setter>
         </Style>

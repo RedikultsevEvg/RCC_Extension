@@ -129,6 +129,9 @@
     <Compile Include="WinForms\WallType.Designer.cs">
       <DependentUpon>WallType.cs</DependentUpon>
     </Compile>
+    <Compile Include="WPF_Windows\BuildingsAndSites\WndBuilding.xaml.cs">
+      <DependentUpon>WndBuilding.xaml</DependentUpon>
+    </Compile>
     <Compile Include="WPF_Windows\BuildingsAndSites\wndLevel.xaml.cs">
       <DependentUpon>wndLevel.xaml</DependentUpon>
     </Compile>
@@ -141,8 +144,11 @@
     <Compile Include="WPF_Windows\Foundations\Soils\WndClaySoil.xaml.cs">
       <DependentUpon>WndClaySoil.xaml</DependentUpon>
     </Compile>
-    <Compile Include="WPF_Windows\Foundations\Soils\WndSoilCrossSection.xaml.cs">
-      <DependentUpon>WndSoilCrossSection.xaml</DependentUpon>
+    <Compile Include="WPF_Windows\Foundations\Soils\WndSoilSection.xaml.cs">
+      <DependentUpon>WndSoilSection.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="WPF_Windows\Foundations\Soils\WndSoilSections.xaml.cs">
+      <DependentUpon>WndSoilSections.xaml</DependentUpon>
     </Compile>
     <Compile Include="WPF_Windows\Foundations\Soils\WndSoils.xaml.cs">
       <DependentUpon>WndSoils.xaml</DependentUpon>
@@ -187,6 +193,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="WPF_Windows\BuildingsAndSites\WndBuilding.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="WPF_Windows\BuildingsAndSites\wndLevel.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -199,7 +209,11 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="WPF_Windows\Foundations\Soils\WndSoilCrossSection.xaml">
+    <Page Include="WPF_Windows\Foundations\Soils\WndSoilSection.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="WPF_Windows\Foundations\Soils\WndSoilSections.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

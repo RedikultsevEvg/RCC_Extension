@@ -175,7 +175,7 @@ namespace RDBLL.Entity.RCC.BuildingAndSite
             DataRow dataRow;
             dataTable = dataSet.Tables["Buildings"];
             dataRow = dataTable.NewRow();
-            dataRow.ItemArray = new object[] { Id, BuildingSiteId, Name };
+            dataRow.ItemArray = new object[] { Id, BuildingSiteId, Name, RelativeLevel, AbsoluteLevel };
             dataTable.Rows.Add(dataRow);
             foreach (Level level in Levels)
             {

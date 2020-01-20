@@ -63,13 +63,11 @@ namespace DAL.DataSets
             #region Buildings
             dataTable = new DataTable("Buildings");
             dataSet.Tables.Add(dataTable);
-            IdColumn = new DataColumn("Id", Type.GetType("System.Int32"));
-            IdColumn.Unique = true;
-            dataTable.Columns.Add(IdColumn);
-            FkIdColumn = new DataColumn("BuildingSiteId", Type.GetType("System.Int32"));
-            dataTable.Columns.Add(FkIdColumn);
-            NameColumn = new DataColumn("Name", Type.GetType("System.String"));
-            dataTable.Columns.Add(NameColumn);
+            DsOperation.AddIdColumn(dataTable);
+            DsOperation.AddFkIdColumn("BuildingSites", "BuildingSiteId", dataTable);
+            DsOperation.AddNameColumn(dataTable);
+            DsOperation.AddDoubleColumn(dataTable, "RelativeLevel",0);
+            DsOperation.AddDoubleColumn(dataTable, "AbsoluteLevel", 260);
             #endregion
             #region Levels
             dataTable = new DataTable("Levels");

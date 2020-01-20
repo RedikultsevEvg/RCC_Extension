@@ -10,6 +10,20 @@
         Title="Усилие" Height="600" Width="1000" WindowStartupLocation="CenterScreen" MinWidth="1000" MinHeight="600">
     <Window.Resources>
         <BooleanToVisibilityConverter x:Key="VisibleIfTrueConverter" />
+        <Style x:Key="SndAddOperationButton" TargetType="Button" BasedOn="{StaticResource AddOperationButton}">
+            <Setter Property="Content">
+                <Setter.Value>
+                    <Image Style="{StaticResource OperationButtonImage}" Source="{DynamicResource IconAdd30}"/>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="SndDeleteOperationButton" TargetType="Button" BasedOn="{StaticResource DeleteOperationButton}">
+            <Setter Property="Content">
+                <Setter.Value>
+                    <Image Style="{StaticResource OperationButtonImage}" Source="{DynamicResource IconDelete30}"/>
+                </Setter.Value>
+            </Setter>
+        </Style>
         <DataTemplate  x:Key="cbTemplate">
             <TextBlock Text="{Binding Path=LongLabelInUnit}"></TextBlock>
         </DataTemplate>
@@ -95,19 +109,9 @@
                     <RowDefinition Height="50"/>
                     <RowDefinition/>
                 </Grid.RowDefinitions>
-                <StackPanel x:Name="stpForceBtns" Style="{StaticResource OperationStack}" MouseLeave="stpLoadsBtns_MouseLeave" MouseMove="stpLoadsBtns_MouseMove">
-                    <Button x:Name="btnAddForce" Style="{StaticResource OperationButton}" ToolTip="Добавить усилие" Click="btnAddForce_Click">
-                        <Button.Effect>
-                            <DropShadowEffect Opacity="0.6"/>
-                        </Button.Effect>
-                        <Image x:Name="AddForce_png" Style="{StaticResource OperationButtonImage}" Source="{DynamicResource IconAdd30}" />
-                    </Button>
-                    <Button x:Name="btnDeleteForce" Style="{StaticResource OperationButton}" ToolTip="Удалить усилие" Click="btnDeleteForce_Click">
-                        <Button.Effect>
-                            <DropShadowEffect Opacity="0.6"/>
-                        </Button.Effect>
-                        <Image x:Name="DeleteForce_png" Style="{StaticResource OperationButtonImage}" Source="{DynamicResource IconDelete30}"/>
-                    </Button>
+                <StackPanel x:Name="stpForceBtns" Style="{StaticResource OperationStack}">
+                    <Button x:Name="btnAddForce" Style="{StaticResource SndAddOperationButton}" ToolTip="Добавить усилие" Click="btnAddForce_Click"/>
+                    <Button x:Name="btnDeleteForce" Style="{StaticResource SndDeleteOperationButton}" ToolTip="Удалить усилие" Click="btnDeleteForce_Click"/>
                 </StackPanel>
                 <ListView x:Name="lvForcesList" Margin="5" ItemTemplate="{StaticResource ParameterTemplate}" Background="{x:Null}" Grid.RowSpan="2">
                 </ListView>
@@ -118,19 +122,9 @@
                     <RowDefinition Height="50"/>
                     <RowDefinition/>
                 </Grid.RowDefinitions>
-                <StackPanel x:Name="stpLoadsBtns" Style="{StaticResource OperationStack}" MouseLeave="stpLoadsBtns_MouseLeave" MouseMove="stpLoadsBtns_MouseMove">
-                    <Button x:Name="btnAddLoad" Style="{StaticResource OperationButton}" ToolTip="Добавить нагрузку" Click="btnAddLoad_Click">
-                        <Button.Effect>
-                            <DropShadowEffect Opacity="0.6"/>
-                        </Button.Effect>
-                        <Image x:Name="AddLoad_png" Style="{StaticResource OperationButtonImage}" Source="{DynamicResource IconAdd30}" />
-                    </Button>
-                    <Button x:Name="btnDeleteLoad" Style="{StaticResource OperationButton}" ToolTip="Удалить нагрузку" Click="btnDeleteLoad_Click">
-                        <Button.Effect>
-                            <DropShadowEffect Opacity="0.6"/>
-                        </Button.Effect>
-                        <Image x:Name="DeleteLoad_png" Style="{StaticResource OperationButtonImage}" Source="{DynamicResource IconDelete30}"/>
-                    </Button>
+                <StackPanel x:Name="stpLoadsBtns" Style="{StaticResource OperationStack}">
+                    <Button x:Name="btnAddLoad" Style="{StaticResource AddOperationButton}" ToolTip="Добавить нагрузку" Click="btnAddLoad_Click"/>
+                    <Button x:Name="btnDeleteLoad" Style="{StaticResource DeleteOperationButton}" ToolTip="Удалить нагрузку" Click="btnDeleteLoad_Click"/>
                 </StackPanel>
                 <ListView x:Name="lvLoadSet"
                           Grid.Row="0" Margin="5" ItemTemplate="{StaticResource LoadsTemplate}" Grid.RowSpan="2"

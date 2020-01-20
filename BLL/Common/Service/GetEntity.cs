@@ -34,7 +34,9 @@ namespace RDBLL.Common.Service
                     Id = dataRow.Field<int>("Id"),
                     BuildingSiteId = dataRow.Field<int>("BuildingSiteId"),
                     BuildingSite = buildingSite,
-                    Name = dataRow.Field<string>("Name")
+                    Name = dataRow.Field<string>("Name"),
+                    RelativeLevel = dataRow.Field<double>("RelativeLevel"),
+                    AbsoluteLevel = dataRow.Field<double>("AbsoluteLevel")
                 };
                 newObject.Levels = GetLevels(dataSet, newObject);
                 newObjects.Add(newObject);
@@ -372,16 +374,16 @@ namespace RDBLL.Common.Service
         /// <param name="dataSet"></param>
         /// <param name="foundation"></param>
         /// <returns></returns>
-        public static ObservableCollection<FoundationPart> GetFoundationParts(DataSet dataSet, Foundation foundation)
+        public static ObservableCollection<RectFoundationPart> GetFoundationParts(DataSet dataSet, Foundation foundation)
         {
-            ObservableCollection<FoundationPart> newObjects = new ObservableCollection<FoundationPart>();
+            ObservableCollection<RectFoundationPart> newObjects = new ObservableCollection<RectFoundationPart>();
             DataTable dataTable = dataSet.Tables["FoundationParts"];
             var query = from dataRow in dataTable.AsEnumerable()
                         where dataRow.Field<int>("FoundationId") == foundation.Id
                         select dataRow;
             foreach (var dataRow in query)
             {
-                FoundationPart newObject = new FoundationPart
+                RectFoundationPart newObject = new RectFoundationPart
                 {
                     Id = dataRow.Field<int>("Id"),
                     FoundationId = dataRow.Field<int>("FoundationId"),

@@ -135,7 +135,7 @@ namespace CSL.Reports
         private void ProcessFoundationParts(Foundation foundation)
         {
             DataTable FoundationParts = dataSet.Tables["FoundationParts"];
-            foreach (FoundationPart foundationPart in foundation.Parts)
+            foreach (RectFoundationPart foundationPart in foundation.Parts)
             {
                 DataRow newFoundationPart = FoundationParts.NewRow();
                 newFoundationPart.ItemArray = new object[]

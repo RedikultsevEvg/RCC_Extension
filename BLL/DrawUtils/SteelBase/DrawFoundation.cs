@@ -56,7 +56,7 @@ namespace RDBLL.DrawUtils.SteelBase
         /// <param name="koeffY"></param>
         /// <param name="opacity"> Прозрачность</param>
         /// <param name="showName"></param>
-        public static void DrawTopFoundationPart(FoundationPart foundationPart, Canvas canvas, double[] AxisCenter, double scale_factor, int koeffX = 1, int koeffY = 1, double opacity = 0.6, bool showName = true)
+        public static void DrawTopFoundationPart(RectFoundationPart foundationPart, Canvas canvas, double[] AxisCenter, double scale_factor, int koeffX = 1, int koeffY = 1, double opacity = 0.6, bool showName = true)
         {
             double[] basePartCenter = new double[2] { AxisCenter[0] + foundationPart.CenterX * scale_factor * koeffX, AxisCenter[1] - foundationPart.CenterY * scale_factor * koeffY };
             Rectangle basePartRect = new Rectangle();

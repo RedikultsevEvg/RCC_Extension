@@ -34,6 +34,7 @@ namespace RDUIL.WPF_Windows.Foundations
             _collection = _level.Foundations;
             InitializeComponent();
             this.DataContext = _collection;
+            if (_collection.Count > 0) { LvMain.SelectedIndex = 0; }
         }
 
         private void BtnAdd_Click(object sender, RoutedEventArgs e)
