@@ -3,16 +3,20 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using RDBLL.Entity.RCC.BuildingAndSite;
+using RDBLL.Common.Service;
+using RDBLL.Entity.MeasureUnits;
+using RDBLL.Common.Interfaces;
+using System.ComponentModel;
+using System.Data;
 
 namespace RDBLL.Entity.Soils
 {
     /// <summary>
     /// Класс геологического разреза
     /// </summary>
-    public class SoilSection
+    public class SoilSection : ISavableToDataSet, IDataErrorInfo
     {
         /// <summary>
         /// Код разреза
@@ -35,6 +39,10 @@ namespace RDBLL.Entity.Soils
         /// </summary>
         public ObservableCollection<SoilLayer> SoilLayers { get; set; }
         /// <summary>
+        /// Флаг наличия грунтовой воды
+        /// </summary>
+        public bool HasWater { get; set; }
+        /// <summary>
         /// Уровень грунтовых вод зафиксированный
         /// </summary>
         public double NaturalWaterLevel { get; set; }
@@ -50,5 +58,86 @@ namespace RDBLL.Entity.Soils
         /// Положение центра
         /// </summary>
         public double CenterY { get; set; }
+        /// <summary>
+        /// Наименование линейных единиц измерения
+        /// </summary>
+        public string LinearMeasure { get { return MeasureUnitConverter.GetUnitLabelText(0); } }
+        /// <summary>
+        /// Конструктор без параметров
+        /// </summary>
+        public SoilSection()
+        {
+            SoilLayers = new ObservableCollection<SoilLayer>();
+        }
+        /// <summary>
+        /// Конструктор по строительному объекту
+        /// </summary>
+        /// <param name="buildingSite"></param>
+        public SoilSection(BuildingSite buildingSite)
+        {
+            Id = ProgrammSettings.CurrentId;
+            BuildingSiteId = buildingSite.Id;
+            BuildingSite = buildingSite;
+            Name = "Скважина-" + (buildingSite.SoilSections.Count + 1);
+            HasWater = false;
+            NaturalWaterLevel = 200;
+            CenterX = 0;
+            CenterY = 0;
+            SoilLayers = new ObservableCollection<SoilLayer>();
+        }
+        #region SaveToDataset
+        /// <summary>
+        /// Сохраняет класс в датасет
+        /// </summary>
+        public void SaveToDataSet(DataSet dataSet)
+        {
+            DataTable dataTable;
+            DataRow dataRow;
+            dataTable = dataSet.Tables["SoilSections"];
+            dataRow = dataTable.NewRow();
+            dataRow.ItemArray = new object[]
+                { Id, BuildingSiteId, Name, HasWater, NaturalWaterLevel, WaterLevel, CenterX, CenterY };
+            dataTable.Rows.Add(dataRow);
+            foreach (SoilLayer soilLayer in SoilLayers)
+            {
+                //soilLayer.SaveToDataSet(dataSet);
+            }
+        }
+        public void OpenFromDataSet(DataSet dataSet, int id)
+        {
+            throw new NotImplementedException();
+        }
+        #endregion
+        #region errors
+        /// <summary>
+        /// Поле для ошибки
+        /// </summary>
+        public string Error { get { throw new NotImplementedException(); } }
+        /// <summary>
+        /// Поле для проверки на ошибки
+        /// </summary>
+        /// <param name="columnName"></param>
+        /// <returns></returns>
+        public string this[string columnName]
+        {
+            get
+            {
+                string error = String.Empty;
+                switch (columnName)
+                {
+                    case "NaturalWaterLevel":
+                        {
+                            if (SoilLayers.Count>0 & HasWater)
+                            if (NaturalWaterLevel > SoilLayers[0].TopLevel)
+                            {
+                                error = "Уровень грунтовых вод должен быть ниже кровели верхнего слоя";
+                            }
+                        }
+                        break;
+                }
+                return error;
+            }
+        }
+        #endregion
     }
 }

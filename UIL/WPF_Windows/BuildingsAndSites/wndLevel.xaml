@@ -12,7 +12,7 @@
     </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="375*"/>
+            <RowDefinition/>
             <RowDefinition Height="80"/>
         </Grid.RowDefinitions>
         <Grid>
@@ -44,18 +44,8 @@
 
         </Grid>
         <StackPanel Height="60" Grid.Row="1" Margin="10" Orientation="Horizontal" Grid.ColumnSpan="3" HorizontalAlignment="Right" Background="#FFE2E2E2">
-            <Button x:Name="btnOK" Style="{StaticResource ServiceButton}" HorizontalAlignment="Stretch" Click="btnOK_Click">
-                <Button.Effect>
-                    <DropShadowEffect Opacity="0.6"/>
-                </Button.Effect>
-                <Image x:Name="OK_png" Style="{StaticResource ServiceButtonImage}" Source="{DynamicResource IconOK}"/>
-            </Button>
-            <Button x:Name="btnCancel" Style="{StaticResource ServiceButton}" HorizontalAlignment="Stretch" Click="btnCancel_Click" IsEnabled="False">
-                <Button.Effect>
-                    <DropShadowEffect Opacity="0.6"/>
-                </Button.Effect>
-                <Image x:Name="Cancel_png" Style="{StaticResource ServiceButtonImage}" Source="{DynamicResource IconCancel}"/>
-            </Button>
+            <Button x:Name="btnOK" Style="{StaticResource OkServiceButton}" HorizontalAlignment="Stretch" Click="btnOK_Click"/>
+            <Button x:Name="btnCancel" Style="{StaticResource CancelServiceButton}" HorizontalAlignment="Stretch" Click="btnCancel_Click" IsEnabled="False"/>
         </StackPanel>
     </Grid>
 </Window>

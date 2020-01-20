@@ -27,12 +27,12 @@ namespace RDBLL.Entity.RCC.Foundations.Processors
             if (foundation.Parts.Count>0)
             {
                 //Размеры в плане принимаем по самой нижней ступени
-                FoundationPart foundationPart = foundation.Parts[foundation.Parts.Count - 1];
+                RectFoundationPart foundationPart = foundation.Parts[foundation.Parts.Count - 1];
                 sizes[0] = foundationPart.Width;
                 sizes[1] = foundationPart.Length;
 
                 //Высоту определяем как сумму высот ступеней
-                foreach (FoundationPart foundationPartH in foundation.Parts)
+                foreach (RectFoundationPart foundationPartH in foundation.Parts)
                 {
                     sizes[2] += foundationPartH.Height;
                 }
@@ -72,7 +72,7 @@ namespace RDBLL.Entity.RCC.Foundations.Processors
             delta[0] = foundation.Parts[partCount - 1].CenterX;
             delta[1] = foundation.Parts[partCount - 1].CenterY;
             //Сдвижку по Z получаем как суммарную высоту фундамента
-            foreach (FoundationPart foundationPart in foundation.Parts)
+            foreach (RectFoundationPart foundationPart in foundation.Parts)
             {
                 //Знак - принимаем, так как фундамент располагается вниз от верхней точки
                 delta[2] -= foundationPart.Height;
@@ -168,7 +168,7 @@ namespace RDBLL.Entity.RCC.Foundations.Processors
         public static double GetConcreteVolume(Foundation foundation)
         {
             double volume = 0;
-            foreach (FoundationPart foundationPart in foundation.Parts)
+            foreach (RectFoundationPart foundationPart in foundation.Parts)
             {
                 volume += foundationPart.Width * foundationPart.Length * foundationPart.Height;
             }
@@ -269,7 +269,7 @@ namespace RDBLL.Entity.RCC.Foundations.Processors
         public static List<double[]> GetFoundationMidllePoints(Foundation foundation)
         {
             List<double[]> points = new List<double[]>();
-            FoundationPart foundationPart = foundation.Parts[foundation.Parts.Count - 1];
+            RectFoundationPart foundationPart = foundation.Parts[foundation.Parts.Count - 1];
             double[] point1 = new double[2] { foundationPart.Width / 2, foundationPart.CenterY };
             double[] point2 = new double[2] { (-1D) * foundationPart.Width / 2, foundationPart.CenterY };
             double[] point3 = new double[2] { foundationPart.CenterX, foundationPart.Length / 2 };
@@ -284,7 +284,7 @@ namespace RDBLL.Entity.RCC.Foundations.Processors
         public static List<double[]> GetFoundationCornerPoints(Foundation foundation)
         {
             List<double[]> points = new List<double[]>();
-            FoundationPart foundationPart = foundation.Parts[foundation.Parts.Count - 1];
+            RectFoundationPart foundationPart = foundation.Parts[foundation.Parts.Count - 1];
             double[] point1 = new double[2] { foundationPart.Width / 2, foundationPart.Length / 2 };
             double[] point2 = new double[2] { (-1D) * foundationPart.Width / 2, (-1D) * foundationPart.Length / 2 };
             double[] point3 = new double[2] { foundationPart.Width / 2, (-1D) * foundationPart.Length / 2 };

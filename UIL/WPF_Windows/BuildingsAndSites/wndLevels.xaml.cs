@@ -17,7 +17,7 @@ using RDBLL.Common.Service;
 using Winforms = System.Windows.Forms;
 using RDUIL.WPF_Windows.Foundations;
 using RDUIL.Common.Reports;
-using RDUIL.WPF_Windows.Foundations.Soils;
+using RDUIL.WPF_Windows.BuildingsAndSites;
 
 
 namespace RDUIL.WPF_Windows.BuildingsAndSites
@@ -127,11 +127,10 @@ namespace RDUIL.WPF_Windows.BuildingsAndSites
             }
             
         }
-
-        private void BtnSoils_Click(object sender, RoutedEventArgs e)
+        private void BtnBuilding_Click(object sender, RoutedEventArgs e)
         {
-            WndSoils wndSoils = new WndSoils(_building.BuildingSite);
-            wndSoils.ShowDialog();
+            WndBuilding wndBuilding = new WndBuilding(_building);
+            wndBuilding.ShowDialog();
         }
     }
 }

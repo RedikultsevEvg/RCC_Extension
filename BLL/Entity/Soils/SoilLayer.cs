@@ -3,19 +3,26 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using RDBLL.Common.Interfaces;
+using System.ComponentModel;
+using System.Data;
 
 namespace RDBLL.Entity.Soils
 {
     /// <summary>
     /// Класс слоя грунта
     /// </summary>
-    public class SoilLayer
+    public class SoilLayer : ISavableToDataSet
+
     {
         /// <summary>
         /// Код слоя
         /// </summary>
         public int Id { get; set; }
-
+        /// <summary>
+        /// Код модели грунта
+        /// </summary>
+        public int SoilId { get; set; }
         /// <summary>
         /// Ссылка на модель грунта
         /// </summary>
@@ -24,5 +31,25 @@ namespace RDBLL.Entity.Soils
         /// Отметка верха слоя
         /// </summary>
         public double TopLevel { get; set; }
+
+        #region SaveToDataset
+        /// <summary>
+        /// Сохраняет класс в датасет
+        /// </summary>
+        public void SaveToDataSet(DataSet dataSet)
+        {
+            DataTable dataTable;
+            DataRow dataRow;
+            dataTable = dataSet.Tables["SoilSections"];
+            dataRow = dataTable.NewRow();
+            dataRow.ItemArray = new object[]
+                { Id, SoilId, TopLevel };
+            dataTable.Rows.Add(dataRow);
+        }
+        public void OpenFromDataSet(DataSet dataSet, int id)
+        {
+            throw new NotImplementedException();
+        }
+        #endregion
     }
 }

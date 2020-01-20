@@ -18,7 +18,7 @@ namespace RDUIL.WPF_Windows.Foundations
     public partial class wndFoundationParts : Window
     {
         private Foundation _foundation;
-        private ObservableCollection<FoundationPart> _collection;
+        private ObservableCollection<RectFoundationPart> _collection;
         public wndFoundationParts(Foundation foundation)
         {
             _foundation = foundation;
@@ -40,7 +40,7 @@ namespace RDUIL.WPF_Windows.Foundations
 
         private void BtnAddPart_Click(object sender, RoutedEventArgs e)
         {
-            FoundationPart foundationPart = new FoundationPart(_foundation);
+            RectFoundationPart foundationPart = new RectFoundationPart(_foundation);
             _collection.Add(foundationPart);
         }
 

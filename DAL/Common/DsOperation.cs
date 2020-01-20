@@ -60,6 +60,7 @@ namespace DAL.Common
         {
             DataColumn NewColumn;
             NewColumn = new DataColumn(columnName, Type.GetType("System.Double"));
+            NewColumn.AllowDBNull = false;
             NewColumn.DefaultValue = defaultValue;
             dataTable.Columns.Add(NewColumn);
             return NewColumn;

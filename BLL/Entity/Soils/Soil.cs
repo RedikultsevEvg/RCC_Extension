@@ -31,6 +31,10 @@ namespace RDBLL.Entity.Soils
         /// </summary>
         public string Name { get; set; }
         /// <summary>
+        /// Расширенное наименование
+        /// </summary>
+        public string Description { get; set; }
+        /// <summary>
         /// Нормативная плотность грунта
         /// </summary>
         public double CrcDensity { get; set; }
@@ -47,8 +51,17 @@ namespace RDBLL.Entity.Soils
         /// Необходим, так как влияет на напряжения в грунте при послойном суммировании
         /// </summary>
         public double FiltrationCoeff { get; set; }
+        /// <summary>
+        /// Единицы измерения напряжений, только для чтения
+        /// </summary>
         public string StressMeasure { get { return MeasureUnitConverter.GetUnitLabelText(3); } }
+        /// <summary>
+        /// Единицы измерения плотности
+        /// </summary>
         public string DensityMeasure { get { return MeasureUnitConverter.GetUnitLabelText(8); } }
+        /// <summary>
+        /// Единицы измерения коэффициента фильтрации
+        /// </summary>
         public string FiltrationMeasure { get { return MeasureUnitConverter.GetUnitLabelText(14); } }
 
         /// <summary>
@@ -61,6 +74,7 @@ namespace RDBLL.Entity.Soils
             BuildingSiteId = buildingSite.Id;
             BuildingSite = buildingSite;
             Name = "ИГЭ-" + (buildingSite.Soils.Count + 1);
+            Description = "Суглинок песчанистый, тугопластичный";
             FiltrationCoeff = 0.0001;
         }
     }

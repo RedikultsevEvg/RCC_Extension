@@ -19,7 +19,7 @@ namespace RDUIL.Converters
             {
                 Path path = new Path();
                 GeometryGroup geometryGroup = new GeometryGroup();
-                foreach (FoundationPart foundationPart in item.Parts)
+                foreach (RectFoundationPart foundationPart in item.Parts)
                 {
                     RectangleGeometry rectangleGeometry = new RectangleGeometry();
                     rectangleGeometry.Rect = new Rect(0, 0, foundationPart.Width*100, foundationPart.Length*100);
