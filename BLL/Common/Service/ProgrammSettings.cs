@@ -29,6 +29,9 @@ namespace RDBLL.Common.Service
         private static int _CurrentId;
         private static int _CurrentTmpId;
 
+        /// <summary>
+        /// Генератор Id
+        /// </summary>
         public static int CurrentId
         {
             get
@@ -41,6 +44,9 @@ namespace RDBLL.Common.Service
                 _CurrentId = value;
             }
         }
+        /// <summary>
+        /// Генератор временных Id
+        /// </summary>
         public static int CurrentTmpId
         {
             get
@@ -53,10 +59,21 @@ namespace RDBLL.Common.Service
                 _CurrentTmpId = value;
             }
         }
+        /// <summary>
+        /// Параметры усилий
+        /// </summary>
         public static List<ForceParamKind> ForceParamKinds { get; set; }
+        /// <summary>
+        /// Единицы измерения
+        /// </summary>
         public static ObservableCollection<MeasureUnit> MeasureUnits { get; set; }
-
+        /// <summary>
+        /// Строительный объект
+        /// </summary>
         public static BuildingSite BuildingSite { get; set; }
+        /// <summary>
+        /// Путь к рабочему файлу
+        /// </summary>
         public static String FilePath
         {
             get { return _filePath; }
@@ -66,6 +83,9 @@ namespace RDBLL.Common.Service
                 if (FilePathChanged != null) FilePathChanged(null, EventArgs.Empty);
             }
         }
+        /// <summary>
+        /// Флаг внесения изменений в файл
+        /// </summary>
         public static bool IsDataChanged
         {
             get
@@ -76,6 +96,9 @@ namespace RDBLL.Common.Service
                 if (IsDataChangedChanged != null) IsDataChangedChanged(null, EventArgs.Empty);
             }
         }
+        /// <summary>
+        /// Метод задания начальных параметров
+        /// </summary>
         public static void InicializeNew()
         {
             BuildingSite = new BuildingSite();
@@ -257,10 +280,17 @@ namespace RDBLL.Common.Service
             #endregion
             
         }
+        /// <summary>
+        /// Очистить коллекцию зданий строительного объекта
+        /// </summary>
         public static void ClearAll()
         {
             BuildingSite.Buildings.Clear();
         }
+        /// <summary>
+        /// Открыть проект из файла
+        /// </summary>
+        /// <returns></returns>
         public static bool OpenProjectFromFile()
         {
             try
@@ -280,6 +310,11 @@ namespace RDBLL.Common.Service
                 return false;
             }
         }
+        /// <summary>
+        /// Сохранение проекта в файл
+        /// </summary>
+        /// <param name="InNewFile"></param>
+        /// <returns></returns>
         public static bool SaveProjectToFile(bool InNewFile = false)
         {
             try
@@ -322,7 +357,14 @@ namespace RDBLL.Common.Service
         /// Параметр определяющий, что данные изменились
         /// </summary>
         public static event EventHandler IsDataChangedChanged;
+        /// <summary>
+        /// Событие изменения пути файла
+        /// </summary>
         public static event EventHandler FilePathChanged;
+        /// <summary>
+        /// Получение датасета
+        /// </summary>
+        /// <returns></returns>
         public static DataSet GetDataSet()
         {
             MainDataSet mainDataSet = new MainDataSet();
@@ -357,6 +399,10 @@ namespace RDBLL.Common.Service
             #endregion
             return dataSet;
         }
+        /// <summary>
+        /// Открыть существующий проект
+        /// </summary>
+        /// <param name="fileName"></param>
         public static void OpenExistDataset(string fileName)
         {
             MainDataSet mainDataSet = new MainDataSet();
