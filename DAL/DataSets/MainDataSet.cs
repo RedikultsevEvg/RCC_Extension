@@ -188,7 +188,7 @@ namespace DAL.DataSets
             dataSet.Tables.Add(dataTable);
             DsOperation.AddIdColumn(dataTable);
             DsOperation.AddFkIdColumn("Levels", "LevelId", dataTable);
-            FkIdColumn = new DataColumn("SteelClassId", Type.GetType("System.Int32"));
+            FkIdColumn = new DataColumn("ReinfSteelClassId", Type.GetType("System.Int32"));
             dataTable.Columns.Add(FkIdColumn);
             FkIdColumn = new DataColumn("ConcreteClassId", Type.GetType("System.Int32"));
             dataTable.Columns.Add(FkIdColumn);

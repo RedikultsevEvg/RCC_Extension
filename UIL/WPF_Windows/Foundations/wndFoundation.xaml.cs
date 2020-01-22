@@ -49,10 +49,15 @@ namespace RDUIL.WPF_Windows.Foundations
             else
             {
                 _element.IsLoadCasesActual = false;
-                ProgrammSettings.IsDataChanged = true;
                 this.DialogResult = true;
                 this.Close();
             }
+        }
+
+        private void BtnCancel_Click(object sender, RoutedEventArgs e)
+        {
+            this.DialogResult = false;
+            this.Close();
         }
     }
 }

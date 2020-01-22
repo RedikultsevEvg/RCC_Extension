@@ -182,6 +182,36 @@ namespace RDBLL.Entity.RCC.BuildingAndSite
                 level.SaveToDataSet(dataSet);
             }
         }
+        /// <summary>
+        /// Обновляет датасет в соответствии с записью
+        /// </summary>
+        /// <param name="dataSet"></param>
+        public void Save (DataSet dataSet)
+        {
+            DataTable dataTable = dataSet.Tables["Buildings"];
+            var building = (from dataRow in dataTable.AsEnumerable()
+                        where dataRow.Field<int>("Id") == Id
+                        select dataRow).Single();
+            building.SetField("Name", Name);
+            building.SetField("RelativeLevel", RelativeLevel);
+            building.SetField("AbsoluteLevel", AbsoluteLevel);
+            dataTable.AcceptChanges();
+        }
+        /// <summary>
+        /// Обновляет запись в соответствии с сохраненной в датасете
+        /// </summary>
+        /// <param name="dataSet"></param>
+        public void Revert(DataSet dataSet)
+        {
+            DataTable dataTable = dataSet.Tables["Buildings"];
+            var building = (from dataRow in dataTable.AsEnumerable()
+                            where dataRow.Field<int>("Id") == Id
+                            select dataRow).Single();
+            Name = building.Field<string>("Name");
+            RelativeLevel = building.Field<double>("RelativeLevel");
+            AbsoluteLevel = building.Field<double>("AbsoluteLevel");
+        }
+
         public void OpenFromDataSet(DataSet dataSet, int Id)
         {
         }
