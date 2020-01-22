@@ -53,6 +53,8 @@ namespace RDBLL.Common.Service
                 _CurrentTmpId = value;
             }
         }
+        public static List<DataSet> DataSets { get; set; }
+        public static DataSet CurrentDataSet { get { return DataSets[0]; } }
         public static List<ForceParamKind> ForceParamKinds { get; set; }
         public static ObservableCollection<MeasureUnit> MeasureUnits { get; set; }
 
@@ -255,7 +257,7 @@ namespace RDBLL.Common.Service
                 MeasureUnit = measureUnitMoment
             });
             #endregion
-            
+            DataSets = new List<DataSet>();
         }
         public static void ClearAll()
         {
@@ -378,6 +380,8 @@ namespace RDBLL.Common.Service
                 MeasureUnits[i].CurrentUnitLabelId = Convert.ToInt32(dataTable.Rows[i].ItemArray[0]);
             }
             BuildingSite.OpenFromDataSet(dataSet, 1);
+            DataSets.Clear();
+            DataSets.Add(dataSet);
             #endregion
         }
     }

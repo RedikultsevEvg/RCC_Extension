@@ -18,6 +18,7 @@ using Winforms = System.Windows.Forms;
 using RDUIL.WPF_Windows.Foundations;
 using RDUIL.Common.Reports;
 using RDUIL.WPF_Windows.BuildingsAndSites;
+using System.Data;
 
 
 namespace RDUIL.WPF_Windows.BuildingsAndSites
@@ -129,8 +130,11 @@ namespace RDUIL.WPF_Windows.BuildingsAndSites
         }
         private void BtnBuilding_Click(object sender, RoutedEventArgs e)
         {
+            DataSet dataSet = ProgrammSettings.CurrentDataSet;
             WndBuilding wndBuilding = new WndBuilding(_building);
             wndBuilding.ShowDialog();
+            if (wndBuilding.DialogResult == true) { _building.Save(dataSet); }
+            else { _building.Revert(dataSet); }
         }
     }
 }

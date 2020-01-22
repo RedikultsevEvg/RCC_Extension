@@ -17,6 +17,7 @@ using RDBLL.Entity.RCC.Foundations;
 using RDBLL.Common.Service;
 using RDUIL.Common.Reports;
 using Winforms = System.Windows.Forms;
+using System.Data;
 
 namespace RDUIL.WPF_Windows.Foundations
 {
@@ -39,8 +40,17 @@ namespace RDUIL.WPF_Windows.Foundations
 
         private void BtnAdd_Click(object sender, RoutedEventArgs e)
         {
-            _collection.Add(new Foundation(_level));
-            ProgrammSettings.IsDataChanged = true;
+            Foundation foundation = new Foundation(_level);
+            wndFoundation wndChild = new wndFoundation(foundation);
+            wndChild.ShowDialog();
+            if (wndChild.DialogResult == true)
+            {
+                DataSet dataSet = ProgrammSettings.CurrentDataSet;
+                foundation.SaveToDataSet(dataSet);
+                _collection.Add(foundation);
+                ProgrammSettings.IsDataChanged = true;
+            }
+
         }
 
         private void BtnDelete_Click(object sender, RoutedEventArgs e)
@@ -74,8 +84,12 @@ namespace RDUIL.WPF_Windows.Foundations
             if (LvMain.SelectedIndex >= 0)
             {
                 int a = LvMain.SelectedIndex;
-                wndFoundation wndChild = new wndFoundation(_collection[a]);
+                DataSet dataSet = ProgrammSettings.CurrentDataSet;
+                Foundation foundation = _collection[a];
+                wndFoundation wndChild = new wndFoundation(foundation);
                 wndChild.ShowDialog();
+                if (wndChild.DialogResult == true) { foundation.Save(dataSet); }
+                else { foundation.Revert(dataSet); }
             }
             else
             {

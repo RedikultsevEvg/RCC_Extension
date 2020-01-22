@@ -344,7 +344,7 @@ namespace RDBLL.Common.Service
                     Id = dataRow.Field<int>("Id"),
                     LevelId = dataRow.Field<int>("LevelId"),
                     Level = level,
-                    SteelClassId = dataRow.Field<int>("SteelClassId"),
+                    ReinfSteelClassId = dataRow.Field<int>("ReinfSteelClassId"),
                     ConcreteClassId = dataRow.Field<int>("ConcreteClassId"),
                     //Надо получить ссылки на сталь и бетон
 
