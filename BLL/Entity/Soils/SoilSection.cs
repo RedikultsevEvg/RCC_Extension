@@ -89,7 +89,7 @@ namespace RDBLL.Entity.Soils
         /// <summary>
         /// Сохраняет класс в датасет
         /// </summary>
-        public void SaveToDataSet(DataSet dataSet)
+        public void SaveToDataSet(DataSet dataSet, bool createNew)
         {
             DataTable dataTable;
             DataRow dataRow;
@@ -103,7 +103,23 @@ namespace RDBLL.Entity.Soils
                 //soilLayer.SaveToDataSet(dataSet);
             }
         }
-        public void OpenFromDataSet(DataSet dataSet, int id)
+        public void OpenFromDataSet(DataSet dataSet)
+        {
+            throw new NotImplementedException();
+        }
+        /// <summary>
+        /// Обновляет запись в соответствии со строкой датасета
+        /// </summary>
+        /// <param name="dataRow"></param>
+        public void OpenFromDataSet(DataRow dataRow)
+        {
+            throw new NotImplementedException();
+        }
+        /// <summary>
+        /// Удаляет запись из датасета
+        /// </summary>
+        /// <param name="dataSet"></param>
+        public void DeleteFromDataSet(DataSet dataSet)
         {
             throw new NotImplementedException();
         }

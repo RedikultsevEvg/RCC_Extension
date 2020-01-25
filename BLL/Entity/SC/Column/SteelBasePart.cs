@@ -134,7 +134,7 @@ namespace RDBLL.Entity.SC.Column
         /// Сохранение в датасет
         /// </summary>
         /// <param name="dataSet">Датасет</param>
-        public void SaveToDataSet(DataSet dataSet)
+        public void SaveToDataSet(DataSet dataSet, bool createNew)
         {
             DataTable dataTable;
             DataRow dataRow;
@@ -151,9 +151,25 @@ namespace RDBLL.Entity.SC.Column
             dataTable.Rows.Add(dataRow);
         }
 
-        public void OpenFromDataSet(DataSet dataSet, int Id)
+        public void OpenFromDataSet(DataSet dataSet)
         {
 
+        }
+        /// <summary>
+        /// Обновляет запись в соответствии со строкой датасета
+        /// </summary>
+        /// <param name="dataRow"></param>
+        public void OpenFromDataSet(DataRow dataRow)
+        {
+            throw new NotImplementedException();
+        }
+        /// <summary>
+        /// Удаляет запись из датасета
+        /// </summary>
+        /// <param name="dataSet"></param>
+        public void DeleteFromDataSet(DataSet dataSet)
+        {
+            throw new NotImplementedException();
         }
         #endregion
         //IClonable

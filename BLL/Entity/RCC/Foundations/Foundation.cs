@@ -10,6 +10,8 @@ using System.ComponentModel;
 using System.Data;
 using RDBLL.Entity.MeasureUnits;
 using System.Linq;
+using DAL.Common;
+
 
 
 namespace RDBLL.Entity.RCC.Foundations
@@ -149,7 +151,8 @@ namespace RDBLL.Entity.RCC.Foundations
         /// </summary>
         public Foundation()
         {
-
+            IsLoadCasesActual = false;
+            IsPartsActual = false;
         }
         /// <summary>
         /// Конструктор по уровню
@@ -188,82 +191,88 @@ namespace RDBLL.Entity.RCC.Foundations
         /// <summary>
         /// Сохраняет класс в датасет
         /// </summary>
-        public void SaveToDataSet(DataSet dataSet)
+        public void SaveToDataSet(DataSet dataSet, bool createNew)
         {
             DataTable dataTable;
-            DataRow dataRow;
+            DataRow row;
             dataTable = dataSet.Tables["Foundations"];
-            dataRow = dataTable.NewRow();
-            dataRow.ItemArray = new object[]
-                { Id, LevelId,ReinfSteelClassId, ConcreteClassId,
-                Name, RelativeTopLevel, SoilRelativeTopLevel, SoilVolumeWeight, ConcreteVolumeWeight,
-                FloorLoad, FloorLoadFactor, ConcreteFloorLoad,
-                ConcreteFloorLoadFactor, CoveringLayerX, CoveringLayerY,
-                CompressedLayerRatio
-                };
-            dataTable.Rows.Add(dataRow);
+            if (createNew) { row = dataTable.NewRow(); }
+            else
+            {
+                var foundation = (from dataRow in dataTable.AsEnumerable()
+                                  where dataRow.Field<int>("Id") == Id
+                                  select dataRow).Single();
+                row = foundation;
+            }
+            row.SetField("Id", Id);
+            row.SetField("ReinfSteelClassId", ReinfSteelClassId);
+            row.SetField("ConcreteClassId", ConcreteClassId);
+            row.SetField("Name", Name);
+            row.SetField("RelativeTopLevel", RelativeTopLevel);
+            row.SetField("SoilRelativeTopLevel", SoilRelativeTopLevel);
+            row.SetField("SoilVolumeWeight", SoilVolumeWeight);
+            row.SetField("ConcreteVolumeWeight", ConcreteVolumeWeight);
+            row.SetField("FloorLoad", FloorLoad);
+            row.SetField("FloorLoadFactor", FloorLoadFactor);
+            row.SetField("ConcreteFloorLoad", ConcreteFloorLoad);
+            row.SetField("CoveringLayerX", CoveringLayerX);
+            row.SetField("CoveringLayerY", CoveringLayerY);
+            row.SetField("CompressedLayerRatio", CompressedLayerRatio);
+            row = dataTable.NewRow();
+            dataTable.AcceptChanges();
+
             foreach (RectFoundationPart foundationPart in Parts)
             {
-                foundationPart.SaveToDataSet(dataSet);
+                foundationPart.SaveToDataSet(dataSet, createNew);
             }
             foreach (ForcesGroup forcesGroup in ForcesGroups)
             {
-                forcesGroup.SaveToDataSet(dataSet);
+                forcesGroup.SaveToDataSet(dataSet, createNew);
             }
         }
-        /// <summary>
-        /// Обновляет датасет в соответствии с записью
-        /// </summary>
-        /// <param name="dataSet"></param>
-        public void Save(DataSet dataSet)
-        {
-            DataTable dataTable = dataSet.Tables["Foundations"];
-            var foundation = (from dataRow in dataTable.AsEnumerable()
-                            where dataRow.Field<int>("Id") == Id
-                            select dataRow).Single();
-            foundation.SetField("ReinfSteelClassId", ReinfSteelClassId);
-            foundation.SetField("ConcreteClassId", ConcreteClassId);
-            foundation.SetField("Name", Name);
-            foundation.SetField("RelativeTopLevel", RelativeTopLevel);
-            foundation.SetField("SoilRelativeTopLevel", SoilRelativeTopLevel);
-            foundation.SetField("SoilVolumeWeight", SoilVolumeWeight);
-            foundation.SetField("ConcreteVolumeWeight", ConcreteVolumeWeight);
-            foundation.SetField("FloorLoad", FloorLoad);
-            foundation.SetField("FloorLoadFactor", FloorLoadFactor);
-            foundation.SetField("ConcreteFloorLoad", ConcreteFloorLoad);
-            foundation.SetField("CoveringLayerX", CoveringLayerX);
-            foundation.SetField("CoveringLayerY", CoveringLayerY);
-            foundation.SetField("CompressedLayerRatio", CompressedLayerRatio);
-            dataTable.AcceptChanges();
-        }
+
         /// <summary>
         /// Обновляет запись в соответствии с сохраненной в датасете
         /// </summary>
         /// <param name="dataSet"></param>
-        public void Revert(DataSet dataSet)
+        public void OpenFromDataSet(DataSet dataSet)
         {
             DataTable dataTable = dataSet.Tables["Foundations"];
-            var foundation = (from dataRow in dataTable.AsEnumerable()
-                            where dataRow.Field<int>("Id") == Id
-                            select dataRow).Single();
-            ReinfSteelClassId = foundation.Field<int>("ReinfSteelClassId");
-            ConcreteClassId = foundation.Field <int>("ConcreteClassId");
-            Name = foundation.Field<string>("Name");
-            RelativeTopLevel = foundation.Field<double>("RelativeTopLevel");
-            SoilRelativeTopLevel = foundation.Field<double>("SoilRelativeTopLevel");
-            SoilVolumeWeight = foundation.Field<double>("SoilVolumeWeight");
-            ConcreteVolumeWeight = foundation.Field<double>("ConcreteVolumeWeight");
-            FloorLoad = foundation.Field<double>("FloorLoad");
-            FloorLoadFactor = foundation.Field<double>("FloorLoadFactor");
-            ConcreteFloorLoad = foundation.Field<double>("ConcreteFloorLoad");
-            ConcreteFloorLoadFactor = foundation.Field<double>("ConcreteFloorLoadFactor");
-            CoveringLayerX = foundation.Field<double>("CoveringLayerX");
-            CoveringLayerY = foundation.Field<double>("CoveringLayerY");
-            CompressedLayerRatio = foundation.Field<double>("CompressedLayerRatio");
+            var row = (from dataRow in dataTable.AsEnumerable()
+                              where dataRow.Field<int>("Id") == Id
+                              select dataRow).Single();
+            OpenFromDataSet(row);
         }
-        public void OpenFromDataSet(DataSet dataSet, int id)
+
+        /// <summary>
+        /// Обновляет запись в соответствии со строкой датасета
+        /// </summary>
+        /// <param name="dataRow"></param>
+        public void OpenFromDataSet(DataRow dataRow)
         {
-            throw new NotImplementedException();
+            Id = dataRow.Field<int>("Id");
+            ReinfSteelClassId = dataRow.Field<int>("ReinfSteelClassId");
+            ConcreteClassId = dataRow.Field<int>("ConcreteClassId");
+            Name = dataRow.Field<string>("Name");
+            RelativeTopLevel = dataRow.Field<double>("RelativeTopLevel");
+            SoilRelativeTopLevel = dataRow.Field<double>("SoilRelativeTopLevel");
+            SoilVolumeWeight = dataRow.Field<double>("SoilVolumeWeight");
+            ConcreteVolumeWeight = dataRow.Field<double>("ConcreteVolumeWeight");
+            FloorLoad = dataRow.Field<double>("FloorLoad");
+            FloorLoadFactor = dataRow.Field<double>("FloorLoadFactor");
+            ConcreteFloorLoad = dataRow.Field<double>("ConcreteFloorLoad");
+            ConcreteFloorLoadFactor = dataRow.Field<double>("ConcreteFloorLoadFactor");
+            CoveringLayerX = dataRow.Field<double>("CoveringLayerX");
+            CoveringLayerY = dataRow.Field<double>("CoveringLayerY");
+            CompressedLayerRatio = dataRow.Field<double>("CompressedLayerRatio");
+        }
+        /// <summary>
+        /// Удаляет запись из датасета
+        /// </summary>
+        /// <param name="dataSet"></param>
+        public void DeleteFromDataSet(DataSet dataSet)
+        {
+            DsOperation.DeleteRow(dataSet, "BuildingSites", Id);
         }
         #endregion
         /// <summary>

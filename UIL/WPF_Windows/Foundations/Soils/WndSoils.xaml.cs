@@ -36,11 +36,22 @@ namespace RDUIL.WPF_Windows.Foundations.Soils
             if (_collection.Count>0) { LvMain.SelectedIndex = 0; }
         }
 
+        /// <summary>
+        /// Добавить новый грунт
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void BtnAdd_Click(object sender, RoutedEventArgs e)
         {
             DispersedSoil dispersedSoil = new DispersedSoil(_buildingSite);
-            _buildingSite.Soils.Add(dispersedSoil);
-            ProgrammSettings.IsDataChanged = true;
+            WndClaySoil wndSoil = new WndClaySoil(dispersedSoil);
+            wndSoil.ShowDialog();
+            if (wndSoil.DialogResult == true)
+            {
+                dispersedSoil.SaveToDataSet(ProgrammSettings.CurrentDataSet, true);
+                ProgrammSettings.IsDataChanged = true;
+                _buildingSite.Soils.Add(dispersedSoil);
+            }          
         }
 
         private void BtnDelete_Click(object sender, RoutedEventArgs e)
@@ -79,6 +90,12 @@ namespace RDUIL.WPF_Windows.Foundations.Soils
                 {
                     WndClaySoil wndSoil = new WndClaySoil(soil as DispersedSoil);
                     wndSoil.ShowDialog();
+                    if (wndSoil.DialogResult == true)
+                    {
+                        soil.SaveToDataSet(ProgrammSettings.CurrentDataSet, false);
+                        ProgrammSettings.IsDataChanged = true;
+                    }
+                    else { soil.OpenFromDataSet(ProgrammSettings.CurrentDataSet); }
                 }               
             }
             else

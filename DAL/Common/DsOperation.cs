@@ -97,5 +97,14 @@ namespace DAL.Common
             NewColumn = new DataColumn(columnName, Type.GetType("System.Byte[]"));
             dataTable.Columns.Add(NewColumn);
         }
+
+        public static void DeleteRow(DataSet dataSet, string dataTableName, int Id)
+        {
+            DataTable dataTable = dataSet.Tables[dataTableName];
+            var row = (from dataRow in dataTable.AsEnumerable()
+                       where dataRow.Field<int>("Id") == Id
+                       select dataRow).Single();
+            row.Delete();
+        }
     }
 }

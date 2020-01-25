@@ -10,7 +10,7 @@ using System.Data;
 
 namespace RDBLL.Entity.RCC.Foundations
 {
-    public abstract class FoundationPart
+    public abstract class FoundationPart : ISavableToDataSet
     {
         /// <summary>
         /// Код ступени фундамента
@@ -54,7 +54,7 @@ namespace RDBLL.Entity.RCC.Foundations
         }
 
         /// <summary>
-        /// Конструктор по фундаменты
+        /// Конструктор по фундаменту
         /// </summary>
         /// <param name="foundation"></param>
         public FoundationPart(Foundation foundation)
@@ -74,6 +74,34 @@ namespace RDBLL.Entity.RCC.Foundations
             }
             CenterX = 0;
             CenterY = 0;
+        }
+
+        /// <summary>
+        /// Сохраняет класс в датасет
+        /// </summary>
+        public virtual void SaveToDataSet(DataSet dataSet, bool createNew)
+        {
+            throw new NotImplementedException();
+        }
+        public virtual void OpenFromDataSet(DataSet dataSet)
+        {
+            throw new NotImplementedException();
+        }
+        /// <summary>
+        /// Обновляет запись в соответствии со строкой датасета
+        /// </summary>
+        /// <param name="dataRow"></param>
+        public void OpenFromDataSet(DataRow dataRow)
+        {
+            throw new NotImplementedException();
+        }
+        /// <summary>
+        /// Удаляет запись из датасета
+        /// </summary>
+        /// <param name="dataSet"></param>
+        public void DeleteFromDataSet(DataSet dataSet)
+        {
+            throw new NotImplementedException();
         }
     }
 }

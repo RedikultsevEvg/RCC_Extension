@@ -46,7 +46,7 @@ namespace RDUIL.WPF_Windows.Foundations
             if (wndChild.DialogResult == true)
             {
                 DataSet dataSet = ProgrammSettings.CurrentDataSet;
-                foundation.SaveToDataSet(dataSet);
+                foundation.SaveToDataSet(dataSet, true);
                 _collection.Add(foundation);
                 ProgrammSettings.IsDataChanged = true;
             }
@@ -88,8 +88,8 @@ namespace RDUIL.WPF_Windows.Foundations
                 Foundation foundation = _collection[a];
                 wndFoundation wndChild = new wndFoundation(foundation);
                 wndChild.ShowDialog();
-                if (wndChild.DialogResult == true) { foundation.Save(dataSet); }
-                else { foundation.Revert(dataSet); }
+                if (wndChild.DialogResult == true) { foundation.SaveToDataSet(dataSet, false); }
+                else { foundation.OpenFromDataSet(dataSet); }
             }
             else
             {

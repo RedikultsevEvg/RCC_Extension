@@ -96,7 +96,7 @@ namespace RDBLL.Entity.RCC.BuildingAndSite
         /// Сохранение в датасет
         /// </summary>
         /// <param name="dataSet"></param>
-        public void SaveToDataSet(DataSet dataSet)
+        public void SaveToDataSet(DataSet dataSet, bool createNew)
         {
             DataTable dataTable;
             DataRow dataRow;
@@ -106,42 +106,57 @@ namespace RDBLL.Entity.RCC.BuildingAndSite
             dataTable.Rows.Add(dataRow);
             foreach (SteelBase steelBase in SteelBases)
             {
-                steelBase.SaveToDataSet(dataSet);
+                steelBase.SaveToDataSet(dataSet, createNew);
             }
             foreach (Foundation foundation in Foundations)
             {
-                foundation.SaveToDataSet(dataSet);
+                foundation.SaveToDataSet(dataSet, createNew);
             }
         }
 
-        public void OpenFromDataSet(DataSet dataSet, int Id)
+        public void OpenFromDataSet(DataSet dataSet)
         {
-            DataTable dataTable, childTable;
-            dataTable = dataSet.Tables["Levels"];
+            //DataTable dataTable, childTable;
+            //dataTable = dataSet.Tables["Levels"];
 
-            for (int i = 0; i < dataTable.Rows.Count; i++)
-            {
-                if (Convert.ToInt32(dataTable.Rows[i].ItemArray[0]) == Id)
-                {
-                    this.Id = Id;
-                    this.BuildingId = Convert.ToInt32(dataTable.Rows[i].ItemArray[1]);
-                    this.Name = Convert.ToString(dataTable.Rows[i].ItemArray[2]);
-                    childTable = dataSet.Tables["SteelBases"];
-                    if (childTable != null)
-                    {
-                        for (int j = 0; j < childTable.Rows.Count; j++)
-                        {
-                            if (Convert.ToInt32(childTable.Rows[j].ItemArray[1]) == this.Id)
-                            {
-                                SteelBase newObject = new SteelBase(this);
-                                newObject.OpenFromDataSet(dataSet, Convert.ToInt32(childTable.Rows[j].ItemArray[0]));
-                            }
-                        }
-                    }
-                }
-            }
+            //for (int i = 0; i < dataTable.Rows.Count; i++)
+            //{
+            //    if (Convert.ToInt32(dataTable.Rows[i].ItemArray[0]) == Id)
+            //    {
+            //        this.Id = Id;
+            //        this.BuildingId = Convert.ToInt32(dataTable.Rows[i].ItemArray[1]);
+            //        this.Name = Convert.ToString(dataTable.Rows[i].ItemArray[2]);
+            //        childTable = dataSet.Tables["SteelBases"];
+            //        if (childTable != null)
+            //        {
+            //            for (int j = 0; j < childTable.Rows.Count; j++)
+            //            {
+            //                if (Convert.ToInt32(childTable.Rows[j].ItemArray[1]) == this.Id)
+            //                {
+            //                    SteelBase newObject = new SteelBase(this);
+            //                    newObject.OpenFromDataSet(dataSet, Convert.ToInt32(childTable.Rows[j].ItemArray[0]));
+            //                }
+            //            }
+            //        }
+            //    }
+            //}
         }
-
+        /// <summary>
+        /// Обновляет запись в соответствии со строкой датасета
+        /// </summary>
+        /// <param name="dataRow"></param>
+        public void OpenFromDataSet(DataRow dataRow)
+        {
+            throw new NotImplementedException();
+        }
+        /// <summary>
+        /// Удаляет запись из датасета
+        /// </summary>
+        /// <param name="dataSet"></param>
+        public void DeleteFromDataSet(DataSet dataSet)
+        {
+            throw new NotImplementedException();
+        }
         /// <summary>
         /// Конструктор без параметров
         /// </summary>

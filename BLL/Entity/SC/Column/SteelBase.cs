@@ -259,7 +259,7 @@ namespace RDBLL.Entity.SC.Column
         /// Сохраняет данные базы стальной колонны в указанный датасет
         /// </summary>
         /// <param name="dataSet">Датасет</param>
-        public void SaveToDataSet(DataSet dataSet)
+        public void SaveToDataSet(DataSet dataSet, bool createNew)
         {
             DataTable dataTable;
             DataRow dataRow;
@@ -273,20 +273,36 @@ namespace RDBLL.Entity.SC.Column
             dataTable.Rows.Add(dataRow);
             foreach (SteelBasePart steelBasePart in SteelBaseParts)
             {
-                steelBasePart.SaveToDataSet(dataSet);
+                steelBasePart.SaveToDataSet(dataSet, createNew);
             }
             foreach (SteelBolt steelBolt in SteelBolts)
             {
-                steelBolt.SaveToDataSet(dataSet);
+                steelBolt.SaveToDataSet(dataSet, createNew);
             }
             foreach (ForcesGroup forcesGroup in ForcesGroups)
             {
-                forcesGroup.SaveToDataSet(dataSet);
+                forcesGroup.SaveToDataSet(dataSet, createNew);
             }
         }
-        public void OpenFromDataSet(DataSet dataSet, int Id)
+        public void OpenFromDataSet(DataSet dataSet)
         {
 
+        }
+        /// <summary>
+        /// Обновляет запись в соответствии со строкой датасета
+        /// </summary>
+        /// <param name="dataRow"></param>
+        public void OpenFromDataSet(DataRow dataRow)
+        {
+            throw new NotImplementedException();
+        }
+        /// <summary>
+        /// Удаляет запись из датасета
+        /// </summary>
+        /// <param name="dataSet"></param>
+        public void DeleteFromDataSet(DataSet dataSet)
+        {
+            throw new NotImplementedException();
         }
         #endregion
 

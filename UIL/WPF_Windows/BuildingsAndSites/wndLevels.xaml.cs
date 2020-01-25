@@ -134,7 +134,7 @@ namespace RDUIL.WPF_Windows.BuildingsAndSites
             WndBuilding wndBuilding = new WndBuilding(_building);
             wndBuilding.ShowDialog();
             if (wndBuilding.DialogResult == true) { _building.Save(dataSet); }
-            else { _building.Revert(dataSet); }
+            else { _building.OpenFromDataSet(dataSet); }
         }
     }
 }
