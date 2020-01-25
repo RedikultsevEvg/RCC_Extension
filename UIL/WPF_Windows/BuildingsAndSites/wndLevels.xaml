@@ -34,7 +34,7 @@
                         <ColumnDefinition Width="100"/>
                     </Grid.ColumnDefinitions>
                     <TextBlock x:Name="tbName" Grid.Column="1" Style="{StaticResource PropertyTextBlock}" Text="Наименование" FontSize="14" FontWeight="Bold"/>
-                    <TextBox x:Name="tbxName" Grid.Column="2" Style="{StaticResource PropertyTextBox}" Text="{Binding Name}"/>
+                    <TextBox x:Name="tbxName" Grid.Column="2" Style="{StaticResource PropertyTextBox}" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"/>
                 </Grid>
             </Grid>
         </DataTemplate>

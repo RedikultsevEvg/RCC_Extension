@@ -54,6 +54,15 @@ namespace RDUIL.WPF_Windows.BuildingsAndSites
         private void BtnAdd_Click(object sender, RoutedEventArgs e)
         {
             Level level = new Level(_building);
+            wndLevel wndLevel = new wndLevel(level);
+            wndLevel.ShowDialog();
+            if (wndLevel.DialogResult == true)
+            {
+                DataSet dataSet = ProgrammSettings.CurrentDataSet;
+                level.SaveToDataSet(dataSet, true);
+                _collection.Add(level);
+                ProgrammSettings.IsDataChanged = true;
+            }
             ProgrammSettings.IsDataChanged = true;
         }
 
@@ -73,6 +82,7 @@ namespace RDUIL.WPF_Windows.BuildingsAndSites
                     if (LvMain.Items.Count == 1) LvMain.UnselectAll();
                     else if (a < (LvMain.Items.Count - 1)) LvMain.SelectedIndex = a + 1;
                     else LvMain.SelectedIndex = a - 1;
+                    _collection[a].DeleteFromDataSet(ProgrammSettings.CurrentDataSet);
                     _collection.RemoveAt(a);
                     ProgrammSettings.IsDataChanged = true;
                 }
@@ -88,8 +98,12 @@ namespace RDUIL.WPF_Windows.BuildingsAndSites
             if (LvMain.SelectedIndex >= 0)
             {
                 int a = LvMain.SelectedIndex;
-                wndLevel wndLevel = new wndLevel(_collection[a]);
+                DataSet dataSet = ProgrammSettings.CurrentDataSet;
+                Level level = _collection[a];
+                wndLevel wndLevel = new wndLevel(level);
                 wndLevel.ShowDialog();
+                if (wndLevel.DialogResult == true) { level.SaveToDataSet(dataSet, false); }
+                else { level.OpenFromDataSet(dataSet); }
             }
             else
             {
@@ -133,7 +147,7 @@ namespace RDUIL.WPF_Windows.BuildingsAndSites
             DataSet dataSet = ProgrammSettings.CurrentDataSet;
             WndBuilding wndBuilding = new WndBuilding(_building);
             wndBuilding.ShowDialog();
-            if (wndBuilding.DialogResult == true) { _building.Save(dataSet); }
+            if (wndBuilding.DialogResult == true) { _building.SaveToDataSet(dataSet, false); }
             else { _building.OpenFromDataSet(dataSet); }
         }
     }

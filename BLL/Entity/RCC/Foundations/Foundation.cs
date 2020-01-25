@@ -196,7 +196,11 @@ namespace RDBLL.Entity.RCC.Foundations
             DataTable dataTable;
             DataRow row;
             dataTable = dataSet.Tables["Foundations"];
-            if (createNew) { row = dataTable.NewRow(); }
+            if (createNew)
+            {
+                row = dataTable.NewRow();
+                dataTable.Rows.Add(row);
+            }
             else
             {
                 var foundation = (from dataRow in dataTable.AsEnumerable()
@@ -204,6 +208,7 @@ namespace RDBLL.Entity.RCC.Foundations
                                   select dataRow).Single();
                 row = foundation;
             }
+            #region setFields
             row.SetField("Id", Id);
             row.SetField("ReinfSteelClassId", ReinfSteelClassId);
             row.SetField("ConcreteClassId", ConcreteClassId);
@@ -218,7 +223,7 @@ namespace RDBLL.Entity.RCC.Foundations
             row.SetField("CoveringLayerX", CoveringLayerX);
             row.SetField("CoveringLayerY", CoveringLayerY);
             row.SetField("CompressedLayerRatio", CompressedLayerRatio);
-            row = dataTable.NewRow();
+            #endregion
             dataTable.AcceptChanges();
 
             foreach (RectFoundationPart foundationPart in Parts)
@@ -230,7 +235,6 @@ namespace RDBLL.Entity.RCC.Foundations
                 forcesGroup.SaveToDataSet(dataSet, createNew);
             }
         }
-
         /// <summary>
         /// Обновляет запись в соответствии с сохраненной в датасете
         /// </summary>
@@ -243,7 +247,6 @@ namespace RDBLL.Entity.RCC.Foundations
                               select dataRow).Single();
             OpenFromDataSet(row);
         }
-
         /// <summary>
         /// Обновляет запись в соответствии со строкой датасета
         /// </summary>
@@ -272,7 +275,12 @@ namespace RDBLL.Entity.RCC.Foundations
         /// <param name="dataSet"></param>
         public void DeleteFromDataSet(DataSet dataSet)
         {
-            DsOperation.DeleteRow(dataSet, "BuildingSites", Id);
+            //Удаляем вложенные части
+            foreach (RectFoundationPart foundationPart in Parts)
+            {
+                foundationPart.DeleteFromDataSet(dataSet);
+            }
+            DsOperation.DeleteRow(dataSet, "Foundations", Id);
         }
         #endregion
         /// <summary>

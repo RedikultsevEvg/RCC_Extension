@@ -35,15 +35,10 @@ namespace RDBLL.Entity.Soils
         public BearingSoil(BuildingSite buildingSite) : base(buildingSite)
         {
         }
-
         /// <summary>
-        /// Сохраняет класс в датасет
+        /// Сохраняет запись в строку датасета
         /// </summary>
-        /// <param name="dataSet">Датасет</param>
-        public override void SaveToDataSet(DataSet dataSet, bool createNew)
-        {
-            throw new NotImplementedException();
-        }
+        /// <param name="dataRow"></param>
         public override void SaveToDataSet(DataRow dataRow)
         {
             base.SaveToDataSet(dataRow);
@@ -51,6 +46,10 @@ namespace RDBLL.Entity.Soils
             dataRow["SndElasticModulus"] = SndElasticModulus;
             dataRow["PoissonRatio"] = PoissonRatio;
         }
+        /// <summary>
+        /// Обновляет запись по строке датасета
+        /// </summary>
+        /// <param name="dataRow"></param>
         public override void OpenFromDataSet(DataRow dataRow)
         {
             base.OpenFromDataSet(dataRow);

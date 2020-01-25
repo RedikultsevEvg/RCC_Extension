@@ -79,18 +79,12 @@ namespace DAL.DataSets
             dataTable.Columns.Add(FkIdColumn);
             NameColumn = new DataColumn("Name", Type.GetType("System.String"));
             dataTable.Columns.Add(NameColumn);
-            NewColumn = new DataColumn("FloorLevel", Type.GetType("System.Double"));
-            dataTable.Columns.Add(NewColumn);
-            NewColumn = new DataColumn("Height", Type.GetType("System.Double"));
-            dataTable.Columns.Add(NewColumn);
-            NewColumn = new DataColumn("TopOffset", Type.GetType("System.Double"));
-            dataTable.Columns.Add(NewColumn);
-            NewColumn = new DataColumn("BasePointX", Type.GetType("System.Double"));
-            dataTable.Columns.Add(NewColumn);
-            NewColumn = new DataColumn("BasePointY", Type.GetType("System.Double"));
-            dataTable.Columns.Add(NewColumn);
-            NewColumn = new DataColumn("BasePointZ", Type.GetType("System.Double"));
-            dataTable.Columns.Add(NewColumn);
+            DsOperation.AddDoubleColumn(dataTable, "FloorLevel", 0);
+            DsOperation.AddDoubleColumn(dataTable, "Height", 3);
+            DsOperation.AddDoubleColumn(dataTable, "TopOffset", -0.2);
+            DsOperation.AddDoubleColumn(dataTable, "BasePointX", 0);
+            DsOperation.AddDoubleColumn(dataTable, "BasePointY", 0);
+            DsOperation.AddDoubleColumn(dataTable, "BasePointZ", 0);
             #endregion
             #region SteelBases
             dataTable = new DataTable("SteelBases");
@@ -246,6 +240,26 @@ namespace DAL.DataSets
             DsOperation.AddDoubleColumn(dataTable, "CrcCohesion", 20000);
             DsOperation.AddDoubleColumn(dataTable, "FstDesignCohesion", 17000);
             DsOperation.AddDoubleColumn(dataTable, "SndDesignCohesion", 18000);
+            #endregion
+            #region SoilSections
+            dataTable = new DataTable("SoilSections");
+            dataSet.Tables.Add(dataTable);
+            DsOperation.AddIdColumn(dataTable);
+            DsOperation.AddFkIdColumn("BuildingSites", "BuildingSiteId", dataTable);
+            DsOperation.AddNameColumn(dataTable);
+            DsOperation.AddBoolColumn(dataTable, "HasWater", false);
+            DsOperation.AddDoubleColumn(dataTable, "NaturalWaterLevel", 200);
+            DsOperation.AddDoubleColumn(dataTable, "WaterLevel", 200);
+            DsOperation.AddDoubleColumn(dataTable, "CenterX", 0);
+            DsOperation.AddDoubleColumn(dataTable, "CenterY", 0);
+            #endregion
+            #region SoilSections
+            dataTable = new DataTable("SoilLayers");
+            dataSet.Tables.Add(dataTable);
+            DsOperation.AddIdColumn(dataTable);
+            DsOperation.AddFkIdColumn("Soils", "SoilId", dataTable);
+            DsOperation.AddFkIdColumn("SoilSections", "SoilSectionId", dataTable);
+            DsOperation.AddDoubleColumn(dataTable, "TopLevel", 0);
             #endregion
             DataSet = dataSet;
         }

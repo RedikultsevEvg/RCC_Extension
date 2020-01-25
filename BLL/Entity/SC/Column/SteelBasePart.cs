@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using RDBLL.Common.Interfaces;
 using System.Data;
+using System.Linq;
 
 namespace RDBLL.Entity.SC.Column
 {
@@ -137,18 +138,40 @@ namespace RDBLL.Entity.SC.Column
         public void SaveToDataSet(DataSet dataSet, bool createNew)
         {
             DataTable dataTable;
-            DataRow dataRow;
+            DataRow row;
             dataTable = dataSet.Tables["SteelBaseParts"];
-            dataRow = dataTable.NewRow();
-            dataRow.ItemArray = new object[]
-            { Id, SteelBaseId, Name,
-                Width, Length,
-                CenterX, CenterY,
-                LeftOffset, RightOffset, TopOffset, TopOffset,
-                FixLeft, FixRight, FixTop, FixBottom,
-                AddSymmetricX, AddSymmetricY
-            };
-            dataTable.Rows.Add(dataRow);
+            if (createNew)
+            {
+                row = dataTable.NewRow();
+                dataTable.Rows.Add(row);
+            }
+            else
+            {
+                var tmpRow = (from dataRow in dataTable.AsEnumerable()
+                              where dataRow.Field<int>("Id") == Id
+                              select dataRow).Single();
+                row = tmpRow;
+            }
+            #region
+            row.SetField("Id", Id);
+            row.SetField("SteelBaseId", SteelBaseId);
+            row.SetField("Name", Name);
+            row.SetField("Width", Width);
+            row.SetField("Length", Length);
+            row.SetField("CenterX", CenterX);
+            row.SetField("CenterY", CenterY);
+            row.SetField("LeftOffset", LeftOffset);
+            row.SetField("RightOffset", RightOffset);
+            row.SetField("TopOffset", TopOffset);
+            row.SetField("BottomOffset", BottomOffset);
+            row.SetField("FixLeft", FixLeft);
+            row.SetField("FixRight", FixRight);
+            row.SetField("FixTop", FixTop);
+            row.SetField("FixBottom", FixBottom);
+            row.SetField("AddSymmetricX", AddSymmetricX);
+            row.SetField("AddSymmetricY", AddSymmetricY);
+            #endregion
+            dataTable.AcceptChanges();
         }
 
         public void OpenFromDataSet(DataSet dataSet)

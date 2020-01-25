@@ -3,6 +3,7 @@ using RDBLL.Entity.Common.NDM;
 using System;
 using RDBLL.Common.Interfaces;
 using System.Data;
+using System.Linq;
 
 namespace RDBLL.Entity.SC.Column
 {
@@ -41,11 +42,31 @@ namespace RDBLL.Entity.SC.Column
         public void SaveToDataSet(DataSet dataSet, bool createNew)
         {
             DataTable dataTable;
-            DataRow dataRow;
+            DataRow row;
             dataTable = dataSet.Tables["SteelBolts"];
-            dataRow = dataTable.NewRow();
-            dataRow.ItemArray = new object[] { Id, SteelBaseId, Name, Diameter, CenterX, CenterY, AddSymmetricX, AddSymmetricY };
-            dataTable.Rows.Add(dataRow);
+            if (createNew)
+            {
+                row = dataTable.NewRow();
+                dataTable.Rows.Add(row);
+            }
+            else
+            {
+                var tmpRow = (from dataRow in dataTable.AsEnumerable()
+                              where dataRow.Field<int>("Id") == Id
+                              select dataRow).Single();
+                row = tmpRow;
+            }
+            #region
+            row.SetField("Id", Id);
+            row.SetField("SteelBaseId", SteelBaseId);
+            row.SetField("Name", Name);
+            row.SetField("Diameter", Diameter);
+            row.SetField("CenterX", CenterX);
+            row.SetField("CenterY", CenterY);
+            row.SetField("AddSymmetricX", AddSymmetricX);
+            row.SetField("AddSymmetricY", AddSymmetricY);
+            #endregion
+            dataTable.AcceptChanges();
         }
 
         public void OpenFromDataSet(DataSet dataSet)

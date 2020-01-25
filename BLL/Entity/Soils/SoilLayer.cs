@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using RDBLL.Common.Interfaces;
 using System.ComponentModel;
 using System.Data;
+using DAL.Common;
 
 namespace RDBLL.Entity.Soils
 {
@@ -28,6 +29,14 @@ namespace RDBLL.Entity.Soils
         /// </summary>
         public Soil Soil { get; set; }
         /// <summary>
+        /// Код геологического разреза
+        /// </summary>
+        public int SoilSectionId { get; set; }
+        /// <summary>
+        /// Обратная ссылка на геологический разрез
+        /// </summary>
+        public SoilSection SoilSection { get; set; }
+        /// <summary>
         /// Отметка верха слоя
         /// </summary>
         public double TopLevel { get; set; }
@@ -39,16 +48,39 @@ namespace RDBLL.Entity.Soils
         public void SaveToDataSet(DataSet dataSet, bool createNew)
         {
             DataTable dataTable;
-            DataRow dataRow;
-            dataTable = dataSet.Tables["SoilSections"];
-            dataRow = dataTable.NewRow();
-            dataRow.ItemArray = new object[]
-                { Id, SoilId, TopLevel };
-            dataTable.Rows.Add(dataRow);
+            DataRow row;
+            dataTable = dataSet.Tables["SoilLayers"];
+            if (createNew)
+            {
+                row = dataTable.NewRow();
+                dataTable.Rows.Add(row);
+            }
+            else
+            {
+                var soil = (from dataRow in dataTable.AsEnumerable()
+                            where dataRow.Field<int>("Id") == Id
+                            select dataRow).Single();
+                row = soil;
+            }
+            #region setFields
+            row.SetField("Id", Id);
+            row.SetField("SoilId", SoilId);
+            row.SetField("SoilSectionId", SoilSectionId);
+            row.SetField("TopLevel", TopLevel);
+            #endregion
+            dataTable.AcceptChanges();
         }
+        /// <summary>
+        /// Обновляет запись из датасета
+        /// </summary>
+        /// <param name="dataSet"></param>
         public void OpenFromDataSet(DataSet dataSet)
         {
-            throw new NotImplementedException();
+            DataTable dataTable = dataSet.Tables["SoilLayers"];
+            var row = (from dataRow in dataTable.AsEnumerable()
+                       where dataRow.Field<int>("Id") == Id
+                       select dataRow).Single();
+            OpenFromDataSet(row);
         }
         /// <summary>
         /// Обновляет запись в соответствии со строкой датасета
@@ -56,7 +88,10 @@ namespace RDBLL.Entity.Soils
         /// <param name="dataRow"></param>
         public void OpenFromDataSet(DataRow dataRow)
         {
-            throw new NotImplementedException();
+            Id = dataRow.Field<int>("Id");
+            SoilId = dataRow.Field<int>("SoilId");
+            SoilSectionId = dataRow.Field<int>("SoilSectionId");
+            TopLevel = dataRow.Field<double>("TopLevel");
         }
         /// <summary>
         /// Удаляет запись из датасета
@@ -64,7 +99,7 @@ namespace RDBLL.Entity.Soils
         /// <param name="dataSet"></param>
         public void DeleteFromDataSet(DataSet dataSet)
         {
-            throw new NotImplementedException();
+            DsOperation.DeleteRow(dataSet, "SoilLayers", Id);
         }
         #endregion
     }

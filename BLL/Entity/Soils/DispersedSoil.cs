@@ -39,7 +39,6 @@ namespace RDBLL.Entity.Soils
         /// Расчетное значение сцепления для 2-й группы ПС
         /// </summary>
         public double SndDesignCohesion { get; set; }
-
         /// <summary>
         /// Конструктор по строительному объекту
         /// </summary>
@@ -59,27 +58,10 @@ namespace RDBLL.Entity.Soils
             FstDesignCohesion = 17000;
             SndDesignCohesion = 18000;
         }
-
         /// <summary>
-        /// Сохраняет класс в датасет
+        /// Сохраняет класс в строку датасета
         /// </summary>
-        /// <param name="dataSet">Датасет</param>
-        public override void SaveToDataSet(DataSet dataSet, bool createNew)
-        {
-            DataTable dataTable;
-            DataRow row;
-            dataTable = dataSet.Tables["Soils"];
-            if (createNew) { row = dataTable.NewRow(); }
-            else
-            {
-                var soil = (from dataRow in dataTable.AsEnumerable()
-                            where dataRow.Field<int>("Id") == Id
-                            select dataRow).Single();
-                row = soil;
-            }          
-            SaveToDataSet(row);
-            dataTable.Rows.Add(row);
-        }
+        /// <param name="dataRow"></param>
         public override void SaveToDataSet(DataRow dataRow)
         {
             base.SaveToDataSet(dataRow);

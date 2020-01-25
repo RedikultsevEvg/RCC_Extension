@@ -20,11 +20,11 @@ namespace RDUIL.WPF_Windows
     public partial class wndSteelBases : Window
     {
         private Level _level;
-        private ObservableCollection<SteelBase> _steelBases;
+        private ObservableCollection<SteelBase> _collection;
         public wndSteelBases(Level level)
         {
             _level = level;
-            _steelBases = _level.SteelBases;
+            _collection = _level.SteelBases;
             InitializeComponent();
             this.DataContext = level.SteelBases;           
         }
@@ -57,7 +57,8 @@ namespace RDUIL.WPF_Windows
                     if (LvSteelBases.Items.Count == 1) LvSteelBases.UnselectAll();
                     else if (a < (LvSteelBases.Items.Count - 1)) LvSteelBases.SelectedIndex = a + 1;
                     else LvSteelBases.SelectedIndex = a - 1;
-                    _steelBases.RemoveAt(a);
+                    _collection[a].DeleteFromDataSet(ProgrammSettings.CurrentDataSet);
+                    _collection.RemoveAt(a);
                     ProgrammSettings.IsDataChanged = true;
                 }
             }
@@ -72,7 +73,7 @@ namespace RDUIL.WPF_Windows
             if (LvSteelBases.SelectedIndex >= 0)
             {
                 int a = LvSteelBases.SelectedIndex;
-                WndSteelColumnBase wndSteelColumnBase = new WndSteelColumnBase(_steelBases[a]);
+                WndSteelColumnBase wndSteelColumnBase = new WndSteelColumnBase(_collection[a]);
                 wndSteelColumnBase.ShowDialog();
             }
             else

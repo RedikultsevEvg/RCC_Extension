@@ -76,7 +76,7 @@ namespace RDUIL.WPF_Windows.Foundations.Soils
             }
         }
 
-        private void BtnDeleteSection_Click(object sender, RoutedEventArgs e)
+        private void BtnDeleteSoil_Click(object sender, RoutedEventArgs e)
         {
             if (LvAssignedSoils.SelectedIndex >= 0)
             {
@@ -92,6 +92,7 @@ namespace RDUIL.WPF_Windows.Foundations.Soils
                     if (LvAssignedSoils.Items.Count == 1) LvAssignedSoils.UnselectAll();
                     else if (a < (LvAssignedSoils.Items.Count - 1)) LvAssignedSoils.SelectedIndex = a + 1;
                     else LvAssignedSoils.SelectedIndex = a - 1;
+                    _collection[a].DeleteFromDataSet(ProgrammSettings.CurrentDataSet);
                     _collection.RemoveAt(a);
                     ProgrammSettings.IsDataChanged = true;
                 }
@@ -111,9 +112,15 @@ namespace RDUIL.WPF_Windows.Foundations.Soils
                 double topLevel =250;
                 int count = _element.SoilLayers.Count;
                 if (count>0) { topLevel = _element.SoilLayers[count - 1].TopLevel - 2;}
-                SoilLayer soilLayer = new SoilLayer() { Id = ProgrammSettings.CurrentId, SoilId = soil.Id, Soil = soil, TopLevel = topLevel };
+                SoilLayer soilLayer = new SoilLayer()
+                { Id = ProgrammSettings.CurrentId,
+                    SoilId = soil.Id, Soil = soil,
+                    SoilSectionId = _element.Id, SoilSection = _element,
+                    TopLevel = topLevel };
+                soilLayer.SaveToDataSet(ProgrammSettings.CurrentDataSet, true);
                 _element.SoilLayers.Add(soilLayer);
                 LvAssignedSoils.SelectedIndex = _element.SoilLayers.Count - 1;
+                ProgrammSettings.IsDataChanged = true;
             }
             else
             {

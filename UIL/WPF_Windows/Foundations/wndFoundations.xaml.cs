@@ -41,16 +41,15 @@ namespace RDUIL.WPF_Windows.Foundations
         private void BtnAdd_Click(object sender, RoutedEventArgs e)
         {
             Foundation foundation = new Foundation(_level);
-            wndFoundation wndChild = new wndFoundation(foundation);
-            wndChild.ShowDialog();
-            if (wndChild.DialogResult == true)
+            wndFoundation wndFoundation = new wndFoundation(foundation);
+            wndFoundation.ShowDialog();
+            if (wndFoundation.DialogResult == true)
             {
                 DataSet dataSet = ProgrammSettings.CurrentDataSet;
                 foundation.SaveToDataSet(dataSet, true);
                 _collection.Add(foundation);
                 ProgrammSettings.IsDataChanged = true;
             }
-
         }
 
         private void BtnDelete_Click(object sender, RoutedEventArgs e)
@@ -69,7 +68,9 @@ namespace RDUIL.WPF_Windows.Foundations
                     if (LvMain.Items.Count == 1) LvMain.UnselectAll();
                     else if (a < (LvMain.Items.Count - 1)) LvMain.SelectedIndex = a + 1;
                     else LvMain.SelectedIndex = a - 1;
+                    _collection[a].DeleteFromDataSet(ProgrammSettings.CurrentDataSet);
                     _collection.RemoveAt(a);
+
                     ProgrammSettings.IsDataChanged = true;
                 }
             }

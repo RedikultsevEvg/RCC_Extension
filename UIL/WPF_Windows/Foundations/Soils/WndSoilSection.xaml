@@ -72,7 +72,7 @@
                                 <ColumnDefinition/>
                             </Grid.ColumnDefinitions>
                             <StackPanel x:Name="stpSectionsBtns" Style="{StaticResource OperationStack}" Height="50" VerticalAlignment="Top">
-                                <Button x:Name="btnDeleteSection" Style="{StaticResource DeleteOperationButton}" ToolTip="Удалить нагрузку" Click="BtnDeleteSection_Click"/>
+                                <Button x:Name="btnDeleteSoil" Style="{StaticResource DeleteOperationButton}" ToolTip="Удалить слой грунта" Click="BtnDeleteSoil_Click"/>
                             </StackPanel>
                             <ListView x:Name="LvAssignedSoils" Grid.Column="0" Grid.RowSpan="2" 
                                       ItemTemplate="{StaticResource SoilLayer}" ItemsSource="{Binding Path=SoilLayers}" SelectionMode="Single"
@@ -116,7 +116,7 @@
                                 </ListView.ItemContainerStyle>
                             </ListView>
                             <StackPanel x:Name="stpSoilsBtns" Style="{StaticResource OperationStack}" Grid.Column="1" Height="50"  VerticalAlignment="Top">
-                                <Button x:Name="btnAddSoil" Style="{StaticResource AddOperationButton}" ToolTip="Добавить нагрузку" Click="BtnAddSoil_Click"/>
+                                <Button x:Name="btnAddSoil" Style="{StaticResource AddOperationButton}" ToolTip="Добавить слой грунта" Click="BtnAddSoil_Click"/>
                             </StackPanel>
                             <ListView x:Name="LvSoils" Grid.Column="1"
                                       ItemsSource="{Binding Path=BuildingSite.Soils}" Grid.RowSpan="2"  SelectionMode="Single"
@@ -161,7 +161,6 @@
         </Grid>
         <StackPanel Height="60" Grid.Row="1" Margin="10" Orientation="Horizontal" Grid.ColumnSpan="3" HorizontalAlignment="Right" Background="#FFE2E2E2">
             <Button x:Name="btnOK" Style="{StaticResource OkServiceButton}" HorizontalAlignment="Stretch" Click="BtnOK_Click"/>
-            <Button x:Name="btnCancel" Style="{StaticResource CancelServiceButton}" HorizontalAlignment="Stretch" IsEnabled="False"/>
         </StackPanel>
     </Grid>
 </Window>

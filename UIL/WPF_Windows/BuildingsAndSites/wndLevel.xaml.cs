@@ -33,7 +33,7 @@ namespace RDUIL.WPF_Windows.BuildingsAndSites
         {
             try
             {
-                ProgrammSettings.IsDataChanged = true;
+                this.DialogResult = true;
                 this.Close();
             }
             catch (Exception ex)
@@ -44,7 +44,8 @@ namespace RDUIL.WPF_Windows.BuildingsAndSites
 
         private void btnCancel_Click(object sender, RoutedEventArgs e)
         {
-            throw new NotImplementedException();
+            this.DialogResult = false;
+            this.Close();
         }
     }
 }

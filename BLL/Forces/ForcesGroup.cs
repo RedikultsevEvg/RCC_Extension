@@ -93,39 +93,73 @@ namespace RDBLL.Forces
         public void SaveToDataSet(DataSet dataSet, bool createNew)
         {
             DataTable dataTable;
-            DataRow dataRow;
+            DataRow row;
+            //Данные по группам нагрузок
             dataTable = dataSet.Tables["ForcesGroups"];
-            dataRow = dataTable.NewRow();
-            dataRow.ItemArray = new object[]
-            { Id, Name,
-                CenterX, CenterY
-            };
-            dataTable.Rows.Add(dataRow);
-
+            if (createNew)
+            {
+                row = dataTable.NewRow();
+                dataTable.Rows.Add(row);
+            }
+            else
+            {
+                var tmpRow = (from dataRow in dataTable.AsEnumerable()
+                              where dataRow.Field<int>("Id") == Id
+                              select dataRow).Single();
+                row = tmpRow;
+            }
+            #region
+            row.SetField("Id", Id);
+            row.SetField("Name", Name);
+            row.SetField("CenterX", CenterX);
+            row.SetField("CenterY", CenterY);
+            #endregion
+            dataTable.AcceptChanges();
+            //Данные по нагрузкам на стальные базы
             dataTable = dataSet.Tables["SteelBaseForcesGroups"];
             foreach (SteelBase steelBase in SteelBases)
             {
-                dataRow = dataTable.NewRow();
-                dataRow.ItemArray = new object[]
-                { steelBase.Id, this.Id
-                };
-                dataTable.Rows.Add(dataRow);
+                if (createNew)
+                {
+                    row = dataTable.NewRow();
+                    dataTable.Rows.Add(row);
+                }
+                else
+                {
+                    var tmpRow = (from dataRow in dataTable.AsEnumerable()
+                              where dataRow.Field<int>("ForcesGroupId") == Id
+                              select dataRow).Single();
+                    row = tmpRow;
+                }
+                #region           
+                row.SetField("SteelBaseId", steelBase.Id);
+                row.SetField("ForcesGroupId", Id);
+                #endregion
             }
-
+            dataTable.AcceptChanges();
+            //Данные по нагрузкам на фундамент
             dataTable = dataSet.Tables["FoundationForcesGroups"];
             foreach (Foundation foundation in Foundations)
             {
-                dataRow = dataTable.NewRow();
-                dataRow.ItemArray = new object[]
-                { foundation.Id, this.Id
-                };
-                dataTable.Rows.Add(dataRow);
+                if (createNew)
+                {
+                    row = dataTable.NewRow();
+                    dataTable.Rows.Add(row);
+                }
+                else
+                {
+                    var tmpRow = (from dataRow in dataTable.AsEnumerable()
+                                  where dataRow.Field<int>("ForcesGroupId") == Id
+                                  select dataRow).Single();
+                    row = tmpRow;
+                }
+                #region           
+                row.SetField("FoundationId", foundation.Id);
+                row.SetField("ForcesGroupId", Id);
+                #endregion
             }
-
-            foreach (LoadSet loadSet in LoadSets)
-            {
-                loadSet.SaveToDataSet(dataSet, createNew);
-            }
+            dataTable.AcceptChanges();
+            foreach (LoadSet loadSet in LoadSets) { loadSet.SaveToDataSet(dataSet, createNew);}
         }
 
         public void OpenFromDataSet(DataSet dataSet)

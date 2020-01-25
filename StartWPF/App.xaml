@@ -185,7 +185,7 @@
             </Setter>
             <Setter Property="Content">
                 <Setter.Value>
-                    <Image Style="{StaticResource OperationButtonImage}" Source="{StaticResource IconDelete30}" />
+                    <Image Style="{StaticResource OperationButtonImage}" Source="{DynamicResource IconDelete30}" />
                 </Setter.Value>
             </Setter>
         </Style>
