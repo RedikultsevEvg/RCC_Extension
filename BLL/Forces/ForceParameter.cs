@@ -117,13 +117,28 @@ namespace RDBLL.Forces
         public void SaveToDataSet(DataSet dataSet, bool createNew)
         {
             DataTable dataTable;
-            DataRow dataRow;
+            DataRow row;
             dataTable = dataSet.Tables["ForceParameters"];
-            dataRow = dataTable.NewRow();
-            dataRow.ItemArray = new object[]
-            { Id, LoadSetId, KindId, Name, CrcValue
-            };
-            dataTable.Rows.Add(dataRow);
+            if (createNew)
+            {
+                row = dataTable.NewRow();
+                dataTable.Rows.Add(row);
+            }
+            else
+            {
+                var tmpRow = (from dataRow in dataTable.AsEnumerable()
+                              where dataRow.Field<int>("Id") == Id
+                              select dataRow).Single();
+                row = tmpRow;
+            }
+            #region
+            row.SetField("Id", Id);
+            row.SetField("LoadSetId", LoadSetId);
+            row.SetField("KindId", KindId);
+            row.SetField("Name", Name);
+            row.SetField("CrcValue", CrcValue);
+            #endregion
+            dataTable.AcceptChanges();
         }
 
         public void OpenFromDataSet(DataSet dataSet)

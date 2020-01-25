@@ -2,6 +2,7 @@
 using System;
 using System.ComponentModel;
 using System.Data;
+using System.Linq;
 
 namespace RDBLL.Entity.RCC.Foundations
 {
@@ -53,12 +54,30 @@ namespace RDBLL.Entity.RCC.Foundations
         public override void SaveToDataSet(DataSet dataSet, bool createNew)
         {
             DataTable dataTable;
-            DataRow dataRow;
+            DataRow row;
             dataTable = dataSet.Tables["FoundationParts"];
-            dataRow = dataTable.NewRow();
-            dataRow.ItemArray = new object[]
-                { Id, FoundationId, Name, Width, Length, Height, CenterX, CenterY};
-            dataTable.Rows.Add(dataRow);
+            if (createNew)
+            {
+                row = dataTable.NewRow();
+                dataTable.Rows.Add(row);
+            }
+            else
+            {
+                var tmpRow = (from dataRow in dataTable.AsEnumerable()
+                              where dataRow.Field<int>("Id") == Id
+                              select dataRow).Single();
+                row = tmpRow;
+            }
+            #region
+            row.SetField("Id", Id);
+            row.SetField("FoundationId", FoundationId);
+            row.SetField("Name", Name);
+            row.SetField("Width", Width);
+            row.SetField("Length", Length);
+            row.SetField("CenterX", CenterX);
+            row.SetField("CenterY", CenterY);
+            #endregion
+            dataTable.AcceptChanges();
         }
         public override void OpenFromDataSet(DataSet dataSet)
         {

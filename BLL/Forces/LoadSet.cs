@@ -82,23 +82,51 @@ namespace RDBLL.Forces
         public void SaveToDataSet(DataSet dataSet, bool createNew)
         {
             DataTable dataTable;
-            DataRow dataRow;
+            DataRow row;
             dataTable = dataSet.Tables["LoadSets"];
-            dataRow = dataTable.NewRow();
-            dataRow.ItemArray = new object[]
-            { Id, Name, PartialSafetyFactor, IsLiveLoad, IsCombination, BothSign
-            };
-            dataTable.Rows.Add(dataRow);
+            if (createNew)
+            {
+                row = dataTable.NewRow();
+                dataTable.Rows.Add(row);
+            }
+            else
+            {
+                var tmpRow = (from dataRow in dataTable.AsEnumerable()
+                              where dataRow.Field<int>("Id") == Id
+                              select dataRow).Single();
+                row = tmpRow;
+            }
+            #region
+            row.SetField("Id", Id);
+            row.SetField("Name", Name);
+            row.SetField("PartialSafetyFactor", PartialSafetyFactor);
+            row.SetField("IsLiveLoad", IsLiveLoad);
+            row.SetField("IsCombination", IsCombination);
+            row.SetField("BothSign", BothSign);
+            #endregion
+            dataTable.AcceptChanges();
 
             dataTable = dataSet.Tables["ForcesGroupLoadSets"];
             foreach (ForcesGroup forcesGroup in ForcesGroups)
             {
-                dataRow = dataTable.NewRow();
-                dataRow.ItemArray = new object[]
-                { forcesGroup.Id, this.Id
-                };
-                dataTable.Rows.Add(dataRow);
+                if (createNew)
+                {
+                    row = dataTable.NewRow();
+                    dataTable.Rows.Add(row);
+                }
+                else
+                {
+                    var tmpRow = (from dataRow in dataTable.AsEnumerable()
+                                  where dataRow.Field<int>("LoadSetId") == Id
+                                  select dataRow).Single();
+                    row = tmpRow;
+                }
+                #region
+                row.SetField("ForcesGroupId", forcesGroup.Id);
+                row.SetField("LoadSetId",Id);
+                #endregion
             }
+            dataTable.AcceptChanges();
             foreach (ForceParameter forceParameter in ForceParameters)
             {
                 forceParameter.SaveToDataSet(dataSet, createNew);

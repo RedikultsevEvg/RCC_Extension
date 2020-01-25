@@ -12,6 +12,7 @@ using System.Collections.ObjectModel;
 using System.Data;
 using RDBLL.Common.Interfaces;
 using RDBLL.Entity.RCC.Foundations;
+using DAL.Common;
 
 
 namespace RDBLL.Entity.RCC.BuildingAndSite
@@ -96,14 +97,37 @@ namespace RDBLL.Entity.RCC.BuildingAndSite
         /// Сохранение в датасет
         /// </summary>
         /// <param name="dataSet"></param>
+        /// <param name="createNew"></param>
         public void SaveToDataSet(DataSet dataSet, bool createNew)
         {
             DataTable dataTable;
-            DataRow dataRow;
+            DataRow row;
             dataTable = dataSet.Tables["Levels"];
-            dataRow = dataTable.NewRow();
-            dataRow.ItemArray = new object[] { Id, BuildingId, Name, Elevation, Height, TopOffset, BasePointX, BasePointY, BasePointY };
-            dataTable.Rows.Add(dataRow);
+            if (createNew)
+            {
+                row = dataTable.NewRow();
+                dataTable.Rows.Add(row);
+            }
+            else
+            {
+                var tmpRow = (from dataRow in dataTable.AsEnumerable()
+                              where dataRow.Field<int>("Id") == Id
+                              select dataRow).Single();
+                row = tmpRow;
+            }
+            #region SetField
+            row.SetField("Id", Id);
+            row.SetField("BuildingId", BuildingId);
+            row.SetField("Name", Name);
+            row.SetField("FloorLevel", Elevation);
+            row.SetField("Height", Height);
+            row.SetField("TopOffset", TopOffset);
+            row.SetField("BasePointX", BasePointX);
+            row.SetField("BasePointY", BasePointY);
+            row.SetField("BasePointZ", BasePointZ);
+            #endregion
+            dataTable.AcceptChanges();
+
             foreach (SteelBase steelBase in SteelBases)
             {
                 steelBase.SaveToDataSet(dataSet, createNew);
@@ -114,32 +138,17 @@ namespace RDBLL.Entity.RCC.BuildingAndSite
             }
         }
 
+        /// <summary>
+        /// Открывает запись из датасета
+        /// </summary>
+        /// <param name="dataSet"></param>
         public void OpenFromDataSet(DataSet dataSet)
         {
-            //DataTable dataTable, childTable;
-            //dataTable = dataSet.Tables["Levels"];
-
-            //for (int i = 0; i < dataTable.Rows.Count; i++)
-            //{
-            //    if (Convert.ToInt32(dataTable.Rows[i].ItemArray[0]) == Id)
-            //    {
-            //        this.Id = Id;
-            //        this.BuildingId = Convert.ToInt32(dataTable.Rows[i].ItemArray[1]);
-            //        this.Name = Convert.ToString(dataTable.Rows[i].ItemArray[2]);
-            //        childTable = dataSet.Tables["SteelBases"];
-            //        if (childTable != null)
-            //        {
-            //            for (int j = 0; j < childTable.Rows.Count; j++)
-            //            {
-            //                if (Convert.ToInt32(childTable.Rows[j].ItemArray[1]) == this.Id)
-            //                {
-            //                    SteelBase newObject = new SteelBase(this);
-            //                    newObject.OpenFromDataSet(dataSet, Convert.ToInt32(childTable.Rows[j].ItemArray[0]));
-            //                }
-            //            }
-            //        }
-            //    }
-            //}
+            DataTable dataTable = dataSet.Tables["Levels"];
+            var level = (from dataRow in dataTable.AsEnumerable()
+                            where dataRow.Field<int>("Id") == Id
+                            select dataRow).Single();
+            OpenFromDataSet(level);
         }
         /// <summary>
         /// Обновляет запись в соответствии со строкой датасета
@@ -147,7 +156,15 @@ namespace RDBLL.Entity.RCC.BuildingAndSite
         /// <param name="dataRow"></param>
         public void OpenFromDataSet(DataRow dataRow)
         {
-            throw new NotImplementedException();
+            Id = dataRow.Field<int>("Id");
+            BuildingId = dataRow.Field<int>("BuildingId");
+            Name = dataRow.Field<string>("Name");
+            Elevation = dataRow.Field<double>("FloorLevel");
+            Height = dataRow.Field<double>("Height");
+            TopOffset = dataRow.Field<double>("TopOffset");
+            BasePointX = dataRow.Field<double>("BasePointX");
+            BasePointY = dataRow.Field<double>("BasePointY");
+            BasePointZ = dataRow.Field<double>("BasePointZ");
         }
         /// <summary>
         /// Удаляет запись из датасета
@@ -155,7 +172,15 @@ namespace RDBLL.Entity.RCC.BuildingAndSite
         /// <param name="dataSet"></param>
         public void DeleteFromDataSet(DataSet dataSet)
         {
-            throw new NotImplementedException();
+            foreach (SteelBase steelBase in SteelBases)
+            {
+                steelBase.DeleteFromDataSet(dataSet);
+            }
+            foreach (Foundation foundation in Foundations)
+            {
+                foundation.DeleteFromDataSet(dataSet);
+            }
+            DsOperation.DeleteRow(dataSet, "Levels", Id);
         }
         /// <summary>
         /// Конструктор без параметров
@@ -180,7 +205,6 @@ namespace RDBLL.Entity.RCC.BuildingAndSite
             BuildingId = building.Id;
             Name = "Этаж 1";
             Building = building;
-            building.Levels.Add(this);
             Elevation = 0;
             Height = 3;
             TopOffset = -0.2;

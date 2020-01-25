@@ -340,18 +340,6 @@ namespace RDBLL.Common.Service
                 }
                 DataSet dataSet = GetDataSet();
                 dataSet.WriteXml(FilePath);
-                #region old
-                //XmlTextWriter textWritter = new XmlTextWriter(FilePath, Encoding.UTF8);
-                //textWritter.WriteStartDocument();
-                //textWritter.WriteStartElement("Project");
-                //textWritter.Close();
-                //XmlDocument xmlDocument = new XmlDocument();
-                //xmlDocument.Load(FilePath);
-                //XmlElement xmlRoot = xmlDocument.DocumentElement;
-                //XmlElement xmlSite = BuildingSite.SaveToXMLNode(xmlDocument);
-                //xmlRoot.AppendChild(xmlSite);
-                //xmlDocument.Save(FilePath);
-                #endregion
                 IsDataChanged = false;
                 return true;
             }
@@ -405,7 +393,7 @@ namespace RDBLL.Common.Service
                 };
                 dataTable.Rows.Add(dataRow);
             }
-            BuildingSite.SaveToDataSet(dataSet, false);
+            BuildingSite.SaveToDataSet(dataSet, true);
             #endregion
             return dataSet;
         }
@@ -437,11 +425,11 @@ namespace RDBLL.Common.Service
                     if (measureUnitLabel.Id == labelId) { MeasureUnits[i].CurrentUnitLabelId=labelId; }
                 }
             }
+            #endregion
             BuildingSite.OpenFromDataSet(dataSet);
             BuildingSite.Buildings = GetEntity.GetBuildings(dataSet, BuildingSite);
             DataSets.Clear();
             DataSets.Add(dataSet);
-            #endregion
         }
     }
 }

@@ -10,6 +10,7 @@ using RDBLL.Entity.MeasureUnits;
 using RDBLL.Common.Interfaces;
 using System.ComponentModel;
 using System.Data;
+using DAL.Common;
 
 namespace RDBLL.Entity.Soils
 {
@@ -81,6 +82,7 @@ namespace RDBLL.Entity.Soils
             Name = "Скважина-" + (buildingSite.SoilSections.Count + 1);
             HasWater = false;
             NaturalWaterLevel = 200;
+            WaterLevel = 200;
             CenterX = 0;
             CenterY = 0;
             SoilLayers = new ObservableCollection<SoilLayer>();
@@ -92,20 +94,43 @@ namespace RDBLL.Entity.Soils
         public void SaveToDataSet(DataSet dataSet, bool createNew)
         {
             DataTable dataTable;
-            DataRow dataRow;
+            DataRow row;
             dataTable = dataSet.Tables["SoilSections"];
-            dataRow = dataTable.NewRow();
-            dataRow.ItemArray = new object[]
-                { Id, BuildingSiteId, Name, HasWater, NaturalWaterLevel, WaterLevel, CenterX, CenterY };
-            dataTable.Rows.Add(dataRow);
-            foreach (SoilLayer soilLayer in SoilLayers)
+            if (createNew)
             {
-                //soilLayer.SaveToDataSet(dataSet);
+                row = dataTable.NewRow();
+                dataTable.Rows.Add(row);
             }
+            else
+            {
+                var soil = (from dataRow in dataTable.AsEnumerable()
+                            where dataRow.Field<int>("Id") == Id
+                            select dataRow).Single();
+                row = soil;
+            }
+            #region setFields
+            row.SetField("Id", Id);
+            row.SetField("BuildingSiteId", BuildingSiteId);
+            row.SetField("Name", Name);
+            row.SetField("HasWater", HasWater);
+            row.SetField("NaturalWaterLevel", NaturalWaterLevel);
+            row.SetField("WaterLevel", WaterLevel);
+            row.SetField("CenterX", CenterX);
+            row.SetField("CenterY", CenterY);
+            #endregion
+            dataTable.AcceptChanges();
+            //foreach (SoilLayer soilLayer in SoilLayers)
+            //{
+            //    soilLayer.SaveToDataSet(dataSet);
+            //}
         }
         public void OpenFromDataSet(DataSet dataSet)
         {
-            throw new NotImplementedException();
+            DataTable dataTable = dataSet.Tables["SoilSections"];
+            var row = (from dataRow in dataTable.AsEnumerable()
+                       where dataRow.Field<int>("Id") == Id
+                       select dataRow).Single();
+            OpenFromDataSet(row);
         }
         /// <summary>
         /// Обновляет запись в соответствии со строкой датасета
@@ -113,7 +138,14 @@ namespace RDBLL.Entity.Soils
         /// <param name="dataRow"></param>
         public void OpenFromDataSet(DataRow dataRow)
         {
-            throw new NotImplementedException();
+            Id = dataRow.Field<int>("Id");
+            BuildingSiteId = dataRow.Field<int>("BuildingSiteId");
+            Name = dataRow.Field<string>("Name");
+            HasWater = dataRow.Field<bool>("HasWater");
+            NaturalWaterLevel = dataRow.Field<double>("NaturalWaterLevel");
+            WaterLevel = dataRow.Field<double>("WaterLevel");
+            CenterX = dataRow.Field<double>("CenterX");
+            CenterY = dataRow.Field<double>("CenterY");
         }
         /// <summary>
         /// Удаляет запись из датасета
@@ -121,7 +153,16 @@ namespace RDBLL.Entity.Soils
         /// <param name="dataSet"></param>
         public void DeleteFromDataSet(DataSet dataSet)
         {
-            throw new NotImplementedException();
+            DataTable dataTable;
+            dataTable = dataSet.Tables["SoilLayers"];
+            var soilLayers = from dataRow in dataTable.AsEnumerable()
+                             where dataRow.Field<int>("SoilSectionId") == Id
+                             select dataRow;
+            foreach (DataRow dataRow in soilLayers)
+            {
+                dataRow.Delete();
+            }
+            DsOperation.DeleteRow(dataSet, "SoilSections", Id);
         }
         #endregion
         #region errors

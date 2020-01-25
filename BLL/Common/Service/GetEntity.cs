@@ -29,15 +29,9 @@ namespace RDBLL.Common.Service
                         select dataRow;
             foreach (var dataRow in query)
             {
-                Building newObject = new Building
-                {
-                    Id = dataRow.Field<int>("Id"),
-                    BuildingSiteId = dataRow.Field<int>("BuildingSiteId"),
-                    BuildingSite = buildingSite,
-                    Name = dataRow.Field<string>("Name"),
-                    RelativeLevel = dataRow.Field<double>("RelativeLevel"),
-                    AbsoluteLevel = dataRow.Field<double>("AbsoluteLevel")
-                };
+                Building newObject = new Building();
+                newObject.OpenFromDataSet(dataRow);
+                newObject.BuildingSite = buildingSite;
                 newObject.Levels = GetLevels(dataSet, newObject);
                 newObjects.Add(newObject);
             }
@@ -58,19 +52,9 @@ namespace RDBLL.Common.Service
                                          select dataRow;
             foreach (var dataRow in query)
             {
-                Level newObject = new Level
-                {
-                    Id = dataRow.Field<int>("Id"),
-                    BuildingId = dataRow.Field<int>("BuildingId"),
-                    Building = building,
-                    Name = dataRow.Field<string>("Name"),
-                    Elevation = dataRow.Field<double>("FloorLevel"),
-                    Height = dataRow.Field<double>("Height"),
-                    TopOffset = dataRow.Field<double>("TopOffset"),
-                    BasePointX = dataRow.Field<double>("BasePointX"),
-                    BasePointY = dataRow.Field<double>("BasePointY"),
-                    BasePointZ = dataRow.Field<double>("BasePointZ")
-                };
+                Level newObject = new Level();
+                newObject.OpenFromDataSet(dataRow);
+                newObject.Building = building;
                 newObject.SteelBases = GetSteelBases(dataSet, newObject);
                 newObject.Foundations = GetFoundations(dataSet, newObject);
                 newObjects.Add(newObject);

@@ -7,6 +7,8 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data;
+using System.Linq;
+using DAL.Common;
 
 namespace RDBLL.Entity.SC.Column
 {
@@ -262,15 +264,37 @@ namespace RDBLL.Entity.SC.Column
         public void SaveToDataSet(DataSet dataSet, bool createNew)
         {
             DataTable dataTable;
-            DataRow dataRow;
-             dataTable = dataSet.Tables["SteelBases"];
-            dataRow = dataTable.NewRow();
-            dataRow.ItemArray = new object[]
-                { Id, LevelId, SteelClassId, ConcreteClassId,
-                    Name, SteelStrength, ConcreteStrength, IsActual,
-                    Width, Length, Thickness, WorkCondCoef,
-                    UseSimpleMethod };
-            dataTable.Rows.Add(dataRow);
+            DataRow row;
+            dataTable = dataSet.Tables["SteelBases"];
+            if (createNew)
+            {
+                row = dataTable.NewRow();
+                dataTable.Rows.Add(row);
+            }
+            else
+            {
+                var tmpRow = (from dataRow in dataTable.AsEnumerable()
+                              where dataRow.Field<int>("Id") == Id
+                              select dataRow).Single();
+                row = tmpRow;
+            }
+            #region
+            row.SetField("Id", Id);
+            row.SetField("LevelId", LevelId);
+            row.SetField("SteelClassId", SteelClassId);
+            row.SetField("ConcreteClassId", ConcreteClassId);
+            row.SetField("Name", Name);
+            row.SetField("SteelStrength", SteelStrength);
+            row.SetField("ConcreteStrength", ConcreteStrength);
+            row.SetField("IsActual", IsActual);
+            row.SetField("Width", Width);
+            row.SetField("Length", Length);
+            row.SetField("Thickness", Thickness);
+            row.SetField("WorkCondCoef", WorkCondCoef);
+            row.SetField("UseSimpleMethod", UseSimpleMethod);
+            #endregion
+            dataTable.AcceptChanges();
+
             foreach (SteelBasePart steelBasePart in SteelBaseParts)
             {
                 steelBasePart.SaveToDataSet(dataSet, createNew);
@@ -302,7 +326,7 @@ namespace RDBLL.Entity.SC.Column
         /// <param name="dataSet"></param>
         public void DeleteFromDataSet(DataSet dataSet)
         {
-            throw new NotImplementedException();
+            DsOperation.DeleteRow(dataSet, "SteelBases", Id);
         }
         #endregion
 

@@ -85,9 +85,26 @@ namespace RDBLL.Entity.Soils
         /// Сохраняет класс в датасет
         /// </summary>
         /// <param name="dataSet">Датасет</param>
+        /// <param name="createNew"></param>
         public virtual void SaveToDataSet(DataSet dataSet, bool createNew)
         {
-            throw new NotImplementedException();
+            DataTable dataTable;
+            DataRow row;
+            dataTable = dataSet.Tables["Soils"];
+            if (createNew)
+            {
+                row = dataTable.NewRow();
+                dataTable.Rows.Add(row);
+            }
+            else
+            {
+                var soil = (from dataRow in dataTable.AsEnumerable()
+                            where dataRow.Field<int>("Id") == Id
+                            select dataRow).Single();
+                row = soil;
+            }
+            SaveToDataSet(row);
+            dataTable.AcceptChanges();
         }
         /// <summary>
         /// Сохраняет запись в строку датасета
@@ -95,6 +112,7 @@ namespace RDBLL.Entity.Soils
         /// <param name="dataRow">Строка датасета</param>
         public virtual void SaveToDataSet(DataRow dataRow)
         {
+            //Не удалять, так как этот участок необходим с учетом наследования
             dataRow["Id"] = Id;
             dataRow["BuildingSiteId"] = BuildingSiteId;
             dataRow["Name"] = Name;
@@ -137,7 +155,18 @@ namespace RDBLL.Entity.Soils
         /// <param name="dataSet"></param>
         public void DeleteFromDataSet(DataSet dataSet)
         {
-            DsOperation.DeleteRow(dataSet, "Soils", Id);
+            DataTable dataTable;
+            dataTable = dataSet.Tables["SoilLayers"];
+            var soilLayers = from dataRow in dataTable.AsEnumerable()
+                        where dataRow.Field<int>("SoilId") == Id
+                        select dataRow;
+            int count = 0;
+            foreach (DataRow dataRow in soilLayers)
+            {
+                count++;
+            }
+            if (count > 0 ) { throw new Exception("Нельзя удалить грунт, который участвует в скважинах"); }
+            else { DsOperation.DeleteRow(dataSet, "Soils", Id); }
         }
         public string Error { get { throw new NotImplementedException(); } }
         public string this[string columnName]

@@ -32,7 +32,7 @@
             <TextBlock x:Name="tbElevation" Grid.Row="1" Style="{StaticResource PropertyTextBlock}" Text="Уровень пола"/>
             <TextBlock x:Name="tbHeight" Grid.Row="2" Style="{StaticResource PropertyTextBlock}" Text="Высота этажа"/>
             <TextBlock x:Name="tbTopOffset" Grid.Row="3" Style="{StaticResource PropertyTextBlock}" Text="Оффсет сверху"/>
-            <TextBox x:Name="tbxName" Grid.Column="1" Style="{StaticResource PropertyTextBox}" Text="{Binding Path=Name}"/>
+            <TextBox x:Name="tbxName" Grid.Column="1" Style="{StaticResource PropertyTextBox}" Text="{Binding Path=Name}" Grid.ColumnSpan="2"/>
             <TextBox x:Name="tbxElevation" Grid.Row="1" Grid.Column="1" Style="{StaticResource PropertyTextBox}" Text="{Binding Path=Elevation, Converter={StaticResource LinearSizeConverter}}"/>
             <TextBox x:Name="tbxHeight" Grid.Row="2" Grid.Column="1" Style="{StaticResource PropertyTextBox}" Text="{Binding Path=Height, Converter={StaticResource LinearSizeConverter}}"/>
             <TextBox x:Name="tbxTopOffset" Grid.Row="3" Grid.Column="1" Style="{StaticResource PropertyTextBox}" Text="{Binding Path=TopOffset, Converter={StaticResource LinearSizeConverter}}"/>
@@ -45,7 +45,7 @@
         </Grid>
         <StackPanel Height="60" Grid.Row="1" Margin="10" Orientation="Horizontal" Grid.ColumnSpan="3" HorizontalAlignment="Right" Background="#FFE2E2E2">
             <Button x:Name="btnOK" Style="{StaticResource OkServiceButton}" HorizontalAlignment="Stretch" Click="btnOK_Click"/>
-            <Button x:Name="btnCancel" Style="{StaticResource CancelServiceButton}" HorizontalAlignment="Stretch" Click="btnCancel_Click" IsEnabled="False"/>
+            <Button x:Name="btnCancel" Style="{StaticResource CancelServiceButton}" HorizontalAlignment="Stretch" Click="btnCancel_Click"/>
         </StackPanel>
     </Grid>
 </Window>
