@@ -9,7 +9,9 @@ namespace RDBLL.Common.Interfaces
 {
     interface ISavableToDataSet
     {
-        void SaveToDataSet(DataSet dataSet);
-        void OpenFromDataSet(DataSet dataSet, int id);
+        void SaveToDataSet(DataSet dataSet, bool createNew);
+        void OpenFromDataSet(DataSet dataSet);
+        void OpenFromDataSet(DataRow dataRow);
+        void DeleteFromDataSet(DataSet dataSet);
     }
 }

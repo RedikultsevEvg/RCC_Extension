@@ -10,7 +10,7 @@
     <Window.Resources>
         <Convert:VolumeWeightConverter x:Key="VolumeWeightConverter"/>
     </Window.Resources>
-    <Grid>
+    <Grid x:Name="GridMain">
         <Grid.RowDefinitions>
             <RowDefinition/>
             <RowDefinition Height="80"/>
@@ -33,7 +33,7 @@
         </Grid>
         <StackPanel Height="60" Grid.Row="1" Margin="10" Orientation="Horizontal" Grid.ColumnSpan="3" HorizontalAlignment="Right" Background="#FFE2E2E2">
             <Button x:Name="btnOK" Style="{StaticResource OkServiceButton}" HorizontalAlignment="Stretch" Click="BtnOK_Click"/>
-            <Button x:Name="btnCancel" Style="{StaticResource CancelServiceButton}" HorizontalAlignment="Stretch" IsEnabled="False"/>
+            <Button x:Name="btnCancel" Style="{StaticResource CancelServiceButton}" HorizontalAlignment="Stretch" Click="BtnCancel_Click"/>
         </StackPanel>
     </Grid>
 </Window>

@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using RDBLL.Entity.Soils;
+using RDUIL.Validations;
 
 namespace RDUIL.WPF_Windows.Foundations.Soils
 {
@@ -20,17 +21,29 @@ namespace RDUIL.WPF_Windows.Foundations.Soils
     /// </summary>
     public partial class WndClaySoil : Window
     {
-        private DispersedSoil _dispersedSoil;
+        private DispersedSoil _element;
         public WndClaySoil(DispersedSoil dispersedSoil)
         {
-            _dispersedSoil = dispersedSoil;
-            this.DataContext = _dispersedSoil;
+            _element = dispersedSoil;
+            this.DataContext = _element;
             InitializeComponent();
         }
 
         private void BtnOK_Click(object sender, RoutedEventArgs e)
         {
-            throw new NotImplementedException();
+            string message = ErrorProcessor.cmdGetErrorString(GridMain);
+            if (message != "") { MessageBox.Show(message); }
+            else
+            {
+                this.DialogResult = true;
+                this.Close();
+            }
+        }
+
+        private void BtnCancel_Click(object sender, RoutedEventArgs e)
+        {
+            this.DialogResult = false;
+            this.Close();
         }
     }
 }

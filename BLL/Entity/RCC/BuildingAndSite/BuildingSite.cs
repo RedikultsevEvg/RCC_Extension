@@ -10,7 +10,7 @@ using System.Collections.ObjectModel;
 using RDBLL.Common.Interfaces;
 using System.Data;
 using RDBLL.Entity.Soils;
-
+using DAL.Common;
 
 namespace RDBLL.Entity.RCC.BuildingAndSite
 {
@@ -43,38 +43,62 @@ namespace RDBLL.Entity.RCC.BuildingAndSite
         /// Сохранение в датасет
         /// </summary>
         /// <param name="dataSet"></param>
-        public void SaveToDataSet(DataSet dataSet)
+        public void SaveToDataSet(DataSet dataSet, bool createNew)
         {
             DataTable dataTable;
-            DataRow dataRow;
+            DataRow row;
             dataTable = dataSet.Tables["BuildingSites"];
-            dataRow = dataTable.NewRow();
-            dataRow.ItemArray = new object[] { Id, 0, Name };
-            dataTable.Rows.Add(dataRow);
+            if (createNew) { row = dataTable.NewRow(); }
+            else
+            {
+                var soil = (from dataRow in dataTable.AsEnumerable()
+                            where dataRow.Field<int>("Id") == Id
+                            select dataRow).Single();
+                row = soil;
+            }
+            //Задаем свойства элемента
+            row["Id"] = Id;
+            row["ParentId"] = 0;
+            row["Name"] = Name;
+            dataTable.Rows.Add(row);
+            //Добавляем вложенные элементы
             foreach (Building building in Buildings)
             {
-                building.SaveToDataSet(dataSet);
+                building.SaveToDataSet(dataSet, createNew);
+            }
+            foreach (Soil soil in Soils)
+            {
+                soil.SaveToDataSet(dataSet, createNew);
             }
         }
         /// <summary>
-        /// Открытие из датасета по Id
+        /// Открытие из датасета
         /// </summary>
         /// <param name="dataSet"></param>
-        /// <param name="Id"></param>
-        public void OpenFromDataSet(DataSet dataSet, int Id)
+        public void OpenFromDataSet(DataSet dataSet)
         {
-            DataTable dataTable;
-            dataTable = dataSet.Tables["BuildingSites"];
-
-            for (int i = 0; i < dataTable.Rows.Count; i++)
-            {
-                if (Convert.ToInt32(dataTable.Rows[i].ItemArray[0]) == Id)
-                {
-                    this.Id = Id;
-                    this.Name = Convert.ToString(dataTable.Rows[i].ItemArray[2]);
-                    this.Buildings=GetEntity.GetBuildings(dataSet, this);
-                }
-            }
+            DataTable dataTable = dataSet.Tables["BuildingSites"];
+            var row = (from dataRow in dataTable.AsEnumerable()
+                           where dataRow.Field<int>("Id") == Id
+                           select dataRow).Single();
+            OpenFromDataSet(row);
+        }
+        /// <summary>
+        /// Обновляет запись в соответствии со строкой датасета
+        /// </summary>
+        /// <param name="dataRow"></param>
+        public void OpenFromDataSet(DataRow dataRow)
+        {
+            this.Id = dataRow.Field<int>("Id");
+            this.Name = dataRow.Field<string>("Name");
+        }
+        /// <summary>
+        /// Удаляет запись из датасета
+        /// </summary>
+        /// <param name="dataSet"></param>
+        public void DeleteFromDataSet(DataSet dataSet)
+        {
+            DsOperation.DeleteRow(dataSet, "BuildingSites", Id);
         }
         /// <summary>
         /// Клонирование объекта
@@ -89,7 +113,6 @@ namespace RDBLL.Entity.RCC.BuildingAndSite
         /// </summary>
         public BuildingSite()
         {
-            Id = ProgrammSettings.CurrentId;
             Name = "Мой объект";
             Buildings = new ObservableCollection<Building>();
             Soils = new ObservableCollection<Soil>();
@@ -169,7 +192,7 @@ namespace RDBLL.Entity.RCC.BuildingAndSite
         /// Сохранение в датасет
         /// </summary>
         /// <param name="dataSet"></param>
-        public void SaveToDataSet(DataSet dataSet)
+        public void SaveToDataSet(DataSet dataSet, bool createNew)
         {
             DataTable dataTable;
             DataRow dataRow;
@@ -179,7 +202,7 @@ namespace RDBLL.Entity.RCC.BuildingAndSite
             dataTable.Rows.Add(dataRow);
             foreach (Level level in Levels)
             {
-                level.SaveToDataSet(dataSet);
+                level.SaveToDataSet(dataSet, createNew);
             }
         }
         /// <summary>
@@ -197,11 +220,8 @@ namespace RDBLL.Entity.RCC.BuildingAndSite
             building.SetField("AbsoluteLevel", AbsoluteLevel);
             dataTable.AcceptChanges();
         }
-        /// <summary>
-        /// Обновляет запись в соответствии с сохраненной в датасете
-        /// </summary>
-        /// <param name="dataSet"></param>
-        public void Revert(DataSet dataSet)
+
+        public void OpenFromDataSet(DataSet dataSet)
         {
             DataTable dataTable = dataSet.Tables["Buildings"];
             var building = (from dataRow in dataTable.AsEnumerable()
@@ -211,9 +231,21 @@ namespace RDBLL.Entity.RCC.BuildingAndSite
             RelativeLevel = building.Field<double>("RelativeLevel");
             AbsoluteLevel = building.Field<double>("AbsoluteLevel");
         }
-
-        public void OpenFromDataSet(DataSet dataSet, int Id)
+        /// <summary>
+        /// Обновляет запись в соответствии со строкой датасета
+        /// </summary>
+        /// <param name="dataRow"></param>
+        public void OpenFromDataSet(DataRow dataRow)
         {
+            throw new NotImplementedException();
+        }
+        /// <summary>
+        /// Удаляет запись из датасета
+        /// </summary>
+        /// <param name="dataSet"></param>
+        public void DeleteFromDataSet(DataSet dataSet)
+        {
+            throw new NotImplementedException();
         }
         /// <summary>
         /// Клонирование объекта

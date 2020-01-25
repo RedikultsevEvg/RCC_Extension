@@ -6,13 +6,16 @@ using System.Threading.Tasks;
 using RDBLL.Entity.RCC.BuildingAndSite;
 using RDBLL.Common.Service;
 using RDBLL.Entity.MeasureUnits;
+using RDBLL.Common.Interfaces;
+using System.Data;
+using DAL.Common;
 
 namespace RDBLL.Entity.Soils
 {
     /// <summary>
     /// Абстрактный класс грунта
     /// </summary>
-    public abstract class Soil
+    public abstract class Soil : ISavableToDataSet
     {
         /// <summary>
         /// Код грунта
@@ -76,6 +79,85 @@ namespace RDBLL.Entity.Soils
             Name = "ИГЭ-" + (buildingSite.Soils.Count + 1);
             Description = "Суглинок песчанистый, тугопластичный";
             FiltrationCoeff = 0.0001;
+        }
+
+        /// <summary>
+        /// Сохраняет класс в датасет
+        /// </summary>
+        /// <param name="dataSet">Датасет</param>
+        public virtual void SaveToDataSet(DataSet dataSet, bool createNew)
+        {
+            throw new NotImplementedException();
+        }
+        /// <summary>
+        /// Сохраняет запись в строку датасета
+        /// </summary>
+        /// <param name="dataRow">Строка датасета</param>
+        public virtual void SaveToDataSet(DataRow dataRow)
+        {
+            dataRow["Id"] = Id;
+            dataRow["BuildingSiteId"] = BuildingSiteId;
+            dataRow["Name"] = Name;
+            dataRow["Description"] = Description;
+            dataRow["CrcDensity"] = CrcDensity;
+            dataRow["FstDesignDensity"] = FstDesignDensity;
+            dataRow["SndDesignDensity"] = SndDesignDensity;
+            dataRow["FiltrationCoeff"] = FiltrationCoeff;
+        }
+        /// <summary>
+        /// Получает свойства класса из датасета
+        /// </summary>
+        /// <param name="dataSet"></param>
+        public virtual void OpenFromDataSet(DataSet dataSet)
+        {
+            DataTable dataTable = dataSet.Tables["Soils"];
+            var soilRow = (from dataRow in dataTable.AsEnumerable()
+                           where dataRow.Field<int>("Id") == Id
+                           select dataRow).Single();
+            OpenFromDataSet(soilRow);
+        }
+        /// <summary>
+        /// Получает свойства класса из строки датасета
+        /// </summary>
+        /// <param name="dataRow">Строка датасета</param>
+        public virtual void OpenFromDataSet(DataRow dataRow)
+        {
+            Id = dataRow.Field<int>("Id");
+            BuildingSiteId = dataRow.Field<int>("BuildingSiteId");
+            Name = dataRow.Field<string>("Name");
+            Description = dataRow.Field<string>("Description");
+            CrcDensity = dataRow.Field<double>("CrcDensity");
+            FstDesignDensity = dataRow.Field<double>("FstDesignDensity");
+            SndDesignDensity = dataRow.Field<double>("SndDesignDensity");
+            FiltrationCoeff = dataRow.Field<double>("FiltrationCoeff");
+        }
+        /// <summary>
+        /// Удаляет запись из строки датасета
+        /// </summary>
+        /// <param name="dataSet"></param>
+        public void DeleteFromDataSet(DataSet dataSet)
+        {
+            DsOperation.DeleteRow(dataSet, "Soils", Id);
+        }
+        public string Error { get { throw new NotImplementedException(); } }
+        public string this[string columnName]
+        {
+            get
+            {
+                string error = String.Empty;
+                switch (columnName)
+                {
+                    case "CrcDensity":
+                        {
+                            if (CrcDensity <= 0)
+                            {
+                                error = "Нормативная плотность грунта должна быть больше нуля";
+                            }
+                        }
+                        break;
+                }
+                return error;
+            }
         }
     }
 }

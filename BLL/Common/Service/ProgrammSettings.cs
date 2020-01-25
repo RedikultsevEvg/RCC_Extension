@@ -101,8 +101,15 @@ namespace RDBLL.Common.Service
         /// </summary>
         public static void InicializeNew()
         {
+            DataSets = new List<DataSet>();
+            MainDataSet mainDataSet = new MainDataSet();
+            mainDataSet.GetNewDataSet();
+            DataSet dataSet = mainDataSet.DataSet;
+            DataSets.Add(dataSet);
             BuildingSite = new BuildingSite();
+            BuildingSite.Id = CurrentId;
             BuildingSite.Buildings.Add(new Building(BuildingSite));
+            BuildingSite.SaveToDataSet(CurrentDataSet, true);
             IsDataChanged = false;
             CurrentId = 0;
             CurrentTmpId = 1000000;
@@ -278,7 +285,6 @@ namespace RDBLL.Common.Service
                 MeasureUnit = measureUnitMoment
             });
             #endregion
-            DataSets = new List<DataSet>();
         }
         /// <summary>
         /// Очистить коллекцию зданий строительного объекта
@@ -299,7 +305,11 @@ namespace RDBLL.Common.Service
                 openFileDialog.Filter = "XML file (*.xml)|*.xml";
                 if (openFileDialog.ShowDialog() == true) FilePath = openFileDialog.FileName; else return false;
                 ClearAll();
-                InicializeNew();
+                DataSets = new List<DataSet>();
+                MainDataSet mainDataSet = new MainDataSet();
+                mainDataSet.GetNewDataSet();
+                DataSet dataSet = mainDataSet.DataSet;
+                DataSets.Add(dataSet);
                 OpenExistDataset(FilePath);
                 IsDataChanged = false;
                 return true;
@@ -395,7 +405,7 @@ namespace RDBLL.Common.Service
                 };
                 dataTable.Rows.Add(dataRow);
             }
-            BuildingSite.SaveToDataSet(dataSet);
+            BuildingSite.SaveToDataSet(dataSet, false);
             #endregion
             return dataSet;
         }
@@ -421,9 +431,14 @@ namespace RDBLL.Common.Service
             dataTable = dataSet.Tables["MeasurementUnits"];
             for (int i = 0; i < dataTable.Rows.Count; i++)
             {
-                MeasureUnits[i].CurrentUnitLabelId = Convert.ToInt32(dataTable.Rows[i].ItemArray[0]);
+                int labelId = Convert.ToInt32(dataTable.Rows[i].ItemArray[0]);
+                foreach (MeasureUnitLabel measureUnitLabel in MeasureUnits[i].UnitLabels)
+                {
+                    if (measureUnitLabel.Id == labelId) { MeasureUnits[i].CurrentUnitLabelId=labelId; }
+                }
             }
-            BuildingSite.OpenFromDataSet(dataSet, 1);
+            BuildingSite.OpenFromDataSet(dataSet);
+            BuildingSite.Buildings = GetEntity.GetBuildings(dataSet, BuildingSite);
             DataSets.Clear();
             DataSets.Add(dataSet);
             #endregion

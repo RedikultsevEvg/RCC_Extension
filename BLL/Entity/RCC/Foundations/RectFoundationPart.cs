@@ -50,7 +50,7 @@ namespace RDBLL.Entity.RCC.Foundations
         /// <summary>
         /// Сохраняет класс в датасет
         /// </summary>
-        public void SaveToDataSet(DataSet dataSet)
+        public override void SaveToDataSet(DataSet dataSet, bool createNew)
         {
             DataTable dataTable;
             DataRow dataRow;
@@ -60,7 +60,7 @@ namespace RDBLL.Entity.RCC.Foundations
                 { Id, FoundationId, Name, Width, Length, Height, CenterX, CenterY};
             dataTable.Rows.Add(dataRow);
         }
-        public void OpenFromDataSet(DataSet dataSet, int i)
+        public override void OpenFromDataSet(DataSet dataSet)
         {
             throw new NotImplementedException();
         }

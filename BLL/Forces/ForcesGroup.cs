@@ -90,7 +90,7 @@ namespace RDBLL.Forces
         /// Сохранение в датасет
         /// </summary>
         /// <param name="dataSet"></param>
-        public void SaveToDataSet(DataSet dataSet)
+        public void SaveToDataSet(DataSet dataSet, bool createNew)
         {
             DataTable dataTable;
             DataRow dataRow;
@@ -124,11 +124,27 @@ namespace RDBLL.Forces
 
             foreach (LoadSet loadSet in LoadSets)
             {
-                loadSet.SaveToDataSet(dataSet);
+                loadSet.SaveToDataSet(dataSet, createNew);
             }
         }
 
-        public void OpenFromDataSet(DataSet dataSet, int Id)
+        public void OpenFromDataSet(DataSet dataSet)
+        {
+            throw new NotImplementedException();
+        }
+        /// <summary>
+        /// Обновляет запись в соответствии со строкой датасета
+        /// </summary>
+        /// <param name="dataRow"></param>
+        public void OpenFromDataSet(DataRow dataRow)
+        {
+            throw new NotImplementedException();
+        }
+        /// <summary>
+        /// Удаляет запись из датасета
+        /// </summary>
+        /// <param name="dataSet"></param>
+        public void DeleteFromDataSet(DataSet dataSet)
         {
             throw new NotImplementedException();
         }

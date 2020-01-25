@@ -339,30 +339,10 @@ namespace RDBLL.Common.Service
                         select dataRow;
             foreach (var dataRow in query)
             {
-                Foundation newObject = new Foundation
-                {
-                    Id = dataRow.Field<int>("Id"),
-                    LevelId = dataRow.Field<int>("LevelId"),
-                    Level = level,
-                    ReinfSteelClassId = dataRow.Field<int>("ReinfSteelClassId"),
-                    ConcreteClassId = dataRow.Field<int>("ConcreteClassId"),
-                    //Надо получить ссылки на сталь и бетон
-
-                    Name = dataRow.Field<string>("Name"),
-                    SoilVolumeWeight = dataRow.Field<double>("SoilVolumeWeight"),
-                    ConcreteVolumeWeight = dataRow.Field<double>("ConcreteVolumeWeight"),
-                    FloorLoad = dataRow.Field<double>("FloorLoad"),
-                    FloorLoadFactor = dataRow.Field<double>("FloorLoadFactor"),
-                    ConcreteFloorLoad = dataRow.Field<double>("ConcreteFloorLoad"),
-                    ConcreteFloorLoadFactor = dataRow.Field<double>("ConcreteFloorLoadFactor"),
-                    CoveringLayerX = dataRow.Field<double>("CoveringLayerX"),
-                    CoveringLayerY = dataRow.Field<double>("CoveringLayerY"),
-                    CompressedLayerRatio = dataRow.Field<double>("CompressedLayerRatio"),
-                    IsLoadCasesActual = false,
-                    IsPartsActual = false               
-                };
-                newObject.Parts = GetFoundationParts(dataSet, newObject);
-                
+                Foundation newObject = new Foundation();
+                newObject.OpenFromDataSet(dataRow);
+                newObject.Level = level;
+                newObject.Parts = GetFoundationParts(dataSet, newObject);                
                 newObject.ForcesGroups = GetFoundationForcesGroups(dataSet, newObject);
                 newObjects.Add(newObject);
             }
