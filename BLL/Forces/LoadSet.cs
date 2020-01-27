@@ -122,6 +122,7 @@ namespace RDBLL.Forces
                     row = tmpRow;
                 }
                 #region
+                row.SetField("Id", ProgrammSettings.CurrentId);
                 row.SetField("ForcesGroupId", forcesGroup.Id);
                 row.SetField("LoadSetId",Id);
                 #endregion

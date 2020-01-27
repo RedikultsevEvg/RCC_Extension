@@ -149,6 +149,7 @@ namespace DAL.DataSets
             #region SteelBaseForcesGroups
             dataTable = new DataTable("SteelBaseForcesGroups");
             dataSet.Tables.Add(dataTable);
+            DsOperation.AddIdColumn(dataTable);
             DsOperation.AddFkIdColumn("SteelBases", "SteelBaseId", dataTable);
             DsOperation.AddFkIdColumn("ForcesGroups", "ForcesGroupId", dataTable);
             #endregion
@@ -165,6 +166,7 @@ namespace DAL.DataSets
             #region ForcesGroupLoadSets
             dataTable = new DataTable("ForcesGroupLoadSets");
             dataSet.Tables.Add(dataTable);
+            DsOperation.AddIdColumn(dataTable);
             DsOperation.AddFkIdColumn("ForcesGroups", "ForcesGroupId", dataTable);
             DsOperation.AddFkIdColumn("LoadSets", "LoadSetId", dataTable);
             #endregion
@@ -203,6 +205,7 @@ namespace DAL.DataSets
             dataTable = new DataTable("FoundationParts");
             dataSet.Tables.Add(dataTable);
             DsOperation.AddIdColumn(dataTable);
+            DsOperation.AddStringColumn(dataTable, "Type");
             DsOperation.AddFkIdColumn("Foundations", "FoundationId", dataTable);
             DsOperation.AddNameColumn(dataTable);
             DsOperation.AddDoubleColumn(dataTable, "Width");
@@ -214,6 +217,7 @@ namespace DAL.DataSets
             #region FoundationForcesGroups
             dataTable = new DataTable("FoundationForcesGroups");
             dataSet.Tables.Add(dataTable);
+            DsOperation.AddIdColumn(dataTable);
             DsOperation.AddFkIdColumn("Foundations", "FoundationId", dataTable);
             DsOperation.AddFkIdColumn("ForcesGroups", "ForcesGroupId", dataTable);
             #endregion

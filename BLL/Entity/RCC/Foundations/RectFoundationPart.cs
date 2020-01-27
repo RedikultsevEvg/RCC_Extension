@@ -70,18 +70,26 @@ namespace RDBLL.Entity.RCC.Foundations
             }
             #region
             row.SetField("Id", Id);
+            row.SetField("Type", "Rect");
             row.SetField("FoundationId", FoundationId);
             row.SetField("Name", Name);
             row.SetField("Width", Width);
             row.SetField("Length", Length);
+            row.SetField("Height", Height);
             row.SetField("CenterX", CenterX);
             row.SetField("CenterY", CenterY);
             #endregion
             dataTable.AcceptChanges();
         }
-        public override void OpenFromDataSet(DataSet dataSet)
+        /// <summary>
+        /// Обновляет запись по строке датасета
+        /// </summary>
+        /// <param name="dataRow"></param>
+        public override void OpenFromDataSet(DataRow dataRow)
         {
-            throw new NotImplementedException();
+            base.OpenFromDataSet(dataRow);
+            Width = dataRow.Field<double>("Width");
+            Length = dataRow.Field<double>("Length");
         }
         #endregion
         public string Error { get { throw new NotImplementedException(); } }

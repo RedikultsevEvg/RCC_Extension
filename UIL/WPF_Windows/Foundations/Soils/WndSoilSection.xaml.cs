@@ -92,7 +92,6 @@ namespace RDUIL.WPF_Windows.Foundations.Soils
                     if (LvAssignedSoils.Items.Count == 1) LvAssignedSoils.UnselectAll();
                     else if (a < (LvAssignedSoils.Items.Count - 1)) LvAssignedSoils.SelectedIndex = a + 1;
                     else LvAssignedSoils.SelectedIndex = a - 1;
-                    _collection[a].DeleteFromDataSet(ProgrammSettings.CurrentDataSet);
                     _collection.RemoveAt(a);
                     ProgrammSettings.IsDataChanged = true;
                 }
@@ -117,7 +116,6 @@ namespace RDUIL.WPF_Windows.Foundations.Soils
                     SoilId = soil.Id, Soil = soil,
                     SoilSectionId = _element.Id, SoilSection = _element,
                     TopLevel = topLevel };
-                soilLayer.SaveToDataSet(ProgrammSettings.CurrentDataSet, true);
                 _element.SoilLayers.Add(soilLayer);
                 LvAssignedSoils.SelectedIndex = _element.SoilLayers.Count - 1;
                 ProgrammSettings.IsDataChanged = true;
@@ -126,6 +124,12 @@ namespace RDUIL.WPF_Windows.Foundations.Soils
             {
                 MessageBox.Show("Ничего не выбрано", "Выберите один из элементов");
             }
+        }
+
+        private void BtnCancel_Click(object sender, RoutedEventArgs e)
+        {
+            this.DialogResult = false;
+            this.Close();
         }
     }
 }

@@ -9,15 +9,45 @@ namespace RDBLL.Entity.SC.Column
 {
     public class SteelBolt: ICloneable, ISavableToDataSet
     {
-        public int Id { get; set; } //Код
-        public int SteelBaseId { get; set; } //Код базы
-        public SteelBase SteelBase { get; set; } //Ссылка на базу
+        /// <summary>
+        /// Код
+        /// </summary>
+        public int Id { get; set; }
+        /// <summary>
+        /// Код базы
+        /// </summary>
+        public int SteelBaseId { get; set; }
+        /// <summary>
+        /// Ссылка на базу
+        /// </summary>
+        public SteelBase SteelBase { get; set; }
+        /// <summary>
+        /// Наименование
+        /// </summary>
         public String Name { get; set; }
+        /// <summary>
+        /// Диаметр
+        /// </summary>
         public double Diameter { get; set; }
+        /// <summary>
+        /// Положение центра X
+        /// </summary>
         public double CenterX { get; set; }
+        /// <summary>
+        /// Положение центра Y
+        /// </summary>
         public double CenterY { get; set; }
-        public bool AddSymmetricX { get; set; } //Наличие симметричного участка относительно оси X
-        public bool AddSymmetricY { get; set; } //Наличие симметричного участка по оси Y
+        /// <summary>
+        /// Наличие симметричного участка относительно оси X
+        /// </summary>
+        public bool AddSymmetricX { get; set; }
+        /// <summary>
+        /// Наличие симметричного участка по оси Y
+        /// </summary>
+        public bool AddSymmetricY { get; set; } 
+        /// <summary>
+        /// Участки НДМ
+        /// </summary>
         public NdmCircleArea SubPart { get; set; }
 
         #region Constructors
@@ -71,7 +101,11 @@ namespace RDBLL.Entity.SC.Column
 
         public void OpenFromDataSet(DataSet dataSet)
         {
-
+            DataTable dataTable = dataSet.Tables["SteelBolts"];
+            var row = (from dataRow in dataTable.AsEnumerable()
+                       where dataRow.Field<int>("Id") == Id
+                       select dataRow).Single();
+            OpenFromDataSet(row);
         }
         /// <summary>
         /// Обновляет запись в соответствии со строкой датасета
@@ -79,7 +113,14 @@ namespace RDBLL.Entity.SC.Column
         /// <param name="dataRow"></param>
         public void OpenFromDataSet(DataRow dataRow)
         {
-            throw new NotImplementedException();
+            Id = dataRow.Field<int>("Id");
+            SteelBaseId = dataRow.Field<int>("SteelBaseId");
+            Name = dataRow.Field<string>("Name");
+            Diameter = dataRow.Field<double>("Diameter");
+            CenterX = dataRow.Field<double>("CenterX");
+            CenterY = dataRow.Field<double>("CenterY");
+            AddSymmetricX = dataRow.Field<bool>("AddSymmetricX");
+            AddSymmetricY = dataRow.Field<bool>("AddSymmetricY");
         }
         /// <summary>
         /// Удаляет запись из датасета

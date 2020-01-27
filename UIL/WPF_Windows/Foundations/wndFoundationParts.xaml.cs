@@ -76,14 +76,26 @@ namespace RDUIL.WPF_Windows.Foundations
             if (message != "") { MessageBox.Show(message); }
             else
             {
-                this.DialogResult = true;
-                this.Close();
+                _foundation.DeleteParts(ProgrammSettings.CurrentDataSet);
+                foreach (FoundationPart foundationPart in _foundation.Parts)
+                {
+                    foundationPart.SaveToDataSet(ProgrammSettings.CurrentDataSet, true);
+                }
+                DialogResult = true;
+                Close();
             }            
         }
 
         private void BtnRefresh_Click(object sender, RoutedEventArgs e)
         {
             DrawFoundation.DrawTopScatch(_foundation, cvScetch);
+        }
+
+        private void BtnCancel_Click(object sender, RoutedEventArgs e)
+        {
+            _foundation.Parts = GetEntity.GetFoundationParts(ProgrammSettings.CurrentDataSet, _foundation);
+            DialogResult = false;
+            Close();
         }
     }
 }

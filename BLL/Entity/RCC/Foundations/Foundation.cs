@@ -210,6 +210,7 @@ namespace RDBLL.Entity.RCC.Foundations
             }
             #region setFields
             row.SetField("Id", Id);
+            row.SetField("LevelId", LevelId);
             row.SetField("ReinfSteelClassId", ReinfSteelClassId);
             row.SetField("ConcreteClassId", ConcreteClassId);
             row.SetField("Name", Name);
@@ -254,6 +255,7 @@ namespace RDBLL.Entity.RCC.Foundations
         public void OpenFromDataSet(DataRow dataRow)
         {
             Id = dataRow.Field<int>("Id");
+            LevelId = dataRow.Field<int>("LevelId");
             ReinfSteelClassId = dataRow.Field<int>("ReinfSteelClassId");
             ConcreteClassId = dataRow.Field<int>("ConcreteClassId");
             Name = dataRow.Field<string>("Name");
@@ -276,11 +278,20 @@ namespace RDBLL.Entity.RCC.Foundations
         public void DeleteFromDataSet(DataSet dataSet)
         {
             //Удаляем вложенные части
-            foreach (RectFoundationPart foundationPart in Parts)
-            {
-                foundationPart.DeleteFromDataSet(dataSet);
-            }
+            DeleteParts(dataSet);
             DsOperation.DeleteRow(dataSet, "Foundations", Id);
+        }
+        public void DeleteParts(DataSet dataSet)
+        {
+            DataTable dataTable;
+            dataTable = dataSet.Tables["FoundationParts"];
+            DataRow[] partRows = dataTable.Select("FoundationId=" + Id);
+            int count = partRows.Length;
+            for (int i = count - 1; i >= 0; i--)
+            {
+                dataTable.Rows.Remove(partRows[i]);
+            }
+            dataTable.AcceptChanges();
         }
         #endregion
         /// <summary>
