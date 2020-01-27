@@ -176,7 +176,11 @@ namespace RDBLL.Entity.SC.Column
 
         public void OpenFromDataSet(DataSet dataSet)
         {
-
+            DataTable dataTable = dataSet.Tables["SteelBaseParts"];
+            var row = (from dataRow in dataTable.AsEnumerable()
+                       where dataRow.Field<int>("Id") == Id
+                       select dataRow).Single();
+            OpenFromDataSet(row);
         }
         /// <summary>
         /// Обновляет запись в соответствии со строкой датасета
@@ -184,7 +188,23 @@ namespace RDBLL.Entity.SC.Column
         /// <param name="dataRow"></param>
         public void OpenFromDataSet(DataRow dataRow)
         {
-            throw new NotImplementedException();
+            Id = dataRow.Field<int>("Id");
+            SteelBaseId = dataRow.Field<int>("SteelBaseId");
+            Name = dataRow.Field<string>("Name");
+            Width = dataRow.Field<double>("Width");
+            Length = dataRow.Field<double>("Length");
+            CenterX = dataRow.Field<double>("CenterX");
+            CenterY = dataRow.Field<double>("CenterY");
+            LeftOffset = dataRow.Field<double>("LeftOffset");
+            RightOffset = dataRow.Field<double>("RightOffset");
+            TopOffset = dataRow.Field<double>("TopOffset");
+            BottomOffset = dataRow.Field<double>("BottomOffset");
+            FixLeft = dataRow.Field<bool>("FixLeft");
+            FixRight = dataRow.Field<bool>("FixRight");
+            FixTop = dataRow.Field<bool>("FixTop");
+            FixBottom = dataRow.Field<bool>("FixBottom");
+            AddSymmetricX = dataRow.Field<bool>("AddSymmetricX");
+            AddSymmetricY = dataRow.Field<bool>("AddSymmetricY");
         }
         /// <summary>
         /// Удаляет запись из датасета

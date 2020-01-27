@@ -27,14 +27,27 @@ namespace RDUIL.WPF_Windows.Foundations
         {
             wndForces wndForces = new wndForces(_element);
             wndForces.ShowDialog();
-            DrawFoundation.DrawTopScatch(_element, cvScetch);
+            if (wndForces.DialogResult == true)
+            {
+                ProgrammSettings.IsDataChanged = true;
+                DrawFoundation.DrawTopScatch(_element, cvScetch);
+            }
+            else
+            {
+
+            }
+            
         }
 
         private void BtnParts_Click(object sender, RoutedEventArgs e)
         {
             wndFoundationParts wndFoundationParts = new wndFoundationParts(_element);
             wndFoundationParts.ShowDialog();
-            DrawFoundation.DrawTopScatch(_element, cvScetch);
+            if (wndFoundationParts.DialogResult == true)
+            {
+                ProgrammSettings.IsDataChanged = true;
+                DrawFoundation.DrawTopScatch(_element, cvScetch);
+            }
         }
 
         private void BtnRefresh_Click(object sender, RoutedEventArgs e)
@@ -49,15 +62,15 @@ namespace RDUIL.WPF_Windows.Foundations
             else
             {
                 _element.IsLoadCasesActual = false;
-                this.DialogResult = true;
-                this.Close();
+                DialogResult = true;
+                Close();
             }
         }
 
         private void BtnCancel_Click(object sender, RoutedEventArgs e)
         {
-            this.DialogResult = false;
-            this.Close();
+            DialogResult = false;
+            Close();
         }
     }
 }

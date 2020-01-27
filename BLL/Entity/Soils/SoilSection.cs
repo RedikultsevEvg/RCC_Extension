@@ -119,11 +119,18 @@ namespace RDBLL.Entity.Soils
             row.SetField("CenterY", CenterY);
             #endregion
             dataTable.AcceptChanges();
-            //foreach (SoilLayer soilLayer in SoilLayers)
-            //{
-            //    soilLayer.SaveToDataSet(dataSet);
-            //}
+            //Удаляем из датасета все вложенные слои грунта
+            DeleteLayers(dataSet);
+            //Добавляем в датасет вложенные слои грунта
+            foreach (SoilLayer soilLayer in SoilLayers)
+            {
+                soilLayer.SaveToDataSet(dataSet, createNew);
+            }
         }
+        /// <summary>
+        /// Обновляет запись в соответствии с датасетом
+        /// </summary>
+        /// <param name="dataSet">Датасет</param>
         public void OpenFromDataSet(DataSet dataSet)
         {
             DataTable dataTable = dataSet.Tables["SoilSections"];
@@ -146,6 +153,8 @@ namespace RDBLL.Entity.Soils
             WaterLevel = dataRow.Field<double>("WaterLevel");
             CenterX = dataRow.Field<double>("CenterX");
             CenterY = dataRow.Field<double>("CenterY");
+            SoilLayers = new ObservableCollection<SoilLayer>();
+
         }
         /// <summary>
         /// Удаляет запись из датасета
@@ -153,16 +162,20 @@ namespace RDBLL.Entity.Soils
         /// <param name="dataSet"></param>
         public void DeleteFromDataSet(DataSet dataSet)
         {
+            DeleteLayers(dataSet);
+            DsOperation.DeleteRow(dataSet, "SoilSections", Id);
+        }
+        private void DeleteLayers(DataSet dataSet)
+        {
             DataTable dataTable;
             dataTable = dataSet.Tables["SoilLayers"];
-            var soilLayers = from dataRow in dataTable.AsEnumerable()
-                             where dataRow.Field<int>("SoilSectionId") == Id
-                             select dataRow;
-            foreach (DataRow dataRow in soilLayers)
+            DataRow[] soilRows = dataTable.Select("id="+Id);
+            int count = soilRows.Length;
+            for (int i = count-1; i>=0; i--)
             {
-                dataRow.Delete();
+                dataTable.Rows.Remove(soilRows[i]);
             }
-            DsOperation.DeleteRow(dataSet, "SoilSections", Id);
+            dataTable.AcceptChanges();
         }
         #endregion
         #region errors

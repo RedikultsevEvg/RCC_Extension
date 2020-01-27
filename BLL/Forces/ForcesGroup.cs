@@ -115,51 +115,42 @@ namespace RDBLL.Forces
             row.SetField("CenterY", CenterY);
             #endregion
             dataTable.AcceptChanges();
+            //Удаляем записи по вложенным элементам
+            DeleteSubElements(dataSet);
+            //И создаем все нагрузки заново
             //Данные по нагрузкам на стальные базы
             dataTable = dataSet.Tables["SteelBaseForcesGroups"];
-            foreach (SteelBase steelBase in SteelBases)
+            if (createNew)
             {
-                if (createNew)
+                foreach (SteelBase steelBase in SteelBases)
                 {
                     row = dataTable.NewRow();
                     dataTable.Rows.Add(row);
+                    #region
+                    row.SetField("Id", ProgrammSettings.CurrentId);
+                    row.SetField("SteelBaseId", steelBase.Id);
+                    row.SetField("ForcesGroupId", Id);
+                    #endregion
                 }
-                else
-                {
-                    var tmpRow = (from dataRow in dataTable.AsEnumerable()
-                              where dataRow.Field<int>("ForcesGroupId") == Id
-                              select dataRow).Single();
-                    row = tmpRow;
-                }
-                #region           
-                row.SetField("SteelBaseId", steelBase.Id);
-                row.SetField("ForcesGroupId", Id);
-                #endregion
-            }
-            dataTable.AcceptChanges();
-            //Данные по нагрузкам на фундамент
-            dataTable = dataSet.Tables["FoundationForcesGroups"];
-            foreach (Foundation foundation in Foundations)
-            {
-                if (createNew)
+                dataTable.AcceptChanges();
+                //Данные по нагрузкам на фундамент
+                dataTable = dataSet.Tables["FoundationForcesGroups"];
+                foreach (Foundation foundation in Foundations)
                 {
                     row = dataTable.NewRow();
                     dataTable.Rows.Add(row);
+                    #region
+                    row.SetField("Id", ProgrammSettings.CurrentId);
+                    row.SetField("FoundationId", foundation.Id);
+                    row.SetField("ForcesGroupId", Id);
+                    #endregion
                 }
-                else
-                {
-                    var tmpRow = (from dataRow in dataTable.AsEnumerable()
-                                  where dataRow.Field<int>("ForcesGroupId") == Id
-                                  select dataRow).Single();
-                    row = tmpRow;
-                }
-                #region           
-                row.SetField("FoundationId", foundation.Id);
-                row.SetField("ForcesGroupId", Id);
-                #endregion
+                dataTable.AcceptChanges();
             }
-            dataTable.AcceptChanges();
-            foreach (LoadSet loadSet in LoadSets) { loadSet.SaveToDataSet(dataSet, createNew);}
+            foreach (LoadSet loadSet in LoadSets)
+            {
+                loadSet.SaveToDataSet(dataSet, true);
+            }
         }
 
         public void OpenFromDataSet(DataSet dataSet)
@@ -180,9 +171,45 @@ namespace RDBLL.Forces
         /// <param name="dataSet"></param>
         public void DeleteFromDataSet(DataSet dataSet)
         {
-            throw new NotImplementedException();
+            DeleteSubElements(dataSet);
         }
+        private void DeleteSubElements(DataSet dataSet)
+        {
+            DataTable dataTable;
+            int count;
+            DataRow[] rows;
+            //Удаляем записи в комбинациях нагрузок
+            dataTable = dataSet.Tables["ForcesGroupLoadSets"];
+            rows = dataTable.Select("ForcesGroupid=" + Id);
+            count = rows.Length;
+            for (int i = count - 1; i >= 0; i--)
+            {
+                //Проверяем, встречается ли комбинация нагрузок еще где-то
+                int loadSetId = dataTable.Rows[i].Field<int>("LoadSetId");
+                dataTable.Rows.Remove(rows[i]);
+                //Получаем коллекцию записей комбинаций в группах нагрузок где встречается данная комбинация
+                DataTable adjDataTable = dataSet.Tables["ForcesGroupLoadSets"];
+                var query = from adjDataRow in adjDataTable.AsEnumerable()
+                            from dataRow in dataTable.AsEnumerable()
+                            where adjDataRow.Field<int>("LoadSetId") == loadSetId
+                            select dataRow;
+                int countLoadSet = 0;
+                foreach (var dataRow in query) { countLoadSet++; }
+                //Если данная комбинация больше нигде не встречается
+                if (countLoadSet == 0)
+                {
+                    //Получаем запись данной комбинации и удаляем ее
+                    DataTable lsDataTable = dataSet.Tables["LoadSets"];
+                    DataRow[] lsRows = lsDataTable.Select("Id=" + loadSetId);
+                    int lsCount = lsRows.Length;
+                    for (int j = lsCount - 1; j >= 0; j--)
+                    {
+                        lsDataTable.Rows.Remove(lsRows[j]);
+                    }
+                }
 
+            }
+        }
         /// <summary>
         /// Установка родителей неактуальными
         /// </summary>

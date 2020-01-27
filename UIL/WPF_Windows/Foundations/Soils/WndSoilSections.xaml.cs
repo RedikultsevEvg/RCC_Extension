@@ -38,21 +38,18 @@ namespace RDUIL.WPF_Windows.Foundations.Soils
         private void BtnAdd_Click(object sender, RoutedEventArgs e)
         {
             SoilSection soilSection = new SoilSection(_buildingSite);
-            soilSection.SaveToDataSet(ProgrammSettings.CurrentDataSet, true);
             WndSoilSection wndSoilSection = new WndSoilSection(soilSection);
             wndSoilSection.ShowDialog();
             if (wndSoilSection.DialogResult == true)
-            {               
+            {
+                soilSection.SaveToDataSet(ProgrammSettings.CurrentDataSet, true);
                 _collection.Add(soilSection);
                 ProgrammSettings.IsDataChanged = true;
+                LvMain.SelectedIndex = _collection.Count - 1;
             }
             else
             {
-                foreach (SoilLayer soilLayer in soilSection.SoilLayers)
-                {
-                    soilLayer.DeleteFromDataSet(ProgrammSettings.CurrentDataSet);
-                }
-                soilSection.DeleteFromDataSet(ProgrammSettings.CurrentDataSet);
+                soilSection.OpenFromDataSet(ProgrammSettings.CurrentDataSet);
             }
         }
 
@@ -68,33 +65,7 @@ namespace RDUIL.WPF_Windows.Foundations.Soils
 
                 if (result == Winforms.DialogResult.Yes)
                 {
-                    bool canDelete = true;
-                    int a = LvMain.SelectedIndex;
-                    //Если скважина содержит слои грунта
-                    if (_collection[a].SoilLayers.Count > 0)
-                    {
-                        //то задаем запрос на удаление слоев вместе со скважиной
-                        Winforms.DialogResult result2 = Winforms.MessageBox.Show("Элемент содержит слои грунта", "Все равно удалить?",
-                        Winforms.MessageBoxButtons.YesNo,
-                        Winforms.MessageBoxIcon.Information,
-                        Winforms.MessageBoxDefaultButton.Button1,
-                        Winforms.MessageBoxOptions.DefaultDesktopOnly);
-
-                        if (! (result2 == Winforms.DialogResult.Yes))
-                        {
-                            canDelete = false;
-                        }
-                    }
-                    if (canDelete)
-                    {
-                        if (LvMain.Items.Count == 1) LvMain.UnselectAll();
-                        else if (a < (LvMain.Items.Count - 1)) LvMain.SelectedIndex = a + 1;
-                        else LvMain.SelectedIndex = a - 1;
-                        _collection[a].DeleteFromDataSet(ProgrammSettings.CurrentDataSet);
-                        _collection.RemoveAt(a);
-                        ProgrammSettings.IsDataChanged = true;
-                    }
-
+                    DeleteSoilSection();
                 }
             }
             else
@@ -114,7 +85,6 @@ namespace RDUIL.WPF_Windows.Foundations.Soils
                 if (wndSoilSection.DialogResult == true)
                 {
                     soilSection.SaveToDataSet(ProgrammSettings.CurrentDataSet, false);
-                    _collection.Add(soilSection);
                     ProgrammSettings.IsDataChanged = true;
                 }
                 else
@@ -125,6 +95,37 @@ namespace RDUIL.WPF_Windows.Foundations.Soils
             else
             {
                 MessageBox.Show("Ничего не выбрано", "Выберите один из элементов");
+            }
+        }
+        private void DeleteSoilSection()
+        {
+            bool canDelete = true;
+            int a = LvMain.SelectedIndex;
+            //Если скважина содержит слои грунта
+            if (_collection[a].SoilLayers.Count > 0)
+            {
+                //то задаем запрос на удаление слоев вместе со скважиной
+                Winforms.DialogResult result2 = Winforms.MessageBox.Show("Элемент содержит слои грунта", "Все равно удалить?",
+                Winforms.MessageBoxButtons.YesNo,
+                Winforms.MessageBoxIcon.Information,
+                Winforms.MessageBoxDefaultButton.Button1,
+                Winforms.MessageBoxOptions.DefaultDesktopOnly);
+                //Если ответ отрицательный, то удаление невозможно
+                if (!(result2 == Winforms.DialogResult.Yes))
+                {
+                    canDelete = false;
+                }
+            }
+            //Если скважину можно удалить
+            if (canDelete)
+            {//удаляем
+                if (LvMain.Items.Count == 1) LvMain.UnselectAll();
+                else if (a < (LvMain.Items.Count - 1)) LvMain.SelectedIndex = a + 1;
+                else LvMain.SelectedIndex = a - 1;
+                _collection[a].DeleteFromDataSet(ProgrammSettings.CurrentDataSet);
+                _collection.RemoveAt(a);
+                ProgrammSettings.IsDataChanged = true;
+                LvMain.SelectedIndex = _collection.Count - 1;
             }
         }
     }

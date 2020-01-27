@@ -65,6 +65,7 @@ namespace RDBLL.Entity.Soils
         public override void SaveToDataSet(DataRow dataRow)
         {
             base.SaveToDataSet(dataRow);
+            dataRow.SetField<string>("Type", "ClaySoil");
             dataRow["CrcFi"] = CrcFi;
             dataRow["FstDesignFi"] = FstDesignFi;
             dataRow["SndDesignFi"] = SndDesignFi;

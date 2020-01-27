@@ -308,9 +308,17 @@ namespace RDBLL.Entity.SC.Column
                 forcesGroup.SaveToDataSet(dataSet, createNew);
             }
         }
+        /// <summary>
+        /// Обновляет запись по датасету
+        /// </summary>
+        /// <param name="dataSet"></param>
         public void OpenFromDataSet(DataSet dataSet)
         {
-
+            DataTable dataTable = dataSet.Tables["SteelBases"];
+            var row = (from dataRow in dataTable.AsEnumerable()
+                       where dataRow.Field<int>("Id") == Id
+                       select dataRow).Single();
+            OpenFromDataSet(row);
         }
         /// <summary>
         /// Обновляет запись в соответствии со строкой датасета
@@ -318,7 +326,24 @@ namespace RDBLL.Entity.SC.Column
         /// <param name="dataRow"></param>
         public void OpenFromDataSet(DataRow dataRow)
         {
-            throw new NotImplementedException();
+            Id = dataRow.Field<int>("Id");
+            LevelId = dataRow.Field<int>("LevelId");
+            SteelClassId = dataRow.Field<int>("SteelClassId");
+            ConcreteClassId = dataRow.Field<int>("ConcreteClassId");
+            //Надо получить ссылки на сталь и бетон
+            Name = dataRow.Field<string>("Name");
+            SteelStrength = dataRow.Field<double>("SteelStrength");
+            ConcreteStrength = dataRow.Field<double>("ConcreteStrength");
+            IsActual = false;
+            //dataRow.Field<bool>("IsActual"), В любом случае при загрузке данные неактуальны
+            IsLoadCasesActual = false;
+            IsBasePartsActual = false;
+            IsBoltsActual = false;
+            Width = dataRow.Field<double>("Width");
+            Length = dataRow.Field<double>("Length");
+            Thickness = dataRow.Field<double>("Thickness");
+            WorkCondCoef = dataRow.Field<double>("WorkCondCoef");
+            UseSimpleMethod = dataRow.Field<bool>("UseSimpleMethod");
         }
         /// <summary>
         /// Удаляет запись из датасета
@@ -326,7 +351,29 @@ namespace RDBLL.Entity.SC.Column
         /// <param name="dataSet"></param>
         public void DeleteFromDataSet(DataSet dataSet)
         {
+            DeleteSubElements(dataSet);
             DsOperation.DeleteRow(dataSet, "SteelBases", Id);
+        }
+        private void DeleteSubElements(DataSet dataSet)
+        {
+            DataTable dataTable;
+            //Удаляем части стальной базы
+            dataTable = dataSet.Tables["SteelBaseParts"];
+            DataRow[] soilRows = dataTable.Select("id=" + Id);
+            int count = soilRows.Length;
+            for (int i = count - 1; i >= 0; i--)
+            {
+                dataTable.Rows.Remove(soilRows[i]);
+            }
+            //Удаляем болты стальной базы
+            dataTable = dataSet.Tables["SteelBolts"];
+            soilRows = dataTable.Select("id=" + Id);
+            count = soilRows.Length;
+            for (int i = count - 1; i >= 0; i--)
+            {
+                dataTable.Rows.Remove(soilRows[i]);
+            }
+            dataTable.AcceptChanges();
         }
         #endregion
 

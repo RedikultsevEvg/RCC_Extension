@@ -74,6 +74,10 @@ namespace RDBLL.Entity.RCC.BuildingAndSite
             {
                 soil.SaveToDataSet(dataSet, createNew);
             }
+            foreach (SoilSection soilSection in SoilSections)
+            {
+                soilSection.SaveToDataSet(dataSet, createNew);
+            }
         }
         /// <summary>
         /// Открытие из датасета

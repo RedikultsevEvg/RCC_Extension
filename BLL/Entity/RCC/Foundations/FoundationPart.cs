@@ -86,15 +86,24 @@ namespace RDBLL.Entity.RCC.Foundations
         }
         public virtual void OpenFromDataSet(DataSet dataSet)
         {
-            throw new NotImplementedException();
+            DataTable dataTable = dataSet.Tables["FoundationParts"];
+            var row = (from dataRow in dataTable.AsEnumerable()
+                       where dataRow.Field<int>("FoundationId") == Id
+                       select dataRow).Single();
+            OpenFromDataSet(row);
         }
         /// <summary>
         /// Обновляет запись в соответствии со строкой датасета
         /// </summary>
         /// <param name="dataRow"></param>
-        public void OpenFromDataSet(DataRow dataRow)
+        public virtual void OpenFromDataSet(DataRow dataRow)
         {
-            throw new NotImplementedException();
+            Id = dataRow.Field<int>("Id");
+            FoundationId = dataRow.Field<int>("FoundationId");
+            Name = dataRow.Field<string>("Name");
+            Height = dataRow.Field<double>("Height");
+            CenterX = dataRow.Field<double>("CenterX");
+            CenterY = dataRow.Field<double>("CenterY");
         }
         /// <summary>
         /// Удаляет запись из датасета

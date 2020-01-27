@@ -9,6 +9,7 @@ using System.Data;
 using RDBLL.Entity.SC.Column;
 using RDBLL.Forces;
 using RDBLL.Entity.RCC.Foundations;
+using RDBLL.Entity.Soils;
 
 namespace RDBLL.Common.Service
 {
@@ -76,28 +77,9 @@ namespace RDBLL.Common.Service
                         select dataRow;
             foreach (var dataRow in query)
             {
-                SteelBase newObject = new SteelBase
-                {
-                    Id = dataRow.Field<int>("Id"),
-                    LevelId = dataRow.Field<int>("LevelId"),
-                    Level = level,
-                    SteelClassId = dataRow.Field<int>("SteelClassId"),
-                    ConcreteClassId = dataRow.Field<int>("ConcreteClassId"),
-                    //Надо получить ссылки на сталь и бетон
-
-                    Name = dataRow.Field<string>("Name"),
-                    SteelStrength = dataRow.Field<double>("SteelStrength"),
-                    ConcreteStrength = dataRow.Field<double>("ConcreteStrength"),
-                    IsActual = false, //dataRow.Field<bool>("IsActual"), В любом случае при загрузке данные неактуальны
-                    IsLoadCasesActual = false,
-                    IsBasePartsActual = false,
-                    IsBoltsActual = false,
-                    Width = dataRow.Field<double>("Width"),
-                    Length = dataRow.Field<double>("Length"),
-                    Thickness = dataRow.Field<double>("Thickness"),
-                    WorkCondCoef = dataRow.Field<double>("WorkCondCoef"),
-                    UseSimpleMethod = dataRow.Field<bool>("UseSimpleMethod")
-                };
+                SteelBase newObject = new SteelBase();
+                newObject.OpenFromDataSet(dataRow);
+                newObject.Level = level;
                 newObject.SteelBaseParts = GetSteelBaseParts(dataSet, newObject);
                 newObject.SteelBolts = GetSteelBolts(dataSet, newObject);
                 newObject.ForcesGroups = GetSteelBaseForcesGroups(dataSet, newObject);
@@ -120,27 +102,9 @@ namespace RDBLL.Common.Service
                         select dataRow;
             foreach (var dataRow in query)
             {
-                SteelBasePart newObject = new SteelBasePart
-                {
-                    Id = dataRow.Field<int>("Id"),
-                    SteelBaseId = dataRow.Field<int>("SteelBaseId"),
-                    SteelBase = steelBase,
-                    Name = dataRow.Field<string>("Name"),
-                    Width = dataRow.Field<double>("Width"),
-                    Length = dataRow.Field<double>("Length"),
-                    CenterX = dataRow.Field<double>("CenterX"),
-                    CenterY = dataRow.Field<double>("CenterY"),
-                    LeftOffset = dataRow.Field<double>("LeftOffset"),
-                    RightOffset = dataRow.Field<double>("RightOffset"),
-                    TopOffset = dataRow.Field<double>("TopOffset"),
-                    BottomOffset = dataRow.Field<double>("BottomOffset"),
-                    FixLeft = dataRow.Field<bool>("FixLeft"),
-                    FixRight = dataRow.Field<bool>("FixRight"),
-                    FixTop = dataRow.Field<bool>("FixTop"),
-                    FixBottom = dataRow.Field<bool>("FixBottom"),
-                    AddSymmetricX = dataRow.Field<bool>("AddSymmetricX"),
-                    AddSymmetricY = dataRow.Field<bool>("AddSymmetricY")
-                };
+                SteelBasePart newObject = new SteelBasePart();
+                newObject.OpenFromDataSet(dataRow);
+                newObject.SteelBase = steelBase;
                 newObjects.Add(newObject);
             }
             return newObjects;
@@ -160,18 +124,10 @@ namespace RDBLL.Common.Service
                         select dataRow;
             foreach (var dataRow in query)
             {
-                SteelBolt newObject = new SteelBolt
-                {
-                    Id = dataRow.Field<int>("Id"),
-                    SteelBaseId = dataRow.Field<int>("SteelBaseId"),
-                    SteelBase = steelBase,
-                    Name = dataRow.Field<string>("Name"),
-                    Diameter = dataRow.Field<double>("Diameter"),
-                    CenterX = dataRow.Field<double>("CenterX"),
-                    CenterY = dataRow.Field<double>("CenterY"),
-                    AddSymmetricX = dataRow.Field<bool>("AddSymmetricX"),
-                    AddSymmetricY = dataRow.Field<bool>("AddSymmetricY")
-                };
+                SteelBolt newObject = new SteelBolt();
+                newObject.OpenFromDataSet(dataRow);
+                newObject.SteelBase = steelBase;
+                newObjects.Add(newObject);
                 newObjects.Add(newObject);
             }
             return newObjects;
@@ -347,18 +303,85 @@ namespace RDBLL.Common.Service
                         select dataRow;
             foreach (var dataRow in query)
             {
-                RectFoundationPart newObject = new RectFoundationPart
+                RectFoundationPart newObject = new RectFoundationPart();
+                newObject.OpenFromDataSet(dataRow);
+                newObject.Foundation = foundation;
+                newObjects.Add(newObject);
+            }
+            return newObjects;
+        }
+        /// <summary>
+        /// Возвращает коллекцию грунтов по датасету и строительному объекту
+        /// </summary>
+        /// <param name="dataSet">Датасет</param>
+        /// <param name="buildingSite">Строительный объект</param>
+        /// <returns></returns>
+        public static ObservableCollection<Soil> GetSoils (DataSet dataSet, BuildingSite buildingSite)
+        {
+            ObservableCollection<Soil> newObjects = new ObservableCollection<Soil>();
+            DataTable dataTable = dataSet.Tables["Soils"];
+            var query = from dataRow in dataTable.AsEnumerable()
+                        where dataRow.Field<int>("BuildingSiteId") == buildingSite.Id
+                        select dataRow;
+            foreach (var dataRow in query)
+            {
+                Soil newObject;
+                if (dataRow.Field<string>("Type") == "ClaySoil")
                 {
-                    Id = dataRow.Field<int>("Id"),
-                    FoundationId = dataRow.Field<int>("FoundationId"),
-                    Foundation = foundation,
-                    Name = dataRow.Field<string>("Name"),
-                    Width = dataRow.Field<double>("Width"),
-                    Length = dataRow.Field<double>("Length"),
-                    Height = dataRow.Field<double>("Height"),
-                    CenterX = dataRow.Field<double>("CenterX"),
-                    CenterY = dataRow.Field<double>("CenterY")
-                };
+                    newObject = new DispersedSoil(buildingSite);
+                    newObject.OpenFromDataSet(dataRow);
+                    newObject.BuildingSite = buildingSite;
+                    newObjects.Add(newObject);
+                }
+            }
+            return newObjects;
+        }
+        /// <summary>
+        /// Возвращает коллекцию скважин по датасету и строительному объекту
+        /// </summary>
+        /// <param name="dataSet">Датасет</param>
+        /// <param name="buildingSite">Строительный объект</param>
+        /// <returns></returns>
+        public static ObservableCollection<SoilSection> GetSoilSections(DataSet dataSet, BuildingSite buildingSite)
+        {
+            ObservableCollection<SoilSection> newObjects = new ObservableCollection<SoilSection>();
+            DataTable dataTable = dataSet.Tables["SoilSections"];
+            var query = from dataRow in dataTable.AsEnumerable()
+                        where dataRow.Field<int>("BuildingSiteId") == buildingSite.Id
+                        select dataRow;
+            foreach (var dataRow in query)
+            {
+                SoilSection newObject = new SoilSection(buildingSite);
+                newObject.OpenFromDataSet(dataRow);
+                newObject.BuildingSite = buildingSite;
+                //Получаем коллекцию слоев грунта
+                newObject.SoilLayers = GetSoilLayers(dataSet, newObject);
+                newObjects.Add(newObject);
+            }
+            return newObjects;
+        }
+        /// <summary>
+        /// Возвращает коллекцию слоев грунта по датасету и скважине
+        /// </summary>
+        /// <param name="dataSet">Датасет</param>
+        /// <param name="soilSection">Скважина</param>
+        /// <returns></returns>
+        public static ObservableCollection<SoilLayer> GetSoilLayers (DataSet dataSet, SoilSection soilSection)
+        {
+            ObservableCollection<SoilLayer> newObjects = new ObservableCollection<SoilLayer>();
+            DataTable dataTable = dataSet.Tables["SoilLayers"];
+            var query = from dataRow in dataTable.AsEnumerable()
+                        where dataRow.Field<int>("SoilSectionId") == soilSection.Id
+                        select dataRow;
+            foreach (var dataRow in query)
+            {
+                SoilLayer newObject = new SoilLayer();
+                newObject.OpenFromDataSet(dataRow);
+                newObject.SoilSection = soilSection;
+                foreach (Soil soil in soilSection.BuildingSite.Soils)
+                {
+                    if (soil.Id == newObject.SoilId) { newObject.Soil = soil; }
+                }
                 newObjects.Add(newObject);
             }
             return newObjects;
