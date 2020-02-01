@@ -37,7 +37,7 @@
                 </StackPanel>
             </Grid>
             <Grid Grid.Column="1">
-                <StackPanel x:Name="stpPartBtns" Height="50" Style="{StaticResource OperationStack}" VerticalAlignment="Top" MouseMove="StpPartBtns_MouseMove" MouseLeave="StpPartBtns_MouseLeave">
+                <StackPanel x:Name="stpPartBtns" Height="50" Style="{StaticResource OperationStack}" VerticalAlignment="Top">
                     <Button x:Name="btnAddPart" Style="{StaticResource OperationButton}" ToolTip="Добавить участок" Click="BtnAddPart_Click">
                         <Button.Effect>
                             <DropShadowEffect Opacity="0.6"/>

@@ -7,6 +7,7 @@ using System.Collections.ObjectModel;
 using RDBLL.Common.Service;
 using RDBLL.Common.Interfaces;
 using System.Data;
+using DAL.Common;
 
 namespace RDBLL.Forces
 {
@@ -152,7 +153,11 @@ namespace RDBLL.Forces
         /// <param name="dataSet"></param>
         public void DeleteFromDataSet(DataSet dataSet)
         {
-            throw new NotImplementedException();
+            foreach (ForceParameter forceParameter in ForceParameters)
+            {
+                forceParameter.DeleteFromDataSet(dataSet);
+            }
+            DsOperation.DeleteRow(dataSet, "LoadSets", Id);
         }
         #endregion
         //IEquatable

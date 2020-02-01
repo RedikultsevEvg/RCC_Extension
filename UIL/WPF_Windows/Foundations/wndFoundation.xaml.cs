@@ -4,6 +4,7 @@ using RDBLL.Entity.MeasureUnits;
 using RDBLL.Entity.RCC.Foundations;
 using System.Windows;
 using RDUIL.Validations;
+using System;
 
 namespace RDUIL.WPF_Windows.Foundations
 {
@@ -25,18 +26,27 @@ namespace RDUIL.WPF_Windows.Foundations
 
         private void BtnForces_Click(object sender, RoutedEventArgs e)
         {
-            wndForces wndForces = new wndForces(_element);
+            wndForces wndForces = new wndForces(_element.ForcesGroups[0]);
             wndForces.ShowDialog();
             if (wndForces.DialogResult == true)
             {
-                ProgrammSettings.IsDataChanged = true;
-                DrawFoundation.DrawTopScatch(_element, cvScetch);
+                try
+                {
+                    _element.ForcesGroups[0].DeleteFromDataSet(ProgrammSettings.CurrentDataSet);
+                    _element.ForcesGroups[0].SaveToDataSet(ProgrammSettings.CurrentDataSet, true);
+                    _element.ForcesGroups[0].SetParentsNotActual();
+                    ProgrammSettings.IsDataChanged = true;
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Ошибка сохранения :" + ex);
+                }
+                DrawFoundation.DrawTopScatch(_element, cvScetch);            
             }
             else
             {
-
-            }
-            
+                _element.ForcesGroups = GetEntity.GetFoundationForcesGroups(ProgrammSettings.CurrentDataSet, _element);
+            }          
         }
 
         private void BtnParts_Click(object sender, RoutedEventArgs e)
@@ -45,8 +55,24 @@ namespace RDUIL.WPF_Windows.Foundations
             wndFoundationParts.ShowDialog();
             if (wndFoundationParts.DialogResult == true)
             {
-                ProgrammSettings.IsDataChanged = true;
-                DrawFoundation.DrawTopScatch(_element, cvScetch);
+                try
+                {
+                    _element.DeleteSubElements(ProgrammSettings.CurrentDataSet, "FoundationParts");
+                    foreach (FoundationPart foundationPart in _element.Parts)
+                    {
+                        foundationPart.SaveToDataSet(ProgrammSettings.CurrentDataSet, true);
+                    }
+                    ProgrammSettings.IsDataChanged = true;
+                    DrawFoundation.DrawTopScatch(_element, cvScetch);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Ошибка сохранения :" + ex);
+                }
+            }
+            else
+            {
+                _element.Parts = GetEntity.GetFoundationParts(ProgrammSettings.CurrentDataSet, _element);
             }
         }
 
@@ -69,8 +95,6 @@ namespace RDUIL.WPF_Windows.Foundations
 
         private void BtnCancel_Click(object sender, RoutedEventArgs e)
         {
-            DialogResult = false;
-            Close();
         }
     }
 }

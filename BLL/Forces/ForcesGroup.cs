@@ -10,6 +10,9 @@ using RDBLL.Common.Service;
 using RDBLL.Common.Interfaces;
 using System.Data;
 using RDBLL.Entity.RCC.Foundations;
+using Winforms = System.Windows.Forms;
+using System.Windows;
+using DAL.Common;
 
 namespace RDBLL.Forces
 {
@@ -118,10 +121,10 @@ namespace RDBLL.Forces
             //Удаляем записи по вложенным элементам
             DeleteSubElements(dataSet);
             //И создаем все нагрузки заново
-            //Данные по нагрузкам на стальные базы
-            dataTable = dataSet.Tables["SteelBaseForcesGroups"];
             if (createNew)
             {
+                //Данные по нагрузкам на стальные базы
+                dataTable = dataSet.Tables["SteelBaseForcesGroups"];
                 foreach (SteelBase steelBase in SteelBases)
                 {
                     row = dataTable.NewRow();
@@ -152,7 +155,6 @@ namespace RDBLL.Forces
                 loadSet.SaveToDataSet(dataSet, true);
             }
         }
-
         public void OpenFromDataSet(DataSet dataSet)
         {
             throw new NotImplementedException();
@@ -172,6 +174,9 @@ namespace RDBLL.Forces
         public void DeleteFromDataSet(DataSet dataSet)
         {
             DeleteSubElements(dataSet);
+            DsOperation.DeleteRow(dataSet, "SteelBaseForcesGroups","ForcesGroupId", Id);
+            DsOperation.DeleteRow(dataSet, "FoundationForcesGroups", "ForcesGroupId", Id);
+            DsOperation.DeleteRow(dataSet, "ForcesGroups", Id);
         }
         private void DeleteSubElements(DataSet dataSet)
         {
@@ -180,7 +185,7 @@ namespace RDBLL.Forces
             DataRow[] rows;
             //Удаляем записи в комбинациях нагрузок
             dataTable = dataSet.Tables["ForcesGroupLoadSets"];
-            rows = dataTable.Select("ForcesGroupid=" + Id);
+            rows = dataTable.Select("ForcesGroupId=" + Id);
             count = rows.Length;
             for (int i = count - 1; i >= 0; i--)
             {
@@ -199,13 +204,8 @@ namespace RDBLL.Forces
                 if (countLoadSet == 0)
                 {
                     //Получаем запись данной комбинации и удаляем ее
-                    DataTable lsDataTable = dataSet.Tables["LoadSets"];
-                    DataRow[] lsRows = lsDataTable.Select("Id=" + loadSetId);
-                    int lsCount = lsRows.Length;
-                    for (int j = lsCount - 1; j >= 0; j--)
-                    {
-                        lsDataTable.Rows.Remove(lsRows[j]);
-                    }
+                    DsOperation.DeleteRow(dataSet, "ForceParameters", "LoadSetId", loadSetId);
+                    DsOperation.DeleteRow(dataSet, "LoadSets", loadSetId);
                 }
 
             }

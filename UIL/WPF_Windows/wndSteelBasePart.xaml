@@ -128,7 +128,7 @@
                 <RowDefinition Height="50"/>
                 <RowDefinition/>
             </Grid.RowDefinitions>
-            <StackPanel x:Name="stpPartBtns" Style="{StaticResource OperationStack}" MouseMove="StpPartBtns_MouseMove" MouseLeave="StpPartBtns_MouseLeave">
+            <StackPanel x:Name="stpPartBtns" Style="{StaticResource OperationStack}">
                 <Button x:Name="btnAddPart" Style="{StaticResource OperationButton}" ToolTip="Добавить участок" Click="BtnAddPart_Click">
                     <Button.Effect>
                         <DropShadowEffect Opacity="0.6"/>
@@ -155,13 +155,13 @@
         </StackPanel>
 
         <StackPanel Height="60" Grid.Row="1" Margin="0,10,10,10" Orientation="Horizontal" HorizontalAlignment="Right" Background="#FFE2E2E2" Grid.Column="2">
-            <Button x:Name="btnOK" Style="{StaticResource ServiceButton}" HorizontalAlignment="Stretch" Click="btnOK_Click">
+            <Button x:Name="btnOK" Style="{StaticResource OkServiceButton}" HorizontalAlignment="Stretch" Click="btnOK_Click">
                 <Button.Effect>
                     <DropShadowEffect Opacity="0.6"/>
                 </Button.Effect>
                 <Image x:Name="OK_png" Style="{StaticResource ServiceButtonImage}" Source="{DynamicResource IconOK}"/>
             </Button>
-            <Button x:Name="btnCancel" Style="{StaticResource ServiceButton}" HorizontalAlignment="Stretch" Click="btnCancel_Click" IsEnabled="False">
+            <Button x:Name="btnCancel" Style="{StaticResource CancelServiceButton}" HorizontalAlignment="Stretch" Click="BtnCancel_Click">
                 <Button.Effect>
                     <DropShadowEffect Opacity="0.6"/>
                 </Button.Effect>

@@ -11,7 +11,7 @@ using System.Data;
 using RDBLL.Entity.MeasureUnits;
 using System.Linq;
 using DAL.Common;
-
+using RDBLL.Entity.Soils;
 
 
 namespace RDBLL.Entity.RCC.Foundations
@@ -34,6 +34,14 @@ namespace RDBLL.Entity.RCC.Foundations
         /// Обратная ссылка на уровень
         /// </summary>
         public Level Level { get; set; }
+        /// <summary>
+        /// Код скважины
+        /// </summary>
+        public int? SoilSectionId { get; set; }
+        /// <summary>
+        /// Обратная ссылка на скважину
+        /// </summary>
+        public SoilSection SoilSection {get;set;}
         /// <summary>
         /// Код стали
         /// </summary>
@@ -211,6 +219,7 @@ namespace RDBLL.Entity.RCC.Foundations
             #region setFields
             row.SetField("Id", Id);
             row.SetField("LevelId", LevelId);
+            row.SetField("SoilSectionId", SoilSectionId);
             row.SetField("ReinfSteelClassId", ReinfSteelClassId);
             row.SetField("ConcreteClassId", ConcreteClassId);
             row.SetField("Name", Name);
@@ -256,6 +265,7 @@ namespace RDBLL.Entity.RCC.Foundations
         {
             Id = dataRow.Field<int>("Id");
             LevelId = dataRow.Field<int>("LevelId");
+            SoilSectionId = dataRow.Field<int?>("SoilSectionId");
             ReinfSteelClassId = dataRow.Field<int>("ReinfSteelClassId");
             ConcreteClassId = dataRow.Field<int>("ConcreteClassId");
             Name = dataRow.Field<string>("Name");
@@ -270,6 +280,16 @@ namespace RDBLL.Entity.RCC.Foundations
             CoveringLayerX = dataRow.Field<double>("CoveringLayerX");
             CoveringLayerY = dataRow.Field<double>("CoveringLayerY");
             CompressedLayerRatio = dataRow.Field<double>("CompressedLayerRatio");
+            //Если у фундамента есть код скважины
+            if (!(SoilSectionId is null))
+            {
+                //получаем ссылку на скважину
+                foreach (SoilSection soilSection in this.Level.Building.BuildingSite.SoilSections)
+                {
+                    if (soilSection.Id == SoilSectionId) { SoilSection = soilSection; }
+                }
+            }
+
         }
         /// <summary>
         /// Удаляет запись из датасета
@@ -278,20 +298,19 @@ namespace RDBLL.Entity.RCC.Foundations
         public void DeleteFromDataSet(DataSet dataSet)
         {
             //Удаляем вложенные части
-            DeleteParts(dataSet);
+            DeleteSubElements(dataSet, "FoundationParts");
+            DeleteSubElements(dataSet, "FoundationForcesGroups");
+            foreach (ForcesGroup forcesGroup in ForcesGroups)
+            {
+
+                forcesGroup.DeleteFromDataSet(dataSet);
+            }
             DsOperation.DeleteRow(dataSet, "Foundations", Id);
         }
-        public void DeleteParts(DataSet dataSet)
+        public void DeleteSubElements(DataSet dataSet, string tableName)
         {
-            DataTable dataTable;
-            dataTable = dataSet.Tables["FoundationParts"];
-            DataRow[] partRows = dataTable.Select("FoundationId=" + Id);
-            int count = partRows.Length;
-            for (int i = count - 1; i >= 0; i--)
-            {
-                dataTable.Rows.Remove(partRows[i]);
-            }
-            dataTable.AcceptChanges();
+            DsOperation.DeleteRow(dataSet, tableName, "FoundationId", Id);
+
         }
         #endregion
         /// <summary>

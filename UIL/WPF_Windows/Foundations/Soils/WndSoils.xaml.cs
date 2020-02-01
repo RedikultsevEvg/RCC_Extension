@@ -48,9 +48,16 @@ namespace RDUIL.WPF_Windows.Foundations.Soils
             wndSoil.ShowDialog();
             if (wndSoil.DialogResult == true)
             {
-                dispersedSoil.SaveToDataSet(ProgrammSettings.CurrentDataSet, true);
-                ProgrammSettings.IsDataChanged = true;
-                _buildingSite.Soils.Add(dispersedSoil);
+                try
+                {
+                    dispersedSoil.SaveToDataSet(ProgrammSettings.CurrentDataSet, true);
+                    ProgrammSettings.IsDataChanged = true;
+                    _buildingSite.Soils.Add(dispersedSoil);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Ошибка сохранения :" + ex);
+                }
             }          
         }
 
@@ -92,8 +99,15 @@ namespace RDUIL.WPF_Windows.Foundations.Soils
                     wndSoil.ShowDialog();
                     if (wndSoil.DialogResult == true)
                     {
-                        soil.SaveToDataSet(ProgrammSettings.CurrentDataSet, false);
-                        ProgrammSettings.IsDataChanged = true;
+                        try
+                        {
+                            soil.SaveToDataSet(ProgrammSettings.CurrentDataSet, false);
+                            ProgrammSettings.IsDataChanged = true;
+                        }
+                        catch (Exception ex)
+                        {
+                            MessageBox.Show("Ошибка сохранения :" + ex);
+                        }
                     }
                     else { soil.OpenFromDataSet(ProgrammSettings.CurrentDataSet); }
                 }               

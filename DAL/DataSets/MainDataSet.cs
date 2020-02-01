@@ -60,6 +60,48 @@ namespace DAL.DataSets
             NameColumn = new DataColumn("Name", Type.GetType("System.String"));
             dataTable.Columns.Add(NameColumn);
             #endregion
+            #region Soils
+            dataTable = new DataTable("Soils");
+            dataSet.Tables.Add(dataTable);
+            DsOperation.AddIdColumn(dataTable);
+            DsOperation.AddStringColumn(dataTable, "Type");
+            DsOperation.AddFkIdColumn("BuildingSites", "BuildingSiteId", dataTable);
+            DsOperation.AddNameColumn(dataTable);
+            DsOperation.AddStringColumn(dataTable, "Description");
+            DsOperation.AddDoubleColumn(dataTable, "CrcDensity", 1950);
+            DsOperation.AddDoubleColumn(dataTable, "FstDesignDensity", 1800);
+            DsOperation.AddDoubleColumn(dataTable, "SndDesignDensity", 1900);
+            DsOperation.AddDoubleColumn(dataTable, "FiltrationCoeff", 0.0001);
+            DsOperation.AddDoubleColumn(dataTable, "ElasticModulus", 2e7);
+            DsOperation.AddDoubleColumn(dataTable, "SndElasticModulus", 1e8);
+            DsOperation.AddDoubleColumn(dataTable, "PoissonRatio", 0.3);
+            DsOperation.AddDoubleColumn(dataTable, "CrcFi", 20);
+            DsOperation.AddDoubleColumn(dataTable, "FstDesignFi", 17);
+            DsOperation.AddDoubleColumn(dataTable, "SndDesignFi", 18);
+            DsOperation.AddDoubleColumn(dataTable, "CrcCohesion", 20000);
+            DsOperation.AddDoubleColumn(dataTable, "FstDesignCohesion", 17000);
+            DsOperation.AddDoubleColumn(dataTable, "SndDesignCohesion", 18000);
+            #endregion
+            #region SoilSections
+            dataTable = new DataTable("SoilSections");
+            dataSet.Tables.Add(dataTable);
+            DsOperation.AddIdColumn(dataTable);
+            DsOperation.AddFkIdColumn("BuildingSites", "BuildingSiteId", dataTable);
+            DsOperation.AddNameColumn(dataTable);
+            DsOperation.AddBoolColumn(dataTable, "HasWater", false);
+            DsOperation.AddDoubleColumn(dataTable, "NaturalWaterLevel", 200);
+            DsOperation.AddDoubleColumn(dataTable, "WaterLevel", 200);
+            DsOperation.AddDoubleColumn(dataTable, "CenterX", 0);
+            DsOperation.AddDoubleColumn(dataTable, "CenterY", 0);
+            #endregion
+            #region SoilLayers
+            dataTable = new DataTable("SoilLayers");
+            dataSet.Tables.Add(dataTable);
+            DsOperation.AddIdColumn(dataTable);
+            DsOperation.AddFkIdColumn("Soils", "SoilId", dataTable);
+            DsOperation.AddFkIdColumn("SoilSections", "SoilSectionId", dataTable);
+            DsOperation.AddDoubleColumn(dataTable, "TopLevel", 0);
+            #endregion
             #region Buildings
             dataTable = new DataTable("Buildings");
             dataSet.Tables.Add(dataTable);
@@ -184,6 +226,7 @@ namespace DAL.DataSets
             dataSet.Tables.Add(dataTable);
             DsOperation.AddIdColumn(dataTable);
             DsOperation.AddFkIdColumn("Levels", "LevelId", dataTable);
+            DsOperation.AddFkIdColumn("SoilSections", "SoilSectionId", dataTable, true);
             FkIdColumn = new DataColumn("ReinfSteelClassId", Type.GetType("System.Int32"));
             dataTable.Columns.Add(FkIdColumn);
             FkIdColumn = new DataColumn("ConcreteClassId", Type.GetType("System.Int32"));
@@ -223,48 +266,7 @@ namespace DAL.DataSets
             #endregion
             #region
             #endregion
-            #region Soils
-            dataTable = new DataTable("Soils");
-            dataSet.Tables.Add(dataTable);
-            DsOperation.AddIdColumn(dataTable);
-            DsOperation.AddStringColumn(dataTable, "Type");
-            DsOperation.AddFkIdColumn("BuildingSites", "BuildingSiteId", dataTable);
-            DsOperation.AddNameColumn(dataTable);
-            DsOperation.AddStringColumn(dataTable, "Description");
-            DsOperation.AddDoubleColumn(dataTable, "CrcDensity", 1950);
-            DsOperation.AddDoubleColumn(dataTable, "FstDesignDensity", 1800);
-            DsOperation.AddDoubleColumn(dataTable, "SndDesignDensity", 1900);
-            DsOperation.AddDoubleColumn(dataTable, "FiltrationCoeff", 0.0001);
-            DsOperation.AddDoubleColumn(dataTable, "ElasticModulus", 2e7);
-            DsOperation.AddDoubleColumn(dataTable, "SndElasticModulus", 1e8);
-            DsOperation.AddDoubleColumn(dataTable, "PoissonRatio", 0.3);
-            DsOperation.AddDoubleColumn(dataTable, "CrcFi", 20);
-            DsOperation.AddDoubleColumn(dataTable, "FstDesignFi", 17);
-            DsOperation.AddDoubleColumn(dataTable, "SndDesignFi", 18);
-            DsOperation.AddDoubleColumn(dataTable, "CrcCohesion", 20000);
-            DsOperation.AddDoubleColumn(dataTable, "FstDesignCohesion", 17000);
-            DsOperation.AddDoubleColumn(dataTable, "SndDesignCohesion", 18000);
-            #endregion
-            #region SoilSections
-            dataTable = new DataTable("SoilSections");
-            dataSet.Tables.Add(dataTable);
-            DsOperation.AddIdColumn(dataTable);
-            DsOperation.AddFkIdColumn("BuildingSites", "BuildingSiteId", dataTable);
-            DsOperation.AddNameColumn(dataTable);
-            DsOperation.AddBoolColumn(dataTable, "HasWater", false);
-            DsOperation.AddDoubleColumn(dataTable, "NaturalWaterLevel", 200);
-            DsOperation.AddDoubleColumn(dataTable, "WaterLevel", 200);
-            DsOperation.AddDoubleColumn(dataTable, "CenterX", 0);
-            DsOperation.AddDoubleColumn(dataTable, "CenterY", 0);
-            #endregion
-            #region SoilSections
-            dataTable = new DataTable("SoilLayers");
-            dataSet.Tables.Add(dataTable);
-            DsOperation.AddIdColumn(dataTable);
-            DsOperation.AddFkIdColumn("Soils", "SoilId", dataTable);
-            DsOperation.AddFkIdColumn("SoilSections", "SoilSectionId", dataTable);
-            DsOperation.AddDoubleColumn(dataTable, "TopLevel", 0);
-            #endregion
+
             DataSet = dataSet;
         }
 

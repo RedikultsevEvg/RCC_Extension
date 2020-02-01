@@ -4,6 +4,7 @@ using System;
 using RDBLL.Common.Interfaces;
 using System.Data;
 using System.Linq;
+using DAL.Common;
 
 namespace RDBLL.Entity.SC.Column
 {
@@ -128,7 +129,7 @@ namespace RDBLL.Entity.SC.Column
         /// <param name="dataSet"></param>
         public void DeleteFromDataSet(DataSet dataSet)
         {
-            throw new NotImplementedException();
+            DsOperation.DeleteRow(dataSet, "SteelBolts", Id);
         }
         public void SetParentNotActual()
         {

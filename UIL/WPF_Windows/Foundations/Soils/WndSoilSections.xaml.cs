@@ -42,10 +42,18 @@ namespace RDUIL.WPF_Windows.Foundations.Soils
             wndSoilSection.ShowDialog();
             if (wndSoilSection.DialogResult == true)
             {
-                soilSection.SaveToDataSet(ProgrammSettings.CurrentDataSet, true);
-                _collection.Add(soilSection);
-                ProgrammSettings.IsDataChanged = true;
-                LvMain.SelectedIndex = _collection.Count - 1;
+                try
+                {
+                    soilSection.SaveToDataSet(ProgrammSettings.CurrentDataSet, true);
+                    _collection.Add(soilSection);
+                    ProgrammSettings.IsDataChanged = true;
+                    LvMain.SelectedIndex = _collection.Count - 1;
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Ошибка сохранения :" + ex);
+                }
+                
             }
             else
             {
@@ -84,8 +92,15 @@ namespace RDUIL.WPF_Windows.Foundations.Soils
                 wndSoilSection.ShowDialog();
                 if (wndSoilSection.DialogResult == true)
                 {
-                    soilSection.SaveToDataSet(ProgrammSettings.CurrentDataSet, false);
-                    ProgrammSettings.IsDataChanged = true;
+                    try
+                    {
+                        soilSection.SaveToDataSet(ProgrammSettings.CurrentDataSet, false);
+                        ProgrammSettings.IsDataChanged = true;
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show("Ошибка сохранения :" + ex);
+                    }
                 }
                 else
                 {

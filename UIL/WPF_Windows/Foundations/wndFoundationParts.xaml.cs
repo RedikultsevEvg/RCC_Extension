@@ -8,6 +8,7 @@ using System.Windows.Input;
 using Winforms = System.Windows.Forms;
 using RDBLL.DrawUtils.SteelBase;
 using RDUIL.Validations;
+using System;
 
 
 namespace RDUIL.WPF_Windows.Foundations
@@ -26,16 +27,6 @@ namespace RDUIL.WPF_Windows.Foundations
             InitializeComponent();
             this.DataContext = _collection;
             DrawFoundation.DrawTopScatch(_foundation, cvScetch);
-        }
-
-        private void StpPartBtns_MouseMove(object sender, MouseEventArgs e)
-        {
-            ((StackPanel)sender).Opacity = 1;
-        }
-
-        private void StpPartBtns_MouseLeave(object sender, MouseEventArgs e)
-        {
-            ((StackPanel)sender).Opacity = 0.5;
         }
 
         private void BtnAddPart_Click(object sender, RoutedEventArgs e)
@@ -76,11 +67,6 @@ namespace RDUIL.WPF_Windows.Foundations
             if (message != "") { MessageBox.Show(message); }
             else
             {
-                _foundation.DeleteParts(ProgrammSettings.CurrentDataSet);
-                foreach (FoundationPart foundationPart in _foundation.Parts)
-                {
-                    foundationPart.SaveToDataSet(ProgrammSettings.CurrentDataSet, true);
-                }
                 DialogResult = true;
                 Close();
             }            
@@ -93,7 +79,7 @@ namespace RDUIL.WPF_Windows.Foundations
 
         private void BtnCancel_Click(object sender, RoutedEventArgs e)
         {
-            _foundation.Parts = GetEntity.GetFoundationParts(ProgrammSettings.CurrentDataSet, _foundation);
+
             DialogResult = false;
             Close();
         }

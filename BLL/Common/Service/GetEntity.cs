@@ -128,7 +128,6 @@ namespace RDBLL.Common.Service
                 newObject.OpenFromDataSet(dataRow);
                 newObject.SteelBase = steelBase;
                 newObjects.Add(newObject);
-                newObjects.Add(newObject);
             }
             return newObjects;
         }
@@ -280,8 +279,8 @@ namespace RDBLL.Common.Service
             foreach (var dataRow in query)
             {
                 Foundation newObject = new Foundation();
-                newObject.OpenFromDataSet(dataRow);
                 newObject.Level = level;
+                newObject.OpenFromDataSet(dataRow);
                 newObject.Parts = GetFoundationParts(dataSet, newObject);                
                 newObject.ForcesGroups = GetFoundationForcesGroups(dataSet, newObject);
                 newObjects.Add(newObject);

@@ -45,24 +45,24 @@ namespace CSL.Reports
                     DataTable Foundations = dataSet.Tables["Foundations"];
                     foreach (Foundation foundation in level.Foundations)
                     {
-                        try
+                        //Если данные по фундаменту неактуальны выполняем расчет
+                        if (!(foundation.IsLoadCasesActual & foundation.IsPartsActual))
                         {
-                            if (!(foundation.IsLoadCasesActual & foundation.IsPartsActual))
+                            //Если расчет выполнен успешно
+                            if (FoundationProcessor.SolveFoundation(foundation))
                             {
-                                FoundationProcessor.SolveFoundation(foundation);
+                                //Заносим результаты расчета в таблицы датасета
+                                ProcessFoundation(Foundations, foundation);
+                                ProcessFoundationParts(foundation);
+                                ProcessLoadSets(foundation);
+                                ProcessBtmStresses(foundation);
                             }
-
-                            ProcessFoundation(Foundations, foundation);
-                            ProcessFoundationParts(foundation);
-                            ProcessLoadSets(foundation);
-                            ProcessBtmStresses(foundation);
+                            else
+                            {
+                                //Иначе показываем пользователю, что произошла ошибка расчета
+                                MessageBox.Show($" фундамент: {foundation.Name} Ошибка расчета");
+                            }
                         }
-                        catch (Exception e)
-                        {
-                            MessageBox.Show(e+ " фундамент: "+foundation.Name, "Ошибка расчета");
-                        }
-                            
-
                     }
                 }
             }

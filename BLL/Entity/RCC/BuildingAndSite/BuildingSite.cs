@@ -66,10 +66,6 @@ namespace RDBLL.Entity.RCC.BuildingAndSite
             row["Name"] = Name;
             dataTable.AcceptChanges();
             //Добавляем вложенные элементы
-            foreach (Building building in Buildings)
-            {
-                building.SaveToDataSet(dataSet, createNew);
-            }
             foreach (Soil soil in Soils)
             {
                 soil.SaveToDataSet(dataSet, createNew);
@@ -77,6 +73,11 @@ namespace RDBLL.Entity.RCC.BuildingAndSite
             foreach (SoilSection soilSection in SoilSections)
             {
                 soilSection.SaveToDataSet(dataSet, createNew);
+            }
+            //Здание надо добавлять позже грунтов, так как грунты нужны для фундаментов
+            foreach (Building building in Buildings)
+            {
+                building.SaveToDataSet(dataSet, createNew);
             }
         }
         /// <summary>
