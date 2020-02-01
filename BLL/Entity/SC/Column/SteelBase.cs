@@ -239,7 +239,6 @@ namespace RDBLL.Entity.SC.Column
             SetDefault();
             LevelId = level.Id;
             Level = level;
-            level.SteelBases.Add(this);
         }
 
         /// <summary>
@@ -351,29 +350,24 @@ namespace RDBLL.Entity.SC.Column
         /// <param name="dataSet"></param>
         public void DeleteFromDataSet(DataSet dataSet)
         {
-            DeleteSubElements(dataSet);
+            DeleteSubElements(dataSet, "SteelBaseParts");
+            DeleteSubElements(dataSet, "SteelBolts");
+            DeleteSubElements(dataSet, "SteelBaseForcesGroups");
+            foreach (ForcesGroup forcesGroup in ForcesGroups)
+            {
+                //Нужно сделать проверку, встречается ли группа еще-где-то
+                //Если не встречается, то удалять
+                forcesGroup.DeleteFromDataSet(dataSet);
+            }
             DsOperation.DeleteRow(dataSet, "SteelBases", Id);
         }
-        private void DeleteSubElements(DataSet dataSet)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="dataSet"></param>
+        public void DeleteSubElements(DataSet dataSet, string tableName)
         {
-            DataTable dataTable;
-            //Удаляем части стальной базы
-            dataTable = dataSet.Tables["SteelBaseParts"];
-            DataRow[] soilRows = dataTable.Select("id=" + Id);
-            int count = soilRows.Length;
-            for (int i = count - 1; i >= 0; i--)
-            {
-                dataTable.Rows.Remove(soilRows[i]);
-            }
-            //Удаляем болты стальной базы
-            dataTable = dataSet.Tables["SteelBolts"];
-            soilRows = dataTable.Select("id=" + Id);
-            count = soilRows.Length;
-            for (int i = count - 1; i >= 0; i--)
-            {
-                dataTable.Rows.Remove(soilRows[i]);
-            }
-            dataTable.AcceptChanges();
+            DsOperation.DeleteRow(dataSet, tableName, "SteelBaseId", Id);
         }
         #endregion
 

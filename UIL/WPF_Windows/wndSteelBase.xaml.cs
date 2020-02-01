@@ -33,39 +33,92 @@ namespace RDUIL.WPF_Windows
 
         private void btnOK_Click(object sender, RoutedEventArgs e)
         {
-            try
-            {
-                //this.DialogResult = OK;
-                ProgrammSettings.IsDataChanged = true;
-                _steelColumnBase.IsActual = false;
-                this.Close();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Некорректные данные :" + ex);
-            }
+            DialogResult = true;
+            Close();
         }
 
         private void btnCancel_Click(object sender, RoutedEventArgs e)
         {
-            this.Close();
         }
 
         private void btnForces_Click(object sender, RoutedEventArgs e)
         {
-            wndForces wndForces = new wndForces(_steelColumnBase);
+            wndForces wndForces = new wndForces(_steelColumnBase.ForcesGroups[0]);
             wndForces.ShowDialog();
+            if (wndForces.DialogResult == true)
+            {
+                try
+                {
+                    _steelColumnBase.ForcesGroups[0].DeleteFromDataSet(ProgrammSettings.CurrentDataSet);
+                    _steelColumnBase.ForcesGroups[0].SaveToDataSet(ProgrammSettings.CurrentDataSet, true);
+                    _steelColumnBase.ForcesGroups[0].SetParentsNotActual();
+                    ProgrammSettings.IsDataChanged = true;
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Ошибка сохранения :" + ex);
+                }
+            }
+            else
+            {
+                _steelColumnBase.ForcesGroups = GetEntity.GetSteelBaseForcesGroups(ProgrammSettings.CurrentDataSet, _steelColumnBase);
+            }
         }
         private void BtnParts_Click(object sender, RoutedEventArgs e)
         {
             WndSteelBasePart wndSteelBasePart = new WndSteelBasePart(_steelColumnBase);
             wndSteelBasePart.ShowDialog();
+            if (wndSteelBasePart.DialogResult == true)
+            {
+                try
+                {
+                    _steelColumnBase.IsBasePartsActual = false;
+                    _steelColumnBase.IsActual = false;
+
+                    _steelColumnBase.DeleteSubElements(ProgrammSettings.CurrentDataSet, "SteelBaseParts");
+                    foreach (SteelBasePart steelBasePart in _steelColumnBase.SteelBaseParts)
+                    {
+                        steelBasePart.SaveToDataSet(ProgrammSettings.CurrentDataSet, true);
+                    }
+                    ProgrammSettings.IsDataChanged = true;
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Ошибка сохранения :" + ex);
+                }
+            }
+            else
+            {
+                _steelColumnBase.SteelBaseParts = GetEntity.GetSteelBaseParts(ProgrammSettings.CurrentDataSet, _steelColumnBase);
+            }
         }
 
         private void BtnBolts_Click(object sender, RoutedEventArgs e)
         {
             wndSteelBaseBolts wndSteelBaseBolts = new wndSteelBaseBolts(_steelColumnBase);
             wndSteelBaseBolts.ShowDialog();
+            if (wndSteelBaseBolts.DialogResult == true)
+            {
+                try
+                {
+                    _steelColumnBase.IsBoltsActual = false;
+                    _steelColumnBase.IsActual = false;
+                    _steelColumnBase.DeleteSubElements(ProgrammSettings.CurrentDataSet, "SteelBolts");
+                    foreach (SteelBolt steelBolt in _steelColumnBase.SteelBolts)
+                    {
+                        steelBolt.SaveToDataSet(ProgrammSettings.CurrentDataSet, true);
+                    }
+                    ProgrammSettings.IsDataChanged = true;
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Ошибка сохранения :" + ex);
+                }
+            }
+            else
+            {
+                _steelColumnBase.SteelBolts = GetEntity.GetSteelBolts(ProgrammSettings.CurrentDataSet, _steelColumnBase);
+            }
         }
 
         private void BtnStresses_Click(object sender, RoutedEventArgs e)

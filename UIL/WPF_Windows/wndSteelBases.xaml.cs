@@ -37,7 +37,27 @@ namespace RDUIL.WPF_Windows
         private void BtnAdd_Click(object sender, RoutedEventArgs e)
         {
             SteelBase steelBase = new SteelBase(_level);
-            ProgrammSettings.IsDataChanged = true;
+            steelBase.SaveToDataSet(ProgrammSettings.CurrentDataSet, true);
+            WndSteelColumnBase wndSteelColumnBase = new WndSteelColumnBase(steelBase);
+            wndSteelColumnBase.ShowDialog();
+            if (wndSteelColumnBase.DialogResult == true)
+            {
+                try
+                {
+                    steelBase.SaveToDataSet(ProgrammSettings.CurrentDataSet, false);
+                    steelBase.IsActual = false;
+                    _level.SteelBases.Add(steelBase);
+                    ProgrammSettings.IsDataChanged = true;
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Ошибка сохранения :" + ex);
+                }
+            }
+            else
+            {
+                steelBase.DeleteFromDataSet(ProgrammSettings.CurrentDataSet);
+            }
         }
 
         private void BtnDelete_Click(object sender, RoutedEventArgs e)
@@ -75,6 +95,23 @@ namespace RDUIL.WPF_Windows
                 int a = LvSteelBases.SelectedIndex;
                 WndSteelColumnBase wndSteelColumnBase = new WndSteelColumnBase(_collection[a]);
                 wndSteelColumnBase.ShowDialog();
+                if (wndSteelColumnBase.DialogResult == true)
+                {
+                    try
+                    {
+                        _collection[a].SaveToDataSet(ProgrammSettings.CurrentDataSet, false);
+                        _collection[a].IsActual = false;
+                        ProgrammSettings.IsDataChanged = true;
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show("Ошибка сохранения :" + ex);
+                    }
+                }
+                else
+                {
+                    _collection[a].OpenFromDataSet(ProgrammSettings.CurrentDataSet);
+                }
             }
             else
             {

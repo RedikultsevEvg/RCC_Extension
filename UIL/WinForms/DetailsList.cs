@@ -772,7 +772,7 @@ namespace RDUIL.WinForms
                 {
                     steelColumnBase = ((ObservableCollection<SteelBase>)_objectList)[i];
                     this.Visible = false;
-                    wndForces wndForces = new wndForces(steelColumnBase);
+                    wndForces wndForces = new wndForces(steelColumnBase.ForcesGroups[0]);
                     wndForces.ShowDialog();
                     this.Visible = true;
                 }

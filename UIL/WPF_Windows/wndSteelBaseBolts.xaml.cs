@@ -30,29 +30,17 @@ namespace RDUIL.WPF_Windows
             InitializeComponent();
             _steelColumnBase = steelColumnBase;
             DrawSteelBase.DrawBase(_steelColumnBase, cvScetch);
-            this.DataContext = _steelColumnBase;
+            DataContext = _steelColumnBase;
         }
 
         private void BtnOK_Click(object sender, RoutedEventArgs e)
         {
-            try
-            {
-                this.DialogResult = true;
-                _steelColumnBase.IsBoltsActual = false;
-                _steelColumnBase.IsActual = false;
-                ProgrammSettings.IsDataChanged = true;
-                this.Close();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Некорректные данные :" + ex);
-            }
+            DialogResult = true;
+            Close();
         }
 
         private void BtnCancel_Click(object sender, RoutedEventArgs e)
         {
-            this.DialogResult = false;
-            this.Close();
         }
 
         private void BtnRefresh_Click(object sender, RoutedEventArgs e)

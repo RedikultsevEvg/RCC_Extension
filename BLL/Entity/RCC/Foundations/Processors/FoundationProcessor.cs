@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Windows;
 
 namespace RDBLL.Entity.RCC.Foundations.Processors
 {
@@ -89,28 +90,49 @@ namespace RDBLL.Entity.RCC.Foundations.Processors
         /// Основной решатель фундамента
         /// </summary>
         /// <param name="foundation"></param>
-        public static void SolveFoundation(Foundation foundation)
+        public static bool SolveFoundation(Foundation foundation)
         {
-            if (foundation.Parts.Count == 0) { throw new Exception("Не заданы ступени фундамента"); }
-            if (!foundation.IsLoadCasesActual || !foundation.IsPartsActual)
+            bool result = false;
+            #region checking
+            if (foundation.SoilSectionId is null)
             {
-                if (!foundation.IsLoadCasesActual)
-                {
-                    foundation.LoadCases = LoadSetProcessor.GetLoadCases(foundation.ForcesGroups);
-                    //Загружения с учетом веса фундамента и грунта
-                    foundation.btmLoadSetsWithWeight = GetBottomLoadCasesWithWeight(foundation);
-                    //Загружения без учета веса фундамента и грунта
-                    if (foundation.LoadCases == null) { foundation.LoadCases = new ObservableCollection<LoadSet>(); }
-                    double[] delta = GetDeltaDistance(foundation);
-                    foundation.btmLoadSetsWithoutWeight = LoadSetProcessor.GetLoadSetsTransform(foundation.LoadCases, delta);
-                    foundation.IsLoadCasesActual = true;
-                }
-                foundation.IsPartsActual = true;
-
-                foundation.NdmAreas = GetNdmAreas(foundation);
-                foundation.ForceCurvaturesWithoutWeight = GetForceCurvatures(foundation, foundation.btmLoadSetsWithoutWeight);
-                foundation.ForceCurvaturesWithWeight = GetForceCurvatures(foundation, foundation.btmLoadSetsWithWeight);
+                MessageBox.Show("Не задана скважина для расчета");
+                return false;
             }
+            if (foundation.Parts.Count == 0)
+            {
+                MessageBox.Show("Не заданы ступени фундамента");
+                return false;
+            }
+            #endregion
+            try
+            {
+                if (!foundation.IsLoadCasesActual || !foundation.IsPartsActual)
+                {
+                    if (!foundation.IsLoadCasesActual)
+                    {
+                        foundation.LoadCases = LoadSetProcessor.GetLoadCases(foundation.ForcesGroups);
+                        //Загружения с учетом веса фундамента и грунта
+                        foundation.btmLoadSetsWithWeight = GetBottomLoadCasesWithWeight(foundation);
+                        //Загружения без учета веса фундамента и грунта
+                        if (foundation.LoadCases == null) { foundation.LoadCases = new ObservableCollection<LoadSet>(); }
+                        double[] delta = GetDeltaDistance(foundation);
+                        foundation.btmLoadSetsWithoutWeight = LoadSetProcessor.GetLoadSetsTransform(foundation.LoadCases, delta);
+                        foundation.IsLoadCasesActual = true;
+                    }
+                    foundation.IsPartsActual = true;
+                    foundation.NdmAreas = GetNdmAreas(foundation);
+                    foundation.ForceCurvaturesWithoutWeight = GetForceCurvatures(foundation, foundation.btmLoadSetsWithoutWeight);
+                    foundation.ForceCurvaturesWithWeight = GetForceCurvatures(foundation, foundation.btmLoadSetsWithWeight);
+                }
+                result = true;
+            }
+            catch (Exception ex)
+            {
+                result = false;
+                MessageBox.Show("Ошибка расчета :" + ex);
+            }
+            return result;
         }
         /// <summary>
         /// Возвращает группу нагрузок с учетом веса фундамент и грунта на его уступах

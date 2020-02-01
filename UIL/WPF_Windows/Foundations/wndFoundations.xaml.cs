@@ -41,14 +41,27 @@ namespace RDUIL.WPF_Windows.Foundations
         private void BtnAdd_Click(object sender, RoutedEventArgs e)
         {
             Foundation foundation = new Foundation(_level);
+            //Надо создать элемент, иначе некуда будет сохранять дочерние
+            foundation.SaveToDataSet(ProgrammSettings.CurrentDataSet, true);
             wndFoundation wndFoundation = new wndFoundation(foundation);
             wndFoundation.ShowDialog();
             if (wndFoundation.DialogResult == true)
             {
-                DataSet dataSet = ProgrammSettings.CurrentDataSet;
-                foundation.SaveToDataSet(dataSet, true);
-                _collection.Add(foundation);
-                ProgrammSettings.IsDataChanged = true;
+                try
+                {
+                    foundation.SaveToDataSet(ProgrammSettings.CurrentDataSet, false);
+                    _collection.Add(foundation);
+                    ProgrammSettings.IsDataChanged = true;
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Ошибка сохранения :" + ex);
+                }
+
+            }
+            else //Если пользователь не подтвердил создание, то удаляем элемент
+            {
+                foundation.DeleteFromDataSet(ProgrammSettings.CurrentDataSet);
             }
         }
 
@@ -85,12 +98,22 @@ namespace RDUIL.WPF_Windows.Foundations
             if (LvMain.SelectedIndex >= 0)
             {
                 int a = LvMain.SelectedIndex;
-                DataSet dataSet = ProgrammSettings.CurrentDataSet;
                 Foundation foundation = _collection[a];
                 wndFoundation wndChild = new wndFoundation(foundation);
                 wndChild.ShowDialog();
-                if (wndChild.DialogResult == true) { foundation.SaveToDataSet(dataSet, false); }
-                else { foundation.OpenFromDataSet(dataSet); }
+                if (wndChild.DialogResult == true)
+                {
+                    try
+                    {
+                        foundation.SaveToDataSet(ProgrammSettings.CurrentDataSet, false);
+                        ProgrammSettings.IsDataChanged = true;
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show("Ошибка сохранения :" + ex);
+                    }
+                }
+                else { foundation.OpenFromDataSet(ProgrammSettings.CurrentDataSet); }
             }
             else
             {

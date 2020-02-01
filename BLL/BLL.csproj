@@ -109,6 +109,7 @@
     <Compile Include="Entity\Soils\DispersedSoil.cs" />
     <Compile Include="Entity\Soils\NominalSoil.cs" />
     <Compile Include="Entity\Soils\NonBearingSoil.cs" />
+    <Compile Include="Entity\Soils\Processors\SoilLayerProcessor.cs" />
     <Compile Include="Entity\Soils\RockSoil.cs" />
     <Compile Include="Entity\Soils\Soil.cs" />
     <Compile Include="Entity\Soils\SoilElementaryLayer.cs" />
@@ -131,7 +132,6 @@
   <ItemGroup>
     <Folder Include="Common\Delegates\" />
     <Folder Include="Entity\Results\RCC\" />
-    <Folder Include="Entity\Soils\Processors\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DAL\DAL.csproj">

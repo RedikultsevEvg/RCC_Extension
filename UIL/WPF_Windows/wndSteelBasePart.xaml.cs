@@ -24,24 +24,10 @@ namespace RDUIL.WPF_Windows
             this.DataContext = _steelColumnBase;
         }
 
-        private void btnCancel_Click(object sender, RoutedEventArgs e)
-        {
-            _steelColumnBase.IsBasePartsActual = false;
-            _steelColumnBase.IsActual = false;
-            this.Close();
-        }
-
         private void btnOK_Click(object sender, RoutedEventArgs e)
         {
-            try
-            {
-                ProgrammSettings.IsDataChanged = true;
-                this.Close();
-            }
-            catch(Exception ex)
-            {
-                MessageBox.Show("Некорректные данные :" + ex);
-            }
+            DialogResult = true;
+            Close();
         }
         
 
@@ -80,14 +66,8 @@ namespace RDUIL.WPF_Windows
             }
         }
 
-        private void StpPartBtns_MouseMove(object sender, MouseEventArgs e)
+        private void BtnCancel_Click(object sender, RoutedEventArgs e)
         {
-            ((StackPanel)sender).Opacity = 1;
-        }
-
-        private void StpPartBtns_MouseLeave(object sender, MouseEventArgs e)
-        {
-            ((StackPanel)sender).Opacity = 0.5;
         }
     }
 }

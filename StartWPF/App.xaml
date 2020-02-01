@@ -92,6 +92,7 @@
         </Style>
 
         <Style x:Key="OkServiceButton" TargetType="Button" BasedOn="{StaticResource ServiceButton}">
+            <Setter Property="IsDefault" Value="True"/>
             <Setter Property="ToolTip">
                 <Setter.Value>
                     <Run Text="Подтвердить"/>
@@ -104,6 +105,7 @@
             </Setter>
         </Style>
         <Style x:Key="CancelServiceButton" TargetType="Button" BasedOn="{StaticResource ServiceButton}">
+            <Setter Property="IsCancel" Value="True"/>
             <Setter Property="ToolTip">
                 <Setter.Value>
                     <Run Text="Отмена"/>

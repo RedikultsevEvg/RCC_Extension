@@ -16,43 +16,29 @@ namespace RDUIL.WPF_Windows
     public partial class wndForces : Window
     {
         private ForcesGroup _forcesGroup;
-        private IHaveForcesGroups _haveForcesGroups;
         private ObservableCollection<LoadSet> _loadSets;
-        public wndForces(IHaveForcesGroups haveForcesGroups)
+
+        public wndForces(ForcesGroup forcesGroup)
         {
-            InitializeComponent();
-            _haveForcesGroups = haveForcesGroups;
-            _forcesGroup = _haveForcesGroups.ForcesGroups[0];
+            _forcesGroup = forcesGroup;
             _loadSets = _forcesGroup.LoadSets;
-            this.DataContext = _forcesGroup;
+            InitializeComponent();
+            DataContext = _forcesGroup;
         }
 
         private void btnOK_Click(object sender, RoutedEventArgs e)
         {
-            try
+            foreach (LoadSet loadSet in _loadSets)
             {
-                _forcesGroup.SetParentsNotActual();
-                foreach (LoadSet loadSet in _forcesGroup.LoadSets)
+                foreach (ForceParameter forceParameter in loadSet.ForceParameters)
                 {
-                    foreach (ForceParameter forceParameter in loadSet.ForceParameters)
-                    {
-                        forceParameter.DesignValue = forceParameter.CrcValue * loadSet.PartialSafetyFactor;
-                    }
+                    forceParameter.DesignValue = forceParameter.CrcValue * loadSet.PartialSafetyFactor;
                 }
-                
-                ProgrammSettings.IsDataChanged = true;
-                this.Close();
             }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Некорректные данные :" + ex);
-            }
+            DialogResult = true;
+            Close();
         }
-        private void btnCancel_Click(object sender, RoutedEventArgs e)
-        {
 
-            this.Close();
-        }
         private void btnAddLoad_Click(object sender, RoutedEventArgs e)
         {
             _forcesGroup.LoadSets.Add(new LoadSet(_forcesGroup));
