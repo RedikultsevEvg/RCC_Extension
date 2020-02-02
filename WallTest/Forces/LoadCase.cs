@@ -25,10 +25,10 @@ namespace Test.Forces
             i = 2;
             AddForceParameter(steelColumnBase.ForcesGroups[0], i, false);
 
-            List<LoadSet> ExpLoadCases = new List<LoadSet>();
+            ObservableCollection<LoadSet> ExpLoadCases = new ObservableCollection<LoadSet>();
 
-            List<LoadSet> ActualList = LoadSetProcessor.GetLoadCases(steelColumnBase.ForcesGroups);
-            List<LoadSet> ExpectedList = ExpLoadCases;
+            ObservableCollection<LoadSet> ActualList = LoadSetProcessor.GetLoadCases(steelColumnBase.ForcesGroups);
+            ObservableCollection<LoadSet> ExpectedList = ExpLoadCases;
             #region //Свойства ожидаемой комбинации нагрузок
             ExpectedList.Add(new LoadSet());
             LoadSet expLoadSet = new LoadSet();
@@ -60,10 +60,10 @@ namespace Test.Forces
             i = 2;
             AddForceParameter(steelColumnBase.ForcesGroups[0], i, true);
 
-            List<LoadSet> ExpLoadCases = new List<LoadSet>();
+            ObservableCollection<LoadSet> ExpLoadCases = new ObservableCollection<LoadSet>();
 
-            List<LoadSet> ActualList = LoadSetProcessor.GetLoadCases(steelColumnBase.ForcesGroups);
-            List<LoadSet> ExpectedList = ExpLoadCases;
+            ObservableCollection<LoadSet> ActualList = LoadSetProcessor.GetLoadCases(steelColumnBase.ForcesGroups);
+            ObservableCollection<LoadSet> ExpectedList = ExpLoadCases;
             #region //Свойства ожидаемой комбинации нагрузок
             ExpectedList.Add(new LoadSet());
             LoadSet expLoadSet = new LoadSet();
@@ -108,10 +108,10 @@ namespace Test.Forces
             i = 2;
             AddForceParameter(steelColumnBase.ForcesGroups[0], i, true, true);
 
-            List<LoadSet> ExpLoadCases = new List<LoadSet>();
+            ObservableCollection<LoadSet> ExpLoadCases = new ObservableCollection<LoadSet>();
 
-            List<LoadSet> ActualList = LoadSetProcessor.GetLoadCases(steelColumnBase.ForcesGroups);
-            List<LoadSet> ExpectedList = ExpLoadCases;
+            ObservableCollection<LoadSet> ActualList = LoadSetProcessor.GetLoadCases(steelColumnBase.ForcesGroups);
+            ObservableCollection<LoadSet> ExpectedList = ExpLoadCases;
             #region //Свойства ожидаемой комбинации нагрузок
             ExpectedList.Add(new LoadSet());
             LoadSet expLoadSet = new LoadSet();
@@ -191,7 +191,7 @@ namespace Test.Forces
             return true;
         }
 
-        public static bool CompareLoadList(List<LoadSet> frstList, List<LoadSet> scndtList)
+        public static bool CompareLoadList(ObservableCollection<LoadSet> frstList, ObservableCollection<LoadSet> scndtList)
         {
             if (!(scndtList.Count == frstList.Count)) { return false; } //Если количество не совпадает нет смысла сравнивать
             for (int i = 0; i < frstList.Count; i++)

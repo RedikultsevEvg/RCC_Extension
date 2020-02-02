@@ -9,6 +9,8 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows;
+using RDBLL.Entity.Soils.Processors;
+using RDBLL.Entity.Soils;
 
 namespace RDBLL.Entity.RCC.Foundations.Processors
 {
@@ -87,6 +89,29 @@ namespace RDBLL.Entity.RCC.Foundations.Processors
             return delta;
         }
         /// <summary>
+        /// Возвращает характерные отметки фундамента
+        /// </summary>
+        /// <param name="foundation">Фундамент</param>
+        /// <returns>Набор абсолютных отметок - нуль, верх фундамента, низ фундамента, верх грунта обратной засыпки</returns>
+        public static double[] FoundationLevels(Foundation foundation)
+        {
+            double[] levels = new double[5];
+            double[] foundationSizes = GetDeltaDistance(foundation);
+            double absZeroLevel = foundation.Level.Building.AbsoluteLevel - foundation.Level.Building.RelativeLevel;
+            double AbsTopLevel = absZeroLevel + foundation.RelativeTopLevel;
+            double AbsBtmLevel = AbsTopLevel - foundationSizes[2];
+            double SoilTopLevel = absZeroLevel + foundation.SoilRelativeTopLevel;
+            if (foundation.SoilSection is null) { throw new Exception("Для фундамента не назначена скважина"); }
+            SoilSection soilSection = foundation.SoilSection;
+            if (soilSection.SoilLayers.Count == 0) { throw new Exception("Скважина не содержит грунтов"); }
+            levels[0] = absZeroLevel; // - абсолютная отметка нуля
+            levels[1] = AbsTopLevel; // - абсолютная отметка верха фундамента
+            levels[2] = AbsBtmLevel; // - абсолютная отметка подошвы фундамента
+            levels[3] = SoilTopLevel; // - абсолютная отметка поверхности грунта обратной засыпки
+            levels[4] = soilSection.SoilLayers[0].TopLevel; // - абсолютная отметка поверхности природного грунта
+            return levels;
+        }
+        /// <summary>
         /// Основной решатель фундамента
         /// </summary>
         /// <param name="foundation"></param>
@@ -97,6 +122,11 @@ namespace RDBLL.Entity.RCC.Foundations.Processors
             if (foundation.SoilSectionId is null)
             {
                 MessageBox.Show("Не задана скважина для расчета");
+                return false;
+            }
+            if (foundation.SoilSection.SoilLayers.Count ==0)
+            {
+                MessageBox.Show("Скважина не содержит грунтов");
                 return false;
             }
             if (foundation.Parts.Count == 0)
@@ -181,7 +211,6 @@ namespace RDBLL.Entity.RCC.Foundations.Processors
             }
             return forcesGroup;
         }
-
         /// <summary>
         /// Возвращает объем фундамента
         /// </summary>
@@ -196,7 +225,6 @@ namespace RDBLL.Entity.RCC.Foundations.Processors
             }
             return volume;
         }
-
         /// <summary>
         /// Возвращает объем грунта на уступах фундамента
         /// </summary>
@@ -209,7 +237,6 @@ namespace RDBLL.Entity.RCC.Foundations.Processors
             volume = sizes[0] * sizes[1] * sizes[2] - GetConcreteVolume(foundation);
             return volume;
         }
-
         /// <summary>
         /// Возвращает усилия к подошве фундамента с учетом веса фундамента и грунта на его уступах
         /// </summary>
@@ -236,7 +263,6 @@ namespace RDBLL.Entity.RCC.Foundations.Processors
             loadSets = LoadSetProcessor.GetLoadSetsTransform(loadSets, delta);
             return loadSets;
         }
-
         /// <summary>
         /// Возвращает коллекцию кривизн по коллекции комбинаций нагрузок
         /// </summary>
@@ -287,7 +313,6 @@ namespace RDBLL.Entity.RCC.Foundations.Processors
             double[] delta = GetDeltaDistance(foundation);
             return new double[2] { delta[0], delta[1]};
         }
-
         public static List<double[]> GetFoundationMidllePoints(Foundation foundation)
         {
             List<double[]> points = new List<double[]>();
@@ -302,7 +327,6 @@ namespace RDBLL.Entity.RCC.Foundations.Processors
             points.Add(point4);
             return points;
         }
-
         public static List<double[]> GetFoundationCornerPoints(Foundation foundation)
         {
             List<double[]> points = new List<double[]>();
@@ -317,7 +341,6 @@ namespace RDBLL.Entity.RCC.Foundations.Processors
             points.Add(point4);
             return points;
         }
-
         /// <summary>
         /// Возвращает коллекцию срединных, краевых, угловых напряжений для фундамента
         /// </summary>
@@ -405,6 +428,49 @@ namespace RDBLL.Entity.RCC.Foundations.Processors
             double designAvgStress = forceCurvature.DesignSumForces.ForceMatrix[2, 0] / Area;
             double[] stress = new double[2] { crcAvgStress, designAvgStress};
             return stress;
+        }
+        /// <summary>
+        /// Возвращает список средних напряжений под подошвой фундаментов для всех загружений
+        /// </summary>
+        /// <param name="foundation">Фундамент</param>
+        /// <returns>Список давлений 0 - Напряжения от давления грунта выше подошвы фундамента, 1 - Напряжения от внешней нагрузки</returns>
+        public static List<double[]> GetMidlleStresses(Foundation foundation)
+        {
+            List<double[]> stressesList = new List<double[]>();
+            double[] levels = FoundationLevels(foundation);
+            double Area = GetBtmGeometryProperties(foundation)[2];
+            double sigmZg;
+            double d = levels[3] - levels[2];
+            double dn = levels[4] - levels[2];
+            if (d < dn) { sigmZg = foundation.SoilVolumeWeight * d; }
+            else { sigmZg = foundation.SoilVolumeWeight * dn; }
+
+            List<double[]> stressesWithWeigth = FoundationProcessor.GetStresses(foundation, foundation.ForceCurvaturesWithWeight);
+            foreach (double[] stressesArray in stressesWithWeigth)
+            {
+                double[] stresses = new double[2];
+                stresses[0] = sigmZg; //Напряжения от давления грунта выше подошвы фундамента
+                stresses[1] = stressesArray[0]; //Напряжения от внешней нагрузки
+                stressesList.Add(stresses);
+            }
+            return stressesList;
+        }
+        public static List<List<SoilLayerProcessor.CompressedLayer>> CompressedLayers(Foundation foundation)
+        {
+            List<List<SoilLayerProcessor.CompressedLayer>> mainCompressedLayers = new List<List<SoilLayerProcessor.CompressedLayer>>();
+            double l, b;
+            double[] foundationSizes = FoundationProcessor.GetContourSize(foundation);
+            l = foundationSizes[1];
+            b = foundationSizes[0];
+            
+            List<SoilElementaryLayer> soilElementaryLayers = SoilLayerProcessor.LayersFromSection(foundation);
+            List<double[]> midlleStresses = GetMidlleStresses(foundation);
+            foreach (double[] stresses in midlleStresses)
+            {
+                List<SoilLayerProcessor.CompressedLayer> compressedLayers = SoilLayerProcessor.CompressedLayers(soilElementaryLayers, l, b, stresses[0], stresses[1]);
+                mainCompressedLayers.Add(compressedLayers);
+            }   
+            return mainCompressedLayers;
         }
     }
 }

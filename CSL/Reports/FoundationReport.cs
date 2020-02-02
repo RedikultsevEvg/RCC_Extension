@@ -16,6 +16,8 @@ using System.Windows.Controls;
 using System.Windows;
 using System;
 using RDBLL.Common.Service;
+using RDBLL.Entity.Soils.Processors;
+using RDBLL.Entity.Soils;
 
 namespace CSL.Reports
 {
@@ -32,8 +34,8 @@ namespace CSL.Reports
                 report.Load(fileName);
                 CommonServices.PrepareMeasureUnit(report);
                 report.RegisterData(dataSet);
-                //report.Design();
-                report.Show();
+                report.Design();
+                //report.Show();
             }
         }
         private void PrepareReport()
@@ -52,16 +54,18 @@ namespace CSL.Reports
                             if (FoundationProcessor.SolveFoundation(foundation))
                             {
                                 //Заносим результаты расчета в таблицы датасета
-                                ProcessFoundation(Foundations, foundation);
-                                ProcessFoundationParts(foundation);
-                                ProcessLoadSets(foundation);
-                                ProcessBtmStresses(foundation);
+                                ProcessSubElements(Foundations, foundation);
                             }
                             else
                             {
                                 //Иначе показываем пользователю, что произошла ошибка расчета
                                 MessageBox.Show($" фундамент: {foundation.Name} Ошибка расчета");
                             }
+                        }
+                        else //Если актуальны, то сразу подготавливаем отчет
+                        {
+                            //Заносим результаты расчета в таблицы датасета
+                            ProcessSubElements(Foundations, foundation);
                         }
                     }
                 }
@@ -204,6 +208,50 @@ namespace CSL.Reports
                         };
                 FoundationStresses.Rows.Add(newTableItem);
             }
+        }
+        private void ProcessSettlement(Foundation foundation)
+        {
+            List<List<SoilLayerProcessor.CompressedLayer>> mainCompressedLayers = FoundationProcessor.CompressedLayers(foundation);
+            double stressCoefficient = MeasureUnitConverter.GetCoefficient(3);
+            DataTable SettlementSets = dataSet.Tables["SettlementSets"];
+            DataTable ComressedLayers = dataSet.Tables["ComressedLayers"];
+            int i = 1;
+            foreach (List<SoilLayerProcessor.CompressedLayer> compressedLayersList in mainCompressedLayers)
+            {
+                int setId = ProgrammSettings.CurrentTmpId;
+                DataRow newTableItem = SettlementSets.NewRow();
+                newTableItem.ItemArray = new object[]
+                        { setId,
+                        foundation.Id,
+                        i
+                        };
+                SettlementSets.Rows.Add(newTableItem);
+                foreach (SoilLayerProcessor.CompressedLayer compressedLayer in compressedLayersList)
+                {
+                    DataRow newSettleItem = ComressedLayers.NewRow();
+                    newSettleItem.ItemArray = new object[]
+                        { ProgrammSettings.CurrentTmpId,
+                        setId,
+                        0,
+                        Math.Round(compressedLayer.SoilElementaryLayer.TopLevel, 3),
+                        Math.Round(compressedLayer.SoilElementaryLayer.BottomLevel, 3),
+                        Math.Round(compressedLayer.SigmZg * stressCoefficient, 3),
+                        Math.Round(compressedLayer.SigmZgamma * stressCoefficient, 3),
+                        Math.Round(compressedLayer.SigmZp * stressCoefficient, 3),
+                        Math.Round(compressedLayer.LocalSettlement * MeasureUnitConverter.GetCoefficient(0), 3),
+                        Math.Round(compressedLayer.SumSettlement * MeasureUnitConverter.GetCoefficient(0), 3)
+                        };
+                    ComressedLayers.Rows.Add(newSettleItem);
+                }
+            }
+        }
+        private void ProcessSubElements(DataTable Foundations, Foundation foundation)
+        {
+            ProcessFoundation(Foundations, foundation);
+            ProcessFoundationParts(foundation);
+            ProcessLoadSets(foundation);
+            ProcessBtmStresses(foundation);
+            ProcessSettlement(foundation);
         }
     }
 }
