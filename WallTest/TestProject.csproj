@@ -49,6 +49,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Forces\LoadCase.cs" />
+    <Compile Include="RC\Foundations\NaturalSoilFoundation\CheckStress\AlphaCoff.cs" />
     <Compile Include="SC\SteelBasePart\CheckMoment\FourSides.cs" />
     <Compile Include="SC\SteelBasePart\CheckMoment\OneSide.cs" />
     <Compile Include="SC\SteelBasePart\CheckMoment\ThreeSides.cs" />

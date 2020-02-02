@@ -138,6 +138,7 @@ namespace RDBLL.Entity.Soils
                        where dataRow.Field<int>("Id") == Id
                        select dataRow).Single();
             OpenFromDataSet(row);
+            SoilLayers = GetEntity.GetSoilLayers(dataSet, this);
         }
         /// <summary>
         /// Обновляет запись в соответствии со строкой датасета
@@ -153,8 +154,6 @@ namespace RDBLL.Entity.Soils
             WaterLevel = dataRow.Field<double>("WaterLevel");
             CenterX = dataRow.Field<double>("CenterX");
             CenterY = dataRow.Field<double>("CenterY");
-            SoilLayers = new ObservableCollection<SoilLayer>();
-
         }
         /// <summary>
         /// Удаляет запись из датасета

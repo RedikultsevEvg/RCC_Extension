@@ -84,6 +84,27 @@ namespace CSL.DataSets.RCC.Foundations
             DsOperation.AddDoubleColumn(newTable, "CrcTensionAreaRatio");
             DsOperation.AddDoubleColumn(newTable, "DesignTensionAreaRatio");
             #endregion
+            #region SettlementSets
+            newTable = new DataTable("SettlementSets");
+            dataSet.Tables.Add(newTable);
+            DsOperation.AddIdColumn(newTable);
+            DsOperation.AddFkIdColumn("Foundations", "FoundationId", newTable);
+            DsOperation.AddNameColumn(newTable);
+            #endregion
+            #region ComressedLayers
+            newTable = new DataTable("ComressedLayers");
+            dataSet.Tables.Add(newTable);
+            DsOperation.AddIdColumn(newTable);
+            DsOperation.AddFkIdColumn("SettlementSets", "SettlementSetId", newTable);
+            DsOperation.AddDoubleColumn(newTable, "ZLevel");
+            DsOperation.AddDoubleColumn(newTable, "TopLevel");
+            DsOperation.AddDoubleColumn(newTable, "BtmLevel");
+            DsOperation.AddDoubleColumn(newTable, "SigmZg");
+            DsOperation.AddDoubleColumn(newTable, "SigmZgamma");
+            DsOperation.AddDoubleColumn(newTable, "SigmZp");
+            DsOperation.AddDoubleColumn(newTable, "LocalSettlement");
+            DsOperation.AddDoubleColumn(newTable, "SumSettlement");
+            #endregion
             return dataSet;
         }
     }

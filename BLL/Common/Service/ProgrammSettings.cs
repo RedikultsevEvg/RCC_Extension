@@ -428,12 +428,12 @@ namespace RDBLL.Common.Service
             #endregion
             BuildingSite.OpenFromDataSet(dataSet);
             #region Вложенные объекты
-            //Получаем коллекцию здания
-            BuildingSite.Buildings = GetEntity.GetBuildings(dataSet, BuildingSite);
             //Получаем коллекцию грунтов
             BuildingSite.Soils = GetEntity.GetSoils(dataSet, BuildingSite);
             //Получаем коллекцию скважин
             BuildingSite.SoilSections = GetEntity.GetSoilSections(dataSet, BuildingSite);
+            //Получаем коллекцию зданий
+            BuildingSite.Buildings = GetEntity.GetBuildings(dataSet, BuildingSite);
             #endregion
             DataSets.Clear();
             DataSets.Add(dataSet);
