@@ -215,7 +215,7 @@ namespace CSL.Reports
             double stressCoefficient = MeasureUnitConverter.GetCoefficient(3);
             DataTable SettlementSets = dataSet.Tables["SettlementSets"];
             DataTable ComressedLayers = dataSet.Tables["ComressedLayers"];
-            int i = 1;
+            int i = 0;
             foreach (List<SoilLayerProcessor.CompressedLayer> compressedLayersList in mainCompressedLayers)
             {
                 int setId = ProgrammSettings.CurrentTmpId;
@@ -223,9 +223,12 @@ namespace CSL.Reports
                 newTableItem.ItemArray = new object[]
                         { setId,
                         foundation.Id,
-                        i
+                        foundation.LoadCases[i].Name,
+                        Math.Round(compressedLayersList[0].SumSettlement * MeasureUnitConverter.GetCoefficient(0), 3),
+                        SoilLayerProcessor.ComressedHeight(compressedLayersList)
                         };
                 SettlementSets.Rows.Add(newTableItem);
+                i++;
                 foreach (SoilLayerProcessor.CompressedLayer compressedLayer in compressedLayersList)
                 {
                     DataRow newSettleItem = ComressedLayers.NewRow();

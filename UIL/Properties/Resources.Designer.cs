@@ -103,6 +103,16 @@ namespace RDUIL.Properties {
         /// <summary>
         ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
         /// </summary>
+        public static System.Drawing.Bitmap IconBuilding40 {
+            get {
+                object obj = ResourceManager.GetObject("IconBuilding40", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
+        /// </summary>
         public static System.Drawing.Bitmap IconDelete40 {
             get {
                 object obj = ResourceManager.GetObject("IconDelete40", resourceCulture);
@@ -146,6 +156,26 @@ namespace RDUIL.Properties {
         public static System.Drawing.Bitmap IconReport40 {
             get {
                 object obj = ResourceManager.GetObject("IconReport40", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap IconSoil40 {
+            get {
+                object obj = ResourceManager.GetObject("IconSoil40", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap IconSoilSection40 {
+            get {
+                object obj = ResourceManager.GetObject("IconSoilSection40", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
