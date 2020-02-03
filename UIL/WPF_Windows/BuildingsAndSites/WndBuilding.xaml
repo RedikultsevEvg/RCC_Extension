@@ -15,7 +15,7 @@
             </Setter>
             <Setter Property="Content">
                 <Setter.Value>
-                    <Image Style="{StaticResource ServiceButtonImage}" Source="{DynamicResource IconReport}"/>
+                    <Image Style="{StaticResource ServiceButtonImage}" Source="{DynamicResource IconSoil}"/>
                 </Setter.Value>
             </Setter>
         </Style>
@@ -27,7 +27,7 @@
             </Setter>
             <Setter Property="Content">
                 <Setter.Value>
-                    <Image Style="{StaticResource ServiceButtonImage}" Source="{DynamicResource IconReport}"/>
+                    <Image Style="{StaticResource ServiceButtonImage}" Source="{DynamicResource IconSoilSection}"/>
                 </Setter.Value>
             </Setter>
         </Style>

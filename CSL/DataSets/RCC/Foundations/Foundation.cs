@@ -90,6 +90,8 @@ namespace CSL.DataSets.RCC.Foundations
             DsOperation.AddIdColumn(newTable);
             DsOperation.AddFkIdColumn("Foundations", "FoundationId", newTable);
             DsOperation.AddNameColumn(newTable);
+            DsOperation.AddDoubleColumn(newTable, "MinSettlement");
+            DsOperation.AddDoubleColumn(newTable, "CompressedHeight");
             #endregion
             #region ComressedLayers
             newTable = new DataTable("ComressedLayers");

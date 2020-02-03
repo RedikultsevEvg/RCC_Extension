@@ -175,6 +175,18 @@ namespace RDBLL.Entity.Soils.Processors
             double sigmZpI;
             double sumSettlement = 0;
             sigmZgI = sigmZg0;
+            double zMin;
+
+            if (width < length)
+            {
+                double tmpb = length;
+                length = width;
+                width = tmpb;
+            }
+            if ( width <= 10) { zMin = width / 2;}
+            else if (width > 10 & width <= 60) { zMin = 4 + 0.1 * width; }
+            else { zMin = 10; }
+
             foreach (SoilElementaryLayer soilElementaryLayer in soilElementaryLayers)
             {
                 double layerHeight = soilElementaryLayer.TopLevel - soilElementaryLayer.BottomLevel;
@@ -193,7 +205,7 @@ namespace RDBLL.Entity.Soils.Processors
                 double elasiticModulus = (soilElementaryLayer.Soil as BearingSoil).ElasticModulus;
                 double sndElasitcModulus = (soilElementaryLayer.Soil as BearingSoil).SndElasticModulus;
                 //глубина сжимаемой толщи определяется по отношению напряжений
-                if ((sigmRatio > 0.2) || (sigmRatio > minSigmRatio)) //если граница не достигнута по СП или указанная пользователем, то считаем
+                if ((sigmRatio > 0.2) || (sigmRatio > minSigmRatio) || (z<zMin)) //если граница не достигнута по СП или указанная пользователем, то считаем
                 {
                     CompressedLayer compressedLayer = new CompressedLayer();
                     compressedLayer.SoilElementaryLayer = soilElementaryLayer;
@@ -202,7 +214,9 @@ namespace RDBLL.Entity.Soils.Processors
                             || //или
                             ((sigmRatio > 0.2) & (elasiticModulus <= 7e6)) //больше 0,2 для сильно сжимаемых с модулем меньше 7МПа
                             || //или
-                            (sigmRatio > minSigmRatio) //отношение больше минимального
+                            (sigmRatio > minSigmRatio)//отношение больше минимального
+                            ||
+                            (z < zMin) //Глубина сжимаемой толщи меньше минимальной
                         )
                     //то учитываем осадку для слоя
                     {
@@ -218,20 +232,23 @@ namespace RDBLL.Entity.Soils.Processors
                             localSettlement = 0.8 * layerHeight * ((sigmZpI - sigmZgammaI) / elasiticModulus + sigmZgammaI / sndElasitcModulus);
                         }                
                         compressedLayer.LocalSettlement = localSettlement;
-                        sumSettlement += localSettlement;
                     }
                     else //иначе осадка слоя не учитывается
                     {
                         compressedLayer.LocalSettlement = 0;
                     }
-#error Поправить осадку с учетом обратного порядка слоев
-                    compressedLayer.SumSettlement = sumSettlement;
                     compressedLayer.SigmZg = sigmZgI;
                     compressedLayer.SigmZgamma = sigmZgammaI;
                     compressedLayer.SigmZp = sigmZpI;
                     compressedLayers.Add(compressedLayer);
                 }
 
+            }
+            int count = compressedLayers.Count;
+            for (int i = count -1; i >= 0; i--)
+            {
+                sumSettlement += compressedLayers[i].LocalSettlement;
+                compressedLayers[i].SumSettlement = sumSettlement;
             }
             return compressedLayers;
         }
@@ -241,6 +258,22 @@ namespace RDBLL.Entity.Soils.Processors
             weight[0] = soilElementaryLayer.Soil.FstDesignDensity;
             weight[1] = soilElementaryLayer.Soil.SndDesignDensity;
             return weight;
+        }
+        /// <summary>
+        /// Возвращает глубину сжимаемой толщи
+        /// </summary>
+        /// <param name="compressedLayers">Коллекция слоев грунта</param>
+        /// <returns></returns>
+        public static double ComressedHeight(List<CompressedLayer> compressedLayers)
+        {
+            double comressedHeight = 0;
+            int i = compressedLayers.Count-1;
+            while (compressedLayers[i].SumSettlement == 0)
+            {
+                i--;
+            }
+            comressedHeight = compressedLayers[0].SoilElementaryLayer.TopLevel - compressedLayers[i].SoilElementaryLayer.BottomLevel;
+            return comressedHeight;
         }
     }
 }
