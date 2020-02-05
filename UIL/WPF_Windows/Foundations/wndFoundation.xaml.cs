@@ -55,6 +55,8 @@ namespace RDUIL.WPF_Windows.Foundations
             wndFoundationParts.ShowDialog();
             if (wndFoundationParts.DialogResult == true)
             {
+                _element.IsPartsActual = false;
+                _element.IsLoadCasesActual = false;
                 try
                 {
                     _element.DeleteSubElements(ProgrammSettings.CurrentDataSet, "FoundationParts");

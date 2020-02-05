@@ -132,6 +132,7 @@ namespace RDBLL.Entity.RCC.Foundations
         /// Коллекция элементарных участков подошвы
         /// </summary>
         public List<NdmArea> NdmAreas { get; set; }
+        public List<CompressedLayerList> CompressedLayers { get; set; }
         /// <summary>
         /// Признак актуальности нагрузок
         /// </summary>

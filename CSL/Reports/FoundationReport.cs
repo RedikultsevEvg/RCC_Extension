@@ -211,12 +211,12 @@ namespace CSL.Reports
         }
         private void ProcessSettlement(Foundation foundation)
         {
-            List<List<SoilLayerProcessor.CompressedLayer>> mainCompressedLayers = FoundationProcessor.CompressedLayers(foundation);
+            List<CompressedLayerList> mainCompressedLayers = foundation.CompressedLayers;
             double stressCoefficient = MeasureUnitConverter.GetCoefficient(3);
             DataTable SettlementSets = dataSet.Tables["SettlementSets"];
             DataTable ComressedLayers = dataSet.Tables["ComressedLayers"];
             int i = 0;
-            foreach (List<SoilLayerProcessor.CompressedLayer> compressedLayersList in mainCompressedLayers)
+            foreach (CompressedLayerList compressedLayersList in mainCompressedLayers)
             {
                 int setId = ProgrammSettings.CurrentTmpId;
                 DataRow newTableItem = SettlementSets.NewRow();
@@ -224,12 +224,12 @@ namespace CSL.Reports
                         { setId,
                         foundation.Id,
                         foundation.LoadCases[i].Name,
-                        Math.Round(compressedLayersList[0].SumSettlement * MeasureUnitConverter.GetCoefficient(0), 3),
-                        SoilLayerProcessor.ComressedHeight(compressedLayersList)
+                        Math.Round(compressedLayersList.CompressedLayers[0].SumSettlement * MeasureUnitConverter.GetCoefficient(0), 3),
+                        Math.Round(SoilLayerProcessor.ComressedHeight(compressedLayersList.CompressedLayers), 3)
                         };
                 SettlementSets.Rows.Add(newTableItem);
                 i++;
-                foreach (SoilLayerProcessor.CompressedLayer compressedLayer in compressedLayersList)
+                foreach (CompressedLayer compressedLayer in compressedLayersList.CompressedLayers)
                 {
                     DataRow newSettleItem = ComressedLayers.NewRow();
                     newSettleItem.ItemArray = new object[]

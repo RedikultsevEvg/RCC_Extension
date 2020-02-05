@@ -16,27 +16,6 @@ namespace RDBLL.Entity.Soils.Processors
     public class SoilLayerProcessor
     {
         /// <summary>
-        /// Класс сжатого слоя
-        /// </summary>
-        public class CompressedLayer
-        {
-            /// <summary>
-            /// Ссылка на элементарный слой
-            /// </summary>
-            public SoilElementaryLayer SoilElementaryLayer { get; set; }
-            public double SigmZg { get; set; }
-            public double SigmZgamma { get; set; }
-            public double SigmZp { get; set; }
-            /// <summary>
-            /// Осадка элементарного слоя
-            /// </summary>
-            public double LocalSettlement { get; set; }
-            /// <summary>
-            /// Осадка нарастающим итогом
-            /// </summary>
-            public double SumSettlement { get; set; }
-        }
-        /// <summary>
         /// Возвращает слои грунта по фундаменту и заданной глубине
         /// </summary>
         /// <param name="foundation">Фундамент</param>
@@ -111,6 +90,7 @@ namespace RDBLL.Entity.Soils.Processors
             foreach (SoilElementaryLayer soilElementaryLayer in soilElementaryLayers)
             {
                 if ((soilElementaryLayer.TopLevel < soilSection.NaturalWaterLevel) & (soilSection.HasWater)) { soilElementaryLayer.HasGroundWater = true; }
+                else { soilElementaryLayer.HasGroundWater = false; }
             }
             return soilElementaryLayers;
         }
@@ -139,21 +119,18 @@ namespace RDBLL.Entity.Soils.Processors
         /// <returns></returns>
         public static double GetAlphaRect(double l, double b, double z)
         {
-            double alpha, alpha1, alpha2, D, R, K1, K2, K3;
+            double alpha, R, K1;
             if (b < l)
             {
                 double tmpb = l;
                 l = b;
                 b = tmpb;
             }
+            b *= 0.5;
+            l *= 0.5;
             R = Math.Sqrt(l * l + b * b + z * z);
-            D = 2 * R;
-            K1 = l * b * z / D;
-            K2 = (l * l + b * b + 2 * z * z) / (D * D * z * z + l * l * b * b);
-            alpha1 = K1 * K2;
-            K3 = l * b / (Math.Sqrt((l * l + z * z) * (b * b + z * z)));
-            alpha2 = Math.Asin(K3);
-            alpha = 2 / (Math.PI) * (alpha1 + alpha2);
+            K1 = l * l + b * b + 2 * z * z;
+            alpha = 2 / (Math.PI) * (Math.Atan2(b * l, z * R) + b * l * z * K1 / ((b * b + z * z) * (l * l + z * z) * R));
             return alpha;
         }
         /// <summary>
@@ -192,7 +169,7 @@ namespace RDBLL.Entity.Soils.Processors
                 double layerHeight = soilElementaryLayer.TopLevel - soilElementaryLayer.BottomLevel;
                 z += layerHeight / 2;
                 //Давление от собственного веса грунта
-                sigmZgI -= layerHeight * SoilWeight(soilElementaryLayer)[1];
+                sigmZgI -= layerHeight * SoilWeight(soilElementaryLayer)[3];
                 double alpha = GetAlphaRect(length, width, z);
                 //Давление от внешней нагрузки для слоя
                 sigmZpI = alpha * sigmZp0;
@@ -237,6 +214,8 @@ namespace RDBLL.Entity.Soils.Processors
                     {
                         compressedLayer.LocalSettlement = 0;
                     }
+                    compressedLayer.z = z;
+                    compressedLayer.alpha = alpha;
                     compressedLayer.SigmZg = sigmZgI;
                     compressedLayer.SigmZgamma = sigmZgammaI;
                     compressedLayer.SigmZp = sigmZpI;
@@ -252,11 +231,30 @@ namespace RDBLL.Entity.Soils.Processors
             }
             return compressedLayers;
         }
+        /// <summary>
+        /// Возвращает плотность и вес грунта по 1-й и 2-й группе ПС
+        /// </summary>
+        /// <param name="soilElementaryLayer"></param>
+        /// <returns></returns>
         public static double[] SoilWeight(SoilElementaryLayer soilElementaryLayer)
         {
-            double [] weight = new double[2];
-            weight[0] = soilElementaryLayer.Soil.FstDesignDensity;
-            weight[1] = soilElementaryLayer.Soil.SndDesignDensity;
+            double [] weight = new double[4];
+
+            if (soilElementaryLayer.HasGroundWater)
+            {
+                weight[0] = (soilElementaryLayer.Soil.FstDesignDensity - 1000) / (1 + soilElementaryLayer.Soil.PorousityCoef);
+                weight[1] = (soilElementaryLayer.Soil.SndDesignDensity - 1000) / (1 + soilElementaryLayer.Soil.PorousityCoef);
+                weight[2] = (soilElementaryLayer.Soil.FstDesignDensity * 9.81 - 9810) / (1 + soilElementaryLayer.Soil.PorousityCoef);
+                weight[3] = (soilElementaryLayer.Soil.SndDesignDensity * 9.81 - 9810) / (1 + soilElementaryLayer.Soil.PorousityCoef);
+            }
+            else
+            {
+                weight[0] = soilElementaryLayer.Soil.FstDesignDensity;
+                weight[1] = soilElementaryLayer.Soil.SndDesignDensity;
+                weight[2] = soilElementaryLayer.Soil.FstDesignDensity * 9.81;
+                weight[3] = soilElementaryLayer.Soil.SndDesignDensity * 9.81;
+            }
+
             return weight;
         }
         /// <summary>

@@ -50,6 +50,22 @@ namespace RDBLL.Entity.Soils
         /// </summary>
         public double SndDesignDensity { get; set; }
         /// <summary>
+        /// Нормативный вес частиц
+        /// </summary>
+        public double CrcParticularDensity { get; set; }
+        /// <summary>
+        /// Вес частиц для 1 группы ПС
+        /// </summary>
+        public double FstParticularDensity { get; set; }
+        /// <summary>
+        /// Вес частиц для 2 группы ПС
+        /// </summary>
+        public double SndParticularDensity { get; set; }
+        /// <summary>
+        /// Коэффициент пористости
+        /// </summary>
+        public double PorousityCoef { get; set; }
+        /// <summary>
         /// Коэффициент фильтрации
         /// Необходим, так как влияет на напряжения в грунте при послойном суммировании
         /// </summary>
@@ -120,6 +136,10 @@ namespace RDBLL.Entity.Soils
             dataRow["CrcDensity"] = CrcDensity;
             dataRow["FstDesignDensity"] = FstDesignDensity;
             dataRow["SndDesignDensity"] = SndDesignDensity;
+            dataRow["CrcParticularDensity"] = CrcParticularDensity;
+            dataRow["FstParticularDensity"] = FstParticularDensity;
+            dataRow["SndParticularDensity"] = SndParticularDensity;
+            dataRow["PorousityCoef"] = PorousityCoef;
             dataRow["FiltrationCoeff"] = FiltrationCoeff;
         }
         /// <summary>
@@ -147,6 +167,10 @@ namespace RDBLL.Entity.Soils
             CrcDensity = dataRow.Field<double>("CrcDensity");
             FstDesignDensity = dataRow.Field<double>("FstDesignDensity");
             SndDesignDensity = dataRow.Field<double>("SndDesignDensity");
+            CrcParticularDensity = dataRow.Field<double>("CrcParticularDensity");
+            FstParticularDensity = dataRow.Field<double>("FstParticularDensity");
+            SndParticularDensity = dataRow.Field<double>("SndParticularDensity");
+            PorousityCoef = dataRow.Field<double>("PorousityCoef");
             FiltrationCoeff = dataRow.Field<double>("FiltrationCoeff");
         }
         /// <summary>

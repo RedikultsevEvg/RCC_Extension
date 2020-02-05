@@ -48,6 +48,10 @@ namespace RDBLL.Entity.Soils
             CrcDensity = 1950;
             FstDesignDensity = 1800;
             SndDesignDensity = 1900;
+            CrcParticularDensity = 2700;
+            FstParticularDensity = 2700;
+            SndParticularDensity = 2700;
+            PorousityCoef = 0.7;
             ElasticModulus = 2e7;
             SndElasticModulus = 1e8;
             PoissonRatio = 0.3;
