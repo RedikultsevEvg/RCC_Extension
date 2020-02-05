@@ -11,6 +11,7 @@ using System.Linq;
 using System.Windows;
 using RDBLL.Entity.Soils.Processors;
 using RDBLL.Entity.Soils;
+using RDBLL.Common.Service;
 
 namespace RDBLL.Entity.RCC.Foundations.Processors
 {
@@ -154,6 +155,7 @@ namespace RDBLL.Entity.RCC.Foundations.Processors
                     foundation.NdmAreas = GetNdmAreas(foundation);
                     foundation.ForceCurvaturesWithoutWeight = GetForceCurvatures(foundation, foundation.btmLoadSetsWithoutWeight);
                     foundation.ForceCurvaturesWithWeight = GetForceCurvatures(foundation, foundation.btmLoadSetsWithWeight);
+                    foundation.CompressedLayers = CompressedLayers(foundation);
                 }
                 result = true;
             }
@@ -455,9 +457,9 @@ namespace RDBLL.Entity.RCC.Foundations.Processors
             }
             return stressesList;
         }
-        public static List<List<SoilLayerProcessor.CompressedLayer>> CompressedLayers(Foundation foundation)
+        public static List<CompressedLayerList> CompressedLayers(Foundation foundation)
         {
-            List<List<SoilLayerProcessor.CompressedLayer>> mainCompressedLayers = new List<List<SoilLayerProcessor.CompressedLayer>>();
+            List<CompressedLayerList> mainCompressedLayers = new List<CompressedLayerList>();
             double l, b;
             double[] foundationSizes = FoundationProcessor.GetContourSize(foundation);
             l = foundationSizes[1];
@@ -467,8 +469,11 @@ namespace RDBLL.Entity.RCC.Foundations.Processors
             List<double[]> midlleStresses = GetMidlleStresses(foundation);
             foreach (double[] stresses in midlleStresses)
             {
-                List<SoilLayerProcessor.CompressedLayer> compressedLayers = SoilLayerProcessor.CompressedLayers(soilElementaryLayers, l, b, stresses[0], stresses[1]);
-                mainCompressedLayers.Add(compressedLayers);
+                List<CompressedLayer> compressedLayers = SoilLayerProcessor.CompressedLayers(soilElementaryLayers, l, b, stresses[0], stresses[1]);
+                CompressedLayerList compressedLayerList = new CompressedLayerList();
+                compressedLayerList.Id = ProgrammSettings.CurrentTmpId;
+                compressedLayerList.CompressedLayers = compressedLayers;
+                mainCompressedLayers.Add(compressedLayerList);
             }   
             return mainCompressedLayers;
         }

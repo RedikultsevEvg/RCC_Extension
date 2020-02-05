@@ -71,6 +71,10 @@ namespace DAL.DataSets
             DsOperation.AddDoubleColumn(dataTable, "CrcDensity", 1950);
             DsOperation.AddDoubleColumn(dataTable, "FstDesignDensity", 1800);
             DsOperation.AddDoubleColumn(dataTable, "SndDesignDensity", 1900);
+            DsOperation.AddDoubleColumn(dataTable, "CrcParticularDensity", 2700);
+            DsOperation.AddDoubleColumn(dataTable, "FstParticularDensity", 2700);
+            DsOperation.AddDoubleColumn(dataTable, "SndParticularDensity", 2700);
+            DsOperation.AddDoubleColumn(dataTable, "PorousityCoef", 0.7);
             DsOperation.AddDoubleColumn(dataTable, "FiltrationCoeff", 0.0001);
             DsOperation.AddDoubleColumn(dataTable, "ElasticModulus", 2e7);
             DsOperation.AddDoubleColumn(dataTable, "SndElasticModulus", 1e8);
