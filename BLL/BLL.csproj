@@ -53,7 +53,9 @@
     <Compile Include="Common\Geometry\Mathematic\Matrix.cs" />
     <Compile Include="Common\Geometry\RectCrossSection.cs" />
     <Compile Include="Common\Interfaces\IHaveForcesGroups.cs" />
+    <Compile Include="Common\Interfaces\IObserver.cs" />
     <Compile Include="Common\Interfaces\ISavableToDataSet.cs" />
+    <Compile Include="Common\Interfaces\ISubject.cs" />
     <Compile Include="Common\Service\GetEntity.cs" />
     <Compile Include="DrawUtils\SteelBase\DrawFoundation.cs" />
     <Compile Include="DrawUtils\SteelBase\DrawSteelBase.cs" />

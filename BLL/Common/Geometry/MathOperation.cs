@@ -30,9 +30,9 @@ namespace RDBLL.Common.Geometry
         /// <summary>
         /// Линейная интерполяция по диапазону
         /// </summary>
-        /// <param name="xValue"></param>
-        /// <param name="yValue"></param>
-        /// <param name="xn"></param>
+        /// <param name="xValue">Значения по оси абсцисс</param>
+        /// <param name="yValue">Значения по оси ординат</param>
+        /// <param name="xn">Известное значение по оси абсцисс</param>
         /// <returns></returns>
         public static double InterpolateList(List<double> xValue, List<double> yValue, double xn)
         {

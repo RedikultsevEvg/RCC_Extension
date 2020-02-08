@@ -11,7 +11,7 @@ namespace Test.RC.Foundations.NaturalSoilFoundation.CheckStress
     [TestClass]
     public class AlphaCoff
     {
-        double tolerance = 0.05;
+        double tolerance = 0.03;
         [TestMethod]
         public void RectAlpha1_1_0()
         {
@@ -114,6 +114,16 @@ namespace Test.RC.Foundations.NaturalSoilFoundation.CheckStress
             Assert.AreEqual(Expected, Actual, Expected * tolerance);
         }
         [TestMethod]
+        public void RectAlpha12_18_2()
+        {
+            double l = 1.2;
+            double b = 1.8;
+            double z = 2.08;
+            double Actual = SoilLayerProcessor.GetAlphaRect(l, b, z);
+            double Expected = 0.195;
+            Assert.AreEqual(Expected, Actual, Expected * tolerance);
+        }
+        [TestMethod]
         public void RectAlpha3_1_1()
         {
             double l = 3;
@@ -138,6 +148,26 @@ namespace Test.RC.Foundations.NaturalSoilFoundation.CheckStress
         {
             double l = 10;
             double b = 1;
+            double z = 1;
+            double Actual = SoilLayerProcessor.GetAlphaRect(l, b, z);
+            double Expected = 0.55;
+            Assert.AreEqual(Expected, Actual, Expected * tolerance);
+        }
+        [TestMethod]
+        public void RectAlpha1_10_1()
+        {
+            double l = 1;
+            double b = 10;
+            double z = 1;
+            double Actual = SoilLayerProcessor.GetAlphaRect(l, b, z);
+            double Expected = 0.55;
+            Assert.AreEqual(Expected, Actual, Expected * tolerance);
+        }
+        [TestMethod]
+        public void RectAlpha1_20_1()
+        {
+            double l = 1;
+            double b = 10;
             double z = 1;
             double Actual = SoilLayerProcessor.GetAlphaRect(l, b, z);
             double Expected = 0.55;
