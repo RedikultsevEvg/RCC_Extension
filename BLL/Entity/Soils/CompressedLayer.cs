@@ -15,8 +15,8 @@ namespace RDBLL.Entity.Soils
         /// Ссылка на элементарный слой
         /// </summary>
         public SoilElementaryLayer SoilElementaryLayer { get; set; }
-        public double z { get; set; }
-        public double alpha { get; set; }
+        public double Zlevel { get; set; }
+        public double Alpha { get; set; }
         public double SigmZg { get; set; }
         public double SigmZgamma { get; set; }
         public double SigmZp { get; set; }

@@ -18,6 +18,8 @@ using System;
 using RDBLL.Common.Service;
 using RDBLL.Entity.Soils.Processors;
 using RDBLL.Entity.Soils;
+using System.Linq;
+using RDBLL.Entity.Common.NDM;
 
 namespace CSL.Reports
 {
@@ -48,8 +50,8 @@ namespace CSL.Reports
                     foreach (Foundation foundation in level.Foundations)
                     {
                         //Если данные по фундаменту неактуальны выполняем расчет
-                        if (!(foundation.IsLoadCasesActual & foundation.IsPartsActual))
-                        {
+                        //if (!(foundation.IsLoadCasesActual & foundation.IsPartsActual))
+                        //{
                             //Если расчет выполнен успешно
                             if (FoundationProcessor.SolveFoundation(foundation))
                             {
@@ -61,12 +63,12 @@ namespace CSL.Reports
                                 //Иначе показываем пользователю, что произошла ошибка расчета
                                 MessageBox.Show($" фундамент: {foundation.Name} Ошибка расчета");
                             }
-                        }
-                        else //Если актуальны, то сразу подготавливаем отчет
-                        {
+                        //}
+                        //else //Если актуальны, то сразу подготавливаем отчет
+                        //{
                             //Заносим результаты расчета в таблицы датасета
-                            ProcessSubElements(Foundations, foundation);
-                        }
+                            //ProcessSubElements(Foundations, foundation);
+                        //}
                     }
                 }
             }
@@ -83,7 +85,7 @@ namespace CSL.Reports
         /// </summary>
         /// <param name="dataTable"></param>
         /// <param name="foundation"></param>
-        private void ProcessFoundation(DataTable dataTable, Foundation foundation)
+        private DataRow ProcessFoundation(DataTable dataTable, Foundation foundation)
         {
             double foundationWidth = FoundationProcessor.GetContourSize(foundation)[0];
             double foundationLength = FoundationProcessor.GetContourSize(foundation)[1];
@@ -116,6 +118,7 @@ namespace CSL.Reports
                             Wy * MeasureUnitConverter.GetCoefficient(5)};
 
             dataTable.Rows.Add(newFoundation);
+            return newFoundation;
         }
         /// <summary>
         /// Добавление в датасет данных по нагрузкам
@@ -209,9 +212,11 @@ namespace CSL.Reports
                 FoundationStresses.Rows.Add(newTableItem);
             }
         }
-        private void ProcessSettlement(Foundation foundation)
+        private void ProcessSettlement(Foundation foundation, DataRow newFoundation)
         {
             List<CompressedLayerList> mainCompressedLayers = foundation.CompressedLayers;
+            List<double> Settlements = new List<double>();
+            List<double> ComressionHeights = new List<double>();
             double stressCoefficient = MeasureUnitConverter.GetCoefficient(3);
             DataTable SettlementSets = dataSet.Tables["SettlementSets"];
             DataTable ComressedLayers = dataSet.Tables["ComressedLayers"];
@@ -220,13 +225,34 @@ namespace CSL.Reports
             {
                 int setId = ProgrammSettings.CurrentTmpId;
                 DataRow newTableItem = SettlementSets.NewRow();
+                double sumSettlement = compressedLayersList.CompressedLayers[0].SumSettlement;
+                double roundSumSettlement = Math.Round(sumSettlement * MeasureUnitConverter.GetCoefficient(0), 3);
+                double compressionHeight = Math.Round(SoilLayerProcessor.ComressedHeight(compressedLayersList.CompressedLayers), 3);
+                Settlements.Add(sumSettlement);
+                ComressionHeights.Add(compressionHeight);
+                SumForces sumForces = new SumForces(foundation.LoadCases[i], false);
+                double Nz = sumForces.ForceMatrix[2,0];
+                double Mx = sumForces.ForceMatrix[0, 0];
+                double My = sumForces.ForceMatrix[1, 0];
                 newTableItem.ItemArray = new object[]
                         { setId,
                         foundation.Id,
                         foundation.LoadCases[i].Name,
-                        Math.Round(compressedLayersList.CompressedLayers[0].SumSettlement * MeasureUnitConverter.GetCoefficient(0), 3),
-                        Math.Round(SoilLayerProcessor.ComressedHeight(compressedLayersList.CompressedLayers), 3)
+                        roundSumSettlement,
+                        compressionHeight
                         };
+                double[] rotates = SoilLayerProcessor.Rotates(Mx, My, compressedLayersList.CompressedLayers, foundation);
+                newTableItem.SetField("SumRotateX", Math.Round(rotates[0], 5));
+                newTableItem.SetField("SumRotateY", Math.Round(rotates[1], 5));
+                string NzStiffnessString = "---";
+                if (sumSettlement != 0)
+                {
+                    double NzStiffness = Nz / sumSettlement;
+                    double NzStiffnessRound = Math.Round(NzStiffness * MeasureUnitConverter.GetCoefficient(1) / MeasureUnitConverter.GetCoefficient(0), 3);
+                    NzStiffnessString = Convert.ToString(NzStiffnessRound);
+                }
+                newTableItem.SetField("NzStiffness", NzStiffnessString);
+
                 SettlementSets.Rows.Add(newTableItem);
                 i++;
                 foreach (CompressedLayer compressedLayer in compressedLayersList.CompressedLayers)
@@ -235,9 +261,10 @@ namespace CSL.Reports
                     newSettleItem.ItemArray = new object[]
                         { ProgrammSettings.CurrentTmpId,
                         setId,
-                        0,
+                        Math.Round(compressedLayer.Zlevel, 3),
                         Math.Round(compressedLayer.SoilElementaryLayer.TopLevel, 3),
                         Math.Round(compressedLayer.SoilElementaryLayer.BottomLevel, 3),
+                        Math.Round(compressedLayer.Alpha, 3),
                         Math.Round(compressedLayer.SigmZg * stressCoefficient, 3),
                         Math.Round(compressedLayer.SigmZgamma * stressCoefficient, 3),
                         Math.Round(compressedLayer.SigmZp * stressCoefficient, 3),
@@ -247,14 +274,16 @@ namespace CSL.Reports
                     ComressedLayers.Rows.Add(newSettleItem);
                 }
             }
+            newFoundation.SetField("MinSettlement", Settlements.Min());
+            newFoundation.SetField("MaxCompressionHeight", ComressionHeights.Max());
         }
         private void ProcessSubElements(DataTable Foundations, Foundation foundation)
         {
-            ProcessFoundation(Foundations, foundation);
+            DataRow newFoundation = ProcessFoundation(Foundations, foundation);
             ProcessFoundationParts(foundation);
             ProcessLoadSets(foundation);
             ProcessBtmStresses(foundation);
-            ProcessSettlement(foundation);
+            ProcessSettlement(foundation, newFoundation);
         }
     }
 }

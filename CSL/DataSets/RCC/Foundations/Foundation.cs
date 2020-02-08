@@ -34,6 +34,8 @@ namespace CSL.DataSets.RCC.Foundations
             DsOperation.AddDoubleColumn(newTable, "Area");
             DsOperation.AddDoubleColumn(newTable, "Wx");
             DsOperation.AddDoubleColumn(newTable, "Wy");
+            DsOperation.AddDoubleColumn(newTable, "MinSettlement");
+            DsOperation.AddDoubleColumn(newTable, "MaxCompressionHeight");
             #endregion
             #region FoundationParts
             newTable = new DataTable("FoundationParts");
@@ -92,6 +94,11 @@ namespace CSL.DataSets.RCC.Foundations
             DsOperation.AddNameColumn(newTable);
             DsOperation.AddDoubleColumn(newTable, "MinSettlement");
             DsOperation.AddDoubleColumn(newTable, "CompressedHeight");
+            DsOperation.AddDoubleColumn(newTable, "SumRotateX");
+            DsOperation.AddDoubleColumn(newTable, "SumRotateY");
+            DsOperation.AddStringColumn(newTable, "NzStiffness");
+            DsOperation.AddStringColumn(newTable, "MxStiffness");
+            DsOperation.AddStringColumn(newTable, "MyStiffness");
             #endregion
             #region ComressedLayers
             newTable = new DataTable("ComressedLayers");
@@ -101,6 +108,7 @@ namespace CSL.DataSets.RCC.Foundations
             DsOperation.AddDoubleColumn(newTable, "ZLevel");
             DsOperation.AddDoubleColumn(newTable, "TopLevel");
             DsOperation.AddDoubleColumn(newTable, "BtmLevel");
+            DsOperation.AddDoubleColumn(newTable, "Alpha");
             DsOperation.AddDoubleColumn(newTable, "SigmZg");
             DsOperation.AddDoubleColumn(newTable, "SigmZgamma");
             DsOperation.AddDoubleColumn(newTable, "SigmZp");

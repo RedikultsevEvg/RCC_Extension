@@ -138,10 +138,10 @@ namespace RDBLL.Entity.RCC.Foundations.Processors
             #endregion
             try
             {
-                if (!foundation.IsLoadCasesActual || !foundation.IsPartsActual)
-                {
-                    if (!foundation.IsLoadCasesActual)
-                    {
+                //if (!foundation.IsLoadCasesActual || !foundation.IsPartsActual)
+                //{
+                //    if (!foundation.IsLoadCasesActual)
+                //    {
                         foundation.LoadCases = LoadSetProcessor.GetLoadCases(foundation.ForcesGroups);
                         //Загружения с учетом веса фундамента и грунта
                         foundation.btmLoadSetsWithWeight = GetBottomLoadCasesWithWeight(foundation);
@@ -150,13 +150,13 @@ namespace RDBLL.Entity.RCC.Foundations.Processors
                         double[] delta = GetDeltaDistance(foundation);
                         foundation.btmLoadSetsWithoutWeight = LoadSetProcessor.GetLoadSetsTransform(foundation.LoadCases, delta);
                         foundation.IsLoadCasesActual = true;
-                    }
+                    //}
                     foundation.IsPartsActual = true;
                     foundation.NdmAreas = GetNdmAreas(foundation);
                     foundation.ForceCurvaturesWithoutWeight = GetForceCurvatures(foundation, foundation.btmLoadSetsWithoutWeight);
                     foundation.ForceCurvaturesWithWeight = GetForceCurvatures(foundation, foundation.btmLoadSetsWithWeight);
                     foundation.CompressedLayers = CompressedLayers(foundation);
-                }
+                //}
                 result = true;
             }
             catch (Exception ex)

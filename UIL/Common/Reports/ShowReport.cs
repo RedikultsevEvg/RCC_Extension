@@ -62,6 +62,17 @@ namespace RDUIL.Common.Reports
             newReportCard.RegisterDelegate(new ReportCard.CommandDelegate(ShowFoundationReport));
             reportCards.Add(newReportCard);
 
+            newReportCard = new ReportCard
+            {
+                Name = "Отчет по расчету осадки",
+                FileName = directory + "Settlements.frx",
+                Description = "Полный отчет по методу послойного суммирования",
+                ImageName = directory + "Foundations.png",
+                ToolTip = ""
+            };
+            newReportCard.RegisterDelegate(new ReportCard.CommandDelegate(ShowFoundationReport));
+            reportCards.Add(newReportCard);
+
             wndReports wndReports = new wndReports(reportCards);
             wndReports.ShowDialog();
         }
