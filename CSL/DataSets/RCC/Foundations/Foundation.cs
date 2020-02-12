@@ -34,8 +34,22 @@ namespace CSL.DataSets.RCC.Foundations
             DsOperation.AddDoubleColumn(newTable, "Area");
             DsOperation.AddDoubleColumn(newTable, "Wx");
             DsOperation.AddDoubleColumn(newTable, "Wy");
-            DsOperation.AddDoubleColumn(newTable, "MinSettlement");
-            DsOperation.AddDoubleColumn(newTable, "MaxCompressionHeight");
+            DsOperation.AddDoubleColumn(newTable, "MinSndAvgStressesWithWeight");
+            DsOperation.AddDoubleColumn(newTable, "MinSndMiddleStressesWithWeight");
+            DsOperation.AddDoubleColumn(newTable, "MinSndCornerStressesWithWeight");
+            DsOperation.AddDoubleColumn(newTable, "MaxSndCornerStressesWithWeight");
+            DsOperation.AddDoubleColumn(newTable, "MaxSndTensionAreaRatioWithWeight");
+            DsOperation.AddDoubleColumn(newTable, "SettlementMin");
+            DsOperation.AddDoubleColumn(newTable, "CompressionHeightMax");
+            DsOperation.AddDoubleColumn(newTable, "IncXMax");
+            DsOperation.AddDoubleColumn(newTable, "IncYMax");
+            DsOperation.AddDoubleColumn(newTable, "IncXYMax");
+            DsOperation.AddStringColumn(newTable, "NzStiffnessStringMin");
+            DsOperation.AddStringColumn(newTable, "MxStiffnessStringMin");
+            DsOperation.AddStringColumn(newTable, "MyStiffnessStringMin");
+            DsOperation.AddStringColumn(newTable, "NzStiffnessStringMax");
+            DsOperation.AddStringColumn(newTable, "MxStiffnessStringMax");
+            DsOperation.AddStringColumn(newTable, "MyStiffnessStringMax");
             #endregion
             #region FoundationParts
             newTable = new DataTable("FoundationParts");
@@ -96,6 +110,7 @@ namespace CSL.DataSets.RCC.Foundations
             DsOperation.AddDoubleColumn(newTable, "CompressedHeight");
             DsOperation.AddDoubleColumn(newTable, "SumRotateX");
             DsOperation.AddDoubleColumn(newTable, "SumRotateY");
+            DsOperation.AddDoubleColumn(newTable, "SumRotateXY");
             DsOperation.AddStringColumn(newTable, "NzStiffness");
             DsOperation.AddStringColumn(newTable, "MxStiffness");
             DsOperation.AddStringColumn(newTable, "MyStiffness");

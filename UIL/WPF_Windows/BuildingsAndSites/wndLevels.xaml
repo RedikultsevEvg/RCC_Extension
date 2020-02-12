@@ -54,7 +54,9 @@
             <Button x:Name="BtnEdit" Style="{StaticResource EditServiceButton}" Click="BtnEdit_Click">
                 <Image x:Name="EditPng" Style="{StaticResource ServiceButtonImage}" Source="{DynamicResource IconEdit40}"/>
             </Button>
-            <Button x:Name="BtnReport" Style="{StaticResource ReportServiceButton}" Click="BtnReport_Click"/>
+            <Button x:Name="BtnReport" Style="{StaticResource ReportServiceButton}" Click="BtnReport_Click">
+                <Image x:Name="ReportPng" Style="{StaticResource ServiceButtonImage}" Source="{DynamicResource IconReport}"/>
+            </Button>
             <Button x:Name="BtnChildItem" Style="{StaticResource ServiceButton}" Click="BtnChildItem_Click">
                 <Button.ToolTip>
                     <TextBlock Margin="3" Foreground="Black"><Run Text="..."/></TextBlock>

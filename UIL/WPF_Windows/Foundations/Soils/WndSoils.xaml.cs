@@ -74,11 +74,19 @@ namespace RDUIL.WPF_Windows.Foundations.Soils
                 if (result == Winforms.DialogResult.Yes)
                 {
                     int a = LvMain.SelectedIndex;
-                    if (LvMain.Items.Count == 1) LvMain.UnselectAll();
-                    else if (a < (LvMain.Items.Count - 1)) LvMain.SelectedIndex = a + 1;
-                    else LvMain.SelectedIndex = a - 1;
-                    _collection.RemoveAt(a);
-                    ProgrammSettings.IsDataChanged = true;
+                    //Проверка на содержание грунта в других элементах, например в скважинах
+                    if (_collection[a].HasChild())
+                    {
+                        MessageBox.Show("Нельзя удалять грунт, содержащийся в других элементах");
+                    }
+                    else
+                    {
+                        if (LvMain.Items.Count == 1) LvMain.UnselectAll();
+                        else if (a < (LvMain.Items.Count - 1)) LvMain.SelectedIndex = a + 1;
+                        else LvMain.SelectedIndex = a - 1;
+                        _collection.RemoveAt(a);
+                        ProgrammSettings.IsDataChanged = true;
+                    }
                 }
             }
             else

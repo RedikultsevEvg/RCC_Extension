@@ -17,8 +17,9 @@ namespace RDBLL.Entity.Soils
     /// <summary>
     /// Класс геологического разреза
     /// </summary>
-    public class SoilSection : ISavableToDataSet, IDataErrorInfo
+    public class SoilSection : ISavableToDataSet, IDataErrorInfo, IRDObservable
     {
+        #region Properies
         /// <summary>
         /// Код разреза
         /// </summary>
@@ -63,12 +64,15 @@ namespace RDBLL.Entity.Soils
         /// Наименование линейных единиц измерения
         /// </summary>
         public string LinearMeasure { get { return MeasureUnitConverter.GetUnitLabelText(0); } }
+        private List<IRDObserver> Observers;
+        #endregion
         /// <summary>
         /// Конструктор без параметров
         /// </summary>
         public SoilSection()
         {
             SoilLayers = new ObservableCollection<SoilLayer>();
+            Observers = new List<IRDObserver>();
         }
         /// <summary>
         /// Конструктор по строительному объекту
@@ -86,6 +90,7 @@ namespace RDBLL.Entity.Soils
             CenterX = 0;
             CenterY = 0;
             SoilLayers = new ObservableCollection<SoilLayer>();
+            Observers = new List<IRDObserver>();
         }
         #region SaveToDataset
         /// <summary>
@@ -175,6 +180,44 @@ namespace RDBLL.Entity.Soils
                 dataTable.Rows.Remove(soilRows[i]);
             }
             dataTable.AcceptChanges();
+        }
+        #endregion
+        #region IRDObservable
+        /// <summary>
+        /// Добавляет объект в коллекцию наблюдателей
+        /// </summary>
+        /// <param name="obj"></param>
+        public void AddObserver(IRDObserver obj)
+        {
+            Observers.Add(obj);
+        }
+        /// <summary>
+        /// Удаляет объект из коллекции наблюдателей
+        /// </summary>
+        /// <param name="obj"></param>
+        public void RemoveObserver(IRDObserver obj)
+        {
+            Observers.Remove(obj);
+        }
+        /// <summary>
+        /// Уведомляет наблюдателей об изменении
+        /// </summary>
+        public void NotifyObservers()
+        {
+            foreach (IRDObserver observer in Observers)
+            {
+                observer.Update();
+            }
+        }
+        /// <summary>
+        /// Возвращат наличие объектов, где применяется данный объект
+        /// </summary>
+        /// <returns></returns>
+        public bool HasChild()
+        {
+            bool result = false;
+            if (Observers.Count > 0) return true;
+            return result;
         }
         #endregion
         #region errors

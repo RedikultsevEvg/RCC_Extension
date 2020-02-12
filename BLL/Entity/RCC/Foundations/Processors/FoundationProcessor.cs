@@ -12,6 +12,8 @@ using System.Windows;
 using RDBLL.Entity.Soils.Processors;
 using RDBLL.Entity.Soils;
 using RDBLL.Common.Service;
+using RDBLL.Entity.MeasureUnits;
+
 
 namespace RDBLL.Entity.RCC.Foundations.Processors
 {
@@ -20,6 +22,26 @@ namespace RDBLL.Entity.RCC.Foundations.Processors
     /// </summary>
     public class FoundationProcessor
     {
+        public class SettleMentResult
+        {
+            public double SettleMent { get; set; }
+            public double CompressionHeight { get; set; }
+            public double IncX { get; set; }
+            public double IncY { get; set; }
+            public double IncXY { get; set; }
+            public double NzStiffnessMin { get; set; }
+            public double MxStiffnessMin { get; set; }
+            public double MyStiffnessMin { get; set; }
+            public double NzStiffnessMax { get; set; }
+            public double MxStiffnessMax { get; set; }
+            public double MyStiffnessMax { get; set; }
+            public string NzStiffnessStringMin { get; set; }
+            public string MxStiffnessStringMin { get; set; }
+            public string MyStiffnessStringMin { get; set; }
+            public string NzStiffnessStringMax { get; set; }
+            public string MxStiffnessStringMax { get; set; }
+            public string MyStiffnessStringMax { get; set; }
+        }
         /// <summary>
         /// Возвращает габаритные размеры фундамента
         /// </summary>
@@ -407,9 +429,24 @@ namespace RDBLL.Entity.RCC.Foundations.Processors
                 double[] avgStress = GetAvgStresses(foundation, forceCurvature);
                 double[] areas = GetStressedAreas(foundation.NdmAreas, forceCurvature);
                 double[] stress = new double[14]
-                {avgStress[0], crcCenterStress, crcMiddleSresses.Min(), crcCornerSresses.Min(), crcCornerSresses.Max(),
-                     avgStress[1], designCenterStress, designMiddleSresses.Min(), designCornerSresses.Min(), designCornerSresses.Max(),
-                     areas[0], areas[1], areas[2], areas[3]
+                {
+                    //Для 2-й группы ПС
+                    avgStress[0], //[0] средние напряжения
+                    crcCenterStress, //[1] напряжения в центре 
+                    crcMiddleSresses.Min(), //[2] минимальные напряжения в середине грани
+                    crcCornerSresses.Min(), //[3] минимальные напряжения в углу
+                    crcCornerSresses.Max(), //[4] максимальные напряжения в углу (для оценки отрыва)
+                    //Для 1-й группы ПС
+                    avgStress[1], //[5] 
+                    designCenterStress, //[6] 
+                    designMiddleSresses.Min(), //[7] 
+                    designCornerSresses.Min(), //[8] 
+                    designCornerSresses.Max(), //[9] 
+                    //Площади сжатой и растянутой части
+                    areas[0], //[10] 
+                    areas[1], //[11] 
+                    areas[2], //[12] 
+                    areas[3] //[13] 
                 };
                 stresses.Add(stress);
             }
@@ -476,6 +513,142 @@ namespace RDBLL.Entity.RCC.Foundations.Processors
                 mainCompressedLayers.Add(compressedLayerList);
             }   
             return mainCompressedLayers;
+        }
+        /// <summary>
+        /// Возвращает суммарные результаты по массиву напряжений
+        /// </summary>
+        /// <param name="stressesList"></param>
+        /// <returns></returns>
+        public static double[] MinMaxStresses(List<double[]> stressesList)
+        {
+            double[] minMaxStresses = new double[5];
+            List<double> MinSndAvgStressesWithWeight = new List<double>();
+            List<double> MinSndMiddleStressesWithWeight = new List<double>();
+            List<double> MinSndCornerStressesWithWeight = new List<double>();
+            List<double> MaxSndCornerStressesWithWeight = new List<double>();
+            List<double> MaxSndTensionAreaRatioWithWeight = new List<double>();
+            foreach (double[] stresses in stressesList)
+            {
+                MinSndAvgStressesWithWeight.Add(stresses[0]);
+                MinSndMiddleStressesWithWeight.Add(stresses[2]);
+                MinSndCornerStressesWithWeight.Add(stresses[3]);
+                MaxSndCornerStressesWithWeight.Add(stresses[4]);
+                MaxSndTensionAreaRatioWithWeight.Add(stresses[10] / (stresses[10] + stresses[11]));
+            }
+
+            minMaxStresses[0] = MinSndAvgStressesWithWeight.Min(); //средние напряжения
+            minMaxStresses[1] = MinSndMiddleStressesWithWeight.Min(); //краевое напряжение
+            minMaxStresses[2] = MinSndCornerStressesWithWeight.Min(); //минимальное угловое напряжение
+            minMaxStresses[3] = MaxSndCornerStressesWithWeight.Max(); //максимальное угловое напряжение
+            minMaxStresses[4] = MaxSndTensionAreaRatioWithWeight.Max(); //максимальный процент площади отрыва
+
+            return minMaxStresses;
+        }
+        public static SettleMentResult GetSettleMentResult (Foundation foundation)
+        {
+            SettleMentResult settleMentResult = new SettleMentResult();
+            List<CompressedLayerList> mainCompressedLayers = foundation.CompressedLayers;
+
+            List<double> Settlements = new List<double>();
+            List<double> ComressionHeights = new List<double>();
+
+            List<double> IncXs = new List<double>();
+            List<double> IncYs = new List<double>();
+            List<double> IncXYs = new List<double>();
+
+            List<double> NzStiffnesses = new List<double>();
+            List<double> MxStiffnesses = new List<double>();
+            List<double> MyStiffnesses = new List<double>();
+
+            int count = mainCompressedLayers.Count;
+            for (int i = 0; i<count; i++)
+            {
+                CompressedLayerList compressedLayersList = mainCompressedLayers[i];
+                double sumSettlement = compressedLayersList.CompressedLayers[0].SumSettlement;
+                Settlements.Add(sumSettlement);
+                double compressionHeight = SoilLayerProcessor.ComressedHeight(compressedLayersList.CompressedLayers);
+                ComressionHeights.Add(compressionHeight);
+
+                SumForces sumForces = new SumForces(foundation.LoadCases[i], false);
+                double Nz = sumForces.ForceMatrix[2, 0];
+                double Mx = sumForces.ForceMatrix[0, 0];
+                double My = sumForces.ForceMatrix[1, 0];
+                double[] rotates = SoilLayerProcessor.Inclination(Mx, My, compressedLayersList.CompressedLayers, foundation);
+                double MxInc = rotates[0];
+                double MyInc = rotates[1];
+                double MxyInc = Math.Sqrt(MxInc * MxInc + MyInc * MyInc);
+                IncXs.Add(Math.Abs(MxInc));
+                IncYs.Add(Math.Abs(MyInc));
+                IncXYs.Add(MxyInc);
+
+                double NzStiffness;
+                double MxStiffness;
+                double MyStiffness;
+
+                if (sumSettlement != 0)
+                {
+                    NzStiffness = Nz / sumSettlement;
+                    NzStiffnesses.Add(Math.Abs(NzStiffness));
+                    if (MxInc != 0)
+                    {
+                        MxStiffness = Mx / MxInc;
+                        MxStiffnesses.Add(Math.Abs(MxStiffness));
+                    }
+                    if (MyInc != 0)
+                    {
+                        MyStiffness = My / MyInc;
+                        MyStiffnesses.Add(Math.Abs(MyStiffness));
+                    }
+                }
+
+
+            }
+            settleMentResult.SettleMent = Settlements.Min();
+            settleMentResult.CompressionHeight = ComressionHeights.Max();
+            settleMentResult.IncX = IncXs.Max();
+            settleMentResult.IncY = IncYs.Max();
+            settleMentResult.IncXY = IncXYs.Max();
+
+            settleMentResult.NzStiffnessStringMax = "---";
+            settleMentResult.MxStiffnessStringMax = "---";
+            settleMentResult.MyStiffnessStringMax = "---";
+
+            settleMentResult.NzStiffnessStringMin = "---";
+            settleMentResult.MxStiffnessStringMin = "---";
+            settleMentResult.MyStiffnessStringMin = "---";
+
+            if (NzStiffnesses.Count() > 0)
+            {
+                settleMentResult.NzStiffnessMax = NzStiffnesses.Max();
+                double NzStiffnessRound = Math.Round(settleMentResult.NzStiffnessMax * MeasureUnitConverter.GetCoefficient(1) / MeasureUnitConverter.GetCoefficient(0), 3);
+                settleMentResult.NzStiffnessStringMax = Convert.ToString(NzStiffnessRound);
+
+                settleMentResult.NzStiffnessMin = NzStiffnesses.Min();
+                NzStiffnessRound = Math.Round(settleMentResult.NzStiffnessMin * MeasureUnitConverter.GetCoefficient(1) / MeasureUnitConverter.GetCoefficient(0), 3);
+                settleMentResult.NzStiffnessStringMin = Convert.ToString(NzStiffnessRound);
+            }
+            if (MxStiffnesses.Count() > 0)
+            {
+                settleMentResult.MxStiffnessMax = MxStiffnesses.Max();
+                double MxStiffnessRound = Math.Round(settleMentResult.MxStiffnessMax * MeasureUnitConverter.GetCoefficient(2), 3);
+                settleMentResult.MxStiffnessStringMax = Convert.ToString(MxStiffnessRound);
+
+                settleMentResult.MxStiffnessMin = MxStiffnesses.Min();
+                MxStiffnessRound = Math.Round(settleMentResult.MxStiffnessMin * MeasureUnitConverter.GetCoefficient(2), 3);
+                settleMentResult.MxStiffnessStringMin = Convert.ToString(MxStiffnessRound);
+            }
+            if (MyStiffnesses.Count() > 0)
+            {
+                settleMentResult.MyStiffnessMax = MyStiffnesses.Max();
+                double MyStiffnessRound = Math.Round(settleMentResult.MyStiffnessMax * MeasureUnitConverter.GetCoefficient(2), 3);
+                settleMentResult.MyStiffnessStringMax = Convert.ToString(MyStiffnessRound);
+
+                settleMentResult.MyStiffnessMin = MyStiffnesses.Min();
+                MyStiffnessRound = Math.Round(settleMentResult.MyStiffnessMin * MeasureUnitConverter.GetCoefficient(2), 3);
+                settleMentResult.MyStiffnessStringMin = Convert.ToString(MyStiffnessRound);
+            }
+            
+            return settleMentResult;
         }
     }
 }
