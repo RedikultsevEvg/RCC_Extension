@@ -9,14 +9,16 @@ using RDBLL.Entity.MeasureUnits;
 using RDBLL.Common.Interfaces;
 using System.Data;
 using DAL.Common;
+using System.Collections.ObjectModel;
 
 namespace RDBLL.Entity.Soils
 {
     /// <summary>
     /// Абстрактный класс грунта
     /// </summary>
-    public abstract class Soil : ISavableToDataSet
+    public abstract class Soil : ISavableToDataSet, IRDObservable
     {
+        #region Properties
         /// <summary>
         /// Код грунта
         /// </summary>
@@ -82,6 +84,8 @@ namespace RDBLL.Entity.Soils
         /// Единицы измерения коэффициента фильтрации
         /// </summary>
         public string FiltrationMeasure { get { return MeasureUnitConverter.GetUnitLabelText(14); } }
+        public List<IRDObserver> Observers;
+        #endregion
 
         /// <summary>
         /// Конструктор по строительному объекту
@@ -95,6 +99,7 @@ namespace RDBLL.Entity.Soils
             Name = "ИГЭ-" + (buildingSite.Soils.Count + 1);
             Description = "Суглинок песчанистый, тугопластичный";
             FiltrationCoeff = 0.0001;
+            Observers = new List<IRDObserver>();
         }
 
         /// <summary>
@@ -182,15 +187,44 @@ namespace RDBLL.Entity.Soils
             DataTable dataTable;
             dataTable = dataSet.Tables["SoilLayers"];
             var soilLayers = from dataRow in dataTable.AsEnumerable()
-                        where dataRow.Field<int>("SoilId") == Id
-                        select dataRow;
+                             where dataRow.Field<int>("SoilId") == Id
+                             select dataRow;
             int count = 0;
             foreach (DataRow dataRow in soilLayers)
             {
                 count++;
             }
-            if (count > 0 ) { throw new Exception("Нельзя удалить грунт, который участвует в скважинах"); }
+            if (count > 0) { throw new Exception("Нельзя удалить грунт, который участвует в скважинах"); }
             else { DsOperation.DeleteRow(dataSet, "Soils", Id); }
+        }
+        #region IObservable
+        public void AddObserver(IRDObserver obj)
+        {
+            Observers.Add(obj);
+        }
+        public void RemoveObserver(IRDObserver obj)
+        {
+            Observers.Remove(obj);
+        }
+        public void NotifyObservers()
+        {
+            foreach (IRDObserver observer in Observers)
+            {
+                observer.Update();
+            }
+        }
+        #endregion
+        public bool HasChild()
+        {
+            bool result = false;
+            foreach (SoilSection soilSection in BuildingSite.SoilSections)
+            {
+                foreach (SoilLayer soilLayer in soilSection.SoilLayers)
+                {
+                    if (soilLayer.Soil.Id == Id) return true;
+                }
+            }
+            return result;
         }
         public string Error { get { throw new NotImplementedException(); } }
         public string this[string columnName]
@@ -212,5 +246,6 @@ namespace RDBLL.Entity.Soils
                 return error;
             }
         }
+
     }
 }

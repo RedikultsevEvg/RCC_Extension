@@ -6,9 +6,8 @@ using System.Threading.Tasks;
 
 namespace RDBLL.Common.Interfaces
 {
-    interface IRdObserver
+    public interface IRDObserver
     {
         void Update();
-        void UnSubScribe();
     }
 }

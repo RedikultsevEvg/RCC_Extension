@@ -47,6 +47,7 @@ namespace RDUIL.WPF_Windows.Foundations
             wndFoundation.ShowDialog();
             if (wndFoundation.DialogResult == true)
             {
+                foundation.RenewSoilSection();
                 try
                 {
                     foundation.SaveToDataSet(ProgrammSettings.CurrentDataSet, false);
@@ -81,6 +82,7 @@ namespace RDUIL.WPF_Windows.Foundations
                     if (LvMain.Items.Count == 1) LvMain.UnselectAll();
                     else if (a < (LvMain.Items.Count - 1)) LvMain.SelectedIndex = a + 1;
                     else LvMain.SelectedIndex = a - 1;
+                    _collection[a].DeleteFromObservables();
                     _collection[a].DeleteFromDataSet(ProgrammSettings.CurrentDataSet);
                     _collection.RemoveAt(a);
 
@@ -103,6 +105,7 @@ namespace RDUIL.WPF_Windows.Foundations
                 wndChild.ShowDialog();
                 if (wndChild.DialogResult == true)
                 {
+                    foundation.RenewSoilSection();
                     try
                     {
                         foundation.SaveToDataSet(ProgrammSettings.CurrentDataSet, false);

@@ -302,7 +302,7 @@ namespace RDBLL.Entity.Soils.Processors
             List<double> coff_5_9_0 = new List<double> { 1, 1.2, 1.5, 2.0, 3.0, 5.0, 10.0 };
             List<double> coff_5_9_1 = new List<double> { 0.5, 0.57, 0.68, 0.82, 1.17, 1.42, 2.0 };
             List<double> coff_5_9_2 = new List<double> { 0.5, 0.43, 0.36, 0.28, 0.20, 0.12, 0.07 };
-            if (width < length)
+            if (width > length)
             {
                 cofficient[0] = MathOperation.InterpolateList(coff_5_9_0, coff_5_9_1, betta);
                 cofficient[1] = MathOperation.InterpolateList(coff_5_9_0, coff_5_9_2, betta);
@@ -359,9 +359,9 @@ namespace RDBLL.Entity.Soils.Processors
         /// <param name="compressedLayers">Коллекция сжатых слоев грунта</param>
         /// <param name="foundation">Фундамент</param>
         /// <returns></returns>
-        public static double[] Rotates(double Mx, double My, List<CompressedLayer> compressedLayers, Foundation foundation)
+        public static double[] Inclination(double Mx, double My, List<CompressedLayer> compressedLayers, Foundation foundation)
         {
-            double[] rotates = new double[2] { 0, 0 };
+            double[] inclination = new double[2] { 0, 0 };
             double[] sizes = FoundationProcessor.GetContourSize(foundation);
             double[] k = GetK_5_9_Coff(foundation);
             double d = AvgPoisonCoff(compressedLayers);
@@ -369,15 +369,15 @@ namespace RDBLL.Entity.Soils.Processors
             {
                 double length = sizes[1];
                 length /= 2;
-                rotates[0] = d * k[1] * Mx / (length * length * length);
+                inclination[0] = d * k[1] * Mx / (length * length * length);
             }
             if (My != 0)
             {
                 double length = sizes[0];
                 length /= 2;
-                rotates[1] = d * k[0] * My / (length * length * length);
+                inclination[1] = d * k[0] * My / (length * length * length);
             }
-            return rotates;
+            return inclination;
         }
     }
 }

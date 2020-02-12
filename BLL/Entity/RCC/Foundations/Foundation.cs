@@ -19,7 +19,7 @@ namespace RDBLL.Entity.RCC.Foundations
     /// <summary>
     /// Класс столбчатого фундамента
     /// </summary>
-    public class Foundation : IHaveForcesGroups, ISavableToDataSet, IDataErrorInfo
+    public class Foundation : IHaveForcesGroups, ISavableToDataSet, IDataErrorInfo, IRDObserver
     {
         #region fields and properties
         /// <summary>
@@ -197,6 +197,7 @@ namespace RDBLL.Entity.RCC.Foundations
         }
         #endregion
         #region methods
+        #region IODataset
         /// <summary>
         /// Сохраняет класс в датасет
         /// </summary>
@@ -284,11 +285,7 @@ namespace RDBLL.Entity.RCC.Foundations
             //Если у фундамента есть код скважины
             if (!(SoilSectionId is null))
             {
-                //получаем ссылку на скважину
-                foreach (SoilSection soilSection in this.Level.Building.BuildingSite.SoilSections)
-                {
-                    if (soilSection.Id == SoilSectionId) { SoilSection = soilSection; }
-                }
+                RenewSoilSection();
             }
 
         }
@@ -312,6 +309,31 @@ namespace RDBLL.Entity.RCC.Foundations
         {
             DsOperation.DeleteRow(dataSet, tableName, "FoundationId", Id);
 
+        }
+        #endregion
+        #region IRDObserver
+        public void Update()
+        {
+            IsLoadCasesActual = false;
+            IsPartsActual = false;
+        }
+        #endregion
+        public void RenewSoilSection()
+        {
+            //получаем ссылку на скважину
+            foreach (SoilSection soilSection in this.Level.Building.BuildingSite.SoilSections)
+            {
+                if (!(SoilSection is null)) SoilSection.RemoveObserver(this);
+                if (soilSection.Id == SoilSectionId)
+                {
+                    SoilSection = soilSection;
+                    SoilSection.AddObserver(this);
+                }
+            }
+        }
+        public void DeleteFromObservables()
+        {
+            if (!(SoilSection is null)) SoilSection.RemoveObserver(this);
         }
         #endregion
         /// <summary>

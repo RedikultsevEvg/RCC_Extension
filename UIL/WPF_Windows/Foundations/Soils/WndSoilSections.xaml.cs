@@ -116,6 +116,28 @@ namespace RDUIL.WPF_Windows.Foundations.Soils
         {
             bool canDelete = true;
             int a = LvMain.SelectedIndex;
+            canDelete = CanDelete(a);     
+            
+            //Если скважину можно удалить
+            if (canDelete)
+            {//удаляем
+                if (LvMain.Items.Count == 1) LvMain.UnselectAll();
+                else if (a < (LvMain.Items.Count - 1)) LvMain.SelectedIndex = a + 1;
+                else LvMain.SelectedIndex = a - 1;
+                _collection[a].DeleteFromDataSet(ProgrammSettings.CurrentDataSet);
+                _collection.RemoveAt(a);
+                ProgrammSettings.IsDataChanged = true;
+                LvMain.SelectedIndex = _collection.Count - 1;
+            }
+        }
+       private bool CanDelete(int a)
+        {
+            //Если скважина содержится в других элементах
+            if (_collection[a].HasChild())
+            {
+                MessageBox.Show("Скважина содержится в других элементах", "Невозможно удалить скважину");
+                return false;
+            }
             //Если скважина содержит слои грунта
             if (_collection[a].SoilLayers.Count > 0)
             {
@@ -128,20 +150,10 @@ namespace RDUIL.WPF_Windows.Foundations.Soils
                 //Если ответ отрицательный, то удаление невозможно
                 if (!(result2 == Winforms.DialogResult.Yes))
                 {
-                    canDelete = false;
+                    return false;
                 }
             }
-            //Если скважину можно удалить
-            if (canDelete)
-            {//удаляем
-                if (LvMain.Items.Count == 1) LvMain.UnselectAll();
-                else if (a < (LvMain.Items.Count - 1)) LvMain.SelectedIndex = a + 1;
-                else LvMain.SelectedIndex = a - 1;
-                _collection[a].DeleteFromDataSet(ProgrammSettings.CurrentDataSet);
-                _collection.RemoveAt(a);
-                ProgrammSettings.IsDataChanged = true;
-                LvMain.SelectedIndex = _collection.Count - 1;
-            }
+            return true;
         }
     }
 }
