@@ -31,14 +31,26 @@
             <Canvas/>
             <ScrollViewer Grid.Column="1">
                 <StackPanel>
-                    <Expander Header="Свойства">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="30"/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition Width="200"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Style="{StaticResource PropertyTextBlock}" Text="Наименование"/>
+                        <TextBox Grid.Column="1" Style="{StaticResource PropertyTextBox}" Text="{Binding Path=Name}"/>
+                    </Grid>
+                    <Expander Header="Основное">
                         <Grid>
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="30"/>
                                 <RowDefinition Height="30"/>
                                 <RowDefinition Height="30"/>
                                 <RowDefinition Height="30"/>
-                                <RowDefinition Height="30"/>
+
                                 <RowDefinition/>
                             </Grid.RowDefinitions>
                             <Grid.ColumnDefinitions>
@@ -46,19 +58,17 @@
                                 <ColumnDefinition Width="100"/>
                                 <ColumnDefinition Width="100"/>
                             </Grid.ColumnDefinitions>
-                            <TextBlock Style="{StaticResource PropertyTextBlock}" Text="Наименование"/>
-                            <TextBlock Grid.Row="1" Style="{StaticResource PropertyTextBlock}" Text="Наличие грунтовых вод"/>
-                            <TextBlock Grid.Row="2" Style="{StaticResource PropertyTextBlock}" Text="Уровень грунтовых вод"/>
-                            <TextBlock Grid.Row="3" Style="{StaticResource PropertyTextBlock}" Text="Привязка центра X"/>
-                            <TextBlock Grid.Row="4" Style="{StaticResource PropertyTextBlock}" Text="Привязка центра Y"/>
-                            <TextBox Grid.Column="1" Style="{StaticResource PropertyTextBox}" Text="{Binding Path=Name}"/>
-                            <CheckBox Grid.Column="1" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" IsChecked="{Binding HasWater}"/>
-                            <TextBox Grid.Column="1" Grid.Row="2" Style="{StaticResource PropertyTextBoxError}" Text="{Binding NaturalWaterLevel, ValidatesOnDataErrors=True}" IsEnabled="{Binding HasWater}"/>
-                            <TextBox Grid.Column="1" Grid.Row="3" Style="{StaticResource PropertyTextBoxError}" Text="{Binding CenterX, ValidatesOnDataErrors=True}"/>
-                            <TextBox Grid.Column="1" Grid.Row="4" Style="{StaticResource PropertyTextBoxError}" Text="{Binding CenterY, ValidatesOnDataErrors=True}"/>
+                            <TextBlock Grid.Row="0" Style="{StaticResource PropertyTextBlock}" Text="Наличие грунтовых вод"/>
+                            <TextBlock Grid.Row="1" Style="{StaticResource PropertyTextBlock}" Text="Уровень грунтовых вод"/>
+                            <TextBlock Grid.Row="2" Style="{StaticResource PropertyTextBlock}" Text="Привязка центра X"/>
+                            <TextBlock Grid.Row="3" Style="{StaticResource PropertyTextBlock}" Text="Привязка центра Y"/>
+                            <CheckBox Grid.Column="1" Grid.Row="0" HorizontalAlignment="Center" VerticalAlignment="Center" IsChecked="{Binding HasWater}"/>
+                            <TextBox Grid.Column="1" Grid.Row="1" Style="{StaticResource PropertyTextBoxError}" Text="{Binding NaturalWaterLevel, ValidatesOnDataErrors=True}" IsEnabled="{Binding HasWater}"/>
+                            <TextBox Grid.Column="1" Grid.Row="2" Style="{StaticResource PropertyTextBoxError}" Text="{Binding CenterX, ValidatesOnDataErrors=True}"/>
+                            <TextBox Grid.Column="1" Grid.Row="3" Style="{StaticResource PropertyTextBoxError}" Text="{Binding CenterY, ValidatesOnDataErrors=True}"/>
+                            <TextBlock Grid.Column="2" Grid.Row="1" Style="{StaticResource PropertyTextBlock}" Text="м"/>
                             <TextBlock Grid.Column="2" Grid.Row="2" Style="{StaticResource PropertyTextBlock}" Text="м"/>
                             <TextBlock Grid.Column="2" Grid.Row="3" Style="{StaticResource PropertyTextBlock}" Text="м"/>
-                            <TextBlock Grid.Column="2" Grid.Row="4" Style="{StaticResource PropertyTextBlock}" Text="м"/>
                         </Grid>
                     </Expander>
                     <Expander Header="Грунты">

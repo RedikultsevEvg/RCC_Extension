@@ -122,7 +122,7 @@ namespace RDBLL.Entity.RCC.Foundations.Processors
             double[] foundationSizes = GetDeltaDistance(foundation);
             double absZeroLevel = foundation.Level.Building.AbsoluteLevel - foundation.Level.Building.RelativeLevel;
             double AbsTopLevel = absZeroLevel + foundation.RelativeTopLevel;
-            double AbsBtmLevel = AbsTopLevel - foundationSizes[2];
+            double AbsBtmLevel = AbsTopLevel + foundationSizes[2];
             double SoilTopLevel = absZeroLevel + foundation.SoilRelativeTopLevel;
             if (foundation.SoilSection is null) { throw new Exception("Для фундамента не назначена скважина"); }
             SoilSection soilSection = foundation.SoilSection;
@@ -481,8 +481,8 @@ namespace RDBLL.Entity.RCC.Foundations.Processors
             double sigmZg;
             double d = levels[3] - levels[2];
             double dn = levels[4] - levels[2];
-            if (d < dn) { sigmZg = foundation.SoilVolumeWeight * d; }
-            else { sigmZg = foundation.SoilVolumeWeight * dn; }
+            if (d < dn) { sigmZg = foundation.SoilVolumeWeight * d *(-1D); }
+            else { sigmZg = foundation.SoilVolumeWeight * dn * (-1D); }
 
             List<double[]> stressesWithWeigth = FoundationProcessor.GetStresses(foundation, foundation.ForceCurvaturesWithWeight);
             foreach (double[] stressesArray in stressesWithWeigth)
@@ -546,6 +546,24 @@ namespace RDBLL.Entity.RCC.Foundations.Processors
         }
         public static SettleMentResult GetSettleMentResult (Foundation foundation)
         {
+            string[] GetStiffnessString(List<double> stiffnessList, double coff)
+            {
+                string[] s = new string[2];
+                s[0] = "---";
+                s[1] = "---";
+                if (stiffnessList.Count > 0)
+                {
+                    double stiffnessMax = stiffnessList.Max();
+                    double StiffnessMaxRound = Math.Round(stiffnessMax * coff, 3);
+                    s[0] = Convert.ToString(StiffnessMaxRound);
+
+                    double stiffnessMin = stiffnessList.Min();
+                    double StiffnessMinRound = Math.Round(stiffnessMin * coff, 3);
+                    s[1] = Convert.ToString(StiffnessMinRound);
+                }
+                return s;
+            }
+
             SettleMentResult settleMentResult = new SettleMentResult();
             List<CompressedLayerList> mainCompressedLayers = foundation.CompressedLayers;
 
@@ -609,44 +627,22 @@ namespace RDBLL.Entity.RCC.Foundations.Processors
             settleMentResult.IncY = IncYs.Max();
             settleMentResult.IncXY = IncXYs.Max();
 
-            settleMentResult.NzStiffnessStringMax = "---";
-            settleMentResult.MxStiffnessStringMax = "---";
-            settleMentResult.MyStiffnessStringMax = "---";
+            string[] stiffness;
+            double measureCoff;
+            measureCoff = MeasureUnitConverter.GetCoefficient(1) / MeasureUnitConverter.GetCoefficient(0);
+            stiffness = GetStiffnessString(NzStiffnesses, measureCoff);
+            settleMentResult.NzStiffnessStringMax = stiffness[0];
+            settleMentResult.NzStiffnessStringMin = stiffness[1];
 
-            settleMentResult.NzStiffnessStringMin = "---";
-            settleMentResult.MxStiffnessStringMin = "---";
-            settleMentResult.MyStiffnessStringMin = "---";
+            measureCoff = MeasureUnitConverter.GetCoefficient(2);
+            stiffness = GetStiffnessString(MxStiffnesses, measureCoff);
+            settleMentResult.MxStiffnessStringMax = stiffness[0];
+            settleMentResult.MxStiffnessStringMin = stiffness[1];
 
-            if (NzStiffnesses.Count() > 0)
-            {
-                settleMentResult.NzStiffnessMax = NzStiffnesses.Max();
-                double NzStiffnessRound = Math.Round(settleMentResult.NzStiffnessMax * MeasureUnitConverter.GetCoefficient(1) / MeasureUnitConverter.GetCoefficient(0), 3);
-                settleMentResult.NzStiffnessStringMax = Convert.ToString(NzStiffnessRound);
+            stiffness = GetStiffnessString(MyStiffnesses, measureCoff);
+            settleMentResult.MyStiffnessStringMax = stiffness[0];
+            settleMentResult.MyStiffnessStringMin = stiffness[1];
 
-                settleMentResult.NzStiffnessMin = NzStiffnesses.Min();
-                NzStiffnessRound = Math.Round(settleMentResult.NzStiffnessMin * MeasureUnitConverter.GetCoefficient(1) / MeasureUnitConverter.GetCoefficient(0), 3);
-                settleMentResult.NzStiffnessStringMin = Convert.ToString(NzStiffnessRound);
-            }
-            if (MxStiffnesses.Count() > 0)
-            {
-                settleMentResult.MxStiffnessMax = MxStiffnesses.Max();
-                double MxStiffnessRound = Math.Round(settleMentResult.MxStiffnessMax * MeasureUnitConverter.GetCoefficient(2), 3);
-                settleMentResult.MxStiffnessStringMax = Convert.ToString(MxStiffnessRound);
-
-                settleMentResult.MxStiffnessMin = MxStiffnesses.Min();
-                MxStiffnessRound = Math.Round(settleMentResult.MxStiffnessMin * MeasureUnitConverter.GetCoefficient(2), 3);
-                settleMentResult.MxStiffnessStringMin = Convert.ToString(MxStiffnessRound);
-            }
-            if (MyStiffnesses.Count() > 0)
-            {
-                settleMentResult.MyStiffnessMax = MyStiffnesses.Max();
-                double MyStiffnessRound = Math.Round(settleMentResult.MyStiffnessMax * MeasureUnitConverter.GetCoefficient(2), 3);
-                settleMentResult.MyStiffnessStringMax = Convert.ToString(MyStiffnessRound);
-
-                settleMentResult.MyStiffnessMin = MyStiffnesses.Min();
-                MyStiffnessRound = Math.Round(settleMentResult.MyStiffnessMin * MeasureUnitConverter.GetCoefficient(2), 3);
-                settleMentResult.MyStiffnessStringMin = Convert.ToString(MyStiffnessRound);
-            }
             
             return settleMentResult;
         }

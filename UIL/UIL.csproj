@@ -141,6 +141,11 @@
     <Compile Include="WPF_Windows\ControlClasses\CalcKind.cs" />
     <Compile Include="WPF_Windows\ControlClasses\CalcType.cs" />
     <Compile Include="WPF_Windows\ControlClasses\ReportCard.cs" />
+    <Compile Include="WPF_Windows\Foundations\Soils\ControlClasses\SoilCard.cs" />
+    <Compile Include="WPF_Windows\Foundations\Soils\SelectSoilProcessor.cs" />
+    <Compile Include="WPF_Windows\Foundations\Soils\UserControls\SoilCardControl.xaml.cs">
+      <DependentUpon>SoilCardControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="WPF_Windows\Foundations\Soils\WndClaySoil.xaml.cs">
       <DependentUpon>WndClaySoil.xaml</DependentUpon>
     </Compile>
@@ -152,6 +157,9 @@
     </Compile>
     <Compile Include="WPF_Windows\Foundations\Soils\WndSoils.xaml.cs">
       <DependentUpon>WndSoils.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="WPF_Windows\Foundations\Soils\WndSoilSelect.xaml.cs">
+      <DependentUpon>WndSoilSelect.xaml</DependentUpon>
     </Compile>
     <Compile Include="WPF_Windows\Foundations\wndFoundation.xaml.cs">
       <DependentUpon>wndFoundation.xaml</DependentUpon>
@@ -205,6 +213,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="WPF_Windows\Foundations\Soils\UserControls\SoilCardControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="WPF_Windows\Foundations\Soils\WndClaySoil.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -218,6 +230,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="WPF_Windows\Foundations\Soils\WndSoils.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="WPF_Windows\Foundations\Soils\WndSoilSelect.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

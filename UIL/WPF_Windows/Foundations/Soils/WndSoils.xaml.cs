@@ -43,22 +43,7 @@ namespace RDUIL.WPF_Windows.Foundations.Soils
         /// <param name="e"></param>
         private void BtnAdd_Click(object sender, RoutedEventArgs e)
         {
-            DispersedSoil dispersedSoil = new DispersedSoil(_buildingSite);
-            WndClaySoil wndSoil = new WndClaySoil(dispersedSoil);
-            wndSoil.ShowDialog();
-            if (wndSoil.DialogResult == true)
-            {
-                try
-                {
-                    dispersedSoil.SaveToDataSet(ProgrammSettings.CurrentDataSet, true);
-                    ProgrammSettings.IsDataChanged = true;
-                    _buildingSite.Soils.Add(dispersedSoil);
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Ошибка сохранения :" + ex);
-                }
-            }          
+           SelectSoilProcessor.SelectSoils(_buildingSite);       
         }
 
         private void BtnDelete_Click(object sender, RoutedEventArgs e)
