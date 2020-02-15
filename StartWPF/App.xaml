@@ -193,56 +193,74 @@
         </Style>
 
         <DataTemplate x:Key="GeneralSoilProps">
-            <Expander x:Name="General" Header="Общие свойства">
+            <StackPanel>
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="30"/>
-                        <RowDefinition Height="30"/>
-                        <RowDefinition Height="30"/>
-                        <RowDefinition Height="30"/>
-                        <RowDefinition Height="30"/>
-                        <RowDefinition Height="30"/>
-                        <RowDefinition Height="30"/>
-                        <RowDefinition Height="30"/>
-                        <RowDefinition Height="30"/>
-                        <RowDefinition Height="30"/>
-                        <RowDefinition Height="30"/>
+                        <RowDefinition Height="90"/>
                         <RowDefinition/>
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="200"/>
                         <ColumnDefinition/>
-                        <ColumnDefinition Width="100"/>
-                        <ColumnDefinition Width="100"/>
                     </Grid.ColumnDefinitions>
                     <TextBlock Style="{StaticResource PropertyTextBlock}" Text="Наименование"/>
-                    <TextBlock Grid.Row="1" Style="{StaticResource PropertyTextBlock}" Text="Плотность грунта" FontWeight="Bold"/>
-                    <TextBlock Grid.Row="2" Style="{StaticResource PropertyTextBlock}" Text="Нормативное значение"/>
-                    <TextBlock Grid.Row="3" Style="{StaticResource PropertyTextBlock}" Text="Расчетное значение по 1-й группе предельных состояний"/>
-                    <TextBlock Grid.Row="4" Style="{StaticResource PropertyTextBlock}" Text="Расчетное значение по 2-й группе предельных состояний"/>
-                    <TextBlock Grid.Row="5" Style="{StaticResource PropertyTextBlock}" Text="Плотность частиц" FontWeight="Bold"/>
-                    <TextBlock Grid.Row="6" Style="{StaticResource PropertyTextBlock}" Text="Нормативное значение"/>
-                    <TextBlock Grid.Row="7" Style="{StaticResource PropertyTextBlock}" Text="Расчетное значение по 1-й группе предельных состояний"/>
-                    <TextBlock Grid.Row="8" Style="{StaticResource PropertyTextBlock}" Text="Расчетное значение по 2-й группе предельных состояний"/>
-                    <TextBlock Grid.Row="9" Style="{StaticResource PropertyTextBlock}" Text="Коэффициент пористости"/>
-                    <TextBlock Grid.Row="10" Style="{StaticResource PropertyTextBlock}" Text="Коэффициент фильтрации"/>
+                    <TextBlock Style="{StaticResource PropertyTextBlock}" Text="Описание" Grid.Row="1" VerticalAlignment="Center"/>
                     <TextBox Grid.Column="1" Style="{StaticResource PropertyTextBox}" Text="{Binding Path=Name}"/>
-                    <TextBox Grid.Column="1" Grid.Row="2" Style="{StaticResource PropertyTextBoxError}" Text="{Binding CrcDensity, Converter={StaticResource DensityConverter}, ValidatesOnDataErrors=True}"/>
-                    <TextBox Grid.Column="1" Grid.Row="3" Style="{StaticResource PropertyTextBoxError}" Text="{Binding FstDesignDensity, Converter={StaticResource DensityConverter}, ValidatesOnDataErrors=True}"/>
-                    <TextBox Grid.Column="1" Grid.Row="4" Style="{StaticResource PropertyTextBoxError}" Text="{Binding SndDesignDensity, Converter={StaticResource DensityConverter}, ValidatesOnDataErrors=True}"/>
-                    <TextBox Grid.Column="1" Grid.Row="6" Style="{StaticResource PropertyTextBoxError}" Text="{Binding CrcParticularDensity, Converter={StaticResource DensityConverter}, ValidatesOnDataErrors=True}"/>
-                    <TextBox Grid.Column="1" Grid.Row="7" Style="{StaticResource PropertyTextBoxError}" Text="{Binding FstParticularDensity, Converter={StaticResource DensityConverter}, ValidatesOnDataErrors=True}"/>
-                    <TextBox Grid.Column="1" Grid.Row="8" Style="{StaticResource PropertyTextBoxError}" Text="{Binding SndParticularDensity, Converter={StaticResource DensityConverter}, ValidatesOnDataErrors=True}"/>
-                    <TextBox Grid.Column="1" Grid.Row="9" Style="{StaticResource PropertyTextBoxError}" Text="{Binding PorousityCoef, ValidatesOnDataErrors=True}"/>
-                    <TextBox Grid.Column="1" Grid.Row="10" Style="{StaticResource PropertyTextBoxError}" Text="{Binding FiltrationCoeff, Converter={StaticResource FiltrationConverter}, ValidatesOnDataErrors=True}"/>
-                    <TextBlock Grid.Column="2" Grid.Row="2" Style="{StaticResource PropertyTextBlock}" Text="{Binding DensityMeasure}" />
-                    <TextBlock Grid.Column="2" Grid.Row="3" Style="{StaticResource PropertyTextBlock}" Text="{Binding DensityMeasure}" />
-                    <TextBlock Grid.Column="2" Grid.Row="4" Style="{StaticResource PropertyTextBlock}" Text="{Binding DensityMeasure}" />
-                    <TextBlock Grid.Column="2" Grid.Row="6" Style="{StaticResource PropertyTextBlock}" Text="{Binding DensityMeasure}" />
-                    <TextBlock Grid.Column="2" Grid.Row="7" Style="{StaticResource PropertyTextBlock}" Text="{Binding DensityMeasure}" />
-                    <TextBlock Grid.Column="2" Grid.Row="8" Style="{StaticResource PropertyTextBlock}" Text="{Binding DensityMeasure}" />
-                    <TextBlock Grid.Column="2" Grid.Row="10" Style="{StaticResource PropertyTextBlock}" Text="{Binding FiltrationMeasure}" />
+                    <TextBox Grid.Column="1" Style="{StaticResource PropertyTextBox}" Text="{Binding Path=Description}" Grid.Row="1" TextWrapping="Wrap"/>
                 </Grid>
-            </Expander>
+                <Expander x:Name="General" Header="Общие свойства">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="0"/>
+                            <RowDefinition Height="30"/>
+                            <RowDefinition Height="30"/>
+                            <RowDefinition Height="30"/>
+                            <RowDefinition Height="30"/>
+                            <RowDefinition Height="30"/>
+                            <RowDefinition Height="30"/>
+                            <RowDefinition Height="30"/>
+                            <RowDefinition Height="30"/>
+                            <RowDefinition Height="30"/>
+                            <RowDefinition Height="30"/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition Width="100"/>
+                            <ColumnDefinition Width="100"/>
+                        </Grid.ColumnDefinitions>
+                        
+                        <TextBlock Grid.Row="1" Style="{StaticResource PropertyTextBlock}" Text="Плотность грунта" FontWeight="Bold"/>
+                        <TextBlock Grid.Row="2" Style="{StaticResource PropertyTextBlock}" Text="Нормативное значение"/>
+                        <TextBlock Grid.Row="3" Style="{StaticResource PropertyTextBlock}" Text="Расчетное значение по 1-й группе предельных состояний"/>
+                        <TextBlock Grid.Row="4" Style="{StaticResource PropertyTextBlock}" Text="Расчетное значение по 2-й группе предельных состояний"/>
+                        <TextBlock Grid.Row="5" Style="{StaticResource PropertyTextBlock}" Text="Плотность частиц" FontWeight="Bold"/>
+                        <TextBlock Grid.Row="6" Style="{StaticResource PropertyTextBlock}" Text="Нормативное значение"/>
+                        <TextBlock Grid.Row="7" Style="{StaticResource PropertyTextBlock}" Text="Расчетное значение по 1-й группе предельных состояний"/>
+                        <TextBlock Grid.Row="8" Style="{StaticResource PropertyTextBlock}" Text="Расчетное значение по 2-й группе предельных состояний"/>
+                        <TextBlock Grid.Row="9" Style="{StaticResource PropertyTextBlock}" Text="Коэффициент пористости"/>
+                        <TextBlock Grid.Row="10" Style="{StaticResource PropertyTextBlock}" Text="Коэффициент фильтрации"/>
+                        
+                        <TextBox Grid.Column="1" Grid.Row="2" Style="{StaticResource PropertyTextBoxError}" Text="{Binding CrcDensity, Converter={StaticResource DensityConverter}, ValidatesOnDataErrors=True}"/>
+                        <TextBox Grid.Column="1" Grid.Row="3" Style="{StaticResource PropertyTextBoxError}" Text="{Binding FstDesignDensity, Converter={StaticResource DensityConverter}, ValidatesOnDataErrors=True}"/>
+                        <TextBox Grid.Column="1" Grid.Row="4" Style="{StaticResource PropertyTextBoxError}" Text="{Binding SndDesignDensity, Converter={StaticResource DensityConverter}, ValidatesOnDataErrors=True}"/>
+                        <TextBox Grid.Column="1" Grid.Row="6" Style="{StaticResource PropertyTextBoxError}" Text="{Binding CrcParticularDensity, Converter={StaticResource DensityConverter}, ValidatesOnDataErrors=True}"/>
+                        <TextBox Grid.Column="1" Grid.Row="7" Style="{StaticResource PropertyTextBoxError}" Text="{Binding FstParticularDensity, Converter={StaticResource DensityConverter}, ValidatesOnDataErrors=True}"/>
+                        <TextBox Grid.Column="1" Grid.Row="8" Style="{StaticResource PropertyTextBoxError}" Text="{Binding SndParticularDensity, Converter={StaticResource DensityConverter}, ValidatesOnDataErrors=True}"/>
+                        <TextBox Grid.Column="1" Grid.Row="9" Style="{StaticResource PropertyTextBoxError}" Text="{Binding PorousityCoef, ValidatesOnDataErrors=True}"/>
+                        <TextBox Grid.Column="1" Grid.Row="10" Style="{StaticResource PropertyTextBoxError}" Text="{Binding FiltrationCoeff, Converter={StaticResource FiltrationConverter}, ValidatesOnDataErrors=True}"/>
+                        <TextBlock Grid.Column="2" Grid.Row="2" Style="{StaticResource PropertyTextBlock}" Text="{Binding DensityMeasure}" />
+                        <TextBlock Grid.Column="2" Grid.Row="3" Style="{StaticResource PropertyTextBlock}" Text="{Binding DensityMeasure}" />
+                        <TextBlock Grid.Column="2" Grid.Row="4" Style="{StaticResource PropertyTextBlock}" Text="{Binding DensityMeasure}" />
+                        <TextBlock Grid.Column="2" Grid.Row="6" Style="{StaticResource PropertyTextBlock}" Text="{Binding DensityMeasure}" />
+                        <TextBlock Grid.Column="2" Grid.Row="7" Style="{StaticResource PropertyTextBlock}" Text="{Binding DensityMeasure}" />
+                        <TextBlock Grid.Column="2" Grid.Row="8" Style="{StaticResource PropertyTextBlock}" Text="{Binding DensityMeasure}" />
+                        <TextBlock Grid.Column="2" Grid.Row="10" Style="{StaticResource PropertyTextBlock}" Text="{Binding FiltrationMeasure}" />
+                    </Grid>
+                </Expander>
+            </StackPanel>
+            
         </DataTemplate>
         <DataTemplate x:Key="MechanicalSoilProps">
             <Expander x:Name="Mechanical" Header="Механические свойства">

@@ -64,9 +64,31 @@ namespace RDUIL.Common.Reports
 
             newReportCard = new ReportCard
             {
+                Name = "Отчет по комбинациям нагрузок",
+                FileName = directory + "ForceCombinations.frx",
+                Description = "Полный отчет по нагрузкам, приведенным к подошве",
+                ImageName = directory + "Foundations.png",
+                ToolTip = ""
+            };
+            newReportCard.RegisterDelegate(new ReportCard.CommandDelegate(ShowFoundationReport));
+            reportCards.Add(newReportCard);
+
+            newReportCard = new ReportCard
+            {
                 Name = "Отчет по расчету осадки",
                 FileName = directory + "Settlements.frx",
                 Description = "Полный отчет по методу послойного суммирования",
+                ImageName = directory + "Foundations.png",
+                ToolTip = ""
+            };
+            newReportCard.RegisterDelegate(new ReportCard.CommandDelegate(ShowFoundationReport));
+            reportCards.Add(newReportCard);
+
+            newReportCard = new ReportCard
+            {
+                Name = "Отчет по напряжениям под подошвой",
+                FileName = directory + "Stresses.frx",
+                Description = "Полный отчет по напряжениям под подошвой",
                 ImageName = directory + "Foundations.png",
                 ToolTip = ""
             };

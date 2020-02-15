@@ -26,7 +26,7 @@ namespace RDBLL.Entity.Soils.Processors
         public static List<SoilElementaryLayer> LayersFromSection(Foundation foundation, double soilThickness = 50, double maxHeight = 0.1)
         {
             double[] levels = FoundationProcessor.FoundationLevels(foundation);
-            double foundationAbsBtmLevel = levels[3];
+            double foundationAbsBtmLevel = levels[2];
             List<SoilElementaryLayer> soilElementaryLayers = new List<SoilElementaryLayer>();
             List<SoilElementaryLayer> tmpSoilElementaryLayers = new List<SoilElementaryLayer>();
             SoilSection soilSection = foundation.SoilSection;

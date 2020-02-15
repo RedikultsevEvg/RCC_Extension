@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Report ScriptLanguage="CSharp" ReportInfo.Created="08/11/2019 20:16:27" ReportInfo.Modified="11/03/2019 18:27:56" ReportInfo.CreatorVersion="2019.4.11.0">
+<Report ScriptLanguage="CSharp" ReportInfo.Created="08/11/2019 20:16:27" ReportInfo.Modified="01/25/2020 11:19:25" ReportInfo.CreatorVersion="2020.1.0.0">
   <Dictionary>
     <TableDataSource Name="LoadCases" ReferenceName="Data.LoadCases" DataType="System.Int32" Enabled="true">
       <Column Name="Id" DataType="System.Int32"/>
@@ -7,15 +7,22 @@
       <Column Name="SteelBaseId" DataType="System.Int32"/>
       <Column Name="PartialSafetyFactor" DataType="System.Double"/>
       <Column Name="ForceDescription" DataType="System.String"/>
+      <Column Name="Name" DataType="System.String"/>
+      <Column Name="CrcForceDescription" DataType="System.String"/>
+      <Column Name="DesignForceDescription" DataType="System.String"/>
     </TableDataSource>
     <TableDataSource Name="LoadCasesForceParameters" ReferenceName="Data.LoadCasesForceParameters" DataType="System.Int32" Enabled="true">
       <Column Name="Id" DataType="System.Int32"/>
-      <Column Name="LoadCaseId" DataType="System.Int32"/>
       <Column Name="LongLabel" DataType="System.String"/>
       <Column Name="ShortLabel" DataType="System.String"/>
       <Column Name="Unit" DataType="System.String"/>
       <Column Name="CrcValue" DataType="System.Double"/>
       <Column Name="DesignValue" DataType="System.Double"/>
+      <Column Name="SteelBaseId" DataType="System.Int32"/>
+      <Column Name="ElementName" DataType="System.String"/>
+      <Column Name="LoadSetId" DataType="System.Int32"/>
+      <Column Name="LoadSetName" DataType="System.String"/>
+      <Column Name="Description" DataType="System.String"/>
     </TableDataSource>
     <TableDataSource Name="LoadSets" ReferenceName="Data.LoadSets" DataType="System.Int32" Enabled="true">
       <Column Name="Id" DataType="System.Int32"/>
@@ -24,6 +31,8 @@
       <Column Name="PartialSafetyFactor" DataType="System.Double"/>
       <Column Name="CrcForceDescription" DataType="System.String"/>
       <Column Name="DesignForceDescription" DataType="System.String"/>
+      <Column Name="Description" DataType="System.String"/>
+      <Column Name="ForceDescription" DataType="System.String"/>
     </TableDataSource>
     <TableDataSource Name="LoadSetsForceParameters" ReferenceName="Data.LoadSetsForceParameters" DataType="System.Int32" Enabled="true">
       <Column Name="Id" DataType="System.Int32"/>
@@ -36,7 +45,7 @@
       <Column Name="CrcValue" DataType="System.Double"/>
       <Column Name="DesignValue" DataType="System.Double"/>
       <Column Name="SteelBaseId" DataType="System.Int32"/>
-      <Column Name="SteelBaseName" DataType="System.String"/>
+      <Column Name="ElementName" DataType="System.String"/>
     </TableDataSource>
     <TableDataSource Name="SteelBases" ReferenceName="Data.SteelBases" DataType="System.Int32" Enabled="true">
       <Column Name="Name" DataType="System.String"/>
@@ -91,6 +100,13 @@
         <Parameter Name="Moment" DataType="System.String"/>
       </Parameter>
       <Parameter Name="Mass" DataType="System.String"/>
+      <Parameter Name="Density" DataType="System.String"/>
+      <Parameter Name="VolumeWeight" DataType="System.String"/>
+      <Parameter Name="SizeArea" DataType="System.String"/>
+      <Parameter Name="SizeVolume" DataType="System.String"/>
+      <Parameter Name="DistributedForce" DataType="System.String"/>
+      <Parameter Name="DistributedLoad" DataType="System.String"/>
+      <Parameter Name="Filtration" DataType="System.String"/>
     </Parameter>
   </Dictionary>
   <ReportPage Name="MainReport" RawPaperSize="9" LeftMargin="20" TopMargin="5" RightMargin="5" BottomMargin="5" Watermark.Font="Arial, 60pt">

@@ -306,15 +306,15 @@ namespace CSL.Reports
                     newSettleItem.ItemArray = new object[]
                         { ProgrammSettings.CurrentTmpId,
                         setId,
-                        Math.Round(compressedLayer.Zlevel, 3),
-                        Math.Round(compressedLayer.SoilElementaryLayer.TopLevel, 3),
-                        Math.Round(compressedLayer.SoilElementaryLayer.BottomLevel, 3),
-                        Math.Round(compressedLayer.Alpha, 3),
-                        Math.Round(compressedLayer.SigmZg * stressCoefficient, 3),
-                        Math.Round(compressedLayer.SigmZgamma * stressCoefficient, 3),
-                        Math.Round(compressedLayer.SigmZp * stressCoefficient, 3),
-                        Math.Round(compressedLayer.LocalSettlement * MeasureUnitConverter.GetCoefficient(0), 3),
-                        Math.Round(compressedLayer.SumSettlement * MeasureUnitConverter.GetCoefficient(0), 3)
+                        compressedLayer.Zlevel,
+                        compressedLayer.SoilElementaryLayer.TopLevel,
+                        compressedLayer.SoilElementaryLayer.BottomLevel,
+                        compressedLayer.Alpha,
+                        compressedLayer.SigmZg * stressCoefficient,
+                        compressedLayer.SigmZgamma * stressCoefficient,
+                        compressedLayer.SigmZp * stressCoefficient,
+                        compressedLayer.LocalSettlement * MeasureUnitConverter.GetCoefficient(0),
+                        compressedLayer.SumSettlement * MeasureUnitConverter.GetCoefficient(0)
                         };
                     ComressedLayers.Rows.Add(newSettleItem);
                 }
