@@ -40,6 +40,10 @@ namespace RDBLL.Entity.Soils
         /// </summary>
         public double SndDesignCohesion { get; set; }
         /// <summary>
+        /// Флаг определения характеристик из испытаний (требуется для вычисления R)
+        /// </summary>
+        public bool IsDefinedFromTest { get; set; }
+        /// <summary>
         /// Конструктор по строительному объекту
         /// </summary>
         /// <param name="buildingSite"></param>
@@ -61,6 +65,7 @@ namespace RDBLL.Entity.Soils
             CrcCohesion = 20000;
             FstDesignCohesion = 17000;
             SndDesignCohesion = 18000;
+            IsDefinedFromTest = true;
         }
         /// <summary>
         /// Сохраняет класс в строку датасета
@@ -76,6 +81,7 @@ namespace RDBLL.Entity.Soils
             dataRow["CrcCohesion"] = CrcCohesion;
             dataRow["FstDesignCohesion"] = FstDesignCohesion;
             dataRow["SndDesignCohesion"] = SndDesignCohesion;
+            dataRow["IsDefinedFromTest"] = IsDefinedFromTest;
         }
         public override void OpenFromDataSet(DataSet dataSet)
         {
@@ -98,6 +104,7 @@ namespace RDBLL.Entity.Soils
             CrcCohesion = dataRow.Field<double>("CrcCohesion");
             FstDesignCohesion = dataRow.Field<double>("FstDesignCohesion");
             SndDesignCohesion = dataRow.Field<double>("SndDesignCohesion");
+            IsDefinedFromTest = dataRow.Field<bool>("IsDefinedFromTest");
         }
 
     }

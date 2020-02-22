@@ -4,9 +4,11 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:RDUIL.WPF_Windows.BuildingsAndSites"
+        xmlns:Convert="clr-namespace:RDUIL.Converters" 
         mc:Ignorable="d"
-        Title="Здание" Height="300" Width="450" WindowStartupLocation="CenterScreen">
+        Title="Здание" Height="400" Width="550" WindowStartupLocation="CenterScreen">
     <Window.Resources>
+        <Convert:LinearSizeConverter x:Key="LinearSizeConverter"/>
         <Style x:Key="SoilServiceButton" TargetType="Button" BasedOn="{StaticResource ServiceButton}">
             <Setter Property="ToolTip">
                 <Setter.Value>
@@ -42,27 +44,70 @@
                 <ColumnDefinition/>
                 <ColumnDefinition Width ="110"/>
             </Grid.ColumnDefinitions>
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="30"/>
-                    <RowDefinition Height="30"/>
-                    <RowDefinition Height="30"/>
-                    <RowDefinition Height="30"/>
-                </Grid.RowDefinitions>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width ="*"/>
-                    <ColumnDefinition Width ="100"/>
-                    <ColumnDefinition Width="70"/>
-                </Grid.ColumnDefinitions>
-                <TextBlock x:Name="tbName" Style="{StaticResource PropertyTextBlock}" Text="Наименование"/>
-                <TextBlock x:Name="tbElevation" Grid.Row="1" Style="{StaticResource PropertyTextBlock}" Text="Относительная отметка"/>
-                <TextBlock x:Name="tbHeight" Grid.Row="2" Style="{StaticResource PropertyTextBlock}" Text="Абсолютная отметка"/>
-                <TextBox x:Name="tbxName" Grid.Column="1" Style="{StaticResource PropertyTextBox}" Text="{Binding Name}"/>
-                <TextBox x:Name="tbxElevation" Grid.Row="1" Grid.Column="1" Style="{StaticResource PropertyTextBox}" Text="{Binding RelativeLevel}"/>
-                <TextBox x:Name="tbxHeight" Grid.Row="2" Grid.Column="1" Style="{StaticResource PropertyTextBox}" Text="{Binding AbsoluteLevel}"/>
-                <TextBlock Grid.Column="2" Grid.Row="1" x:Name="tbRelativeMeasure" Style="{StaticResource PropertyTextBlock}" Text="м" />
-                <TextBlock Grid.Column="2" Grid.Row="2" x:Name="tbAbsoluteMeasure" Style="{StaticResource PropertyTextBlock}" Text="м" />
-            </Grid>
+            <StackPanel>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="30"/>
+                        <RowDefinition Height="30"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width ="*"/>
+                        <ColumnDefinition Width ="170"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock x:Name="tbName" Style="{StaticResource PropertyTextBlock}" Text="Наименование"/>
+                    <TextBox x:Name="tbxName" Grid.Column="1" Style="{StaticResource PropertyTextBox}" Text="{Binding Name}"/>
+                </Grid>
+                <ScrollViewer>
+                    <StackPanel>
+                        <Expander Header="Отметки">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="30"/>
+                                    <RowDefinition Height="30"/>
+                                    <RowDefinition Height="30"/>
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width ="*"/>
+                                    <ColumnDefinition Width ="100"/>
+                                    <ColumnDefinition Width="70"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock x:Name="tbElevation" Grid.Row="0" Style="{StaticResource PropertyTextBlock}" Text="Относительная отметка"/>
+                                <TextBlock x:Name="tbHeight" Grid.Row="1" Style="{StaticResource PropertyTextBlock}" Text="Абсолютная отметка"/>
+                                <TextBlock x:Name="tbPlaningHeight" Grid.Row="2" Style="{StaticResource PropertyTextBlock}" Text="Абсолютная отметка планировки"/>
+                                <TextBox x:Name="tbxElevation" Grid.Row="0" Grid.Column="1" Style="{StaticResource PropertyTextBox}" Text="{Binding RelativeLevel, ValidatesOnDataErrors=True}"/>
+                                <TextBox x:Name="tbxHeight" Grid.Row="1" Grid.Column="1" Style="{StaticResource PropertyTextBox}" Text="{Binding AbsoluteLevel, ValidatesOnDataErrors=True}"/>
+                                <TextBox x:Name="tbxPlaningHeight" Grid.Row="2" Grid.Column="1" Style="{StaticResource PropertyTextBox}" Text="{Binding AbsolutePlaningLevel, ValidatesOnDataErrors=True}"/>
+                                <TextBlock Grid.Column="2" Grid.Row="0" x:Name="tbRelativeMeasure" Style="{StaticResource PropertyTextBlock}" Text="м" />
+                                <TextBlock Grid.Column="2" Grid.Row="1" x:Name="tbAbsoluteMeasure" Style="{StaticResource PropertyTextBlock}" Text="м" />
+                                <TextBlock Grid.Column="2" Grid.Row="2" x:Name="tbAbsolutePlaningMeasure" Style="{StaticResource PropertyTextBlock}" Text="м" />
+                            </Grid>
+                        </Expander>
+                        <Expander Header="Фундаменты">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="30"/>
+                                    <RowDefinition Height="30"/>
+                                    <RowDefinition Height="30"/>
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width ="*"/>
+                                    <ColumnDefinition Width ="100"/>
+                                    <ColumnDefinition Width="70"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock x:Name="tbMaxFoundationSettlement" Grid.Row="0" Style="{StaticResource PropertyTextBlock}" Text="Предельная осадка"/>
+                                <TextBlock x:Name="tbIsRigid" Grid.Row="1" Style="{StaticResource PropertyTextBlock}" Text="Система здания жесткая"/>
+                                <TextBlock x:Name="tbRigidRatio" Grid.Row="2" Style="{StaticResource PropertyTextBlock}" Text=" Отношение L/H"/>
+                                <TextBox x:Name="tbxMaxFoundationSettlement" Grid.Row="0" Grid.Column="1" Style="{StaticResource PropertyTextBox}"
+                                         Text="{Binding MaxFoundationSettlement, Converter={StaticResource LinearSizeConverter}, ValidatesOnDataErrors=True}"/>
+                                <CheckBox x:Name="cbIsRigid" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" IsChecked="{Binding IsRigid}"/>
+                                <TextBox x:Name="tbxRigidRatio" Grid.Row="2" Grid.Column="1" Style="{StaticResource PropertyTextBox}" Text="{Binding RigidRatio}"/>
+                                <TextBlock  Grid.Row="0" Grid.Column="2" Style="{StaticResource PropertyTextBlock}" Text="{Binding LinearMeasure, ValidatesOnDataErrors=True}" />
+                            </Grid>
+                        </Expander>
+                    </StackPanel>
+                </ScrollViewer>
+            </StackPanel>
+            
             <StackPanel Grid.Column="1">
                 <Button x:Name="BtnSoils" Style="{StaticResource SoilServiceButton}" Click="BtnSoils_Click"/>
                 <Button x:Name="BtnSoilSections" Style="{StaticResource SoilSectionServiceButton}" Click="BtnSoilSections_Click"/>

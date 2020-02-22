@@ -300,6 +300,7 @@
                         <RowDefinition Height="30"/>
                         <RowDefinition Height="30"/>
                         <RowDefinition Height="30"/>
+                        <RowDefinition Height="30"/>
                         <RowDefinition/>
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
@@ -315,12 +316,14 @@
                     <TextBlock Grid.Row="5" Style="{StaticResource PropertyTextBlock}" Text="Нормативное значение"/>
                     <TextBlock Grid.Row="6" Style="{StaticResource PropertyTextBlock}" Text="Расчетное значение по 1-й группе предельных состояний"/>
                     <TextBlock Grid.Row="7" Style="{StaticResource PropertyTextBlock}" Text="Расчетное значение по 2-й группе предельных состояний"/>
+                    <TextBlock Grid.Row="8" Style="{StaticResource PropertyTextBlock}" Text="Хаарактеристики определены по испытаниям"/>
                     <TextBox Grid.Column="1" Grid.Row="1" Style="{StaticResource PropertyTextBoxError}" Text="{Binding CrcFi, ValidatesOnDataErrors=True}"/>
                     <TextBox Grid.Column="1" Grid.Row="2" Style="{StaticResource PropertyTextBoxError}" Text="{Binding FstDesignFi, ValidatesOnDataErrors=True}"/>
                     <TextBox Grid.Column="1" Grid.Row="3" Style="{StaticResource PropertyTextBoxError}" Text="{Binding SndDesignFi, ValidatesOnDataErrors=True}"/>
                     <TextBox Grid.Column="1" Grid.Row="5" Style="{StaticResource PropertyTextBoxError}" Text="{Binding CrcCohesion, Converter={StaticResource StressConverter}, ValidatesOnDataErrors=True}"/>
                     <TextBox Grid.Column="1" Grid.Row="6" Style="{StaticResource PropertyTextBoxError}" Text="{Binding FstDesignCohesion, Converter={StaticResource StressConverter}, ValidatesOnDataErrors=True}"/>
                     <TextBox Grid.Column="1" Grid.Row="7" Style="{StaticResource PropertyTextBoxError}" Text="{Binding SndDesignCohesion, Converter={StaticResource StressConverter}, ValidatesOnDataErrors=True}"/>
+                    <CheckBox Grid.Column="1" Grid.Row="8" HorizontalAlignment="Center" VerticalAlignment="Center" IsChecked="{Binding IsDefinedFromTest}"/>
                     <TextBlock Grid.Column="2" Grid.Row="1" Style="{StaticResource PropertyTextBlock}" Text="Град."/>
                     <TextBlock Grid.Column="2" Grid.Row="2" Style="{StaticResource PropertyTextBlock}" Text="Град."/>
                     <TextBlock Grid.Column="2" Grid.Row="3" Style="{StaticResource PropertyTextBlock}" Text="Град."/>

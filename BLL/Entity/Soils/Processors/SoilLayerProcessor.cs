@@ -250,10 +250,10 @@ namespace RDBLL.Entity.Soils.Processors
 
             if (soilElementaryLayer.HasGroundWater)
             {
-                weight[0] = (soilElementaryLayer.Soil.FstDesignDensity - 1000) / (1 + soilElementaryLayer.Soil.PorousityCoef);
-                weight[1] = (soilElementaryLayer.Soil.SndDesignDensity - 1000) / (1 + soilElementaryLayer.Soil.PorousityCoef);
-                weight[2] = (soilElementaryLayer.Soil.FstDesignDensity * 9.81 - 9810) / (1 + soilElementaryLayer.Soil.PorousityCoef);
-                weight[3] = (soilElementaryLayer.Soil.SndDesignDensity * 9.81 - 9810) / (1 + soilElementaryLayer.Soil.PorousityCoef);
+                weight[0] = (soilElementaryLayer.Soil.FstDesignDensity - 1000) / (1 + soilElementaryLayer.Soil.PorousityCoef); //Плотность по 1й группе ПС с учетом взвешивающего действия воды
+                weight[1] = (soilElementaryLayer.Soil.SndDesignDensity - 1000) / (1 + soilElementaryLayer.Soil.PorousityCoef); //Плотность по 2й группе ПС с учетом взвешивающего действия воды
+                weight[2] = (soilElementaryLayer.Soil.FstDesignDensity * 9.81 - 9810) / (1 + soilElementaryLayer.Soil.PorousityCoef);  //Объемный вес по 1й группе ПС с учетом взвешивающего действия воды
+                weight[3] = (soilElementaryLayer.Soil.SndDesignDensity * 9.81 - 9810) / (1 + soilElementaryLayer.Soil.PorousityCoef);  //Объемный вес по 2й группе ПС с учетом взвешивающего действия воды
             }
             else
             {

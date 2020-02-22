@@ -190,7 +190,7 @@ namespace RDBLL.Forces
             for (int i = count - 1; i >= 0; i--)
             {
                 //Проверяем, встречается ли комбинация нагрузок еще где-то
-                int loadSetId = dataTable.Rows[i].Field<int>("LoadSetId");
+                int loadSetId = rows[i].Field<int>("LoadSetId");
                 dataTable.Rows.Remove(rows[i]);
                 //Получаем коллекцию записей комбинаций в группах нагрузок где встречается данная комбинация
                 DataTable adjDataTable = dataSet.Tables["ForcesGroupLoadSets"];

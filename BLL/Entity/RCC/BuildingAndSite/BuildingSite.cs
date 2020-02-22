@@ -11,6 +11,7 @@ using RDBLL.Common.Interfaces;
 using System.Data;
 using RDBLL.Entity.Soils;
 using DAL.Common;
+using RDBLL.Entity.MeasureUnits;
 
 namespace RDBLL.Entity.RCC.BuildingAndSite
 {
@@ -158,6 +159,22 @@ namespace RDBLL.Entity.RCC.BuildingAndSite
         /// </summary>
         public double AbsoluteLevel { get; set; }
         /// <summary>
+        /// Абсолютная отметка планировки
+        /// </summary>
+        public double AbsolutePlaningLevel { get; set; }
+        /// <summary>
+        /// Предельное значение осадки фундамента
+        /// </summary>
+        public double MaxFoundationSettlement { get; set; }
+        /// <summary>
+        /// Флаг отнесения здания к жесткой системе
+        /// </summary>
+        public bool IsRigid { get; set; }
+        /// <summary>
+        /// Отношение, характеризующее жесткость здания
+        /// </summary>
+        public double RigidRatio { get; set; }
+        /// <summary>
         /// Коллекция уровней
         /// </summary>
         public ObservableCollection<Level> Levels { get; set; }
@@ -169,6 +186,10 @@ namespace RDBLL.Entity.RCC.BuildingAndSite
         /// Коллекция отверстий
         /// </summary>
         public ObservableCollection<OpeningType> OpeningTypeList { get; set; }
+        /// <summary>
+        /// Наименование линейных единиц измерения
+        /// </summary>
+        public string LinearMeasure { get { return MeasureUnitConverter.GetUnitLabelText(0); } }
         /// <summary>
         /// Конструктор без параметров
         /// </summary>
@@ -189,7 +210,11 @@ namespace RDBLL.Entity.RCC.BuildingAndSite
             Name = "Мое здание";
             RelativeLevel = 0;
             AbsoluteLevel = 260;
+            AbsolutePlaningLevel = 260;
             BuildingSite = buildingSite;
+            MaxFoundationSettlement = 0.08;
+            IsRigid = false;
+            RigidRatio = 4;
             Levels = new ObservableCollection<Level>();
             WallTypeList = new ObservableCollection<WallType>();
             OpeningTypeList = new ObservableCollection<OpeningType>();
@@ -221,6 +246,10 @@ namespace RDBLL.Entity.RCC.BuildingAndSite
             row.SetField("Name", Name);
             row.SetField("RelativeLevel", RelativeLevel);
             row.SetField("AbsoluteLevel", AbsoluteLevel);
+            row.SetField("AbsolutePlaningLevel", AbsolutePlaningLevel);
+            row.SetField("MaxFoundationSettlement", MaxFoundationSettlement);
+            row.SetField("IsRigid", IsRigid);
+            row.SetField("RigidRatio", RigidRatio);
             dataTable.AcceptChanges();
             foreach (Level level in Levels)
             {
@@ -251,6 +280,10 @@ namespace RDBLL.Entity.RCC.BuildingAndSite
             Name = dataRow.Field<string>("Name");
             RelativeLevel = dataRow.Field<double>("RelativeLevel");
             AbsoluteLevel = dataRow.Field<double>("AbsoluteLevel");
+            AbsolutePlaningLevel = dataRow.Field<double>("AbsolutePlaningLevel");
+            MaxFoundationSettlement = dataRow.Field<double>("MaxFoundationSettlement");
+            IsRigid = dataRow.Field<bool>("IsRigid");
+            RigidRatio = dataRow.Field<double>("RigidRatio");
         }
         /// <summary>
         /// Удаляет запись из датасета

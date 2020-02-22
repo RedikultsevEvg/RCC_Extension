@@ -13,7 +13,7 @@ using RDBLL.Entity.Soils.Processors;
 using RDBLL.Entity.Soils;
 using RDBLL.Common.Service;
 using RDBLL.Entity.MeasureUnits;
-
+using RDBLL.Common.Geometry;
 
 namespace RDBLL.Entity.RCC.Foundations.Processors
 {
@@ -24,7 +24,7 @@ namespace RDBLL.Entity.RCC.Foundations.Processors
     {
         public class SettleMentResult
         {
-            public double SettleMent { get; set; }
+            public double Settlement { get; set; }
             public double CompressionHeight { get; set; }
             public double IncX { get; set; }
             public double IncY { get; set; }
@@ -177,7 +177,10 @@ namespace RDBLL.Entity.RCC.Foundations.Processors
                     foundation.NdmAreas = GetNdmAreas(foundation);
                     foundation.ForceCurvaturesWithoutWeight = GetForceCurvatures(foundation, foundation.btmLoadSetsWithoutWeight);
                     foundation.ForceCurvaturesWithWeight = GetForceCurvatures(foundation, foundation.btmLoadSetsWithWeight);
-                    foundation.CompressedLayers = CompressedLayers(foundation);
+                    foundation.Result.CompressedLayers = CompressedLayers(foundation);
+                SettleMentResult SettleMentResult = GetSettleMentResult(foundation);
+                foundation.Result.MaxSettlement = SettleMentResult.Settlement;
+                foundation.Result.sndResistance = SndResistance(foundation);
                 //}
                 result = true;
             }
@@ -565,7 +568,7 @@ namespace RDBLL.Entity.RCC.Foundations.Processors
             }
 
             SettleMentResult settleMentResult = new SettleMentResult();
-            List<CompressedLayerList> mainCompressedLayers = foundation.CompressedLayers;
+            List<CompressedLayerList> mainCompressedLayers = foundation.Result.CompressedLayers;
 
             List<double> Settlements = new List<double>();
             List<double> ComressionHeights = new List<double>();
@@ -621,7 +624,7 @@ namespace RDBLL.Entity.RCC.Foundations.Processors
 
 
             }
-            settleMentResult.SettleMent = Settlements.Min();
+            settleMentResult.Settlement = Settlements.Min();
             settleMentResult.CompressionHeight = ComressionHeights.Max();
             settleMentResult.IncX = IncXs.Max();
             settleMentResult.IncY = IncYs.Max();
@@ -645,6 +648,139 @@ namespace RDBLL.Entity.RCC.Foundations.Processors
 
             
             return settleMentResult;
+        }
+        /// <summary>
+        /// Возвращает расчетное сопротивление дисперсного грунта
+        /// </summary>
+        /// <param name="gammaC1"></param>
+        /// <param name="gammaC2"></param>
+        /// <param name="k"></param>
+        /// <param name="fi2">Угол внутреннего трения, радиан</param>
+        /// <param name="c2"></param>
+        /// <param name="width"></param>
+        /// <param name="kZ"></param>
+        /// <param name="d1"></param>
+        /// <param name="db"></param>
+        /// <param name="gamma2"></param>
+        /// <param name="gamma2Dash"></param>
+        /// <returns>Расчетное сопротивлени дисперсного грунта</returns>
+        public static double LinearResistance(double gammaC1, double gammaC2, double k, double fi2, double c2, double width, double d1, double db, double gamma2, double gamma2Dash)
+        {
+            double[] cofficients = SndResistanceCoff(fi2);
+
+            double m_Gamma = cofficients[0];
+            double m_Q = cofficients[1];
+            double m_C = cofficients[2];
+            double kZ;
+            if (width < 10) kZ = 1; else kZ = 8 / width + 0.2;
+            double resistance;
+            resistance = gammaC1 * gammaC2 / k * (m_Gamma * kZ * width * gamma2 + gamma2Dash * (m_Q * (d1 + db) - db) + m_C * c2);
+            return resistance;
+        }
+        /// <summary>
+        /// Возвращает коэффициенты для вычисления расчетного сопротивления дисперсного грунта
+        /// </summary>
+        /// <param name="fi">Угол внутреннего трения в градусах!!!!</param>
+        /// <returns>Массив из 3-х коэффциентов</returns>
+        public static double[] SndResistanceCoff(double fi)
+        {
+            fi = fi / 180 * Math.PI;
+            double[] cofficients = new double[3];
+            double psi = Math.PI / (1 / (Math.Tan(fi)) + fi - Math.PI / 2);
+            cofficients[0] = psi / 4; //M_Gamma
+            cofficients[1] = 1 + psi; //M_Q
+            cofficients[2] = psi / (Math.Tan(fi)); //M_C
+            return cofficients;
+        }
+        private static double GetGammaC1(DispersedSoil dispersedSoil)
+        {
+            //Если грунт крупнообломочный
+            //Если грунт песок мелкий
+            //Если грунт песок маловлажный
+            //Если грунт песок насыщенный водой
+            //Глинистый грунт с Il<0.25
+            //Глинистый грунт с 0.25<Il<0.5
+            //Глинистый грунт с Il>0.5
+            return 1.1;
+        }
+        private static double GetGammaC2(BuildingAndSite.Building building, DispersedSoil dispersedSoil)
+        {
+            double gammaC2 = 1;
+            double ratio = building.RigidRatio;
+            if ((!building.IsRigid) & (ratio < 4))
+            {
+                if (dispersedSoil is ClaySoil)
+                {
+                    ClaySoil claySoil = dispersedSoil as ClaySoil;
+                    if (claySoil.IL > 0.5) return 1;
+                    return MathOperation.InterpolateNumber(1.5, 1.1, 4.0, 1.0, claySoil.IL);
+                }
+            }
+            return gammaC2;
+        }
+        public static double SndResistance (Foundation foundation)
+        {
+
+            double resistance = 0;
+            List<CompressedLayerList> compressedLayerList = foundation.Result.CompressedLayers;
+            List<CompressedLayer> compressedLayers = compressedLayerList[0].CompressedLayers;
+            Soil soil = compressedLayers[0].SoilElementaryLayer.Soil;
+            if (soil is DispersedSoil)
+            {
+                DispersedSoil dispSoil = soil as DispersedSoil;
+                double fi2 = dispSoil.SndDesignFi;
+                double c2 = dispSoil.SndDesignCohesion;
+                //Коэффициент по СП
+                double gammaC1 = GetGammaC1(dispSoil);
+                //Коэффициент по СП
+                double gammaC2 = GetGammaC2(foundation.Level.Building, dispSoil);
+                //Если характеристики грунта определены испытаниями, то коэффициент 1.0, иначе 1.1
+                double k;
+                if (dispSoil.IsDefinedFromTest) k = 1.0; else k = 1.1;
+                double[] sizes = FoundationProcessor.GetContourSize(foundation);
+                double width = Math.Min(sizes[0], sizes[1]);
+                //Абсолютная отметка планировки для здания
+                double planingLevel = foundation.Level.Building.AbsolutePlaningLevel;
+                //Характерные отметки здания
+                double[] levels = FoundationLevels(foundation);
+                //Абсолютная отметка подошвы
+                double btmLevel = levels[2];
+                //Абсолютная отметка засыпки
+                double soilLevel = levels[3];
+                //Расстояние от уровня засыпки до подошвы фундамента
+                double d1 = soilLevel- btmLevel;
+                //Добавляем высоту пола, приведенную по объемному весу к засыпке
+                d1 += foundation.FloorLoad / foundation.SoilVolumeWeight;
+                //Глубина подвала принимается не более 2м
+                double db = Math.Max(0, planingLevel - soilLevel);
+                db = Math.Min(2, db);
+                double gamma2;
+                //Характеристики грунта ниже подошвы фундамента осредняем в пределах зоны, определяемой по СП
+                double zMax;
+                if (width < 10) zMax = btmLevel-width / 2; else zMax = btmLevel - (4 + 0.1 * width);
+                List<double> gammas = new List<double>();
+                foreach (CompressedLayer compressedLayer in compressedLayers)
+                {
+                    if (compressedLayer.SoilElementaryLayer.TopLevel < zMax)
+                    {
+                        double gamma = SoilLayerProcessor.SoilWeight(compressedLayer.SoilElementaryLayer)[3];
+                        gammas.Add(gamma);
+                    }
+                }
+                gamma2 = gammas.Average();
+                //Объемный вес грунта обратной засыпки
+                double gamma2Dash = foundation.SoilVolumeWeight;
+                resistance = LinearResistance(gammaC1, gammaC2, k, fi2, c2, width, d1, db, gamma2, gamma2Dash);
+                double maxSettlement = foundation.Result.MaxSettlement * (-1D);
+                double maxLimitSettlement = foundation.Level.Building.MaxFoundationSettlement;
+                //Если осадка не превышает 40% предельной
+                if (maxSettlement < (0.4 * maxLimitSettlement)) return 1.2 * resistance;
+                //Если осадка не превышает 70% предельной
+                if (maxSettlement < (0.7 * maxLimitSettlement)) return MathOperation.InterpolateNumber(0.4, 1.2, 0.7, 1.0, maxSettlement / maxLimitSettlement) * resistance;
+                //Иначе возварщаем без повышения
+                return resistance;
+            }
+            return resistance;
         }
     }
 }

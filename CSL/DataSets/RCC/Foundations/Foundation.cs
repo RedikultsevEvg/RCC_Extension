@@ -39,7 +39,12 @@ namespace CSL.DataSets.RCC.Foundations
             DsOperation.AddDoubleColumn(newTable, "MinSndCornerStressesWithWeight");
             DsOperation.AddDoubleColumn(newTable, "MaxSndCornerStressesWithWeight");
             DsOperation.AddDoubleColumn(newTable, "MaxSndTensionAreaRatioWithWeight");
+            DsOperation.AddDoubleColumn(newTable, "SndResistance");
+            DsOperation.AddStringColumn(newTable, "AvgStressConclusion");
+            DsOperation.AddStringColumn(newTable, "MiddleStressConclusion");
+            DsOperation.AddStringColumn(newTable, "CornerStressConclusion");
             DsOperation.AddDoubleColumn(newTable, "SettlementMin");
+            DsOperation.AddStringColumn(newTable, "SettlementConclusion");
             DsOperation.AddDoubleColumn(newTable, "CompressionHeightMax");
             DsOperation.AddDoubleColumn(newTable, "IncXMax");
             DsOperation.AddDoubleColumn(newTable, "IncYMax");
@@ -50,6 +55,7 @@ namespace CSL.DataSets.RCC.Foundations
             DsOperation.AddStringColumn(newTable, "NzStiffnessStringMax");
             DsOperation.AddStringColumn(newTable, "MxStiffnessStringMax");
             DsOperation.AddStringColumn(newTable, "MyStiffnessStringMax");
+            DsOperation.AddStringColumn(newTable, "GeneralConclusion");
             #endregion
             #region FoundationParts
             newTable = new DataTable("FoundationParts");

@@ -68,6 +68,7 @@ namespace DAL.DataSets
             DsOperation.AddFkIdColumn("BuildingSites", "BuildingSiteId", dataTable);
             DsOperation.AddNameColumn(dataTable);
             DsOperation.AddStringColumn(dataTable, "Description");
+            DsOperation.AddBoolColumn(dataTable, "IsDefinedFromTest", true);
             DsOperation.AddDoubleColumn(dataTable, "CrcDensity", 1950);
             DsOperation.AddDoubleColumn(dataTable, "FstDesignDensity", 1800);
             DsOperation.AddDoubleColumn(dataTable, "SndDesignDensity", 1900);
@@ -114,6 +115,10 @@ namespace DAL.DataSets
             DsOperation.AddNameColumn(dataTable);
             DsOperation.AddDoubleColumn(dataTable, "RelativeLevel",0);
             DsOperation.AddDoubleColumn(dataTable, "AbsoluteLevel", 260);
+            DsOperation.AddDoubleColumn(dataTable, "AbsolutePlaningLevel", 259.5);
+            DsOperation.AddDoubleColumn(dataTable, "MaxFoundationSettlement", 0.08);
+            DsOperation.AddBoolColumn(dataTable, "IsRigid", false);
+            DsOperation.AddDoubleColumn(dataTable, "RigidRatio", 4);
             #endregion
             #region Levels
             dataTable = new DataTable("Levels");
