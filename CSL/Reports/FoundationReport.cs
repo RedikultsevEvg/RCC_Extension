@@ -22,6 +22,7 @@ using System.Linq;
 using RDBLL.Entity.Common.NDM;
 
 
+
 namespace CSL.Reports
 {
     public class FoundationReport : IReport
@@ -207,6 +208,7 @@ namespace CSL.Reports
             newFoundation.SetField("MinSndCornerStressesWithWeight", Math.Round(minMaxStresses[2] * stressCoefficient, 3));
             newFoundation.SetField("MaxSndCornerStressesWithWeight", Math.Round(minMaxStresses[3] * stressCoefficient, 3));
             newFoundation.SetField("MaxSndTensionAreaRatioWithWeight", Math.Round(minMaxStresses[4], 3) * 100);
+            newFoundation.SetField("sndResistance", foundation.Result.sndResistance * stressCoefficient);
 
             List<double[]> stressesWithoutWeigth = FoundationProcessor.GetStresses(foundation, foundation.ForceCurvaturesWithoutWeight);
             FoundationStresses = dataSet.Tables["FoundationStressesWithoutWeight"];
@@ -230,6 +232,35 @@ namespace CSL.Reports
                         Math.Round(stresses[12]/(stresses[12]+stresses[13]), 3)*100
                         };
                 FoundationStresses.Rows.Add(newTableItem);
+
+                Compare compare = new Compare(3);
+                #region AvgStresCheck
+                compare.Name = "Проверка величины среднего давления";
+                compare.Val1Name = "Sigma";
+                compare.Val2Name = "R";
+                compare.Val1 = minMaxStresses[0] * (-1D);
+                compare.Val2 = foundation.Result.sndResistance;
+                if (!compare.BoolResult()) foundation.Result.GeneralResult = false;
+                newFoundation.SetField("AvgStressConclusion", compare.CompareResult());
+                #endregion
+                #region MiddleStresCheck
+                compare.Name = "Проверка величины краевого давления";
+                compare.Val1Name = "Sigma";
+                compare.Val2Name = "1.2R";
+                compare.Val1 = minMaxStresses[1] * (-1D);
+                compare.Val2 = foundation.Result.sndResistance * 1.2;
+                if (!compare.BoolResult()) foundation.Result.GeneralResult = false;
+                newFoundation.SetField("MiddleStressConclusion", compare.CompareResult());
+                #endregion
+                #region CornerStresCheck
+                compare.Name = "Проверка величины краевого давления";
+                compare.Val1Name = "Sigma";
+                compare.Val2Name = "1.5R";
+                compare.Val1 = minMaxStresses[2] * (-1D);
+                compare.Val2 = foundation.Result.sndResistance * 1.5;
+                if (!compare.BoolResult()) foundation.Result.GeneralResult = false;
+                newFoundation.SetField("CornerStressConclusion", compare.CompareResult());
+                #endregion
             }
         }
         /// <summary>
@@ -239,7 +270,7 @@ namespace CSL.Reports
         /// <param name="newFoundation"></param>
         private void ProcessSettlement(Foundation foundation, DataRow newFoundation)
         {
-            List<CompressedLayerList> mainCompressedLayers = foundation.CompressedLayers;
+            List<CompressedLayerList> mainCompressedLayers = foundation.Result.CompressedLayers;
             double stressCoefficient = MeasureUnitConverter.GetCoefficient(3);
             DataTable SettlementSets = dataSet.Tables["SettlementSets"];
             DataTable ComressedLayers = dataSet.Tables["ComressedLayers"];
@@ -320,7 +351,7 @@ namespace CSL.Reports
                 }
             }
             FoundationProcessor.SettleMentResult SettleMentResult = FoundationProcessor.GetSettleMentResult(foundation);
-            newFoundation.SetField("SettlementMin", Math.Round(SettleMentResult.SettleMent * MeasureUnitConverter.GetCoefficient(0), 3));
+            newFoundation.SetField("SettlementMin", Math.Round(SettleMentResult.Settlement * MeasureUnitConverter.GetCoefficient(0), 3));
             newFoundation.SetField("CompressionHeightMax", Math.Round(SettleMentResult.CompressionHeight, 3));
             newFoundation.SetField("IncXMax", Math.Round(SettleMentResult.IncX, 5));
             newFoundation.SetField("IncYMax", Math.Round(SettleMentResult.IncY, 5));
@@ -331,14 +362,30 @@ namespace CSL.Reports
             newFoundation.SetField("NzStiffnessStringMax", SettleMentResult.NzStiffnessStringMax);
             newFoundation.SetField("MxStiffnessStringMax", SettleMentResult.MxStiffnessStringMax);
             newFoundation.SetField("MyStiffnessStringMax", SettleMentResult.MyStiffnessStringMax);
+
+            #region SettlementCheck
+            Compare compare = new Compare(0);
+            compare.Name = "Проверка величины осадки";
+            compare.Val1Name = "S";
+            compare.Val2Name = "Smax";
+            compare.Val1 = foundation.Result.MaxSettlement * (-1D);
+            compare.Val2 = foundation.Level.Building.MaxFoundationSettlement;
+            if (!compare.BoolResult()) foundation.Result.GeneralResult = false;
+            newFoundation.SetField("SettlementConclusion", compare.CompareResult());
+            #endregion
         }
         private void ProcessSubElements(DataTable Foundations, Foundation foundation)
         {
+            foundation.Result.GeneralResult = true;
             DataRow newFoundation = ProcessFoundation(Foundations, foundation);
             ProcessFoundationParts(foundation);
             ProcessLoadSets(foundation);
             ProcessBtmStresses(foundation, newFoundation);
             ProcessSettlement(foundation, newFoundation);
+            string result = $"В соответствии с выполненным расчетом, несущая способность, надежность и долговечность фундамента {foundation.Name} ";
+            if (! foundation.Result.GeneralResult) result += "не ";
+            result += "соответствуют требованиям действуйющих норм.";
+            newFoundation.SetField("GeneralConclusion", result);
         }
     }
 }

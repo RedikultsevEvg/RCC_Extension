@@ -56,6 +56,7 @@
     <Compile Include="Common\Interfaces\IRDObserver.cs" />
     <Compile Include="Common\Interfaces\ISavableToDataSet.cs" />
     <Compile Include="Common\Interfaces\IRDObservable.cs" />
+    <Compile Include="Common\Service\Compare.cs" />
     <Compile Include="Common\Service\GetEntity.cs" />
     <Compile Include="DrawUtils\SteelBase\DrawFoundation.cs" />
     <Compile Include="DrawUtils\SteelBase\DrawSteelBase.cs" />
@@ -108,6 +109,7 @@
     <Compile Include="Entity\SC\Column\SteelBolt.cs" />
     <Compile Include="Entity\SC\Column\SteelBase.cs" />
     <Compile Include="Entity\Soils\BearingSoil.cs" />
+    <Compile Include="Entity\Soils\ClaySoil.cs" />
     <Compile Include="Entity\Soils\CompressedLayer.cs" />
     <Compile Include="Entity\Soils\CompressedLayerList.cs" />
     <Compile Include="Entity\Soils\DispersedSoil.cs" />
@@ -115,6 +117,7 @@
     <Compile Include="Entity\Soils\NonBearingSoil.cs" />
     <Compile Include="Entity\Soils\Processors\SoilLayerProcessor.cs" />
     <Compile Include="Entity\Soils\RockSoil.cs" />
+    <Compile Include="Entity\Soils\SandSoil.cs" />
     <Compile Include="Entity\Soils\Soil.cs" />
     <Compile Include="Entity\Soils\SoilElementaryLayer.cs" />
     <Compile Include="Entity\Soils\SoilLayer.cs" />

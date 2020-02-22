@@ -40,7 +40,6 @@ namespace RDBLL.Entity.Soils
         /// Отметка верха слоя
         /// </summary>
         public double TopLevel { get; set; }
-
         #region SaveToDataset
         /// <summary>
         /// Сохраняет класс в датасет

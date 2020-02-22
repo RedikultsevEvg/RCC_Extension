@@ -21,6 +21,13 @@ namespace RDBLL.Entity.RCC.Foundations
     /// </summary>
     public class Foundation : IHaveForcesGroups, ISavableToDataSet, IDataErrorInfo, IRDObserver
     {
+        public class FoundationResult
+        {
+            public List<CompressedLayerList> CompressedLayers { get; set; }
+            public double MaxSettlement { get; set; }
+            public double sndResistance { get; set; }
+            public bool GeneralResult { get; set; }
+        }
         #region fields and properties
         /// <summary>
         /// Код фундамента
@@ -132,7 +139,7 @@ namespace RDBLL.Entity.RCC.Foundations
         /// Коллекция элементарных участков подошвы
         /// </summary>
         public List<NdmArea> NdmAreas { get; set; }
-        public List<CompressedLayerList> CompressedLayers { get; set; }
+        
         /// <summary>
         /// Признак актуальности нагрузок
         /// </summary>
@@ -153,6 +160,10 @@ namespace RDBLL.Entity.RCC.Foundations
         /// Единица измерения нагрузки, распределенной по площади
         /// </summary>
         public string DistributedLoadMeasure { get { return MeasureUnitConverter.GetUnitLabelText(13); } }
+        /// <summary>
+        /// Свойство для сохранения результатов
+        /// </summary>
+        public FoundationResult Result { get; set; }
         #endregion
         #region Constructors
         /// <summary>
@@ -162,6 +173,7 @@ namespace RDBLL.Entity.RCC.Foundations
         {
             IsLoadCasesActual = false;
             IsPartsActual = false;
+            Result = new FoundationResult();
         }
         /// <summary>
         /// Конструктор по уровню
@@ -194,6 +206,7 @@ namespace RDBLL.Entity.RCC.Foundations
             ForceCurvaturesWithoutWeight = new List<ForceCurvature>();
             IsLoadCasesActual = true;
             IsPartsActual = true;
+            Result = new FoundationResult();
         }
         #endregion
         #region methods
