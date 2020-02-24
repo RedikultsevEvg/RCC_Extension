@@ -4,7 +4,8 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:RDUIL.WPF_Windows.Foundations"
-        xmlns:Convert="clr-namespace:RDUIL.Converters" 
+        xmlns:Convert="clr-namespace:RDUIL.Converters"
+        xml:lang="ru-RU"
         mc:Ignorable="d"
         Title="Фундамент" Height="500" Width="650" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
     <Window.Resources>

@@ -16,7 +16,14 @@ namespace RDUIL.Converters
         }
         public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
-            return System.Convert.ToDouble(value) / MeasureUnitConverter.GetCoefficient(14);
+            try
+            {
+                return System.Convert.ToDouble(value) / MeasureUnitConverter.GetCoefficient(14);
+            }
+            catch (Exception e)
+            {
+                return null;
+            }
         }
     }
 }

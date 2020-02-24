@@ -332,6 +332,13 @@ namespace RDBLL.Common.Service
                     newObject.BuildingSite = buildingSite;
                     newObjects.Add(newObject);
                 }
+                if (dataRow.Field<string>("Type") == "RockSoil")
+                {
+                    newObject = new RockSoil(buildingSite);
+                    newObject.OpenFromDataSet(dataRow);
+                    newObject.BuildingSite = buildingSite;
+                    newObjects.Add(newObject);
+                }
             }
             return newObjects;
         }

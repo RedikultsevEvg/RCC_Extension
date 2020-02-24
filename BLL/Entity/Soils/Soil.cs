@@ -97,7 +97,6 @@ namespace RDBLL.Entity.Soils
             BuildingSiteId = buildingSite.Id;
             BuildingSite = buildingSite;
             Name = "ИГЭ-" + (buildingSite.Soils.Count + 1);
-            Description = "Суглинок песчанистый, тугопластичный";
             FiltrationCoeff = 0.0001;
             Observers = new List<IRDObserver>();
         }

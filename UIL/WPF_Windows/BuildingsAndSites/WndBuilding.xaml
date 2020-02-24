@@ -33,6 +33,13 @@
                 </Setter.Value>
             </Setter>
         </Style>
+        <Style x:Key="CheckedPropertyTextBoxError" TargetType="TextBox" BasedOn="{StaticResource PropertyTextBoxError}">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding ElementName=cbIsRigid, Path=IsChecked}" Value="False">
+                    <Setter Property="Visibility" Value="Hidden"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
     </Window.Resources>
     <Grid  x:Name="GridMain">
         <Grid.RowDefinitions>
@@ -65,6 +72,7 @@
                                     <RowDefinition Height="30"/>
                                     <RowDefinition Height="30"/>
                                     <RowDefinition Height="30"/>
+                                    <RowDefinition Height="30"/>
                                 </Grid.RowDefinitions>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width ="*"/>
@@ -74,9 +82,9 @@
                                 <TextBlock x:Name="tbElevation" Grid.Row="0" Style="{StaticResource PropertyTextBlock}" Text="Относительная отметка"/>
                                 <TextBlock x:Name="tbHeight" Grid.Row="1" Style="{StaticResource PropertyTextBlock}" Text="Абсолютная отметка"/>
                                 <TextBlock x:Name="tbPlaningHeight" Grid.Row="2" Style="{StaticResource PropertyTextBlock}" Text="Абсолютная отметка планировки"/>
-                                <TextBox x:Name="tbxElevation" Grid.Row="0" Grid.Column="1" Style="{StaticResource PropertyTextBox}" Text="{Binding RelativeLevel, ValidatesOnDataErrors=True}"/>
-                                <TextBox x:Name="tbxHeight" Grid.Row="1" Grid.Column="1" Style="{StaticResource PropertyTextBox}" Text="{Binding AbsoluteLevel, ValidatesOnDataErrors=True}"/>
-                                <TextBox x:Name="tbxPlaningHeight" Grid.Row="2" Grid.Column="1" Style="{StaticResource PropertyTextBox}" Text="{Binding AbsolutePlaningLevel, ValidatesOnDataErrors=True}"/>
+                                <TextBox x:Name="tbxElevation" Grid.Row="0" Grid.Column="1" Style="{StaticResource PropertyTextBoxError}" Text="{Binding RelativeLevel, ValidatesOnDataErrors=True}"/>
+                                <TextBox x:Name="tbxHeight" Grid.Row="1" Grid.Column="1" Style="{StaticResource PropertyTextBoxError}" Text="{Binding AbsoluteLevel, ValidatesOnDataErrors=True}"/>
+                                <TextBox x:Name="tbxPlaningHeight" Grid.Row="2" Grid.Column="1" Style="{StaticResource PropertyTextBoxError}" Text="{Binding AbsolutePlaningLevel, ValidatesOnDataErrors=True}"/>
                                 <TextBlock Grid.Column="2" Grid.Row="0" x:Name="tbRelativeMeasure" Style="{StaticResource PropertyTextBlock}" Text="м" />
                                 <TextBlock Grid.Column="2" Grid.Row="1" x:Name="tbAbsoluteMeasure" Style="{StaticResource PropertyTextBlock}" Text="м" />
                                 <TextBlock Grid.Column="2" Grid.Row="2" x:Name="tbAbsolutePlaningMeasure" Style="{StaticResource PropertyTextBlock}" Text="м" />
@@ -97,23 +105,22 @@
                                 <TextBlock x:Name="tbMaxFoundationSettlement" Grid.Row="0" Style="{StaticResource PropertyTextBlock}" Text="Предельная осадка"/>
                                 <TextBlock x:Name="tbIsRigid" Grid.Row="1" Style="{StaticResource PropertyTextBlock}" Text="Система здания жесткая"/>
                                 <TextBlock x:Name="tbRigidRatio" Grid.Row="2" Style="{StaticResource PropertyTextBlock}" Text=" Отношение L/H"/>
-                                <TextBox x:Name="tbxMaxFoundationSettlement" Grid.Row="0" Grid.Column="1" Style="{StaticResource PropertyTextBox}"
+                                <TextBox x:Name="tbxMaxFoundationSettlement" Grid.Row="0" Grid.Column="1" Style="{StaticResource PropertyTextBoxError}"
                                          Text="{Binding MaxFoundationSettlement, Converter={StaticResource LinearSizeConverter}, ValidatesOnDataErrors=True}"/>
                                 <CheckBox x:Name="cbIsRigid" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" IsChecked="{Binding IsRigid}"/>
-                                <TextBox x:Name="tbxRigidRatio" Grid.Row="2" Grid.Column="1" Style="{StaticResource PropertyTextBox}" Text="{Binding RigidRatio}"/>
-                                <TextBlock  Grid.Row="0" Grid.Column="2" Style="{StaticResource PropertyTextBlock}" Text="{Binding LinearMeasure, ValidatesOnDataErrors=True}" />
+                                <TextBox x:Name="tbxRigidRatio" Grid.Row="2" Grid.Column="1" Style="{StaticResource CheckedPropertyTextBoxError}"
+                                         Text="{Binding RigidRatio, ValidatesOnDataErrors=True}"/>
+                                <TextBlock  Grid.Row="0" Grid.Column="2" Style="{StaticResource PropertyTextBlock}" Text="{Binding LinearMeasure}" />
                             </Grid>
                         </Expander>
                     </StackPanel>
                 </ScrollViewer>
             </StackPanel>
-            
             <StackPanel Grid.Column="1">
                 <Button x:Name="BtnSoils" Style="{StaticResource SoilServiceButton}" Click="BtnSoils_Click"/>
                 <Button x:Name="BtnSoilSections" Style="{StaticResource SoilSectionServiceButton}" Click="BtnSoilSections_Click"/>
             </StackPanel>
         </Grid>
-
         <StackPanel Height="60" Grid.Row="1" Margin="10" Orientation="Horizontal" Grid.ColumnSpan="3" HorizontalAlignment="Right" Background="#FFE2E2E2">
             <Button x:Name="btnOK" Style="{StaticResource OkServiceButton}" HorizontalAlignment="Stretch" Click="BtnOK_Click">
                 <Image x:Name="OK_png" Style="{StaticResource ServiceButtonImage}" Source="{DynamicResource IconOK}"/>

@@ -21,13 +21,22 @@ namespace RDUIL.WPF_Windows.Foundations.Soils
             List<SoilCard> soilCards = new List<SoilCard>();
             #region ClaySoil
             SoilCard soilCard = new SoilCard();
-            soilCard.Name = "Суглинок";
-            //soilCard.SoilTypeName = "ClaySoil";
+            soilCard.Name = "Глинистый грунт";
             soilCard.BuildingSite = buildingSite;
-            soilCard.Description = "Задать вид грунта - Суглинок (дисперсный грунт)";
+            soilCard.Description = "Задать глинистый грунт";
             soilCard.ImageName = $"{directory}ClaySoil.png";
             soilCard.RegisterDelegate(new SoilCard.CommandDelegate(CreateClaySoil));
             soilCards.Add(soilCard);
+            #endregion
+
+            #region ClaySoil
+            SoilCard rockCard = new SoilCard();
+            rockCard.Name = "Скальный грунт";
+            rockCard.BuildingSite = buildingSite;
+            rockCard.Description = "Задать скальный грунт";
+            rockCard.ImageName = $"{directory}RockSoil.png";
+            rockCard.RegisterDelegate(new SoilCard.CommandDelegate(CreateRockSoil));
+            soilCards.Add(rockCard);
             #endregion
 
             WndSoilSelect wndSoilSelect = new WndSoilSelect(soilCards);
@@ -37,43 +46,32 @@ namespace RDUIL.WPF_Windows.Foundations.Soils
         public static void CreateClaySoil(BuildingSite buildingSite)
         {
             DispersedSoil dispersedSoil = new DispersedSoil(buildingSite);
+            createSoil(buildingSite, dispersedSoil);
+        }
 
-            WndClaySoil wndSoil = new WndClaySoil(dispersedSoil);
+        public static void CreateRockSoil(BuildingSite buildingSite)
+        {
+            RockSoil rockSoil = new RockSoil(buildingSite);
+            createSoil(buildingSite, rockSoil);
+        }
+
+        private static void createSoil(BuildingSite buildingSite, Soil soil)
+        {
+            WndClaySoil wndSoil = new WndClaySoil(soil);
             wndSoil.ShowDialog();
             if (wndSoil.DialogResult == true)
             {
                 try
                 {
-                    dispersedSoil.SaveToDataSet(ProgrammSettings.CurrentDataSet, true);
+                    soil.SaveToDataSet(ProgrammSettings.CurrentDataSet, true);
                     ProgrammSettings.IsDataChanged = true;
-                    buildingSite.Soils.Add(dispersedSoil);
+                    buildingSite.Soils.Add(soil);
                 }
                 catch (Exception ex)
                 {
                     MessageBox.Show("Ошибка сохранения :" + ex);
                 }
             }
-        }
-
-        public static void CreateRockSoil(BuildingSite buildingSite)
-        {
-            RockSoil rockSoil = new RockSoil(buildingSite);
-
-            //WndClaySoil wndSoil = new WndClaySoil(rockSoil);
-            //wndSoil.ShowDialog();
-            //if (wndSoil.DialogResult == true)
-            //{
-            //    try
-            //    {
-            //        rockSoil.SaveToDataSet(ProgrammSettings.CurrentDataSet, true);
-            //        ProgrammSettings.IsDataChanged = true;
-            //        buildingSite.Soils.Add(rockSoil);
-            //    }
-            //    catch (Exception ex)
-            //    {
-            //        MessageBox.Show("Ошибка сохранения :" + ex);
-            //    }
-            //}
         }
     }
 }

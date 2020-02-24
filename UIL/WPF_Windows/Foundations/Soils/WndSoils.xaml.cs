@@ -86,24 +86,21 @@ namespace RDUIL.WPF_Windows.Foundations.Soils
             {
                 int a = LvMain.SelectedIndex;
                 Soil soil = _collection[a];
-                if (soil is DispersedSoil)
+                WndClaySoil wndSoil = new WndClaySoil(soil);
+                wndSoil.ShowDialog();
+                if (wndSoil.DialogResult == true)
                 {
-                    WndClaySoil wndSoil = new WndClaySoil(soil as DispersedSoil);
-                    wndSoil.ShowDialog();
-                    if (wndSoil.DialogResult == true)
+                    try
                     {
-                        try
-                        {
-                            soil.SaveToDataSet(ProgrammSettings.CurrentDataSet, false);
-                            ProgrammSettings.IsDataChanged = true;
-                        }
-                        catch (Exception ex)
-                        {
-                            MessageBox.Show("Ошибка сохранения :" + ex);
-                        }
+                        soil.SaveToDataSet(ProgrammSettings.CurrentDataSet, false);
+                        ProgrammSettings.IsDataChanged = true;
                     }
-                    else { soil.OpenFromDataSet(ProgrammSettings.CurrentDataSet); }
-                }               
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show("Ошибка сохранения :" + ex);
+                    }
+                }
+                else { soil.OpenFromDataSet(ProgrammSettings.CurrentDataSet); }
             }
             else
             {

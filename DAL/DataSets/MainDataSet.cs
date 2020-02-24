@@ -86,6 +86,9 @@ namespace DAL.DataSets
             DsOperation.AddDoubleColumn(dataTable, "CrcCohesion", 20000);
             DsOperation.AddDoubleColumn(dataTable, "FstDesignCohesion", 17000);
             DsOperation.AddDoubleColumn(dataTable, "SndDesignCohesion", 18000);
+            DsOperation.AddDoubleColumn(dataTable, "CrcStrength", 2e7);
+            DsOperation.AddDoubleColumn(dataTable, "FstDesignStrength", 1.8e7);
+            DsOperation.AddDoubleColumn(dataTable, "SndDesignStrength", 1.6e7);
             #endregion
             #region SoilSections
             dataTable = new DataTable("SoilSections");

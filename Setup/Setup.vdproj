@@ -354,7 +354,7 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:CSL, Version=2020.1.12.1, Culture=neutral, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:CSL, Version=2020.2.15.1, Culture=neutral, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
                     "_03FB79747E252C1182211E61B9ADCE20"
@@ -527,7 +527,7 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:DAL, Version=2020.1.12.1, Culture=neutral, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:DAL, Version=2020.2.15.1, Culture=neutral, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
                     "_8425B40174293B7625616C8626C26D5F"
@@ -669,7 +669,7 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:BLL, Version=2020.1.12.1, Culture=neutral, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:BLL, Version=2020.2.15.1, Culture=neutral, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
                     "_971DFAB99578DEBA3FF701FD27C1D0CE"
@@ -771,7 +771,7 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:UIL, Version=2020.1.12.2, Culture=neutral, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:UIL, Version=2020.2.15.2, Culture=neutral, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
                     "_FC0BD30E32A04ADBCFB60BE2FAA34164"
@@ -909,15 +909,15 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:RDCalculator"
-        "ProductCode" = "8:{1E003824-65EB-450E-B4A7-92514C7E7BBF}"
-        "PackageCode" = "8:{E12F596A-481F-4BD6-9672-4A5F80647A5C}"
+        "ProductCode" = "8:{849B1897-0673-4399-A404-65A788932081}"
+        "PackageCode" = "8:{5048BD86-2C60-401B-9964-49B757DAF3F5}"
         "UpgradeCode" = "8:{F8D2313E-F177-4FC2-9861-457BFA1190A1}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:TRUE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:FALSE"
-        "ProductVersion" = "8:20.02.15"
+        "ProductVersion" = "8:20.02.24"
         "Manufacturer" = "8:RealDoc"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:"

@@ -3,13 +3,14 @@ using System;
 using System.ComponentModel;
 using System.Data;
 using System.Linq;
+using RDBLL.Common.Service;
 
 namespace RDBLL.Entity.RCC.Foundations
 {
     /// <summary>
     /// Класс части (ступени) фундамента
     /// </summary>
-    public class RectFoundationPart :FoundationPart, ISavableToDataSet, IDataErrorInfo
+    public class RectFoundationPart :FoundationPart, ISavableToDataSet, IDataErrorInfo, IDuplicate
     {
         #region fields and properties
         /// <summary>
@@ -90,6 +91,24 @@ namespace RDBLL.Entity.RCC.Foundations
             base.OpenFromDataSet(dataRow);
             Width = dataRow.Field<double>("Width");
             Length = dataRow.Field<double>("Length");
+        }
+        #endregion
+        #region IDuplicate
+        /// <summary>
+        /// Клонирование объекта
+        /// </summary>
+        /// <returns></returns>
+        public object Duplicate()
+        {
+            RectFoundationPart rectFoundationPart = new RectFoundationPart();
+            rectFoundationPart.Id = ProgrammSettings.CurrentId;
+            rectFoundationPart.Name = this.Name;
+            rectFoundationPart.CenterX = this.CenterX;
+            rectFoundationPart.CenterY = this.CenterY;
+            rectFoundationPart.Width = this.Width;
+            rectFoundationPart.Length = this.Length;
+            rectFoundationPart.Height = this.Height;
+            return rectFoundationPart;
         }
         #endregion
         public string Error { get { throw new NotImplementedException(); } }

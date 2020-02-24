@@ -14,7 +14,7 @@ namespace RDBLL.Forces
     /// <summary>
     /// Класс величины усилия
     /// </summary>
-    public class ForceParameter : IEquatable<ForceParameter>, ISavableToDataSet
+    public class ForceParameter : IEquatable<ForceParameter>, ISavableToDataSet, IDuplicate
     {
         private int _KindId;
         private ForceParamKind _forceParamKind;
@@ -179,6 +179,24 @@ namespace RDBLL.Forces
             }
             else { return false; }
         }
+        #region IDuplicate
+        /// <summary>
+        /// Клонирование объекта
+        /// </summary>
+        /// <returns></returns>
+        public object Duplicate()
+        {
+            ForceParameter forceParameter = new ForceParameter();
+            forceParameter.Id = ProgrammSettings.CurrentId;
+            forceParameter.KindId = KindId;
+            forceParameter.ForceParamKind = ForceParamKind;
+            forceParameter.Name = Name;
+            forceParameter.CrcValue = CrcValue;
+            forceParameter.CrcValueInCurUnit = CrcValueInCurUnit;
+            forceParameter.DesignValue = DesignValue;
+            return forceParameter;
+        }
+        #endregion
     }
 
 

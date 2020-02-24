@@ -242,7 +242,7 @@ namespace RDBLL.Entity.Soils
                             if (SoilLayers.Count>0 & HasWater)
                             if (NaturalWaterLevel > SoilLayers[0].TopLevel)
                             {
-                                error = "Уровень грунтовых вод должен быть ниже кровели верхнего слоя";
+                                error = "Уровень грунтовых вод должен быть ниже кровли верхнего слоя";
                             }
                         }
                         break;

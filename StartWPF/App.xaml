@@ -333,6 +333,66 @@
                 </Grid>
             </Expander>
         </DataTemplate>
+        <DataTemplate x:Key="ClaySoilProps">
+            <Expander x:Name="MC" Header="Свойства глинистого грунта">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="30"/>
+                        <RowDefinition Height="30"/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition Width="100"/>
+                        <ColumnDefinition Width="100"/>
+                    </Grid.ColumnDefinitions>
+                </Grid>
+            </Expander>
+        </DataTemplate>
+        <DataTemplate x:Key="SandSoilProps">
+            <Expander x:Name="MC" Header="Свойства песчаного грунта">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="30"/>
+                        <RowDefinition Height="30"/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition Width="100"/>
+                        <ColumnDefinition Width="100"/>
+                    </Grid.ColumnDefinitions>
+                </Grid>
+            </Expander>
+        </DataTemplate>
+        <DataTemplate x:Key="RockSoilProps">
+            <Expander x:Name="RS" Header="Свойства скального грунта">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="30"/>
+                        <RowDefinition Height="30"/>
+                        <RowDefinition Height="30"/>
+                        <RowDefinition Height="30"/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition Width="100"/>
+                        <ColumnDefinition Width="100"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Grid.Row="0" Style="{StaticResource PropertyTextBlock}" Text="Сопротивление при одноосном сжатии" FontWeight="Bold"/>
+                    <TextBlock Grid.Row="1" Style="{StaticResource PropertyTextBlock}" Text="Нормативное значение"/>
+                    <TextBlock Grid.Row="2" Style="{StaticResource PropertyTextBlock}" Text="Расчетное значение для 1-й группы предельных состояний"/>
+                    <TextBlock Grid.Row="3" Style="{StaticResource PropertyTextBlock}" Text="Расчетное значение для 2-й группы предельных состояний"/>
+                    <TextBox Grid.Column="1" Grid.Row="1" Style="{StaticResource PropertyTextBoxError}" Text="{Binding CrcStrength, Converter={StaticResource StressConverter}, ValidatesOnDataErrors=True}"/>
+                    <TextBox Grid.Column="1" Grid.Row="2" Style="{StaticResource PropertyTextBoxError}" Text="{Binding FstDesignStrength, Converter={StaticResource StressConverter}, ValidatesOnDataErrors=True}"/>
+                    <TextBox Grid.Column="1" Grid.Row="3" Style="{StaticResource PropertyTextBoxError}" Text="{Binding SndDesignStrength, Converter={StaticResource StressConverter}, ValidatesOnDataErrors=True}"/>
+                    <TextBlock Grid.Column="2" Grid.Row="1" Style="{StaticResource PropertyTextBlock}" Text="{Binding StressMeasure}"/>
+                    <TextBlock Grid.Column="2" Grid.Row="2" Style="{StaticResource PropertyTextBlock}" Text="{Binding StressMeasure}"/>
+                    <TextBlock Grid.Column="2" Grid.Row="3" Style="{StaticResource PropertyTextBlock}" Text="{Binding StressMeasure}"/>
+                </Grid>
+            </Expander>
+        </DataTemplate>
 
         <BitmapImage x:Key="IconRefresh40" CreateOptions="IgnoreImageCache" CacheOption="OnLoad" UriSource="/UIL;component/Resources/IconRefresh40.png"/>
         <BitmapImage x:Key="IconForces" CreateOptions="IgnoreImageCache" CacheOption="OnLoad" UriSource="/UIL;component/Resources/IconForces.png"/>
@@ -345,6 +405,7 @@
         <BitmapImage x:Key="IconAdd40" CreateOptions="IgnoreImageCache" CacheOption="OnLoad" UriSource="/UIL;component/Resources/IconAdd40.png"/>
         <BitmapImage x:Key="IconDelete40" CreateOptions="IgnoreImageCache" CacheOption="OnLoad" UriSource="/UIL;component/Resources/IconDelete40.png"/>
         <BitmapImage x:Key="IconEdit40" CreateOptions="IgnoreImageCache" CacheOption="OnLoad" UriSource="/UIL;component/Resources/IconEdit40.png"/>
+        <BitmapImage x:Key="IconDuplicate40" CreateOptions="IgnoreImageCache" CacheOption="OnLoad" UriSource="/UIL;component/Resources/IconRefresh40.png"/>
         <BitmapImage x:Key="IconBolt" CreateOptions="IgnoreImageCache" CacheOption="OnLoad" UriSource="/UIL;component/Resources/IconBolt40.png"/>
         <BitmapImage x:Key="IconBase40" CreateOptions="IgnoreImageCache" CacheOption="OnLoad" UriSource="/UIL;component/Resources/IconBase40.png"/>
         <BitmapImage x:Key="IconBasePart40" CreateOptions="IgnoreImageCache" CacheOption="OnLoad" UriSource="/UIL;component/Resources/IconBasePart40.png"/>
