@@ -19,7 +19,7 @@ namespace RDBLL.Entity.RCC.Foundations
     /// <summary>
     /// Класс столбчатого фундамента
     /// </summary>
-    public class Foundation : IHaveForcesGroups, ISavableToDataSet, IDataErrorInfo, IRDObserver
+    public class Foundation : IHaveForcesGroups, ISavableToDataSet, IDataErrorInfo, IRDObserver, IDuplicate
     {
         public class FoundationResult
         {
@@ -173,6 +173,12 @@ namespace RDBLL.Entity.RCC.Foundations
         {
             IsLoadCasesActual = false;
             IsPartsActual = false;
+            ForcesGroups = new ObservableCollection<ForcesGroup>();
+            ForcesGroups.Add(new ForcesGroup(this));
+            Parts = new ObservableCollection<RectFoundationPart>();
+            LoadCases = new ObservableCollection<LoadSet>();
+            ForceCurvaturesWithWeight = new List<ForceCurvature>();
+            ForceCurvaturesWithoutWeight = new List<ForceCurvature>();
             Result = new FoundationResult();
         }
         /// <summary>
@@ -329,6 +335,55 @@ namespace RDBLL.Entity.RCC.Foundations
         {
             IsLoadCasesActual = false;
             IsPartsActual = false;
+        }
+        #endregion
+        #region IDuplicate
+        /// <summary>
+        /// Клонирование объекта
+        /// </summary>
+        /// <returns></returns>
+        public object Duplicate()
+        {
+            Foundation foundation = new Foundation();
+            foundation.Id = ProgrammSettings.CurrentId;
+            #region Copy properties
+            foundation.Name = Name;
+            if (! (SoilSectionId is null))
+            {
+                foundation.SoilSectionId = SoilSectionId;
+                foundation.SoilSection = SoilSection;
+            }
+            foundation.ReinfSteelClassId = ReinfSteelClassId;
+            foundation.ConcreteClassId = ConcreteClassId;
+            foundation.RelativeTopLevel = RelativeTopLevel;
+            foundation.SoilRelativeTopLevel = SoilRelativeTopLevel;
+            foundation.SoilVolumeWeight = SoilVolumeWeight;
+            foundation.ConcreteVolumeWeight = ConcreteVolumeWeight;
+            foundation.FloorLoad = FloorLoad;
+            foundation.FloorLoadFactor = FloorLoadFactor;
+            foundation.ConcreteFloorLoad = ConcreteFloorLoad;
+            foundation.ConcreteFloorLoadFactor = ConcreteFloorLoadFactor;
+            foundation.CoveringLayerX = CoveringLayerX;
+            foundation.CoveringLayerY = CoveringLayerY;
+            foundation.CompressedLayerRatio = CompressedLayerRatio;
+            #endregion
+            //Копируем нагрузки
+            foreach (ForcesGroup forcesGroup in ForcesGroups)
+            {
+                ForcesGroup newForcesGroup = forcesGroup.Duplicate() as ForcesGroup;
+                newForcesGroup.Foundations.Add(foundation);
+                foundation.ForcesGroups.Clear();
+                foundation.ForcesGroups.Add(newForcesGroup);
+            }
+            //Копируем ступени
+            foreach (RectFoundationPart rectFoundationPart in this.Parts)
+            {
+                RectFoundationPart newFoundationPart = rectFoundationPart.Duplicate() as RectFoundationPart;
+                newFoundationPart.FoundationId = foundation.Id;
+                newFoundationPart.Foundation = foundation;
+                foundation.Parts.Add(newFoundationPart);
+            }
+            return foundation;
         }
         #endregion
         public void RenewSoilSection()

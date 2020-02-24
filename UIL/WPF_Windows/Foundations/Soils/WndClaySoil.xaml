@@ -24,10 +24,8 @@
 
             </Image>
             <ScrollViewer Grid.Column="1">
-                <StackPanel>
+                <StackPanel x:Name="StpProperties">
                     <ContentControl ContentTemplate="{DynamicResource GeneralSoilProps}" Content="{Binding}"/>
-                    <ContentControl ContentTemplate="{DynamicResource MechanicalSoilProps}" Content="{Binding}"/>
-                    <ContentControl ContentTemplate="{DynamicResource MCSoilProps}" Content="{Binding}"/>
                 </StackPanel>
             </ScrollViewer>
         </Grid>

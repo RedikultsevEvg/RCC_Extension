@@ -37,25 +37,6 @@ namespace RDUIL.Validations
 
                 }
             }
-
-            //foreach (object child in VisualTreeHelper.GetChild(obj))
-            //{
-            //    Panel panelElement = child as Panel;
-            //    if (panelElement != null) { GetErrors(sb, panelElement); }
-
-            //    TextBox element = child as TextBox;
-            //    if (element == null) continue;
-
-            //    if (Validation.GetHasError(element))
-            //    {
-            //        sb.Append(element.Text + " найдена ошибка:\r\n");
-            //        foreach (ValidationError error in Validation.GetErrors(element))
-            //        {
-            //            sb.Append("  " + error.ErrorContent.ToString());
-            //            sb.Append("\r\n");
-            //        }
-            //    }
-            //}
         }
     }
 }

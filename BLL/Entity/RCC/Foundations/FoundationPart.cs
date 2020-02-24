@@ -11,6 +11,9 @@ using DAL.Common;
 
 namespace RDBLL.Entity.RCC.Foundations
 {
+    /// <summary>
+    /// Класс ступени фундамента
+    /// </summary>
     public abstract class FoundationPart : ISavableToDataSet
     {
         /// <summary>
@@ -53,7 +56,6 @@ namespace RDBLL.Entity.RCC.Foundations
         {
 
         }
-
         /// <summary>
         /// Конструктор по фундаменту
         /// </summary>
@@ -76,7 +78,6 @@ namespace RDBLL.Entity.RCC.Foundations
             CenterX = 0;
             CenterY = 0;
         }
-
         /// <summary>
         /// Сохраняет класс в датасет
         /// </summary>
@@ -84,6 +85,10 @@ namespace RDBLL.Entity.RCC.Foundations
         {
             throw new NotImplementedException();
         }
+        /// <summary>
+        /// Обновляет запись в соответствии с датасетом
+        /// </summary>
+        /// <param name="dataSet"></param>
         public virtual void OpenFromDataSet(DataSet dataSet)
         {
             DataTable dataTable = dataSet.Tables["FoundationParts"];

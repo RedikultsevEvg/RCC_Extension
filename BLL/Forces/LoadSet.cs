@@ -14,7 +14,7 @@ namespace RDBLL.Forces
     /// <summary>
     ///Клас комбинации загружений 
     /// </summary>
-    public class LoadSet : IEquatable<LoadSet>, ISavableToDataSet
+    public class LoadSet : IEquatable<LoadSet>, ISavableToDataSet, IDuplicate
     {
         #region
         /// <summary>
@@ -80,6 +80,11 @@ namespace RDBLL.Forces
         }
         #endregion
         #region Methods
+        /// <summary>
+        /// Сохраняет лоадсет в датасет
+        /// </summary>
+        /// <param name="dataSet"></param>
+        /// <param name="createNew"></param>
         public void SaveToDataSet(DataSet dataSet, bool createNew)
         {
             DataTable dataTable;
@@ -134,7 +139,10 @@ namespace RDBLL.Forces
                 forceParameter.SaveToDataSet(dataSet, createNew);
             }
         }
-
+        /// <summary>
+        /// Обновляет запись в соответствии с датасетом
+        /// </summary>
+        /// <param name="dataSet"></param>
         public void OpenFromDataSet(DataSet dataSet)
         {
             throw new NotImplementedException();
@@ -171,6 +179,11 @@ namespace RDBLL.Forces
             }
             else { return false; }
         }
+        /// <summary>
+        /// Сравнивает все значения нагрузок при сравнении текущего лоадсета с другим
+        /// </summary>
+        /// <param name="other"></param>
+        /// <returns>true, если лоадсеты имеют одинаковые наборы нагрузок</returns>
         public bool CompareForceParameters(LoadSet other)
         {
             if (!(other.ForceParameters.Count == ForceParameters.Count)) { return false; }
@@ -180,5 +193,30 @@ namespace RDBLL.Forces
             }
             return true;
         }
+        #region IDuplicate
+        /// <summary>
+        /// Клонирование объекта
+        /// </summary>
+        /// <returns></returns>
+        public object Duplicate()
+        {
+            LoadSet loadSet = new LoadSet();
+            loadSet.Id = ProgrammSettings.CurrentId;
+            loadSet.Name = this.Name;
+            loadSet.PartialSafetyFactor = PartialSafetyFactor;
+            loadSet.IsLiveLoad = IsLiveLoad;
+            loadSet.IsCombination = IsCombination;
+            loadSet.BothSign = BothSign;
+            //Копируем параметры нагрузки
+            foreach (ForceParameter forceParameter in ForceParameters)
+            {
+                ForceParameter newForceParameter = forceParameter.Duplicate() as ForceParameter;
+                newForceParameter.LoadSetId = loadSet.Id;
+                newForceParameter.LoadSet = loadSet;
+                loadSet.ForceParameters.Add(newForceParameter);
+            }
+            return loadSet;
+        }
+        #endregion
     }
 }

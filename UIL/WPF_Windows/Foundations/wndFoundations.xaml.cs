@@ -128,5 +128,31 @@ namespace RDUIL.WPF_Windows.Foundations
         {
             ShowReportProcessor.ShowFoundationsReport();
         }
+
+        private void BtnDuplicate_Click(object sender, RoutedEventArgs e)
+        {
+            if (LvMain.SelectedIndex >= 0)
+            {
+                int a = LvMain.SelectedIndex;
+                Foundation foundation = _collection[a];
+                Foundation newFoundation = foundation.Duplicate() as Foundation;
+                newFoundation.LevelId = foundation.LevelId;
+                newFoundation.Level = foundation.Level;
+                try
+                {
+                    newFoundation.SaveToDataSet(ProgrammSettings.CurrentDataSet, true);
+                    _collection.Add(newFoundation);
+                    ProgrammSettings.IsDataChanged = true;
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Ошибка сохранения :" + ex);
+                }
+            }
+            else
+            {
+                MessageBox.Show("Ничего не выбрано", "Выберите один из элементов");
+            }
+        }
     }
 }

@@ -12,6 +12,7 @@ using System.Data;
 using RDBLL.Entity.Soils;
 using DAL.Common;
 using RDBLL.Entity.MeasureUnits;
+using System.ComponentModel;
 
 namespace RDBLL.Entity.RCC.BuildingAndSite
 {
@@ -132,7 +133,7 @@ namespace RDBLL.Entity.RCC.BuildingAndSite
     /// <summary>
     /// Класс здания
     /// </summary>
-    public class Building : ICloneable, ISavableToDataSet
+    public class Building : ICloneable, ISavableToDataSet, IDataErrorInfo
     {
         /// <summary>
         /// Код здания
@@ -256,7 +257,6 @@ namespace RDBLL.Entity.RCC.BuildingAndSite
                 level.SaveToDataSet(dataSet, createNew);
             }
         }
-
         /// <summary>
         /// Открытие из датасета
         /// </summary>
@@ -300,6 +300,74 @@ namespace RDBLL.Entity.RCC.BuildingAndSite
         public object Clone()
         {
             return this.MemberwiseClone();
+        }
+        /// <summary>
+        /// Поле для ошибки
+        /// </summary>
+        public string Error { get { throw new NotImplementedException(); } }
+        /// <summary>
+        /// Поле для проверки на ошибки
+        /// </summary>
+        /// <param name="columnName"></param>
+        /// <returns></returns>
+        public string this[string columnName]
+        {
+            get
+            {
+                string error = String.Empty;
+                switch (columnName)
+                {
+                    case "RelativeLevel":
+                        {
+                            if (RelativeLevel < -5)
+                            {
+                                error = "Ошибка относительной отметки";
+                            }
+                        }
+                        break;
+                    case "AbsoluteLevel":
+                        {
+                            if (AbsoluteLevel <= 0)
+                            {
+                                error = "Абсолютная отметка не может быть меньше нуля";
+                            }
+                            if (AbsoluteLevel >= 1000)
+                            {
+                                error = "Абсолютная отметка не может быть больше 1000м";
+                            }
+                        }
+                        break;
+                    case "AbsolutePlaningLevel":
+                        {
+                            if (AbsolutePlaningLevel <= 0)
+                            {
+                                error = "Абсолютная отметка планировки не может быть меньше нуля";
+                            }
+                            if (AbsolutePlaningLevel < AbsoluteLevel - 20)
+                            {
+                                error = "Абсолютная отметка планировки назначена неверно";
+                            }
+                        }
+                        break;
+                    case "MaxFoundationSettlement":
+                        {
+                            if (MaxFoundationSettlement < 0)
+                            {
+                                error = "Введите корректное значение осадки";
+                            }
+                        }
+                        break;
+                    case "RigidRatio":
+                        {
+                            if (RigidRatio < 0)
+                            {
+                                error = "Отношение длины к высоте не может быть меньше нуля";
+                            }
+                        }
+                        break;
+                }
+                return error;
+            }
         }
     }
 }

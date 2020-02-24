@@ -19,7 +19,7 @@ namespace RDBLL.Forces
     /// <summary>
     /// Группа нагрузок, приложенных в одной точке
     /// </summary>
-    public class ForcesGroup: ISavableToDataSet
+    public class ForcesGroup: ISavableToDataSet, IDuplicate
     {
         #region Fields and properties
         /// <summary>
@@ -224,6 +224,25 @@ namespace RDBLL.Forces
             {
                 foundation.IsLoadCasesActual = false;
             }
+        }
+        #endregion
+        #region IDuplicate
+        /// <summary>
+        /// Клонирование объекта
+        /// </summary>
+        /// <returns></returns>
+        public object Duplicate()
+        {
+            ForcesGroup forcesGroup = new ForcesGroup();
+            forcesGroup.Id = ProgrammSettings.CurrentId;
+            //копируем лоадсеты
+            foreach (LoadSet loadSet in LoadSets)
+            {
+                LoadSet newLoadSet = loadSet.Duplicate() as LoadSet;
+                newLoadSet.ForcesGroups.Add(forcesGroup);
+                forcesGroup.LoadSets.Add(newLoadSet);
+            }
+            return forcesGroup;
         }
         #endregion
     }

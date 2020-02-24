@@ -52,6 +52,7 @@
     <Compile Include="Common\Geometry\Mathematic\Constants.cs" />
     <Compile Include="Common\Geometry\Mathematic\Matrix.cs" />
     <Compile Include="Common\Geometry\RectCrossSection.cs" />
+    <Compile Include="Common\Interfaces\IDuplicate.cs" />
     <Compile Include="Common\Interfaces\IHaveForcesGroups.cs" />
     <Compile Include="Common\Interfaces\IRDObserver.cs" />
     <Compile Include="Common\Interfaces\ISavableToDataSet.cs" />

@@ -340,6 +340,12 @@ namespace RDBLL.Entity.RCC.Foundations.Processors
             double[] delta = GetDeltaDistance(foundation);
             return new double[2] { delta[0], delta[1]};
         }
+        /// <summary>
+        /// Возвращает краевые точки фундамента
+        /// Каждая точка - пара координат
+        /// </summary>
+        /// <param name="foundation"></param>
+        /// <returns></returns>
         public static List<double[]> GetFoundationMidllePoints(Foundation foundation)
         {
             List<double[]> points = new List<double[]>();
@@ -354,6 +360,12 @@ namespace RDBLL.Entity.RCC.Foundations.Processors
             points.Add(point4);
             return points;
         }
+        /// <summary>
+        /// Возвращает угловые точки фундамента
+        /// Каждая точка - пара координат
+        /// </summary>
+        /// <param name="foundation"></param>
+        /// <returns></returns>
         public static List<double[]> GetFoundationCornerPoints(Foundation foundation)
         {
             List<double[]> points = new List<double[]>();
@@ -547,8 +559,14 @@ namespace RDBLL.Entity.RCC.Foundations.Processors
 
             return minMaxStresses;
         }
+        /// <summary>
+        /// Возвращает результирующие данные по осадке для отчета
+        /// </summary>
+        /// <param name="foundation"></param>
+        /// <returns></returns>
         public static SettleMentResult GetSettleMentResult (Foundation foundation)
         {
+            //Функция перевода жесткости в строку
             string[] GetStiffnessString(List<double> stiffnessList, double coff)
             {
                 string[] s = new string[2];
@@ -566,22 +584,24 @@ namespace RDBLL.Entity.RCC.Foundations.Processors
                 }
                 return s;
             }
-
+            #region Списки для хранения
             SettleMentResult settleMentResult = new SettleMentResult();
             List<CompressedLayerList> mainCompressedLayers = foundation.Result.CompressedLayers;
-
+            //Список хранения осадки
             List<double> Settlements = new List<double>();
+            //Список для хранения глубины сжимаемой толщи
             List<double> ComressionHeights = new List<double>();
-
+            //Списки для хранения кренов относительно каждой из осей
             List<double> IncXs = new List<double>();
             List<double> IncYs = new List<double>();
             List<double> IncXYs = new List<double>();
-
+            //Списки для хранения жесткостей по каждой степени свободы
             List<double> NzStiffnesses = new List<double>();
             List<double> MxStiffnesses = new List<double>();
             List<double> MyStiffnesses = new List<double>();
-
+            #endregion
             int count = mainCompressedLayers.Count;
+            //Заполнение списков
             for (int i = 0; i<count; i++)
             {
                 CompressedLayerList compressedLayersList = mainCompressedLayers[i];
@@ -621,9 +641,8 @@ namespace RDBLL.Entity.RCC.Foundations.Processors
                         MyStiffnesses.Add(Math.Abs(MyStiffness));
                     }
                 }
-
-
             }
+            //Нахождение минимумов и максимумов по спискам
             settleMentResult.Settlement = Settlements.Min();
             settleMentResult.CompressionHeight = ComressionHeights.Max();
             settleMentResult.IncX = IncXs.Max();
@@ -645,8 +664,7 @@ namespace RDBLL.Entity.RCC.Foundations.Processors
             stiffness = GetStiffnessString(MyStiffnesses, measureCoff);
             settleMentResult.MyStiffnessStringMax = stiffness[0];
             settleMentResult.MyStiffnessStringMin = stiffness[1];
-
-            
+           
             return settleMentResult;
         }
         /// <summary>
@@ -692,6 +710,11 @@ namespace RDBLL.Entity.RCC.Foundations.Processors
             cofficients[2] = psi / (Math.Tan(fi)); //M_C
             return cofficients;
         }
+        /// <summary>
+        /// Возвращает коэффициент по СП
+        /// </summary>
+        /// <param name="dispersedSoil"></param>
+        /// <returns></returns>
         private static double GetGammaC1(DispersedSoil dispersedSoil)
         {
             //Если грунт крупнообломочный
@@ -703,6 +726,12 @@ namespace RDBLL.Entity.RCC.Foundations.Processors
             //Глинистый грунт с Il>0.5
             return 1.1;
         }
+        /// <summary>
+        /// Возвращает коэффициент по СП
+        /// </summary>
+        /// <param name="building"></param>
+        /// <param name="dispersedSoil"></param>
+        /// <returns></returns>
         private static double GetGammaC2(BuildingAndSite.Building building, DispersedSoil dispersedSoil)
         {
             double gammaC2 = 1;
@@ -718,6 +747,11 @@ namespace RDBLL.Entity.RCC.Foundations.Processors
             }
             return gammaC2;
         }
+        /// <summary>
+        /// Возвращает расчетное сопротивление грунта по 2-й группе предельных состояний
+        /// </summary>
+        /// <param name="foundation"></param>
+        /// <returns></returns>
         public static double SndResistance (Foundation foundation)
         {
 
@@ -725,6 +759,16 @@ namespace RDBLL.Entity.RCC.Foundations.Processors
             List<CompressedLayerList> compressedLayerList = foundation.Result.CompressedLayers;
             List<CompressedLayer> compressedLayers = compressedLayerList[0].CompressedLayers;
             Soil soil = compressedLayers[0].SoilElementaryLayer.Soil;
+            //Если грунт не является несущим, выдаем исключение
+            if (!(soil is BearingSoil)) throw new Exception("Невозможно определить расчетное сопротивление ненесущего грунта");
+            //Если грунт является скальным
+            if (soil is RockSoil)
+            {
+                RockSoil rockSoil = soil as RockSoil;
+                resistance = rockSoil.SndDesignStrength;
+                return resistance;
+            }
+            //Если грунт является дисперсным
             if (soil is DispersedSoil)
             {
                 DispersedSoil dispSoil = soil as DispersedSoil;

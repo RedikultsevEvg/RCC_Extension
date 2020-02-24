@@ -49,6 +49,7 @@ namespace RDBLL.Entity.Soils
         /// <param name="buildingSite"></param>
         public DispersedSoil(BuildingSite buildingSite) :base(buildingSite)
         {
+            Description = "Суглинок песчанистый, тугопластичный";
             CrcDensity = 1950;
             FstDesignDensity = 1800;
             SndDesignDensity = 1900;
@@ -83,6 +84,10 @@ namespace RDBLL.Entity.Soils
             dataRow["SndDesignCohesion"] = SndDesignCohesion;
             dataRow["IsDefinedFromTest"] = IsDefinedFromTest;
         }
+        /// <summary>
+        /// Обновляет запись в соответствии с датасетом
+        /// </summary>
+        /// <param name="dataSet"></param>
         public override void OpenFromDataSet(DataSet dataSet)
         {
             DataTable dataTable = dataSet.Tables["Soils"];
@@ -106,6 +111,5 @@ namespace RDBLL.Entity.Soils
             SndDesignCohesion = dataRow.Field<double>("SndDesignCohesion");
             IsDefinedFromTest = dataRow.Field<bool>("IsDefinedFromTest");
         }
-
     }
 }

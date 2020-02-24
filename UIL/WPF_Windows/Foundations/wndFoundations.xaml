@@ -17,6 +17,9 @@
             <Button x:Name="BtnAdd" Style="{StaticResource AddServiceButton}" Click="BtnAdd_Click"/>
             <Button x:Name="BtnDelete" Style="{StaticResource DeleteServiceButton}" Click="BtnDelete_Click"/>
             <Button x:Name="BtnEdit" Style="{StaticResource EditServiceButton}" Click="BtnEdit_Click"/>
+            <Button x:Name="BtnDuplicate" Style="{StaticResource ServiceButton}" ToolTip="Дублировать" Click="BtnDuplicate_Click">
+                <Image x:Name="DuplicatePng" Style="{StaticResource ServiceButtonImage}" Source="{DynamicResource IconDuplicate40}"/>
+            </Button>
             <Button x:Name="BtnReport" Style="{StaticResource ReportServiceButton}" Click="BtnReport_Click">
                 <Image x:Name="ReportPng" Style="{StaticResource ServiceButtonImage}" Source="{DynamicResource IconReport}"/>
             </Button>
