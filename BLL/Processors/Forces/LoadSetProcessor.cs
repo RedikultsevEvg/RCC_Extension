@@ -218,14 +218,14 @@ namespace RDBLL.Processors.Forces
                         break;
                 }
             }
-            Mx[0] += Qy[0] * dz - Nz[0] * dy;
-            Mx[1] += Qy[1] * dz - Nz[1] * dy;
+            Mx[0] += +Qy[0] * dz + Nz[0] * dy;
+            Mx[1] += +Qy[1] * dz + Nz[1] * dy;
             //У моментов по оси Y другие знаки, так как тройка осей координат правая
-            My[0] += - Qx[0] * dz + Nz[0] * dx;
-            My[1] += - Qx[1] * dz + Nz[1] * dx;
+            My[0] += -Qx[0] * dz - Nz[0] * dx;
+            My[1] += -Qx[1] * dz - Nz[1] * dx;
 
-            Mz[0] += Qx[0] * dy + Qy[0] * dx;
-            Mz[1] += Qx[1] * dy + Qy[1] * dx;
+            Mz[0] += -Qx[0] * dy + Qy[0] * dx;
+            Mz[1] += -Qx[1] * dy + Qy[1] * dx;
 
             LoadSet newLoadSet = new LoadSet();
             newLoadSet.Name = deduplicatedSet.Name;

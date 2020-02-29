@@ -27,7 +27,6 @@ namespace RDBLL.Entity.Soils
         /// Коэффициент Пуассона
         /// </summary>
         public double PoissonRatio { get; set; }
-
         /// <summary>
         /// Конструктор по строительному объекту
         /// </summary>

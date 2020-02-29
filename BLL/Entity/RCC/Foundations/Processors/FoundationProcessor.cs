@@ -180,7 +180,21 @@ namespace RDBLL.Entity.RCC.Foundations.Processors
                     foundation.Result.CompressedLayers = CompressedLayers(foundation);
                 SettleMentResult SettleMentResult = GetSettleMentResult(foundation);
                 foundation.Result.MaxSettlement = SettleMentResult.Settlement;
-                foundation.Result.sndResistance = SndResistance(foundation);
+                foundation.Result.CompressHeight = SettleMentResult.CompressionHeight;
+                foundation.Result.IncX = SettleMentResult.IncX;
+                foundation.Result.IncY = SettleMentResult.IncY;
+                foundation.Result.IncXY = SettleMentResult.IncXY;
+
+                foundation.Result.StressesWithWeigth = FoundationProcessor.GetStresses(foundation, foundation.ForceCurvaturesWithWeight);
+                double[] minMaxStresses = FoundationProcessor.MinMaxStresses(foundation.Result.StressesWithWeigth);
+
+                foundation.Result.MinSndAvgStressesWithWeight = minMaxStresses[0];
+                foundation.Result.MinSndMiddleStressesWithWeight = minMaxStresses[1];
+                foundation.Result.MinSndCornerStressesWithWeight = minMaxStresses[2];
+                foundation.Result.MaxSndCornerStressesWithWeight = minMaxStresses[3];
+                foundation.Result.MaxSndTensionAreaRatioWithWeight = minMaxStresses[4];
+
+                foundation.Result.SndResistance = SndResistance(foundation);
                 //}
                 result = true;
             }

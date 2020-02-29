@@ -86,7 +86,6 @@ namespace RDBLL.Entity.Soils
         public string FiltrationMeasure { get { return MeasureUnitConverter.GetUnitLabelText(14); } }
         public List<IRDObserver> Observers;
         #endregion
-
         /// <summary>
         /// Конструктор по строительному объекту
         /// </summary>
@@ -96,7 +95,7 @@ namespace RDBLL.Entity.Soils
             Id = ProgrammSettings.CurrentId;
             BuildingSiteId = buildingSite.Id;
             BuildingSite = buildingSite;
-            Name = "ИГЭ-" + (buildingSite.Soils.Count + 1);
+            Name = $"ИГЭ-{buildingSite.Soils.Count + 1}";
             FiltrationCoeff = 0.0001;
             Observers = new List<IRDObserver>();
         }

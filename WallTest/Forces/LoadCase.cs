@@ -23,13 +23,13 @@ namespace Test.Forces
             AddForceParameter(forcesGroup, false);
             AddForceParameter(forcesGroup, false);
 
-            ObservableCollection<LoadSet> ExpLoadCases = new ObservableCollection<LoadSet>();
+            ObservableCollection<RDBLL.Forces.LoadSet> ExpLoadCases = new ObservableCollection<RDBLL.Forces.LoadSet>();
 
-            ObservableCollection<LoadSet> ActualList = LoadSetProcessor.GetLoadCases(forcesGroups);
-            ObservableCollection<LoadSet> ExpectedList = ExpLoadCases;
+            ObservableCollection<RDBLL.Forces.LoadSet> ActualList = LoadSetProcessor.GetLoadCases(forcesGroups);
+            ObservableCollection<RDBLL.Forces.LoadSet> ExpectedList = ExpLoadCases;
             #region //Свойства ожидаемой комбинации нагрузок
-            ExpectedList.Add(new LoadSet());
-            LoadSet expLoadSet = new LoadSet();
+            ExpectedList.Add(new RDBLL.Forces.LoadSet());
+            RDBLL.Forces.LoadSet expLoadSet = new RDBLL.Forces.LoadSet();
             ExpectedList[0] = expLoadSet;
             expLoadSet.Name = "New_load_1*(1) + New_load_2*(1)";
             expLoadSet.ForceParameters.Add(new ForceParameter());
@@ -57,13 +57,13 @@ namespace Test.Forces
             AddForceParameter(forcesGroup);
             AddForceParameter(forcesGroup, true);
 
-            ObservableCollection<LoadSet> ExpLoadCases = new ObservableCollection<LoadSet>();
+            ObservableCollection<RDBLL.Forces.LoadSet> ExpLoadCases = new ObservableCollection<RDBLL.Forces.LoadSet>();
 
-            ObservableCollection<LoadSet> ActualList = LoadSetProcessor.GetLoadCases(forcesGroups);
-            ObservableCollection<LoadSet> ExpectedList = ExpLoadCases;
+            ObservableCollection<RDBLL.Forces.LoadSet> ActualList = LoadSetProcessor.GetLoadCases(forcesGroups);
+            ObservableCollection<RDBLL.Forces.LoadSet> ExpectedList = ExpLoadCases;
             #region //Свойства ожидаемой комбинации нагрузок
-            ExpectedList.Add(new LoadSet());
-            LoadSet expLoadSet = new LoadSet();
+            ExpectedList.Add(new RDBLL.Forces.LoadSet());
+            RDBLL.Forces.LoadSet expLoadSet = new RDBLL.Forces.LoadSet();
             ExpectedList[0] = expLoadSet;
             expLoadSet.Name = "New_load_1*(1)";
             expLoadSet.ForceParameters.Add(new ForceParameter());
@@ -74,8 +74,8 @@ namespace Test.Forces
             expLoadSet.PartialSafetyFactor = 0;
 
 
-            ExpectedList.Add(new LoadSet());
-            LoadSet expLoadSet1 = new LoadSet();
+            ExpectedList.Add(new RDBLL.Forces.LoadSet());
+            RDBLL.Forces.LoadSet expLoadSet1 = new RDBLL.Forces.LoadSet();
             ExpectedList[1] = expLoadSet1;
             expLoadSet1.Name = "New_load_1*(1) + New_load_2*(1)";
             expLoadSet1.ForceParameters.Add(new ForceParameter());
@@ -104,13 +104,13 @@ namespace Test.Forces
             AddForceParameter(forcesGroup);
             AddForceParameter(forcesGroup, true, true);
 
-            ObservableCollection<LoadSet> ExpLoadCases = new ObservableCollection<LoadSet>();
+            ObservableCollection<RDBLL.Forces.LoadSet> ExpLoadCases = new ObservableCollection<RDBLL.Forces.LoadSet>();
 
-            ObservableCollection<LoadSet> ActualList = LoadSetProcessor.GetLoadCases(forcesGroups);
-            ObservableCollection<LoadSet> ExpectedList = ExpLoadCases;
+            ObservableCollection<RDBLL.Forces.LoadSet> ActualList = LoadSetProcessor.GetLoadCases(forcesGroups);
+            ObservableCollection<RDBLL.Forces.LoadSet> ExpectedList = ExpLoadCases;
             #region //Свойства ожидаемой комбинации нагрузок
-            ExpectedList.Add(new LoadSet());
-            LoadSet expLoadSet = new LoadSet();
+            ExpectedList.Add(new RDBLL.Forces.LoadSet());
+            RDBLL.Forces.LoadSet expLoadSet = new RDBLL.Forces.LoadSet();
             ExpectedList[0] = expLoadSet;
             expLoadSet.Name = "New_load_1*(1)";
             expLoadSet.ForceParameters.Add(new ForceParameter());
@@ -121,8 +121,8 @@ namespace Test.Forces
             expLoadSet.IsLiveLoad = false;
             expLoadSet.PartialSafetyFactor = 0;
 
-            ExpectedList.Add(new LoadSet());
-            LoadSet expLoadSet1 = new LoadSet();
+            ExpectedList.Add(new RDBLL.Forces.LoadSet());
+            RDBLL.Forces.LoadSet expLoadSet1 = new RDBLL.Forces.LoadSet();
             ExpectedList[1] = expLoadSet1;
             expLoadSet1.Name = "New_load_1*(1) + New_load_2*(1)";
             expLoadSet1.ForceParameters.Add(new ForceParameter());
@@ -133,8 +133,8 @@ namespace Test.Forces
             expLoadSet1.IsLiveLoad = true;
             expLoadSet1.PartialSafetyFactor = 0;
 
-            ExpectedList.Add(new LoadSet());
-            LoadSet expLoadSet2 = new LoadSet();
+            ExpectedList.Add(new RDBLL.Forces.LoadSet());
+            RDBLL.Forces.LoadSet expLoadSet2 = new RDBLL.Forces.LoadSet();
             ExpectedList[2] = expLoadSet2;
             expLoadSet2.Name = "New_load_1*(1) + New_load_2*(-1)";
             expLoadSet2.ForceParameters.Add(new ForceParameter());
@@ -160,7 +160,7 @@ namespace Test.Forces
         /// /// <param name="bothSign">Флаг знакопеременной нагрузки</param>
         public static void AddForceParameter(ForcesGroup forcesGroup, bool isLiveLoad = false, bool bothSign = false)
         {
-            LoadSet loadSet = new LoadSet();
+            RDBLL.Forces.LoadSet loadSet = new RDBLL.Forces.LoadSet();
             forcesGroup.LoadSets.Add(loadSet);
             loadSet.Name = $"New_load_{forcesGroup.LoadSets.Count}";
             loadSet.ForceParameters.Add(new ForceParameter());
@@ -187,7 +187,7 @@ namespace Test.Forces
             return true;
         }
 
-        public static bool CompareLoadList(ObservableCollection<LoadSet> frstList, ObservableCollection<LoadSet> scndtList)
+        public static bool CompareLoadList(ObservableCollection<RDBLL.Forces.LoadSet> frstList, ObservableCollection<RDBLL.Forces.LoadSet> scndtList)
         {
             if (!(scndtList.Count == frstList.Count)) { return false; } //Если количество не совпадает нет смысла сравнивать
             for (int i = 0; i < frstList.Count; i++)
