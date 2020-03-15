@@ -299,5 +299,18 @@ namespace RDBLL.Processors.Forces
             }
             return newLoadSets;
         }
+        /// <summary>
+        /// Деление всех параметров нагрузки на коэффициент надежности по нагрузке (на случай если пользователю удобно ввести расчетные нагрузки)
+        /// </summary>
+        /// <param name="loadSet"></param>
+        public static void DivideLoadSetWithCoff(LoadSet loadSet)
+        {
+            foreach (ForceParameter forceParameter in loadSet.ForceParameters)
+            {
+                forceParameter.CrcValue /= loadSet.PartialSafetyFactor;
+                forceParameter.CrcValueInCurUnit /= loadSet.PartialSafetyFactor;
+                forceParameter.DesignValue /= loadSet.PartialSafetyFactor;
+            }
+        }
     }
 }

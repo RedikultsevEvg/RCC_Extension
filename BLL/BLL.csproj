@@ -44,6 +44,9 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
+    <Reference Include="TestList03">
+      <HintPath>..\TestList03.dll</HintPath>
+    </Reference>
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
@@ -76,6 +79,7 @@
     <Compile Include="Entity\Common\NDM\NdmCircleArea.cs" />
     <Compile Include="Entity\Common\NDM\Processors\NdmAreaProcessor.cs" />
     <Compile Include="Entity\Common\NDM\Processors\NdmProcessor.cs" />
+    <Compile Include="Entity\Common\NDM\Processors\NdmViewerProcessor.cs" />
     <Compile Include="Entity\Common\NDM\Processors\StiffnessCoefficientProcessor.cs" />
     <Compile Include="Entity\Common\NDM\StiffnessCoefficient.cs" />
     <Compile Include="Entity\Common\NDM\SumForces.cs" />
@@ -107,6 +111,7 @@
     <Compile Include="Entity\Results\SC\ColumnBaseResult.cs" />
     <Compile Include="Entity\SC\Column\SteelBasePart.cs" />
     <Compile Include="Entity\SC\Column\SteelBaseSubPart.cs" />
+    <Compile Include="Entity\SC\Column\SteelBases\Processors\SteelBaseViewStressProcessor.cs" />
     <Compile Include="Entity\SC\Column\SteelBolt.cs" />
     <Compile Include="Entity\SC\Column\SteelBase.cs" />
     <Compile Include="Entity\Soils\BearingSoil.cs" />
@@ -114,6 +119,7 @@
     <Compile Include="Entity\Soils\CompressedLayer.cs" />
     <Compile Include="Entity\Soils\CompressedLayerList.cs" />
     <Compile Include="Entity\Soils\DispersedSoil.cs" />
+    <Compile Include="Entity\Soils\GravelSoil.cs" />
     <Compile Include="Entity\Soils\NominalSoil.cs" />
     <Compile Include="Entity\Soils\NonBearingSoil.cs" />
     <Compile Include="Entity\Soils\Processors\SoilLayerProcessor.cs" />

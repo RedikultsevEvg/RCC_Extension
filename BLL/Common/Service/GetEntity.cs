@@ -327,7 +327,7 @@ namespace RDBLL.Common.Service
                 Soil newObject;
                 if (dataRow.Field<string>("Type") == "ClaySoil")
                 {
-                    newObject = new DispersedSoil(buildingSite);
+                    newObject = new ClaySoil(buildingSite);
                     newObject.OpenFromDataSet(dataRow);
                     newObject.BuildingSite = buildingSite;
                     newObjects.Add(newObject);

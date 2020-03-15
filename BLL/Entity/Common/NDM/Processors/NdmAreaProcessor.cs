@@ -27,7 +27,6 @@ namespace RDBLL.Entity.Common.NDM.Processors
             double stress = ndmArea.GetSecantModulus(strain) * strain;
             return new double[2] { strain, stress }; 
         }
-
         /// <summary>
         /// Возвращает массив пары деформации-напряжения по модели материалов, координатам точки и кривизне
         /// </summary>
@@ -44,7 +43,6 @@ namespace RDBLL.Entity.Common.NDM.Processors
             double stress = materialModel.GetSecantModulus(strain) * strain;
             return new double[2] { strain, stress };
         }
-
         /// <summary>
         /// Возвращает коллекцию прямоугольных элементарных участков по модели материалов, заданному прямоугольнику, размеру элемента
         /// </summary>
@@ -86,6 +84,50 @@ namespace RDBLL.Entity.Common.NDM.Processors
             }
             //Возвращаем коллекцию элементов
             return ndmRectangleAreas;
+        }
+        /// <summary>
+        /// Возвращает коллекцию прямоугольных элементарных участков по модели материалов, заданному прямоугольнику, размеру элемента
+        /// </summary>
+        /// <param name="materialModel">Модель материала</param>
+        /// <param name="startX">Начало участка по X</param>
+        /// <param name="endX">Конец участка по X</param>
+        /// <param name="startY">Начало участка по Y</param>
+        /// <param name="endY">Конец участка по Y</param>
+        /// <param name="elementSize">Максимальный размер элемента</param>
+        /// <returns></returns>
+        public static List<NdmRectangleArea> MeshRectangleByCoord(IMaterialModel materialModel, double startX, double endX, double startY, double endY, double elementSize = 0.02)
+        {
+            double width = Math.Abs(endX-startX);
+            double length = Math.Abs(endY - startY);
+            double centerX = (startX + endX) / 2;
+            double centerY = (startY + endY) / 2;
+            List<NdmRectangleArea> ndmRectangleAreas = MeshRectangle(materialModel, width, length, centerX, centerY, elementSize);
+            return ndmRectangleAreas;
+        }
+        public static SumForces GetSumForces(List<NdmArea> ndmAreas, Curvature curvature)
+        {
+            double N = 0;
+            double Mx = 0;
+            double My = 0;
+            foreach (NdmArea ndmArea in ndmAreas)
+            {
+                double stress = GetStrainFromCuvature(ndmArea, curvature)[1];
+                double force = stress * ndmArea.Area;
+                N += force;
+                Mx += force * ndmArea.CenterY;
+                My -= force * ndmArea.CenterX;
+            }
+            SumForces sumForces = new SumForces(Mx, My, N);
+            return sumForces;
+        }
+        public static List<NdmArea> ConvertFromRectToBase(List<NdmRectangleArea> ndmRectangleAreas)
+        {
+            List<NdmArea> ndmAreas = new List<NdmArea>();
+            foreach (NdmRectangleArea ndmRectangleArea in ndmRectangleAreas)
+            {
+                ndmAreas.Add(ndmRectangleArea);
+            }
+            return ndmAreas;
         }
     }
 }

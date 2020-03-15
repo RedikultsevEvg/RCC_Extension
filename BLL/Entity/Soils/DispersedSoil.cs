@@ -13,7 +13,7 @@ namespace RDBLL.Entity.Soils
     /// <summary>
     /// Класс дисперсного грунта
     /// </summary>
-    public class DispersedSoil :BearingSoil, ISavableToDataSet
+    public abstract class DispersedSoil :BearingSoil, ISavableToDataSet
     {
         /// <summary>
         /// Нормативное значение угла внутреннего трения
@@ -40,6 +40,26 @@ namespace RDBLL.Entity.Soils
         /// </summary>
         public double SndDesignCohesion { get; set; }
         /// <summary>
+        /// Число пластичности
+        /// Ip<1 - Песок
+        /// 1<Ip<7 - Супесь
+        /// 7<Ip<17 - Суглинок
+        /// Ip>17 - Глина
+        /// </summary>
+        public double IP { get; set; }
+        /// <summary>
+        /// Показатель текучести
+        /// </summary>
+        public double IL { get; set; }
+        /// <summary>
+        /// Код крупности для песков и крупнообломочных
+        /// </summary>
+        public int BignessId { get; set; }
+        /// <summary>
+        /// Код влажности для песков и крупнообломочных
+        /// </summary>
+        public int WetnessId { get; set; }
+        /// <summary>
         /// Флаг определения характеристик из испытаний (требуется для вычисления R)
         /// </summary>
         public bool IsDefinedFromTest { get; set; }
@@ -49,7 +69,6 @@ namespace RDBLL.Entity.Soils
         /// <param name="buildingSite"></param>
         public DispersedSoil(BuildingSite buildingSite) :base(buildingSite)
         {
-            Description = "Суглинок песчанистый, тугопластичный";
             CrcDensity = 1950;
             FstDesignDensity = 1800;
             SndDesignDensity = 1900;
@@ -60,12 +79,6 @@ namespace RDBLL.Entity.Soils
             ElasticModulus = 2e7;
             SndElasticModulus = 1e8;
             PoissonRatio = 0.3;
-            CrcFi = 20;
-            FstDesignFi = 17;
-            SndDesignFi = 18;
-            CrcCohesion = 20000;
-            FstDesignCohesion = 17000;
-            SndDesignCohesion = 18000;
             IsDefinedFromTest = true;
         }
         /// <summary>

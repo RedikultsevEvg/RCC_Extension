@@ -22,7 +22,8 @@ namespace RDUIL.Converters
         {
             try
             {
-                return System.Convert.ToDouble(value) / MeasureUnitConverter.GetCoefficient(0);
+                string s = System.Convert.ToString(value);
+                return CommonOperation.ConvertToDouble(s) / MeasureUnitConverter.GetCoefficient(0);
             }
             catch(Exception e)
             {

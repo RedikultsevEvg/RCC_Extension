@@ -5,6 +5,7 @@ using RDBLL.Entity.RCC.Foundations;
 using System.Windows;
 using RDUIL.Validations;
 using System;
+using RDBLL.Entity.RCC.Foundations.Processors;
 
 namespace RDUIL.WPF_Windows.Foundations
 {
@@ -97,6 +98,12 @@ namespace RDUIL.WPF_Windows.Foundations
 
         private void BtnCancel_Click(object sender, RoutedEventArgs e)
         {
+        }
+
+        private void BtnSoilStresses_Click(object sender, RoutedEventArgs e)
+        {
+            FoundationProcessor.SolveFoundation(_element);
+            FoundationProcessor.ShowSoilStress(_element);
         }
     }
 }
