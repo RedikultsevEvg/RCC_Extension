@@ -18,7 +18,8 @@ namespace RDUIL.Converters
         {
             try
             {
-                return System.Convert.ToDouble(value) / MeasureUnitConverter.GetCoefficient(3);
+                string s = System.Convert.ToString(value);
+                return CommonOperation.ConvertToDouble(s,3);
             }
             catch (Exception e)
             {

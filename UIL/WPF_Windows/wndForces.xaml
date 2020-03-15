@@ -38,8 +38,8 @@
                           SelectedValuePath="Id"
                           SelectedValue="{Binding Path=KindId}" Height="22" Margin="30,0,0,0">
                 </ComboBox>
-                <TextBox Text="{Binding Path=CrcValueInCurUnit}" Grid.Column="1" Background="#FFFFFEDF" Height="22">
-                    <TextBox.ToolTip >
+                <TextBox Style="{StaticResource PropertyTextBoxError}" Text="{Binding Path=CrcValueInCurUnit, Converter={StaticResource DoubleConverter}}" Grid.Column="1" Height="22">
+                    <!--<TextBox.ToolTip >
                         <Grid Width="400" Height="200">
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="20"/>
@@ -53,7 +53,7 @@
                             <Image Grid.Row="1" Source="/UIL;component/Resources/FoundationForces.png"/>
                             <TextBlock Text="{Binding Path=ForceParamKind.Addition}" Grid.Column="1" TextWrapping="Wrap" Grid.Row="1"></TextBlock>
                         </Grid>
-                    </TextBox.ToolTip>
+                    </TextBox.ToolTip>-->
                 </TextBox>
             </Grid>
 
@@ -78,7 +78,7 @@
                         <TextBlock x:Name="tbBothSign" Grid.Row="3" Style="{StaticResource PropertyTextBlock}" Text="Знакопеременная нагрузка"
                                    Visibility="{Binding Path=IsLiveLoad, Converter={StaticResource VisibleIfTrueConverter}}"/>
                         <TextBox x:Name="tbxName" Style="{StaticResource PropertyTextBox}" Text="{Binding Path=Name}" Grid.Column="1"/>
-                        <TextBox x:Name="tbxPartialSafetyFactor" Grid.Row="1" Grid.Column="1" Style="{StaticResource PropertyTextBox}" Text="{Binding Path=PartialSafetyFactor}"/>
+                        <TextBox x:Name="tbxPartialSafetyFactor" Grid.Row="1" Grid.Column="1" Style="{StaticResource PropertyTextBox}" Text="{Binding Path=PartialSafetyFactor, Converter={StaticResource DoubleConverter}}"/>
                         <CheckBox x:Name="cbIsLiveLoad" Content="" Grid.Column="1" HorizontalAlignment="Center" Margin="0" Grid.Row="2" VerticalAlignment="Center" IsChecked="{Binding Path=IsLiveLoad}" />
                         <CheckBox x:Name="cbBothSign" Content="" Grid.Column="1" HorizontalAlignment="Center"
                                   Margin="0" Grid.Row="3" VerticalAlignment="Center" IsChecked="{Binding Path=BothSign}"
@@ -123,8 +123,15 @@
                     <RowDefinition/>
                 </Grid.RowDefinitions>
                 <StackPanel x:Name="stpLoadsBtns" Style="{StaticResource OperationStack}">
-                    <Button x:Name="btnAddLoad" Style="{StaticResource AddOperationButton}" ToolTip="Добавить нагрузку" Click="btnAddLoad_Click"/>
-                    <Button x:Name="btnDeleteLoad" Style="{StaticResource DeleteOperationButton}" ToolTip="Удалить нагрузку" Click="btnDeleteLoad_Click"/>
+                    <Button x:Name="btnAddLoad" Style="{StaticResource AddOperationButton}" ToolTip="Добавить нагрузку" Click="btnAddLoad_Click">
+                        <Image x:Name="AddLoad_png" Style="{StaticResource OperationButtonImage}" Source="{DynamicResource IconAdd30}"/>
+                    </Button>
+                    <Button x:Name="btnDeleteLoad" Style="{StaticResource DeleteOperationButton}" ToolTip="Удалить нагрузку" Click="btnDeleteLoad_Click">
+                        <Image x:Name="DeleteLoad_png" Style="{StaticResource OperationButtonImage}" Source="{DynamicResource IconDelete30}"/>
+                    </Button>
+                    <Button x:Name="btnDivideLoad" Style="{StaticResource OperationButton}" ToolTip="Разделить значения на коэффициент надежности" Click="BtnDivideLoad_Click">
+                        <Image x:Name="Divide_png" Style="{StaticResource OperationButtonImage}" Source="{DynamicResource IconDelete30}"/>
+                    </Button>
                 </StackPanel>
                 <ListView x:Name="lvLoadSet"
                           Grid.Row="0" Margin="5" ItemTemplate="{StaticResource LoadsTemplate}" Grid.RowSpan="2"

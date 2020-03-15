@@ -13,20 +13,18 @@ namespace RDBLL.Entity.Soils
     public class ClaySoil :DispersedSoil
     {
         /// <summary>
-        /// Флаг отнесения к суглинкам
-        /// </summary>
-        public bool IsSemiClay { get; set; }
-        /// <summary>
-        /// Показатель текучести
-        /// </summary>
-        public double IL { get; set; }
-        /// <summary>
         /// Конструктор по строительному объекту
         /// </summary>
         /// <param name="buildingSite"></param>
         public ClaySoil(BuildingSite buildingSite) : base(buildingSite)
         {
-            IsSemiClay = true;
+            Description = "Суглинок песчанистый, тугопластичный";
+            CrcFi = 20;
+            FstDesignFi = 17;
+            SndDesignFi = 18;
+            CrcCohesion = 20000;
+            FstDesignCohesion = 17000;
+            SndDesignCohesion = 18000;
             IL = 0.25;
         }
     }

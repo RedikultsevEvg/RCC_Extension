@@ -357,21 +357,22 @@ namespace RDBLL.Processors.SC
         /// Возвращает коллекцию элементарных участков для участка базы
         /// </summary>
         /// <param name="steelBasePart">Участок базы стальной колонны</param>
-        /// <param name="Rc">Расчетное сопротивление растяжению</param>
+        /// <param name="Rc">Расчетное сопротивление сжатию</param>
         public static void GetSubParts(SteelBasePart steelBasePart, double Rc = 0)
-        {     
+        {
+            double elemSize = 0.01;
             if (Rc == 0)
             {
                 IMaterialModel materialModel = new LinearIsotropic(1e+10, 1, 0);
-                steelBasePart.SubParts = NdmAreaProcessor.MeshRectangle(materialModel, steelBasePart.Width, steelBasePart.Length, steelBasePart.CenterX, steelBasePart.CenterY, 0.02);
+                steelBasePart.SubParts = NdmAreaProcessor.MeshRectangle(materialModel, steelBasePart.Width, steelBasePart.Length, steelBasePart.CenterX, steelBasePart.CenterY, elemSize);
             }
             else
             {
                 List<double> constantList = new List<double> { Rc * (-1D), -0.0015, -0.0035, 0, 0.0015, 0.0035 };
                 IMaterialModel materialModel = new DoubleLinear(constantList);
-                steelBasePart.SubParts = NdmAreaProcessor.MeshRectangle(materialModel, steelBasePart.Width, steelBasePart.Length, steelBasePart.CenterX, steelBasePart.CenterY, 0.02);
+                steelBasePart.SubParts = NdmAreaProcessor.MeshRectangle(materialModel, steelBasePart.Width, steelBasePart.Length, steelBasePart.CenterX, steelBasePart.CenterY, elemSize);
             }
-            
+          
         }
         /// <summary>
         /// Вычисляет минимальное напряжение на участке по линейно упругой теории сопротивления материалов

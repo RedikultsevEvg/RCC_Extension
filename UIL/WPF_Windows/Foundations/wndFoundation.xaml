@@ -7,7 +7,7 @@
         xmlns:Convert="clr-namespace:RDUIL.Converters"
         xml:lang="ru-RU"
         mc:Ignorable="d"
-        Title="Фундамент" Height="500" Width="650" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
+        Title="Фундамент" Height="500" Width="760" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
     <Window.Resources>
         <Convert:VolumeWeightConverter x:Key="VolumeWeightConverter"/>
         <Convert:LinearSizeConverter x:Key="LinearSizeConverter"/>
@@ -25,6 +25,7 @@
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="200"/>
                 <ColumnDefinition/>
+                <ColumnDefinition Width="110"/>
                 <ColumnDefinition Width="110"/>
             </Grid.ColumnDefinitions>
             <Grid>
@@ -91,11 +92,11 @@
                         <TextBox x:Name="tbxFloorLoad" Grid.Column="1" Grid.Row="2" Style="{StaticResource PropertyTextBoxError}"
                     Text="{Binding FloorLoad, Converter={StaticResource DistributedLoadConverter}, ValidatesOnDataErrors=True}"/>
                         <TextBox x:Name="tbxFloorLoadFactor" Grid.Column="1" Grid.Row="3" Style="{StaticResource PropertyTextBoxError}"
-                    Text="{Binding FloorLoadFactor, ValidatesOnDataErrors=True}"/>
+                    Text="{Binding FloorLoadFactor, Converter={StaticResource DoubleConverter}, ValidatesOnDataErrors=True}"/>
                         <TextBox x:Name="tbxConcreteFloorLoad" Grid.Column="1" Grid.Row="4" Style="{StaticResource PropertyTextBoxError}"
                     Text="{Binding ConcreteFloorLoad, Converter={StaticResource DistributedLoadConverter}, ValidatesOnDataErrors=True}"/>
                         <TextBox x:Name="tbxConcreteFloorLoadFactor" Grid.Column="1" Grid.Row="5" Style="{StaticResource PropertyTextBoxError}"
-                    Text="{Binding ConcreteFloorLoadFactor, ValidatesOnDataErrors=True}"/>
+                    Text="{Binding ConcreteFloorLoadFactor, Converter={StaticResource DoubleConverter}, ValidatesOnDataErrors=True}"/>
                         <TextBlock Grid.Column="2" Grid.Row="0" x:Name="tbSoilWeightMeasure" Style="{StaticResource PropertyTextBlock}" Text="{Binding VolumeWeightMeasure}" />
                         <TextBlock Grid.Column="2" Grid.Row="1" x:Name="tbConcreteWeightMeasure" Style="{StaticResource PropertyTextBlock}" Text="{Binding VolumeWeightMeasure}" />
                         <TextBlock Grid.Column="2" Grid.Row="2" x:Name="tbFloorLoadMeasure" Style="{StaticResource PropertyTextBlock}" Text="{Binding DistributedLoadMeasure}" />
@@ -123,7 +124,7 @@
                         <TextBox x:Name="tbxCoveringLayerY" Grid.Column="1" Grid.Row="1" Style="{StaticResource PropertyTextBoxError}"
                     Text="{Binding CoveringLayerY, Converter={StaticResource LinearSizeConverter}, ValidatesOnDataErrors=True}"/>
                         <TextBox x:Name="tbxCompressedLayerRatio" Grid.Column="1" Grid.Row="2" Style="{StaticResource PropertyTextBoxError}"
-                    Text="{Binding CompressedLayerRatio, ValidatesOnDataErrors=True}"/>
+                    Text="{Binding CompressedLayerRatio, Converter={StaticResource DoubleConverter}, ValidatesOnDataErrors=True}"/>
 
                         <TextBlock Grid.Column="2" Grid.Row="0" Style="{StaticResource PropertyTextBlock}" Text="{Binding LinearMeasure}" />
                         <TextBlock Grid.Column="2" Grid.Row="1" Style="{StaticResource PropertyTextBlock}" Text="{Binding LinearMeasure}" />
@@ -133,9 +134,6 @@
 
             <StackPanel Grid.Column="2" Background="#FFE2E2E2" VerticalAlignment="Top">
                 <Button x:Name="btnForces" Style="{StaticResource ServiceButton}" Height="50" Click="BtnForces_Click">
-                    <Button.Effect>
-                        <DropShadowEffect Opacity="0.6"/>
-                    </Button.Effect>
                     <Image x:Name="Forces_png" Style="{StaticResource ServiceButtonImage}" Source="{DynamicResource IconForces40}"/>
                     <Button.ToolTip>
                         <TextBlock Margin="3" Foreground="Black">Усилия...</TextBlock>
@@ -145,6 +143,14 @@
                     <Image x:Name="Parts_png" Style="{StaticResource ServiceButtonImage}" Source="{DynamicResource IconBasePart}"/>
                     <Button.ToolTip>
                         <TextBlock Margin="3" Foreground="Black">Ступени фундамента...</TextBlock>
+                    </Button.ToolTip>
+                </Button>
+            </StackPanel>
+            <StackPanel Grid.Column="3" Background="#FFE2E2E2" VerticalAlignment="Top">
+                <Button x:Name="btnSoilStresses" Style="{StaticResource ServiceButton}" Height="50" Click="BtnSoilStresses_Click">
+                    <Image x:Name="ConcreteStresses_png" Style="{StaticResource ServiceButtonImage}" Source="{DynamicResource IconForces}"/>
+                    <Button.ToolTip>
+                        <TextBlock Margin="3" Foreground="Black">Напряжения под подошвой...</TextBlock>
                     </Button.ToolTip>
                 </Button>
             </StackPanel>

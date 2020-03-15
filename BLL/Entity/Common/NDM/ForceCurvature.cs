@@ -7,6 +7,9 @@ using RDBLL.Forces;
 
 namespace RDBLL.Entity.Common.NDM
 {
+    /// <summary>
+    /// Класс набора нагрузок, соответствующих усилий и кривизн
+    /// </summary>
     public class ForceCurvature
     {
         /// <summary>

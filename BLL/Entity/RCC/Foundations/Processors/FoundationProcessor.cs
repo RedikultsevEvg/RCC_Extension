@@ -1,7 +1,12 @@
-﻿using RDBLL.Entity.Common.NDM;
+﻿using RDBLL.Common.Geometry;
+using RDBLL.Common.Service;
+using RDBLL.Entity.Common.NDM;
 using RDBLL.Entity.Common.NDM.Interfaces;
 using RDBLL.Entity.Common.NDM.MaterialModels;
 using RDBLL.Entity.Common.NDM.Processors;
+using RDBLL.Entity.MeasureUnits;
+using RDBLL.Entity.Soils;
+using RDBLL.Entity.Soils.Processors;
 using RDBLL.Forces;
 using RDBLL.Processors.Forces;
 using System;
@@ -9,11 +14,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows;
-using RDBLL.Entity.Soils.Processors;
-using RDBLL.Entity.Soils;
-using RDBLL.Common.Service;
-using RDBLL.Entity.MeasureUnits;
-using RDBLL.Common.Geometry;
+using IsoViewer = TestList03;
 
 namespace RDBLL.Entity.RCC.Foundations.Processors
 {
@@ -195,6 +196,8 @@ namespace RDBLL.Entity.RCC.Foundations.Processors
                 foundation.Result.MaxSndTensionAreaRatioWithWeight = minMaxStresses[4];
 
                 foundation.Result.SndResistance = SndResistance(foundation);
+                calcReinforcement(foundation);
+
                 //}
                 result = true;
             }
@@ -732,12 +735,44 @@ namespace RDBLL.Entity.RCC.Foundations.Processors
         private static double GetGammaC1(DispersedSoil dispersedSoil)
         {
             //Если грунт крупнообломочный
-            //Если грунт песок мелкий
-            //Если грунт песок маловлажный
-            //Если грунт песок насыщенный водой
-            //Глинистый грунт с Il<0.25
-            //Глинистый грунт с 0.25<Il<0.5
-            //Глинистый грунт с Il>0.5
+            if (dispersedSoil is GravelSoil)
+            {
+                GravelSoil soil = dispersedSoil as GravelSoil;
+                if (soil.HasIL || (soil.FillingIL==3))
+                {
+                    double IL = Math.Max(soil.IL, soil.FillingIL);
+                    //Глинистый грунт с Il<0.25
+                    if (IL <= 0.25) return 1.25;
+                    //Глинистый грунт с Il>0.5
+                    else if (IL > 0.5) return 1.1;
+                    //Глинистый грунт с 0.25<Il<0.5
+                    else return 1.2;
+                }
+                return 1.4;
+            }
+            //Если грунт песок
+            if (dispersedSoil is SandSoil)
+            {
+                SandSoil sandSoil = dispersedSoil as SandSoil;
+                //Если грунт песок мелкий
+                if (sandSoil.BignessId == 4) return 1.3;
+                //Если грунт песок маловлажный
+                //Если грунт песок насыщенный водой
+                else if (sandSoil.BignessId == 5) return 1.25;
+                return 1.4;
+            }
+            //Если грунт глинистый
+            if (dispersedSoil is ClaySoil)
+            {
+                ClaySoil soil = dispersedSoil as ClaySoil;
+                double IL = soil.IL;
+                //Глинистый грунт с Il<0.25
+                if (soil.IL <= 0.25) return 1.25;
+                //Глинистый грунт с Il>0.5
+                else if (soil.IL > 0.5) return 1.1;
+                //Глинистый грунт с 0.25<Il<0.5
+                else return 1.2;
+            }
             return 1.1;
         }
         /// <summary>
@@ -839,6 +874,91 @@ namespace RDBLL.Entity.RCC.Foundations.Processors
                 return resistance;
             }
             return resistance;
+        }
+        /// <summary>
+        /// Отображает напряжения под подошвой фундамента во вьювере
+        /// </summary>
+        /// <param name="foundation"></param>
+        public static void ShowSoilStress(Foundation foundation)
+        {
+            //Создаем список кривизн и элементарных участков
+            List<ForceCurvature> forceCurvatures = foundation.ForceCurvaturesWithWeight;
+            List<NdmArea> ndmAreas = foundation.NdmAreas;
+            List<IsoViewer.LoadCaseRectangleValue> loadCaseRectangleValues = NdmViewerProcessor.GetSressValues(forceCurvatures, ndmAreas, 1);
+            //Показываем окно с напряжениями
+            Window wndMain = new IsoViewer.MainWindow(loadCaseRectangleValues);
+            wndMain.Show();
+        }
+        public static bool calcReinforcement(Foundation foundation)
+        {
+            double elemSize = 0.05;
+
+            double Rc = -1.5e7;
+            double Rct = 1.05e6;
+            double Rsc = -3.5e8;
+            double Rs = 3.5e8;
+            double Es = 2e11;
+
+            double[] reinfAreas = new double[2] { 0, 0 };
+
+            IMaterialModel soilModel = foundation.NdmAreas[0].MaterialModel;
+
+            //Модель материала для бетона
+            List<double> constantConcreteList = new List<double> { Rc, -0.0015, -0.0035, Rct, 0.0015, 0.0035 };
+            IMaterialModel concreteModel = new DoubleLinear(constantConcreteList);
+
+            //Модель материала для арматуры
+            List<double> constantSteelList = new List<double> { Rsc, Rsc / Es, -0.025, Rs, Rs / Es, 0.025 };
+            IMaterialModel SteelModel = new DoubleLinear(constantSteelList);
+
+            int partCount = foundation.Parts.Count();
+            //В цикле проходим по всем ступеням
+            //Высота центра тяжести
+            double currentZ = 0;
+            //список для моментов в сечениях нормальных к оси X
+            List<double[]> momentsXLeft = new List<double[]>();
+
+            RectFoundationPart bottomPart = foundation.Parts[foundation.Parts.Count() - 1];
+            double[] minMaxX = new double[2] { bottomPart.Width / 2 * (-1D), bottomPart.Width / 2 };
+            double[] minMaxY = new double[2] { bottomPart.Length / 2 * (-1D), bottomPart.Length / 2 };
+            double currentX = 0;
+            for (int i = 1; i <= partCount; i++)
+            {
+                RectFoundationPart part = foundation.Parts[partCount - i];
+                //Если рассматриваемая ступень является самой верхней
+                if (i == partCount) currentX = part.CenterX - bottomPart.CenterX;
+                else
+                {
+                    RectFoundationPart nextPart = foundation.Parts[partCount - i - 1];
+                    currentX = part.CenterX - bottomPart.CenterX - nextPart.Width / 2;
+                }
+                List<NdmRectangleArea> ndmSoilRectAreas = NdmAreaProcessor.MeshRectangleByCoord(soilModel, minMaxX[0], currentX, minMaxY[0], minMaxY[1], elemSize);
+                List<NdmArea> ndmSoilAreas = NdmAreaProcessor.ConvertFromRectToBase(ndmSoilRectAreas);
+
+                List<double> tmpCrcMoments = new List<double>();
+                List<double> tmpDesignMoments = new List<double>();
+                foreach (ForceCurvature forceCurvature in foundation.ForceCurvaturesWithoutWeight)
+                {
+                    SumForces sumCrcForces = NdmAreaProcessor.GetSumForces(ndmSoilAreas, forceCurvature.CrcCurvature);
+                    sumCrcForces = new SumForces(sumCrcForces, currentX, 0);
+                    SumForces sumDesignForces = NdmAreaProcessor.GetSumForces(ndmSoilAreas, forceCurvature.DesignCurvature);
+                    sumDesignForces = new SumForces(sumDesignForces, currentX, 0);
+                    tmpCrcMoments.Add(sumCrcForces.ForceMatrix[1, 0]);
+                    tmpDesignMoments.Add(sumDesignForces.ForceMatrix[1, 0]);
+                }
+                double crcMx = tmpCrcMoments.Min();
+                double designMx = tmpDesignMoments.Min();
+                momentsXLeft.Add(new double[2] { crcMx, designMx });
+
+                currentZ += part.Height / 2;
+                //Проверяем сечения нормальные оси X
+                //double currentLengthX = part.Length;
+
+                //List<NdmRectangleArea> ndmAreas = NdmAreaProcessor.MeshRectangle(concreteModel, part.Length, part.Height, currentZ, 0, elemSize);
+                //Проверяем сечения нормальные оси Y
+                //currentZ += part.Height / 2;
+            }
+            return true;
         }
     }
 }

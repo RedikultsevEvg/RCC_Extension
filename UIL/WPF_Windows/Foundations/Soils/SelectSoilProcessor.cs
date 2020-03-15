@@ -19,14 +19,35 @@ namespace RDUIL.WPF_Windows.Foundations.Soils
         {
             string directory = Directory.GetCurrentDirectory() + "\\Images\\Soils\\";
             List<SoilCard> soilCards = new List<SoilCard>();
+
+            #region GravelSoil
+            SoilCard gravelCard = new SoilCard();
+            gravelCard.Name = "Крупнообломочный грунт";
+            gravelCard.BuildingSite = buildingSite;
+            gravelCard.Description = "Задать крупнообломочный грунт (валунный, щебенистый, дресвяный)";
+            gravelCard.ImageName = $"{directory}GravelSoil.png";
+            gravelCard.RegisterDelegate(new SoilCard.CommandDelegate(CreateGravelSoil));
+            soilCards.Add(gravelCard);
+            #endregion
+
+            #region SandSoil
+            SoilCard sandCard = new SoilCard();
+            sandCard.Name = "Песчаный грунт";
+            sandCard.BuildingSite = buildingSite;
+            sandCard.Description = "Задать песчаный грунт";
+            sandCard.ImageName = $"{directory}SandSoil.png";
+            sandCard.RegisterDelegate(new SoilCard.CommandDelegate(CreateSandSoil));
+            soilCards.Add(sandCard);
+            #endregion
+
             #region ClaySoil
-            SoilCard soilCard = new SoilCard();
-            soilCard.Name = "Глинистый грунт";
-            soilCard.BuildingSite = buildingSite;
-            soilCard.Description = "Задать глинистый грунт";
-            soilCard.ImageName = $"{directory}ClaySoil.png";
-            soilCard.RegisterDelegate(new SoilCard.CommandDelegate(CreateClaySoil));
-            soilCards.Add(soilCard);
+            SoilCard clayCard = new SoilCard();
+            clayCard.Name = "Глинистый грунт";
+            clayCard.BuildingSite = buildingSite;
+            clayCard.Description = "Задать глинистый грунт (супеси, суглинки, глины)";
+            clayCard.ImageName = $"{directory}ClaySoil.png";
+            clayCard.RegisterDelegate(new SoilCard.CommandDelegate(CreateClaySoil));
+            soilCards.Add(clayCard);
             #endregion
 
             #region ClaySoil
@@ -45,8 +66,20 @@ namespace RDUIL.WPF_Windows.Foundations.Soils
 
         public static void CreateClaySoil(BuildingSite buildingSite)
         {
-            DispersedSoil dispersedSoil = new DispersedSoil(buildingSite);
-            createSoil(buildingSite, dispersedSoil);
+            ClaySoil soil = new ClaySoil(buildingSite);
+            createSoil(buildingSite, soil);
+        }
+
+        public static void CreateSandSoil(BuildingSite buildingSite)
+        {
+            SandSoil soil = new SandSoil(buildingSite);
+            createSoil(buildingSite, soil);
+        }
+
+        public static void CreateGravelSoil(BuildingSite buildingSite)
+        {
+            GravelSoil soil = new GravelSoil(buildingSite);
+            createSoil(buildingSite, soil);
         }
 
         public static void CreateRockSoil(BuildingSite buildingSite)

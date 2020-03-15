@@ -7,6 +7,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using Winforms = System.Windows.Forms;
 using RDBLL.Common.Interfaces;
+using RDBLL.Processors.Forces;
 
 namespace RDUIL.WPF_Windows
 {
@@ -115,7 +116,21 @@ namespace RDUIL.WPF_Windows
             {
                 MessageBox.Show("Ничего не выбрано", "Выберите один из элементов");
             }
+        }
 
+        private void BtnDivideLoad_Click(object sender, RoutedEventArgs e)
+        {
+            if (lvLoadSet.SelectedIndex >= 0)
+            {
+                int a = lvLoadSet.SelectedIndex;
+                LoadSetProcessor.DivideLoadSetWithCoff(_forcesGroup.LoadSets[a]);
+                lvForcesList.ItemsSource = null;
+                lvForcesList.ItemsSource = _forcesGroup.LoadSets[a].ForceParameters;
+            }
+            else
+            {
+                MessageBox.Show("Ничего не выбрано", "Выберите один из элементов");
+            }
         }
     }
 }

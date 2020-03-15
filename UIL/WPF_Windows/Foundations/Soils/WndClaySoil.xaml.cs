@@ -28,7 +28,23 @@ namespace RDUIL.WPF_Windows.Foundations.Soils
             this.DataContext = _element;
             InitializeComponent();
             if (_element is BearingSoil) AddContentControl(_element, "MechanicalSoilProps");
-            if (_element is DispersedSoil) AddContentControl(_element, "MCSoilProps");
+            if (_element is DispersedSoil)
+            {
+                AddContentControl(_element, "MCSoilProps");
+                if (_element is GravelSoil)
+                {
+                    AddContentControl(_element, "GravelSoilProps");
+                }
+                if (_element is SandSoil)
+                {
+                    //SandSoil sandSoil = _element as SandSoil;
+                    ContentControl contentControl = AddContentControl(_element, "SandSoilProps");                  
+                }
+                if (_element is ClaySoil)
+                {
+                    AddContentControl(_element, "ClaySoilProps");
+                }
+            }
             if (_element is RockSoil) AddContentControl(_element, "RockSoilProps");
         }
 
@@ -49,7 +65,7 @@ namespace RDUIL.WPF_Windows.Foundations.Soils
             this.Close();
         }
 
-        private void AddContentControl(Soil soil, string name)
+        private ContentControl AddContentControl(Soil soil, string name)
         {
             ContentControl contentControl = new ContentControl();
             contentControl.SetResourceReference(ContentControl.ContentTemplateProperty, name);
@@ -57,6 +73,7 @@ namespace RDUIL.WPF_Windows.Foundations.Soils
             binding.Source = soil;
             contentControl.SetBinding(ContentControl.ContentProperty, binding);
             StpProperties.Children.Add(contentControl);
+            return contentControl;
         }
     }
 }
