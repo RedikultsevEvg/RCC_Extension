@@ -69,6 +69,22 @@ namespace CSL.DataSets.RCC.Foundations
             DsOperation.AddDoubleColumn(newTable, "Volume");
             DsOperation.AddDoubleColumn(newTable, "CenterX");
             DsOperation.AddDoubleColumn(newTable, "CentrY");
+            DsOperation.AddDoubleColumn(newTable, "CrcMomentXMax");
+            DsOperation.AddDoubleColumn(newTable, "CrcMomentYMax");
+            DsOperation.AddDoubleColumn(newTable, "CrcMomentXMin");
+            DsOperation.AddDoubleColumn(newTable, "CrcMomentYMin");
+            DsOperation.AddDoubleColumn(newTable, "DesignMomentXMax");
+            DsOperation.AddDoubleColumn(newTable, "DesignMomentYMax");
+            DsOperation.AddDoubleColumn(newTable, "DesignMomentXMin");
+            DsOperation.AddDoubleColumn(newTable, "DesignMomentYMin");
+            DsOperation.AddDoubleColumn(newTable, "CrcMomentXMaxDistr");
+            DsOperation.AddDoubleColumn(newTable, "CrcMomentYMaxDistr");
+            DsOperation.AddDoubleColumn(newTable, "CrcMomentXMinDistr");
+            DsOperation.AddDoubleColumn(newTable, "CrcMomentYMinDistr");
+            DsOperation.AddDoubleColumn(newTable, "DesignMomentXMaxDistr");
+            DsOperation.AddDoubleColumn(newTable, "DesignMomentYMaxDistr");
+            DsOperation.AddDoubleColumn(newTable, "DesignMomentXMinDistr");
+            DsOperation.AddDoubleColumn(newTable, "DesignMomentYMinDistr");
             #endregion
             #region StressesWithWeight
             newTable = new DataTable("FoundationStressesWithWeight");
@@ -135,6 +151,14 @@ namespace CSL.DataSets.RCC.Foundations
             DsOperation.AddDoubleColumn(newTable, "SigmZp");
             DsOperation.AddDoubleColumn(newTable, "LocalSettlement");
             DsOperation.AddDoubleColumn(newTable, "SumSettlement");
+            #endregion
+            #region FoundationPartMoments
+            newTable = new DataTable("PartMoment");
+            dataSet.Tables.Add(newTable);
+            DsOperation.AddIdColumn(newTable);
+            DsOperation.AddFkIdColumn("FoundationParts", "FoundationPartId", newTable);
+            DsOperation.AddDoubleColumn(newTable, "CrcMomentX");
+            DsOperation.AddDoubleColumn(newTable, "DesignMomentY");
             #endregion
             return dataSet;
         }

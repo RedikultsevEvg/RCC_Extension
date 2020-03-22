@@ -196,7 +196,8 @@ namespace RDBLL.Entity.RCC.Foundations.Processors
                 foundation.Result.MaxSndTensionAreaRatioWithWeight = minMaxStresses[4];
 
                 foundation.Result.SndResistance = SndResistance(foundation);
-                calcReinforcement(foundation);
+                //Obtaining bending moments for foundationParts
+                foundation.Result.partMomentAreas = FoundationBodyProcessor.GetBottomMomentAreas(foundation);
 
                 //}
                 result = true;
@@ -888,77 +889,6 @@ namespace RDBLL.Entity.RCC.Foundations.Processors
             //Показываем окно с напряжениями
             Window wndMain = new IsoViewer.MainWindow(loadCaseRectangleValues);
             wndMain.Show();
-        }
-        public static bool calcReinforcement(Foundation foundation)
-        {
-            double elemSize = 0.05;
-
-            double Rc = -1.5e7;
-            double Rct = 1.05e6;
-            double Rsc = -3.5e8;
-            double Rs = 3.5e8;
-            double Es = 2e11;
-
-            double[] reinfAreas = new double[2] { 0, 0 };
-
-            IMaterialModel soilModel = foundation.NdmAreas[0].MaterialModel;
-
-            //Модель материала для бетона
-            List<double> constantConcreteList = new List<double> { Rc, -0.0015, -0.0035, Rct, 0.0015, 0.0035 };
-            IMaterialModel concreteModel = new DoubleLinear(constantConcreteList);
-
-            //Модель материала для арматуры
-            List<double> constantSteelList = new List<double> { Rsc, Rsc / Es, -0.025, Rs, Rs / Es, 0.025 };
-            IMaterialModel SteelModel = new DoubleLinear(constantSteelList);
-
-            int partCount = foundation.Parts.Count();
-            //В цикле проходим по всем ступеням
-            //Высота центра тяжести
-            double currentZ = 0;
-            //список для моментов в сечениях нормальных к оси X
-            List<double[]> momentsXLeft = new List<double[]>();
-
-            RectFoundationPart bottomPart = foundation.Parts[foundation.Parts.Count() - 1];
-            double[] minMaxX = new double[2] { bottomPart.Width / 2 * (-1D), bottomPart.Width / 2 };
-            double[] minMaxY = new double[2] { bottomPart.Length / 2 * (-1D), bottomPart.Length / 2 };
-            double currentX = 0;
-            for (int i = 1; i <= partCount; i++)
-            {
-                RectFoundationPart part = foundation.Parts[partCount - i];
-                //Если рассматриваемая ступень является самой верхней
-                if (i == partCount) currentX = part.CenterX - bottomPart.CenterX;
-                else
-                {
-                    RectFoundationPart nextPart = foundation.Parts[partCount - i - 1];
-                    currentX = part.CenterX - bottomPart.CenterX - nextPart.Width / 2;
-                }
-                List<NdmRectangleArea> ndmSoilRectAreas = NdmAreaProcessor.MeshRectangleByCoord(soilModel, minMaxX[0], currentX, minMaxY[0], minMaxY[1], elemSize);
-                List<NdmArea> ndmSoilAreas = NdmAreaProcessor.ConvertFromRectToBase(ndmSoilRectAreas);
-
-                List<double> tmpCrcMoments = new List<double>();
-                List<double> tmpDesignMoments = new List<double>();
-                foreach (ForceCurvature forceCurvature in foundation.ForceCurvaturesWithoutWeight)
-                {
-                    SumForces sumCrcForces = NdmAreaProcessor.GetSumForces(ndmSoilAreas, forceCurvature.CrcCurvature);
-                    sumCrcForces = new SumForces(sumCrcForces, currentX, 0);
-                    SumForces sumDesignForces = NdmAreaProcessor.GetSumForces(ndmSoilAreas, forceCurvature.DesignCurvature);
-                    sumDesignForces = new SumForces(sumDesignForces, currentX, 0);
-                    tmpCrcMoments.Add(sumCrcForces.ForceMatrix[1, 0]);
-                    tmpDesignMoments.Add(sumDesignForces.ForceMatrix[1, 0]);
-                }
-                double crcMx = tmpCrcMoments.Min();
-                double designMx = tmpDesignMoments.Min();
-                momentsXLeft.Add(new double[2] { crcMx, designMx });
-
-                currentZ += part.Height / 2;
-                //Проверяем сечения нормальные оси X
-                //double currentLengthX = part.Length;
-
-                //List<NdmRectangleArea> ndmAreas = NdmAreaProcessor.MeshRectangle(concreteModel, part.Length, part.Height, currentZ, 0, elemSize);
-                //Проверяем сечения нормальные оси Y
-                //currentZ += part.Height / 2;
-            }
-            return true;
         }
     }
 }

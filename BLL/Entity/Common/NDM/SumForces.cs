@@ -16,12 +16,23 @@ namespace RDBLL.Entity.Common.NDM
     /// </summary>
     public class SumForces
     {
+        /// <summary>
+        /// Матрица усилий
+        /// </summary>
         public Matrix ForceMatrix { get; set; }
+        //[0,0] - изгибающий момент Mx
+        //[1,0] - изгибающий момент My
+        //[2,0] - Продольная сила Nz
         #region Constructors
         public SumForces()
         {
             ForceMatrix = new Matrix(3, 1);
         }
+        /// <summary>
+        /// Конструктор по жесткостным коэффициентам и кривизне
+        /// </summary>
+        /// <param name="stifCoef"></param>
+        /// <param name="curvature"></param>
         public SumForces(StiffnessCoefficient stifCoef, Curvature curvature)
         {
             ForceMatrix = stifCoef.StifMatrix * curvature.CurvMatrix;

@@ -253,7 +253,7 @@ namespace RDBLL.Common.Service
                 ForceParameter newObject = new ForceParameter
                 {
                     Id = dataRow.Field<int>("Id"),
-                    LoadSetId = dataRow.Field<int>("LoadSetId"),
+                    LoadId = dataRow.Field<int>("LoadSetId"),
                     LoadSet = loadSet,
                     KindId = dataRow.Field<int>("KindId"),
                     Name = dataRow.Field<string>("Name"),

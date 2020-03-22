@@ -150,6 +150,10 @@ namespace CSL.Reports
         /// <param name="foundation"></param>
         private void ProcessFoundationParts(Foundation foundation)
         {
+            double[] foundSizes = FoundationProcessor.GetContourSize(foundation);
+            double width = foundSizes[0];
+            double length = foundSizes[1];
+
             DataTable FoundationParts = dataSet.Tables["FoundationParts"];
             foreach (RectFoundationPart foundationPart in foundation.Parts)
             {
@@ -166,6 +170,56 @@ namespace CSL.Reports
                             foundationPart.CenterX * MeasureUnitConverter.GetCoefficient(0),
                             foundationPart.CenterY * MeasureUnitConverter.GetCoefficient(0)
                         };
+                List<FoundationBodyProcessor.PartMomentAreas> partMoments = foundation.Result.partMomentAreas;
+                List<double>[] moments;
+                double momentCoff = MeasureUnitConverter.GetCoefficient(2);
+                foreach (FoundationBodyProcessor.PartMomentAreas partMomentAreas in partMoments)
+                {
+                    if (partMomentAreas.FoundationPartId == foundationPart.Id)
+                    {
+                        moments = new List<double>[4];
+                        moments[0] = new List<double>();
+                        moments[1] = new List<double>();
+                        moments[2] = new List<double>();
+                        moments[3] = new List<double>();
+                        foreach (LoadCombination comb in partMomentAreas.loadCombinationsX)
+                        {
+                            moments[1].Add(comb.ForceParameters[0].CrcValue);
+                            moments[3].Add(comb.ForceParameters[0].DesignValue);
+                        }
+                        //Получаем моменты на ширину ступени
+                        newFoundationPart.SetField("CrcMomentXMin", moments[1].Min() * momentCoff);
+                        newFoundationPart.SetField("DesignMomentXMin", moments[3].Min() * momentCoff);
+                        newFoundationPart.SetField("CrcMomentXMax", moments[1].Max() * momentCoff);
+                        newFoundationPart.SetField("DesignMomentXMax", moments[3].Max() * momentCoff);
+                        //Получаем моменты на единицу ширины ступени
+                        newFoundationPart.SetField("CrcMomentXMinDistr", moments[1].Min() * momentCoff / width);
+                        newFoundationPart.SetField("DesignMomentXMinDistr", moments[3].Min() * momentCoff / width);
+                        newFoundationPart.SetField("CrcMomentXMaxDistr", moments[1].Max() * momentCoff / width);
+                        newFoundationPart.SetField("DesignMomentXMaxDistr", moments[3].Max() * momentCoff / width);
+
+                        moments = new List<double>[4];
+                        moments[0] = new List<double>();
+                        moments[1] = new List<double>();
+                        moments[2] = new List<double>();
+                        moments[3] = new List<double>();
+                        foreach (LoadCombination comb in partMomentAreas.loadCombinationsY)
+                        {
+                            moments[1].Add(comb.ForceParameters[0].CrcValue);
+                            moments[3].Add(comb.ForceParameters[0].DesignValue);
+                        }
+                        //Получаем моменты на ширину ступени
+                        newFoundationPart.SetField("CrcMomentYMin", moments[1].Min() * momentCoff);
+                        newFoundationPart.SetField("DesignMomentYMin", moments[3].Min() * momentCoff);
+                        newFoundationPart.SetField("CrcMomentYMax", moments[1].Max() * momentCoff);
+                        newFoundationPart.SetField("DesignMomentYMax", moments[3].Max() * momentCoff);
+                        //Получаем моменты на единицу ширины ступени
+                        newFoundationPart.SetField("CrcMomentYMinDistr", moments[1].Min() * momentCoff / length);
+                        newFoundationPart.SetField("DesignMomentYMinDistr", moments[3].Min() * momentCoff / length);
+                        newFoundationPart.SetField("CrcMomentYMaxDistr", moments[1].Max() * momentCoff / length);
+                        newFoundationPart.SetField("DesignMomentYMaxDistr", moments[3].Max() * momentCoff / length);
+                    }
+                }
 
                 FoundationParts.Rows.Add(newFoundationPart);
             }
