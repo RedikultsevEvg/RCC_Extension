@@ -26,11 +26,11 @@ namespace RDBLL.Forces
         /// <summary>
         /// Код комбинации загружения
         /// </summary>
-        public int LoadSetId { get; set; }
+        public int LoadId { get; set; }
         /// <summary>
         /// Обратная ссылка на комбинацию загружений
         /// </summary>
-        public LoadSet LoadSet { get; set; }
+        public Load LoadSet { get; set; }
         /// <summary>
         /// Код вида усилия (например, продольная сила). Виды нагрузки жестко предустановлены в программе
         /// </summary>
@@ -65,6 +65,10 @@ namespace RDBLL.Forces
         /// </summary>
         public string Name { get; set; }
         /// <summary>
+        /// Длительная часть нормативного значения
+        /// </summary>
+        public double LongCrcValue { get; set; }
+        /// <summary>
         /// Нормативное (характеристическое) значение нагрузки
         /// </summary>
         public double CrcValue
@@ -89,6 +93,10 @@ namespace RDBLL.Forces
             }
         }
         /// <summary>
+        /// Длительная часть расчетного значения
+        /// </summary>
+        public double LongDesignValue { get; set; }
+        /// <summary>
         /// Расчетное значение нагрузки
         /// </summary>
         public double DesignValue { get; set; }
@@ -103,10 +111,10 @@ namespace RDBLL.Forces
         /// Конструктор по комбинации нагрузок
         /// </summary>
         /// <param name="loadSet"></param>
-        public ForceParameter(LoadSet loadSet)
+        public ForceParameter(Load loadSet)
         {
             Id = ProgrammSettings.CurrentId;
-            LoadSetId = loadSet.Id;
+            LoadId = loadSet.Id;
             LoadSet = loadSet;
         }
         #endregion
@@ -134,7 +142,7 @@ namespace RDBLL.Forces
             }
             #region
             row.SetField("Id", Id);
-            row.SetField("LoadSetId", LoadSetId);
+            row.SetField("LoadSetId", LoadId);
             row.SetField("KindId", KindId);
             row.SetField("Name", Name);
             row.SetField("CrcValue", CrcValue);

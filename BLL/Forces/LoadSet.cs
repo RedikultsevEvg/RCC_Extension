@@ -14,21 +14,13 @@ namespace RDBLL.Forces
     /// <summary>
     ///Клас комбинации загружений 
     /// </summary>
-    public class LoadSet : IEquatable<LoadSet>, ISavableToDataSet, IDuplicate
+    public class LoadSet : Load, IEquatable<LoadSet>, ISavableToDataSet, IDuplicate
     {
         #region
-        /// <summary>
-        /// Код комбинации загружений
-        /// </summary>
-        public int Id { get; set; }
         /// <summary>
         /// Обратная ссылка на родительскую группу нагруок
         /// </summary>
         public List<ForcesGroup> ForcesGroups { get; set; }
-        /// <summary>
-        /// Наименование
-        /// </summary>
-        public string Name { get; set; }
         /// <summary>
         /// Коэффициент надежности по нагрузке
         /// </summary>
@@ -45,30 +37,25 @@ namespace RDBLL.Forces
         /// Флаг знакопеременной нагрузки
         /// </summary>
         public bool BothSign { get; set; }
-        /// <summary>
-        /// Коллекция нагрузок, входящих в загружение
-        /// </summary>
-        public ObservableCollection<ForceParameter> ForceParameters { get; set; }
         #endregion       
         #region Constructors
         /// <summary>
         /// Конструктор без параметров
         /// </summary>
-        public LoadSet()
+        public LoadSet() :base()
         {
             ForcesGroups = new List<ForcesGroup>();
-            ForceParameters = new ObservableCollection<ForceParameter>();
+
         }
 
         /// <summary>
         /// Конструктор по группе нагрузок
         /// </summary>
         /// <param name="forcesGroup"></param>
-        public LoadSet(ForcesGroup forcesGroup)
+        public LoadSet(ForcesGroup forcesGroup) :base()
         {
             Id = ProgrammSettings.CurrentId;
             ForcesGroups = new List<ForcesGroup>();
-            ForceParameters = new ObservableCollection<ForceParameter>();
             ForcesGroups.Add(forcesGroup);
             forcesGroup.SetParentsNotActual();
             Name = "Новая нагрузка";
@@ -211,7 +198,7 @@ namespace RDBLL.Forces
             foreach (ForceParameter forceParameter in ForceParameters)
             {
                 ForceParameter newForceParameter = forceParameter.Duplicate() as ForceParameter;
-                newForceParameter.LoadSetId = loadSet.Id;
+                newForceParameter.LoadId = loadSet.Id;
                 newForceParameter.LoadSet = loadSet;
                 loadSet.ForceParameters.Add(newForceParameter);
             }

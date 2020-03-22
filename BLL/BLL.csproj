@@ -94,6 +94,7 @@
     <Compile Include="Entity\Common\Materials\ConcreteKind.cs" />
     <Compile Include="Entity\RCC\Foundations\Foundation.cs" />
     <Compile Include="Entity\RCC\Foundations\FoundationPart.cs" />
+    <Compile Include="Entity\RCC\Foundations\Processors\FoundationBodyProcessor.cs" />
     <Compile Include="Entity\RCC\Foundations\RectFoundationPart.cs" />
     <Compile Include="Entity\RCC\Foundations\Processors\FoundationProcessor.cs" />
     <Compile Include="Entity\RCC\Reinforcement\Bar.cs" />
@@ -135,6 +136,8 @@
     <Compile Include="Forces\ForcesGroup.cs" />
     <Compile Include="Forces\ForceParameter.cs" />
     <Compile Include="Forces\ForceParamKind.cs" />
+    <Compile Include="Forces\Load.cs" />
+    <Compile Include="Forces\LoadCombination.cs" />
     <Compile Include="Forces\LoadSet.cs" />
     <Compile Include="Processors\Forces\BarLoadSetProcessor.cs" />
     <Compile Include="Processors\Forces\LoadSetProcessor.cs" />
