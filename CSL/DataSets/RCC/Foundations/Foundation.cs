@@ -85,6 +85,8 @@ namespace CSL.DataSets.RCC.Foundations
             DsOperation.AddDoubleColumn(newTable, "DesignMomentYMaxDistr");
             DsOperation.AddDoubleColumn(newTable, "DesignMomentXMinDistr");
             DsOperation.AddDoubleColumn(newTable, "DesignMomentYMinDistr");
+            DsOperation.AddDoubleColumn(newTable, "CrcMomentX");
+            DsOperation.AddDoubleColumn(newTable, "CrcMomentY");
             #endregion
             #region StressesWithWeight
             newTable = new DataTable("FoundationStressesWithWeight");

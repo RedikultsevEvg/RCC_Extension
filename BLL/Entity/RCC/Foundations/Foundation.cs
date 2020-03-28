@@ -37,7 +37,6 @@ namespace RDBLL.Entity.RCC.Foundations
             public double MaxSndCornerStressesWithWeight { get; set; }
             public double MaxSndTensionAreaRatioWithWeight { get; set; }
             public double SndResistance { get; set; }
-            public List<FoundationBodyProcessor.PartMomentAreas> partMomentAreas { get; set; }
             public bool GeneralResult { get; set; }
         }
         #region fields and properties

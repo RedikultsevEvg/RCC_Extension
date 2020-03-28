@@ -197,8 +197,12 @@ namespace RDBLL.Entity.RCC.Foundations.Processors
 
                 foundation.Result.SndResistance = SndResistance(foundation);
                 //Obtaining bending moments for foundationParts
-                foundation.Result.partMomentAreas = FoundationBodyProcessor.GetBottomMomentAreas(foundation);
-
+                foreach (FoundationPart foundationPart in foundation.Parts)
+                {
+                    foundationPart.Result = new FoundationPart.PartResult();
+                }
+                FoundationBodyProcessor.CalcBottomMomentAreas(foundation);
+                FoundationBodyProcessor.CalcCrcMoment(foundation);
                 //}
                 result = true;
             }

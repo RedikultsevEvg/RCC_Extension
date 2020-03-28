@@ -8,6 +8,8 @@ using RDBLL.Common.Service;
 using RDBLL.Common.Interfaces;
 using System.Data;
 using DAL.Common;
+using RDBLL.Entity.RCC.Foundations.Processors;
+using System.Collections.Generic;
 
 namespace RDBLL.Entity.RCC.Foundations
 {
@@ -16,6 +18,13 @@ namespace RDBLL.Entity.RCC.Foundations
     /// </summary>
     public abstract class FoundationPart : ISavableToDataSet
     {
+        public class PartResult
+        {
+            public FoundationBodyProcessor.PartMomentAreas partMomentAreas { get; set; }
+            public double[] Mcrc { get; set; }
+            public double[] CrcWidth { get; set; }
+            public double[] AsRec { get; set; }
+        }
         /// <summary>
         /// Код ступени фундамента
         /// </summary>
@@ -44,6 +53,10 @@ namespace RDBLL.Entity.RCC.Foundations
         /// Положение центра ступени по Y
         /// </summary>
         public double CenterY { get; set; }
+        /// <summary>
+        /// Свойство результатов
+        /// </summary>
+        public PartResult Result { get; set; }
         /// <summary>
         /// Наименование линейных единиц измерения
         /// </summary>

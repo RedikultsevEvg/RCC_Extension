@@ -31,8 +31,7 @@ namespace RDBLL.DrawUtils.SteelBase
             {
                 double zoom_factor_X = canvas.Width / sizes[0] / 1.2;
                 double zoom_factor_Y = canvas.Height / sizes[1] / 1.2;
-                double scale_factor;
-                if (zoom_factor_X < zoom_factor_Y) { scale_factor = zoom_factor_X; } else { scale_factor = zoom_factor_Y; }
+                double scale_factor = Math.Min(zoom_factor_X, zoom_factor_Y);
                 double[] AxisCenter = new double[2] { canvas.Width / 2, canvas.Height / 2 };
                 int count = foundation.Parts.Count;
                 for (int i = 0; i < count; i++)

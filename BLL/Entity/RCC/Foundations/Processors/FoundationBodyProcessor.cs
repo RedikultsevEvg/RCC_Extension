@@ -6,6 +6,7 @@ using RDBLL.Entity.Common.NDM.Processors;
 using RDBLL.Forces;
 using System.Collections.Generic;
 using System.Linq;
+using System;
 
 namespace RDBLL.Entity.RCC.Foundations.Processors
 {
@@ -30,45 +31,71 @@ namespace RDBLL.Entity.RCC.Foundations.Processors
             /// <summary>
             /// Коллекция комбинаций усилий в ступени фундамента
             /// </summary>
-            public List<LoadCombination> loadCombinationsX { get; set; }
+            public List<LoadCombination> LoadCombinationsX { get; set; }
             /// <summary>
             /// Коллекция комбинаций усилий в ступени фундамента
             /// </summary>
-            public List<LoadCombination> loadCombinationsY { get; set; }
+            public List<LoadCombination> LoadCombinationsY { get; set; }
             /// <summary>
             /// Коллекция элементарных участков бетона и арматуры в ступени фундамента
             /// </summary>
-            public List<NdmArea> ndmAreasX { get; set; }
+            public List<NdmArea> CrcNdmAreasX { get; set; }
             /// <summary>
             /// Коллекция элементарных участков бетона и арматуры в ступени фундамента
             /// </summary>
-            public List<NdmArea> ndmAreasY { get; set; }
+            public List<NdmArea> DesignNdmAreasX { get; set; }
+            /// <summary>
+            /// Коллекция элементарных участков бетона и арматуры в ступени фундамента
+            /// </summary>
+            public List<NdmArea> CrcNdmAreasY { get; set; }
+            /// <summary>
+            /// Коллекция элементарных участков бетона и арматуры в ступени фундамента
+            /// </summary>
+            public List<NdmArea> DesignNdmAreasY { get; set; }
         }
         /// <summary>
         /// Возвращает коллекцию моментов и элементарных участков по ступеням
         /// </summary>
         /// <param name="foundation"></param>
         /// <returns></returns>
-        public static List<PartMomentAreas> GetBottomMomentAreas(Foundation foundation)
+        public static bool CalcBottomMomentAreas(Foundation foundation)
         {
-            List<PartMomentAreas> partMomentAreas = new List<PartMomentAreas>();
             #region Settings
             double elemSize = 0.1;
             #endregion
             #region MaterialModels
             double Rc = -1.5e7;
             double Rct = 1.05e6;
+            double Rc_ser = -1.5e7;
+            double Rct_ser = 1.05e6;
+            double Ec = 3e10;
             double Rsc = -3.5e8;
             double Rs = 3.5e8;
+            double Rsc_ser = -4.0e8;
+            double Rs_ser = 4.0e8;
             double Es = 2e11;
             //SoilModel
             IMaterialModel soilModel = foundation.NdmAreas[0].MaterialModel;
-            //Concrete Model
-            List<double> constantConcreteList = new List<double> { Rc, -0.0015, -0.0035, Rct, 0.00008, 0.00015 };
-            IMaterialModel concreteModel = new DoubleLinear(constantConcreteList);
-            //Reinforcement Model
-            List<double> constantSteelList = new List<double> { Rsc, Rsc / Es, -0.025, Rs, Rs / Es, 0.025 };
-            IMaterialModel SteelModel = new DoubleLinear(constantSteelList);
+            #region  Concrete Model
+            //Модель материала бетона с нормативными характеристиками
+            List<double> constCrcConcreteList = new List<double> { Rc_ser, -0.0015, -0.0035, Rct_ser, 0.00008, 0.00015 };
+            IMaterialModel concreteCrcModel = new DoubleLinear(constCrcConcreteList);
+            concreteCrcModel.ElasticModulus = Ec;
+            //Модель материала бетона с расчетными характеристиками
+            List<double> constDesignConcreteList = new List<double> { Rc, -0.0015, -0.0035, Rct, 0.00008, 0.00015 };
+            IMaterialModel concreteDesignModel = new DoubleLinear(constDesignConcreteList);
+            concreteDesignModel.ElasticModulus = Ec;
+            #endregion
+            #region Reinforcement Model
+            //Модель материала арматуры с нормативными характеристиками
+            List<double> constCrcSteelList = new List<double> { Rsc_ser, Rsc_ser / Es, -0.025, Rs_ser, Rs_ser / Es, 0.025 };
+            IMaterialModel steelCrcModel = new DoubleLinear(constCrcSteelList);
+            steelCrcModel.ElasticModulus = Es;
+            //Модель материала арматуры с расчетными характеристиками
+            List<double> consDesigntSteelList = new List<double> { Rsc, Rsc / Es, -0.025, Rs, Rs / Es, 0.025 };
+            IMaterialModel steelDesignModel = new DoubleLinear(consDesigntSteelList);
+            steelDesignModel.ElasticModulus = Es;
+            #endregion
             #endregion
 
             List<LoadCombination> GetMoment(double coordX, double coordY, List<NdmRectangleArea> ndmSoilRectAreas, List<ForceCurvature> forceCurvatures, bool normalX, double coff)
@@ -119,7 +146,7 @@ namespace RDBLL.Entity.RCC.Foundations.Processors
             List<NdmArea> concreteYNdmAreas = new List<NdmArea>();
             double currentZ = 0;
             //Возвращает коллекцию элементарных участков для ступени и нижележащих ступеней
-            List<NdmArea> GetPartAreas(RectFoundationPart part, bool normalX)
+            List<NdmArea> GetPartAreas(RectFoundationPart part, IMaterialModel materialModel, bool normalX)
             {
                 double width;
                 List<NdmArea> curNdmAreas;
@@ -134,7 +161,7 @@ namespace RDBLL.Entity.RCC.Foundations.Processors
                     curNdmAreas = concreteYNdmAreas;
                 }
                 //Коллекция новых элементарных участков только для данной ступени
-                List<NdmRectangleArea> newNdmAreas = NdmAreaProcessor.MeshRectangleByCoord(concreteModel, -width / 2, +width / 2, currentZ, currentZ + part.Height, elemSize);
+                List<NdmRectangleArea> newNdmAreas = NdmAreaProcessor.MeshRectangleByCoord(materialModel, -width / 2, +width / 2, currentZ, currentZ + part.Height, elemSize);
                 //Коллекция элементарных участков данной ступени и всех нижележащих
                 List<NdmArea> partNdmAreas = new List<NdmArea>();
                 //Добавляем все ранее созданные элементарные участки
@@ -167,8 +194,10 @@ namespace RDBLL.Entity.RCC.Foundations.Processors
                 PartMomentAreas locPartMomentAreas = new PartMomentAreas();
                 locPartMomentAreas.FoundationPartId = part.Id;
                 locPartMomentAreas.FoundationPart = part;
-                locPartMomentAreas.ndmAreasX = GetPartAreas(part, true);
-                locPartMomentAreas.ndmAreasY = GetPartAreas(part, false);
+                locPartMomentAreas.CrcNdmAreasX = GetPartAreas(part, concreteCrcModel, true);
+                locPartMomentAreas.CrcNdmAreasY = GetPartAreas(part, concreteCrcModel, false);
+                locPartMomentAreas.DesignNdmAreasX = GetPartAreas(part, concreteDesignModel, true);
+                locPartMomentAreas.DesignNdmAreasY = GetPartAreas(part, concreteDesignModel, false);
 
                 //Если рассматриваемая ступень не является самой верхней
                 if (i > 0)
@@ -188,8 +217,8 @@ namespace RDBLL.Entity.RCC.Foundations.Processors
                     ndmSoilRectAreas = NdmAreaProcessor.MeshRectangleByCoord(soilModel, currentX, minMaxX[1], minMaxY[0], minMaxY[1], elemSize);
                     List<LoadCombination> MomentXRightCombinations = GetMoment(currentX, 0, ndmSoilRectAreas, foundation.ForceCurvaturesWithoutWeight, true, 1);
 
-                    locPartMomentAreas.loadCombinationsY = MomentXLeftCombinations;
-                    locPartMomentAreas.loadCombinationsY.AddRange(MomentXRightCombinations);
+                    locPartMomentAreas.LoadCombinationsY = MomentXLeftCombinations;
+                    locPartMomentAreas.LoadCombinationsY.AddRange(MomentXRightCombinations);
                     #endregion
                     #region Moment Y
                     //Определяем моменты снизу от ступени
@@ -201,8 +230,8 @@ namespace RDBLL.Entity.RCC.Foundations.Processors
                     ndmSoilRectAreas = NdmAreaProcessor.MeshRectangleByCoord(soilModel, minMaxX[0], minMaxX[1], currentY, minMaxY[1], elemSize);
                     List<LoadCombination> MomentYTopCombinations = GetMoment(0, currentY, ndmSoilRectAreas, foundation.ForceCurvaturesWithoutWeight, false, -1);
 
-                    locPartMomentAreas.loadCombinationsX = MomentYBottomCombinations;
-                    locPartMomentAreas.loadCombinationsX.AddRange(MomentYTopCombinations);
+                    locPartMomentAreas.LoadCombinationsX = MomentYBottomCombinations;
+                    locPartMomentAreas.LoadCombinationsX.AddRange(MomentYTopCombinations);
                     #endregion
                     //Добавляем высоту
                     currentZ += part.Height;
@@ -212,14 +241,39 @@ namespace RDBLL.Entity.RCC.Foundations.Processors
                     //Момент определяем в середине ступени
                     ndmSoilRectAreas = NdmAreaProcessor.MeshRectangleByCoord(soilModel, minMaxX[0], centerX, minMaxY[0], minMaxY[1], elemSize);
                     List<LoadCombination> MomentYCombinations = GetMoment(centerX, 0, ndmSoilRectAreas, foundation.ForceCurvaturesWithoutWeight, true, -1);
-                    locPartMomentAreas.loadCombinationsX = MomentYCombinations;
+                    locPartMomentAreas.LoadCombinationsX = MomentYCombinations;
                     ndmSoilRectAreas = NdmAreaProcessor.MeshRectangleByCoord(soilModel, minMaxX[0], minMaxX[1], minMaxY[0], centerY, elemSize);
                     List<LoadCombination> MomentXCombinations = GetMoment(0, centerY, ndmSoilRectAreas, foundation.ForceCurvaturesWithoutWeight, false, 1);
-                    locPartMomentAreas.loadCombinationsY = MomentXCombinations;
+                    locPartMomentAreas.LoadCombinationsY = MomentXCombinations;
                 }
-                partMomentAreas.Add(locPartMomentAreas);
+                part.Result.partMomentAreas = locPartMomentAreas;
             }
-            return partMomentAreas;
+            return true;
+        }
+        public static void CalcCrcMoment (Foundation foundation)
+        {
+            double Rct = 1.5e6;
+            
+            foreach (FoundationPart part in foundation.Parts)
+            {
+                PartMomentAreas partMomentAreas = part.Result.partMomentAreas;
+                part.Result.Mcrc = GetCrcMoments(partMomentAreas, Rct, 3e10);
+            }
+        }
+        /// <summary>
+        /// Возвращает пару моментов образования трещин для ступеней
+        /// </summary>
+        /// <param name="partMomentAreas"></param>
+        /// <param name="Rct"></param>
+        /// <param name="Ec"></param>
+        /// <returns></returns>
+        public static double[] GetCrcMoments(PartMomentAreas partMomentAreas, double Rct, double Ec = 3e10)
+        {
+            double[] crcMoments = new double[2];
+            double sndMomentInertiaX = NdmConcreteProcessor.GetSndMomentInertia(partMomentAreas.CrcNdmAreasY, Ec)[0, 1];
+            double sndMomentInertiaY = NdmConcreteProcessor.GetSndMomentInertia(partMomentAreas.CrcNdmAreasX, Ec)[0, 1];
+            crcMoments = new double[2] { Math.Abs(sndMomentInertiaX * Rct), Math.Abs(sndMomentInertiaY * Rct) };
+            return crcMoments;
         }
     }
 }
