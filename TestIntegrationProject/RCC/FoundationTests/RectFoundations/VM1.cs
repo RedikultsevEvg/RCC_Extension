@@ -89,7 +89,7 @@ namespace TestIntegrationProject.RCC.FoundationTests.RectFoundations
             building.Levels.Add(level);
             #endregion
             #region Soil
-            DispersedSoil soil = new DispersedSoil(buildingSite);
+            DispersedSoil soil = new ClaySoil(buildingSite);
             soil.Name = "ИГЭ-1";
             soil.Description = "Суглинок песчанистый, тугопластичный";
             soil.CrcDensity = 1950;

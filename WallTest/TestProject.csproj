@@ -50,6 +50,7 @@
   <ItemGroup>
     <Compile Include="Forces\LoadCase.cs" />
     <Compile Include="Forces\LoadSetTest.cs" />
+    <Compile Include="Ndm\GeometryProperties\GeometryTest.cs" />
     <Compile Include="RC\Foundations\NaturalSoilFoundation\CheckStress\AlphaCoff.cs" />
     <Compile Include="RC\Foundations\NaturalSoilFoundation\CheckStress\MCofficients.cs" />
     <Compile Include="SC\SteelBasePart\CheckMoment\FourSides.cs" />
@@ -69,6 +70,7 @@
       <Name>BLL</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
