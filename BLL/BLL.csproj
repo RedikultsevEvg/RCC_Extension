@@ -65,6 +65,7 @@
     <Compile Include="DrawUtils\SteelBase\DrawFoundation.cs" />
     <Compile Include="DrawUtils\SteelBase\DrawSteelBase.cs" />
     <Compile Include="DrawUtils\SteelBase\DrawUtils.cs" />
+    <Compile Include="Entity\Common\Materials\ReinforcementKind.cs" />
     <Compile Include="Entity\Common\NDM\Curvature.cs" />
     <Compile Include="Entity\Common\NDM\ForceCurvature.cs" />
     <Compile Include="Entity\Common\NDM\ForceDoubleCurvature.cs" />
@@ -94,6 +95,7 @@
     <Compile Include="Common\Geometry\Point2D.cs" />
     <Compile Include="Common\Geometry\Point3D.cs" />
     <Compile Include="Entity\Common\Materials\ConcreteKind.cs" />
+    <Compile Include="Entity\RCC\Common\Processors\RectSectionProcessor.cs" />
     <Compile Include="Entity\RCC\Foundations\Foundation.cs" />
     <Compile Include="Entity\RCC\Foundations\FoundationPart.cs" />
     <Compile Include="Entity\RCC\Foundations\Processors\FoundationBodyProcessor.cs" />

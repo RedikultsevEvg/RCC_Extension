@@ -70,6 +70,15 @@ namespace DAL.Common
             NewColumn = new DataColumn(columnName, Type.GetType("System.Int32"));
             dataTable.Columns.Add(NewColumn);
         }
+        public static DataColumn AddIntColumn(DataTable dataTable, string columnName, int defaultValue)
+        {
+            DataColumn NewColumn;
+            NewColumn = new DataColumn(columnName, Type.GetType("System.Int32"));
+            NewColumn.AllowDBNull = false;
+            NewColumn.DefaultValue = defaultValue;
+            dataTable.Columns.Add(NewColumn);
+            return NewColumn;
+        }
         public static DataColumn AddDoubleColumn(DataTable dataTable, string columnName)
         {
             DataColumn NewColumn;

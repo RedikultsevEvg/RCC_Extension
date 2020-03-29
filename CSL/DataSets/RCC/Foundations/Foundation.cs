@@ -55,6 +55,14 @@ namespace CSL.DataSets.RCC.Foundations
             DsOperation.AddStringColumn(newTable, "NzStiffnessStringMax");
             DsOperation.AddStringColumn(newTable, "MxStiffnessStringMax");
             DsOperation.AddStringColumn(newTable, "MyStiffnessStringMax");
+            DsOperation.AddDoubleColumn(newTable, "AsBottomXAct");
+            DsOperation.AddDoubleColumn(newTable, "AsBottomYAct");
+            DsOperation.AddDoubleColumn(newTable, "AsBottomXMax");
+            DsOperation.AddDoubleColumn(newTable, "AsBottomYMax");
+            DsOperation.AddDoubleColumn(newTable, "AsCrcBottomXMax");
+            DsOperation.AddDoubleColumn(newTable, "AsCrcBottomYMax");
+            DsOperation.AddStringColumn(newTable, "AsFstConclusionX");
+            DsOperation.AddStringColumn(newTable, "AsFstConclusionY");
             DsOperation.AddStringColumn(newTable, "GeneralConclusion");
             #endregion
             #region FoundationParts
@@ -87,6 +95,10 @@ namespace CSL.DataSets.RCC.Foundations
             DsOperation.AddDoubleColumn(newTable, "DesignMomentYMinDistr");
             DsOperation.AddDoubleColumn(newTable, "CrcMomentX");
             DsOperation.AddDoubleColumn(newTable, "CrcMomentY");
+            DsOperation.AddDoubleColumn(newTable, "AsBottomXMax");
+            DsOperation.AddDoubleColumn(newTable, "AsBottomYMax");
+            DsOperation.AddDoubleColumn(newTable, "AsCrcBottomXMax");
+            DsOperation.AddDoubleColumn(newTable, "AsCrcBottomYMax");
             #endregion
             #region StressesWithWeight
             newTable = new DataTable("FoundationStressesWithWeight");

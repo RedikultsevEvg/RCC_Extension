@@ -15,6 +15,7 @@ using RDBLL.Entity.MeasureUnits;
 using System.Collections.ObjectModel;
 using System.Data;
 using DAL.DataSets;
+using RDBLL.Entity.Common.Materials;
 
 
 namespace RDBLL.Common.Service
@@ -96,6 +97,14 @@ namespace RDBLL.Common.Service
             }
         }
         /// <summary>
+        /// Справочник классов бетона
+        /// </summary>
+        public static List<ConcreteKind> ConcreteKinds { get; set; }
+        /// <summary>
+        /// Справочник классов арматуры
+        /// </summary>
+        public static List<ReinforcementKind> ReinforcementKinds { get; set; }
+        /// <summary>
         /// Метод задания начальных параметров
         /// </summary>
         public static void InicializeNew()
@@ -110,6 +119,8 @@ namespace RDBLL.Common.Service
             BuildingSite.Buildings.Add(new Building(BuildingSite));
             BuildingSite.SaveToDataSet(CurrentDataSet, true);
             IsDataChanged = false;
+            ConcreteKinds = new List<ConcreteKind>();
+            ReinforcementKinds = new List<ReinforcementKind>();
             CurrentId = 0;
             CurrentTmpId = 1000000;
             #region Исходные данные единиц измерения
@@ -283,6 +294,63 @@ namespace RDBLL.Common.Service
                 Addition = "За положительное значение момента принят момент против часовой стрелки если смотреть с конца оси Z",
                 MeasureUnit = measureUnitMoment
             });
+            #endregion
+            #region ConcreteClasses
+            ConcreteKind concreteKind;
+            concreteKind = new ConcreteKind();
+            concreteKind.Id = 5;
+            concreteKind.Name = "B20";
+            concreteKind.FstCompStrength = 11.7e6;
+            concreteKind.FstTensStrength = 0.98e6;
+            concreteKind.SndCompStrength = 17.7e6;
+            concreteKind.SndTensStrength = 0.98e6;
+            concreteKind.Epsb1Comp = 0.00150;
+            concreteKind.Epsb1Tens = 0.00008;
+            concreteKind.Epsb2Comp = 0.00200;
+            concreteKind.Epsb2Tens = 0.00010;
+            concreteKind.EpsbMaxComp = 0.00350;
+            concreteKind.EpsbMaxTens = 0.00015;
+            concreteKind.ElasticModulus = 3e10;
+            concreteKind.PoissonRatio = 0.2;
+            ConcreteKinds.Add(concreteKind);
+            concreteKind = new ConcreteKind();
+            concreteKind.Id = 6;
+            concreteKind.Name = "B25";
+            concreteKind.FstCompStrength = 11.7e6;
+            concreteKind.FstTensStrength = 0.98e6;
+            concreteKind.SndCompStrength = 17.7e6;
+            concreteKind.SndTensStrength = 0.98e6;
+            concreteKind.Epsb1Comp = 0.00150;
+            concreteKind.Epsb1Tens = 0.00008;
+            concreteKind.Epsb2Comp = 0.00200;
+            concreteKind.Epsb2Tens = 0.00010;
+            concreteKind.EpsbMaxComp = 0.00350;
+            concreteKind.EpsbMaxTens = 0.00015;
+            concreteKind.ElasticModulus = 3e10;
+            concreteKind.PoissonRatio = 0.2;
+            ConcreteKinds.Add(concreteKind);
+            #endregion
+            #region Reinforcement Classes
+            ReinforcementKind reinforcementKind;
+            reinforcementKind = new ReinforcementKind();
+            reinforcementKind.Id = 2;
+            reinforcementKind.Name = "A400";
+            reinforcementKind.FstCompStrength = 350e6;
+            reinforcementKind.FstTensStrength = 350e6;
+            reinforcementKind.SndCompStrength = 400e6;
+            reinforcementKind.SndTensStrength = 400e6;
+            reinforcementKind.ElasticModulus = 2e11;
+            ReinforcementKinds.Add(reinforcementKind);
+
+            reinforcementKind = new ReinforcementKind();
+            reinforcementKind.Id = 3;
+            reinforcementKind.Name = "A500";
+            reinforcementKind.FstCompStrength = 435e6;
+            reinforcementKind.FstTensStrength = 435e6;
+            reinforcementKind.SndCompStrength = 500e6;
+            reinforcementKind.SndTensStrength = 500e6;
+            reinforcementKind.ElasticModulus = 2e11;
+            ReinforcementKinds.Add(reinforcementKind);
             #endregion
         }
         /// <summary>

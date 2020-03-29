@@ -48,6 +48,8 @@ namespace RDUIL.WPF_Windows.Foundations
             if (wndFoundation.DialogResult == true)
             {
                 foundation.RenewSoilSection();
+                foundation.RenewConcrete();
+                foundation.RenewBtmReinf();
                 try
                 {
                     foundation.SaveToDataSet(ProgrammSettings.CurrentDataSet, false);
@@ -106,6 +108,8 @@ namespace RDUIL.WPF_Windows.Foundations
                 if (wndChild.DialogResult == true)
                 {
                     foundation.RenewSoilSection();
+                    foundation.RenewConcrete();
+                    foundation.RenewBtmReinf();
                     try
                     {
                         foundation.SaveToDataSet(ProgrammSettings.CurrentDataSet, false);

@@ -23,24 +23,78 @@ namespace RDBLL.Entity.RCC.Foundations.Processors
     /// </summary>
     public class FoundationProcessor
     {
+        /// <summary>
+        /// Класс результатов по осадкам фундамента
+        /// </summary>
         public class SettleMentResult
         {
+            /// <summary>
+            /// Осадка
+            /// </summary>
             public double Settlement { get; set; }
+            /// <summary>
+            /// Глубина сжимаемой толщи
+            /// </summary>
             public double CompressionHeight { get; set; }
+            /// <summary>
+            /// Крен относительно оси X
+            /// </summary>
             public double IncX { get; set; }
+            /// <summary>
+            /// Крен относительно оси Y
+            /// </summary>
             public double IncY { get; set; }
+            /// <summary>
+            /// Суммарный крен (геометрическая сумма)
+            /// </summary>
             public double IncXY { get; set; }
+            /// <summary>
+            /// Минимальное значение жесткости на вертикальное усилие
+            /// </summary>
             public double NzStiffnessMin { get; set; }
+            /// <summary>
+            /// Минимальное значение жесткости на момент относительно оси X
+            /// </summary>
             public double MxStiffnessMin { get; set; }
+            /// <summary>
+            /// Минимальное значение жесткости на момент относительно оси Y
+            /// </summary>
             public double MyStiffnessMin { get; set; }
+            /// <summary>
+            /// Максимальное значение жесткости на вертикальное усилие
+            /// </summary>
             public double NzStiffnessMax { get; set; }
+            /// <summary>
+            /// Максимальное значение жесткости на момент относительно оси X
+            /// </summary>
             public double MxStiffnessMax { get; set; }
+            /// <summary>
+            /// Максимальное значение жесткости на момент относительно оси Y
+            /// </summary>
             public double MyStiffnessMax { get; set; }
+            /// <summary>
+            /// Минимальное значение жесткости на вертикальное усилие
+            /// </summary>
             public string NzStiffnessStringMin { get; set; }
+            /// <summary>
+            /// Минимальное значение жесткости на момент относительно оси X
+            /// </summary>
             public string MxStiffnessStringMin { get; set; }
+            /// <summary>
+            /// Минимальное значение жесткости на момент относительно оси Y
+            /// </summary>
             public string MyStiffnessStringMin { get; set; }
+            /// <summary>
+            /// Максимальное значение жесткости на вертикальное усилие
+            /// </summary>
             public string NzStiffnessStringMax { get; set; }
+            /// <summary>
+            /// Максимальное значение жесткости на момент относительно оси X
+            /// </summary>
             public string MxStiffnessStringMax { get; set; }
+            /// <summary>
+            /// Максимальное значение жесткости на момент относительно оси Y
+            /// </summary>
             public string MyStiffnessStringMax { get; set; }
         }
         /// <summary>
@@ -89,6 +143,7 @@ namespace RDBLL.Entity.RCC.Foundations.Processors
         /// Возвращает тройку дистанций от верха фундамента до центра нижней ступени
         /// </summary>
         /// <param name="foundation">Фундамент</param>
+        /// <param name="isPositive">false - дистанции возвращаются со знаком минус</param>
         /// <returns></returns>
         public static double[] GetDeltaDistance(Foundation foundation, bool isPositive = true)
         {
@@ -201,8 +256,11 @@ namespace RDBLL.Entity.RCC.Foundations.Processors
                 {
                     foundationPart.Result = new FoundationPart.PartResult();
                 }
+                SetFoundationPartZCoord(foundation);
                 FoundationBodyProcessor.CalcBottomMomentAreas(foundation);
                 FoundationBodyProcessor.CalcCrcMoment(foundation);
+                FoundationBodyProcessor.GetReinforcementArea(foundation);
+                FoundationBodyProcessor.GetActualReinforcementArea(foundation);
                 //}
                 result = true;
             }
@@ -531,6 +589,11 @@ namespace RDBLL.Entity.RCC.Foundations.Processors
             }
             return stressesList;
         }
+        /// <summary>
+        /// Коллекция сжатых геологических слоев для основания фундамента
+        /// </summary>
+        /// <param name="foundation"></param>
+        /// <returns></returns>
         public static List<CompressedLayerList> CompressedLayers(Foundation foundation)
         {
             List<CompressedLayerList> mainCompressedLayers = new List<CompressedLayerList>();
@@ -698,7 +761,6 @@ namespace RDBLL.Entity.RCC.Foundations.Processors
         /// <param name="fi2">Угол внутреннего трения, радиан</param>
         /// <param name="c2"></param>
         /// <param name="width"></param>
-        /// <param name="kZ"></param>
         /// <param name="d1"></param>
         /// <param name="db"></param>
         /// <param name="gamma2"></param>
@@ -893,6 +955,21 @@ namespace RDBLL.Entity.RCC.Foundations.Processors
             //Показываем окно с напряжениями
             Window wndMain = new IsoViewer.MainWindow(loadCaseRectangleValues);
             wndMain.Show();
+        }
+        /// <summary>
+        /// Вычисляет для каждой ступени фундамента координату верха ступени считая от подошвы фундамента
+        /// </summary>
+        /// <param name="foundation"></param>
+        private static void SetFoundationPartZCoord(Foundation foundation)
+        {
+            double z = 0;
+            int partCount = foundation.Parts.Count();
+            for (int i = partCount - 1; i >= 0; i--)
+            {
+                RectFoundationPart part = foundation.Parts[i];
+                z += part.Height;
+                part.Result.ZMax = z;
+            }
         }
     }
 }

@@ -13,6 +13,7 @@ using System.Linq;
 using DAL.Common;
 using RDBLL.Entity.Soils;
 using RDBLL.Entity.RCC.Foundations.Processors;
+using RDBLL.Entity.Common.Materials;
 
 
 namespace RDBLL.Entity.RCC.Foundations
@@ -37,7 +38,40 @@ namespace RDBLL.Entity.RCC.Foundations
             public double MaxSndCornerStressesWithWeight { get; set; }
             public double MaxSndTensionAreaRatioWithWeight { get; set; }
             public double SndResistance { get; set; }
+            public double[] AsAct { get; set; }
+            public double[] AsRec { get; set; }
             public bool GeneralResult { get; set; }
+        }
+        /// <summary>
+        /// Класс свойств нижнего армирования
+        /// </summary>
+        public class BtmReinforcement
+        {
+            /// <summary>
+            /// Наименование (для заголовка)
+            /// </summary>
+            public string Name { get; set; }
+            /// <summary>
+            /// Диаметр
+            /// </summary>
+            public double Diameter { get; set; }
+            /// <summary>
+            /// Шаг
+            /// </summary>
+            public double Step { get; set; }
+            /// <summary>
+            /// Защитный слой арматуры подошвы вдоль оси X
+            /// </summary>
+            public double CoveringLayer { get; set; }
+            /// <summary>
+            /// Конструктор по умолчанию
+            /// </summary>
+            public BtmReinforcement()
+            {
+                Diameter = 0.012;
+                Step = 0.2;
+                CoveringLayer = 0.08;
+            }
         }
         #region fields and properties
         /// <summary>
@@ -112,14 +146,12 @@ namespace RDBLL.Entity.RCC.Foundations
         /// Коллекция ступеней столбчатого фундамента
         /// </summary>
         public ObservableCollection<RectFoundationPart> Parts { get; set; }
-        /// <summary>
-        /// Защитный слой арматуры подошвы вдоль оси X
-        /// </summary>
-        public double CoveringLayerX { get; set; }
-        /// <summary>
-        /// Защитный слой арматуры подошвы вдоль оси Y
-        /// </summary>
-        public double CoveringLayerY { get; set; }
+        public int? ConcreteId { get; set; }
+        public ConcreteKind ConcreteKind { get; set; }
+        public int? BtmReinfId { get; set; }
+        public ReinforcementKind BtmReinfKind { get; set; }
+        public BtmReinforcement BtmReinfX { get; set; }
+        public BtmReinforcement BtmReinfY { get; set; }
         /// <summary>
         /// Отношение давления для ограничения глубины сжимаемой толщи
         /// </summary>
@@ -150,7 +182,10 @@ namespace RDBLL.Entity.RCC.Foundations
         /// Коллекция элементарных участков подошвы
         /// </summary>
         public List<NdmArea> NdmAreas { get; set; }
-        
+        public List<ConcreteKind> ConcreteKinds { get { return ProgrammSettings.ConcreteKinds; } }
+        public List<ReinforcementKind> ReinforcementKinds { get { return ProgrammSettings.ReinforcementKinds; } }
+       
+
         /// <summary>
         /// Признак актуальности нагрузок
         /// </summary>
@@ -191,6 +226,10 @@ namespace RDBLL.Entity.RCC.Foundations
             ForceCurvaturesWithWeight = new List<ForceCurvature>();
             ForceCurvaturesWithoutWeight = new List<ForceCurvature>();
             Result = new FoundationResult();
+            BtmReinfX = new BtmReinforcement();
+            BtmReinfX.Name = "Вдоль оси X";
+            BtmReinfY = new BtmReinforcement();
+            BtmReinfY.Name = "Вдоль оси Y";
         }
         /// <summary>
         /// Конструктор по уровню
@@ -212,8 +251,6 @@ namespace RDBLL.Entity.RCC.Foundations
             FloorLoadFactor = 1.2;
             ConcreteFloorLoad = 0;
             ConcreteFloorLoadFactor = 1.2;
-            CoveringLayerX = 0.09;
-            CoveringLayerY = 0.07;
             CompressedLayerRatio = 0.2;
             ForcesGroups = new ObservableCollection<ForcesGroup>();
             ForcesGroups.Add(new ForcesGroup(this));
@@ -224,6 +261,10 @@ namespace RDBLL.Entity.RCC.Foundations
             IsLoadCasesActual = true;
             IsPartsActual = true;
             Result = new FoundationResult();
+            BtmReinfX = new BtmReinforcement();
+            BtmReinfX.Name = "Вдоль оси X";
+            BtmReinfY = new BtmReinforcement();
+            BtmReinfY.Name = "Вдоль оси Y";
         }
         #endregion
         #region methods
@@ -262,8 +303,14 @@ namespace RDBLL.Entity.RCC.Foundations
             row.SetField("FloorLoad", FloorLoad);
             row.SetField("FloorLoadFactor", FloorLoadFactor);
             row.SetField("ConcreteFloorLoad", ConcreteFloorLoad);
-            row.SetField("CoveringLayerX", CoveringLayerX);
-            row.SetField("CoveringLayerY", CoveringLayerY);
+            row.SetField("ConcreteId", ConcreteId);
+            row.SetField("BtmReinfId", BtmReinfId);
+            row.SetField("DiameterX", BtmReinfX.Diameter);
+            row.SetField("StepX", BtmReinfX.Step);
+            row.SetField("CoveringLayerX", BtmReinfX.CoveringLayer);
+            row.SetField("DiameterY", BtmReinfY.Diameter);
+            row.SetField("StepY", BtmReinfY.Step);
+            row.SetField("CoveringLayerY", BtmReinfY.CoveringLayer);
             row.SetField("CompressedLayerRatio", CompressedLayerRatio);
             #endregion
             dataTable.AcceptChanges();
@@ -309,15 +356,19 @@ namespace RDBLL.Entity.RCC.Foundations
             FloorLoadFactor = dataRow.Field<double>("FloorLoadFactor");
             ConcreteFloorLoad = dataRow.Field<double>("ConcreteFloorLoad");
             ConcreteFloorLoadFactor = dataRow.Field<double>("ConcreteFloorLoadFactor");
-            CoveringLayerX = dataRow.Field<double>("CoveringLayerX");
-            CoveringLayerY = dataRow.Field<double>("CoveringLayerY");
+            ConcreteId = dataRow.Field<int>("ConcreteId");
+            BtmReinfId = dataRow.Field<int>("BtmReinfId");
+            BtmReinfX.Diameter = dataRow.Field<double>("DiameterX");
+            BtmReinfX.Step = dataRow.Field<double>("StepX");
+            BtmReinfX.CoveringLayer = dataRow.Field<double>("CoveringLayerX");
+            BtmReinfY.Diameter = dataRow.Field<double>("DiameterY");
+            BtmReinfY.Step = dataRow.Field<double>("StepY");
+            BtmReinfY.CoveringLayer = dataRow.Field<double>("CoveringLayerY");
             CompressedLayerRatio = dataRow.Field<double>("CompressedLayerRatio");
             //Если у фундамента есть код скважины
-            if (!(SoilSectionId is null))
-            {
-                RenewSoilSection();
-            }
-
+            if (!(SoilSectionId is null)) RenewSoilSection();
+            if (!(ConcreteId is null)) RenewConcrete();
+            if (!(BtmReinfId is null)) RenewBtmReinf();
         }
         /// <summary>
         /// Удаляет запись из датасета
@@ -364,6 +415,16 @@ namespace RDBLL.Entity.RCC.Foundations
                 foundation.SoilSectionId = SoilSectionId;
                 foundation.SoilSection = SoilSection;
             }
+            if (!(ConcreteId is null))
+            {
+                foundation.ConcreteId = ConcreteId;
+                foundation.ConcreteKind = ConcreteKind;
+            }
+            if (!(BtmReinfId is null))
+            {
+                foundation.BtmReinfId = BtmReinfId;
+                foundation.BtmReinfKind = BtmReinfKind;
+            }
             foundation.ReinfSteelClassId = ReinfSteelClassId;
             foundation.ConcreteClassId = ConcreteClassId;
             foundation.RelativeTopLevel = RelativeTopLevel;
@@ -374,8 +435,12 @@ namespace RDBLL.Entity.RCC.Foundations
             foundation.FloorLoadFactor = FloorLoadFactor;
             foundation.ConcreteFloorLoad = ConcreteFloorLoad;
             foundation.ConcreteFloorLoadFactor = ConcreteFloorLoadFactor;
-            foundation.CoveringLayerX = CoveringLayerX;
-            foundation.CoveringLayerY = CoveringLayerY;
+            foundation.BtmReinfX.Diameter = BtmReinfX.Diameter;
+            foundation.BtmReinfX.Step = BtmReinfX.Step;
+            foundation.BtmReinfX.CoveringLayer = BtmReinfX.CoveringLayer;
+            foundation.BtmReinfY.Diameter = BtmReinfY.Diameter;
+            foundation.BtmReinfY.Step = BtmReinfY.Step;
+            foundation.BtmReinfY.CoveringLayer = BtmReinfY.CoveringLayer;
             foundation.CompressedLayerRatio = CompressedLayerRatio;
             #endregion
             //Копируем нагрузки
@@ -407,6 +472,26 @@ namespace RDBLL.Entity.RCC.Foundations
                 {
                     SoilSection = soilSection;
                     SoilSection.AddObserver(this);
+                }
+            }
+        }
+        public void RenewConcrete()
+        {
+            foreach (ConcreteKind concreteKind in ProgrammSettings.ConcreteKinds)
+            {
+                if (ConcreteId == concreteKind.Id)
+                {
+                    ConcreteKind = concreteKind;
+                }
+            }
+        }
+        public void RenewBtmReinf()
+        {
+            foreach (ReinforcementKind reinforcementKind in ProgrammSettings.ReinforcementKinds)
+            {
+                if (BtmReinfId == reinforcementKind.Id)
+                {
+                    BtmReinfKind = reinforcementKind;
                 }
             }
         }

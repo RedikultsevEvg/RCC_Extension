@@ -252,7 +252,13 @@ namespace DAL.DataSets
             DsOperation.AddDoubleColumn(dataTable, "FloorLoadFactor", 1.2);
             DsOperation.AddDoubleColumn(dataTable, "ConcreteFloorLoad", 0);
             DsOperation.AddDoubleColumn(dataTable, "ConcreteFloorLoadFactor", 1.2);
+            DsOperation.AddIntColumn(dataTable, "ConcreteId", 5);
+            DsOperation.AddIntColumn(dataTable, "BtmReinfId", 2);
+            DsOperation.AddDoubleColumn(dataTable, "DiameterX", 0.012);
+            DsOperation.AddDoubleColumn(dataTable, "StepX", 0.200);
             DsOperation.AddDoubleColumn(dataTable, "CoveringLayerX", 0.09);
+            DsOperation.AddDoubleColumn(dataTable, "DiameterY", 0.012);
+            DsOperation.AddDoubleColumn(dataTable, "StepY", 0.200);
             DsOperation.AddDoubleColumn(dataTable, "CoveringLayerY", 0.07);
             DsOperation.AddDoubleColumn(dataTable, "CompressedLayerRatio", 0.2);
             #endregion
