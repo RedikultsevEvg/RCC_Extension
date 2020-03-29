@@ -7,6 +7,7 @@ using RDBLL.Forces;
 using System.Collections.Generic;
 using System.Linq;
 using System;
+using RDBLL.Entity.RCC.Common.Processors;
 
 namespace RDBLL.Entity.RCC.Foundations.Processors
 {
@@ -113,28 +114,20 @@ namespace RDBLL.Entity.RCC.Foundations.Processors
 
                     ForceParameter MomentParameter = new ForceParameter(loadCombination);
                     loadCombination.ForceParameters.Add(MomentParameter);
-                    int matrixIndex;
-                    if (normalX)
-                    {
-                        MomentParameter.KindId = 2;
-                        matrixIndex = 1;
-                    }
-                    else
-                    {
-                        MomentParameter.KindId = 3;
-                        matrixIndex = 0;
-                    }
-
+                    MomentParameter.KindId = 2;
+                    int index;
+                    if (normalX) index = 1;
+                    else index = 0;
                     SumForces sumForces;
                     sumForces = NdmAreaProcessor.GetSumForces(ndmSoilAreas, forceCurvature.CrcCurvature);
                     sumForces = new SumForces(sumForces, coordX, coordY);
-                    MomentParameter.LongCrcValue = sumForces.ForceMatrix[matrixIndex, 0] * coff;
-                    MomentParameter.CrcValue = sumForces.ForceMatrix[matrixIndex, 0] * coff;
+                    MomentParameter.LongCrcValue = sumForces.ForceMatrix[index, 0] * coff;
+                    MomentParameter.CrcValue = sumForces.ForceMatrix[index, 0] * coff;
 
                     sumForces = NdmAreaProcessor.GetSumForces(ndmSoilAreas, forceCurvature.DesignCurvature);
                     sumForces = new SumForces(sumForces, coordX, coordY);
-                    MomentParameter.LongDesignValue = sumForces.ForceMatrix[matrixIndex, 0] * coff;
-                    MomentParameter.DesignValue = sumForces.ForceMatrix[matrixIndex, 0] * coff;
+                    MomentParameter.LongDesignValue = sumForces.ForceMatrix[index, 0] * coff;
+                    MomentParameter.DesignValue = sumForces.ForceMatrix[index, 0] * coff;
 
                     loadCombinations.Add(loadCombination);
                 }
@@ -240,16 +233,20 @@ namespace RDBLL.Entity.RCC.Foundations.Processors
                 {
                     //Момент определяем в середине ступени
                     ndmSoilRectAreas = NdmAreaProcessor.MeshRectangleByCoord(soilModel, minMaxX[0], centerX, minMaxY[0], minMaxY[1], elemSize);
-                    List<LoadCombination> MomentYCombinations = GetMoment(centerX, 0, ndmSoilRectAreas, foundation.ForceCurvaturesWithoutWeight, true, -1);
-                    locPartMomentAreas.LoadCombinationsX = MomentYCombinations;
-                    ndmSoilRectAreas = NdmAreaProcessor.MeshRectangleByCoord(soilModel, minMaxX[0], minMaxX[1], minMaxY[0], centerY, elemSize);
-                    List<LoadCombination> MomentXCombinations = GetMoment(0, centerY, ndmSoilRectAreas, foundation.ForceCurvaturesWithoutWeight, false, 1);
+                    List<LoadCombination> MomentXCombinations = GetMoment(centerX, 0, ndmSoilRectAreas, foundation.ForceCurvaturesWithoutWeight, true, -1);
                     locPartMomentAreas.LoadCombinationsY = MomentXCombinations;
+                    ndmSoilRectAreas = NdmAreaProcessor.MeshRectangleByCoord(soilModel, minMaxX[0], minMaxX[1], minMaxY[0], centerY, elemSize);
+                    List<LoadCombination> MomentYCombinations = GetMoment(0, centerY, ndmSoilRectAreas, foundation.ForceCurvaturesWithoutWeight, false, 1);
+                    locPartMomentAreas.LoadCombinationsX = MomentYCombinations;
                 }
                 part.Result.partMomentAreas = locPartMomentAreas;
             }
             return true;
         }
+        /// <summary>
+        /// Вычисление моментов для ступеней фундамента
+        /// </summary>
+        /// <param name="foundation"></param>
         public static void CalcCrcMoment (Foundation foundation)
         {
             double Rct = 1.5e6;
@@ -272,8 +269,67 @@ namespace RDBLL.Entity.RCC.Foundations.Processors
             double[] crcMoments = new double[2];
             double sndMomentInertiaX = NdmConcreteProcessor.GetSndMomentInertia(partMomentAreas.CrcNdmAreasY, Ec)[0, 1];
             double sndMomentInertiaY = NdmConcreteProcessor.GetSndMomentInertia(partMomentAreas.CrcNdmAreasX, Ec)[0, 1];
-            crcMoments = new double[2] { Math.Abs(sndMomentInertiaX * Rct), Math.Abs(sndMomentInertiaY * Rct) };
+            crcMoments = new double[2] { sndMomentInertiaX * Rct * (-1D), sndMomentInertiaY * Rct * (-1D) };
             return crcMoments;
+        }
+        private static double[] GetReinforcementArea(RectFoundationPart part)
+        {
+            double GetMaxMoment(List<LoadCombination> loadCombinations)
+            {
+                List<double> mxList = new List<double>();
+                foreach (LoadCombination loadCombination in loadCombinations)
+                {
+                    foreach (ForceParameter forceParameter in loadCombination.ForceParameters)
+                    {
+                        if (forceParameter.KindId == 2) mxList.Add(forceParameter.DesignValue);
+                    }
+                }
+                return mxList.Max();
+            }
+            double mx = GetMaxMoment(part.Result.partMomentAreas.LoadCombinationsX);
+            double my = GetMaxMoment(part.Result.partMomentAreas.LoadCombinationsY);
+            double Rs = part.Foundation.BtmReinfKind.FstTensStrength;
+            double Rc = part.Foundation.ConcreteKind.FstCompStrength;
+            double bx = part.Length;
+            double by = part.Width;
+            double h0x = part.Result.ZMax - part.Foundation.BtmReinfX.CoveringLayer;
+            double h0y = part.Result.ZMax - part.Foundation.BtmReinfY.CoveringLayer;
+            double ax = RectSectionProcessor.GetReinforcementArea(my, bx, h0x, Rs, Rc);
+            double ay = RectSectionProcessor.GetReinforcementArea(mx, by, h0y, Rs, Rc);
+            part.Result.AsRec = new double[2]; 
+            part.Result.AsRec[0] = ax;
+            part.Result.AsRec[1] = ay;
+            return new double[2] { ax, ay };
+        }
+        public static double[] GetReinforcementArea(Foundation foundation)
+        {
+            List<double> ax = new List<double>();
+            List<double> ay = new List<double>();
+            foreach (FoundationPart part in foundation.Parts)
+            {
+                if (part is RectFoundationPart)
+                {
+                    RectFoundationPart rectPart = part as RectFoundationPart;
+                    double[] areas = GetReinforcementArea(rectPart);
+                    ax.Add(areas[0]);
+                    ay.Add(areas[1]);
+                }
+            }
+            foundation.Result.AsRec = new double[2] { ax.Max(), ay.Max() };
+            return foundation.Result.AsRec;
+        }
+        public static double[] GetActualReinforcementArea(Foundation foundation)
+        {
+            double GetArea (double diameter, double step, double length)
+            {
+                int quant = Convert.ToInt32(Math.Round((length - 0.1) / step)) + 1;
+                double area = Math.PI * diameter * diameter / 4;
+                return area * quant;
+            }
+            double areaX = GetArea(foundation.BtmReinfX.Diameter, foundation.BtmReinfX.Step, foundation.Parts[foundation.Parts.Count - 1].Length);
+            double areaY = GetArea(foundation.BtmReinfY.Diameter, foundation.BtmReinfY.Step, foundation.Parts[foundation.Parts.Count - 1].Width);
+            foundation.Result.AsAct = new double[2] { areaX, areaY };
+            return foundation.Result.AsAct;
         }
     }
 }

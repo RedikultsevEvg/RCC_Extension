@@ -9,7 +9,6 @@ using RDBLL.Common.Interfaces;
 using System.Data;
 using DAL.Common;
 using RDBLL.Entity.RCC.Foundations.Processors;
-using System.Collections.Generic;
 
 namespace RDBLL.Entity.RCC.Foundations
 {
@@ -18,11 +17,34 @@ namespace RDBLL.Entity.RCC.Foundations
     /// </summary>
     public abstract class FoundationPart : ISavableToDataSet
     {
+        /// <summary>
+        /// Класс результатов вычислений ступени фундамента
+        /// </summary>
         public class PartResult
         {
+            /// <summary>
+            /// Координата верха ступени, считая от подошвы фундамента
+            /// </summary>
+            public double ZMax { get; set; }
+            /// <summary>
+            /// Свойство для хранения комбинаций усилий в подошве фундамента
+            /// </summary>
             public FoundationBodyProcessor.PartMomentAreas partMomentAreas { get; set; }
+            /// <summary>
+            /// Момент обрызования трещин в двух направлениях
+            /// </summary>
             public double[] Mcrc { get; set; }
+            /// <summary>
+            /// Ширина раскрытия трещин в двух направлениях
+            /// </summary>
             public double[] CrcWidth { get; set; }
+            /// <summary>
+            /// Предельный момент для ступени в двух направлениях
+            /// </summary>
+            public double[,] Mult { get; set; }
+            /// <summary>
+            /// Рекомендуемая площадь арматуры в двух направлениях
+            /// </summary>
             public double[] AsRec { get; set; }
         }
         /// <summary>
