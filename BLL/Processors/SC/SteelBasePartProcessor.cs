@@ -20,6 +20,9 @@ namespace RDBLL.Processors.SC
 {
     delegate void EchoDelegate(String S);
 
+    /// <summary>
+    /// Processor of parts of steelbase
+    /// </summary>
     public static class SteelBasePartProcessor
     {
         /// <summary>
@@ -107,8 +110,9 @@ namespace RDBLL.Processors.SC
         private static double CalcStreessOneSide(double maxStress, SteelBasePart basePart)
         {
             double maxMoment;
-            double width = basePart.Width;
-            double length = basePart.Length;
+            double[] sizes = GetPartSizes(basePart);
+            double width = sizes[0];
+            double length = sizes[1];
             //Если опора слева или справа
             //echoDelegate("Для участка задана опора по одной стороне, участок расчитывается как консоль");
             if (basePart.FixLeft || basePart.FixRight)
@@ -137,8 +141,9 @@ namespace RDBLL.Processors.SC
             List<double> yValues23 = new List<double>() { 0.06, 0.074, 0.088, 0.097, 0.107, 0.112, 0.120, 0.126, 0.132 };
             #endregion
             double maxMoment;
-            double width = basePart.Width;
-            double length = basePart.Length;
+            double[] sizes = GetPartSizes(basePart);
+            double width = sizes[0];
+            double length = sizes[1];
             //Если опора слева и справа
             if (basePart.FixLeft && basePart.FixRight)
             {
@@ -195,8 +200,9 @@ namespace RDBLL.Processors.SC
             List<double> yValues23 = new List<double>() { 0.06, 0.074, 0.088, 0.097, 0.107, 0.112, 0.120, 0.126, 0.132 };
             #endregion
             double maxMoment;
-            double width = basePart.Width;
-            double length = basePart.Length;
+            double[] sizes = GetPartSizes(basePart);
+            double width = sizes[0];
+            double length = sizes[1];
             double koeff_a1;
             double koeff_b1;
             #region //Если закрепления слева и справа
@@ -251,8 +257,9 @@ namespace RDBLL.Processors.SC
             List<double> yValues4 = new List<double>() { 0.048, 0.055, 0.063, 0.069, 0.075, 0.081, 0.086, 0.091, 0.094, 0.098, 0.1 };
             #endregion
             double maxMoment;
-            double width = basePart.Width;
-            double length = basePart.Length;
+            double[] sizes = GetPartSizes(basePart);
+            double width = sizes[0];
+            double length = sizes[1];
             //echoDelegate("Для участка заданы четыре опоры, опоры считаются шарнирными");
             double koeff_b;
             double koeff_a;
@@ -322,7 +329,9 @@ namespace RDBLL.Processors.SC
                 newSteelBasePart.CenterX = (1.0) * steelBasePart.CenterX;
                 newSteelBasePart.CenterY = (-1.0) * steelBasePart.CenterY;
                 newSteelBasePart.FixTop = steelBasePart.FixBottom;
+                newSteelBasePart.TopOffset = steelBasePart.BottomOffset;
                 newSteelBasePart.FixBottom = steelBasePart.FixTop;
+                newSteelBasePart.BottomOffset = steelBasePart.TopOffset;
                 steelBaseParts.Add(newSteelBasePart);
             }
             if (steelBasePart.AddSymmetricY)
@@ -334,7 +343,9 @@ namespace RDBLL.Processors.SC
                 newSteelBasePart.CenterX = (-1.0) * steelBasePart.CenterX;
                 newSteelBasePart.CenterY = (1.0) * steelBasePart.CenterY;
                 newSteelBasePart.FixLeft = steelBasePart.FixRight;
+                newSteelBasePart.LeftOffset = steelBasePart.RightOffset;
                 newSteelBasePart.FixRight = steelBasePart.FixLeft;
+                newSteelBasePart.RightOffset = steelBasePart.LeftOffset;
                 steelBaseParts.Add(newSteelBasePart);
             }
             if (steelBasePart.AddSymmetricX & steelBasePart.AddSymmetricY)
@@ -346,9 +357,13 @@ namespace RDBLL.Processors.SC
                 newSteelBasePart.CenterX = (-1.0) * steelBasePart.CenterX;
                 newSteelBasePart.CenterY = (-1.0) * steelBasePart.CenterY;
                 newSteelBasePart.FixTop = steelBasePart.FixBottom;
+                newSteelBasePart.TopOffset = steelBasePart.BottomOffset;
                 newSteelBasePart.FixBottom = steelBasePart.FixTop;
+                newSteelBasePart.BottomOffset = steelBasePart.TopOffset;
                 newSteelBasePart.FixLeft = steelBasePart.FixRight;
+                newSteelBasePart.LeftOffset = steelBasePart.RightOffset;
                 newSteelBasePart.FixRight = steelBasePart.FixLeft;
+                newSteelBasePart.RightOffset = steelBasePart.LeftOffset;
                 steelBaseParts.Add(newSteelBasePart);
             }
             return steelBaseParts;
@@ -468,6 +483,16 @@ namespace RDBLL.Processors.SC
                 stresses.Add(GetMinStressNonLinear(basePart, forceCurvature.DesignCurvature));
             }
             return stresses.Min();
+        }
+        private static double[] GetPartSizes(SteelBasePart basePart)
+        {
+            double width = basePart.Width;
+            if (basePart.FixLeft) width -= basePart.LeftOffset;
+            if (basePart.FixRight) width -= basePart.RightOffset;
+            double length = basePart.Length;
+            if (basePart.FixTop) length -= basePart.TopOffset;
+            if (basePart.FixBottom) length -= basePart.BottomOffset;
+            return new double[] { width, length };
         }
     }
 }

@@ -64,10 +64,49 @@
                                 <ColumnDefinition Width ="*"/>
                                 <ColumnDefinition Width ="70"/>
                             </Grid.ColumnDefinitions>
-                            <CheckBox x:Name="cbFixTop" Content="Опора" Grid.Column="1" HorizontalAlignment="Center" Margin="10,10,0,0" VerticalAlignment="Top" IsChecked="{Binding Path=FixTop}"/>
-                            <CheckBox x:Name="cbFixRight" Content="Опора" Grid.Column="2" HorizontalAlignment="Left" Margin="10,0,0,0" Grid.Row="1" VerticalAlignment="Center" IsChecked="{Binding Path=FixRight}"/>
-                            <CheckBox x:Name="cbFixLeft" Content="Опора" HorizontalAlignment="Left" Margin="10,0,0,0" Grid.Row="1" VerticalAlignment="Center"  IsChecked="{Binding Path=FixLeft}"/>
-                            <CheckBox x:Name="cbFixBottom" Content="Опора" Grid.Column="1" HorizontalAlignment="Center" Margin="10,10,0,0" Grid.Row="2" VerticalAlignment="Top"  IsChecked="{Binding Path=FixBottom}"/>
+                            <Grid Grid.Column="1">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition Width ="70"/>
+                                    <ColumnDefinition Width ="100"/>
+                                    <ColumnDefinition Width="30"/>
+                                </Grid.ColumnDefinitions>
+                                <CheckBox x:Name="cbFixTop" Content="Опора" HorizontalAlignment="Center" Margin="10,10,0,0" VerticalAlignment="Top" IsChecked="{Binding Path=FixTop}"/>
+                                <TextBlock Grid.Column="1" x:Name="tbTopOffset" Style="{StaticResource PropertyTextBlock}" Text="Оффсет" HorizontalAlignment="Right" />
+                                <TextBox x:Name="tbxTopOffset" Grid.Column="2" Style="{StaticResource PropertyTextBox}" Text="{Binding Path=TopOffset, Converter={StaticResource LinearSizeConverter}}"
+                                         IsEnabled="{Binding ElementName=cbFixTop, Path=IsChecked}"/>
+                                <TextBlock Grid.Column="3" x:Name="tbTopOffsetMesure" Style="{StaticResource PropertyTextBlock}" Text="мм" />
+                            </Grid>
+                            <StackPanel Grid.Column="0" Grid.Row="1" Margin="0,10,0,0">
+                                <CheckBox x:Name="cbFixLeft" Content="Опора" HorizontalAlignment="Left" Margin="10,0,0,0" IsChecked="{Binding Path=FixLeft}"/>
+                                <TextBlock Grid.Column="1" x:Name="tbLeftOffset" Style="{StaticResource PropertyTextBlock}" Text="Оффсет" HorizontalAlignment="Center" />
+                                <TextBox x:Name="tbxLeftOffset" Grid.Column="2" Style="{StaticResource PropertyTextBox}" Text="{Binding Path=LeftOffset, Converter={StaticResource LinearSizeConverter}}"
+                                         IsEnabled="{Binding ElementName=cbFixLeft, Path=IsChecked}" HorizontalAlignment="Stretch"/>
+                                <TextBlock Grid.Column="3" x:Name="tbLeftOffsetMesure" Style="{StaticResource PropertyTextBlock}" Text="мм" HorizontalAlignment="Center" />
+                            </StackPanel>
+                            <StackPanel Grid.Column="2" Grid.Row="1" Margin="0,10,0,0">
+                                <CheckBox x:Name="cbFixRight" Content="Опора" HorizontalAlignment="Left" Margin="10,0,0,0" Grid.Row="1" VerticalAlignment="Center" IsChecked="{Binding Path=FixRight}"/>
+                                <TextBlock Grid.Column="1" x:Name="tbRightOffset" Style="{StaticResource PropertyTextBlock}" Text="Оффсет" HorizontalAlignment="Center" />
+                                <TextBox x:Name="tbxRightOffset" Grid.Column="2" Style="{StaticResource PropertyTextBox}" Text="{Binding Path=RightOffset, Converter={StaticResource LinearSizeConverter}}"
+                                         IsEnabled="{Binding ElementName=cbFixRight, Path=IsChecked}" HorizontalAlignment="Stretch"/>
+                                <TextBlock Grid.Column="3" x:Name="tbRightOffsetMesure" Style="{StaticResource PropertyTextBlock}" Text="мм" HorizontalAlignment="Center" />
+                            </StackPanel>
+                            
+                            <Grid Grid.Column="1" Grid.Row="2">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition Width ="70"/>
+                                    <ColumnDefinition Width ="100"/>
+                                    <ColumnDefinition Width="30"/>
+                                </Grid.ColumnDefinitions>
+                                <CheckBox x:Name="cbFixBottom" Content="Опора" HorizontalAlignment="Center" Margin="10,10,0,0" VerticalAlignment="Top"  IsChecked="{Binding Path=FixBottom}"/>
+                                <TextBlock Grid.Column="1" x:Name="tbBottomOffset" Style="{StaticResource PropertyTextBlock}" Text="Оффсет" HorizontalAlignment="Right" />
+                                <TextBox x:Name="tbxBottomOffset" Grid.Column="2" Style="{StaticResource PropertyTextBox}" Text="{Binding Path=BottomOffset, Converter={StaticResource LinearSizeConverter}}"
+                                         IsEnabled="{Binding ElementName=cbFixBottom, Path=IsChecked}"/>
+                                <TextBlock Grid.Column="3" x:Name="tbBottomOffsetMesure" Style="{StaticResource PropertyTextBlock}" Text="мм" />
+                            </Grid>
+
+                            
                             <Rectangle Grid.Column="1" Margin="0" Grid.Row="1">
                                 <Rectangle.Effect>
                                     <DropShadowEffect/>
