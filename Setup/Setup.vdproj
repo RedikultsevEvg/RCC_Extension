@@ -63,6 +63,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_66F722E209C047FDA4F095F20DC95DFF"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_6D39AD35ECD00131C7FCB3BC5A479C60"
         "OwnerKey" = "8:_31BC8A474999BBBE189C1B5FFE25FD1A"
         "MsmSig" = "8:_UNDEFINED"
@@ -88,13 +94,13 @@
         "Entry"
         {
         "MsmKey" = "8:_8425B40174293B7625616C8626C26D5F"
-        "OwnerKey" = "8:_03FB79747E252C1182211E61B9ADCE20"
+        "OwnerKey" = "8:_B7A598D9D3FF497AA44C1A7F8D44F573"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_8425B40174293B7625616C8626C26D5F"
-        "OwnerKey" = "8:_B7A598D9D3FF497AA44C1A7F8D44F573"
+        "OwnerKey" = "8:_03FB79747E252C1182211E61B9ADCE20"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -142,13 +148,13 @@
         "Entry"
         {
         "MsmKey" = "8:_971DFAB99578DEBA3FF701FD27C1D0CE"
-        "OwnerKey" = "8:_FC0BD30E32A04ADBCFB60BE2FAA34164"
+        "OwnerKey" = "8:_03FB79747E252C1182211E61B9ADCE20"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_971DFAB99578DEBA3FF701FD27C1D0CE"
-        "OwnerKey" = "8:_03FB79747E252C1182211E61B9ADCE20"
+        "OwnerKey" = "8:_FC0BD30E32A04ADBCFB60BE2FAA34164"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -190,37 +196,7 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_862481583CD4DF70295222A24C465C9E"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_6D39AD35ECD00131C7FCB3BC5A479C60"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_31BC8A474999BBBE189C1B5FFE25FD1A"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_FC0BD30E32A04ADBCFB60BE2FAA34164"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_03FB79747E252C1182211E61B9ADCE20"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_971DFAB99578DEBA3FF701FD27C1D0CE"
+        "OwnerKey" = "8:_E9B767994C380E50996ADDBAC1D1DDBB"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -232,7 +208,37 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_E9B767994C380E50996ADDBAC1D1DDBB"
+        "OwnerKey" = "8:_971DFAB99578DEBA3FF701FD27C1D0CE"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_03FB79747E252C1182211E61B9ADCE20"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_FC0BD30E32A04ADBCFB60BE2FAA34164"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_31BC8A474999BBBE189C1B5FFE25FD1A"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_6D39AD35ECD00131C7FCB3BC5A479C60"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_862481583CD4DF70295222A24C465C9E"
         "MsmSig" = "8:_UNDEFINED"
         }
     }
@@ -357,11 +363,6 @@
             "AssemblyAsmDisplayName" = "8:CSL, Version=2020.2.15.1, Culture=neutral, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
-                    "_03FB79747E252C1182211E61B9ADCE20"
-                    {
-                    "Name" = "8:CSL.dll"
-                    "Attributes" = "3:512"
-                    }
                 }
             "SourcePath" = "8:CSL.dll"
             "TargetName" = "8:"
@@ -472,6 +473,26 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_66F722E209C047FDA4F095F20DC95DFF"
+            {
+            "SourcePath" = "8:..\\StartWPF\\bin\\Release\\Reports\\Template.frx"
+            "TargetName" = "8:Template.frx"
+            "Tag" = "8:"
+            "Folder" = "8:_C771476D543B410ABBF6D62FE0333ECD"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_6D39AD35ECD00131C7FCB3BC5A479C60"
             {
             "AssemblyRegister" = "3:1"
@@ -530,11 +551,6 @@
             "AssemblyAsmDisplayName" = "8:DAL, Version=2020.2.15.1, Culture=neutral, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
-                    "_8425B40174293B7625616C8626C26D5F"
-                    {
-                    "Name" = "8:DAL.dll"
-                    "Attributes" = "3:512"
-                    }
                 }
             "SourcePath" = "8:DAL.dll"
             "TargetName" = "8:"
@@ -672,11 +688,6 @@
             "AssemblyAsmDisplayName" = "8:BLL, Version=2020.2.15.1, Culture=neutral, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
-                    "_971DFAB99578DEBA3FF701FD27C1D0CE"
-                    {
-                    "Name" = "8:BLL.dll"
-                    "Attributes" = "3:512"
-                    }
                 }
             "SourcePath" = "8:BLL.dll"
             "TargetName" = "8:"
@@ -743,11 +754,6 @@
             "AssemblyAsmDisplayName" = "8:System.Net.Http, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a"
                 "ScatterAssemblies"
                 {
-                    "_E9B767994C380E50996ADDBAC1D1DDBB"
-                    {
-                    "Name" = "8:System.Net.Http.dll"
-                    "Attributes" = "3:512"
-                    }
                 }
             "SourcePath" = "8:System.Net.Http.dll"
             "TargetName" = "8:"
@@ -774,11 +780,6 @@
             "AssemblyAsmDisplayName" = "8:UIL, Version=2020.2.15.2, Culture=neutral, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
-                    "_FC0BD30E32A04ADBCFB60BE2FAA34164"
-                    {
-                    "Name" = "8:UIL.dll"
-                    "Attributes" = "3:512"
-                    }
                 }
             "SourcePath" = "8:UIL.dll"
             "TargetName" = "8:"
@@ -909,15 +910,15 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:RDCalculator"
-        "ProductCode" = "8:{849B1897-0673-4399-A404-65A788932081}"
-        "PackageCode" = "8:{5048BD86-2C60-401B-9964-49B757DAF3F5}"
-        "UpgradeCode" = "8:{F8D2313E-F177-4FC2-9861-457BFA1190A1}"
+        "ProductCode" = "8:{48782202-6B0B-41DA-9464-40C526B1B655}"
+        "PackageCode" = "8:{19FFD171-FFB8-4A4F-A13C-25BCE6CE27A6}"
+        "UpgradeCode" = "8:{010693B6-E50A-4BE9-8CE5-1DBFE6442AA9}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:TRUE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:FALSE"
-        "ProductVersion" = "8:20.02.24"
+        "ProductVersion" = "8:20.05.09"
         "Manufacturer" = "8:RealDoc"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:"
