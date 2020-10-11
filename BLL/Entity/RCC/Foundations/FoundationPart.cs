@@ -84,6 +84,26 @@ namespace RDBLL.Entity.RCC.Foundations
         /// </summary>
         public string LinearMeasure { get { return MeasureUnitConverter.GetUnitLabelText(0); } }
 
+        #region events
+        public class PartEventHandler : EventArgs
+        {
+
+        }
+
+        public void Change()
+        {
+            Foundation.IsActual = false;
+            AfterChanged?.Invoke(this, new PartEventHandler());
+        }
+        public void Delete()
+        {
+            BeforeDelete?.Invoke(this, new PartEventHandler());
+        }
+        public event EventHandler<PartEventHandler> AfterChanged;
+        public event EventHandler<PartEventHandler> BeforeDelete;
+        #endregion
+
+
         /// <summary>
         /// Конструктор без параметров
         /// </summary>

@@ -11,13 +11,14 @@ using RDBLL.Common.Interfaces;
 using System.ComponentModel;
 using System.Data;
 using DAL.Common;
+using RDBLL.Entity.RCC.Foundations;
 
 namespace RDBLL.Entity.Soils
 {
     /// <summary>
     /// Класс геологического разреза
     /// </summary>
-    public class SoilSection : ISavableToDataSet, IDataErrorInfo, IRDObservable
+    public class SoilSection : ISavableToDataSet, IDataErrorInfo, IRDObservable, IRDObserver
     {
         #region Properies
         /// <summary>
@@ -218,6 +219,12 @@ namespace RDBLL.Entity.Soils
             bool result = false;
             if (Observers.Count > 0) return true;
             return result;
+        }
+        #endregion
+        #region IRDObserver
+        public void Update()
+        {
+            NotifyObservers();
         }
         #endregion
         #region errors

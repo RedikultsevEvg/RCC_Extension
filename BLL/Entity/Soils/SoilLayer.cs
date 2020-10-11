@@ -13,7 +13,7 @@ namespace RDBLL.Entity.Soils
     /// <summary>
     /// Класс слоя грунта
     /// </summary>
-    public class SoilLayer : ISavableToDataSet
+    public class SoilLayer : ISavableToDataSet, IRDObservable, IRDObserver
 
     {
         /// <summary>
@@ -40,6 +40,7 @@ namespace RDBLL.Entity.Soils
         /// Отметка верха слоя
         /// </summary>
         public double TopLevel { get; set; }
+        private List<IRDObserver> Observers;
         #region SaveToDataset
         /// <summary>
         /// Сохраняет класс в датасет
@@ -99,6 +100,50 @@ namespace RDBLL.Entity.Soils
         public void DeleteFromDataSet(DataSet dataSet)
         {
             DsOperation.DeleteRow(dataSet, "SoilLayers", Id);
+        }
+        #endregion
+        #region IObservable
+        /// <summary>
+        /// Добавляет объект в коллекцию наблюдателей
+        /// </summary>
+        /// <param name="obj"></param>
+        public void AddObserver(IRDObserver obj)
+        {
+            Observers.Add(obj);
+        }
+        /// <summary>
+        /// Удаляет объект из коллекции наблюдателей
+        /// </summary>
+        /// <param name="obj"></param>
+        public void RemoveObserver(IRDObserver obj)
+        {
+            Observers.Remove(obj);
+        }
+        /// <summary>
+        /// Уведомляет наблюдателей об изменении
+        /// </summary>
+        public void NotifyObservers()
+        {
+            foreach (IRDObserver observer in Observers)
+            {
+                observer.Update();
+            }
+        }
+        /// <summary>
+        /// Возвращат наличие объектов, где применяется данный объект
+        /// </summary>
+        /// <returns></returns>
+        public bool HasChild()
+        {
+            bool result = false;
+            if (Observers.Count > 0) return true;
+            return result;
+        }
+        #endregion
+        #region IObserver
+        public void Update()
+        {
+            NotifyObservers();
         }
         #endregion
     }

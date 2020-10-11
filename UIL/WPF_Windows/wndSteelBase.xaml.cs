@@ -9,7 +9,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Windows;
 using RDBLL.Entity.SC.Column.SteelBases.Processors;
-using RDBLL.Processors.SC;
 
 
 namespace RDUIL.WPF_Windows

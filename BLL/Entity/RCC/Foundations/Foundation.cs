@@ -21,7 +21,7 @@ namespace RDBLL.Entity.RCC.Foundations
     /// <summary>
     /// Класс столбчатого фундамента
     /// </summary>
-    public class Foundation : IHaveForcesGroups, ISavableToDataSet, IDataErrorInfo, IRDObserver, IDuplicate
+    public class Foundation : IHaveForcesGroups, ISavableToDataSet, IDataErrorInfo, IRDObserver, IDuplicate, IHasSoilSection
     {
         public class FoundationResult
         {
@@ -185,7 +185,10 @@ namespace RDBLL.Entity.RCC.Foundations
         public List<ConcreteKind> ConcreteKinds { get { return ProgrammSettings.ConcreteKinds; } }
         public List<ReinforcementKind> ReinforcementKinds { get { return ProgrammSettings.ReinforcementKinds; } }
        
-
+        /// <summary>
+        /// Flag of actuality of foundation
+        /// </summary>
+        public bool IsActual { get; set; }
         /// <summary>
         /// Признак актуальности нагрузок
         /// </summary>
@@ -265,6 +268,10 @@ namespace RDBLL.Entity.RCC.Foundations
             BtmReinfX.Name = "Вдоль оси X";
             BtmReinfY = new BtmReinforcement();
             BtmReinfY.Name = "Вдоль оси Y";
+
+            //
+            ConcreteId = 5;
+            BtmReinfId = 2;
         }
         #endregion
         #region methods
@@ -395,6 +402,7 @@ namespace RDBLL.Entity.RCC.Foundations
         #region IRDObserver
         public void Update()
         {
+            IsActual = false;
             IsLoadCasesActual = false;
             IsPartsActual = false;
         }
