@@ -63,6 +63,7 @@ namespace RDUIL.WPF_Windows.Foundations
                     _element.DeleteSubElements(ProgrammSettings.CurrentDataSet, "FoundationParts");
                     foreach (FoundationPart foundationPart in _element.Parts)
                     {
+                        foundationPart.Change();
                         foundationPart.SaveToDataSet(ProgrammSettings.CurrentDataSet, true);
                     }
                     ProgrammSettings.IsDataChanged = true;

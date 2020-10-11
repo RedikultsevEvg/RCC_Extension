@@ -48,7 +48,31 @@
         </DataTemplate>
         <DataTemplate x:Key="DtConcreteSelect">
             <Expander Header="Бетон">
-                
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition Width="100"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="35"/>
+                        <RowDefinition Height="30"/>
+                        <RowDefinition Height="30"/>
+                    </Grid.RowDefinitions>
+                    <TextBlock x:Name="tbConcrClass" Grid.Row="0" Style="{StaticResource PropertyTextBlock}" Text="Класс бетона"/>
+                    <ComboBox Grid.Column="1" Grid.Row="0" Grid.ColumnSpan="2"
+                        Height="22"
+                        ItemsSource="{Binding Path=ConcreteKinds}"
+                        ItemTemplate="{StaticResource cbTemplate}"
+                        SelectedValuePath="Id"
+                        SelectedValue="{Binding Path=ConcreteId}" VerticalAlignment="Center" Margin="5">
+                    </ComboBox>
+                    <TextBlock x:Name="tbConcrCoefFst" Grid.Row="1" Style="{StaticResource PropertyTextBlock}" Text="Коэффициент условий работы 1ПС"/>
+                    <TextBlock x:Name="tbConcrCoefSnd" Grid.Row="2" Style="{StaticResource PropertyTextBlock}" Text="Коэффициент условий работы 2ПС"/>
+                    <TextBox x:Name="tbxConcrCoefFst" Grid.Column="1" Grid.Row="1" Style="{StaticResource PropertyTextBoxError}"
+                        Text="{Binding RelativeTopLevel, ValidatesOnDataErrors=True}"/>
+                    <TextBox x:Name="tbxConcrCoefSnd" Grid.Column="1" Grid.Row="2" Style="{StaticResource PropertyTextBoxError}"
+                        Text="{Binding RelativeTopLevel, ValidatesOnDataErrors=True}"/>
+                </Grid>
             </Expander>
         </DataTemplate>
     </Window.Resources>
@@ -191,7 +215,7 @@
                             <ContentControl x:Name="BtmReinfY" ContentTemplate="{StaticResource BtmReinf}" Content="{Binding Path=BtmReinfY}"/>
                         </StackPanel>
                     </Expander>
-                    <ContentControl ContentTemplate="{StaticResource DtConcreteSelect}" />
+                    <ContentControl ContentTemplate="{StaticResource DtConcreteSelect}"  Content="{Binding}"/>
                 </StackPanel>
             </ScrollViewer>
             <StackPanel Grid.Column="2" Background="#FFE2E2E2" VerticalAlignment="Top">

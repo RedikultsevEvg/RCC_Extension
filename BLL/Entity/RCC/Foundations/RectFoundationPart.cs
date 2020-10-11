@@ -9,6 +9,7 @@ using System.Collections.Generic;
 
 namespace RDBLL.Entity.RCC.Foundations
 {
+    
     /// <summary>
     /// Класс части (ступени) фундамента
     /// </summary>
@@ -24,6 +25,7 @@ namespace RDBLL.Entity.RCC.Foundations
         /// </summary>
         public double Length { get; set; }
         #endregion
+
         #region Constructors
         /// <summary>
         /// Конструктор без параметров 
