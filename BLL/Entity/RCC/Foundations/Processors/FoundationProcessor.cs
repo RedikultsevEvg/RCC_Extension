@@ -937,7 +937,7 @@ namespace RDBLL.Entity.RCC.Foundations.Processors
                 if (maxSettlement < (0.4 * maxLimitSettlement)) return 1.2 * resistance;
                 //Если осадка не превышает 70% предельной
                 if (maxSettlement < (0.7 * maxLimitSettlement)) return MathOperation.InterpolateNumber(0.4, 1.2, 0.7, 1.0, maxSettlement / maxLimitSettlement) * resistance;
-                //Иначе возварщаем без повышения
+                //Иначе возвращаем без повышения
                 return resistance;
             }
             return resistance;
