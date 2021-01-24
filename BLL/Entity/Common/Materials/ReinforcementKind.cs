@@ -3,13 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using RDBLL.Entity.Common.Materials.Interfaces;
+using System.Data;
 
 namespace RDBLL.Entity.Common.Materials
 {
     /// <summary>
     /// Reinforcement class
     /// </summary>
-    public class ReinforcementKind
+    public class ReinforcementKind :IMaterialKind
     {
         /// <summary>
         /// Код класс
@@ -55,5 +57,41 @@ namespace RDBLL.Entity.Common.Materials
         /// модуль упругости
         /// </summary>
         public double ElasticModulus { get; set; }
+
+        #region IODataset
+        /// <summary>
+        /// Сохранение в датасет
+        /// </summary>
+        /// <param name="dataSet"></param>
+        /// <param name="createNew"></param>
+        public void SaveToDataSet(DataSet dataSet, bool createNew)
+        {
+            throw new NotImplementedException();
+        }
+        /// <summary>
+        /// Открыть из датасета
+        /// </summary>
+        /// <param name="dataSet"></param>
+        public void OpenFromDataSet(DataSet dataSet)
+        {
+            throw new NotImplementedException();
+        }
+        /// <summary>
+        /// Открыть из датасета
+        /// </summary>
+        /// <param name="dataRow"></param>
+        public void OpenFromDataSet(DataRow dataRow)
+        {
+            throw new NotImplementedException();
+        }
+        /// <summary>
+        /// Удалить из датасета
+        /// </summary>
+        /// <param name="dataSet"></param>
+        public void DeleteFromDataSet(DataSet dataSet)
+        {
+            throw new NotImplementedException();
+        }
+        #endregion
     }
 }

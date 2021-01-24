@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System;
 using RDBLL.Entity.RCC.Common.Processors;
+using RDBLL.Entity.Common.Materials;
 
 namespace RDBLL.Entity.RCC.Foundations.Processors
 {
@@ -286,14 +287,16 @@ namespace RDBLL.Entity.RCC.Foundations.Processors
                 }
                 return mxList.Max();
             }
+            ReinforcementUsing reinforcementUsing = part.Foundation.BottomReinforcement.MaterialKind as ReinforcementUsing;
+            ConcreteKind concreteKind = part.Foundation.Concrete.MaterialKind as ConcreteKind;
             double mx = GetMaxMoment(part.Result.partMomentAreas.LoadCombinationsX);
             double my = GetMaxMoment(part.Result.partMomentAreas.LoadCombinationsY);
-            double Rs = part.Foundation.BtmReinfKind.FstTensStrength;
-            double Rc = part.Foundation.ConcreteKind.FstCompStrength;
+            double Rs = reinforcementUsing.ReinforcementKind.FstTensStrength;
+            double Rc = concreteKind.FstCompStrength;
             double bx = part.Length;
             double by = part.Width;
-            double h0x = part.Result.ZMax - part.Foundation.BtmReinfX.CoveringLayer;
-            double h0y = part.Result.ZMax - part.Foundation.BtmReinfY.CoveringLayer;
+            double h0x = part.Result.ZMax - reinforcementUsing.ReinforcementSpacings[0].CoveringLayer;
+            double h0y = part.Result.ZMax - reinforcementUsing.ReinforcementSpacings[1].CoveringLayer;
             double ax = RectSectionProcessor.GetReinforcementArea(my, bx, h0x, Rs, Rc);
             double ay = RectSectionProcessor.GetReinforcementArea(mx, by, h0y, Rs, Rc);
             part.Result.AsRec = new double[2]; 
@@ -326,8 +329,9 @@ namespace RDBLL.Entity.RCC.Foundations.Processors
                 double area = Math.PI * diameter * diameter / 4;
                 return area * quant;
             }
-            double areaX = GetArea(foundation.BtmReinfX.Diameter, foundation.BtmReinfX.Step, foundation.Parts[foundation.Parts.Count - 1].Length);
-            double areaY = GetArea(foundation.BtmReinfY.Diameter, foundation.BtmReinfY.Step, foundation.Parts[foundation.Parts.Count - 1].Width);
+            ReinforcementUsing reinforcementUsing = foundation.BottomReinforcement.MaterialKind as ReinforcementUsing;
+            double areaX = GetArea(reinforcementUsing.ReinforcementSpacings[0].Diameter, reinforcementUsing.ReinforcementSpacings[0].Spacing, foundation.Parts[foundation.Parts.Count - 1].Length);
+            double areaY = GetArea(reinforcementUsing.ReinforcementSpacings[0].Diameter, reinforcementUsing.ReinforcementSpacings[0].Spacing, foundation.Parts[foundation.Parts.Count - 1].Width);
             foundation.Result.AsAct = new double[2] { areaX, areaY };
             return foundation.Result.AsAct;
         }

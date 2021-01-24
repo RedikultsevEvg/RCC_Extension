@@ -3,19 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using RDBLL.Common.Interfaces;
 using System.Data;
+using DAL.Common;
 
-namespace RDBLL.Common.Interfaces
+namespace RDBLL.Entity.Common.Materials
 {
-    public interface ISavableToDataSet
+    public class SafetyFactor :ISavableToDataSet
     {
-        int Id { get; set; }
-        void SaveToDataSet(DataSet dataSet, bool createNew);
-        void OpenFromDataSet(DataSet dataSet);
-        void OpenFromDataSet(DataRow dataRow);
-        void DeleteFromDataSet(DataSet dataSet);
-
-        /*
+        #region properties
         /// <summary>
         /// Код
         /// </summary>
@@ -24,6 +20,17 @@ namespace RDBLL.Common.Interfaces
         /// Наименование
         /// </summary>
         public string Name { get; set; }
+        /// <summary>
+        /// Коэффициент надежности для 1 группы ПС
+        /// </summary>
+        public double PsfFst { get; set; }
+        /// <summary>
+        /// Коэффициент надежности для 2 группы ПС
+        /// </summary>
+        public double PsfSnd { get; set; }
+        #endregion
+
+        #region IODataset
         /// <summary>
         /// Сохранение в датасет
         /// </summary>
@@ -37,9 +44,11 @@ namespace RDBLL.Common.Interfaces
             #region setFields
             row.SetField("Id", Id);
             row.SetField("Name", Name);
+            row.SetField("PsfFst", PsfFst);
+            row.SetField("PsfSnd", PsfSnd);
             #endregion
-            dataTable.AcceptChanges();    
-            throw new NotImplementedException();
+            dataTable.AcceptChanges();
+
         }
         /// <summary>
         /// Открыть из датасета
@@ -47,7 +56,7 @@ namespace RDBLL.Common.Interfaces
         /// <param name="dataSet"></param>
         public void OpenFromDataSet(DataSet dataSet)
         {
-            throw new NotImplementedException();
+            OpenFromDataSet(DsOperation.OpenFromDataSetById(dataSet, "Safetyfactors", Id));
         }
         /// <summary>
         /// Открыть из датасета
@@ -57,7 +66,8 @@ namespace RDBLL.Common.Interfaces
         {
             Id = dataRow.Field<int>("Id");
             Name = dataRow.Field<string>("Name");
-            throw new NotImplementedException();
+            PsfFst = dataRow.Field<double>("PsfFst");
+            PsfSnd = dataRow.Field<double>("PsfSnd");
         }
         /// <summary>
         /// Удалить из датасета
@@ -65,9 +75,9 @@ namespace RDBLL.Common.Interfaces
         /// <param name="dataSet"></param>
         public void DeleteFromDataSet(DataSet dataSet)
         {
-            DsOperation.DeleteRow(dataSet, "MyTable", Id);    
+            DsOperation.DeleteRow(dataSet, "Safetyfactors", Id);
             throw new NotImplementedException();
         }
-        */
+        #endregion
     }
 }

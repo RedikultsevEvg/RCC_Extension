@@ -41,15 +41,13 @@ namespace RDUIL.WPF_Windows.Foundations
         private void BtnAdd_Click(object sender, RoutedEventArgs e)
         {
             Foundation foundation = new Foundation(_level);
+            foundation.RenewAll();
             //Надо создать элемент, иначе некуда будет сохранять дочерние
             foundation.SaveToDataSet(ProgrammSettings.CurrentDataSet, true);
             wndFoundation wndFoundation = new wndFoundation(foundation);
             wndFoundation.ShowDialog();
             if (wndFoundation.DialogResult == true)
             {
-                foundation.RenewSoilSection();
-                foundation.RenewConcrete();
-                foundation.RenewBtmReinf();
                 try
                 {
                     foundation.SaveToDataSet(ProgrammSettings.CurrentDataSet, false);
@@ -107,9 +105,7 @@ namespace RDUIL.WPF_Windows.Foundations
                 wndChild.ShowDialog();
                 if (wndChild.DialogResult == true)
                 {
-                    foundation.RenewSoilSection();
-                    foundation.RenewConcrete();
-                    foundation.RenewBtmReinf();
+                    foundation.RenewAll();
                     try
                     {
                         foundation.SaveToDataSet(ProgrammSettings.CurrentDataSet, false);
