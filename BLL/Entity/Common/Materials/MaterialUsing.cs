@@ -9,6 +9,7 @@ using System.Data;
 using RDBLL.Entity.Common.Materials.Interfaces;
 using RDBLL.Entity.RCC.Foundations;
 using RDBLL.Common.Service;
+using System.Collections.ObjectModel;
 
 namespace RDBLL.Entity.Common.Materials
 {
@@ -32,7 +33,7 @@ namespace RDBLL.Entity.Common.Materials
         /// <summary>
         /// Список коэффициентов надежности
         /// </summary>
-        public List<SafetyFactor> SafetyFactors { get; set; }
+        public ObservableCollection<SafetyFactor> SafetyFactors { get; set; }
         public string Purpose { get; set; }
         public List<IMaterialKind> MaterialKinds
         {
@@ -50,7 +51,7 @@ namespace RDBLL.Entity.Common.Materials
         #region Constructors
         public MaterialUsing()
         {
-            SafetyFactors = new List<SafetyFactor>();
+            SafetyFactors = new ObservableCollection<SafetyFactor>();
         }
         #endregion
         #region IODataSet
