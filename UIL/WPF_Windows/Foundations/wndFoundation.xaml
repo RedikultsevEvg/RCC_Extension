@@ -16,34 +16,62 @@
         <DataTemplate  x:Key="cbTemplate">
             <TextBlock Text="{Binding Path=Name}" VerticalAlignment="Center"></TextBlock>
         </DataTemplate>
-        <DataTemplate x:Key="BtmReinf">
-            <Expander Header="{Binding Name}" Margin="20,0,0,0">
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition/>
-                        <ColumnDefinition Width="100"/>
-                        <ColumnDefinition Width="50"/>
-                    </Grid.ColumnDefinitions>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="30"/>
-                        <RowDefinition Height="30"/>
-                        <RowDefinition Height="30"/>
-                    </Grid.RowDefinitions>
-                    <TextBlock Grid.Row="0" Style="{StaticResource PropertyTextBlock}" Text="Диаметр"/>
-                    <TextBlock Grid.Row="1" Style="{StaticResource PropertyTextBlock}" Text="Шаг"/>
-                    <TextBlock Grid.Row="2" Style="{StaticResource PropertyTextBlock}" Text="Расстояние до оси стержня"/>
+        <DataTemplate x:Key="Reinforcement">
+            <Expander Header="{Binding MaterialKind.Name}">
+                <StackPanel>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition Width="100"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="35"/>
+                        </Grid.RowDefinitions>
+                        <TextBlock x:Name="tbReinfClass" Grid.Row="0" Style="{StaticResource PropertyTextBlock}" Text="Класс арматуры"/>
+                        <ComboBox Grid.Column="1" Grid.Row="0" Grid.ColumnSpan="2"
+                        Height="22"
+                        ItemsSource="{Binding Path=MaterialKinds}"
+                        ItemTemplate="{StaticResource cbTemplate}"
+                        SelectedValuePath="Id"
+                        SelectedValue="{Binding Path=MaterialKind.ReinforcementKindId}" VerticalAlignment="Center" Margin="5">
+                        </ComboBox>
+                    </Grid>
                     
-                    <TextBox Grid.Column="1" Grid.Row="0" Style="{StaticResource PropertyTextBoxError}"
-                    Text="{Binding Diameter, Converter={StaticResource MultyThousandConverter}, ValidatesOnDataErrors=True}"/>
-                    <TextBox Grid.Column="1" Grid.Row="1" Style="{StaticResource PropertyTextBoxError}"
-                    Text="{Binding Step, Converter={StaticResource MultyThousandConverter}, ValidatesOnDataErrors=True}"/>
-                    <TextBox Grid.Column="1" Grid.Row="2" Style="{StaticResource PropertyTextBoxError}"
-                    Text="{Binding CoveringLayer, Converter={StaticResource MultyThousandConverter}, ValidatesOnDataErrors=True}"/>
-                    
-                    <TextBlock Grid.Column="2" Grid.Row="0" Style="{StaticResource PropertyTextBlock}" Text="мм"/>
-                    <TextBlock Grid.Column="2" Grid.Row="1" Style="{StaticResource PropertyTextBlock}" Text="мм"/>
-                    <TextBlock Grid.Column="2" Grid.Row="2" Style="{StaticResource PropertyTextBlock}" Text="мм"/>
-                </Grid>
+                    <ListView ItemsSource="{Binding MaterialKind.ReinforcementSpacings}">
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <Expander Header="{Binding Name}">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition/>
+                                            <ColumnDefinition Width="100"/>
+                                            <ColumnDefinition Width="50"/>
+                                        </Grid.ColumnDefinitions>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="30"/>
+                                            <RowDefinition Height="30"/>
+                                            <RowDefinition Height="30"/>
+                                        </Grid.RowDefinitions>
+                                        <TextBlock Grid.Row="0" Style="{StaticResource PropertyTextBlock}" Text="Диаметр"/>
+                                        <TextBlock Grid.Row="1" Style="{StaticResource PropertyTextBlock}" Text="Шаг"/>
+                                        <TextBlock Grid.Row="2" Style="{StaticResource PropertyTextBlock}" Text="Расстояние до оси стержня"/>
+
+                                        <TextBox Grid.Column="1" Grid.Row="0" Style="{StaticResource PropertyTextBoxError}"
+                                        Text="{Binding Diameter, Converter={StaticResource MultyThousandConverter}, ValidatesOnDataErrors=True}"/>
+                                        <TextBox Grid.Column="1" Grid.Row="1" Style="{StaticResource PropertyTextBoxError}"
+                                        Text="{Binding Spacing, Converter={StaticResource MultyThousandConverter}, ValidatesOnDataErrors=True}"/>
+                                        <TextBox Grid.Column="1" Grid.Row="2" Style="{StaticResource PropertyTextBoxError}"
+                                        Text="{Binding CoveringLayer, Converter={StaticResource MultyThousandConverter}, ValidatesOnDataErrors=True}"/>
+
+                                        <TextBlock Grid.Column="2" Grid.Row="0" Style="{StaticResource PropertyTextBlock}" Text="мм"/>
+                                        <TextBlock Grid.Column="2" Grid.Row="1" Style="{StaticResource PropertyTextBlock}" Text="мм"/>
+                                        <TextBlock Grid.Column="2" Grid.Row="2" Style="{StaticResource PropertyTextBlock}" Text="мм"/>
+                                    </Grid>
+                                </Expander>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+                </StackPanel>
             </Expander>
         </DataTemplate>
         <DataTemplate x:Key="DtConcreteSelect">
@@ -191,31 +219,8 @@
                             <TextBlock Grid.Column="2" Grid.Row="1" Style="{StaticResource PropertyTextBlock}" Text="{Binding LinearMeasure}" />
                         </Grid>
                     </Expander>
-                    <Expander Header="Армирование подошвы фундамента">
-                        <StackPanel>
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition/>
-                                    <ColumnDefinition Width="100"/>
-                                    <ColumnDefinition Width="70"/>
-                                </Grid.ColumnDefinitions>
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="35"/>
-                                </Grid.RowDefinitions>
-                                <TextBlock x:Name="tbReinfClass" Grid.Row="0" Style="{StaticResource PropertyTextBlock}" Text="Класс арматуры"/>
-                                <ComboBox Grid.Column="1" Grid.Row="0" Grid.ColumnSpan="2"
-                                Height="22"
-                                ItemsSource="{Binding Path=ReinforcementKinds}"
-                                ItemTemplate="{StaticResource cbTemplate}"
-                                SelectedValuePath="Id"
-                                SelectedValue="{Binding Path=BtmReinfId}" VerticalAlignment="Center" Margin="5">
-                                </ComboBox>
-                            </Grid>
-                            <ContentControl x:Name="BtmReinfX" ContentTemplate="{StaticResource BtmReinf}" Content="{Binding Path=BtmReinfX}"/>
-                            <ContentControl x:Name="BtmReinfY" ContentTemplate="{StaticResource BtmReinf}" Content="{Binding Path=BtmReinfY}"/>
-                        </StackPanel>
-                    </Expander>
-                    <ContentControl ContentTemplate="{StaticResource DtConcreteSelect}"  Content="{Binding}"/>
+                    <ContentControl x:Name="BtmReinf" ContentTemplate="{StaticResource Reinforcement}" Content="{Binding Path=BottomReinforcement}"/>
+                    <ContentControl ContentTemplate="{StaticResource DtConcreteSelect}"  Content="{Binding Path=Concrete}"/>
                 </StackPanel>
             </ScrollViewer>
             <StackPanel Grid.Column="2" Background="#FFE2E2E2" VerticalAlignment="Top">

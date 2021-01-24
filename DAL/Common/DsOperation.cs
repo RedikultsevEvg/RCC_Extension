@@ -7,15 +7,19 @@ using System.Data;
 
 namespace DAL.Common
 {
+    /// <summary>
+    /// Базовые операции с датасетами
+    /// </summary>
     public static class DsOperation
     {
-        public static void AddIdColumn(DataTable dataTable)
+        public static void AddIdColumn(DataTable dataTable, bool addNameColumn = false)
         {
             DataColumn IdColumn;
             IdColumn = new DataColumn("Id", Type.GetType("System.Int32"));
             //IdColumn.Unique = true;
             dataTable.Columns.Add(IdColumn);
             //dataTable.PrimaryKey = new DataColumn[] { dataTable.Columns["Id"] };
+            if (addNameColumn) AddNameColumn(dataTable);
         }
         /// <summary>
         /// Добавление внешного ключа
@@ -139,6 +143,50 @@ namespace DAL.Common
             {
                 dataTable.Rows.Remove(rows[j]);
             }
+        }
+
+        /// <summary>
+        /// Возвращает строку из датасета с указанным Id
+        /// </summary>
+        /// <param name="Id">Код элемента</param>
+        /// <param name="createNew">Флаг необходимости создания нового элемента</param>
+        /// <param name="dataTable">Ссылка на таблицу в которой ищется запись</param>
+        /// <param name=""></param>
+        /// <returns></returns>
+        public static DataRow CreateNewRow (int Id, bool createNew, DataTable dataTable)
+        {
+            DataRow row;
+            //Если флаг создания новой записи установлен
+            if (createNew)
+            {
+                row = dataTable.NewRow();
+                dataTable.Rows.Add(row);
+            }
+            //Иначе
+            else
+            {
+                //Находим нужную запись
+                var foundation = (from dataRow in dataTable.AsEnumerable()
+                                  where dataRow.Field<int>("Id") == Id
+                                  select dataRow).Single();
+                row = foundation;
+            }
+            return row;
+        }
+        /// <summary>
+        /// Возвращает строку из датасета по Id
+        /// </summary>
+        /// <param name="dataSet">Датасет</param>
+        /// /// <param name="dataTableName">Имя таблицы</param>
+        /// <param name="Id">Код элемента</param>
+        /// <returns></returns>
+        public static DataRow OpenFromDataSetById (DataSet dataSet, string dataTableName, int Id)
+        {
+            DataTable dataTable = dataSet.Tables[dataTableName];
+            var row = (from dataRow in dataTable.AsEnumerable()
+                       where dataRow.Field<int>("Id") == Id
+                       select dataRow).Single();
+            return row;
         }
     }
 }
