@@ -141,6 +141,9 @@
     <Compile Include="WPF_Windows\BuildingsAndSites\wndLevels.xaml.cs">
       <DependentUpon>wndLevels.xaml</DependentUpon>
     </Compile>
+    <Compile Include="WPF_Windows\CommonWindows\Forces\wndSafetyFactors.xaml.cs">
+      <DependentUpon>wndSafetyFactors.xaml</DependentUpon>
+    </Compile>
     <Compile Include="WPF_Windows\ControlClasses\CalcKind.cs" />
     <Compile Include="WPF_Windows\ControlClasses\CalcType.cs" />
     <Compile Include="WPF_Windows\ControlClasses\ReportCard.cs" />
@@ -172,6 +175,9 @@
     </Compile>
     <Compile Include="WPF_Windows\Foundations\wndFoundations.xaml.cs">
       <DependentUpon>wndFoundations.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="WPF_Windows\UserControls\ReinforcementControl.xaml.cs">
+      <DependentUpon>ReinforcementControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="WPF_Windows\UserControls\ReportCardControl.xaml.cs">
       <DependentUpon>ReportCardControl.xaml</DependentUpon>
@@ -216,6 +222,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="WPF_Windows\CommonWindows\Forces\wndSafetyFactors.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="WPF_Windows\Foundations\Soils\UserControls\SoilCardControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -249,6 +259,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="WPF_Windows\Foundations\wndFoundations.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="WPF_Windows\UserControls\ReinforcementControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
