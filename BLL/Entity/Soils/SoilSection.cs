@@ -130,7 +130,8 @@ namespace RDBLL.Entity.Soils
             //Добавляем в датасет вложенные слои грунта
             foreach (SoilLayer soilLayer in SoilLayers)
             {
-                soilLayer.SaveToDataSet(dataSet, createNew);
+                //Добавляем все слои, так как удалили перед этим
+                soilLayer.SaveToDataSet(dataSet, true);
             }
         }
         /// <summary>
