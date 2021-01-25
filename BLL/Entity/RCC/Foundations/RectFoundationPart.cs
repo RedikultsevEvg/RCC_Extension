@@ -6,6 +6,7 @@ using System.Linq;
 using RDBLL.Common.Service;
 using RDBLL.Entity.RCC.Foundations.Processors;
 using System.Collections.Generic;
+using DAL.Common;
 
 namespace RDBLL.Entity.RCC.Foundations
 {
@@ -58,21 +59,8 @@ namespace RDBLL.Entity.RCC.Foundations
         /// </summary>
         public override void SaveToDataSet(DataSet dataSet, bool createNew)
         {
-            DataTable dataTable;
-            DataRow row;
-            dataTable = dataSet.Tables["FoundationParts"];
-            if (createNew)
-            {
-                row = dataTable.NewRow();
-                dataTable.Rows.Add(row);
-            }
-            else
-            {
-                var tmpRow = (from dataRow in dataTable.AsEnumerable()
-                              where dataRow.Field<int>("Id") == Id
-                              select dataRow).Single();
-                row = tmpRow;
-            }
+            DataTable dataTable = dataSet.Tables["FoundationParts"];
+            DataRow row = DsOperation.CreateNewRow(Id, createNew, dataTable);
             #region
             row.SetField("Id", Id);
             row.SetField("Type", "Rect");

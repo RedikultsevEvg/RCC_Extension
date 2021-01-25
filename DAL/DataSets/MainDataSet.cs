@@ -63,10 +63,9 @@ namespace DAL.DataSets
             #region Soils
             dataTable = new DataTable("Soils");
             dataSet.Tables.Add(dataTable);
-            DsOperation.AddIdColumn(dataTable);
+            DsOperation.AddIdColumn(dataTable, true);
             DsOperation.AddStringColumn(dataTable, "Type");
             DsOperation.AddFkIdColumn("BuildingSites", "BuildingSiteId", dataTable);
-            DsOperation.AddNameColumn(dataTable);
             DsOperation.AddStringColumn(dataTable, "Description");
             DsOperation.AddBoolColumn(dataTable, "IsDefinedFromTest", true);
             DsOperation.AddDoubleColumn(dataTable, "CrcDensity", 1950);
@@ -281,6 +280,32 @@ namespace DAL.DataSets
             DsOperation.AddIdColumn(dataTable);
             DsOperation.AddFkIdColumn("Foundations", "FoundationId", dataTable);
             DsOperation.AddFkIdColumn("ForcesGroups", "ForcesGroupId", dataTable);
+            #endregion
+            #region MaterialUsing
+            dataTable = new DataTable("Materialusings");
+            dataSet.Tables.Add(dataTable);
+            DsOperation.AddIdColumn(dataTable);
+            DsOperation.AddIntColumn(dataTable, "ParentId");
+            DsOperation.AddStringColumn(dataTable, "Membertype");
+            DsOperation.AddStringColumn(dataTable, "Purpose");
+            DsOperation.AddStringColumn(dataTable, "Materialkindname");
+            DsOperation.AddIntColumn(dataTable, "MaterialId");
+            #endregion
+            #region "Safetyfactors
+            dataTable = new DataTable("Safetyfactors");
+            dataSet.Tables.Add(dataTable);
+            DsOperation.AddIdColumn(dataTable, true);
+            DsOperation.AddFkIdColumn("Materialusings", "MaterialUsingId", dataTable);
+            DsOperation.AddDoubleColumn(dataTable, "PsfFst");
+            DsOperation.AddDoubleColumn(dataTable, "PsfSnd");
+            #endregion
+            #region ReinforcementlUsing
+            dataTable = new DataTable("Reinforcementusings");
+            dataSet.Tables.Add(dataTable);
+            DsOperation.AddIdColumn(dataTable, true);
+            DsOperation.AddFkIdColumn("Materialusings", "MaterialUsingId", dataTable);
+            DsOperation.AddStringColumn(dataTable, "Materialkindname");
+            DsOperation.AddIntColumn(dataTable, "ReinforcementKindId");
             #endregion
             #region
             #endregion
