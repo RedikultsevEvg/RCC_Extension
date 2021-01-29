@@ -23,11 +23,11 @@ namespace RDBLL.Entity.Common.Materials
         /// </summary>
         public int Id { get; set; }
         /// <summary>
-        /// Код материала
+        /// Код выбранного материала
         /// </summary>
         public int MaterialId { get; set; }
         /// <summary>
-        /// Ссылка на материал
+        /// Ссылка на выбранный материал
         /// </summary>
         public IMaterialKind MaterialKind { get; set; }
         /// <summary>

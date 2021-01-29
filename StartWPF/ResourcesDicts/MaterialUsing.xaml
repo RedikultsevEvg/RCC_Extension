@@ -92,7 +92,7 @@
                         ItemsSource="{Binding Path=MaterialKinds}"
                         ItemTemplate="{StaticResource cbTemplate}"
                         SelectedValuePath="Id"
-                        SelectedValue="{Binding Path=MaterialKind.Id}" VerticalAlignment="Center" Margin="5,6,5,7">
+                        SelectedValue="{Binding Path=MaterialId}" VerticalAlignment="Center" Margin="5,6,5,7">
                 </ComboBox>
             </Grid>
         </Expander>

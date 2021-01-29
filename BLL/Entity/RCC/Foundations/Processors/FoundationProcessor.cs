@@ -267,7 +267,7 @@ namespace RDBLL.Entity.RCC.Foundations.Processors
             catch (Exception ex)
             {
                 result = false;
-                MessageBox.Show("Ошибка расчета :" + ex);
+                CommonErrorProcessor.ShowErrorMessage("Ошибка расчета в элементе: " + foundation.Name, ex);
             }
             return result;
         }
@@ -768,6 +768,8 @@ namespace RDBLL.Entity.RCC.Foundations.Processors
         /// <returns>Расчетное сопротивлени дисперсного грунта</returns>
         public static double LinearResistance(double gammaC1, double gammaC2, double k, double fi2, double c2, double width, double d1, double db, double gamma2, double gamma2Dash)
         {
+            if (fi2 < 0.01) throw new Exception("Неверно задан угол внутреннего трения грунта");
+
             double[] cofficients = SndResistanceCoff(fi2);
 
             double m_Gamma = cofficients[0];
