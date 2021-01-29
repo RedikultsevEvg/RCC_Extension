@@ -33,7 +33,8 @@ namespace CSL.Reports
         public void ShowReport(string fileName)
         {
             PrepareReport();
-            using (Report report = new Report())
+            Report report = new Report();
+            try
             {
                 report.Load(fileName);
                 CommonServices.PrepareMeasureUnit(report);
@@ -44,9 +45,19 @@ namespace CSL.Reports
                 }
 #else
                 {
-                    report.Show();
+                    //Если отчет подготовлен, выводим его
+                    if (report.Prepare()) report.Show();
+                    else MessageBox.Show("Ошибка подготовки отчета");
                 }
 #endif
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Ошибка вывода отчета"+ex);
+            }
+            finally
+            {
+                report.Dispose();
             }
         }
         private void PrepareReport()

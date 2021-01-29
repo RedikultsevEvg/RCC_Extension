@@ -18,6 +18,7 @@ using RDBLL.Common.Service;
 using RDUIL.Common.Reports;
 using Winforms = System.Windows.Forms;
 using System.Data;
+using BLL.ErrorProcessing;
 
 namespace RDUIL.WPF_Windows.Foundations
 {
@@ -56,7 +57,7 @@ namespace RDUIL.WPF_Windows.Foundations
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show("Ошибка сохранения :" + ex);
+                    CommonErrorProcessor.ShowErrorMessage("Ошибка сохранения в элементе: "+ foundation.Name, ex);
                 }
 
             }
@@ -113,7 +114,7 @@ namespace RDUIL.WPF_Windows.Foundations
                     }
                     catch (Exception ex)
                     {
-                        MessageBox.Show("Ошибка сохранения :" + ex);
+                        CommonErrorProcessor.ShowErrorMessage("Ошибка сохранения в элементе: " + foundation.Name, ex);
                     }
                 }
                 else { foundation.OpenFromDataSet(ProgrammSettings.CurrentDataSet); }

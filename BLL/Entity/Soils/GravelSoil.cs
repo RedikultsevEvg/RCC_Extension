@@ -35,6 +35,12 @@ namespace RDBLL.Entity.Soils
         public GravelSoil(BuildingSite buildingSite) : base(buildingSite)
         {
             Description = "Щебенистый грунт";
+            CrcFi = 30;
+            FstDesignFi = 27;
+            SndDesignFi = 28;
+            CrcCohesion = 0;
+            FstDesignCohesion = 0;
+            SndDesignCohesion = 0;
             HasIL = false;
             //По умолчанию - без заполнителя
             FillingId = 0;

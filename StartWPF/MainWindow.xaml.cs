@@ -80,7 +80,14 @@ namespace StartWPF
             calcKindFoundation.RegisterDelegate(new CalcKind.CommandDelegate(ShowFoundation));
             calcTypeSoil.CalcKinds.Add(calcKindFoundation);
 
-            calcTypes[0].RunCommand();
+            try
+            {
+                calcTypes[0].RunCommand();
+            }
+            catch (Exception ex)
+            {
+                CommonErrorProcessor.ShowErrorMessage("Неизвестная ошибка, см. техническую информацию", ex);
+            }
         }
 
         private void btnSave_Click(object sender, RoutedEventArgs e)

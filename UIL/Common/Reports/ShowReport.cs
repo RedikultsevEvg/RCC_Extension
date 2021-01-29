@@ -4,6 +4,7 @@ using RDUIL.WPF_Windows;
 using RDUIL.WPF_Windows.ControlClasses;
 using System.Collections.Generic;
 using System.IO;
+using System.Windows;
 
 namespace RDUIL.Common.Reports
 {
@@ -108,7 +109,9 @@ namespace RDUIL.Common.Reports
         private static void ShowFoundationReport(string reportFileName)
         {
             FoundationReport resultReport = new FoundationReport(ProgrammSettings.BuildingSite);
+            //MessageBox.Show("Точка расчета 01");
             resultReport.ShowReport(reportFileName);
+            //MessageBox.Show("Точка расчета 02");
         }
     }
 }
