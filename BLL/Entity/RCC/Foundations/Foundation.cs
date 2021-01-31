@@ -23,6 +23,9 @@ namespace RDBLL.Entity.RCC.Foundations
     /// </summary>
     public class Foundation : IHaveForcesGroups, ISavableToDataSet, IDataErrorInfo, IRDObserver, IDuplicate, IHasSoilSection
     {
+        /// <summary>
+        /// Класс для хранения результатов расчета фундамента
+        /// </summary>
         public class FoundationResult
         {
             public List<CompressedLayerList> CompressedLayers { get; set; }
@@ -108,8 +111,9 @@ namespace RDBLL.Entity.RCC.Foundations
         /// </summary>
         public ObservableCollection<RectFoundationPart> Parts { get; set; }
 
-        public MaterialUsing BottomReinforcement { get; set; }
-        public MaterialUsing Concrete { get; set; }
+        public MaterialContainer BottomReinforcement { get; set; }
+        public MaterialContainer VerticalReinforcement { get; set; }
+        public ConcreteUsing Concrete { get; set; }
 
         /// <summary>
         /// Отношение давления для ограничения глубины сжимаемой толщи
@@ -255,7 +259,9 @@ namespace RDBLL.Entity.RCC.Foundations
             {
                 forcesGroup.SaveToDataSet(dataSet, createNew);
             }
-            //if (!(BottomReinforcement is null)) BottomReinforcement.SaveToDataSet(dataSet, createNew);
+            BottomReinforcement.SaveToDataSet(dataSet, createNew);
+            //VerticalReinforcement.SaveToDataSet(dataSet, createNew);
+            //Concrete.SaveToDataSet(dataSet, createNew);
         }
         /// <summary>
         /// Обновляет запись в соответствии с сохраненной в датасете
@@ -377,7 +383,13 @@ namespace RDBLL.Entity.RCC.Foundations
         public void RenewAll()
         {
             RenewSoilSection();
-            if (! (BottomReinforcement is null)) BottomReinforcement.RenewMaterialKind();
+            if (! (BottomReinforcement is null))
+            {
+                foreach (MaterialUsing materialUsing in BottomReinforcement.MaterialUsings)
+                {
+                    materialUsing.RenewMaterialKind();
+                }
+            }
             if (!(Concrete is null)) Concrete.RenewMaterialKind();
         }
         public void DeleteFromObservables()
@@ -387,46 +399,35 @@ namespace RDBLL.Entity.RCC.Foundations
 
         private void addMaterial(Foundation foundation)
         {
-            //Добавляем армирование подошвы
-            #region
-            foundation.BottomReinforcement = new MaterialUsing();
-            foundation.BottomReinforcement.Id = ProgrammSettings.CurrentId;
-            ReinforcementUsing bottomReinforcementUsing = new ReinforcementUsing();
-            bottomReinforcementUsing.Id = ProgrammSettings.CurrentId;
-            bottomReinforcementUsing.Name = "Армирование подошвы";
-            bottomReinforcementUsing.ReinforcementKindId = 3;
-            bottomReinforcementUsing.RenewKind();
-            foundation.BottomReinforcement.MaterialKind = bottomReinforcementUsing;
-            bottomReinforcementUsing.RegisterParent(BottomReinforcement);
-            foundation.BottomReinforcement.MaterialId = BottomReinforcement.MaterialKind.Id;
-            foundation.BottomReinforcement.Purpose = "BottomReinforcement";
-            foundation.BottomReinforcement.RegisterParent(this);
-            //Добавляем вид армирования подошвы
-            //Добавляем расположение нижнего армирования вдоль оси X
-            ReinforcementSpacing reinforcementSpacingsX = new ReinforcementSpacing();
-            reinforcementSpacingsX.Id = ProgrammSettings.CurrentId;
-            reinforcementSpacingsX.Name = "Вдоль оси X";
-            reinforcementSpacingsX.SpacingType = 1;
-            reinforcementSpacingsX.Spacing = 0.200;
-            reinforcementSpacingsX.Diameter = 0.012;
-            reinforcementSpacingsX.CoveringLayer = 0.050;
-            bottomReinforcementUsing.ReinforcementSpacings.Add(reinforcementSpacingsX);
-            //Добавляем расположение нижнего армирования вдоль оси Y
-            ReinforcementSpacing reinforcementSpacingsY = new ReinforcementSpacing();
-            reinforcementSpacingsY.Id = ProgrammSettings.CurrentId;
-            reinforcementSpacingsY.Name = "Вдоль оси Y";
-            reinforcementSpacingsY.SpacingType = 1;
-            reinforcementSpacingsY.Spacing = 0.200;
-            reinforcementSpacingsY.Diameter = 0.012;
-            reinforcementSpacingsY.CoveringLayer = 0.070;
-            bottomReinforcementUsing.ReinforcementSpacings.Add(reinforcementSpacingsY);
+            #region Армирование подошвы
+            MaterialContainer materialContainer = new MaterialContainer(this);
+            materialContainer.Name = "Армирование подошвы";
+            ReinforcementUsing rfX = new ReinforcementUsing(this);
+            ReinforcementUsing rfY = new ReinforcementUsing(this);
+            rfX.Name = "Вдоль оси X";
+            rfY.Name = "Вдоль оси Y";
+            rfX.SelectedId = ProgrammSettings.ReinforcementKinds[0].Id;
+            rfX.MaterialKind = ProgrammSettings.ReinforcementKinds[0];
+            rfY.SelectedId = ProgrammSettings.ReinforcementKinds[0].Id;
+            rfY.MaterialKind = ProgrammSettings.ReinforcementKinds[0];
+            RFSmearedBySpacing rfSpacingX = new RFSmearedBySpacing(rfX);      
+            RFSmearedBySpacing rfSpacingY = new RFSmearedBySpacing(rfY);
+            materialContainer.MaterialUsings.Add(rfX);
+            materialContainer.MaterialUsings.Add(rfY);
+            foundation.BottomReinforcement = materialContainer;
             #endregion
-            //Добавляем бетон
-            #region
-            foundation.Concrete = new MaterialUsing();
+            #region Армирование подколонника
+            MaterialContainer verticalContainer = new MaterialContainer(this);
+            verticalContainer.Name = "Армирование подколонника";
+            foundation.VerticalReinforcement = verticalContainer;
+            #endregion
+            #region Добавляем бетон
+            foundation.Concrete = new ConcreteUsing();
+            Concrete.RegisterParent(this);
             foundation.Concrete.Id = ProgrammSettings.CurrentId;
+            foundation.Concrete.SelectedId = ProgrammSettings.ConcreteKinds[0].Id;
             foundation.Concrete.MaterialKind = ProgrammSettings.ConcreteKinds[0];
-            foundation.Concrete.MaterialId = Concrete.MaterialKind.Id;
+            foundation.Concrete.SelectedId = Concrete.MaterialKind.Id;
             #endregion
         }
         #endregion

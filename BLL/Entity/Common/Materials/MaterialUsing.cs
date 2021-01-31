@@ -16,16 +16,20 @@ namespace RDBLL.Entity.Common.Materials
     /// <summary>
     /// Класс применения бетона в элементах
     /// </summary>
-    public class MaterialUsing: ISavableToDataSet
+    public class MaterialUsing : ISavableToDataSet
     {
         /// <summary>
         /// Код применения
         /// </summary>
         public int Id { get; set; }
         /// <summary>
+        /// Наименование применения
+        /// </summary>
+        public string Name { get; set; }
+        /// <summary>
         /// Код выбранного материала
         /// </summary>
-        public int MaterialId { get; set; }
+        public int SelectedId { get; set; }
         /// <summary>
         /// Ссылка на выбранный материал
         /// </summary>
@@ -34,7 +38,9 @@ namespace RDBLL.Entity.Common.Materials
         /// Список коэффициентов надежности
         /// </summary>
         public ObservableCollection<SafetyFactor> SafetyFactors { get; set; }
-        public string Purpose { get; set; }
+        /// <summary>
+        /// Коллекция материалов, доступных для выбора
+        /// </summary>
         public List<IMaterialKind> MaterialKinds
         {
             get
@@ -49,8 +55,17 @@ namespace RDBLL.Entity.Common.Materials
 
         private ISavableToDataSet ParentMember;
         #region Constructors
+        /// <summary>
+        /// Конструктор без параметров
+        /// </summary>
         public MaterialUsing()
         {
+            SafetyFactors = new ObservableCollection<SafetyFactor>();
+        }
+        public MaterialUsing(ISavableToDataSet parentMember)
+        {
+            Id = ProgrammSettings.CurrentId;
+            ParentMember = parentMember;
             SafetyFactors = new ObservableCollection<SafetyFactor>();
         }
         #endregion
@@ -67,18 +82,11 @@ namespace RDBLL.Entity.Common.Materials
             row.SetField("Id", Id);
             if (MaterialKind is ConcreteKind) row.SetField("Materialkindname", "Concrete");
             else if (MaterialKind is ReinforcementKind) row.SetField("Materialkindname", "Reinforcement");
-            else if (MaterialKind is ReinforcementUsing)
-            {
-                row.SetField("Materialkindname", "Reinforcementusing");
-                ReinforcementUsing reinforcementUsing = MaterialKind as ReinforcementUsing;
-                reinforcementUsing.SaveToDataSet(dataSet, createNew);
-            }
             else throw new NotImplementedException("Material kind is not valid");
-            row.SetField("MaterialId", MaterialId);
+            row.SetField("MaterialId", SelectedId);
             if (ParentMember is Foundation) row.SetField("Membertype", "Foundation");
             else throw new NotImplementedException("Member type is not valid");
             row.SetField("ParentId", ParentMember.Id);
-            row.SetField("Purpose", Purpose);
             #endregion
             dataTable.AcceptChanges();
             foreach (SafetyFactor safetyFactor in SafetyFactors)
@@ -141,24 +149,21 @@ namespace RDBLL.Entity.Common.Materials
         }
         public double[] GetTotalSafetyFactor()
         {
-            double[] safetyFactors = new double[] { 1, 1 };
+            double[] safetyFactors = new double[] { 1, 1, 1, 1 };
             foreach (SafetyFactor safetyFactor in SafetyFactors)
             {
                 safetyFactors[0] *= safetyFactor.PsfFst;
                 safetyFactors[1] *= safetyFactor.PsfSnd;
+                safetyFactors[2] *= safetyFactor.PsfFstLong;
+                safetyFactors[3] *= safetyFactor.PsfSndLong;
             }
             return safetyFactors;
         }
         public void RenewMaterialKind()
         {
-            if (MaterialKind is ConcreteKind) MaterialKind = MaterialProcessor.GetMaterialKindById("Concrete", MaterialId);
-            else if (MaterialKind is ReinforcementKind) MaterialKind = MaterialProcessor.GetMaterialKindById("Reinforcement", MaterialId);
-            else if (MaterialKind is ReinforcementUsing)
-            {
-                ReinforcementUsing reinforcementUsing = MaterialKind as ReinforcementUsing;
-                reinforcementUsing.RenewKind();
-            }
-            else throw new NotImplementedException("Material kind is not valid");
+            if (MaterialKind is ConcreteKind) MaterialKind = MaterialProcessor.GetMaterialKindById("Concrete", SelectedId);
+            else if (MaterialKind is ReinforcementKind) MaterialKind = MaterialProcessor.GetMaterialKindById("Reinforcement", SelectedId);
+            else throw new Exception("Material kind is not valid");
         }
         #endregion
     }

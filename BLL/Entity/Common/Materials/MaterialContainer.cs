@@ -5,51 +5,56 @@ using System.Text;
 using System.Threading.Tasks;
 using RDBLL.Common.Interfaces;
 using System.Data;
+using System.Collections.ObjectModel;
+using RDBLL.Common.Service;
 using DAL.Common;
 
 namespace RDBLL.Entity.Common.Materials
 {
     /// <summary>
-    /// Класс коэффициента надежности по материалу
+    /// Класс контейнера арматурных элементов
     /// </summary>
-    public class SafetyFactor :ISavableToDataSet
+    public class MaterialContainer : ISavableToDataSet
     {
-        #region Properties
+        #region fields
         /// <summary>
         /// Код
         /// </summary>
         public int Id { get; set; }
         /// <summary>
-        /// Наименование
+        /// Наименование контейнера
         /// </summary>
         public string Name { get; set; }
         /// <summary>
-        /// Коэффициент надежности для 1 группы ПС
+        /// Коллекция использования материалов
         /// </summary>
-        public double PsfFst { get; set; }
+        public List<MaterialUsing> MaterialUsings {get;set;}
         /// <summary>
-        /// Коэффициент надежности для 2 группы ПС
+        /// Ссылка на родительский элемент
         /// </summary>
-        public double PsfSnd { get; set; }
-        /// <summary>
-        /// Коэффициент надежности для 1 группы ПС для длительных нагрузок
-        /// </summary>
-        public double PsfFstLong { get; set; }
-        /// <summary>
-        /// Коэффициент надежности для 2 группы ПС для длительных нагрузок
-        /// </summary>
-        public double PsfSndLong { get; set; }
+        public ISavableToDataSet ParentMember { get; set; }
+
         #endregion
         #region Constructors
-        public SafetyFactor()
+        /// <summary>
+        /// Конструктор без параметров
+        /// </summary>
+        public MaterialContainer()
         {
-            PsfFst = 1.0;
-            PsfSnd = 1.0;
-            PsfFstLong = 1.0;
-            PsfSndLong = 1.0;
+            MaterialUsings = new List<MaterialUsing>();
+        }
+        /// <summary>
+        /// Конструктор по родительскому элементу
+        /// </summary>
+        /// <param name="parentMember"></param>
+        public MaterialContainer(ISavableToDataSet parentMember)
+        {
+            Id = ProgrammSettings.CurrentId;
+            ParentMember = parentMember;
+            MaterialUsings = new List<MaterialUsing>();
         }
         #endregion
-        #region IODataset
+        #region ISavableToDataSet
         /// <summary>
         /// Сохранение в датасет
         /// </summary>
@@ -58,18 +63,18 @@ namespace RDBLL.Entity.Common.Materials
         public void SaveToDataSet(DataSet dataSet, bool createNew)
         {
             DataTable dataTable;
-            dataTable = dataSet.Tables["Safetyfactors"];
+            dataTable = dataSet.Tables["Materialcontainers"];
             DataRow row = DsOperation.CreateNewRow(Id, createNew, dataTable);
             #region setFields
             row.SetField("Id", Id);
             row.SetField("Name", Name);
-            row.SetField("PsfFst", PsfFst);
-            row.SetField("PsfSnd", PsfSnd);
-            row.SetField("PsfFstLong", PsfFstLong);
-            row.SetField("PsfSndLong", PsfSndLong);
+            row.SetField("ParentId", ParentMember.Id);
             #endregion
             dataTable.AcceptChanges();
-
+            foreach (MaterialUsing materialUsing in MaterialUsings)
+            {
+                materialUsing.SaveToDataSet(dataSet, createNew);
+            }
         }
         /// <summary>
         /// Открыть из датасета
@@ -77,7 +82,7 @@ namespace RDBLL.Entity.Common.Materials
         /// <param name="dataSet"></param>
         public void OpenFromDataSet(DataSet dataSet)
         {
-            OpenFromDataSet(DsOperation.OpenFromDataSetById(dataSet, "Safetyfactors", Id));
+            throw new NotImplementedException();
         }
         /// <summary>
         /// Открыть из датасета
@@ -85,10 +90,7 @@ namespace RDBLL.Entity.Common.Materials
         /// <param name="dataRow"></param>
         public void OpenFromDataSet(DataRow dataRow)
         {
-            Id = dataRow.Field<int>("Id");
-            Name = dataRow.Field<string>("Name");
-            PsfFst = dataRow.Field<double>("PsfFst");
-            PsfSnd = dataRow.Field<double>("PsfSnd");
+            throw new NotImplementedException();
         }
         /// <summary>
         /// Удалить из датасета
@@ -96,7 +98,6 @@ namespace RDBLL.Entity.Common.Materials
         /// <param name="dataSet"></param>
         public void DeleteFromDataSet(DataSet dataSet)
         {
-            DsOperation.DeleteRow(dataSet, "Safetyfactors", Id);
             throw new NotImplementedException();
         }
         #endregion

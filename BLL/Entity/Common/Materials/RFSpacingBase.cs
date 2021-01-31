@@ -3,34 +3,35 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using RDBLL.Entity.Common.Materials.Interfaces;
 using RDBLL.Common.Interfaces;
 using System.Data;
-using DAL.Common;
 using RDBLL.Common.Service;
+using RDBLL.Entity.Common.Materials.Interfaces;
 
 namespace RDBLL.Entity.Common.Materials
 {
     /// <summary>
-    /// Класс использования арматуры в конструкции
+    /// Базовый класс массива расположения армирования
     /// </summary>
-    public class ReinforcementUsing : MaterialUsing
+    public abstract class RFSpacingBase : ISavableToDataSet
     {
         /// <summary>
-        /// Класс расположения арматуры
+        /// Код
         /// </summary>
-        public RFSpacingBase RFSpacing { get; set; }
-        #region Constructors
-        public ReinforcementUsing() : base()
-        {
-
-        }
-        public ReinforcementUsing(ISavableToDataSet parentMember) : base(parentMember)
-        {
-            SelectedId = 2;
-        }
-        #endregion
-        #region IODataSet
+        public int Id { get; set; }
+        /// <summary>
+        /// Наименование
+        /// </summary>
+        public string Name { get; set; }
+        /// <summary>
+        /// Коллекция параметров армирования
+        /// </summary>
+        public List<RFSpacingParameter> RFSpacingParameters { get; }
+        /// <summary>
+        /// Ссылка на родителя
+        /// </summary>
+        private ReinforcementUsing ParentMember {get;}
+        #region ISavableToDataSet
         /// <summary>
         /// Сохранение в датасет
         /// </summary>
@@ -38,7 +39,6 @@ namespace RDBLL.Entity.Common.Materials
         /// <param name="createNew"></param>
         public void SaveToDataSet(DataSet dataSet, bool createNew)
         {
-            throw new NotImplementedException();
         }
         /// <summary>
         /// Открыть из датасета
@@ -46,7 +46,6 @@ namespace RDBLL.Entity.Common.Materials
         /// <param name="dataSet"></param>
         public void OpenFromDataSet(DataSet dataSet)
         {
-            throw new NotImplementedException();
         }
         /// <summary>
         /// Открыть из датасета
@@ -54,7 +53,6 @@ namespace RDBLL.Entity.Common.Materials
         /// <param name="dataRow"></param>
         public void OpenFromDataSet(DataRow dataRow)
         {
-            throw new NotImplementedException();
         }
         /// <summary>
         /// Удалить из датасета
@@ -62,10 +60,20 @@ namespace RDBLL.Entity.Common.Materials
         /// <param name="dataSet"></param>
         public void DeleteFromDataSet(DataSet dataSet)
         {
-            throw new NotImplementedException();
         }
         #endregion
-        #region Method
+        #region Constructors
+        public RFSpacingBase()
+        {
+            RFSpacingParameters = new List<RFSpacingParameter>();
+        }
+        public RFSpacingBase(ReinforcementUsing parentMember)
+        {
+            Id = ProgrammSettings.CurrentId;
+            ParentMember = parentMember;
+            parentMember.RFSpacing = this;
+            RFSpacingParameters = new List<RFSpacingParameter>();
+        }
         #endregion
     }
 }

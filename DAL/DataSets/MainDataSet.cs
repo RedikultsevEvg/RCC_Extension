@@ -281,6 +281,13 @@ namespace DAL.DataSets
             DsOperation.AddFkIdColumn("Foundations", "FoundationId", dataTable);
             DsOperation.AddFkIdColumn("ForcesGroups", "ForcesGroupId", dataTable);
             #endregion
+            #region MaterialContainer
+            dataTable = new DataTable("Materialcontainers");
+            dataSet.Tables.Add(dataTable);
+            DsOperation.AddIdColumn(dataTable);
+            DsOperation.AddNameColumn(dataTable);
+            DsOperation.AddIntColumn(dataTable, "ParentId");
+            #endregion
             #region MaterialUsing
             dataTable = new DataTable("Materialusings");
             dataSet.Tables.Add(dataTable);
@@ -298,6 +305,8 @@ namespace DAL.DataSets
             DsOperation.AddFkIdColumn("Materialusings", "MaterialUsingId", dataTable);
             DsOperation.AddDoubleColumn(dataTable, "PsfFst");
             DsOperation.AddDoubleColumn(dataTable, "PsfSnd");
+            DsOperation.AddDoubleColumn(dataTable, "PsfFstLong");
+            DsOperation.AddDoubleColumn(dataTable, "PsfSndLong");
             #endregion
             #region ReinforcementlUsing
             dataTable = new DataTable("Reinforcementusings");
