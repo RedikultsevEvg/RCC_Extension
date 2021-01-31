@@ -287,18 +287,29 @@ namespace RDBLL.Entity.RCC.Foundations.Processors
                 }
                 return mxList.Max();
             }
-            ReinforcementUsing reinforcementUsing = part.Foundation.BottomReinforcement.MaterialKind as ReinforcementUsing;
+            //Получаем ссылки на армирование подошвы вдоль оси X и вдоль оси Y
+            MaterialContainer materialContainer = part.Foundation.BottomReinforcement;
+            ReinforcementUsing rfX = (materialContainer.MaterialUsings[0]) as ReinforcementUsing;
+            ReinforcementUsing rfY = (materialContainer.MaterialUsings[1]) as ReinforcementUsing;
+            //Получаем ссылки на материалы армирования вдоль оси
+            ReinforcementKind rfKindX = (rfX.MaterialKind) as ReinforcementKind;
+            ReinforcementKind rfKindY = (rfY.MaterialKind) as ReinforcementKind;
+            //Получаем ссылки на раскладку армирования подошвы вдоль оси X и вдоль оси Y
+            RFSmearedBySpacing rfSpacingX = (rfX.RFSpacing) as RFSmearedBySpacing;
+            RFSmearedBySpacing rfSpacingY = (rfY.RFSpacing) as RFSmearedBySpacing;
+
             ConcreteKind concreteKind = part.Foundation.Concrete.MaterialKind as ConcreteKind;
             double mx = GetMaxMoment(part.Result.partMomentAreas.LoadCombinationsX);
             double my = GetMaxMoment(part.Result.partMomentAreas.LoadCombinationsY);
-            double Rs = reinforcementUsing.ReinforcementKind.FstTensStrength;
+            double RsX = rfKindX.FstTensStrength;
+            double RsY = rfKindY.FstTensStrength;
             double Rc = concreteKind.FstCompStrength;
             double bx = part.Length;
             double by = part.Width;
-            double h0x = part.Result.ZMax - reinforcementUsing.ReinforcementSpacings[0].CoveringLayer;
-            double h0y = part.Result.ZMax - reinforcementUsing.ReinforcementSpacings[1].CoveringLayer;
-            double ax = RectSectionProcessor.GetReinforcementArea(my, bx, h0x, Rs, Rc);
-            double ay = RectSectionProcessor.GetReinforcementArea(mx, by, h0y, Rs, Rc);
+            double h0x = part.Result.ZMax - rfSpacingX.CoveringLayer;
+            double h0y = part.Result.ZMax - rfSpacingX.CoveringLayer;
+            double ax = RectSectionProcessor.GetReinforcementArea(my, bx, h0x, RsX, Rc);
+            double ay = RectSectionProcessor.GetReinforcementArea(mx, by, h0y, RsY, Rc);
             part.Result.AsRec = new double[2]; 
             part.Result.AsRec[0] = ax;
             part.Result.AsRec[1] = ay;
@@ -321,17 +332,23 @@ namespace RDBLL.Entity.RCC.Foundations.Processors
             foundation.Result.AsRec = new double[2] { ax.Max(), ay.Max() };
             return foundation.Result.AsRec;
         }
+        //Возвращает фактическую площадь армирования подошвы фундамента
         public static double[] GetActualReinforcementArea(Foundation foundation)
         {
-            double GetArea (double diameter, double step, double length)
-            {
-                int quant = Convert.ToInt32(Math.Round((length - 0.1) / step)) + 1;
-                double area = Math.PI * diameter * diameter / 4;
-                return area * quant;
-            }
-            ReinforcementUsing reinforcementUsing = foundation.BottomReinforcement.MaterialKind as ReinforcementUsing;
-            double areaX = GetArea(reinforcementUsing.ReinforcementSpacings[0].Diameter, reinforcementUsing.ReinforcementSpacings[0].Spacing, foundation.Parts[foundation.Parts.Count - 1].Length);
-            double areaY = GetArea(reinforcementUsing.ReinforcementSpacings[0].Diameter, reinforcementUsing.ReinforcementSpacings[0].Spacing, foundation.Parts[foundation.Parts.Count - 1].Width);
+            //Длина раскладки для арматуры вдоль оси X и Y
+            double lengthX = foundation.Parts[foundation.Parts.Count - 1].Length;
+            double lengthY = foundation.Parts[foundation.Parts.Count - 1].Width;
+            //Получаем ссылки на армирование подошвы вдоль оси X и вдоль оси Y
+            MaterialContainer materialContainer = foundation.BottomReinforcement;
+            ReinforcementUsing rfX = (materialContainer.MaterialUsings[0]) as ReinforcementUsing;
+            ReinforcementUsing rfY = (materialContainer.MaterialUsings[1]) as ReinforcementUsing;
+            //Получаем ссылки на раскладку армирования подошвы вдоль оси X и вдоль оси Y
+            RFSmearedBySpacing rfSpacingX = (rfX.RFSpacing) as RFSmearedBySpacing;
+            RFSmearedBySpacing rfSpacingY = (rfY.RFSpacing) as RFSmearedBySpacing;
+            //Фактическая площадь арм
+            double areaX = rfSpacingX.GetTotalBarsArea(lengthX - 0.1);
+            double areaY = rfSpacingY.GetTotalBarsArea(lengthY - 0.1);
+            //Заносим полученные площади армирования в результаты расчета
             foundation.Result.AsAct = new double[2] { areaX, areaY };
             return foundation.Result.AsAct;
         }
