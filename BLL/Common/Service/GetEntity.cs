@@ -10,6 +10,9 @@ using RDBLL.Entity.SC.Column;
 using RDBLL.Forces;
 using RDBLL.Entity.RCC.Foundations;
 using RDBLL.Entity.Soils;
+using RDBLL.Entity.Common.Materials;
+using RDBLL.Common.Interfaces;
+using System.Collections.ObjectModel;
 
 namespace RDBLL.Common.Service
 {
@@ -388,6 +391,95 @@ namespace RDBLL.Common.Service
                 {
                     if (soil.Id == newObject.SoilId) { newObject.Soil = soil; }
                 }
+                newObjects.Add(newObject);
+            }
+            return newObjects;
+        }
+        public static List<MaterialContainer> GetContainers (DataSet dataSet, ISavableToDataSet parent)
+        {
+            List<MaterialContainer> materialContainers = new List<MaterialContainer>();
+            DataTable dataTable = dataSet.Tables["MaterialContainers"];
+            var query = from dataRow in dataTable.AsEnumerable()
+                        where dataRow.Field<int>("ParentId") == parent.Id
+                        select dataRow;
+            foreach (var dataRow in query)
+            {
+                MaterialContainer materialContainer = new MaterialContainer();
+                materialContainer.OpenFromDataSet(dataRow);
+                materialContainers.Add(materialContainer);
+            }
+            foreach (MaterialContainer materialContainer in materialContainers)
+            {
+                List<MaterialUsing> matUsings = GetEntity.GetMaterialUsings(dataSet, materialContainer);
+                foreach (MaterialUsing materialUsing in matUsings)
+                {
+                    if (materialUsing is ReinforcementUsing)
+                    { materialContainer.MaterialUsings.Add(materialUsing as ReinforcementUsing); }
+                    else if (materialUsing is ConcreteUsing) { materialContainer.MaterialUsings.Add(materialUsing as ConcreteUsing); }
+                    else materialContainer.MaterialUsings.Add(materialUsing);
+                }
+            }
+            return materialContainers;
+        }
+        public static List<MaterialUsing> GetMaterialUsings(DataSet dataSet, ISavableToDataSet parent)
+        {
+            List<MaterialUsing> materialUsings = new List<MaterialUsing>();
+            DataTable dataTable = dataSet.Tables["MaterialUsings"];
+            var query = from dataRow in dataTable.AsEnumerable()
+                        where dataRow.Field<int>("ParentId") == parent.Id
+                        select dataRow;
+            foreach (var dataRow in query)
+            {
+                string materialKindName = dataRow.Field<string>("Materialkindname");
+                MaterialUsing materialUsing;
+                if (string.Compare(materialKindName, "Concrete") == 0) { materialUsing = new ConcreteUsing(); }
+                else if (string.Compare(materialKindName, "Reinforcement") == 0) { materialUsing = new ReinforcementUsing();}
+                else throw new Exception("Material type is not valid");
+                materialUsing.RegisterParent(parent);
+                materialUsing.OpenFromDataSet(dataRow);
+                if (materialUsing is ReinforcementUsing) { GetRFSpacing(dataSet, materialUsing as ReinforcementUsing); }
+                #region SafetyFActors
+                List<SafetyFactor> safetyFactorsList = GetSafetyFactors(dataSet, materialUsing);
+                ObservableCollection<SafetyFactor> safetyFactors = new ObservableCollection<SafetyFactor>();
+                foreach (SafetyFactor safetyFactor in safetyFactorsList)
+                {
+                    safetyFactors.Add(safetyFactor);
+                }
+                materialUsing.SafetyFactors = safetyFactors;
+                #endregion
+                materialUsings.Add(materialUsing);
+            }
+            return materialUsings;
+        }
+        public static RFSpacingBase GetRFSpacing(DataSet dataSet, ReinforcementUsing parent)
+        {
+            RFSpacingBase rfSpacing;
+            DataTable dataTable = dataSet.Tables["RFSpacings"];
+            var row = (from dataRow in dataTable.AsEnumerable()
+                        where dataRow.Field<int>("ParentId") == parent.Id
+                        select dataRow).Single();
+
+            string type = row.Field<string>("Type");
+            if (string.Compare(type, "SmSpacing") == 0) { rfSpacing = new RFSmearedBySpacing(); }
+            else if (string.Compare(type, "SmQuantity") == 0) { rfSpacing = new RFSmearedByQuantity(); }
+            else throw new Exception("Reinforcement spacing type is not valid");
+            rfSpacing.ParentMember = parent;
+            parent.RFSpacing = rfSpacing;
+            rfSpacing.OpenFromDataSet(row);
+            return rfSpacing;
+        }
+        private static List<SafetyFactor> GetSafetyFactors(DataSet dataSet, MaterialUsing parent)
+        {
+            List<SafetyFactor> newObjects = new List<SafetyFactor>();
+            DataTable dataTable = dataSet.Tables["SafetyFactors"];
+            var query = from dataRow in dataTable.AsEnumerable()
+                        where dataRow.Field<int>("ParentId") == parent.Id
+                        select dataRow;
+            foreach (var dataRow in query)
+            {
+                SafetyFactor newObject = new SafetyFactor();
+                newObject.OpenFromDataSet(dataRow);
+                newObject.RegisterParent(parent);
                 newObjects.Add(newObject);
             }
             return newObjects;

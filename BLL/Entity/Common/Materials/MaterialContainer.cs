@@ -14,7 +14,7 @@ namespace RDBLL.Entity.Common.Materials
     /// <summary>
     /// Класс контейнера арматурных элементов
     /// </summary>
-    public class MaterialContainer : ISavableToDataSet
+    public class MaterialContainer : IHasParent, IDuplicate
     {
         #region fields
         /// <summary>
@@ -26,14 +26,18 @@ namespace RDBLL.Entity.Common.Materials
         /// </summary>
         public string Name { get; set; }
         /// <summary>
+        /// Назначение контейнера в родительском элементе
+        /// </summary>
+        public string Purpose { get; set; }
+        /// <summary>
         /// Коллекция использования материалов
         /// </summary>
         public List<MaterialUsing> MaterialUsings {get;set;}
         /// <summary>
         /// Ссылка на родительский элемент
         /// </summary>
-        public ISavableToDataSet ParentMember { get; set; }
-
+        public ISavableToDataSet ParentMember { get; private set; }
+        private static string TableName { get { return "MaterialContainers"; } }
         #endregion
         #region Constructors
         /// <summary>
@@ -63,11 +67,12 @@ namespace RDBLL.Entity.Common.Materials
         public void SaveToDataSet(DataSet dataSet, bool createNew)
         {
             DataTable dataTable;
-            dataTable = dataSet.Tables["Materialcontainers"];
+            dataTable = dataSet.Tables[TableName];
             DataRow row = DsOperation.CreateNewRow(Id, createNew, dataTable);
             #region setFields
             row.SetField("Id", Id);
             row.SetField("Name", Name);
+            row.SetField("Purpose", Purpose);
             row.SetField("ParentId", ParentMember.Id);
             #endregion
             dataTable.AcceptChanges();
@@ -82,7 +87,7 @@ namespace RDBLL.Entity.Common.Materials
         /// <param name="dataSet"></param>
         public void OpenFromDataSet(DataSet dataSet)
         {
-            throw new NotImplementedException();
+            OpenFromDataSet(DsOperation.OpenFromDataSetById(dataSet, TableName, Id));
         }
         /// <summary>
         /// Открыть из датасета
@@ -90,7 +95,9 @@ namespace RDBLL.Entity.Common.Materials
         /// <param name="dataRow"></param>
         public void OpenFromDataSet(DataRow dataRow)
         {
-            throw new NotImplementedException();
+            Id = dataRow.Field<int>("Id");
+            Name = dataRow.Field<string>("Name");
+            Purpose = dataRow.Field<string>("Purpose");
         }
         /// <summary>
         /// Удалить из датасета
@@ -98,7 +105,36 @@ namespace RDBLL.Entity.Common.Materials
         /// <param name="dataSet"></param>
         public void DeleteFromDataSet(DataSet dataSet)
         {
-            throw new NotImplementedException();
+            foreach (MaterialUsing materialUsing in MaterialUsings)
+            {
+                materialUsing.DeleteFromDataSet(dataSet);
+            }
+            DsOperation.DeleteRow(dataSet, TableName, Id);
+        }
+
+        public object Duplicate()
+        {
+            MaterialContainer newObject = new MaterialContainer();
+            newObject.Id = ProgrammSettings.CurrentId;
+            newObject.Name = Name;
+            newObject.Purpose = Purpose;
+            foreach (MaterialUsing materialUsing in MaterialUsings)
+            {
+                MaterialUsing newMaterialUsing = materialUsing.Duplicate() as MaterialUsing;
+                newMaterialUsing.RegisterParent(newMaterialUsing);
+                newObject.MaterialUsings.Add(newMaterialUsing);
+            }
+            return newObject;
+        }
+
+        public void RegisterParent(ISavableToDataSet parent)
+        {
+            ParentMember = parent;
+        }
+
+        public void UnRegisterParent()
+        {
+            ParentMember = null;
         }
         #endregion
     }

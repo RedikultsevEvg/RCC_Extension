@@ -1,6 +1,7 @@
 ﻿using RDBLL.Entity.MeasureUnits;
 using System;
 using System.Windows.Data;
+using RDBLL.Common.Service;
 
 namespace RDUIL.Converters
 {

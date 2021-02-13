@@ -27,9 +27,9 @@ namespace RDBLL.Entity.Common.Materials
         /// Конструктор без параметров
         /// </summary>
         public RFSmearedSpacing() : base()
-            {          
-
-            }
+        {
+            SetInitialParam();
+        }
         /// <summary>
         /// Конструктор по родительскому элементу
         /// </summary>

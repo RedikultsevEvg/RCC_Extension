@@ -34,21 +34,17 @@ namespace RDBLL.Entity.Common.Materials
         /// <summary>
         /// Конструктор без параметров
         /// </summary>
-        public RFSmearedBySpacing() : base() {;}
+        public RFSmearedBySpacing() : base()
+        {
+            SetInitialParam();
+        }
         /// <summary>
         /// Конструктор по родительскому элементу
         /// </summary>
         /// <param name="parent"></param>
         public RFSmearedBySpacing(ReinforcementUsing parentMember) : base(parentMember)
         {
-            //Создаем параметр для количество добавленных стержней
-            RFSpacingParameter barAddQuantity = new RFSpacingParameter(this);
-            barAddQuantity.SetParameterValue("int", 1);
-            RFSpacingParameters.Add(barAddQuantity);
-            //Создаем параметр для шага арматуры
-            RFSpacingParameter barSpacing = new RFSpacingParameter(this);
-            barSpacing.SetParameterValue("double", 0.200);
-            RFSpacingParameters.Add(barSpacing);
+            SetInitialParam();
         }
         #endregion
         #region Methods
@@ -67,6 +63,18 @@ namespace RDBLL.Entity.Common.Materials
         {
             return GetTotalBarsQuantity(length) * Area;
         }
+        private void SetInitialParam()
+        {
+            //Создаем параметр для количество добавленных стержней
+            RFSpacingParameter barAddQuantity = new RFSpacingParameter(this);
+            barAddQuantity.SetParameterValue("int", 1);
+            RFSpacingParameters.Add(barAddQuantity);
+            //Создаем параметр для шага арматуры
+            RFSpacingParameter barSpacing = new RFSpacingParameter(this);
+            barSpacing.SetParameterValue("double", 0.200);
+            RFSpacingParameters.Add(barSpacing);
+        }
+
         #endregion
     }
 }

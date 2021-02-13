@@ -6,22 +6,22 @@ using System.Threading.Tasks;
 using RDBLL.Common.Interfaces;
 using System.Data;
 using RDBLL.Common.Service;
+using RDBLL.Common.Service;
 
 namespace RDBLL.Entity.Common.Materials
 {
     /// <summary>
     /// Класс параметра расположения армирования
     /// </summary>
-    public class RFSpacingParameter : ISavableToDataSet
+    public class RFSpacingParameter: IDuplicate
     {
         private string _ValueType;
-
         /// <summary>
         /// Код
         /// </summary>
         public int Id { get; set; }
         /// <summary>
-        /// Значение параметра
+        /// Тип параметра
         /// </summary>
         public string ValueType
         { get { return _ValueType; }
@@ -31,39 +31,19 @@ namespace RDBLL.Entity.Common.Materials
                 _ValueType = value;
             }
         }
+        /// <summary>
+        /// Значение параметра
+        /// </summary>
         public string ParameterValue {get; set;}
-        #region ISavableToDataSet
-        /// <summary>
-        /// Сохранение в датасет
-        /// </summary>
-        /// <param name="dataSet"></param>
-        /// <param name="createNew"></param>
-        public void SaveToDataSet(DataSet dataSet, bool createNew)
-        {
-        }
-        /// <summary>
-        /// Открыть из датасета
-        /// </summary>
-        /// <param name="dataSet"></param>
-        public void OpenFromDataSet(DataSet dataSet)
-        {
-        }
-        /// <summary>
-        /// Открыть из датасета
-        /// </summary>
-        /// <param name="dataRow"></param>
-        public void OpenFromDataSet(DataRow dataRow)
-        {
-        }
-        /// <summary>
-        /// Удалить из датасета
-        /// </summary>
-        /// <param name="dataSet"></param>
-        public void DeleteFromDataSet(DataSet dataSet)
-        {
-        }
-        #endregion
         #region Constructors
+        public RFSpacingParameter()
+        {
+
+        }
+        /// <summary>
+        /// Конструктор по раскладке арматуры
+        /// </summary>
+        /// <param name="rfSpacingBase"></param>
         public RFSpacingParameter(RFSpacingBase rfSpacingBase)
         {
             Id = ProgrammSettings.CurrentId;
@@ -131,7 +111,7 @@ namespace RDBLL.Entity.Common.Materials
         public double GetDoubleValue()
         {
             if (!(ValueType=="int" || ValueType == "double")) { throw new Exception("Type of value is not valid!"); }
-            return Convert.ToDouble(ParameterValue);
+            return CommonOperation.ConvertToDouble(ParameterValue);
         }
         /// <summary>
         /// Возвращает значение параметра в виде строки
@@ -140,6 +120,15 @@ namespace RDBLL.Entity.Common.Materials
         public string GetStringValue()
         {
             return ParameterValue;
+        }
+
+        public object Duplicate()
+        {
+            RFSpacingParameter newObject = new RFSpacingParameter();
+            newObject.Id = ProgrammSettings.CurrentId;
+            newObject.ValueType = ValueType;
+            newObject.ParameterValue = ParameterValue;
+            return newObject;
         }
         #endregion
     }

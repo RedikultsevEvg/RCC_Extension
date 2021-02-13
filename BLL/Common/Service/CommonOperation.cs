@@ -6,10 +6,18 @@ using System.Threading.Tasks;
 using System.Globalization;
 using RDBLL.Entity.MeasureUnits;
 
-namespace RDUIL.Converters
+namespace RDBLL.Common.Service
 {
+    /// <summary>
+    /// Статический класс общих операций
+    /// </summary>
     public static class CommonOperation
     {
+        /// <summary>
+        /// Конвертирует строку в число двоичной точности независимо от разделителя
+        /// </summary>
+        /// <param name="s"></param>
+        /// <returns></returns>
         public static double ConvertToDouble(string s)
         {
             double result;

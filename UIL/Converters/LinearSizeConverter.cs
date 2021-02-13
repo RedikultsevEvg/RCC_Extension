@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Data;
 using RDBLL.Entity.MeasureUnits;
+using RDBLL.Common.Service;
 
 namespace RDUIL.Converters
 {

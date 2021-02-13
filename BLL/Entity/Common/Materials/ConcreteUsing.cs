@@ -9,30 +9,36 @@ using RDBLL.Entity.Common.Materials.Interfaces;
 
 namespace RDBLL.Entity.Common.Materials
 {
+    /// <summary>
+    /// Класс использования бетона в конструкции
+    /// </summary>
     public class ConcreteUsing : MaterialUsing
     {
-        #region IODataSet
-        //void SaveToDataSet(DataSet dataSet, bool createNew)
-        //{
-        //    throw new NotImplementedException();
-        //}
-        //void OpenFromDataSet(DataSet dataSet)
-        //{
-        //    throw new NotImplementedException();
-        //}
-        //void OpenFromDataSet(DataRow dataRow)
-        //{
-        //    throw new NotImplementedException();
-        //}
-        //void DeleteFromDataSet(DataSet dataSet)
-        //{
-        //    throw new NotImplementedException();
-        //}
-        #endregion
+        /// <summary>
+        /// Конструктор без параметров
+        /// </summary>
+        public ConcreteUsing() : base()
+        {
 
+        }
 
         #region Methods
-
+        public void AddGammaB1()
+        {
+            SafetyFactor safetyFactor = new SafetyFactor(true);
+            safetyFactor.Name = "Коэффициент, учитывающий длительность действия нагрузки";
+            safetyFactor.PsfFstLong = 0.9;
+            safetyFactor.RegisterParent(this);
+            SafetyFactors.Add(safetyFactor);
+        }
+        public void AddGammaB2()
+        {
+            SafetyFactor safetyFactor = new SafetyFactor(true);
+            safetyFactor.Name = "Коэффициент, учитывающий бетонирование в вертикальном положении";
+            safetyFactor.PsfFstLong = 0.85;
+            safetyFactor.RegisterParent(this);
+            SafetyFactors.Add(safetyFactor);
+        }
         #endregion
     }
 }

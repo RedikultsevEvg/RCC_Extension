@@ -8,6 +8,7 @@ using System.Windows;
 using RDBLL.Entity.RCC.Foundations;
 using System.Windows.Media;
 using System.Windows.Shapes;
+using RDBLL.Common.Service;
 
 namespace RDUIL.Converters
 {
