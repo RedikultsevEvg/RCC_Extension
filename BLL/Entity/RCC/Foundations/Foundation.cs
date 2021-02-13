@@ -173,6 +173,7 @@ namespace RDBLL.Entity.RCC.Foundations
         /// Свойство для сохранения результатов
         /// </summary>
         public FoundationResult Result { get; set; }
+        private static string TableName { get { return "Foundations"; } }
         #endregion
         #region Constructors
         /// <summary>
@@ -231,37 +232,44 @@ namespace RDBLL.Entity.RCC.Foundations
         /// </summary>
         public void SaveToDataSet(DataSet dataSet, bool createNew)
         {
-            RenewAll();
-            DataTable dataTable = dataSet.Tables["Foundations"];
-            DataRow row = DsOperation.CreateNewRow(Id, createNew, dataTable);
-
-            #region setFields
-            row.SetField("Id", Id);
-            row.SetField("LevelId", LevelId);
-            row.SetField("SoilSectionId", SoilSectionId);
-            row.SetField("Name", Name);
-            row.SetField("RelativeTopLevel", RelativeTopLevel);
-            row.SetField("SoilRelativeTopLevel", SoilRelativeTopLevel);
-            row.SetField("SoilVolumeWeight", SoilVolumeWeight);
-            row.SetField("ConcreteVolumeWeight", ConcreteVolumeWeight);
-            row.SetField("FloorLoad", FloorLoad);
-            row.SetField("FloorLoadFactor", FloorLoadFactor);
-            row.SetField("ConcreteFloorLoad", ConcreteFloorLoad);
-            row.SetField("CompressedLayerRatio", CompressedLayerRatio);
-            #endregion
-            dataTable.AcceptChanges();
-
-            foreach (RectFoundationPart foundationPart in Parts)
+            try
             {
-                foundationPart.SaveToDataSet(dataSet, createNew);
+                RenewAll();
+                DataTable dataTable = dataSet.Tables[TableName];
+                DataRow row = DsOperation.CreateNewRow(Id, createNew, dataTable);
+
+                #region setFields
+                row.SetField("Id", Id);
+                row.SetField("LevelId", LevelId);
+                row.SetField("SoilSectionId", SoilSectionId);
+                row.SetField("Name", Name);
+                row.SetField("RelativeTopLevel", RelativeTopLevel);
+                row.SetField("SoilRelativeTopLevel", SoilRelativeTopLevel);
+                row.SetField("SoilVolumeWeight", SoilVolumeWeight);
+                row.SetField("ConcreteVolumeWeight", ConcreteVolumeWeight);
+                row.SetField("FloorLoad", FloorLoad);
+                row.SetField("FloorLoadFactor", FloorLoadFactor);
+                row.SetField("ConcreteFloorLoad", ConcreteFloorLoad);
+                row.SetField("CompressedLayerRatio", CompressedLayerRatio);
+                #endregion
+                dataTable.AcceptChanges();
+
+                foreach (RectFoundationPart foundationPart in Parts)
+                {
+                    foundationPart.SaveToDataSet(dataSet, createNew);
+                }
+                foreach (ForcesGroup forcesGroup in ForcesGroups)
+                {
+                    forcesGroup.SaveToDataSet(dataSet, createNew);
+                }
+                BottomReinforcement.SaveToDataSet(dataSet, createNew);
+                VerticalReinforcement.SaveToDataSet(dataSet, createNew);
+                Concrete.SaveToDataSet(dataSet, createNew);
             }
-            foreach (ForcesGroup forcesGroup in ForcesGroups)
+            catch (Exception ex)
             {
-                forcesGroup.SaveToDataSet(dataSet, createNew);
+                CommonErrorProcessor.ShowErrorMessage("Ошибка сохранения элемента: " + Name, ex);
             }
-            BottomReinforcement.SaveToDataSet(dataSet, createNew);
-            //VerticalReinforcement.SaveToDataSet(dataSet, createNew);
-            //Concrete.SaveToDataSet(dataSet, createNew);
         }
         /// <summary>
         /// Обновляет запись в соответствии с сохраненной в датасете
@@ -269,7 +277,15 @@ namespace RDBLL.Entity.RCC.Foundations
         /// <param name="dataSet"></param>
         public void OpenFromDataSet(DataSet dataSet)
         {
-            OpenFromDataSet(DsOperation.OpenFromDataSetById(dataSet, "Foundations", Id));
+            try
+            {
+                OpenFromDataSet(DsOperation.OpenFromDataSetById(dataSet, TableName, Id));
+            }
+            catch (Exception ex)
+            {
+                CommonErrorProcessor.ShowErrorMessage("Ошибка получения элемента из базы данных. Элемент: " + Name, ex);
+            }
+            
         }
         /// <summary>
         /// Обновляет запись в соответствии со строкой датасета
@@ -292,6 +308,28 @@ namespace RDBLL.Entity.RCC.Foundations
             CompressedLayerRatio = dataRow.Field<double>("CompressedLayerRatio");
             //Если у фундамента есть код скважины
             if (!(SoilSectionId is null)) RenewSoilSection();
+
+            List<MaterialContainer> materialContainers = GetEntity.GetContainers(dataRow.Table.DataSet, this);
+            foreach (MaterialContainer materialContainer in materialContainers)
+            {
+                if (string.Compare(materialContainer.Purpose, "BtmRF") == 0) { BottomReinforcement = materialContainer; }
+                else if (string.Compare(materialContainer.Purpose, "UndColumn") == 0) { VerticalReinforcement = materialContainer; }
+                else throw new Exception("Container type is not valid");
+                materialContainer.RegisterParent(this);
+            }
+
+            List<MaterialUsing> materialUsings = GetEntity.GetMaterialUsings(dataRow.Table.DataSet, this);
+            foreach (MaterialUsing materialUsing in materialUsings)
+            {
+                if (materialUsing is ConcreteUsing)
+                {
+                    ConcreteUsing concrete = materialUsing as ConcreteUsing;
+                    if (string.Compare(materialUsing.Purpose, "MainConcrete") == 0) { Concrete = concrete; }
+                    else throw new Exception("Concrete type is not valid");
+                }
+                else throw new Exception("Material type is not valid");
+                materialUsing.RegisterParent(this);
+            }
         }
         /// <summary>
         /// Удаляет запись из датасета
@@ -307,7 +345,10 @@ namespace RDBLL.Entity.RCC.Foundations
 
                 forcesGroup.DeleteFromDataSet(dataSet);
             }
-            DsOperation.DeleteRow(dataSet, "Foundations", Id);
+            BottomReinforcement.DeleteFromDataSet(dataSet);
+            VerticalReinforcement.DeleteFromDataSet(dataSet);
+            Concrete.DeleteFromDataSet(dataSet);
+            DsOperation.DeleteRow(dataSet, TableName, Id);
         }
         public void DeleteSubElements(DataSet dataSet, string tableName)
         {
@@ -330,41 +371,51 @@ namespace RDBLL.Entity.RCC.Foundations
         /// <returns></returns>
         public object Duplicate()
         {
-            Foundation foundation = new Foundation();
-            foundation.Id = ProgrammSettings.CurrentId;
-            #region Copy properties
-            foundation.Name = Name;
-            if (! (SoilSectionId is null))
+            try
             {
-                foundation.SoilSectionId = SoilSectionId;
-                foundation.SoilSection = SoilSection;
+                Foundation foundation = new Foundation();
+                foundation.Id = ProgrammSettings.CurrentId;
+                #region Copy properties
+                foundation.Name = Name;
+                if (!(SoilSectionId is null))
+                {
+                    foundation.SoilSectionId = SoilSectionId;
+                    foundation.SoilSection = SoilSection;
+                }
+                foundation.RelativeTopLevel = RelativeTopLevel;
+                foundation.SoilRelativeTopLevel = SoilRelativeTopLevel;
+                foundation.SoilVolumeWeight = SoilVolumeWeight;
+                foundation.ConcreteVolumeWeight = ConcreteVolumeWeight;
+                foundation.FloorLoad = FloorLoad;
+                foundation.FloorLoadFactor = FloorLoadFactor;
+                foundation.ConcreteFloorLoad = ConcreteFloorLoad;
+                foundation.ConcreteFloorLoadFactor = ConcreteFloorLoadFactor;
+                #endregion
+                //Копируем нагрузки
+                foreach (ForcesGroup forcesGroup in ForcesGroups)
+                {
+                    ForcesGroup newForcesGroup = forcesGroup.Duplicate() as ForcesGroup;
+                    newForcesGroup.Foundations.Add(foundation);
+                    foundation.ForcesGroups.Clear();
+                    foundation.ForcesGroups.Add(newForcesGroup);
+                }
+                //Копируем ступени
+                foreach (RectFoundationPart rectFoundationPart in this.Parts)
+                {
+                    RectFoundationPart newFoundationPart = rectFoundationPart.Duplicate() as RectFoundationPart;
+                    newFoundationPart.FoundationId = foundation.Id;
+                    newFoundationPart.Foundation = foundation;
+                    foundation.Parts.Add(newFoundationPart);
+                }
+                foundation.BottomReinforcement = BottomReinforcement.Duplicate() as MaterialContainer;
+                foundation.BottomReinforcement.RegisterParent(foundation);
+                return foundation;
             }
-            foundation.RelativeTopLevel = RelativeTopLevel;
-            foundation.SoilRelativeTopLevel = SoilRelativeTopLevel;
-            foundation.SoilVolumeWeight = SoilVolumeWeight;
-            foundation.ConcreteVolumeWeight = ConcreteVolumeWeight;
-            foundation.FloorLoad = FloorLoad;
-            foundation.FloorLoadFactor = FloorLoadFactor;
-            foundation.ConcreteFloorLoad = ConcreteFloorLoad;
-            foundation.ConcreteFloorLoadFactor = ConcreteFloorLoadFactor;
-            #endregion
-            //Копируем нагрузки
-            foreach (ForcesGroup forcesGroup in ForcesGroups)
+            catch (Exception ex)
             {
-                ForcesGroup newForcesGroup = forcesGroup.Duplicate() as ForcesGroup;
-                newForcesGroup.Foundations.Add(foundation);
-                foundation.ForcesGroups.Clear();
-                foundation.ForcesGroups.Add(newForcesGroup);
+                CommonErrorProcessor.ShowErrorMessage("Ошибка дублирования элемента: " + Name, ex);
+                return null;
             }
-            //Копируем ступени
-            foreach (RectFoundationPart rectFoundationPart in this.Parts)
-            {
-                RectFoundationPart newFoundationPart = rectFoundationPart.Duplicate() as RectFoundationPart;
-                newFoundationPart.FoundationId = foundation.Id;
-                newFoundationPart.Foundation = foundation;
-                foundation.Parts.Add(newFoundationPart);
-            }
-            return foundation;
         }
         #endregion
         public void RenewSoilSection()
@@ -383,14 +434,6 @@ namespace RDBLL.Entity.RCC.Foundations
         public void RenewAll()
         {
             RenewSoilSection();
-            if (! (BottomReinforcement is null))
-            {
-                foreach (MaterialUsing materialUsing in BottomReinforcement.MaterialUsings)
-                {
-                    materialUsing.RenewMaterialKind();
-                }
-            }
-            if (!(Concrete is null)) Concrete.RenewMaterialKind();
         }
         public void DeleteFromObservables()
         {
@@ -402,14 +445,15 @@ namespace RDBLL.Entity.RCC.Foundations
             #region Армирование подошвы
             MaterialContainer materialContainer = new MaterialContainer(this);
             materialContainer.Name = "Армирование подошвы";
-            ReinforcementUsing rfX = new ReinforcementUsing(this);
-            ReinforcementUsing rfY = new ReinforcementUsing(this);
+            materialContainer.Purpose = "BtmRF";
+            ReinforcementUsing rfX = new ReinforcementUsing(materialContainer);
+            ReinforcementUsing rfY = new ReinforcementUsing(materialContainer);
             rfX.Name = "Вдоль оси X";
             rfY.Name = "Вдоль оси Y";
+            rfX.Purpose = "Along X-axes";
+            rfY.Purpose = "Along Y-axes";
             rfX.SelectedId = ProgrammSettings.ReinforcementKinds[0].Id;
-            rfX.MaterialKind = ProgrammSettings.ReinforcementKinds[0];
             rfY.SelectedId = ProgrammSettings.ReinforcementKinds[0].Id;
-            rfY.MaterialKind = ProgrammSettings.ReinforcementKinds[0];
             RFSmearedBySpacing rfSpacingX = new RFSmearedBySpacing(rfX);      
             RFSmearedBySpacing rfSpacingY = new RFSmearedBySpacing(rfY);
             materialContainer.MaterialUsings.Add(rfX);
@@ -419,15 +463,18 @@ namespace RDBLL.Entity.RCC.Foundations
             #region Армирование подколонника
             MaterialContainer verticalContainer = new MaterialContainer(this);
             verticalContainer.Name = "Армирование подколонника";
+            verticalContainer.Purpose = "UndColumn";
             foundation.VerticalReinforcement = verticalContainer;
             #endregion
             #region Добавляем бетон
             foundation.Concrete = new ConcreteUsing();
             Concrete.RegisterParent(this);
             foundation.Concrete.Id = ProgrammSettings.CurrentId;
+            foundation.Concrete.Name = "Бетон";
+            foundation.Concrete.Purpose = "MainConcrete";
             foundation.Concrete.SelectedId = ProgrammSettings.ConcreteKinds[0].Id;
-            foundation.Concrete.MaterialKind = ProgrammSettings.ConcreteKinds[0];
             foundation.Concrete.SelectedId = Concrete.MaterialKind.Id;
+            foundation.Concrete.AddGammaB1();
             #endregion
         }
         #endregion

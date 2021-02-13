@@ -30,41 +30,6 @@ namespace RDBLL.Entity.Common.Materials
             SelectedId = 2;
         }
         #endregion
-        #region IODataSet
-        /// <summary>
-        /// Сохранение в датасет
-        /// </summary>
-        /// <param name="dataSet"></param>
-        /// <param name="createNew"></param>
-        public void SaveToDataSet(DataSet dataSet, bool createNew)
-        {
-            throw new NotImplementedException();
-        }
-        /// <summary>
-        /// Открыть из датасета
-        /// </summary>
-        /// <param name="dataSet"></param>
-        public void OpenFromDataSet(DataSet dataSet)
-        {
-            throw new NotImplementedException();
-        }
-        /// <summary>
-        /// Открыть из датасета
-        /// </summary>
-        /// <param name="dataRow"></param>
-        public void OpenFromDataSet(DataRow dataRow)
-        {
-            throw new NotImplementedException();
-        }
-        /// <summary>
-        /// Удалить из датасета
-        /// </summary>
-        /// <param name="dataSet"></param>
-        public void DeleteFromDataSet(DataSet dataSet)
-        {
-            throw new NotImplementedException();
-        }
-        #endregion
         #region Method
         #endregion
     }

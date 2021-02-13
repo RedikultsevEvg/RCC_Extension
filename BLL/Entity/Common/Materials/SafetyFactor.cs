@@ -6,13 +6,14 @@ using System.Threading.Tasks;
 using RDBLL.Common.Interfaces;
 using System.Data;
 using DAL.Common;
+using RDBLL.Common.Service;
 
 namespace RDBLL.Entity.Common.Materials
 {
     /// <summary>
     /// Класс коэффициента надежности по материалу
     /// </summary>
-    public class SafetyFactor :ISavableToDataSet
+    public class SafetyFactor :IHasParent, IDuplicate
     {
         #region Properties
         /// <summary>
@@ -39,10 +40,26 @@ namespace RDBLL.Entity.Common.Materials
         /// Коэффициент надежности для 2 группы ПС для длительных нагрузок
         /// </summary>
         public double PsfSndLong { get; set; }
+        /// <summary>
+        /// Ссылка на родителя
+        /// </summary>
+        public ISavableToDataSet ParentMember { get; private set; }
+        private static string TableName { get { return "SafetyFactors"; } }
         #endregion
         #region Constructors
+        /// <summary>
+        /// Конструктор без параметров
+        /// </summary>
         public SafetyFactor()
+        { }
+        /// <summary>
+        /// Конструктор с настройками по умолчанию
+        /// </summary>
+        /// <param name="GenId"></param>
+        public SafetyFactor(bool GenId)
         {
+            if (GenId) Id = ProgrammSettings.CurrentId;
+            Name = "Новый коэффициент надежности по материалу";
             PsfFst = 1.0;
             PsfSnd = 1.0;
             PsfFstLong = 1.0;
@@ -58,11 +75,12 @@ namespace RDBLL.Entity.Common.Materials
         public void SaveToDataSet(DataSet dataSet, bool createNew)
         {
             DataTable dataTable;
-            dataTable = dataSet.Tables["Safetyfactors"];
+            dataTable = dataSet.Tables[TableName];
             DataRow row = DsOperation.CreateNewRow(Id, createNew, dataTable);
             #region setFields
             row.SetField("Id", Id);
             row.SetField("Name", Name);
+            row.SetField("ParentId", ParentMember.Id);
             row.SetField("PsfFst", PsfFst);
             row.SetField("PsfSnd", PsfSnd);
             row.SetField("PsfFstLong", PsfFstLong);
@@ -77,7 +95,7 @@ namespace RDBLL.Entity.Common.Materials
         /// <param name="dataSet"></param>
         public void OpenFromDataSet(DataSet dataSet)
         {
-            OpenFromDataSet(DsOperation.OpenFromDataSetById(dataSet, "Safetyfactors", Id));
+            OpenFromDataSet(DsOperation.OpenFromDataSetById(dataSet, TableName, Id));
         }
         /// <summary>
         /// Открыть из датасета
@@ -96,8 +114,31 @@ namespace RDBLL.Entity.Common.Materials
         /// <param name="dataSet"></param>
         public void DeleteFromDataSet(DataSet dataSet)
         {
-            DsOperation.DeleteRow(dataSet, "Safetyfactors", Id);
-            throw new NotImplementedException();
+            DsOperation.DeleteRow(dataSet, TableName, Id);
+        }
+        #endregion
+        #region Methods
+        public void RegisterParent(ISavableToDataSet materialUsing)
+        {
+            ParentMember = materialUsing;
+        }
+        public void UnRegisterParent()
+        {
+            ParentMember = null;
+        }
+        /// <summary>
+        /// Дублирует текущий объект
+        /// </summary>
+        /// <returns></returns>
+        public object Duplicate()
+        {
+            SafetyFactor safetyFactor = new SafetyFactor(true);
+            safetyFactor.Name = Name;
+            safetyFactor.PsfFst = PsfFst;
+            safetyFactor.PsfSnd = PsfSnd;
+            safetyFactor.PsfFstLong = PsfFstLong;
+            safetyFactor.PsfSndLong = PsfSndLong;
+            return safetyFactor;
         }
         #endregion
     }

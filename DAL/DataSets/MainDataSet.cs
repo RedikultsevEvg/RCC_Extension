@@ -251,14 +251,6 @@ namespace DAL.DataSets
             DsOperation.AddDoubleColumn(dataTable, "FloorLoadFactor", 1.2);
             DsOperation.AddDoubleColumn(dataTable, "ConcreteFloorLoad", 0);
             DsOperation.AddDoubleColumn(dataTable, "ConcreteFloorLoadFactor", 1.2);
-            DsOperation.AddIntColumn(dataTable, "ConcreteId", 5);
-            DsOperation.AddIntColumn(dataTable, "BtmReinfId", 2);
-            DsOperation.AddDoubleColumn(dataTable, "DiameterX", 0.012);
-            DsOperation.AddDoubleColumn(dataTable, "StepX", 0.200);
-            DsOperation.AddDoubleColumn(dataTable, "CoveringLayerX", 0.09);
-            DsOperation.AddDoubleColumn(dataTable, "DiameterY", 0.012);
-            DsOperation.AddDoubleColumn(dataTable, "StepY", 0.200);
-            DsOperation.AddDoubleColumn(dataTable, "CoveringLayerY", 0.07);
             DsOperation.AddDoubleColumn(dataTable, "CompressedLayerRatio", 0.2);
             #endregion
             #region FoundationParts
@@ -282,39 +274,38 @@ namespace DAL.DataSets
             DsOperation.AddFkIdColumn("ForcesGroups", "ForcesGroupId", dataTable);
             #endregion
             #region MaterialContainer
-            dataTable = new DataTable("Materialcontainers");
+            dataTable = new DataTable("MaterialContainers");
             dataSet.Tables.Add(dataTable);
-            DsOperation.AddIdColumn(dataTable);
-            DsOperation.AddNameColumn(dataTable);
+            DsOperation.AddIdColumn(dataTable, true);
             DsOperation.AddIntColumn(dataTable, "ParentId");
+            DsOperation.AddStringColumn(dataTable, "Purpose");
             #endregion
             #region MaterialUsing
-            dataTable = new DataTable("Materialusings");
+            dataTable = new DataTable("MaterialUsings");
             dataSet.Tables.Add(dataTable);
-            DsOperation.AddIdColumn(dataTable);
-            DsOperation.AddIntColumn(dataTable, "ParentId");
-            DsOperation.AddStringColumn(dataTable, "Membertype");
+            DsOperation.AddIdColumn(dataTable, true);
             DsOperation.AddStringColumn(dataTable, "Purpose");
+            DsOperation.AddIntColumn(dataTable, "ParentId");
             DsOperation.AddStringColumn(dataTable, "Materialkindname");
-            DsOperation.AddIntColumn(dataTable, "MaterialId");
+            DsOperation.AddIntColumn(dataTable, "SelectedId");
             #endregion
             #region "Safetyfactors
             dataTable = new DataTable("Safetyfactors");
             dataSet.Tables.Add(dataTable);
             DsOperation.AddIdColumn(dataTable, true);
-            DsOperation.AddFkIdColumn("Materialusings", "MaterialUsingId", dataTable);
+            DsOperation.AddIntColumn(dataTable, "ParentId");
             DsOperation.AddDoubleColumn(dataTable, "PsfFst");
             DsOperation.AddDoubleColumn(dataTable, "PsfSnd");
             DsOperation.AddDoubleColumn(dataTable, "PsfFstLong");
             DsOperation.AddDoubleColumn(dataTable, "PsfSndLong");
             #endregion
-            #region ReinforcementlUsing
-            dataTable = new DataTable("Reinforcementusings");
+            #region RFSpacings
+            dataTable = new DataTable("RFSpacings");
             dataSet.Tables.Add(dataTable);
             DsOperation.AddIdColumn(dataTable, true);
-            DsOperation.AddFkIdColumn("Materialusings", "MaterialUsingId", dataTable);
-            DsOperation.AddStringColumn(dataTable, "Materialkindname");
-            DsOperation.AddIntColumn(dataTable, "ReinforcementKindId");
+            DsOperation.AddIntColumn(dataTable, "ParentId");
+            DsOperation.AddStringColumn(dataTable, "Type");
+            DsOperation.AddStringColumn(dataTable, "ValuesString");
             #endregion
             #region
             #endregion

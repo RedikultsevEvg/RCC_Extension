@@ -32,7 +32,7 @@ namespace RDBLL.Entity.Common.Materials
         /// </summary>
         public RFSpotSpacing() : base()
         {
-
+            SetIninitialparam();
         }
         /// <summary>
         /// Конструктор по родительскому элементу
@@ -40,9 +40,7 @@ namespace RDBLL.Entity.Common.Materials
         /// <param name="parent"></param>
         public RFSpotSpacing(ReinforcementUsing parentMember) :base(parentMember)
         {
-            RFSpacingParameter newParam = new RFSpacingParameter(this);
-            newParam.SetParameterValue("double", 0.012);
-            RFSpacingParameters.Add(newParam);
+            SetIninitialparam();
         }
         #endregion
         #region Methods
@@ -51,6 +49,12 @@ namespace RDBLL.Entity.Common.Materials
         /// </summary>
         /// <returns></returns>
         public abstract int GetTotalBarsQuantity();
+        private void SetIninitialparam()
+        {
+            RFSpacingParameter newParam = new RFSpacingParameter(this);
+            newParam.SetParameterValue("double", 0.012);
+            RFSpacingParameters.Add(newParam);
+        }
         #endregion
     }
 }

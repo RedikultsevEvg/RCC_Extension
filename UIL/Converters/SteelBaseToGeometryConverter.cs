@@ -6,6 +6,7 @@ using System.Windows.Shapes;
 using System.Windows.Controls;
 using RDBLL.DrawUtils.SteelBase;
 using System.Windows;
+using RDBLL.Common.Service;
 
 
 namespace RDUIL.Converters

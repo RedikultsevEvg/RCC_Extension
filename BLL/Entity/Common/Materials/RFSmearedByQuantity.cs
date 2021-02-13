@@ -20,7 +20,8 @@ namespace RDBLL.Entity.Common.Materials
         /// </summary>
         public RFSmearedByQuantity() : base()
         {
-
+            RFSpacingParameter barQuantity = new RFSpacingParameter(this);
+            RFSpacingParameters.Add(barQuantity);
         }
         /// <summary>
         /// Конструктор по родительскому элементу

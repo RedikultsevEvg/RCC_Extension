@@ -14,9 +14,9 @@ using System.Collections.ObjectModel;
 namespace RDBLL.Entity.Common.Materials
 {
     /// <summary>
-    /// Класс применения бетона в элементах
+    /// Класс применения материалов в элементах
     /// </summary>
-    public class MaterialUsing : ISavableToDataSet
+    public abstract class MaterialUsing : IHasParent, IDuplicate
     {
         /// <summary>
         /// Код применения
@@ -27,13 +27,26 @@ namespace RDBLL.Entity.Common.Materials
         /// </summary>
         public string Name { get; set; }
         /// <summary>
+        /// Назначение контейнера в родительском элементе
+        /// </summary>
+        public string Purpose { get; set; }
+        /// <summary>
         /// Код выбранного материала
         /// </summary>
         public int SelectedId { get; set; }
         /// <summary>
         /// Ссылка на выбранный материал
         /// </summary>
-        public IMaterialKind MaterialKind { get; set; }
+        public IMaterialKind MaterialKind
+        { get
+            {
+                IMaterialKind materialKind;
+                if (this is ConcreteUsing) materialKind = MaterialProcessor.GetMaterialKindById("Concrete", SelectedId);
+                else if (this is ReinforcementUsing) materialKind = MaterialProcessor.GetMaterialKindById("Reinforcement", SelectedId);
+                else throw new NotImplementedException("Material kind is not valid");
+                return materialKind;
+            }
+        }
         /// <summary>
         /// Список коэффициентов надежности
         /// </summary>
@@ -46,14 +59,17 @@ namespace RDBLL.Entity.Common.Materials
             get
             {
                 List<IMaterialKind> materialKinds = new List<IMaterialKind>();
-                if (MaterialKind is ConcreteKind) materialKinds.AddRange(ProgrammSettings.ConcreteKinds);
-                else if ((MaterialKind is ReinforcementKind) || (MaterialKind is ReinforcementUsing)) materialKinds.AddRange(ProgrammSettings.ReinforcementKinds);
-                else throw new NotImplementedException("Material kind is not valid");
+                if (this is ConcreteUsing) materialKinds.AddRange(ProgrammSettings.ConcreteKinds);
+                else if (this is ReinforcementUsing) materialKinds.AddRange(ProgrammSettings.ReinforcementKinds);
+                else throw new Exception("Material kind is not valid");
                 return materialKinds;
             }
         }
-
-        private ISavableToDataSet ParentMember;
+        /// <summary>
+        /// Ссылка на родительский элемент
+        /// </summary>
+        public ISavableToDataSet ParentMember { get; private set; }
+        private static string TableName { get { return "MaterialUsings"; } }
         #region Constructors
         /// <summary>
         /// Конструктор без параметров
@@ -62,10 +78,14 @@ namespace RDBLL.Entity.Common.Materials
         {
             SafetyFactors = new ObservableCollection<SafetyFactor>();
         }
+        /// <summary>
+        /// Конструктор по родительскому элементу
+        /// </summary>
+        /// <param name="parentMember"></param>
         public MaterialUsing(ISavableToDataSet parentMember)
         {
             Id = ProgrammSettings.CurrentId;
-            ParentMember = parentMember;
+            RegisterParent(parentMember);
             SafetyFactors = new ObservableCollection<SafetyFactor>();
         }
         #endregion
@@ -76,22 +96,27 @@ namespace RDBLL.Entity.Common.Materials
         public void SaveToDataSet(DataSet dataSet, bool createNew)
         {
             DataTable dataTable;
-            dataTable = dataSet.Tables["Materialusings"];
+            dataTable = dataSet.Tables[TableName];
             DataRow row = DsOperation.CreateNewRow(Id, createNew, dataTable);
             #region setFields
             row.SetField("Id", Id);
-            if (MaterialKind is ConcreteKind) row.SetField("Materialkindname", "Concrete");
-            else if (MaterialKind is ReinforcementKind) row.SetField("Materialkindname", "Reinforcement");
+            row.SetField("Name", Name);
+            row.SetField("Purpose", Purpose);
+            if (this is ConcreteUsing) row.SetField("Materialkindname", "Concrete");
+            else if (this is ReinforcementUsing) row.SetField("Materialkindname", "Reinforcement");
             else throw new NotImplementedException("Material kind is not valid");
-            row.SetField("MaterialId", SelectedId);
-            if (ParentMember is Foundation) row.SetField("Membertype", "Foundation");
-            else throw new NotImplementedException("Member type is not valid");
+            row.SetField("SelectedId", SelectedId);
             row.SetField("ParentId", ParentMember.Id);
             #endregion
             dataTable.AcceptChanges();
             foreach (SafetyFactor safetyFactor in SafetyFactors)
             {
                 safetyFactor.SaveToDataSet(dataSet, createNew);
+            }
+            if (this is ReinforcementUsing)
+            {
+                ReinforcementUsing rfUsing = (this) as ReinforcementUsing;
+                rfUsing.RFSpacing.SaveToDataSet(dataSet, createNew);
             }
         }
         /// <summary>
@@ -100,7 +125,7 @@ namespace RDBLL.Entity.Common.Materials
         /// <param name="dataSet"></param>
         public void OpenFromDataSet(DataSet dataSet)
         {
-            OpenFromDataSet(DsOperation.OpenFromDataSetById(dataSet, "Materialusings", Id));
+            OpenFromDataSet(DsOperation.OpenFromDataSetById(dataSet, TableName, Id));
         }
         /// <summary>
         /// Обновляет запись в соответствии со строкой датасета
@@ -109,18 +134,10 @@ namespace RDBLL.Entity.Common.Materials
         public void OpenFromDataSet(DataRow dataRow)
         {
             Id = dataRow.Field<int>("Id");
+            Name = dataRow.Field<string>("Name");
+            Purpose = dataRow.Field<string>("Purpose");
             string materialKindName = dataRow.Field<string>("Materialkindname");
-            switch (materialKindName)
-                {
-                case "Concrete":
-                    MaterialKind = MaterialProcessor.GetMaterialKindById("Concrete", Id);
-                    break;
-                case "Reinforcement":
-                    MaterialKind = MaterialProcessor.GetMaterialKindById("Reinforcement", Id);
-                    break;
-                default:
-                    throw new NotImplementedException("Material name is not valid");
-            }             
+            SelectedId = dataRow.Field<int>("SelectedId");
         }
         /// <summary>
         /// Удаляет запись из датасета
@@ -128,7 +145,41 @@ namespace RDBLL.Entity.Common.Materials
         /// <param name="dataSet"></param>
         public void DeleteFromDataSet(DataSet dataSet)
         {
-            DsOperation.DeleteRow(dataSet, "Materialusings", Id);
+            foreach (SafetyFactor safetyFactor in SafetyFactors)
+            {
+                safetyFactor.DeleteFromDataSet(dataSet);
+            }
+            DsOperation.DeleteRow(dataSet, TableName, Id);
+        }
+        #endregion
+        #region IDuplicate
+        public object Duplicate()
+        {
+            MaterialUsing materialUsing;
+            if (this is ConcreteUsing)
+            {
+                ConcreteUsing concrete = new ConcreteUsing();
+                materialUsing = concrete;
+            }
+            else if (this is ReinforcementUsing)
+            {
+                ReinforcementUsing reinforcement = new ReinforcementUsing();
+                reinforcement.RFSpacing = (this as ReinforcementUsing).RFSpacing.Duplicate() as RFSpacingBase;
+                materialUsing = reinforcement;
+            }
+            else throw new Exception("Material kind is not valid");
+            materialUsing.Id = ProgrammSettings.CurrentId;
+            materialUsing.Name = Name;
+            materialUsing.Purpose = Purpose;
+            materialUsing.SelectedId = SelectedId;
+
+            foreach (SafetyFactor safetyFactor in SafetyFactors)
+            {
+                SafetyFactor newObject = (safetyFactor.Duplicate()) as SafetyFactor;
+                newObject.RegisterParent(materialUsing);
+                materialUsing.SafetyFactors.Add(newObject);
+            }
+            return materialUsing;
         }
         #endregion
         #region Methods
@@ -158,12 +209,6 @@ namespace RDBLL.Entity.Common.Materials
                 safetyFactors[3] *= safetyFactor.PsfSndLong;
             }
             return safetyFactors;
-        }
-        public void RenewMaterialKind()
-        {
-            if (MaterialKind is ConcreteKind) MaterialKind = MaterialProcessor.GetMaterialKindById("Concrete", SelectedId);
-            else if (MaterialKind is ReinforcementKind) MaterialKind = MaterialProcessor.GetMaterialKindById("Reinforcement", SelectedId);
-            else throw new Exception("Material kind is not valid");
         }
         #endregion
     }

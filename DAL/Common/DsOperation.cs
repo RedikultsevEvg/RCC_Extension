@@ -12,6 +12,11 @@ namespace DAL.Common
     /// </summary>
     public static class DsOperation
     {
+        /// <summary>
+        /// Добавляет столбец с кодом в таблицу
+        /// </summary>
+        /// <param name="dataTable">Таблица датасета</param>
+        /// <param name="addNameColumn">Флаг необходимости добавления столбца с наименованием</param>
         public static void AddIdColumn(DataTable dataTable, bool addNameColumn = false)
         {
             DataColumn IdColumn;

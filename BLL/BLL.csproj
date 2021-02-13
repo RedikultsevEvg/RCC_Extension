@@ -60,11 +60,13 @@
     <Compile Include="Common\Geometry\Mathematic\Matrix.cs" />
     <Compile Include="Common\Geometry\RectCrossSection.cs" />
     <Compile Include="Common\Interfaces\IDuplicate.cs" />
+    <Compile Include="Common\Interfaces\IHasParent.cs" />
     <Compile Include="Common\Interfaces\IHasSoilSection.cs" />
     <Compile Include="Common\Interfaces\IHaveForcesGroups.cs" />
     <Compile Include="Common\Interfaces\IRDObserver.cs" />
     <Compile Include="Common\Interfaces\ISavableToDataSet.cs" />
     <Compile Include="Common\Interfaces\IRDObservable.cs" />
+    <Compile Include="Common\Service\CommonOperation.cs" />
     <Compile Include="Common\Service\Compare.cs" />
     <Compile Include="Common\Service\CommonErrorProcessor.cs" />
     <Compile Include="Common\Service\GetEntity.cs" />
@@ -83,7 +85,6 @@
     <Compile Include="Entity\Common\Materials\RFSmearedSpacing.cs" />
     <Compile Include="Entity\Common\Materials\RFSpacingBase.cs" />
     <Compile Include="Entity\Common\Materials\ReinforcementKind.cs" />
-    <Compile Include="Entity\Common\Materials\ReinforcementSpacing.cs" />
     <Compile Include="Entity\Common\Materials\ReinforcementUsing.cs" />
     <Compile Include="Entity\Common\Materials\RFSpacingParameter.cs" />
     <Compile Include="Entity\Common\Materials\RFSpotSpacing.cs" />
