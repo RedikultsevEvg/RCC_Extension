@@ -10,6 +10,8 @@ using RDBLL.Entity.Common.Materials.Interfaces;
 using RDBLL.Entity.RCC.Foundations;
 using RDBLL.Common.Service;
 using System.Collections.ObjectModel;
+using RDBLL.Entity.Common.Placements;
+using RDBLL.Entity.Common.Materials.RFPlacementAdapters;
 
 namespace RDBLL.Entity.Common.Materials
 {
@@ -69,7 +71,6 @@ namespace RDBLL.Entity.Common.Materials
         /// Ссылка на родительский элемент
         /// </summary>
         public ISavableToDataSet ParentMember { get; private set; }
-        private static string TableName { get { return "MaterialUsings"; } }
         #region Constructors
         /// <summary>
         /// Конструктор без параметров
@@ -91,12 +92,17 @@ namespace RDBLL.Entity.Common.Materials
         #endregion
         #region IODataSet
         /// <summary>
+        /// Return name of table in dataset for CRUD operation
+        /// </summary>
+        /// <returns>Name of table</returns>
+        public string GetTableName() { return "MaterialUsings"; }
+        /// <summary>
         /// Сохраняет класс в датасет
         /// </summary>
         public void SaveToDataSet(DataSet dataSet, bool createNew)
         {
             DataTable dataTable;
-            dataTable = dataSet.Tables[TableName];
+            dataTable = dataSet.Tables[GetTableName()];
             DataRow row = DsOperation.CreateNewRow(Id, createNew, dataTable);
             #region setFields
             row.SetField("Id", Id);
@@ -116,7 +122,8 @@ namespace RDBLL.Entity.Common.Materials
             if (this is ReinforcementUsing)
             {
                 ReinforcementUsing rfUsing = (this) as ReinforcementUsing;
-                rfUsing.RFSpacing.SaveToDataSet(dataSet, createNew);
+                row.SetField("Diameter", rfUsing.Diameter);
+                rfUsing.Placement.SaveToDataSet(dataSet, createNew);              
             }
         }
         /// <summary>
@@ -125,7 +132,7 @@ namespace RDBLL.Entity.Common.Materials
         /// <param name="dataSet"></param>
         public void OpenFromDataSet(DataSet dataSet)
         {
-            OpenFromDataSet(DsOperation.OpenFromDataSetById(dataSet, TableName, Id));
+            OpenFromDataSet(DsOperation.OpenFromDataSetById(dataSet, GetTableName(), Id));
         }
         /// <summary>
         /// Обновляет запись в соответствии со строкой датасета
@@ -138,6 +145,11 @@ namespace RDBLL.Entity.Common.Materials
             Purpose = dataRow.Field<string>("Purpose");
             string materialKindName = dataRow.Field<string>("Materialkindname");
             SelectedId = dataRow.Field<int>("SelectedId");
+            if (this is ReinforcementUsing)
+            {
+                ReinforcementUsing rfUsing = (this) as ReinforcementUsing;
+                rfUsing.Diameter = dataRow.Field<double>("Diameter");
+            }
         }
         /// <summary>
         /// Удаляет запись из датасета
@@ -149,7 +161,7 @@ namespace RDBLL.Entity.Common.Materials
             {
                 safetyFactor.DeleteFromDataSet(dataSet);
             }
-            DsOperation.DeleteRow(dataSet, TableName, Id);
+            DsOperation.DeleteRow(dataSet, GetTableName(), Id);
         }
         #endregion
         #region IDuplicate
@@ -164,7 +176,9 @@ namespace RDBLL.Entity.Common.Materials
             else if (this is ReinforcementUsing)
             {
                 ReinforcementUsing reinforcement = new ReinforcementUsing();
-                reinforcement.RFSpacing = (this as ReinforcementUsing).RFSpacing.Duplicate() as RFSpacingBase;
+                reinforcement.SetPlacement((this as ReinforcementUsing).Placement.Clone() as Placement);
+                reinforcement.Placement.RegisterParent(reinforcement);
+                reinforcement.SetAdapter(reinforcement.Adapter.Clone() as RFPlacementAdapter);
                 materialUsing = reinforcement;
             }
             else throw new Exception("Material kind is not valid");

@@ -93,7 +93,12 @@ namespace RDBLL.Entity.Soils
             SoilLayers = new ObservableCollection<SoilLayer>();
             Observers = new List<IRDObserver>();
         }
-        #region SaveToDataset
+        #region IODataSet
+        /// <summary>
+        /// Return name of table in dataset for CRUD operation
+        /// </summary>
+        /// <returns>Name of table</returns>
+        public string GetTableName() { return "SoilSections"; }
         /// <summary>
         /// Сохраняет класс в датасет
         /// </summary>
@@ -101,7 +106,7 @@ namespace RDBLL.Entity.Soils
         {
             DataTable dataTable;
             DataRow row;
-            dataTable = dataSet.Tables["SoilSections"];
+            dataTable = dataSet.Tables[GetTableName()];
             if (createNew)
             {
                 row = dataTable.NewRow();
@@ -140,7 +145,7 @@ namespace RDBLL.Entity.Soils
         /// <param name="dataSet">Датасет</param>
         public void OpenFromDataSet(DataSet dataSet)
         {
-            DataTable dataTable = dataSet.Tables["SoilSections"];
+            DataTable dataTable = dataSet.Tables[GetTableName()];
             var row = (from dataRow in dataTable.AsEnumerable()
                        where dataRow.Field<int>("Id") == Id
                        select dataRow).Single();
@@ -169,7 +174,7 @@ namespace RDBLL.Entity.Soils
         public void DeleteFromDataSet(DataSet dataSet)
         {
             DeleteLayers(dataSet);
-            DsOperation.DeleteRow(dataSet, "SoilSections", Id);
+            DsOperation.DeleteRow(dataSet, GetTableName(), Id);
         }
         private void DeleteLayers(DataSet dataSet)
         {

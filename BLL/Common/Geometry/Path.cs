@@ -54,8 +54,8 @@ namespace RDBLL.Common.Geometry
             List<PathPart> PathParts = new List<PathPart>();
             this.PartList = PathParts;
             Point2D EndPoint = new Point2D(0,0);
-            EndPoint.Coord_X = StartPoint.Coord_X + Convert.ToDouble(Math.Cos(Convert.ToDouble(Angle))) * Length;
-            EndPoint.Coord_Y = StartPoint.Coord_Y + Convert.ToDouble(Math.Sin(Convert.ToDouble(Angle))) * Length;
+            EndPoint.X = StartPoint.X + Convert.ToDouble(Math.Cos(Convert.ToDouble(Angle))) * Length;
+            EndPoint.Y = StartPoint.Y + Convert.ToDouble(Math.Sin(Convert.ToDouble(Angle))) * Length;
             this.StartPoint = StartPoint;
             PathPart PathPart = new PathPart(EndPoint);
             PathParts.Add(PathPart);
@@ -69,8 +69,8 @@ namespace RDBLL.Common.Geometry
 
         public double GetDistance(Point2D StartPoint)
         {
-            double dX = EndPoint.Coord_X - StartPoint.Coord_X;
-            double dY = EndPoint.Coord_Y - StartPoint.Coord_Y;
+            double dX = EndPoint.X - StartPoint.X;
+            double dY = EndPoint.Y - StartPoint.Y;
             return Convert.ToDouble(Math.Sqrt(Convert.ToDouble((dX + dY))));
         }
 

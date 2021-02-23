@@ -200,8 +200,9 @@ namespace RDBLL.Entity.RCC.Foundations.Processors
             #region checking
             if (foundation.SoilSectionId is null)
             {
-                MessageBox.Show("Не задана скважина для расчета");
-                return false;
+                SoilSection soilSection = foundation.Level.Building.BuildingSite.AddDefaultSoilSection(foundation.Level.Building);
+                foundation.SoilSection = soilSection;
+                foundation.SoilSectionId = soilSection.Id;
             }
             if (foundation.SoilSection.SoilLayers.Count ==0)
             {

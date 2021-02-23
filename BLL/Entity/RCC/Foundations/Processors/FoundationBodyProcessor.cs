@@ -9,6 +9,7 @@ using System.Linq;
 using System;
 using RDBLL.Entity.RCC.Common.Processors;
 using RDBLL.Entity.Common.Materials;
+using RDBLL.Entity.Common.Materials.RFPlacementAdapters;
 
 namespace RDBLL.Entity.RCC.Foundations.Processors
 {
@@ -295,8 +296,8 @@ namespace RDBLL.Entity.RCC.Foundations.Processors
             ReinforcementKind rfKindX = (rfX.MaterialKind) as ReinforcementKind;
             ReinforcementKind rfKindY = (rfY.MaterialKind) as ReinforcementKind;
             //Получаем ссылки на раскладку армирования подошвы вдоль оси X и вдоль оси Y
-            RFSmearedBySpacing rfSpacingX = (rfX.RFSpacing) as RFSmearedBySpacing;
-            RFSmearedBySpacing rfSpacingY = (rfY.RFSpacing) as RFSmearedBySpacing;
+            LineToSurfBySpacing rfSpacingX = rfX.Adapter as LineToSurfBySpacing;
+            LineToSurfBySpacing rfSpacingY = rfY.Adapter as LineToSurfBySpacing;
 
             ConcreteKind concreteKind = part.Foundation.Concrete.MaterialKind as ConcreteKind;
             double mx = GetMaxMoment(part.Result.partMomentAreas.LoadCombinationsX);
@@ -307,7 +308,7 @@ namespace RDBLL.Entity.RCC.Foundations.Processors
             double bx = part.Length;
             double by = part.Width;
             double h0x = part.Result.ZMax - rfSpacingX.CoveringLayer;
-            double h0y = part.Result.ZMax - rfSpacingX.CoveringLayer;
+            double h0y = part.Result.ZMax - rfSpacingY.CoveringLayer;
             double ax = RectSectionProcessor.GetReinforcementArea(my, bx, h0x, RsX, Rc);
             double ay = RectSectionProcessor.GetReinforcementArea(mx, by, h0y, RsY, Rc);
             part.Result.AsRec = new double[2]; 
@@ -343,11 +344,13 @@ namespace RDBLL.Entity.RCC.Foundations.Processors
             ReinforcementUsing rfX = (materialContainer.MaterialUsings[0]) as ReinforcementUsing;
             ReinforcementUsing rfY = (materialContainer.MaterialUsings[1]) as ReinforcementUsing;
             //Получаем ссылки на раскладку армирования подошвы вдоль оси X и вдоль оси Y
-            RFSmearedBySpacing rfSpacingX = (rfX.RFSpacing) as RFSmearedBySpacing;
-            RFSmearedBySpacing rfSpacingY = (rfY.RFSpacing) as RFSmearedBySpacing;
-            //Фактическая площадь арм
-            double areaX = rfSpacingX.GetTotalBarsArea(lengthX - 0.1);
-            double areaY = rfSpacingY.GetTotalBarsArea(lengthY - 0.1);
+            LineToSurfBySpacing rfSpacingX = rfX.Adapter as LineToSurfBySpacing;
+            LineToSurfBySpacing rfSpacingY = rfY.Adapter as LineToSurfBySpacing;
+            //Фактическая площадь армирования
+            rfSpacingX.SetPointsX(0, lengthX - 0.1);
+            rfSpacingY.SetPointsX(0, lengthY - 0.1);
+            double areaX = rfX.TotalBarsArea;
+            double areaY = rfY.TotalBarsArea;
             //Заносим полученные площади армирования в результаты расчета
             foundation.Result.AsAct = new double[2] { areaX, areaY };
             return foundation.Result.AsAct;

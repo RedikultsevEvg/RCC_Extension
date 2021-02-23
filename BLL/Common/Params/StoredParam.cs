@@ -1,96 +1,87 @@
-﻿using RDBLL.Common.Interfaces;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using RDBLL.Common.Service;
-using System;
 
-namespace RDBLL.Entity.Common.Materials
+namespace RDBLL.Common.Params
 {
-    /// <summary>
-    /// Класс параметра расположения армирования
-    /// </summary>
-    public class RFSpacingParameter: IDuplicate
+    public class StoredParam : ICloneable
     {
+        /// <summary>
+        /// Поле для типа параметра
+        /// </summary>
         private string _ValueType;
         /// <summary>
         /// Код
         /// </summary>
         public int Id { get; set; }
         /// <summary>
+        /// Наименование параметра
+        /// </summary>
+        public string Name { get; set; }
+        /// <summary>
         /// Тип параметра
         /// </summary>
         public string ValueType
-        { get { return _ValueType; }
-          private set
+        {
+            get { return _ValueType; }
+            private set
             {
-                if (!(value=="int" || value == "double" || value == "string")) { throw new Exception("Type of value is not valid!"); }
+                if (!(value == "int" || value == "double" || value == "string" || value == "bool")) { throw new Exception("Type of value is not valid!"); }
                 _ValueType = value;
             }
         }
         /// <summary>
         /// Значение параметра
         /// </summary>
-        public string ParameterValue {get; set;}
-        #region Constructors
-        /// <summary>
-        /// Default constructor
-        /// </summary>
-        public RFSpacingParameter()
+        public string ParameterValue { get; set; }
+        public void SetValueType(string s)
         {
+            _ValueType = s;
+        }
 
-        }
-        /// <summary>
-        /// Конструктор по раскладке арматуры
-        /// </summary>
-        /// <param name="rfSpacingBase"></param>
-        public RFSpacingParameter(RFSpacingBase rfSpacingBase)
-        {
-            Id = ProgrammSettings.CurrentId;
-        }
-        #endregion
-        #region Methods
+
         /// <summary>
         /// Устанавливает значение параметра как целое число
         /// </summary>
+        /// <param name="param"></param>
         /// <param name="value"></param>
         public void SetIntValue(int value)
         {
+            SetValueType("int");
             ParameterValue = Convert.ToString(value);
         }
         /// <summary>
-        /// Устанавливает значение параметра как число двойной точности
+        /// Устанавливает значение параметра как число двоичной точности
         /// </summary>
+        /// <param name="param"></param>
         /// <param name="value"></param>
         public void SetDoubleValue(double value)
         {
-            ParameterValue = Convert.ToString(value);
-        }
-        /// <summary>
-        /// Устанавливает значение параметра как целое число
-        /// </summary>
-        /// <param name="valuetype"></param>
-        /// <param name="value"></param>
-        public void SetParameterValue(string valuetype, int value)
-        {
-            ValueType = valuetype;
-            ParameterValue = Convert.ToString(value);
-        }
-        /// <summary>
-        /// Устанавливает значение параметра как число двойной точности
-        /// </summary>
-        /// <param name="valuetype"></param>
-        /// <param name="value"></param>
-        public void SetParameterValue(string valuetype, double value)
-        {
-            ValueType = valuetype;
+            SetValueType("double");
             ParameterValue = Convert.ToString(value);
         }
         /// <summary>
         /// Устанавливает значение параметра как строку
         /// </summary>
+        /// <param name="param"></param>
         /// <param name="value"></param>
-        public void SetParameterValue(string value)
+        public void SetStringValue(string value)
         {
-            ValueType = "string";
+            SetValueType("string");
             ParameterValue = value;
+        }
+        /// <summary>
+        /// Устанавливает значение параметра как булево значение
+        /// </summary>
+        /// <param name="param"></param>
+        /// <param name="value"></param>
+        public void SetBoolValue(bool value)
+        {
+            SetValueType("bool");
+            ParameterValue = Convert.ToString(value);
         }
         /// <summary>
         /// Возвращает значение параметра в виде целого числа
@@ -107,7 +98,7 @@ namespace RDBLL.Entity.Common.Materials
         /// <returns></returns>
         public double GetDoubleValue()
         {
-            if (!(ValueType=="int" || ValueType == "double")) { throw new Exception("Type of value is not valid!"); }
+            if (!(ValueType == "int" || ValueType == "double")) { throw new Exception("Type of value is not valid!"); }
             return CommonOperation.ConvertToDouble(ParameterValue);
         }
         /// <summary>
@@ -119,17 +110,23 @@ namespace RDBLL.Entity.Common.Materials
             return ParameterValue;
         }
         /// <summary>
-        /// Создание копии объекта
+        /// Возвращает значение параметра в виде иудува значения
         /// </summary>
         /// <returns></returns>
-        public object Duplicate()
+        public bool GetBoolValue()
         {
-            RFSpacingParameter newObject = new RFSpacingParameter();
+            if (!(ValueType == "bool")) { throw new Exception("Type of value is not valid!"); }
+            return Convert.ToBoolean(ParameterValue);
+        }
+
+
+        public object Clone()
+        {
+            StoredParam newObject = new StoredParam();
             newObject.Id = ProgrammSettings.CurrentId;
             newObject.ValueType = ValueType;
             newObject.ParameterValue = ParameterValue;
             return newObject;
         }
-        #endregion
     }
 }

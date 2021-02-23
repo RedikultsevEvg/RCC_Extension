@@ -93,6 +93,12 @@ namespace RDBLL.Entity.RCC.BuildingAndSite
             return volume;
 
         }
+        #region IODataSet
+        /// <summary>
+        /// Return name of table in dataset for CRUD operation
+        /// </summary>
+        /// <returns>Name of table</returns>
+        public string GetTableName() { return "Levels"; }
         /// <summary>
         /// Сохранение в датасет
         /// </summary>
@@ -102,7 +108,7 @@ namespace RDBLL.Entity.RCC.BuildingAndSite
         {
             DataTable dataTable;
             DataRow row;
-            dataTable = dataSet.Tables["Levels"];
+            dataTable = dataSet.Tables[GetTableName()];
             if (createNew)
             {
                 row = dataTable.NewRow();
@@ -137,14 +143,13 @@ namespace RDBLL.Entity.RCC.BuildingAndSite
                 foundation.SaveToDataSet(dataSet, createNew);
             }
         }
-
         /// <summary>
         /// Открывает запись из датасета
         /// </summary>
         /// <param name="dataSet"></param>
         public void OpenFromDataSet(DataSet dataSet)
         {
-            DataTable dataTable = dataSet.Tables["Levels"];
+            DataTable dataTable = dataSet.Tables[GetTableName()];
             var level = (from dataRow in dataTable.AsEnumerable()
                             where dataRow.Field<int>("Id") == Id
                             select dataRow).Single();
@@ -180,8 +185,9 @@ namespace RDBLL.Entity.RCC.BuildingAndSite
             {
                 foundation.DeleteFromDataSet(dataSet);
             }
-            DsOperation.DeleteRow(dataSet, "Levels", Id);
+            DsOperation.DeleteRow(dataSet, GetTableName(), Id);
         }
+        #endregion
         /// <summary>
         /// Конструктор без параметров
         /// </summary>

@@ -99,7 +99,12 @@ namespace RDBLL.Entity.Soils
             FiltrationCoeff = 0.0001;
             Observers = new List<IRDObserver>();
         }
-
+        #region IODataset
+        /// <summary>
+        /// Return name of table in dataset for CRUD operation
+        /// </summary>
+        /// <returns>Name of table</returns>
+        public string GetTableName() { return "Soils"; }
         /// <summary>
         /// Сохраняет класс в датасет
         /// </summary>
@@ -109,7 +114,7 @@ namespace RDBLL.Entity.Soils
         {
             DataTable dataTable;
             DataRow row;
-            dataTable = dataSet.Tables["Soils"];
+            dataTable = dataSet.Tables[GetTableName()];
             if (createNew)
             {
                 row = dataTable.NewRow();
@@ -151,7 +156,7 @@ namespace RDBLL.Entity.Soils
         /// <param name="dataSet"></param>
         public virtual void OpenFromDataSet(DataSet dataSet)
         {
-            DataTable dataTable = dataSet.Tables["Soils"];
+            DataTable dataTable = dataSet.Tables[GetTableName()];
             var soilRow = (from dataRow in dataTable.AsEnumerable()
                            where dataRow.Field<int>("Id") == Id
                            select dataRow).Single();
@@ -183,6 +188,7 @@ namespace RDBLL.Entity.Soils
         public void DeleteFromDataSet(DataSet dataSet)
         {
             DataTable dataTable;
+            //Определяем участвует ли грунт в каких-либо слоях скважин
             dataTable = dataSet.Tables["SoilLayers"];
             var soilLayers = from dataRow in dataTable.AsEnumerable()
                              where dataRow.Field<int>("SoilId") == Id
@@ -193,8 +199,9 @@ namespace RDBLL.Entity.Soils
                 count++;
             }
             if (count > 0) { throw new Exception("Нельзя удалить грунт, который участвует в скважинах"); }
-            else { DsOperation.DeleteRow(dataSet, "Soils", Id); }
+            else { DsOperation.DeleteRow(dataSet, GetTableName(), Id); }
         }
+        #endregion
         #region IObservable
         public void AddObserver(IRDObserver obj)
         {

@@ -76,6 +76,11 @@ namespace RDBLL.Entity.Common.Materials
 
         #region IODataset
         /// <summary>
+        /// Return name of table in dataset for CRUD operation
+        /// </summary>
+        /// <returns>Name of table</returns>
+        public string GetTableName() { return "ConcreteKinds"; }
+        /// <summary>
         /// Сохранение в датасет
         /// </summary>
         /// <param name="dataSet"></param>

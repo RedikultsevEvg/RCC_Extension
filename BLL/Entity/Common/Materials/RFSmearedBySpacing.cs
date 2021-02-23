@@ -54,8 +54,8 @@ namespace RDBLL.Entity.Common.Materials
         }
         public int GetTotalBarsQuantity(double length)
         {
-            double spacing = RFSpacingParameters[2].GetDoubleValue();
-            int additionalBars = RFSpacingParameters[1].GetIntValue();
+            double spacing = RFSpacingParameters[3].GetDoubleValue();
+            int additionalBars = RFSpacingParameters[2].GetIntValue();
             int spacingQuantity = Convert.ToInt32(Math.Ceiling(length / spacing));
             return spacingQuantity + additionalBars;
         }
