@@ -147,7 +147,7 @@ namespace RDUIL.WPF_Windows.Foundations
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show("Ошибка сохранения :" + ex);
+                    CommonErrorProcessor.ShowErrorMessage("Ошибка дублирования элемента: " + Name, ex);
                 }
             }
             else

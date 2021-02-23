@@ -8,6 +8,7 @@ using RDBLL.Common.Geometry;
 using RDBLL.Common.Service;
 using RDBLL.Entity.RCC.Reinforcement;
 using System.Xml;
+using RDBLL.Common.Geometry.Mathematic;
 
 
 namespace RDBLL.Entity.RCC.WallAndColumn
@@ -51,8 +52,7 @@ namespace RDBLL.Entity.RCC.WallAndColumn
         }
         public double GetLength()
         {
-            Geometry2D Geometry2D = new Geometry2D();
-            return Geometry2D.GetDistance(this.StartPoint, this.EndPoint);
+            return GeometryProc.GetDistance(this.StartPoint, this.EndPoint);
         }
         public double GetConcreteLength()
         {

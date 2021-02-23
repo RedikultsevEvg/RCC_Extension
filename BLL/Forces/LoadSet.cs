@@ -66,7 +66,12 @@ namespace RDBLL.Forces
             
         }
         #endregion
-        #region Methods
+        #region IODataSet
+        /// <summary>
+        /// Return name of table in dataset for CRUD operation
+        /// </summary>
+        /// <returns>Name of table</returns>
+        public string GetTableName() { return "LoadSets"; }
         /// <summary>
         /// Сохраняет лоадсет в датасет
         /// </summary>
@@ -76,7 +81,7 @@ namespace RDBLL.Forces
         {
             DataTable dataTable;
             DataRow row;
-            dataTable = dataSet.Tables["LoadSets"];
+            dataTable = dataSet.Tables[GetTableName()];
             if (createNew)
             {
                 row = dataTable.NewRow();
@@ -152,8 +157,10 @@ namespace RDBLL.Forces
             {
                 forceParameter.DeleteFromDataSet(dataSet);
             }
-            DsOperation.DeleteRow(dataSet, "LoadSets", Id);
+            DsOperation.DeleteRow(dataSet, GetTableName(), Id);
         }
+        #endregion
+        #region Methods
         #endregion
         //IEquatable
         public bool Equals(LoadSet other)

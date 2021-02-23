@@ -119,6 +119,12 @@ namespace RDBLL.Forces
         }
         #endregion
         #region Methods
+        #region IODataset
+        /// <summary>
+        /// Return name of table in dataset for CRUD operation
+        /// </summary>
+        /// <returns>Name of table</returns>
+        public string GetTableName() { return "ForceParameters"; }
         /// <summary>
         /// Сохранение в указанный датасет
         /// </summary>
@@ -127,7 +133,7 @@ namespace RDBLL.Forces
         {
             DataTable dataTable;
             DataRow row;
-            dataTable = dataSet.Tables["ForceParameters"];
+            dataTable = dataSet.Tables[GetTableName()];
             if (createNew)
             {
                 row = dataTable.NewRow();
@@ -149,10 +155,9 @@ namespace RDBLL.Forces
             #endregion
             dataTable.AcceptChanges();
         }
-
         public void OpenFromDataSet(DataSet dataSet)
         {
-
+            throw new NotImplementedException();
         }
         /// <summary>
         /// Обновляет запись в соответствии со строкой датасета
@@ -168,8 +173,9 @@ namespace RDBLL.Forces
         /// <param name="dataSet"></param>
         public void DeleteFromDataSet(DataSet dataSet)
         {
-            DsOperation.DeleteRow(dataSet, "ForceParameters", Id);
+            DsOperation.DeleteRow(dataSet, GetTableName(), Id);
         }
+        #endregion
         #endregion IEquatable
         /// <summary>
         /// Сравнение

@@ -13,7 +13,7 @@ namespace RDBLL.Entity.Soils
     /// <summary>
     /// Абстрактный класс несущего грунта
     /// </summary>
-    public abstract class BearingSoil : Soil, ISavableToDataSet
+    public abstract class BearingSoil : Soil
     {
         /// <summary>
         /// Модуль деформации

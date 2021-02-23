@@ -7,67 +7,44 @@ using System.Data;
 
 namespace RDBLL.Common.Interfaces
 {
+    /// <summary>
+    /// Интерфейс объектов для которых возможно сохранение в датасет
+    /// </summary>
     public interface ISavableToDataSet
     {
-        int Id { get; set; }
-        void SaveToDataSet(DataSet dataSet, bool createNew);
-        void OpenFromDataSet(DataSet dataSet);
-        void OpenFromDataSet(DataRow dataRow);
-        void DeleteFromDataSet(DataSet dataSet);
-
-        /*
         /// <summary>
-        /// Код
+        /// Код элемента
         /// </summary>
-        public int Id { get; set; }
+        int Id { get; set; }
         /// <summary>
         /// Наименование
         /// </summary>
-        public string Name { get; set; }
+        string Name { get; set; }
+        /// <summary>
+        /// Возвращает наименование таблицы для сохранения
+        /// </summary>
+        /// <returns></returns>
+        string GetTableName();
         /// <summary>
         /// Сохранение в датасет
         /// </summary>
-        /// <param name="dataSet"></param>
-        /// <param name="createNew"></param>
-        public void SaveToDataSet(DataSet dataSet, bool createNew)
-        {
-            DataTable dataTable;
-            dataTable = dataSet.Tables["Safetyfactors"];
-            DataRow row = DsOperation.CreateNewRow(Id, createNew, dataTable);
-            #region setFields
-            row.SetField("Id", Id);
-            row.SetField("Name", Name);
-            #endregion
-            dataTable.AcceptChanges();    
-            throw new NotImplementedException();
-        }
+        /// <param name="dataSet">Датасет</param>
+        /// <param name="createNew">Флаг создания нового элемента</param>
+        void SaveToDataSet(DataSet dataSet, bool createNew);
         /// <summary>
-        /// Открыть из датасета
+        /// Открыть запись из датасета
         /// </summary>
         /// <param name="dataSet"></param>
-        public void OpenFromDataSet(DataSet dataSet)
-        {
-            throw new NotImplementedException();
-        }
+        void OpenFromDataSet(DataSet dataSet);
         /// <summary>
-        /// Открыть из датасета
+        /// Открыть строку из датасета
         /// </summary>
         /// <param name="dataRow"></param>
-        public void OpenFromDataSet(DataRow dataRow)
-        {
-            Id = dataRow.Field<int>("Id");
-            Name = dataRow.Field<string>("Name");
-            throw new NotImplementedException();
-        }
+        void OpenFromDataSet(DataRow dataRow);
         /// <summary>
-        /// Удалить из датасета
+        /// Удалить запись из датасета
         /// </summary>
         /// <param name="dataSet"></param>
-        public void DeleteFromDataSet(DataSet dataSet)
-        {
-            DsOperation.DeleteRow(dataSet, "MyTable", Id);    
-            throw new NotImplementedException();
-        }
-        */
+        void DeleteFromDataSet(DataSet dataSet);
     }
 }

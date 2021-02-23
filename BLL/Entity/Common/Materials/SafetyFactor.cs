@@ -44,7 +44,6 @@ namespace RDBLL.Entity.Common.Materials
         /// Ссылка на родителя
         /// </summary>
         public ISavableToDataSet ParentMember { get; private set; }
-        private static string TableName { get { return "SafetyFactors"; } }
         #endregion
         #region Constructors
         /// <summary>
@@ -68,6 +67,11 @@ namespace RDBLL.Entity.Common.Materials
         #endregion
         #region IODataset
         /// <summary>
+        /// Return name of table in dataset for CRUD operation
+        /// </summary>
+        /// <returns>Name of table</returns>
+        public string GetTableName() { return "SafetyFactors"; }
+        /// <summary>
         /// Сохранение в датасет
         /// </summary>
         /// <param name="dataSet"></param>
@@ -75,7 +79,7 @@ namespace RDBLL.Entity.Common.Materials
         public void SaveToDataSet(DataSet dataSet, bool createNew)
         {
             DataTable dataTable;
-            dataTable = dataSet.Tables[TableName];
+            dataTable = dataSet.Tables[GetTableName()];
             DataRow row = DsOperation.CreateNewRow(Id, createNew, dataTable);
             #region setFields
             row.SetField("Id", Id);
@@ -95,7 +99,7 @@ namespace RDBLL.Entity.Common.Materials
         /// <param name="dataSet"></param>
         public void OpenFromDataSet(DataSet dataSet)
         {
-            OpenFromDataSet(DsOperation.OpenFromDataSetById(dataSet, TableName, Id));
+            OpenFromDataSet(DsOperation.OpenFromDataSetById(dataSet, GetTableName(), Id));
         }
         /// <summary>
         /// Открыть из датасета
@@ -114,7 +118,7 @@ namespace RDBLL.Entity.Common.Materials
         /// <param name="dataSet"></param>
         public void DeleteFromDataSet(DataSet dataSet)
         {
-            DsOperation.DeleteRow(dataSet, TableName, Id);
+            DsOperation.DeleteRow(dataSet, GetTableName(), Id);
         }
         #endregion
         #region Methods

@@ -131,7 +131,12 @@ namespace RDBLL.Entity.SC.Column
             SetDefault();
         }
         #endregion
-        #region Methods
+        #region IODataSet
+        /// <summary>
+        /// Return name of table in dataset for CRUD operation
+        /// </summary>
+        /// <returns>Name of table</returns>
+        public string GetTableName() { return "SteelBaseParts"; }
         /// <summary>
         /// Сохранение в датасет
         /// </summary>
@@ -140,7 +145,7 @@ namespace RDBLL.Entity.SC.Column
         {
             DataTable dataTable;
             DataRow row;
-            dataTable = dataSet.Tables["SteelBaseParts"];
+            dataTable = dataSet.Tables[GetTableName()];
             if (createNew)
             {
                 row = dataTable.NewRow();
@@ -174,10 +179,9 @@ namespace RDBLL.Entity.SC.Column
             #endregion
             dataTable.AcceptChanges();
         }
-
         public void OpenFromDataSet(DataSet dataSet)
         {
-            DataTable dataTable = dataSet.Tables["SteelBaseParts"];
+            DataTable dataTable = dataSet.Tables[GetTableName()];
             var row = (from dataRow in dataTable.AsEnumerable()
                        where dataRow.Field<int>("Id") == Id
                        select dataRow).Single();
@@ -213,8 +217,10 @@ namespace RDBLL.Entity.SC.Column
         /// <param name="dataSet"></param>
         public void DeleteFromDataSet(DataSet dataSet)
         {
-            DsOperation.DeleteRow(dataSet, "SteelBaseParts", Id);
+            DsOperation.DeleteRow(dataSet, GetTableName(), Id);
         }
+        #endregion
+        #region Methods
         #endregion
         //IClonable
         /// <summary>

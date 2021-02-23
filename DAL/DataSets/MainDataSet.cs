@@ -288,6 +288,7 @@ namespace DAL.DataSets
             DsOperation.AddIntColumn(dataTable, "ParentId");
             DsOperation.AddStringColumn(dataTable, "Materialkindname");
             DsOperation.AddIntColumn(dataTable, "SelectedId");
+            DsOperation.AddDoubleColumn(dataTable, "Diameter", 0.012);
             #endregion
             #region "Safetyfactors
             dataTable = new DataTable("Safetyfactors");
@@ -301,6 +302,13 @@ namespace DAL.DataSets
             #endregion
             #region RFSpacings
             dataTable = new DataTable("RFSpacings");
+            dataSet.Tables.Add(dataTable);
+            DsOperation.AddIdColumn(dataTable, true);
+            DsOperation.AddIntColumn(dataTable, "ParentId");
+            DsOperation.AddStringColumn(dataTable, "Type");
+            #endregion
+            #region Spacings
+            dataTable = new DataTable("Placements");
             dataSet.Tables.Add(dataTable);
             DsOperation.AddIdColumn(dataTable, true);
             DsOperation.AddIntColumn(dataTable, "ParentId");

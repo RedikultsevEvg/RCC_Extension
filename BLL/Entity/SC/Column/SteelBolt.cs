@@ -69,12 +69,17 @@ namespace RDBLL.Entity.SC.Column
             AddSymmetricY = true;
         }
         #endregion
-        #region Methods
+        #region IODataSet
+        /// <summary>
+        /// Return name of table in dataset for CRUD operation
+        /// </summary>
+        /// <returns>Name of table</returns>
+        public string GetTableName() { return "SteelBolts"; }
         public void SaveToDataSet(DataSet dataSet, bool createNew)
         {
             DataTable dataTable;
             DataRow row;
-            dataTable = dataSet.Tables["SteelBolts"];
+            dataTable = dataSet.Tables[GetTableName()];
             if (createNew)
             {
                 row = dataTable.NewRow();
@@ -99,10 +104,9 @@ namespace RDBLL.Entity.SC.Column
             #endregion
             dataTable.AcceptChanges();
         }
-
         public void OpenFromDataSet(DataSet dataSet)
         {
-            DataTable dataTable = dataSet.Tables["SteelBolts"];
+            DataTable dataTable = dataSet.Tables[GetTableName()];
             var row = (from dataRow in dataTable.AsEnumerable()
                        where dataRow.Field<int>("Id") == Id
                        select dataRow).Single();
@@ -129,8 +133,10 @@ namespace RDBLL.Entity.SC.Column
         /// <param name="dataSet"></param>
         public void DeleteFromDataSet(DataSet dataSet)
         {
-            DsOperation.DeleteRow(dataSet, "SteelBolts", Id);
+            DsOperation.DeleteRow(dataSet, GetTableName(), Id);
         }
+        #endregion
+        #region Methods
         public void SetParentNotActual()
         {
             SteelBase.IsActual = false;

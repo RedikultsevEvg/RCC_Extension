@@ -13,6 +13,7 @@ using RDBLL.Entity.Soils;
 using DAL.Common;
 using RDBLL.Entity.MeasureUnits;
 using System.ComponentModel;
+using System.Windows;
 
 namespace RDBLL.Entity.RCC.BuildingAndSite
 {
@@ -41,6 +42,12 @@ namespace RDBLL.Entity.RCC.BuildingAndSite
         /// Коллекция геологических разрезов
         /// </summary>
         public ObservableCollection<SoilSection> SoilSections { get; set; }
+        #region IODataset
+        /// <summary>
+        /// Return name of table in dataset for CRUD operation
+        /// </summary>
+        /// <returns>Name of table</returns>
+        public string GetTableName() { return "BuildingSites"; }
         /// <summary>
         /// Сохранение в датасет
         /// </summary>
@@ -49,7 +56,7 @@ namespace RDBLL.Entity.RCC.BuildingAndSite
         {
             DataTable dataTable;
             DataRow row;
-            dataTable = dataSet.Tables["BuildingSites"];
+            dataTable = dataSet.Tables[GetTableName()];
             if (createNew)
             {
                 row = dataTable.NewRow();
@@ -88,7 +95,7 @@ namespace RDBLL.Entity.RCC.BuildingAndSite
         /// <param name="dataSet"></param>
         public void OpenFromDataSet(DataSet dataSet)
         {
-            DataTable dataTable = dataSet.Tables["BuildingSites"];
+            DataTable dataTable = dataSet.Tables[GetTableName()];
             var row = (from dataRow in dataTable.AsEnumerable()
                            where dataRow.Field<int>("Id") == Id
                            select dataRow).Single();
@@ -109,7 +116,62 @@ namespace RDBLL.Entity.RCC.BuildingAndSite
         /// <param name="dataSet"></param>
         public void DeleteFromDataSet(DataSet dataSet)
         {
-            DsOperation.DeleteRow(dataSet, "BuildingSites", Id);
+            DsOperation.DeleteRow(dataSet, GetTableName(), Id);
+        }
+        #endregion
+        /// <summary>
+        /// Возвращает грунт по умолчанию
+        /// </summary>
+        /// <returns></returns>
+        public Soil AddDefaultSoil()
+        {
+            if (Soils.Count > 0) { return Soils[0]; } //Если в коллекции грунтов есть хотя бы один грунт, то возвращаем его
+            else
+            {
+                MessageBox.Show("Для объекта не задано ни одного грунта", "Будет создан грунт по умолчанию");
+                Soil soil = new ClaySoil(this);
+                Soils.Add(soil);
+                soil.SaveToDataSet(ProgrammSettings.CurrentDataSet, true);
+                ProgrammSettings.IsDataChanged = true;
+                return soil;
+            }
+        }
+        /// <summary>
+        /// Возвращает скважину по умолчанию
+        /// </summary>
+        /// <param name="building"></param>
+        /// <returns></returns>
+        public SoilSection AddDefaultSoilSection(Building building)
+        {
+            SoilLayer AddSoilLayer(SoilSection soilSection)
+            {
+                Soil soil = AddDefaultSoil();
+                SoilLayer soilLayer = new SoilLayer(soil, soilSection, building);
+                return soilLayer;
+            }
+            ProgrammSettings.IsDataChanged = true;
+            if (SoilSections.Count > 0)  //Если в коллекции есть хоть одна скважина, возвращаем ее
+            {
+                SoilSection section = SoilSections[0];
+                if (section.SoilLayers.Count == 0)
+                {
+                    MessageBox.Show("Для скважины не задано ни одного грунта", "Будет создан грунт по умолчанию");
+                    SoilLayer soilLayer = AddSoilLayer(section);
+                    //Сохраняем слой в датасет, так как скважина уже есть
+                    soilLayer.SaveToDataSet(ProgrammSettings.CurrentDataSet, true);
+                }
+                return section;
+            }
+            else //Если ни одной скважины в коллекции нет, то добавляем ее
+            {
+                MessageBox.Show("Для объекта не задано ни одной скважины", "Будет создана скважина по умолчанию");
+                SoilSection section = new SoilSection(this);
+                AddSoilLayer(section);
+                SoilSections.Add(section);
+                //Сохраняем в датасет новую скважину
+                section.SaveToDataSet(ProgrammSettings.CurrentDataSet, true);
+                return section;
+            }
         }
         /// <summary>
         /// Клонирование объекта
@@ -220,6 +282,12 @@ namespace RDBLL.Entity.RCC.BuildingAndSite
             WallTypeList = new ObservableCollection<WallType>();
             OpeningTypeList = new ObservableCollection<OpeningType>();
         }
+        #region IODataset
+        /// <summary>
+        /// Return name of table in dataset for CRUD operation
+        /// </summary>
+        /// <returns>Name of table</returns>
+        public string GetTableName() { return "Buildings"; }
         /// <summary>
         /// Сохранение в датасет
         /// </summary>
@@ -229,7 +297,7 @@ namespace RDBLL.Entity.RCC.BuildingAndSite
         {
             DataTable dataTable;
             DataRow row;
-            dataTable = dataSet.Tables["Buildings"];
+            dataTable = dataSet.Tables[GetTableName()];
             if (createNew)
             {
                 row = dataTable.NewRow();
@@ -263,7 +331,7 @@ namespace RDBLL.Entity.RCC.BuildingAndSite
         /// <param name="dataSet"></param>
         public void OpenFromDataSet(DataSet dataSet)
         {
-            DataTable dataTable = dataSet.Tables["Buildings"];
+            DataTable dataTable = dataSet.Tables[GetTableName()];
             var building = (from dataRow in dataTable.AsEnumerable()
                             where dataRow.Field<int>("Id") == Id
                             select dataRow).Single();
@@ -291,8 +359,9 @@ namespace RDBLL.Entity.RCC.BuildingAndSite
         /// <param name="dataSet"></param>
         public void DeleteFromDataSet(DataSet dataSet)
         {
-            DsOperation.DeleteRow(dataSet, "Buildings", Id);
+            DsOperation.DeleteRow(dataSet, GetTableName(), Id);
         }
+        #endregion
         /// <summary>
         /// Клонирование объекта
         /// </summary>

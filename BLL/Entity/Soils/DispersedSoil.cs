@@ -13,7 +13,7 @@ namespace RDBLL.Entity.Soils
     /// <summary>
     /// Класс дисперсного грунта
     /// </summary>
-    public abstract class DispersedSoil :BearingSoil, ISavableToDataSet
+    public abstract class DispersedSoil :BearingSoil
     {
         /// <summary>
         /// Нормативное значение угла внутреннего трения
@@ -41,10 +41,10 @@ namespace RDBLL.Entity.Soils
         public double SndDesignCohesion { get; set; }
         /// <summary>
         /// Число пластичности
-        /// Ip<1 - Песок
-        /// 1<Ip<7 - Супесь
-        /// 7<Ip<17 - Суглинок
-        /// Ip>17 - Глина
+        /// Ip less than 1 - Песок
+        /// 1 less than Ip less than 7 - Супесь
+        /// 7 less than Ip less than 17 - Суглинок
+        /// Ip bigger than 17 - Глина
         /// </summary>
         public double IP { get; set; }
         /// <summary>

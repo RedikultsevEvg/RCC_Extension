@@ -89,6 +89,12 @@ namespace RDBLL.Forces
         }
         #endregion
         #region Methods
+        #region IODataset
+        /// <summary>
+        /// Return name of table in dataset for CRUD operation
+        /// </summary>
+        /// <returns>Name of table</returns>
+        public string GetTableName() { return "ForcesGroups"; }
         /// <summary>
         /// Сохранение в датасет
         /// </summary>
@@ -98,7 +104,7 @@ namespace RDBLL.Forces
             DataTable dataTable;
             DataRow row;
             //Данные по группам нагрузок
-            dataTable = dataSet.Tables["ForcesGroups"];
+            dataTable = dataSet.Tables[GetTableName()];
             if (createNew)
             {
                 row = dataTable.NewRow();
@@ -176,8 +182,9 @@ namespace RDBLL.Forces
             DeleteSubElements(dataSet);
             DsOperation.DeleteRow(dataSet, "SteelBaseForcesGroups","ForcesGroupId", Id);
             DsOperation.DeleteRow(dataSet, "FoundationForcesGroups", "ForcesGroupId", Id);
-            DsOperation.DeleteRow(dataSet, "ForcesGroups", Id);
+            DsOperation.DeleteRow(dataSet, GetTableName(), Id);
         }
+        #endregion
         private void DeleteSubElements(DataSet dataSet)
         {
             DataTable dataTable;

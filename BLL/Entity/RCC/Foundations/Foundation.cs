@@ -14,7 +14,8 @@ using DAL.Common;
 using RDBLL.Entity.Soils;
 using RDBLL.Entity.RCC.Foundations.Processors;
 using RDBLL.Entity.Common.Materials;
-
+using RDBLL.Entity.Common.Placements;
+using RDBLL.Entity.Common.Materials.RFPlacementAdapters;
 
 namespace RDBLL.Entity.RCC.Foundations
 {
@@ -173,7 +174,6 @@ namespace RDBLL.Entity.RCC.Foundations
         /// Свойство для сохранения результатов
         /// </summary>
         public FoundationResult Result { get; set; }
-        private static string TableName { get { return "Foundations"; } }
         #endregion
         #region Constructors
         /// <summary>
@@ -228,6 +228,11 @@ namespace RDBLL.Entity.RCC.Foundations
         #region methods
         #region IODataset
         /// <summary>
+        /// Return name of table in dataset for CRUD operation
+        /// </summary>
+        /// <returns>Name of table</returns>
+        public string GetTableName() { return "Foundations"; }
+        /// <summary>
         /// Сохраняет класс в датасет
         /// </summary>
         public void SaveToDataSet(DataSet dataSet, bool createNew)
@@ -235,7 +240,7 @@ namespace RDBLL.Entity.RCC.Foundations
             try
             {
                 RenewAll();
-                DataTable dataTable = dataSet.Tables[TableName];
+                DataTable dataTable = dataSet.Tables[GetTableName()];
                 DataRow row = DsOperation.CreateNewRow(Id, createNew, dataTable);
 
                 #region setFields
@@ -279,7 +284,7 @@ namespace RDBLL.Entity.RCC.Foundations
         {
             try
             {
-                OpenFromDataSet(DsOperation.OpenFromDataSetById(dataSet, TableName, Id));
+                OpenFromDataSet(DsOperation.OpenFromDataSetById(dataSet, GetTableName(), Id));
             }
             catch (Exception ex)
             {
@@ -318,6 +323,13 @@ namespace RDBLL.Entity.RCC.Foundations
                 materialContainer.RegisterParent(this);
             }
 
+            foreach (MaterialUsing  materialUsing in BottomReinforcement.MaterialUsings)
+            {
+                ReinforcementUsing reinforcement = materialUsing as ReinforcementUsing;
+                reinforcement.SetAdapter(new LineToSurfBySpacing());
+                reinforcement.Adapter.SetPlacement(reinforcement.Placement);
+            }
+
             List<MaterialUsing> materialUsings = GetEntity.GetMaterialUsings(dataRow.Table.DataSet, this);
             foreach (MaterialUsing materialUsing in materialUsings)
             {
@@ -348,7 +360,7 @@ namespace RDBLL.Entity.RCC.Foundations
             BottomReinforcement.DeleteFromDataSet(dataSet);
             VerticalReinforcement.DeleteFromDataSet(dataSet);
             Concrete.DeleteFromDataSet(dataSet);
-            DsOperation.DeleteRow(dataSet, TableName, Id);
+            DsOperation.DeleteRow(dataSet, GetTableName(), Id);
         }
         public void DeleteSubElements(DataSet dataSet, string tableName)
         {
@@ -371,51 +383,52 @@ namespace RDBLL.Entity.RCC.Foundations
         /// <returns></returns>
         public object Duplicate()
         {
-            try
+            void DuplicateMaterial(Foundation found)
             {
-                Foundation foundation = new Foundation();
-                foundation.Id = ProgrammSettings.CurrentId;
-                #region Copy properties
-                foundation.Name = Name;
-                if (!(SoilSectionId is null))
-                {
-                    foundation.SoilSectionId = SoilSectionId;
-                    foundation.SoilSection = SoilSection;
-                }
-                foundation.RelativeTopLevel = RelativeTopLevel;
-                foundation.SoilRelativeTopLevel = SoilRelativeTopLevel;
-                foundation.SoilVolumeWeight = SoilVolumeWeight;
-                foundation.ConcreteVolumeWeight = ConcreteVolumeWeight;
-                foundation.FloorLoad = FloorLoad;
-                foundation.FloorLoadFactor = FloorLoadFactor;
-                foundation.ConcreteFloorLoad = ConcreteFloorLoad;
-                foundation.ConcreteFloorLoadFactor = ConcreteFloorLoadFactor;
-                #endregion
-                //Копируем нагрузки
-                foreach (ForcesGroup forcesGroup in ForcesGroups)
-                {
-                    ForcesGroup newForcesGroup = forcesGroup.Duplicate() as ForcesGroup;
-                    newForcesGroup.Foundations.Add(foundation);
-                    foundation.ForcesGroups.Clear();
-                    foundation.ForcesGroups.Add(newForcesGroup);
-                }
-                //Копируем ступени
-                foreach (RectFoundationPart rectFoundationPart in this.Parts)
-                {
-                    RectFoundationPart newFoundationPart = rectFoundationPart.Duplicate() as RectFoundationPart;
-                    newFoundationPart.FoundationId = foundation.Id;
-                    newFoundationPart.Foundation = foundation;
-                    foundation.Parts.Add(newFoundationPart);
-                }
-                foundation.BottomReinforcement = BottomReinforcement.Duplicate() as MaterialContainer;
-                foundation.BottomReinforcement.RegisterParent(foundation);
-                return foundation;
+                found.BottomReinforcement = BottomReinforcement.Duplicate() as MaterialContainer;
+                found.BottomReinforcement.RegisterParent(found);
+                found.VerticalReinforcement = VerticalReinforcement.Duplicate() as MaterialContainer;
+                found.VerticalReinforcement.RegisterParent(found);
+                found.Concrete = Concrete.Duplicate() as ConcreteUsing;
+                found.Concrete.RegisterParent(found);
             }
-            catch (Exception ex)
+            Foundation foundation = new Foundation();
+            foundation.Id = ProgrammSettings.CurrentId;
+            #region Copy properties
+            foundation.Name = Name;
+            if (!(SoilSectionId is null))
             {
-                CommonErrorProcessor.ShowErrorMessage("Ошибка дублирования элемента: " + Name, ex);
-                return null;
+                foundation.SoilSectionId = SoilSectionId;
+                foundation.SoilSection = SoilSection;
             }
+            foundation.RelativeTopLevel = RelativeTopLevel;
+            foundation.SoilRelativeTopLevel = SoilRelativeTopLevel;
+            foundation.SoilVolumeWeight = SoilVolumeWeight;
+            foundation.ConcreteVolumeWeight = ConcreteVolumeWeight;
+            foundation.FloorLoad = FloorLoad;
+            foundation.FloorLoadFactor = FloorLoadFactor;
+            foundation.ConcreteFloorLoad = ConcreteFloorLoad;
+            foundation.ConcreteFloorLoadFactor = ConcreteFloorLoadFactor;
+            #endregion
+            //Копируем нагрузки
+            foreach (ForcesGroup forcesGroup in ForcesGroups)
+            {
+                ForcesGroup newForcesGroup = forcesGroup.Duplicate() as ForcesGroup;
+                newForcesGroup.Foundations.Add(foundation);
+                foundation.ForcesGroups.Clear();
+                foundation.ForcesGroups.Add(newForcesGroup);
+            }
+            //Копируем ступени
+            foreach (RectFoundationPart rectFoundationPart in this.Parts)
+            {
+                RectFoundationPart newFoundationPart = rectFoundationPart.Duplicate() as RectFoundationPart;
+                newFoundationPart.FoundationId = foundation.Id;
+                newFoundationPart.Foundation = foundation;
+                foundation.Parts.Add(newFoundationPart);
+            }
+            //копируем материалы
+            DuplicateMaterial(foundation);
+            return foundation;
         }
         #endregion
         public void RenewSoilSection()
@@ -442,20 +455,27 @@ namespace RDBLL.Entity.RCC.Foundations
 
         private void addMaterial(Foundation foundation)
         {
+            ReinforcementUsing GetBottomReinforcement(MaterialContainer container, double coveringLayer, string rusName, string engName)
+            {
+                ReinforcementUsing rf = new ReinforcementUsing(container);
+                rf.Name = rusName;
+                rf.Purpose = engName;
+                rf.Diameter = 0.012;
+                rf.SelectedId = ProgrammSettings.ReinforcementKinds[0].Id;
+                LineBySpacing placement = new LineBySpacing();
+                placement.RegisterParent(rf);
+                LineToSurfBySpacing adapter = new LineToSurfBySpacing();
+                rf.SetAdapter(adapter);
+                rf.SetPlacement(placement);
+                adapter.CoveringLayer = coveringLayer;
+                return rf;
+            }
             #region Армирование подошвы
             MaterialContainer materialContainer = new MaterialContainer(this);
             materialContainer.Name = "Армирование подошвы";
             materialContainer.Purpose = "BtmRF";
-            ReinforcementUsing rfX = new ReinforcementUsing(materialContainer);
-            ReinforcementUsing rfY = new ReinforcementUsing(materialContainer);
-            rfX.Name = "Вдоль оси X";
-            rfY.Name = "Вдоль оси Y";
-            rfX.Purpose = "Along X-axes";
-            rfY.Purpose = "Along Y-axes";
-            rfX.SelectedId = ProgrammSettings.ReinforcementKinds[0].Id;
-            rfY.SelectedId = ProgrammSettings.ReinforcementKinds[0].Id;
-            RFSmearedBySpacing rfSpacingX = new RFSmearedBySpacing(rfX);      
-            RFSmearedBySpacing rfSpacingY = new RFSmearedBySpacing(rfY);
+            ReinforcementUsing rfX = GetBottomReinforcement(materialContainer, 0.07, "Вдоль оси X", "Along X-axes");
+            ReinforcementUsing rfY = GetBottomReinforcement(materialContainer, 0.07, "Вдоль оси Y", "Along Y-axes");
             materialContainer.MaterialUsings.Add(rfX);
             materialContainer.MaterialUsings.Add(rfY);
             foundation.BottomReinforcement = materialContainer;

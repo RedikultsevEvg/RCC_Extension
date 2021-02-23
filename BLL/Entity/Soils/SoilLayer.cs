@@ -7,6 +7,8 @@ using RDBLL.Common.Interfaces;
 using System.ComponentModel;
 using System.Data;
 using DAL.Common;
+using RDBLL.Common.Service;
+using RDBLL.Entity.RCC.BuildingAndSite;
 
 namespace RDBLL.Entity.Soils
 {
@@ -20,6 +22,10 @@ namespace RDBLL.Entity.Soils
         /// Код слоя
         /// </summary>
         public int Id { get; set; }
+        /// <summary>
+        /// Наименование
+        /// </summary>
+        public string Name { get; set; }
         /// <summary>
         /// Код модели грунта
         /// </summary>
@@ -41,7 +47,49 @@ namespace RDBLL.Entity.Soils
         /// </summary>
         public double TopLevel { get; set; }
         private List<IRDObserver> Observers;
-        #region SaveToDataset
+        #region Constructors
+        /// <summary>
+        /// Default constructor
+        /// </summary>
+        public SoilLayer() {; }
+        /// <summary>
+        /// Constructor from soil and soil section (borehole)
+        /// </summary>
+        /// <param name="soil">Soil</param>
+        /// <param name="soilSection">SoilSection</param>
+        /// <param name="building">Building of construction</param>
+        /// <param name="prevThick">Thickness of previous layer of soil</param>
+        public SoilLayer(Soil soil, SoilSection soilSection, Building building, double prevThick = 2)
+        {
+            Id = ProgrammSettings.CurrentId;
+            Soil = soil;
+            SoilId = soil.Id;
+            SoilSection = soilSection;
+            SoilSectionId = soilSection.Id;
+            //Количество слоев грунта, существующих в скважине до создания данного грунта
+            int count = soilSection.SoilLayers.Count;
+            double topLevel;
+            //Если до добавления слоя грунта слои уже были, то уровень кровли слоя назначаем на 2м ниже кровли предыдущего слоя
+            if (count > 0) { topLevel = soilSection.SoilLayers[count - 1].TopLevel - prevThick; }
+            else
+            {
+                //Если здание не передано
+                if (building == null)
+                {
+                    //Если в объекте нет зданий, то выдаем ошибку
+                    if (soilSection.BuildingSite.Buildings.Count == 0) { throw new Exception("Building site not contain any buildings"); }
+                    //Иначе присваиваем первое здание
+                    else building = soilSection.BuildingSite.Buildings[0];
+                }
+                //Назначаем уровень верха по отметке нуля для здания
+                topLevel = building.AbsoluteLevel - building.RelativeLevel;
+            }
+            TopLevel = topLevel;
+            soilSection.SoilLayers.Add(this);
+        }
+        #endregion
+        #region IODataset
+        public string GetTableName() { return "SoilLayers"; }
         /// <summary>
         /// Сохраняет класс в датасет
         /// </summary>
@@ -49,7 +97,7 @@ namespace RDBLL.Entity.Soils
         {
             DataTable dataTable;
             DataRow row;
-            dataTable = dataSet.Tables["SoilLayers"];
+            dataTable = dataSet.Tables[GetTableName()];
             if (createNew)
             {
                 row = dataTable.NewRow();
@@ -76,7 +124,7 @@ namespace RDBLL.Entity.Soils
         /// <param name="dataSet"></param>
         public void OpenFromDataSet(DataSet dataSet)
         {
-            DataTable dataTable = dataSet.Tables["SoilLayers"];
+            DataTable dataTable = dataSet.Tables[GetTableName()];
             var row = (from dataRow in dataTable.AsEnumerable()
                        where dataRow.Field<int>("Id") == Id
                        select dataRow).Single();
@@ -99,7 +147,7 @@ namespace RDBLL.Entity.Soils
         /// <param name="dataSet"></param>
         public void DeleteFromDataSet(DataSet dataSet)
         {
-            DsOperation.DeleteRow(dataSet, "SoilLayers", Id);
+            DsOperation.DeleteRow(dataSet, GetTableName(), Id);
         }
         #endregion
         #region IObservable

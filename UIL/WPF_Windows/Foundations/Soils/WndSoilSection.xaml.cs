@@ -108,15 +108,8 @@ namespace RDUIL.WPF_Windows.Foundations.Soils
             {
                 int a = LvSoils.SelectedIndex;
                 Soil soil = _element.BuildingSite.Soils[a];
-                double topLevel =259.5;
                 int count = _element.SoilLayers.Count;
-                if (count>0) { topLevel = _element.SoilLayers[count - 1].TopLevel - 2;}
-                SoilLayer soilLayer = new SoilLayer()
-                { Id = ProgrammSettings.CurrentId,
-                    SoilId = soil.Id, Soil = soil,
-                    SoilSectionId = _element.Id, SoilSection = _element,
-                    TopLevel = topLevel };
-                _element.SoilLayers.Add(soilLayer);
+                SoilLayer soilLayer = new SoilLayer(soil, _element, null, 2);
                 LvAssignedSoils.SelectedIndex = _element.SoilLayers.Count - 1;
                 ProgrammSettings.IsDataChanged = true;
             }

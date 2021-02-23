@@ -14,7 +14,7 @@ namespace RDBLL.Entity.Common.Materials
     /// <summary>
     /// Базовый класс массива расположения армирования
     /// </summary>
-    public abstract class RFSpacingBase : ISavableToDataSet, IDuplicate
+    public abstract class RFSpacingBase : IHasParent, IDuplicate
     {
         /// <summary>
         /// Код
@@ -31,9 +31,13 @@ namespace RDBLL.Entity.Common.Materials
         /// <summary>
         /// Ссылка на родителя
         /// </summary>
-        public ReinforcementUsing ParentMember { get; set; }
+        public ISavableToDataSet ParentMember { get; private set; }
         private static string TableName { get { return "RFSpacings"; } }
-        #region ISavableToDataSet
+        #region IODataSet
+        public string GetTableName()
+        {
+            throw new NotImplementedException();
+        }
         /// <summary>
         /// Сохранение в датасет
         /// </summary>
@@ -92,7 +96,7 @@ namespace RDBLL.Entity.Common.Materials
         {
             Id = ProgrammSettings.CurrentId;
             ParentMember = parentMember;
-            parentMember.RFSpacing = this;
+            //parentMember.RFSpacing = this;
             RFSpacingParameters = new List<RFSpacingParameter>();
         }
         #endregion
@@ -145,6 +149,9 @@ namespace RDBLL.Entity.Common.Materials
             }
             return rfSpacing;
         }
+
+        public void RegisterParent(ISavableToDataSet parent) { ParentMember = parent;}
+        public void UnRegisterParent() { ParentMember = null; }
         #endregion
     }
 }

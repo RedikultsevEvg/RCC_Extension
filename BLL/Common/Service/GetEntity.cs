@@ -1,18 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using RDBLL.Common.Interfaces;
+using RDBLL.Entity.Common.Materials;
 using RDBLL.Entity.RCC.BuildingAndSite;
+using RDBLL.Entity.RCC.Foundations;
+using RDBLL.Entity.SC.Column;
+using RDBLL.Entity.Soils;
+using RDBLL.Forces;
+using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data;
-using RDBLL.Entity.SC.Column;
-using RDBLL.Forces;
-using RDBLL.Entity.RCC.Foundations;
-using RDBLL.Entity.Soils;
-using RDBLL.Entity.Common.Materials;
-using RDBLL.Common.Interfaces;
-using System.Collections.ObjectModel;
+using System.Linq;
+using RDBLL.Entity.Common.Placements;
 
 namespace RDBLL.Common.Service
 {
@@ -437,7 +435,7 @@ namespace RDBLL.Common.Service
                 else throw new Exception("Material type is not valid");
                 materialUsing.RegisterParent(parent);
                 materialUsing.OpenFromDataSet(dataRow);
-                if (materialUsing is ReinforcementUsing) { GetRFSpacing(dataSet, materialUsing as ReinforcementUsing); }
+                if (materialUsing is ReinforcementUsing) { GetPlacement(dataSet, materialUsing as ReinforcementUsing); }
                 #region SafetyFActors
                 List<SafetyFactor> safetyFactorsList = GetSafetyFactors(dataSet, materialUsing);
                 ObservableCollection<SafetyFactor> safetyFactors = new ObservableCollection<SafetyFactor>();
@@ -451,23 +449,30 @@ namespace RDBLL.Common.Service
             }
             return materialUsings;
         }
-        public static RFSpacingBase GetRFSpacing(DataSet dataSet, ReinforcementUsing parent)
+
+        public static Placement GetPlacement(DataSet dataSet, IHavePlacement parent)
         {
-            RFSpacingBase rfSpacing;
-            DataTable dataTable = dataSet.Tables["RFSpacings"];
+            Placement placement;
+            ISavableToDataSet savableParent;
+            if (parent is ISavableToDataSet)
+            {
+                savableParent = parent as ISavableToDataSet;
+            }
+            else throw new Exception("Parent is not SavableToDataSet");
+            DataTable dataTable = dataSet.Tables["Placements"];
             var row = (from dataRow in dataTable.AsEnumerable()
-                        where dataRow.Field<int>("ParentId") == parent.Id
-                        select dataRow).Single();
+                       where dataRow.Field<int>("ParentId") == savableParent.Id
+                       select dataRow).Single();
 
             string type = row.Field<string>("Type");
-            if (string.Compare(type, "SmSpacing") == 0) { rfSpacing = new RFSmearedBySpacing(); }
-            else if (string.Compare(type, "SmQuantity") == 0) { rfSpacing = new RFSmearedByQuantity(); }
+            if (string.Compare(type, "LineBySpacing") == 0) { placement = new LineBySpacing(); }
             else throw new Exception("Reinforcement spacing type is not valid");
-            rfSpacing.ParentMember = parent;
-            parent.RFSpacing = rfSpacing;
-            rfSpacing.OpenFromDataSet(row);
-            return rfSpacing;
+            placement.OpenFromDataSet(row);
+            parent.SetPlacement(placement);
+            placement.RegisterParent(savableParent);
+            return placement;
         }
+
         private static List<SafetyFactor> GetSafetyFactors(DataSet dataSet, MaterialUsing parent)
         {
             List<SafetyFactor> newObjects = new List<SafetyFactor>();

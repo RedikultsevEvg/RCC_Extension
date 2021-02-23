@@ -133,6 +133,12 @@ namespace RDBLL.Entity.RCC.Foundations
             CenterX = 0;
             CenterY = 0;
         }
+        #region IODataset
+        /// <summary>
+        /// Return name of table in dataset for CRUD operation
+        /// </summary>
+        /// <returns>Name of table</returns>
+        public string GetTableName() { return "FoundationParts"; }
         /// <summary>
         /// Сохраняет класс в датасет
         /// </summary>
@@ -146,7 +152,7 @@ namespace RDBLL.Entity.RCC.Foundations
         /// <param name="dataSet"></param>
         public virtual void OpenFromDataSet(DataSet dataSet)
         {
-            DataTable dataTable = dataSet.Tables["FoundationParts"];
+            DataTable dataTable = dataSet.Tables[GetTableName()];
             var row = (from dataRow in dataTable.AsEnumerable()
                        where dataRow.Field<int>("FoundationId") == Id
                        select dataRow).Single();
@@ -171,7 +177,8 @@ namespace RDBLL.Entity.RCC.Foundations
         /// <param name="dataSet"></param>
         public void DeleteFromDataSet(DataSet dataSet)
         {
-            DsOperation.DeleteRow(dataSet, "FoundationParts", Id);
+            DsOperation.DeleteRow(dataSet, GetTableName(), Id);
         }
+        #endregion
     }
 }
