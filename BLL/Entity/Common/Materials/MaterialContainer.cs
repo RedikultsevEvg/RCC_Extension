@@ -14,7 +14,7 @@ namespace RDBLL.Entity.Common.Materials
     /// <summary>
     /// Класс контейнера арматурных элементов
     /// </summary>
-    public class MaterialContainer : IHasParent, IDuplicate
+    public class MaterialContainer : IHasParent, ICloneable
     {
         #region fields
         /// <summary>
@@ -36,7 +36,7 @@ namespace RDBLL.Entity.Common.Materials
         /// <summary>
         /// Ссылка на родительский элемент
         /// </summary>
-        public ISavableToDataSet ParentMember { get; private set; }
+        public IDsSaveable ParentMember { get; private set; }
         #endregion
         #region Constructors
         /// <summary>
@@ -50,7 +50,7 @@ namespace RDBLL.Entity.Common.Materials
         /// Конструктор по родительскому элементу
         /// </summary>
         /// <param name="parentMember"></param>
-        public MaterialContainer(ISavableToDataSet parentMember)
+        public MaterialContainer(IDsSaveable parentMember)
         {
             Id = ProgrammSettings.CurrentId;
             ParentMember = parentMember;
@@ -116,7 +116,7 @@ namespace RDBLL.Entity.Common.Materials
             DsOperation.DeleteRow(dataSet, GetTableName(), Id);
         }
 
-        public object Duplicate()
+        public object Clone()
         {
             MaterialContainer newObject = new MaterialContainer();
             newObject.Id = ProgrammSettings.CurrentId;
@@ -124,14 +124,17 @@ namespace RDBLL.Entity.Common.Materials
             newObject.Purpose = Purpose;
             foreach (MaterialUsing materialUsing in MaterialUsings)
             {
-                MaterialUsing newMaterialUsing = materialUsing.Duplicate() as MaterialUsing;
-                newMaterialUsing.RegisterParent(newMaterialUsing);
+                MaterialUsing newMaterialUsing;
+                if (materialUsing is ConcreteUsing) { newMaterialUsing = (materialUsing as ConcreteUsing).Clone() as ConcreteUsing; }
+                else if (materialUsing is ReinforcementUsing) { newMaterialUsing = (materialUsing as ReinforcementUsing).Clone() as ReinforcementUsing; }
+                else throw new Exception("Type of using is not valid");
+                newMaterialUsing.RegisterParent(newObject);
                 newObject.MaterialUsings.Add(newMaterialUsing);
             }
             return newObject;
         }
 
-        public void RegisterParent(ISavableToDataSet parent)
+        public void RegisterParent(IDsSaveable parent)
         {
             ParentMember = parent;
         }

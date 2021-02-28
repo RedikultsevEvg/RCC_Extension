@@ -12,7 +12,7 @@ namespace RDBLL.Entity.SC.Column
     /// <summary>
     /// Класс участков баз стальных колонн
     /// </summary>
-    public class SteelBasePart : ICloneable, ISavableToDataSet
+    public class SteelBasePart : ICloneable, IDsSaveable
     {
         #region Properties
         /// <summary>

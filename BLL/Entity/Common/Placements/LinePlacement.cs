@@ -63,17 +63,17 @@ namespace RDBLL.Entity.Common.Placements
 
         public LinePlacement() : base()
         {
-            StoredParams.Add(new StoredParam() { Id = ProgrammSettings.CurrentId, Name = "StartX" });
+            StoredParams.Add(new StoredParam(this) { Id = ProgrammSettings.CurrentId, Name = "StartX" });
             //StoredParams[0 + ParamQuant].SetDoubleValue(0);
-            StoredParams.Add(new StoredParam() { Id = ProgrammSettings.CurrentId, Name = "StartY" });
+            StoredParams.Add(new StoredParam(this) { Id = ProgrammSettings.CurrentId, Name = "StartY" });
             //StoredParams[1 + ParamQuant].SetDoubleValue(0);
-            StoredParams.Add(new StoredParam() { Id = ProgrammSettings.CurrentId, Name = "EndX" });
+            StoredParams.Add(new StoredParam(this) { Id = ProgrammSettings.CurrentId, Name = "EndX" });
             //StoredParams[2 + ParamQuant].SetDoubleValue(0);
-            StoredParams.Add(new StoredParam() { Id = ProgrammSettings.CurrentId, Name = "EndY" });
+            StoredParams.Add(new StoredParam(this) { Id = ProgrammSettings.CurrentId, Name = "EndY" });
             //StoredParams[3 + ParamQuant].SetDoubleValue(0);
-            StoredParams.Add(new StoredParam() { Id = ProgrammSettings.CurrentId, Name = "AddStart" });
+            StoredParams.Add(new StoredParam(this) { Id = ProgrammSettings.CurrentId, Name = "AddStart" });
             //StoredParams[4 + ParamQuant].SetBoolValue(true);
-            StoredParams.Add(new StoredParam() { Id = ProgrammSettings.CurrentId, Name = "AddStart" });
+            StoredParams.Add(new StoredParam(this) { Id = ProgrammSettings.CurrentId, Name = "AddStart" });
             //StoredParams[5 + ParamQuant].SetBoolValue(true);
             StartPoint = new Point2D(0, 0.05);
             EndPoint = new Point2D(0, 0.05);
@@ -81,26 +81,13 @@ namespace RDBLL.Entity.Common.Placements
             AddEnd = true;
         }
         /// <summary>
-        /// Конструктор по входной строке
+        /// Возвращает
         /// </summary>
-        /// <param name="s">Входная строка</param>
-        public LinePlacement(string s) : base(s)
-        {
-            _StartPoint = new Point2D();
-            _EndPoint = new Point2D();
-        }
-
+        /// <param name="quant"></param>
+        /// <returns></returns>
         public List<Point2D> GetElementPoints(int quant)
-        {
-            List<Point2D> points = new List<Point2D>();
-            if (AddStart) points.Add(StartPoint.Clone() as Point2D);
-            double spacing = GetLength() / quant;
-            for (int i = 1; i <= quant; i++)
-            {
-                points.Add(GeometryProc.GetPointOfset(StartPoint, EndPoint, spacing * i));
-            }
-            if (AddEnd) points.Add(EndPoint.Clone() as Point2D);
-            return points;
+        {    
+            return GeometryProc.GetInternalPoints(StartPoint, EndPoint, quant, AddStart, AddEnd);
         }
 
         public double GetLength() {return GeometryProc.GetDistance(StartPoint, EndPoint);}

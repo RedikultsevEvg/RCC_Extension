@@ -11,14 +11,14 @@ using RDBLL.Entity.RCC.Foundations;
 using RDBLL.Common.Service;
 using System.Collections.ObjectModel;
 using RDBLL.Entity.Common.Placements;
-using RDBLL.Entity.Common.Materials.RFPlacementAdapters;
+using RDBLL.Entity.Common.Materials.RFExtenders;
 
 namespace RDBLL.Entity.Common.Materials
 {
     /// <summary>
     /// Класс применения материалов в элементах
     /// </summary>
-    public abstract class MaterialUsing : IHasParent, IDuplicate
+    public abstract class MaterialUsing : IHasParent, ICloneable
     {
         /// <summary>
         /// Код применения
@@ -70,7 +70,7 @@ namespace RDBLL.Entity.Common.Materials
         /// <summary>
         /// Ссылка на родительский элемент
         /// </summary>
-        public ISavableToDataSet ParentMember { get; private set; }
+        public IDsSaveable ParentMember { get; private set; }
         #region Constructors
         /// <summary>
         /// Конструктор без параметров
@@ -83,7 +83,7 @@ namespace RDBLL.Entity.Common.Materials
         /// Конструктор по родительскому элементу
         /// </summary>
         /// <param name="parentMember"></param>
-        public MaterialUsing(ISavableToDataSet parentMember)
+        public MaterialUsing(IDsSaveable parentMember)
         {
             Id = ProgrammSettings.CurrentId;
             RegisterParent(parentMember);
@@ -101,8 +101,7 @@ namespace RDBLL.Entity.Common.Materials
         /// </summary>
         public void SaveToDataSet(DataSet dataSet, bool createNew)
         {
-            DataTable dataTable;
-            dataTable = dataSet.Tables[GetTableName()];
+            DataTable dataTable = dataSet.Tables[GetTableName()];
             DataRow row = DsOperation.CreateNewRow(Id, createNew, dataTable);
             #region setFields
             row.SetField("Id", Id);
@@ -123,6 +122,7 @@ namespace RDBLL.Entity.Common.Materials
             {
                 ReinforcementUsing rfUsing = (this) as ReinforcementUsing;
                 row.SetField("Diameter", rfUsing.Diameter);
+                row.SetField("Prestrain", rfUsing.Prestrain);
                 rfUsing.Placement.SaveToDataSet(dataSet, createNew);              
             }
         }
@@ -149,6 +149,7 @@ namespace RDBLL.Entity.Common.Materials
             {
                 ReinforcementUsing rfUsing = (this) as ReinforcementUsing;
                 rfUsing.Diameter = dataRow.Field<double>("Diameter");
+                rfUsing.Prestrain = dataRow.Field<double>("Prestrain");
             }
         }
         /// <summary>
@@ -157,51 +158,29 @@ namespace RDBLL.Entity.Common.Materials
         /// <param name="dataSet"></param>
         public void DeleteFromDataSet(DataSet dataSet)
         {
-            foreach (SafetyFactor safetyFactor in SafetyFactors)
-            {
-                safetyFactor.DeleteFromDataSet(dataSet);
-            }
+            foreach (SafetyFactor safetyFactor in SafetyFactors) {safetyFactor.DeleteFromDataSet(dataSet);}
             DsOperation.DeleteRow(dataSet, GetTableName(), Id);
         }
         #endregion
-        #region IDuplicate
-        public object Duplicate()
+        public object Clone()
         {
-            MaterialUsing materialUsing;
-            if (this is ConcreteUsing)
-            {
-                ConcreteUsing concrete = new ConcreteUsing();
-                materialUsing = concrete;
-            }
-            else if (this is ReinforcementUsing)
-            {
-                ReinforcementUsing reinforcement = new ReinforcementUsing();
-                reinforcement.SetPlacement((this as ReinforcementUsing).Placement.Clone() as Placement);
-                reinforcement.Placement.RegisterParent(reinforcement);
-                reinforcement.SetAdapter(reinforcement.Adapter.Clone() as RFPlacementAdapter);
-                materialUsing = reinforcement;
-            }
-            else throw new Exception("Material kind is not valid");
+            MaterialUsing materialUsing = MemberwiseClone() as MaterialUsing; ;
             materialUsing.Id = ProgrammSettings.CurrentId;
-            materialUsing.Name = Name;
-            materialUsing.Purpose = Purpose;
-            materialUsing.SelectedId = SelectedId;
-
+            materialUsing.SafetyFactors = new ObservableCollection<SafetyFactor>();
             foreach (SafetyFactor safetyFactor in SafetyFactors)
             {
-                SafetyFactor newObject = (safetyFactor.Duplicate()) as SafetyFactor;
+                SafetyFactor newObject = (safetyFactor.Clone()) as SafetyFactor;
                 newObject.RegisterParent(materialUsing);
                 materialUsing.SafetyFactors.Add(newObject);
             }
             return materialUsing;
         }
-        #endregion
-        #region Methods
+         #region Methods
         /// <summary>
         /// Регистрация ссылки на родительскую сущность
         /// </summary>
         /// <param name="parent"></param>
-        public void RegisterParent(ISavableToDataSet parent)
+        public void RegisterParent(IDsSaveable parent)
         {
             ParentMember = parent;
         }

@@ -20,7 +20,7 @@ namespace RDBLL.Entity.RCC.BuildingAndSite
     /// <summary>
     /// Класс строительного объекта
     /// </summary>
-    public class BuildingSite :ICloneable, ISavableToDataSet
+    public class BuildingSite :ICloneable, IDsSaveable
     {
         /// <summary>
         /// Код строительного объекта
@@ -195,7 +195,7 @@ namespace RDBLL.Entity.RCC.BuildingAndSite
     /// <summary>
     /// Класс здания
     /// </summary>
-    public class Building : ICloneable, ISavableToDataSet, IDataErrorInfo
+    public class Building : ICloneable, IDsSaveable, IDataErrorInfo
     {
         /// <summary>
         /// Код здания

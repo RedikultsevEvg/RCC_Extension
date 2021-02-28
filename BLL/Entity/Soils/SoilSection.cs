@@ -18,7 +18,7 @@ namespace RDBLL.Entity.Soils
     /// <summary>
     /// Класс геологического разреза
     /// </summary>
-    public class SoilSection : ISavableToDataSet, IDataErrorInfo, IRDObservable, IRDObserver
+    public class SoilSection : IDsSaveable, IDataErrorInfo, IRDObservable, IRDObserver
     {
         #region Properies
         /// <summary>

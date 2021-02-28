@@ -25,24 +25,17 @@ namespace RDBLL.Entity.Common.Placements
         }
         public LineBySpacing() : base ()
         {
-            StoredParams.Add(new StoredParam() { Id = ProgrammSettings.CurrentId, Name = "Spacing" });
+            StoredParams.Add(new StoredParam(this) { Id = ProgrammSettings.CurrentId, Name = "Spacing" });
             StoredParams[0 + ParamQuant].SetDoubleValue(0.2);
         }
 
         /// <summary>
-        /// Конструктор по входной строке
-        /// </summary>
-        /// <param name="s">Входная строка</param>
-        public LineBySpacing(string s) : base(s) { }
-        /// <summary>
-        /// Возвращает коллекцию элементов
+        /// Возвращает коллекцию точек расположения элементов
         /// </summary>
         /// <returns></returns>
         public override List<Point2D> GetElementPoints()
         {
-            //Определяем количество элементов без учета крайних элементов
-            int quant = Convert.ToInt32(Math.Ceiling(GetLength() / Spacing)) - 1;
-            return GetElementPoints(quant);
+            return GeometryProc.GetInternalPoints(StartPoint, EndPoint, Spacing, AddStart, AddEnd);
         }
     }
 }

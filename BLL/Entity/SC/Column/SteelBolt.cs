@@ -8,7 +8,7 @@ using DAL.Common;
 
 namespace RDBLL.Entity.SC.Column
 {
-    public class SteelBolt: ICloneable, ISavableToDataSet
+    public class SteelBolt: ICloneable, IDsSaveable
     {
         /// <summary>
         /// Код

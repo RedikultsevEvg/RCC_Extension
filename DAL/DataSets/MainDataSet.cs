@@ -26,7 +26,7 @@ namespace DAL.DataSets
             DataSet dataSet = new DataSet();
 
             DataTable dataTable;
-            DataColumn IdColumn, FkIdColumn, NameColumn, NewColumn;
+            DataColumn IdColumn, FkIdColumn, NameColumn;
             #region Generators
             dataTable = new DataTable("Generators");
             dataSet.Tables.Add(dataTable);
@@ -289,8 +289,9 @@ namespace DAL.DataSets
             DsOperation.AddStringColumn(dataTable, "Materialkindname");
             DsOperation.AddIntColumn(dataTable, "SelectedId");
             DsOperation.AddDoubleColumn(dataTable, "Diameter", 0.012);
+            DsOperation.AddDoubleColumn(dataTable, "Prestrain", 0);
             #endregion
-            #region "Safetyfactors
+            #region Safetyfactors
             dataTable = new DataTable("Safetyfactors");
             dataSet.Tables.Add(dataTable);
             DsOperation.AddIdColumn(dataTable, true);
@@ -307,17 +308,23 @@ namespace DAL.DataSets
             DsOperation.AddIntColumn(dataTable, "ParentId");
             DsOperation.AddStringColumn(dataTable, "Type");
             #endregion
-            #region Spacings
+            #region Placements
             dataTable = new DataTable("Placements");
             dataSet.Tables.Add(dataTable);
             DsOperation.AddIdColumn(dataTable, true);
             DsOperation.AddIntColumn(dataTable, "ParentId");
             DsOperation.AddStringColumn(dataTable, "Type");
-            DsOperation.AddStringColumn(dataTable, "ValuesString");
             #endregion
+            #region StoredParams
+            #endregion
+            dataTable = new DataTable("StoredParams");
+            dataSet.Tables.Add(dataTable);
+            DsOperation.AddIdColumn(dataTable, true);
+            DsOperation.AddIntColumn(dataTable, "ParentId");
+            DsOperation.AddStringColumn(dataTable, "Type");
+            DsOperation.AddStringColumn(dataTable, "Value");
             #region
             #endregion
-
             DataSet = dataSet;
         }
 

@@ -8,6 +8,6 @@ namespace RDBLL.Common.Interfaces
 {
     interface IDuplicate
     {
-        object Duplicate();
+        object Clone();
     }
 }

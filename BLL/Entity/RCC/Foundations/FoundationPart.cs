@@ -15,7 +15,7 @@ namespace RDBLL.Entity.RCC.Foundations
     /// <summary>
     /// Класс ступени фундамента
     /// </summary>
-    public abstract class FoundationPart : ISavableToDataSet
+    public abstract class FoundationPart : IDsSaveable
     {
         /// <summary>
         /// Класс результатов вычислений ступени фундамента

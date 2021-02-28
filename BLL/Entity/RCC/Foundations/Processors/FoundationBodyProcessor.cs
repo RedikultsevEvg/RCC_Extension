@@ -9,7 +9,7 @@ using System.Linq;
 using System;
 using RDBLL.Entity.RCC.Common.Processors;
 using RDBLL.Entity.Common.Materials;
-using RDBLL.Entity.Common.Materials.RFPlacementAdapters;
+using RDBLL.Entity.Common.Materials.RFExtenders;
 
 namespace RDBLL.Entity.RCC.Foundations.Processors
 {
@@ -296,8 +296,8 @@ namespace RDBLL.Entity.RCC.Foundations.Processors
             ReinforcementKind rfKindX = (rfX.MaterialKind) as ReinforcementKind;
             ReinforcementKind rfKindY = (rfY.MaterialKind) as ReinforcementKind;
             //Получаем ссылки на раскладку армирования подошвы вдоль оси X и вдоль оси Y
-            LineToSurfBySpacing rfSpacingX = rfX.Adapter as LineToSurfBySpacing;
-            LineToSurfBySpacing rfSpacingY = rfY.Adapter as LineToSurfBySpacing;
+            LineToSurfBySpacing rfSpacingX = rfX.Extender as LineToSurfBySpacing;
+            LineToSurfBySpacing rfSpacingY = rfY.Extender as LineToSurfBySpacing;
 
             ConcreteKind concreteKind = part.Foundation.Concrete.MaterialKind as ConcreteKind;
             double mx = GetMaxMoment(part.Result.partMomentAreas.LoadCombinationsX);
@@ -344,8 +344,8 @@ namespace RDBLL.Entity.RCC.Foundations.Processors
             ReinforcementUsing rfX = (materialContainer.MaterialUsings[0]) as ReinforcementUsing;
             ReinforcementUsing rfY = (materialContainer.MaterialUsings[1]) as ReinforcementUsing;
             //Получаем ссылки на раскладку армирования подошвы вдоль оси X и вдоль оси Y
-            LineToSurfBySpacing rfSpacingX = rfX.Adapter as LineToSurfBySpacing;
-            LineToSurfBySpacing rfSpacingY = rfY.Adapter as LineToSurfBySpacing;
+            LineToSurfBySpacing rfSpacingX = rfX.Extender as LineToSurfBySpacing;
+            LineToSurfBySpacing rfSpacingY = rfY.Extender as LineToSurfBySpacing;
             //Фактическая площадь армирования
             rfSpacingX.SetPointsX(0, lengthX - 0.1);
             rfSpacingY.SetPointsX(0, lengthY - 0.1);

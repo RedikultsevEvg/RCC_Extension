@@ -29,7 +29,7 @@ namespace RDBLL.Entity.Common.Placements
         /// <summary>
         /// Ссылка на родительский элемент
         /// </summary>
-        public ISavableToDataSet ParentMember { get; private set; }
+        public IDsSaveable ParentMember { get; private set; }
         /// <summary>
         /// Коллекция хранимых параметров
         /// </summary>
@@ -42,16 +42,8 @@ namespace RDBLL.Entity.Common.Placements
         {
             Id = ProgrammSettings.CurrentId;
             StoredParams = new List<StoredParam>();
-            StoredParams.Add(new StoredParam() { Id = ProgrammSettings.CurrentId, Name = "ItemAngle" });
+            StoredParams.Add(new StoredParam(this) { Id = ProgrammSettings.CurrentId, Name = "ItemAngle" });
             StoredParams[0].SetDoubleValue(0.00);
-        }
-        /// <summary>
-        /// Конструктор по строке параметров
-        /// </summary>
-        /// <param name="s"></param>
-        public Placement(string s)
-        {
-            StoredParams = StoredParamProc.GetFromString(s);
         }
         #endregion
         #region IODataSet
@@ -61,13 +53,14 @@ namespace RDBLL.Entity.Common.Placements
         /// <param name="dataSet"></param>
         public void DeleteFromDataSet(DataSet dataSet)
         {
+            foreach (StoredParam param in StoredParams) { param.DeleteFromDataSet(dataSet); }
             DsOperation.DeleteRow(dataSet, GetTableName(), Id);
         }
         /// <summary>
         /// Возвращает имя таблицы
         /// </summary>
         /// <returns></returns>
-        public string GetTableName() {return "Placements";}
+        public string GetTableName() => "Placements";
         /// <summary>
         /// Обновление записи в датасете
         /// </summary>
@@ -84,13 +77,12 @@ namespace RDBLL.Entity.Common.Placements
         {
             Id = dataRow.Field<int>("Id");
             Name = dataRow.Field<string>("Name");
-            StoredParams = StoredParamProc.GetFromString(dataRow.Field<string>("ValuesString"));
         }
         /// <summary>
         /// Добавление ссылки на родителя
         /// </summary>
         /// <param name="parent"></param>
-        public void RegisterParent(ISavableToDataSet parent) {ParentMember = parent;}
+        public void RegisterParent(IDsSaveable parent) {ParentMember = parent;}
         /// <summary>
         /// Сохранение записи в датасет
         /// </summary>
@@ -106,10 +98,11 @@ namespace RDBLL.Entity.Common.Placements
             row.SetField("Name", Name);
             row.SetField("ParentId", ParentMember.Id);
             if (this is LineBySpacing) { row.SetField("Type", "LineBySpacing"); }
+            else if (this is RectArrayPlacement) { row.SetField("Type", "RectArrayPlacement"); }
             else { throw new Exception("Type of Placement is unknown"); }
-            row.SetField("ValuesString", StoredParamProc.GetValueString(this));
-            #endregion
             dataTable.AcceptChanges();
+            #endregion
+            foreach (StoredParam param in StoredParams) { param.SaveToDataSet(dataSet, createNew);}
         }
         /// <summary>
         /// Удаление ссылки на родителя
@@ -122,12 +115,16 @@ namespace RDBLL.Entity.Common.Placements
         /// <returns></returns>
         public object Clone()
         {
-            Placement placement;
-            if (this is LineBySpacing) { placement = new LineBySpacing(); }
-            else { throw new Exception("Type of Placement is unknown"); }
+            Placement placement = MemberwiseClone() as Placement;
             placement.Id = ProgrammSettings.CurrentId;
-            placement.Name = Name;
-            placement.StoredParams = StoredParamProc.GetFromString(StoredParamProc.GetValueString(this));
+            placement.StoredParams = new List<StoredParam>();
+            foreach (StoredParam param in StoredParams)
+            {
+                StoredParam newParam = param.Clone() as StoredParam;
+                newParam.Id = ProgrammSettings.CurrentId;
+                newParam.RegisterParent(placement);
+                placement.StoredParams.Add(newParam);
+            }
             return placement;
         }
         public abstract List<Point2D> GetElementPoints();

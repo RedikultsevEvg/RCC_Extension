@@ -7,17 +7,17 @@ using RDBLL.Entity.Common.Placements;
 using RDBLL.Common.Geometry;
 using RDBLL.Common.Geometry.Mathematic;
 
-namespace RDBLL.Entity.Common.Materials.RFPlacementAdapters
+namespace RDBLL.Entity.Common.Materials.RFExtenders
 {
     /// <summary>
     /// Абстрактный класс адаптера от раскладки по линии к раскладки по грани
     /// </summary>
-    public abstract class LineToSurf : RFPlacementAdapter
+    public abstract class LineToSurf : CoveredExtender
     {
         /// <summary>
         /// Величина защитного слоя арматуры, м
         /// </summary>
-        public double CoveringLayer
+        public override double CoveringLayer
         { get
             {
                 LinePlacement linePlacement = Placement as LinePlacement;
@@ -26,10 +26,12 @@ namespace RDBLL.Entity.Common.Materials.RFPlacementAdapters
             set
             {
                 LinePlacement linePlacement = Placement as LinePlacement;
-                Point2D startPoint = new Point2D(linePlacement.StartPoint.X, value);
-                Point2D endPoint = new Point2D(linePlacement.EndPoint.X, value);
-                linePlacement.StartPoint = startPoint;
-                linePlacement.EndPoint = endPoint;
+                linePlacement.StoredParams[2].SetDoubleValue(value);
+                linePlacement.StoredParams[4].SetDoubleValue(value);
+                //Point2D startPoint = new Point2D(linePlacement.StartPoint.X, value);
+                //Point2D endPoint = new Point2D(linePlacement.EndPoint.X, value);
+                //linePlacement.StartPoint = startPoint;
+                //linePlacement.EndPoint = endPoint;
             }
         }
         /// <summary>

@@ -20,7 +20,7 @@ namespace RDBLL.Entity.RCC.BuildingAndSite
     /// <summary>
     /// Уровень
     /// </summary>
-    public class Level :ICloneable, ISavableToDataSet
+    public class Level :ICloneable, IDsSaveable
     {
         /// <summary>
         /// Код уровня

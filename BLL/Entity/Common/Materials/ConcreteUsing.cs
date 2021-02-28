@@ -39,6 +39,11 @@ namespace RDBLL.Entity.Common.Materials
             safetyFactor.RegisterParent(this);
             SafetyFactors.Add(safetyFactor);
         }
+
+        public object Clone()
+        {
+            return base.Clone();
+        }
         #endregion
     }
 }

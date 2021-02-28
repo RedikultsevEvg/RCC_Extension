@@ -2,17 +2,14 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:local="clr-namespace:StartWPF.ResourcesDicts"
                     xmlns:Convert="clr-namespace:RDUIL.Converters;assembly=UIL">
-    
 
+    <Convert:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
     <Convert:DoubleConverter x:Key="DoubleConverter"/>
     <Convert:LinearSizeConverter x:Key="LinearSizeConverter"/>
-    <!--<Convert:ForceConverter x:Key="ForceConverter"/>
-        <Convert:BendingMomentConverter x:Key="BendingMomentConverter"/>-->
     <Convert:StressConverter x:Key="StressConverter"/>
     <Convert:DensityConverter x:Key="DensityConverter"/>
     <Convert:VolumeWeightConverter x:Key="VolumeWeightConverter"/>
     <Convert:FiltrationConverter x:Key="FiltrationConverter"/>
-
     <Convert:LinearSizeConverter x:Key="MultyThousandConverter"/>
     <Convert:DistributedLoadConverter x:Key="DistributedLoadConverter"/>
 

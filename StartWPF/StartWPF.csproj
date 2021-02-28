@@ -102,6 +102,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="ResourcesDicts\RFTemplateSelector.cs" />
     <Compile Include="WndAbout.xaml.cs">
       <DependentUpon>WndAbout.xaml</DependentUpon>
     </Compile>

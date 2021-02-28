@@ -11,7 +11,7 @@ namespace RDBLL.Common.Interfaces
     /// <summary>
     /// Интерфейс для сущностей, которые включают группу нагрузок
     /// </summary>
-    public interface IHaveForcesGroups
+    public interface IHasForcesGroups
     {
         /// <summary>
         /// Коллекция групп нагрузок

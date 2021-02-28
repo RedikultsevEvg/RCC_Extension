@@ -68,7 +68,7 @@ namespace TestIntegrationProject.RCC.FoundationTests.RectFoundations
         [TestMethod] //Тестирование определения расчетного сопротивления
         public void SndResistanceTest1()
         {
-            double expectedValue = 527700;
+            double expectedValue = 841000;
             ProgrammSettings.InicializeNew();
             SolveFoundation();
             double actualValue = Foundation.Result.SndResistance;

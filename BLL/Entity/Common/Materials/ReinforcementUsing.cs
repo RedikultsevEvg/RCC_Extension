@@ -9,19 +9,23 @@ using System.Data;
 using DAL.Common;
 using RDBLL.Common.Service;
 using RDBLL.Entity.Common.Placements;
-using RDBLL.Entity.Common.Materials.RFPlacementAdapters;
+using RDBLL.Entity.Common.Materials.RFExtenders;
 
 namespace RDBLL.Entity.Common.Materials
 {
     /// <summary>
     /// Класс использования арматуры в конструкции
     /// </summary>
-    public class ReinforcementUsing : MaterialUsing, IHavePlacement
+    public class ReinforcementUsing : MaterialUsing, IHasPlacement
     {
         /// <summary>
         /// Диаметр арматурного стержня
         /// </summary>
         public double Diameter { get; set; }
+        /// <summary>
+        /// Предварительная деформация, д.ед.
+        /// </summary>
+        public double Prestrain { get; set; }
         /// <summary>
         /// Площадь арматурного стержня
         /// </summary>
@@ -37,11 +41,11 @@ namespace RDBLL.Entity.Common.Materials
         /// <summary>
         /// Класс преобразующий условную раскладку от поверхности в действительную по координатам
         /// </summary>
-        public RFPlacementAdapter Adapter { get; private set; }
+        public RFExtender Extender { get; private set; }
 
         #region Constructors
         public ReinforcementUsing() : base() { }
-        public ReinforcementUsing(ISavableToDataSet parentMember) : base(parentMember) { SelectedId = 2; }
+        public ReinforcementUsing(IDsSaveable parentMember) : base(parentMember) { SelectedId = 2; }
         #endregion
         #region Method
         /// <summary>
@@ -51,11 +55,24 @@ namespace RDBLL.Entity.Common.Materials
         public void SetPlacement(Placement placement)
         {
             Placement = placement;
-            if (!(Adapter == null)) { Adapter.SetPlacement(placement); }
+            Placement.RegisterParent(this);
+            if (!(Extender == null)) { Extender.SetPlacement(placement); }
         }
-        public void SetAdapter(RFPlacementAdapter adapter)
+        public void SetExtender(RFExtender extender)
         {
-            Adapter = adapter;
+            Extender = extender;
+        }
+
+        public object Clone()
+        {
+            ReinforcementUsing newObject = base.Clone() as ReinforcementUsing;
+            Placement placement = Placement.Clone() as Placement;
+            if (!(Extender is null))
+            {
+                newObject.SetExtender(Extender.Clone() as RFExtender);
+            }
+            newObject.SetPlacement(placement);
+            return newObject;
         }
         #endregion
     }

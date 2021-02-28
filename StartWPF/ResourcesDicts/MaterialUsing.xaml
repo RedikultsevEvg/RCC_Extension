@@ -2,63 +2,136 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:local="clr-namespace:StartWPF.ResourcesDicts">
 
-    <ResourceDictionary.MergedDictionaries>
-        <ResourceDictionary Source ="TextBlockStyles.xaml"/> 
-    </ResourceDictionary.MergedDictionaries>
 
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source ="TextBlockStyles.xaml"/>
+    </ResourceDictionary.MergedDictionaries>
+    <ResourceDictionary x:Key="RFSelector">
+        <local:RFTemplateSelector x:Key="RFTemplateSelector"/>
+    </ResourceDictionary>
+  
     <DataTemplate x:Key="PartialSafetyFactors">
-        
+
     </DataTemplate>
 
     <DataTemplate  x:Key="cbTemplate">
         <TextBlock Text="{Binding Path=Name}" VerticalAlignment="Center"></TextBlock>
     </DataTemplate>
 
-    <DataTemplate x:Key="ReinforcementSpacing">
-        <ListView ItemsSource="{Binding MaterialUsings}">
-            <ListView.ItemTemplate>
-                <DataTemplate>
-                    <Expander Header="{Binding Name}">
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition/>
-                                <ColumnDefinition Width="100"/>
-                                <ColumnDefinition Width="50"/>
-                            </Grid.ColumnDefinitions>
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="35"/>
-                                <RowDefinition Height="30"/>
-                                <RowDefinition Height="30"/>
-                                <RowDefinition Height="30"/>
-                            </Grid.RowDefinitions>
-
-                            <TextBlock x:Name="tbReinfClass" Grid.Row="0" Style="{StaticResource PropertyTextBlock}" Text="Класс арматуры"/>
-                            <ComboBox Grid.Column="1" Grid.Row="0" Grid.ColumnSpan="2"
+    <DataTemplate  x:Key="RFClassSelector">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="35"/>
+                <RowDefinition Height="30"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="100" />
+                <ColumnDefinition Width="50" />
+            </Grid.ColumnDefinitions>
+            <TextBlock x:Name="tbReinfClass" Style="{StaticResource PropertyTextBlock}" Text="Класс арматуры"/>
+            <ComboBox Grid.Column="1" Grid.ColumnSpan="2"
                             Height="22"
                             ItemsSource="{Binding Path=MaterialKinds}"
                             ItemTemplate="{StaticResource cbTemplate}"
                             SelectedValuePath="Id"
                             SelectedValue="{Binding Path=SelectedId}" VerticalAlignment="Center" Margin="5">
-                            </ComboBox>
+            </ComboBox>
 
-                            <TextBlock Grid.Row="1" Style="{StaticResource PropertyTextBlock}" Text="Диаметр"/>
-                            <TextBlock Grid.Row="2" Style="{StaticResource PropertyTextBlock}" Text="Шаг"/>
-                            <TextBlock Grid.Row="3" Style="{StaticResource PropertyTextBlock}" Text="Расстояние до оси стержня"/>
-
-                            <TextBox Grid.Column="1" Grid.Row="1" Style="{StaticResource PropertyTextBoxError}"
+            <TextBlock Grid.Row="1" Style="{StaticResource PropertyTextBlock}" Text="Диаметр"/>
+            <TextBox Grid.Column="1" Grid.Row="1" Style="{StaticResource PropertyTextBoxError}"
                                         Text="{Binding Diameter, Converter={StaticResource MultyThousandConverter}, ValidatesOnDataErrors=True}"/>
-                            <TextBox Grid.Column="1" Grid.Row="2" Style="{StaticResource PropertyTextBoxError}"
-                                        Text="{Binding Adapter.Spacing, Converter={StaticResource MultyThousandConverter}, ValidatesOnDataErrors=True}"/>
-                            <TextBox Grid.Column="1" Grid.Row="3" Style="{StaticResource PropertyTextBoxError}"
-                                        Text="{Binding Adapter.CoveringLayer, Converter={StaticResource MultyThousandConverter}, ValidatesOnDataErrors=True}"/>
+            <TextBlock Grid.Column="2" Grid.Row="1" Style="{StaticResource PropertyTextBlock}" Text="мм"/>
+        </Grid>
+    </DataTemplate>
+    <DataTemplate x:Key="RFBySpacing">
+        <Expander Header="{Binding Name}">
+            <StackPanel>
+                <ContentControl ContentTemplate="{StaticResource RFClassSelector}" Content="{Binding}"/>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition Width="100"/>
+                        <ColumnDefinition Width="50"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="30"/>
+                        <RowDefinition Height="30"/>
+                    </Grid.RowDefinitions>
+                    <TextBlock Grid.Row="0" Style="{StaticResource PropertyTextBlock}" Text="Шаг"/>
+                    <TextBox Grid.Column="1" Grid.Row="0" Style="{StaticResource PropertyTextBoxError}" Text="{Binding Extender.Spacing, Converter={StaticResource MultyThousandConverter}, ValidatesOnDataErrors=True}"/>
+                    <TextBlock Grid.Column="2" Grid.Row="0" Style="{StaticResource PropertyTextBlock}" Text="мм"/>
+                    <TextBlock Grid.Row="1" Style="{StaticResource PropertyTextBlock}" Text="Расстояние до оси стержня"/>
+                    <TextBox Grid.Column="1" Grid.Row="1" Style="{StaticResource PropertyTextBoxError}" Text="{Binding Extender.CoveringLayer, Converter={StaticResource MultyThousandConverter}, ValidatesOnDataErrors=True}"/>
+                    <TextBlock Grid.Column="2" Grid.Row="1" Style="{StaticResource PropertyTextBlock}" Text="мм"/>
+                </Grid>
+            </StackPanel>
+        </Expander>
+    </DataTemplate>
+    <DataTemplate x:Key="RFByRectArray">
+        <Expander Header="{Binding Name}">
+            <StackPanel>
+                <ContentControl ContentTemplate="{StaticResource RFClassSelector}" Content="{Binding}"/>
+                <Grid Visibility="{Binding Extender.VisibleCover, Converter={StaticResource BoolToVisibilityConverter}}">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition Width="100"/>
+                        <ColumnDefinition Width="50"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Style="{StaticResource PropertyTextBlock}" Text="Расстояние до оси стержня"/>
+                    <TextBox Grid.Column="1" Style="{StaticResource PropertyTextBoxError}" Text="{Binding Extender.Placement.CoveringLayer, Converter={StaticResource MultyThousandConverter}, ValidatesOnDataErrors=True}"/>
+                    <TextBlock Grid.Column="2" Style="{StaticResource PropertyTextBlock}" Text="мм"/>
+            </Grid>
+                <Grid Visibility="{Binding Extender.VisibleCenter, Converter={StaticResource BoolToVisibilityConverter}}">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition Width="100"/>
+                        <ColumnDefinition Width="50"/>
+                    </Grid.ColumnDefinitions>
+                </Grid>
+                <Grid Visibility="{Binding Extender.VisibleSizes, Converter={StaticResource BoolToVisibilityConverter}}">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition Width="100"/>
+                        <ColumnDefinition Width="50"/>
+                    </Grid.ColumnDefinitions>
+                </Grid>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition Width="100"/>
+                        <ColumnDefinition Width="50"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Style="{StaticResource PropertyTextBlock}" Text="Количество вдоль оси X"/>
+                    <TextBox Grid.Column="1" Style="{StaticResource PropertyTextBoxError}" Text="{Binding Extender.Placement.QuantityX, ValidatesOnDataErrors=True}"/>
+                    <TextBlock Grid.Column="2" Style="{StaticResource PropertyTextBlock}" Text="шт"/>
+                </Grid>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition Width="100"/>
+                        <ColumnDefinition Width="50"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Style="{StaticResource PropertyTextBlock}" Text="Количество вдоль оси Y"/>
+                    <TextBox Grid.Column="1" Style="{StaticResource PropertyTextBoxError}" Text="{Binding  Extender.Placement.QuantityY, ValidatesOnDataErrors=True}"/>
+                    <TextBlock Grid.Column="2" Style="{StaticResource PropertyTextBlock}" Text="шт"/>
+                </Grid>
+                <Grid Visibility="{Binding Extender.VisibleFillArray, Converter={StaticResource BoolToVisibilityConverter}}">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition Width="100"/>
+                        <ColumnDefinition Width="50"/>
+                    </Grid.ColumnDefinitions>
+                </Grid>
+            </StackPanel>
+        </Expander>
+    </DataTemplate>
 
-                            <TextBlock Grid.Column="2" Grid.Row="1" Style="{StaticResource PropertyTextBlock}" Text="мм"/>
-                            <TextBlock Grid.Column="2" Grid.Row="2" Style="{StaticResource PropertyTextBlock}" Text="мм"/>
-                            <TextBlock Grid.Column="2" Grid.Row="3" Style="{StaticResource PropertyTextBlock}" Text="мм"/>
-                        </Grid>
-                    </Expander>
-                </DataTemplate>
-            </ListView.ItemTemplate>
+    <DataTemplate x:Key="ReinforcementSpacing">
+        <ListView ItemsSource="{Binding MaterialUsings}">
+            <ListView.ItemTemplateSelector>
+                <local:RFTemplateSelector RFBySpacing="{StaticResource RFBySpacing}" RFByRectArray="{StaticResource RFByRectArray}"/>
+            </ListView.ItemTemplateSelector>
         </ListView>
     </DataTemplate>
 
@@ -67,6 +140,7 @@
             <ContentControl ContentTemplate="{StaticResource ReinforcementSpacing}" Content="{Binding}"/>
         </Expander>
     </DataTemplate>
+
     <DataTemplate x:Key="DtConcreteSelect">
         <Expander Header="Бетон">
             <Grid>
@@ -89,5 +163,5 @@
             </Grid>
         </Expander>
     </DataTemplate>
-    
+
 </ResourceDictionary>
