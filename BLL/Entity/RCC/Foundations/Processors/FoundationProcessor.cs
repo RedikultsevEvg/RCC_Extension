@@ -873,7 +873,6 @@ namespace RDBLL.Entity.RCC.Foundations.Processors
         /// <returns></returns>
         public static double SndResistance (Foundation foundation)
         {
-
             double resistance = 0;
             List<CompressedLayerList> compressedLayerList = foundation.Result.CompressedLayers;
             List<CompressedLayer> compressedLayers = compressedLayerList[0].CompressedLayers;

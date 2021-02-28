@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using RDBLL.Entity.Common.Placements;
 
-namespace RDBLL.Entity.Common.Materials.RFPlacementAdapters
+namespace RDBLL.Entity.Common.Materials.RFExtenders
 {
     public class LineToSurfBySpacing : LineToSurf
     {

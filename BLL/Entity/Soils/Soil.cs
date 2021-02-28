@@ -16,7 +16,7 @@ namespace RDBLL.Entity.Soils
     /// <summary>
     /// Абстрактный класс грунта
     /// </summary>
-    public abstract class Soil : ISavableToDataSet, IRDObservable
+    public abstract class Soil : IDsSaveable, IRDObservable
     {
         #region Properties
         /// <summary>

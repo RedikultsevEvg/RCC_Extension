@@ -136,7 +136,7 @@ namespace RDUIL.WPF_Windows.Foundations
             {
                 int a = LvMain.SelectedIndex;
                 Foundation foundation = _collection[a];
-                Foundation newFoundation = foundation.Duplicate() as Foundation;
+                Foundation newFoundation = foundation.Clone() as Foundation;
                 newFoundation.LevelId = foundation.LevelId;
                 newFoundation.Level = foundation.Level;
                 try

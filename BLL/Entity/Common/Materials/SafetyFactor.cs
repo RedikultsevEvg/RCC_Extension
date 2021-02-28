@@ -43,7 +43,7 @@ namespace RDBLL.Entity.Common.Materials
         /// <summary>
         /// Ссылка на родителя
         /// </summary>
-        public ISavableToDataSet ParentMember { get; private set; }
+        public IDsSaveable ParentMember { get; private set; }
         #endregion
         #region Constructors
         /// <summary>
@@ -122,7 +122,7 @@ namespace RDBLL.Entity.Common.Materials
         }
         #endregion
         #region Methods
-        public void RegisterParent(ISavableToDataSet materialUsing)
+        public void RegisterParent(IDsSaveable materialUsing)
         {
             ParentMember = materialUsing;
         }
@@ -134,14 +134,10 @@ namespace RDBLL.Entity.Common.Materials
         /// Дублирует текущий объект
         /// </summary>
         /// <returns></returns>
-        public object Duplicate()
+        public object Clone()
         {
-            SafetyFactor safetyFactor = new SafetyFactor(true);
-            safetyFactor.Name = Name;
-            safetyFactor.PsfFst = PsfFst;
-            safetyFactor.PsfSnd = PsfSnd;
-            safetyFactor.PsfFstLong = PsfFstLong;
-            safetyFactor.PsfSndLong = PsfSndLong;
+            SafetyFactor safetyFactor = MemberwiseClone() as SafetyFactor;
+            safetyFactor.Id = ProgrammSettings.CurrentId;
             return safetyFactor;
         }
         #endregion

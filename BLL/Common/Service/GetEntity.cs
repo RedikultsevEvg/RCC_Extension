@@ -11,6 +11,7 @@ using System.Collections.ObjectModel;
 using System.Data;
 using System.Linq;
 using RDBLL.Entity.Common.Placements;
+using RDBLL.Common.Params;
 
 namespace RDBLL.Common.Service
 {
@@ -393,7 +394,7 @@ namespace RDBLL.Common.Service
             }
             return newObjects;
         }
-        public static List<MaterialContainer> GetContainers (DataSet dataSet, ISavableToDataSet parent)
+        public static List<MaterialContainer> GetContainers (DataSet dataSet, IDsSaveable parent)
         {
             List<MaterialContainer> materialContainers = new List<MaterialContainer>();
             DataTable dataTable = dataSet.Tables["MaterialContainers"];
@@ -419,7 +420,7 @@ namespace RDBLL.Common.Service
             }
             return materialContainers;
         }
-        public static List<MaterialUsing> GetMaterialUsings(DataSet dataSet, ISavableToDataSet parent)
+        public static List<MaterialUsing> GetMaterialUsings(DataSet dataSet, IDsSaveable parent)
         {
             List<MaterialUsing> materialUsings = new List<MaterialUsing>();
             DataTable dataTable = dataSet.Tables["MaterialUsings"];
@@ -449,14 +450,13 @@ namespace RDBLL.Common.Service
             }
             return materialUsings;
         }
-
-        public static Placement GetPlacement(DataSet dataSet, IHavePlacement parent)
+        public static Placement GetPlacement(DataSet dataSet, IHasPlacement parent)
         {
             Placement placement;
-            ISavableToDataSet savableParent;
-            if (parent is ISavableToDataSet)
+            IDsSaveable savableParent;
+            if (parent is IDsSaveable)
             {
-                savableParent = parent as ISavableToDataSet;
+                savableParent = parent as IDsSaveable;
             }
             else throw new Exception("Parent is not SavableToDataSet");
             DataTable dataTable = dataSet.Tables["Placements"];
@@ -466,10 +466,12 @@ namespace RDBLL.Common.Service
 
             string type = row.Field<string>("Type");
             if (string.Compare(type, "LineBySpacing") == 0) { placement = new LineBySpacing(); }
+            else if (string.Compare(type, "RectArrayPlacement") == 0) { placement = new RectArrayPlacement(); }
             else throw new Exception("Reinforcement spacing type is not valid");
             placement.OpenFromDataSet(row);
             parent.SetPlacement(placement);
             placement.RegisterParent(savableParent);
+            placement.StoredParams = GetStoredParams(dataSet, placement);
             return placement;
         }
 
@@ -483,6 +485,23 @@ namespace RDBLL.Common.Service
             foreach (var dataRow in query)
             {
                 SafetyFactor newObject = new SafetyFactor();
+                newObject.OpenFromDataSet(dataRow);
+                newObject.RegisterParent(parent);
+                newObjects.Add(newObject);
+            }
+            return newObjects;
+        }
+
+        private static List<StoredParam> GetStoredParams(DataSet dataSet, IDsSaveable parent)
+        {
+            List<StoredParam> newObjects = new List<StoredParam>();
+            DataTable dataTable = dataSet.Tables["StoredParams"];
+            var query = from dataRow in dataTable.AsEnumerable()
+                        where dataRow.Field<int>("ParentId") == parent.Id
+                        select dataRow;
+            foreach (var dataRow in query)
+            {
+                StoredParam newObject = new StoredParam(parent);
                 newObject.OpenFromDataSet(dataRow);
                 newObject.RegisterParent(parent);
                 newObjects.Add(newObject);

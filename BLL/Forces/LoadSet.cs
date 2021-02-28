@@ -14,7 +14,7 @@ namespace RDBLL.Forces
     /// <summary>
     ///Клас комбинации загружений 
     /// </summary>
-    public class LoadSet : Load, IEquatable<LoadSet>, ISavableToDataSet, IDuplicate
+    public class LoadSet : Load, IEquatable<LoadSet>, IDsSaveable, IDuplicate
     {
         #region
         /// <summary>
@@ -192,7 +192,7 @@ namespace RDBLL.Forces
         /// Клонирование объекта
         /// </summary>
         /// <returns></returns>
-        public object Duplicate()
+        public object Clone()
         {
             LoadSet loadSet = new LoadSet();
             loadSet.Id = ProgrammSettings.CurrentId;
@@ -204,7 +204,7 @@ namespace RDBLL.Forces
             //Копируем параметры нагрузки
             foreach (ForceParameter forceParameter in ForceParameters)
             {
-                ForceParameter newForceParameter = forceParameter.Duplicate() as ForceParameter;
+                ForceParameter newForceParameter = forceParameter.Clone() as ForceParameter;
                 newForceParameter.LoadId = loadSet.Id;
                 newForceParameter.LoadSet = loadSet;
                 loadSet.ForceParameters.Add(newForceParameter);

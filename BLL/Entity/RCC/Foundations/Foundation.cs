@@ -15,14 +15,14 @@ using RDBLL.Entity.Soils;
 using RDBLL.Entity.RCC.Foundations.Processors;
 using RDBLL.Entity.Common.Materials;
 using RDBLL.Entity.Common.Placements;
-using RDBLL.Entity.Common.Materials.RFPlacementAdapters;
+using RDBLL.Entity.Common.Materials.RFExtenders;
 
 namespace RDBLL.Entity.RCC.Foundations
 {
     /// <summary>
     /// Класс столбчатого фундамента
     /// </summary>
-    public class Foundation : IHaveForcesGroups, ISavableToDataSet, IDataErrorInfo, IRDObserver, IDuplicate, IHasSoilSection
+    public class Foundation : IHasForcesGroups, IDsSaveable, IDataErrorInfo, IRDObserver, ICloneable, IHasSoilSection
     {
         /// <summary>
         /// Класс для хранения результатов расчета фундамента
@@ -326,8 +326,15 @@ namespace RDBLL.Entity.RCC.Foundations
             foreach (MaterialUsing  materialUsing in BottomReinforcement.MaterialUsings)
             {
                 ReinforcementUsing reinforcement = materialUsing as ReinforcementUsing;
-                reinforcement.SetAdapter(new LineToSurfBySpacing());
-                reinforcement.Adapter.SetPlacement(reinforcement.Placement);
+                reinforcement.SetExtender(new LineToSurfBySpacing());
+                reinforcement.Extender.SetPlacement(reinforcement.Placement);
+            }
+
+            foreach (MaterialUsing materialUsing in VerticalReinforcement.MaterialUsings)
+            {
+                ReinforcementUsing reinforcement = materialUsing as ReinforcementUsing;
+                reinforcement.SetExtender(ExtenderFactory.GetCoveredArray(ExtenderType.CoveredArray));
+                reinforcement.Extender.SetPlacement(reinforcement.Placement);
             }
 
             List<MaterialUsing> materialUsings = GetEntity.GetMaterialUsings(dataRow.Table.DataSet, this);
@@ -381,15 +388,15 @@ namespace RDBLL.Entity.RCC.Foundations
         /// Клонирование объекта
         /// </summary>
         /// <returns></returns>
-        public object Duplicate()
+        public object Clone()
         {
             void DuplicateMaterial(Foundation found)
             {
-                found.BottomReinforcement = BottomReinforcement.Duplicate() as MaterialContainer;
+                found.BottomReinforcement = BottomReinforcement.Clone() as MaterialContainer;
                 found.BottomReinforcement.RegisterParent(found);
-                found.VerticalReinforcement = VerticalReinforcement.Duplicate() as MaterialContainer;
+                found.VerticalReinforcement = VerticalReinforcement.Clone() as MaterialContainer;
                 found.VerticalReinforcement.RegisterParent(found);
-                found.Concrete = Concrete.Duplicate() as ConcreteUsing;
+                found.Concrete = Concrete.Clone() as ConcreteUsing;
                 found.Concrete.RegisterParent(found);
             }
             Foundation foundation = new Foundation();
@@ -413,7 +420,7 @@ namespace RDBLL.Entity.RCC.Foundations
             //Копируем нагрузки
             foreach (ForcesGroup forcesGroup in ForcesGroups)
             {
-                ForcesGroup newForcesGroup = forcesGroup.Duplicate() as ForcesGroup;
+                ForcesGroup newForcesGroup = forcesGroup.Clone() as ForcesGroup;
                 newForcesGroup.Foundations.Add(foundation);
                 foundation.ForcesGroups.Clear();
                 foundation.ForcesGroups.Add(newForcesGroup);
@@ -421,7 +428,7 @@ namespace RDBLL.Entity.RCC.Foundations
             //Копируем ступени
             foreach (RectFoundationPart rectFoundationPart in this.Parts)
             {
-                RectFoundationPart newFoundationPart = rectFoundationPart.Duplicate() as RectFoundationPart;
+                RectFoundationPart newFoundationPart = rectFoundationPart.Clone() as RectFoundationPart;
                 newFoundationPart.FoundationId = foundation.Id;
                 newFoundationPart.Foundation = foundation;
                 foundation.Parts.Add(newFoundationPart);
@@ -455,21 +462,37 @@ namespace RDBLL.Entity.RCC.Foundations
 
         private void addMaterial(Foundation foundation)
         {
-            ReinforcementUsing GetBottomReinforcement(MaterialContainer container, double coveringLayer, string rusName, string engName)
+            ReinforcementUsing GetRF(MaterialContainer container, string rusName, string engName)
             {
                 ReinforcementUsing rf = new ReinforcementUsing(container);
                 rf.Name = rusName;
                 rf.Purpose = engName;
                 rf.Diameter = 0.012;
                 rf.SelectedId = ProgrammSettings.ReinforcementKinds[0].Id;
-                LineBySpacing placement = new LineBySpacing();
-                placement.RegisterParent(rf);
-                LineToSurfBySpacing adapter = new LineToSurfBySpacing();
-                rf.SetAdapter(adapter);
-                rf.SetPlacement(placement);
-                adapter.CoveringLayer = coveringLayer;
                 return rf;
             }
+            ReinforcementUsing GetBottomReinforcement(MaterialContainer container, double coveringLayer, string rusName, string engName)
+            {
+                ReinforcementUsing rf = GetRF(container, rusName, engName);
+                LineBySpacing placement = new LineBySpacing();
+                placement.RegisterParent(rf);
+                LineToSurfBySpacing extender = ExtenderFactory.GetCoveredArray(ExtenderType.CoveredLine) as LineToSurfBySpacing;
+                rf.SetExtender(extender);
+                rf.SetPlacement(placement);
+                extender.CoveringLayer = coveringLayer;
+                return rf;
+            }
+            ReinforcementUsing GetUndColumnRF(MaterialContainer container, double coveringLayer, string rusName, string engName)
+            {
+                ReinforcementUsing rf = GetRF(container, rusName, engName);
+                RectArrayPlacement placement = new RectArrayPlacement();
+                placement.CoveringLayer = 0.05;
+                placement.RegisterParent(rf);
+                rf.SetExtender(ExtenderFactory.GetCoveredArray(ExtenderType.CoveredArray));
+                rf.SetPlacement(placement);
+                return rf;
+            }
+
             #region Армирование подошвы
             MaterialContainer materialContainer = new MaterialContainer(this);
             materialContainer.Name = "Армирование подошвы";
@@ -482,8 +505,11 @@ namespace RDBLL.Entity.RCC.Foundations
             #endregion
             #region Армирование подколонника
             MaterialContainer verticalContainer = new MaterialContainer(this);
-            verticalContainer.Name = "Армирование подколонника";
+            verticalContainer.Name = "Вертикальное армирование";
             verticalContainer.Purpose = "UndColumn";
+            foundation.VerticalReinforcement = verticalContainer;
+            ReinforcementUsing rfVert = GetUndColumnRF(verticalContainer, 0.07, "Подколонник", "UndColumn");
+            verticalContainer.MaterialUsings.Add(rfVert);
             foundation.VerticalReinforcement = verticalContainer;
             #endregion
             #region Добавляем бетон

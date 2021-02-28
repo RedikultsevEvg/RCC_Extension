@@ -3,11 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using RDBLL.Common.Interfaces;
 
-namespace RDBLL.Entity.Common.Materials.Interfaces
+namespace RDBLL.Entity.RCC.Foundations.Processors
 {
-    public interface IMaterialKind :IDsSaveable
+    public static class SoilResistantProc
     {
     }
 }

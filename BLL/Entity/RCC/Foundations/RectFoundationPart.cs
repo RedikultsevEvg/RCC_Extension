@@ -14,7 +14,7 @@ namespace RDBLL.Entity.RCC.Foundations
     /// <summary>
     /// Класс части (ступени) фундамента
     /// </summary>
-    public class RectFoundationPart :FoundationPart, ISavableToDataSet, IDataErrorInfo, IDuplicate
+    public class RectFoundationPart :FoundationPart, IDsSaveable, IDataErrorInfo, IDuplicate
     {
         #region fields and properties
         /// <summary>
@@ -90,16 +90,10 @@ namespace RDBLL.Entity.RCC.Foundations
         /// Клонирование объекта
         /// </summary>
         /// <returns></returns>
-        public object Duplicate()
+        public object Clone()
         {
-            RectFoundationPart rectFoundationPart = new RectFoundationPart();
+            RectFoundationPart rectFoundationPart = MemberwiseClone() as RectFoundationPart;
             rectFoundationPart.Id = ProgrammSettings.CurrentId;
-            rectFoundationPart.Name = this.Name;
-            rectFoundationPart.CenterX = this.CenterX;
-            rectFoundationPart.CenterY = this.CenterY;
-            rectFoundationPart.Width = this.Width;
-            rectFoundationPart.Length = this.Length;
-            rectFoundationPart.Height = this.Height;
             return rectFoundationPart;
         }
         #endregion

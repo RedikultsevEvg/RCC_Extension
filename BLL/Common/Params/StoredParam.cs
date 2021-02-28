@@ -4,10 +4,24 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using RDBLL.Common.Service;
+using RDBLL.Common.Interfaces;
+using System.Data;
+using DAL.Common;
 
 namespace RDBLL.Common.Params
 {
-    public class StoredParam : ICloneable
+    /// <summary>
+    /// Перечисление возможных типов параметра
+    /// </summary>
+    public enum ParamNames
+    {
+        i, //int
+        d, //double
+        s, //string
+        b //bool
+    }
+
+    public class StoredParam : IHasParent, ICloneable
     {
         /// <summary>
         /// Поле для типа параметра
@@ -37,6 +51,14 @@ namespace RDBLL.Common.Params
         /// Значение параметра
         /// </summary>
         public string ParameterValue { get; set; }
+
+        public IDsSaveable ParentMember { get; private set; }
+
+        public StoredParam (IDsSaveable parent)
+        {
+            RegisterParent(parent);
+        }
+
         public void SetValueType(string s)
         {
             _ValueType = s;
@@ -122,11 +144,66 @@ namespace RDBLL.Common.Params
 
         public object Clone()
         {
-            StoredParam newObject = new StoredParam();
+            StoredParam newObject = MemberwiseClone() as StoredParam;
+            newObject.UnRegisterParent();
             newObject.Id = ProgrammSettings.CurrentId;
-            newObject.ValueType = ValueType;
-            newObject.ParameterValue = ParameterValue;
             return newObject;
         }
+
+        /// <summary>
+        /// Возвращает имя таблицы, в которое должно производиться сохранение
+        /// </summary>
+        /// <returns></returns>
+        public string GetTableName() => "StoredParams";
+
+        /// <summary>
+        /// Сохраняет запись в датасет
+        /// </summary>
+        /// <param name="dataSet"></param>
+        /// <param name="createNew"></param>
+        public void SaveToDataSet(DataSet dataSet, bool createNew)
+        {
+            DataTable dataTable = dataSet.Tables[GetTableName()];
+            DataRow row = DsOperation.CreateNewRow(Id, createNew, dataTable);
+            #region setFields
+            row.SetField("Id", Id);
+            row.SetField("Name", Name);
+            row.SetField("ParentId", ParentMember.Id);
+            row.SetField("Type", ValueType);
+            row.SetField("Value", ParameterValue);
+            #endregion
+            dataTable.AcceptChanges();
+        }
+        /// <summary>
+        /// Открывает запись из датасета
+        /// </summary>
+        /// <param name="dataSet"></param>
+        public void OpenFromDataSet(DataSet dataSet) => OpenFromDataSet(DsOperation.OpenFromDataSetById(dataSet, GetTableName(), Id));
+        /// <summary>
+        /// Открывает строку из датасета
+        /// </summary>
+        /// <param name="dataRow"></param>
+        public void OpenFromDataSet(DataRow dataRow)
+        {
+            Id = dataRow.Field<int>("Id");
+            Name = dataRow.Field<string>("Name");
+            ValueType = dataRow.Field<string>("Type");
+            ParameterValue = dataRow.Field<string>("Value");
+        }
+        /// <summary>
+        /// Удаляет запись из датасета
+        /// </summary>
+        /// <param name="dataSet"></param>
+        public void DeleteFromDataSet(DataSet dataSet) => DsOperation.DeleteRow(dataSet, GetTableName(), Id);
+        /// <summary>
+        /// Регистрирует ссылку на родителя
+        /// </summary>
+        /// <param name="parent"></param>
+        public void RegisterParent(IDsSaveable parent) => ParentMember = parent;
+        /// <summary>
+        /// Удаляет ссылку на родителя
+        /// </summary>
+        public void UnRegisterParent() => ParentMember = null;
+
     }
 }

@@ -7,7 +7,7 @@ using RDBLL.Common.Interfaces;
 
 namespace RDBLL.Entity.Common.Materials.Interfaces
 {
-    interface IMaterialUsing :ISavableToDataSet
+    interface IMaterialUsing :IDsSaveable
     {
         /// <summary>
         /// Код выбранного материала
@@ -28,7 +28,7 @@ namespace RDBLL.Entity.Common.Materials.Interfaces
         /// <summary>
         /// Ссылка на родительский элемент
         /// </summary>
-        ISavableToDataSet Parent { get; set; }
+        IDsSaveable Parent { get; set; }
         /// <summary>
         /// Обновление ссылки на выбранный материал
         /// </summary>

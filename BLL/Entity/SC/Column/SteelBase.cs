@@ -15,7 +15,7 @@ namespace RDBLL.Entity.SC.Column
     /// <summary>
     /// База стальной колонны
     /// </summary>
-    public class SteelBase : ICloneable, ISavableToDataSet, IHaveForcesGroups
+    public class SteelBase : ICloneable, IDsSaveable, IHasForcesGroups
     {
         #region Fields
         //private bool _isActual;

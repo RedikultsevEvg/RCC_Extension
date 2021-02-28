@@ -15,7 +15,7 @@ namespace RDBLL.Entity.Soils
     /// <summary>
     /// Класс слоя грунта
     /// </summary>
-    public class SoilLayer : ISavableToDataSet, IRDObservable, IRDObserver
+    public class SoilLayer : IDsSaveable, IRDObservable, IRDObserver
 
     {
         /// <summary>

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace RDBLL.Entity.Common.Placements
 {
-    public interface IHavePlacement
+    public interface IHasPlacement
     {
         /// <summary>
         /// Свойство для сохранения расположения элементов

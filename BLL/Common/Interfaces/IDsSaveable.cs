@@ -10,7 +10,7 @@ namespace RDBLL.Common.Interfaces
     /// <summary>
     /// Интерфейс объектов для которых возможно сохранение в датасет
     /// </summary>
-    public interface ISavableToDataSet
+    public interface IDsSaveable
     {
         /// <summary>
         /// Код элемента

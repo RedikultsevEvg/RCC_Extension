@@ -14,7 +14,7 @@ namespace RDBLL.Entity.Soils
     /// <summary>
     /// Класс скального грунта
     /// </summary>
-    public class RockSoil :BearingSoil, ISavableToDataSet
+    public class RockSoil :BearingSoil, IDsSaveable
     {
         /// <summary>
         /// Нормативное сопротивление

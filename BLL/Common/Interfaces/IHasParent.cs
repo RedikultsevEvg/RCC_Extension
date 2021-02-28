@@ -9,17 +9,17 @@ namespace RDBLL.Common.Interfaces
     /// <summary>
     /// Интерфейс для объектов, имеющих ссылку на родителя
     /// </summary>
-    public interface IHasParent :ISavableToDataSet
+    public interface IHasParent :IDsSaveable
     {
         /// <summary>
         /// Свойство для хранения ссылки на родителя
         /// </summary>
-        ISavableToDataSet ParentMember { get;}
+        IDsSaveable ParentMember { get;}
         /// <summary>
         /// Регистрирует родителя
         /// </summary>
         /// <param name="parent"></param>
-        void RegisterParent(ISavableToDataSet parent);
+        void RegisterParent(IDsSaveable parent);
         /// <summary>
         /// Удаляет ссылку на родителя
         /// </summary>
