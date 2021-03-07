@@ -34,9 +34,8 @@ namespace RDBLL.Common.Service
             {
                 Building newObject = new Building();
                 newObject.OpenFromDataSet(dataRow);
-                newObject.BuildingSite = buildingSite;
+                newObject.RegisterParent(buildingSite);
                 newObject.Levels = GetLevels(dataSet, newObject);
-                newObjects.Add(newObject);
             }
             return newObjects;
         }
@@ -57,10 +56,9 @@ namespace RDBLL.Common.Service
             {
                 Level newObject = new Level();
                 newObject.OpenFromDataSet(dataRow);
-                newObject.Building = building;
+                newObject.RegisterParent(building);
                 newObject.SteelBases = GetSteelBases(dataSet, newObject);
                 newObject.Foundations = GetFoundations(dataSet, newObject);
-                newObjects.Add(newObject);
             }
             return newObjects;
         }

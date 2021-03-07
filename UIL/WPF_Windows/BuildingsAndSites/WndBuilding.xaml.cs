@@ -33,13 +33,13 @@ namespace RDUIL.WPF_Windows.BuildingsAndSites
 
         private void BtnSoils_Click(object sender, RoutedEventArgs e)
         {
-            WndSoils wndSoils = new WndSoils(_element.BuildingSite);
+            WndSoils wndSoils = new WndSoils(_element.ParentMember as BuildingSite);
             wndSoils.ShowDialog();
         }
 
         private void BtnSoilSections_Click(object sender, RoutedEventArgs e)
         {
-            WndSoilSections wndSoilSections = new WndSoilSections(_element.BuildingSite);
+            WndSoilSections wndSoilSections = new WndSoilSections(_element.ParentMember as BuildingSite);
             wndSoilSections.ShowDialog();
         }
 

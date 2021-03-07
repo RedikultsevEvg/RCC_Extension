@@ -195,20 +195,16 @@ namespace RDBLL.Entity.RCC.BuildingAndSite
     /// <summary>
     /// Класс здания
     /// </summary>
-    public class Building : ICloneable, IDsSaveable, IDataErrorInfo
+    public class Building : ICloneable, IHasParent, IDataErrorInfo
     {
         /// <summary>
         /// Код здания
         /// </summary>
         public int Id { get; set; }
         /// <summary>
-        /// Код строительного объекта
-        /// </summary>
-        public int BuildingSiteId { get; set; }
-        /// <summary>
         /// Обратная ссылка на строительный объект
         /// </summary>
-        public BuildingSite BuildingSite { get; set; }
+        public IDsSaveable ParentMember { get; private set; }
         /// <summary>
         /// Наименование
         /// </summary>
@@ -269,12 +265,11 @@ namespace RDBLL.Entity.RCC.BuildingAndSite
         public Building(BuildingSite buildingSite)
         {
             Id = ProgrammSettings.CurrentId;
-            BuildingSiteId = buildingSite.Id;
             Name = "Мое здание";
             RelativeLevel = 0;
             AbsoluteLevel = 260;
             AbsolutePlaningLevel = 260;
-            BuildingSite = buildingSite;
+            RegisterParent(buildingSite);
             MaxFoundationSettlement = 0.08;
             IsRigid = false;
             RigidRatio = 4;
@@ -311,7 +306,7 @@ namespace RDBLL.Entity.RCC.BuildingAndSite
                 row = tmpRow;
             }
             row.SetField("Id", Id);
-            row.SetField("BuildingSiteId", BuildingSiteId);
+            row.SetField("ParentId", ParentMember.Id);
             row.SetField("Name", Name);
             row.SetField("RelativeLevel", RelativeLevel);
             row.SetField("AbsoluteLevel", AbsoluteLevel);
@@ -344,7 +339,6 @@ namespace RDBLL.Entity.RCC.BuildingAndSite
         public void OpenFromDataSet(DataRow dataRow)
         {
             Id = dataRow.Field<int>("Id");
-            BuildingSiteId = dataRow.Field<int>("BuildingSiteId");
             Name = dataRow.Field<string>("Name");
             RelativeLevel = dataRow.Field<double>("RelativeLevel");
             AbsoluteLevel = dataRow.Field<double>("AbsoluteLevel");
@@ -370,6 +364,32 @@ namespace RDBLL.Entity.RCC.BuildingAndSite
         {
             return this.MemberwiseClone();
         }
+        /// <summary>
+        /// Регистрирует родительский элемент
+        /// </summary>
+        /// <param name="parent"></param>
+        public void RegisterParent(IDsSaveable parent)
+        {
+            BuildingSite buildingSite;
+            try
+            {
+                buildingSite = parent as BuildingSite;
+            }
+            catch
+            {
+                throw new Exception("Parent type is not valid");
+            }
+            buildingSite.Buildings.Add(this);
+            ParentMember = buildingSite;
+        }
+
+        public void UnRegisterParent()
+        {
+            BuildingSite buildingSite = ParentMember as BuildingSite;
+            buildingSite.Buildings.Remove(this);
+            ParentMember = null;
+        }
+
         /// <summary>
         /// Поле для ошибки
         /// </summary>

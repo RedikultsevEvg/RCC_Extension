@@ -33,44 +33,44 @@ namespace RDUIL.WinForms
         public frmWall(Wall wall)
         {
             InitializeComponent();
-            _wall = wall;
-            _level = wall.Level;
-            _wallType = _wall.WallType;
-            _building = _level.Building;
-            _levelList = _building.Levels;
-            _wallTypeList = _building.WallTypeList;
-            _tmpStartPoint = (Point2D)_wall.StartPoint.Clone();
-            _tmpEndPoint = (Point2D)_wall.EndPoint.Clone();
-            _tmpVertSpacingSetting = (BarSpacingSettings)_wall.VertSpacingSetting.Clone();
-            _tmpHorSpacingSetting = (BarSpacingSettings)_wallType.HorSpacingSetting.Clone();
+            //_wall = wall;
+            //_level = wall.Level;
+            //_wallType = _wall.WallType;
+            //_building = _level.ParentMember;
+            //_levelList = _building.Levels;
+            //_wallTypeList = _building.WallTypeList;
+            //_tmpStartPoint = (Point2D)_wall.StartPoint.Clone();
+            //_tmpEndPoint = (Point2D)_wall.EndPoint.Clone();
+            //_tmpVertSpacingSetting = (BarSpacingSettings)_wall.VertSpacingSetting.Clone();
+            //_tmpHorSpacingSetting = (BarSpacingSettings)_wallType.HorSpacingSetting.Clone();
 
-            tbName.Text = _wall.Name;
-            tbStartCoord.Text = _wall.StartPoint.PointText();
-            tbEndCoord.Text = _wall.EndPoint.PointText();
-            nudConcreteStartOffset.Value = Convert.ToDecimal(_wall.ConcreteStartOffset);
-            nudConcreteEndOffset.Value = Convert.ToDecimal(_wall.ConcreteEndOffset);
-            cbRewriteHeight.Checked = _wall.ReWriteHeight;
-            nudHeight.Value = Convert.ToDecimal(_wall.Height);
-            if (_wall.OverrideVertSpacing) { tbVertSpacing.Text = _wall.VertSpacingSetting.SpacingText(); } else { tbVertSpacing.Text = _wall.WallType.VertSpacingSetting.SpacingText(); }
-            if (_wall.OverrideHorSpacing) { tbHorSpacing.Text = _wall.HorSpacingSetting.SpacingText(); } else { tbHorSpacing.Text = _wall.WallType.HorSpacingSetting.SpacingText(); }
-            cbOverrideVertSpacing.Checked = _wall.OverrideVertSpacing;
-            cbOverrideHorSpacing.Checked = _wall.OverrideHorSpacing;
-            nudReinforcementStartOffset.Value = Convert.ToDecimal(_wall.ReiforcementStartOffset);
-            nudReinforcementEndOffset.Value = Convert.ToDecimal(_wall.ReiforcementEndOffset);
-            int Counter=0;
-            foreach (Level levelItem in _levelList)
-            {
-                cbLevels.Items.Add(levelItem.Name);
-                if (ReferenceEquals(levelItem, _level)) { cbLevels.SelectedIndex = Counter;}
-                Counter++;
-            }
-            Counter = 0;
-            foreach (WallType wallTypeItem in _wallTypeList)
-            {
-                cbWallTypes.Items.Add(wallTypeItem.Name);
-                if (ReferenceEquals(wallTypeItem, _wallType)) { cbWallTypes.SelectedIndex = Counter; }
-                Counter++;
-            }
+            //tbName.Text = _wall.Name;
+            //tbStartCoord.Text = _wall.StartPoint.PointText();
+            //tbEndCoord.Text = _wall.EndPoint.PointText();
+            //nudConcreteStartOffset.Value = Convert.ToDecimal(_wall.ConcreteStartOffset);
+            //nudConcreteEndOffset.Value = Convert.ToDecimal(_wall.ConcreteEndOffset);
+            //cbRewriteHeight.Checked = _wall.ReWriteHeight;
+            //nudHeight.Value = Convert.ToDecimal(_wall.Height);
+            //if (_wall.OverrideVertSpacing) { tbVertSpacing.Text = _wall.VertSpacingSetting.SpacingText(); } else { tbVertSpacing.Text = _wall.WallType.VertSpacingSetting.SpacingText(); }
+            //if (_wall.OverrideHorSpacing) { tbHorSpacing.Text = _wall.HorSpacingSetting.SpacingText(); } else { tbHorSpacing.Text = _wall.WallType.HorSpacingSetting.SpacingText(); }
+            //cbOverrideVertSpacing.Checked = _wall.OverrideVertSpacing;
+            //cbOverrideHorSpacing.Checked = _wall.OverrideHorSpacing;
+            //nudReinforcementStartOffset.Value = Convert.ToDecimal(_wall.ReiforcementStartOffset);
+            //nudReinforcementEndOffset.Value = Convert.ToDecimal(_wall.ReiforcementEndOffset);
+            //int Counter=0;
+            //foreach (Level levelItem in _levelList)
+            //{
+            //    cbLevels.Items.Add(levelItem.Name);
+            //    if (ReferenceEquals(levelItem, _level)) { cbLevels.SelectedIndex = Counter;}
+            //    Counter++;
+            //}
+            //Counter = 0;
+            //foreach (WallType wallTypeItem in _wallTypeList)
+            //{
+            //    cbWallTypes.Items.Add(wallTypeItem.Name);
+            //    if (ReferenceEquals(wallTypeItem, _wallType)) { cbWallTypes.SelectedIndex = Counter; }
+            //    Counter++;
+            //}
 
         }
 

@@ -112,8 +112,8 @@ namespace CSL.Reports
         /// <param name="steelBase"></param>
         private void ProcessLoadSets(SteelBase steelBase)
         {
-            CommonServices.AddLoadsToDataset(dataSet, "LoadSets", "SteelBases", "SteelBaseId", steelBase.ForcesGroups[0].LoadSets, steelBase.Id, steelBase.Name);
-            CommonServices.AddLoadsToDataset(dataSet, "LoadCases", "SteelBases", "SteelBaseId", steelBase.LoadCases, steelBase.Id, steelBase.Name);
+            CommonServices.AddLoadsToDataset(dataSet, "LoadSets", "SteelBases", steelBase.ForcesGroups[0].LoadSets, steelBase.Id, steelBase.Name);
+            CommonServices.AddLoadsToDataset(dataSet, "LoadCases", "SteelBases", steelBase.LoadCases, steelBase.Id, steelBase.Name);
         }
         /// <summary>
         /// Оставлено 2020_01_03 на всякий случай. Добавление в датасет данных сочетаниям нагрузок
