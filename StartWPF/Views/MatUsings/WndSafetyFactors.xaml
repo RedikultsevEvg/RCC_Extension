@@ -1,0 +1,85 @@
+﻿<Window x:Class="StartWPF.Views.MatUsings.WndSafetyFactors"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:StartWPF.Views.MatUsings"
+        xmlns:vm ="clr-namespace:StartWPF.ViewModels.MatUsings"
+        xmlns:psf ="clr-namespace:RDBLL.Entity.Common.Materials;assembly=BLL"
+        mc:Ignorable="d"
+        Title="Коэффициенты надежности по материалу" Height="450" Width="800" MinHeight="300" MinWidth="300"  WindowStartupLocation="CenterScreen" ResizeMode="NoResize">
+    <Window.Resources>
+        <DataTemplate x:Key="PSFTemplate">
+            <Grid Background="#FF97FF92" Width="700" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="75,0,0,0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="35"/>
+                    <RowDefinition Height="35"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="50"/>
+                    <ColumnDefinition Width="50"/>
+                    <ColumnDefinition Width="50"/>
+                    <ColumnDefinition Width="50"/>
+                    <ColumnDefinition Width="50"/>
+                    <ColumnDefinition Width="50"/>
+                    <ColumnDefinition Width="50"/>
+                </Grid.ColumnDefinitions>
+                <TextBox x:Name="tbxThickness" Grid.Column="0"  Grid.Row="0" Grid.RowSpan="2" Style="{StaticResource PropertyTextBox}" Text="{Binding Name}" TextWrapping="Wrap"/>
+                <TextBlock Grid.Column="1" Grid.Row="0" Style="{StaticResource PropertyTextBlock}" Text="I" TextAlignment="Center"/>
+                <TextBlock Grid.Column="1" Grid.Row="1" Style="{StaticResource PropertyTextBlock}" Text="II" TextAlignment="Center"/>
+                <TextBox Grid.Column="2" Grid.Row="0" Style="{StaticResource PropertyTextBox}" Text="{Binding PsfFst, Converter={StaticResource DoubleConverter}}"/>
+                <TextBox Grid.Column="3" Grid.Row="0" Style="{StaticResource PropertyTextBox}" Text="{Binding PsfFstLong, Converter={StaticResource DoubleConverter}}"/>
+                <TextBox Grid.Column="4" Grid.Row="0" Style="{StaticResource PropertyTextBox}" Text="{Binding PsfEFst, Converter={StaticResource DoubleConverter}}"/>
+                <TextBox Grid.Column="5" Grid.Row="0" Style="{StaticResource PropertyTextBox}" Text="{Binding PsfFstTens, Converter={StaticResource DoubleConverter}}"/>
+                <TextBox Grid.Column="6" Grid.Row="0" Style="{StaticResource PropertyTextBox}" Text="{Binding PsfFstLongTens, Converter={StaticResource DoubleConverter}}"/>
+                <TextBox Grid.Column="7" Grid.Row="0" Style="{StaticResource PropertyTextBox}" Text="{Binding PsfEFstTens, Converter={StaticResource DoubleConverter}}"/>
+                <TextBox Grid.Column="2" Grid.Row="1" Style="{StaticResource PropertyTextBox}" Text="{Binding PsfSnd, Converter={StaticResource DoubleConverter}}"/>
+                <TextBox Grid.Column="3" Grid.Row="1" Style="{StaticResource PropertyTextBox}" Text="{Binding PsfSndLong, Converter={StaticResource DoubleConverter}}"/>
+                <TextBox Grid.Column="4" Grid.Row="1" Style="{StaticResource PropertyTextBox}" Text="{Binding PsfESnd, Converter={StaticResource DoubleConverter}}"/>
+                <TextBox Grid.Column="5" Grid.Row="1" Style="{StaticResource PropertyTextBox}" Text="{Binding PsfSndTens, Converter={StaticResource DoubleConverter}}"/>
+                <TextBox Grid.Column="6" Grid.Row="1" Style="{StaticResource PropertyTextBox}" Text="{Binding PsfSndLong, Converter={StaticResource DoubleConverter}}"/>
+                <TextBox Grid.Column="7" Grid.Row="1" Style="{StaticResource PropertyTextBox}" Text="{Binding PsfESndTens, Converter={StaticResource DoubleConverter}}"/>
+            </Grid>
+        </DataTemplate>
+    </Window.Resources>
+    <Grid x:Name="grid">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="80"/>
+            <RowDefinition Height="55"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <StackPanel Margin="10" Orientation="Horizontal">
+            <Button x:Name="BtnAdd" Style="{StaticResource AddServiceButton}" Command="{Binding AddCommand}"/>
+            <Button x:Name="BtnDelete" Style="{StaticResource DeleteServiceButton}" Command="{Binding RemoveCommand}" CommandParameter="{Binding SelectedPSF}"/>
+        </StackPanel>
+        <Grid Grid.Row="1" x:Name="HeaderGrid">
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="50"/>
+                <ColumnDefinition Width="50"/>
+                <ColumnDefinition Width="50"/>
+                <ColumnDefinition Width="50"/>
+                <ColumnDefinition Width="50"/>
+                <ColumnDefinition Width="50"/>
+                <ColumnDefinition Width="50"/>
+            </Grid.ColumnDefinitions>
+            <TextBlock x:Name="tbName" Grid.Column="0" Grid.Row="0"  Grid.RowSpan="2" Style="{StaticResource PropertyTextBlock}" Text="Наименование" HorizontalAlignment="Center"/>
+            <TextBlock Grid.Column="1" Grid.Row="0" Grid.RowSpan="2" Style="{StaticResource PropertyTextBlock}" Text="Группа ПС" TextAlignment="Center"/>
+            <TextBlock Grid.Column="2" Grid.Row="0"  Grid.ColumnSpan="3"  Style="{StaticResource PropertyTextBlock}" Text="Сжатие" HorizontalAlignment="Center"/>
+            <TextBlock Grid.Column="5" Grid.Row="0"  Grid.ColumnSpan="3"  Style="{StaticResource PropertyTextBlock}" Text="Растяжение" HorizontalAlignment="Center"/>
+            <TextBlock Grid.Column="2" Grid.Row="1" Style="{StaticResource PropertyTextBlock}" Text="R" HorizontalAlignment="Center"/>
+            <TextBlock Grid.Column="3" Grid.Row="1" Style="{StaticResource PropertyTextBlock}" Text="Rl" HorizontalAlignment="Center"/>
+            <TextBlock Grid.Column="4" Grid.Row="1" Style="{StaticResource PropertyTextBlock}" Text="E" HorizontalAlignment="Center"/>
+            <TextBlock Grid.Column="5" Grid.Row="1" Style="{StaticResource PropertyTextBlock}" Text="R" HorizontalAlignment="Center"/>
+            <TextBlock Grid.Column="6" Grid.Row="1" Style="{StaticResource PropertyTextBlock}" Text="Rl" HorizontalAlignment="Center"/>
+            <TextBlock Grid.Column="7" Grid.Row="1" Style="{StaticResource PropertyTextBlock}" Text="E" HorizontalAlignment="Center"/>
+        </Grid>
+        <ListView Name="lvMain" Grid.Row="2" ItemsSource="{Binding SafetyFactors}" SelectedItem="{Binding SelectedPSF}" ItemTemplate="{StaticResource PSFTemplate}">
+        </ListView>
+    </Grid>
+</Window>

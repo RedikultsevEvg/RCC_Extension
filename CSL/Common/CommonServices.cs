@@ -91,7 +91,7 @@ namespace CSL.Common
             }
         }
 
-        private static void AddLoadsTableToDataSet(DataSet dataSet, string dataTableName, string parentTableName, string ParentNameId)
+        private static void AddLoadsTableToDataSet(DataSet dataSet, string dataTableName, string parentTableName)
         {
             DataTable newTable;
             #region Loads
@@ -100,9 +100,8 @@ namespace CSL.Common
             {
                 newTable = new DataTable(dataTableName);
                 dataSet.Tables.Add(newTable);
-                DsOperation.AddIdColumn(newTable);
-                DsOperation.AddFkIdColumn(parentTableName, ParentNameId, newTable);
-                DsOperation.AddNameColumn(newTable);
+                DsOperation.AddIdColumn(newTable, true);
+                DsOperation.AddFkIdColumn(parentTableName, "ParentId", newTable);
                 DsOperation.AddStringColumn(newTable, "Description");
                 DsOperation.AddDoubleColumn(newTable, "PartialSafetyFactor");
                 DsOperation.AddStringColumn(newTable, "CrcForceDescription");
@@ -118,7 +117,7 @@ namespace CSL.Common
                 newTable = new DataTable(dataTableName+"ForceParameters");
                 dataSet.Tables.Add(newTable);
                 DsOperation.AddIntColumn(newTable, "Id");
-                DsOperation.AddFkIdColumn(parentTableName, ParentNameId, newTable);
+                DsOperation.AddFkIdColumn(parentTableName, "ParentId", newTable);
                 DsOperation.AddStringColumn(newTable, "ElementName");
                 DsOperation.AddIntColumn(newTable, "LoadSetId");
                 DsOperation.AddStringColumn(newTable, "LoadSetName");
@@ -133,9 +132,9 @@ namespace CSL.Common
             #endregion
         }
 
-        public static void AddLoadsToDataset(DataSet dataSet, string dataTableName, string parentTableName, string ParentNameId, ObservableCollection<LoadSet> loadSets, int parentId, string parentName)
+        public static void AddLoadsToDataset(DataSet dataSet, string dataTableName, string parentTableName, ObservableCollection<LoadSet> loadSets, int parentId, string parentName)
         {
-            AddLoadsTableToDataSet(dataSet, dataTableName, parentTableName, ParentNameId);
+            AddLoadsTableToDataSet(dataSet, dataTableName, parentTableName);
 
             DataTable dataTable = dataSet.Tables[dataTableName];
             foreach (LoadSet loadSet in loadSets)
@@ -178,8 +177,8 @@ namespace CSL.Common
                 }
                 newLoadSet.ItemArray = new object[]
                     {   loadSet.Id,
-                        parentId,
                         loadSet.Name,
+                        parentId,
                         "",
                         loadSet.PartialSafetyFactor,
                         crcForceDescription,

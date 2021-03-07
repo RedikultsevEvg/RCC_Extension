@@ -440,8 +440,10 @@ namespace RDBLL.Entity.RCC.Foundations
         #endregion
         public void RenewSoilSection()
         {
+            Building building = Level.ParentMember as Building;
+            BuildingSite buildingSite = building.ParentMember as BuildingSite;
             //получаем ссылку на скважину
-            foreach (SoilSection soilSection in this.Level.Building.BuildingSite.SoilSections)
+            foreach (SoilSection soilSection in buildingSite.SoilSections)
             {
                 if (!(SoilSection is null)) SoilSection.RemoveObserver(this);
                 if (soilSection.Id == SoilSectionId)

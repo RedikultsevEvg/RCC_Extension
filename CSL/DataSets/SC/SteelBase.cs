@@ -20,9 +20,8 @@ namespace CSL.DataSets.SC
             //Базы стальных колонн
             newTable = new DataTable("SteelBases");
             dataSet.Tables.Add(newTable);
-            DsOperation.AddIdColumn(newTable);
+            DsOperation.AddIdColumn(newTable, true);
             DsOperation.AddByteColumn(newTable, "Picture");
-            DsOperation.AddNameColumn(newTable);
             DsOperation.AddDoubleColumn(newTable, "SteelStrength");
             DsOperation.AddDoubleColumn(newTable, "ConcreteStrength");
             DsOperation.AddDoubleColumn(newTable, "Width");
@@ -38,10 +37,9 @@ namespace CSL.DataSets.SC
             #region SteelBasesParts
             newTable = new DataTable("SteelBasesParts");
             dataSet.Tables.Add(newTable);
-            DsOperation.AddIdColumn(newTable);
+            DsOperation.AddIdColumn(newTable, true);
             DsOperation.AddFkIdColumn("SteelBases", "SteelBaseId", newTable);
             DsOperation.AddByteColumn(newTable, "Picture");
-            DsOperation.AddNameColumn(newTable);
             DsOperation.AddDoubleColumn(newTable, "CenterX");
             DsOperation.AddDoubleColumn(newTable, "CenterY");
             DsOperation.AddDoubleColumn(newTable, "Width");
@@ -53,9 +51,8 @@ namespace CSL.DataSets.SC
             #region SteelBolts
             newTable = new DataTable("SteelBasesBolts");
             dataSet.Tables.Add(newTable);
-            DsOperation.AddIdColumn(newTable);
+            DsOperation.AddIdColumn(newTable, true);
             DsOperation.AddFkIdColumn("SteelBases", "SteelBaseId", newTable);
-            DsOperation.AddNameColumn(newTable);
             DsOperation.AddDoubleColumn(newTable, "Diameter");
             DsOperation.AddDoubleColumn(newTable, "CenterX");
             DsOperation.AddDoubleColumn(newTable, "CenterY");

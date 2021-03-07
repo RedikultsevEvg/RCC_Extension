@@ -5,6 +5,7 @@ using RDBLL.Entity.Common.NDM.Interfaces;
 using RDBLL.Entity.Common.NDM.MaterialModels;
 using RDBLL.Entity.Common.NDM.Processors;
 using RDBLL.Entity.MeasureUnits;
+using RDBLL.Entity.RCC.BuildingAndSite;
 using RDBLL.Entity.Soils;
 using RDBLL.Entity.Soils.Processors;
 using RDBLL.Forces;
@@ -176,7 +177,8 @@ namespace RDBLL.Entity.RCC.Foundations.Processors
         {
             double[] levels = new double[5];
             double[] foundationSizes = GetDeltaDistance(foundation);
-            double absZeroLevel = foundation.Level.Building.AbsoluteLevel - foundation.Level.Building.RelativeLevel;
+            Building building = foundation.Level.ParentMember as Building;
+            double absZeroLevel = building.AbsoluteLevel - building.RelativeLevel;
             double AbsTopLevel = absZeroLevel + foundation.RelativeTopLevel;
             double AbsBtmLevel = AbsTopLevel + foundationSizes[2];
             double SoilTopLevel = absZeroLevel + foundation.SoilRelativeTopLevel;
@@ -200,7 +202,9 @@ namespace RDBLL.Entity.RCC.Foundations.Processors
             #region checking
             if (foundation.SoilSectionId is null)
             {
-                SoilSection soilSection = foundation.Level.Building.BuildingSite.AddDefaultSoilSection(foundation.Level.Building);
+                Building building = foundation.Level.ParentMember as Building;
+                BuildingSite buildingSite = building.ParentMember as BuildingSite;
+                SoilSection soilSection = buildingSite.AddDefaultSoilSection(building);
                 foundation.SoilSection = soilSection;
                 foundation.SoilSectionId = soilSection.Id;
             }
@@ -895,14 +899,15 @@ namespace RDBLL.Entity.RCC.Foundations.Processors
                 //Коэффициент по СП
                 double gammaC1 = GetGammaC1(dispSoil);
                 //Коэффициент по СП
-                double gammaC2 = GetGammaC2(foundation.Level.Building, dispSoil);
+                Building building = foundation.Level.ParentMember as Building;
+                double gammaC2 = GetGammaC2(building, dispSoil);
                 //Если характеристики грунта определены испытаниями, то коэффициент 1.0, иначе 1.1
                 double k;
                 if (dispSoil.IsDefinedFromTest) k = 1.0; else k = 1.1;
                 double[] sizes = FoundationProcessor.GetContourSize(foundation);
                 double width = Math.Min(sizes[0], sizes[1]);
                 //Абсолютная отметка планировки для здания
-                double planingLevel = foundation.Level.Building.AbsolutePlaningLevel;
+                double planingLevel = building.AbsolutePlaningLevel;
                 //Характерные отметки здания
                 double[] levels = FoundationLevels(foundation);
                 //Абсолютная отметка подошвы
@@ -934,7 +939,7 @@ namespace RDBLL.Entity.RCC.Foundations.Processors
                 double gamma2Dash = foundation.SoilVolumeWeight;
                 resistance = LinearResistance(gammaC1, gammaC2, k, fi2, c2, width, d1, db, gamma2, gamma2Dash);
                 double maxSettlement = foundation.Result.MaxSettlement * (-1D);
-                double maxLimitSettlement = foundation.Level.Building.MaxFoundationSettlement;
+                double maxLimitSettlement = building.MaxFoundationSettlement;
                 //Если осадка не превышает 40% предельной
                 if (maxSettlement < (0.4 * maxLimitSettlement)) resistance = 1.2 * resistance;
                 //Если осадка не превышает 70% предельной

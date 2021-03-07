@@ -117,7 +117,7 @@ namespace RDBLL.Common.Service
             DataSets.Add(dataSet);
             BuildingSite = new BuildingSite();
             BuildingSite.Id = CurrentId;
-            BuildingSite.Buildings.Add(new Building(BuildingSite));
+            Building building =  new Building(BuildingSite);
             BuildingSite.SaveToDataSet(CurrentDataSet, true);
             IsDataChanged = false;
             ConcreteKinds = new List<ConcreteKind>();

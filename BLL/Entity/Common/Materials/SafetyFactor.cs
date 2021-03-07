@@ -16,6 +16,8 @@ namespace RDBLL.Entity.Common.Materials
     public class SafetyFactor :IHasParent, IDuplicate
     {
         #region Properties
+        private double[] _Coefficients;
+
         /// <summary>
         /// Код
         /// </summary>
@@ -24,22 +26,59 @@ namespace RDBLL.Entity.Common.Materials
         /// Наименование
         /// </summary>
         public string Name { get; set; }
+        public static int CoefCount { get => 12; }
+        public bool SetDiffTens { get; set; }
+        public bool SetDiffLSS { get; set; }
+        public bool SetDiffLong { get; set; }
         /// <summary>
         /// Коэффициент надежности для 1 группы ПС
         /// </summary>
-        public double PsfFst { get; set; }
+        public double PsfFst { get => _Coefficients[0]; set { _Coefficients[0] = value; } }
+        /// <summary>
+        /// Коэффициент надежности для 1 группы ПС
+        /// </summary>
+        public double PsfFstTens { get => _Coefficients[1]; set { _Coefficients[1] = value; } }
         /// <summary>
         /// Коэффициент надежности для 2 группы ПС
         /// </summary>
-        public double PsfSnd { get; set; }
+        public double PsfSnd { get => _Coefficients[2]; set { _Coefficients[2] = value; } }
+        /// <summary>
+        /// Коэффициент надежности для 2 группы ПС
+        /// </summary>
+        public double PsfSndTens { get => _Coefficients[3]; set { _Coefficients[3] = value; } }
         /// <summary>
         /// Коэффициент надежности для 1 группы ПС для длительных нагрузок
         /// </summary>
-        public double PsfFstLong { get; set; }
+        public double PsfFstLong { get => _Coefficients[4]; set { _Coefficients[4] = value; } }
+        /// <summary>
+        /// Коэффициент надежности для 1 группы ПС для длительных нагрузок
+        /// </summary>
+        public double PsfFstLongTens { get => _Coefficients[5]; set { _Coefficients[5] = value; } }
         /// <summary>
         /// Коэффициент надежности для 2 группы ПС для длительных нагрузок
         /// </summary>
-        public double PsfSndLong { get; set; }
+        public double PsfSndLong { get => _Coefficients[6]; set { _Coefficients[6] = value; } }
+        /// <summary>
+        /// Коэффициент надежности для 2 группы ПС для длительных нагрузок
+        /// </summary>
+        public double PsfSndLongTens { get => _Coefficients[7]; set { _Coefficients[7] = value; } }
+        /// <summary>
+        /// Коэффициент надежности модуля упругости при сжатии для 1 группы ПС
+        /// </summary>
+        public double PsfEFst { get => _Coefficients[8]; set { _Coefficients[8] = value; } }
+        /// <summary>
+        /// Коэффициент надежности модуля упругости при растяжении для 1 группы ПС
+        /// </summary>
+        public double PsfEFstTens { get => _Coefficients[9]; set { _Coefficients[9] = value; } }
+        /// <summary>
+        /// Коэффициент надежности модуля упругости при сжатии для 2 группы ПС
+        /// </summary>
+        public double PsfESnd { get => _Coefficients[10]; set { _Coefficients[10] = value; } }
+        /// <summary>
+        /// Коэффициент надежности модуля упругости при растяжении для 2 группы ПС
+        /// </summary>
+        public double PsfESndTens { get => _Coefficients[11]; set { _Coefficients[11] = value; } }
+
         /// <summary>
         /// Ссылка на родителя
         /// </summary>
@@ -59,10 +98,11 @@ namespace RDBLL.Entity.Common.Materials
         {
             if (GenId) Id = ProgrammSettings.CurrentId;
             Name = "Новый коэффициент надежности по материалу";
-            PsfFst = 1.0;
-            PsfSnd = 1.0;
-            PsfFstLong = 1.0;
-            PsfSndLong = 1.0;
+            _Coefficients = new double[CoefCount];
+            for (int i = 0; i <= CoefCount - 1; i++)
+            {
+                _Coefficients[i] = 1.0;
+            }
         }
         #endregion
         #region IODataset
@@ -85,10 +125,10 @@ namespace RDBLL.Entity.Common.Materials
             row.SetField("Id", Id);
             row.SetField("Name", Name);
             row.SetField("ParentId", ParentMember.Id);
-            row.SetField("PsfFst", PsfFst);
-            row.SetField("PsfSnd", PsfSnd);
-            row.SetField("PsfFstLong", PsfFstLong);
-            row.SetField("PsfSndLong", PsfSndLong);
+            for (int i=0; i<=CoefCount - 1; i++)
+            {
+                row.SetField(Convert.ToString(i), _Coefficients[i]);
+            }
             #endregion
             dataTable.AcceptChanges();
 
@@ -109,8 +149,11 @@ namespace RDBLL.Entity.Common.Materials
         {
             Id = dataRow.Field<int>("Id");
             Name = dataRow.Field<string>("Name");
-            PsfFst = dataRow.Field<double>("PsfFst");
-            PsfSnd = dataRow.Field<double>("PsfSnd");
+            _Coefficients = new double[12];
+            for (int i = 0; i <= CoefCount - 1; i++)
+            {
+                _Coefficients[i] = dataRow.Field<double>(Convert.ToString(i));
+            }
         }
         /// <summary>
         /// Удалить из датасета
@@ -139,6 +182,11 @@ namespace RDBLL.Entity.Common.Materials
             SafetyFactor safetyFactor = MemberwiseClone() as SafetyFactor;
             safetyFactor.Id = ProgrammSettings.CurrentId;
             return safetyFactor;
+        }
+
+        public void SetCoefArray(double[] array)
+        {
+            _Coefficients = array;
         }
         #endregion
     }

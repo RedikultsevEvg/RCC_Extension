@@ -20,20 +20,16 @@ namespace RDBLL.Entity.RCC.BuildingAndSite
     /// <summary>
     /// Уровень
     /// </summary>
-    public class Level :ICloneable, IDsSaveable
+    public class Level :ICloneable, IHasParent
     {
         /// <summary>
         /// Код уровня
         /// </summary>
         public int Id { get; set; }
         /// <summary>
-        /// Код здания
-        /// </summary>
-        public int BuildingId { get; set; }
-        /// <summary>
         /// Обратная ссылка на здание
         /// </summary>
-        public Building Building { get; set; }
+        public IDsSaveable ParentMember { get; private set; }
         /// <summary>
         /// Наименование
         /// </summary>
@@ -123,7 +119,7 @@ namespace RDBLL.Entity.RCC.BuildingAndSite
             }
             #region SetField
             row.SetField("Id", Id);
-            row.SetField("BuildingId", BuildingId);
+            row.SetField("ParentId", ParentMember.Id);
             row.SetField("Name", Name);
             row.SetField("FloorLevel", Elevation);
             row.SetField("Height", Height);
@@ -162,7 +158,6 @@ namespace RDBLL.Entity.RCC.BuildingAndSite
         public void OpenFromDataSet(DataRow dataRow)
         {
             Id = dataRow.Field<int>("Id");
-            BuildingId = dataRow.Field<int>("BuildingId");
             Name = dataRow.Field<string>("Name");
             Elevation = dataRow.Field<double>("FloorLevel");
             Height = dataRow.Field<double>("Height");
@@ -208,9 +203,8 @@ namespace RDBLL.Entity.RCC.BuildingAndSite
             else {
                 this.Id = Id;
             }         
-            BuildingId = building.Id;
             Name = "Этаж 1";
-            Building = building;
+            ParentMember = building;
             Elevation = 0;
             Height = 3;
             TopOffset = -0.2;
@@ -226,6 +220,20 @@ namespace RDBLL.Entity.RCC.BuildingAndSite
         public object Clone()
         {
             return this.MemberwiseClone();
+        }
+
+        public void RegisterParent(IDsSaveable parent)
+        {
+            Building building = parent as Building;
+            building.Levels.Add(this);
+            ParentMember = parent;
+        }
+
+        public void UnRegisterParent()
+        {
+            Building building = ParentMember as Building;
+            building.Levels.Remove(this);
+            ParentMember = null;
         }
     }
 }
