@@ -175,13 +175,6 @@ namespace DAL.DataSets
             DsOperation.AddDoubleColumn(dataTable, "CenterX");
             DsOperation.AddDoubleColumn(dataTable, "CenterY");
             #endregion
-            #region SteelBaseForcesGroups
-            dataTable = new DataTable("SteelBaseForcesGroups");
-            dataSet.Tables.Add(dataTable);
-            DsOperation.AddIdColumn(dataTable);
-            DsOperation.AddFkIdColumn("SteelBases", "SteelBaseId", dataTable);
-            DsOperation.AddFkIdColumn("ForcesGroups", "ForcesGroupId", dataTable);
-            #endregion
             #region LoadSets
             dataTable = new DataTable("LoadSets");
             dataSet.Tables.Add(dataTable);
@@ -236,11 +229,11 @@ namespace DAL.DataSets
             DsOperation.AddDoubleColumn(dataTable, "CenterX");
             DsOperation.AddDoubleColumn(dataTable, "CenterY");
             #endregion
-            #region FoundationForcesGroups
-            dataTable = new DataTable("FoundationForcesGroups");
+            #region ParentForcesGroups
+            dataTable = new DataTable("ParentForcesGroups");
             dataSet.Tables.Add(dataTable);
             DsOperation.AddIdColumn(dataTable);
-            DsOperation.AddFkIdColumn("Foundations", "FoundationId", dataTable);
+            DsOperation.AddFkIdColumn("ParentId", dataTable);
             DsOperation.AddFkIdColumn("ForcesGroups", "ForcesGroupId", dataTable);
             #endregion
             #region MaterialContainer
@@ -283,6 +276,12 @@ namespace DAL.DataSets
             DsOperation.AddIdNameParentIdColumn(dataTable);
             DsOperation.AddStringColumn(dataTable, "Type");
             DsOperation.AddStringColumn(dataTable, "Value");
+            #endregion
+            #region SoilSectionUsing
+            dataTable = new DataTable("SoilSectionUsings");
+            dataSet.Tables.Add(dataTable);
+            DsOperation.AddIdNameParentIdColumn(dataTable);
+            DsOperation.AddFkIdColumn("SoilSections", "SelectedId", dataTable, true);
             #endregion
             #region
             #endregion

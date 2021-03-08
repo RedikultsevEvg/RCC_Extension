@@ -1,4 +1,5 @@
 ﻿using RDBLL.Common.Geometry;
+using RDBLL.Common.Interfaces;
 using RDBLL.Common.Service;
 using RDBLL.Entity.Common.NDM;
 using RDBLL.Entity.Common.NDM.Interfaces;
@@ -177,13 +178,13 @@ namespace RDBLL.Entity.RCC.Foundations.Processors
         {
             double[] levels = new double[5];
             double[] foundationSizes = GetDeltaDistance(foundation);
-            Building building = foundation.Level.ParentMember as Building;
+            Building building = (foundation.ParentMember as Level).ParentMember as Building;
             double absZeroLevel = building.AbsoluteLevel - building.RelativeLevel;
             double AbsTopLevel = absZeroLevel + foundation.RelativeTopLevel;
             double AbsBtmLevel = AbsTopLevel + foundationSizes[2];
             double SoilTopLevel = absZeroLevel + foundation.SoilRelativeTopLevel;
-            if (foundation.SoilSection is null) { throw new Exception("Для фундамента не назначена скважина"); }
-            SoilSection soilSection = foundation.SoilSection;
+            if (foundation.SoilSectionUsing is null) { throw new Exception("Для фундамента не назначена скважина"); }
+            SoilSection soilSection = foundation.SoilSectionUsing.SoilSection;
             if (soilSection.SoilLayers.Count == 0) { throw new Exception("Скважина не содержит грунтов"); }
             levels[0] = absZeroLevel; // - абсолютная отметка нуля
             levels[1] = AbsTopLevel; // - абсолютная отметка верха фундамента
@@ -200,15 +201,15 @@ namespace RDBLL.Entity.RCC.Foundations.Processors
         {
             bool result = false;
             #region checking
-            if (foundation.SoilSectionId is null)
+            //Если для фундамента не задана скважина
+            if (foundation.SoilSectionUsing.SelectedId is null)
             {
-                Building building = foundation.Level.ParentMember as Building;
+                Building building = (foundation.ParentMember as Level).ParentMember as Building;
                 BuildingSite buildingSite = building.ParentMember as BuildingSite;
                 SoilSection soilSection = buildingSite.AddDefaultSoilSection(building);
-                foundation.SoilSection = soilSection;
-                foundation.SoilSectionId = soilSection.Id;
+                foundation.SoilSectionUsing.SelectedId = soilSection.Id;
             }
-            if (foundation.SoilSection.SoilLayers.Count ==0)
+            if (foundation.SoilSectionUsing.SoilSection.SoilLayers.Count ==0)
             {
                 MessageBox.Show("Скважина не содержит грунтов");
                 return false;
@@ -899,7 +900,7 @@ namespace RDBLL.Entity.RCC.Foundations.Processors
                 //Коэффициент по СП
                 double gammaC1 = GetGammaC1(dispSoil);
                 //Коэффициент по СП
-                Building building = foundation.Level.ParentMember as Building;
+                Building building = (foundation.ParentMember as IHasParent).ParentMember as Building;
                 double gammaC2 = GetGammaC2(building, dispSoil);
                 //Если характеристики грунта определены испытаниями, то коэффициент 1.0, иначе 1.1
                 double k;

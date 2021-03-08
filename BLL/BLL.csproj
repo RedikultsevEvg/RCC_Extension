@@ -121,6 +121,8 @@
     <Compile Include="Entity\MeasureUnits\MeasureUnit.cs" />
     <Compile Include="Entity\MeasureUnits\MeasureUnitConverter.cs" />
     <Compile Include="Entity\MeasureUnits\MeasureUnitLabel.cs" />
+    <Compile Include="Entity\RCC\BuildingAndSite\Building.cs" />
+    <Compile Include="Entity\RCC\BuildingAndSite\BuildingProcessor.cs" />
     <Compile Include="Entity\RCC\BuildingAndSite\BuildingSite.cs" />
     <Compile Include="Entity\RCC\BuildingAndSite\Level.cs" />
     <Compile Include="Common\Geometry\Path.cs" />
@@ -170,6 +172,7 @@
     <Compile Include="Entity\Soils\SoilParameter.cs" />
     <Compile Include="Entity\Soils\SoilParameterKind.cs" />
     <Compile Include="Entity\Soils\SoilSection.cs" />
+    <Compile Include="Entity\Soils\SoilSectionUsing.cs" />
     <Compile Include="Forces\BarLoadSet.cs" />
     <Compile Include="Forces\ForcesGroup.cs" />
     <Compile Include="Forces\ForceParameter.cs" />

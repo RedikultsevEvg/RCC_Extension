@@ -21,6 +21,7 @@ using RDBLL.Entity.Soils;
 using System.Linq;
 using RDBLL.Entity.Common.NDM;
 using DAL.Common;
+using RDBLL.Common.Interfaces;
 
 namespace CSL.Reports
 {
@@ -61,9 +62,9 @@ namespace CSL.Reports
         }
         private void PrepareReport()
         {
-            foreach (Building building in _buildingSite.Buildings)
+            foreach (Building building in _buildingSite.Childs)
             {
-                foreach (Level level in building.Levels)
+                foreach (Level level in building.Childs)
                 {
                     DataTable Foundations = dataSet.Tables["Foundations"];
                     foreach (Foundation foundation in level.Foundations)
@@ -123,7 +124,7 @@ namespace CSL.Reports
             DrawFoundation.DrawTopScatch(foundation, canvas);
             byte[] b = CommonServices.ExportToByte(canvas);
             #endregion
-            DsOperation.SetId(newFound, foundation.Id, foundation.Name, foundation.Level.Id);
+            DsOperation.SetId(newFound, foundation.Id, foundation.Name, foundation.ParentMember.Id);
             newFound.SetField("Picture", b);
             newFound.SetField("Width", foundationWidth * MeasureUnitConverter.GetCoefficient(0));
             newFound.SetField("Length", foundationLength * MeasureUnitConverter.GetCoefficient(0));
@@ -464,7 +465,7 @@ namespace CSL.Reports
             compare.Val1Name = "S";
             compare.Val2Name = "Smax";
             compare.Val1 = foundation.Result.MaxSettlement * (-1D);
-            compare.Val2 = (foundation.Level.ParentMember as Building).MaxFoundationSettlement;
+            compare.Val2 = ((foundation.ParentMember as IHasParent).ParentMember as Building).MaxFoundationSettlement;
             if (!compare.BoolResult()) foundation.Result.GeneralResult = false;
             newFound.SetField("SettlementConclusion", compare.CompareResult());
             #endregion

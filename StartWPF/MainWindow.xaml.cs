@@ -141,8 +141,8 @@ namespace StartWPF
 
         private static void ShowWall()
         {
-            var detailObjectList = new DetailObjectList("Levels", ProgrammSettings.BuildingSite.Buildings[0],
-            ProgrammSettings.BuildingSite.Buildings[0].Levels, false);
+            var detailObjectList = new DetailObjectList("Levels", ProgrammSettings.BuildingSite.Childs[0],
+            ProgrammSettings.BuildingSite.Childs[0].Childs, false);
             detailObjectList.BtnVisibilityList = new List<short>() { 1, 1, 0, 1, 1, 1, 1, 0, 1, 0, 0, 0 };
             frmDetailList DetailForm = new frmDetailList(detailObjectList);
             DetailForm.Show();
@@ -150,7 +150,7 @@ namespace StartWPF
 
         private static void ShowSteelBase()
         {
-            wndLevels wndLevels = new wndLevels(ProgrammSettings.BuildingSite.Buildings[0], ProgrammSettings.BuildingSite.Buildings[0].Levels, "SteelBases");
+            wndLevels wndLevels = new wndLevels(ProgrammSettings.BuildingSite.Childs[0], ProgrammSettings.BuildingSite.Childs[0].Childs, "SteelBases");
             wndLevels.ShowDialog();
         }
 
@@ -159,7 +159,7 @@ namespace StartWPF
         /// </summary>
         private static void ShowFoundation()
         {
-            wndLevels wndLevels = new wndLevels(ProgrammSettings.BuildingSite.Buildings[0], ProgrammSettings.BuildingSite.Buildings[0].Levels, "Foundations");
+            wndLevels wndLevels = new wndLevels(ProgrammSettings.BuildingSite.Childs[0], ProgrammSettings.BuildingSite.Childs[0].Childs, "Foundations");
             wndLevels.ShowDialog();
         }
 

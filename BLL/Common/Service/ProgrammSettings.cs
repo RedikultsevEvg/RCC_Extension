@@ -358,7 +358,7 @@ namespace RDBLL.Common.Service
         /// </summary>
         public static void ClearAll()
         {
-            BuildingSite.Buildings.Clear();
+            BuildingSite.Childs.Clear();
         }
         /// <summary>
         /// Открыть проект из файла
@@ -500,7 +500,7 @@ namespace RDBLL.Common.Service
             //Получаем коллекцию скважин
             BuildingSite.SoilSections = GetEntity.GetSoilSections(dataSet, BuildingSite);
             //Получаем коллекцию зданий
-            BuildingSite.Buildings = GetEntity.GetBuildings(dataSet, BuildingSite);
+            GetEntity.GetBuildings(dataSet, BuildingSite);
             #endregion
             DataSets.Clear();
             DataSets.Add(dataSet);

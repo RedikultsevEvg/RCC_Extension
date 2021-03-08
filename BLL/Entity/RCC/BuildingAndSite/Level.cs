@@ -225,14 +225,14 @@ namespace RDBLL.Entity.RCC.BuildingAndSite
         public void RegisterParent(IDsSaveable parent)
         {
             Building building = parent as Building;
-            building.Levels.Add(this);
+            building.Childs.Add(this);
             ParentMember = parent;
         }
 
         public void UnRegisterParent()
         {
             Building building = ParentMember as Building;
-            building.Levels.Remove(this);
+            building.Childs.Remove(this);
             ParentMember = null;
         }
     }

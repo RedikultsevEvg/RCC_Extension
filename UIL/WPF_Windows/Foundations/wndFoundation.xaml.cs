@@ -46,7 +46,7 @@ namespace RDUIL.WPF_Windows.Foundations
             }
             else
             {
-                _element.ForcesGroups = GetEntity.GetFoundationForcesGroups(ProgrammSettings.CurrentDataSet, _element);
+                _element.ForcesGroups = GetEntity.GetParentForcesGroups(ProgrammSettings.CurrentDataSet, _element);
             }          
         }
 

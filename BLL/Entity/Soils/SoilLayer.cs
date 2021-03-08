@@ -77,9 +77,9 @@ namespace RDBLL.Entity.Soils
                 if (building == null)
                 {
                     //Если в объекте нет зданий, то выдаем ошибку
-                    if (soilSection.BuildingSite.Buildings.Count == 0) { throw new Exception("Building site not contain any buildings"); }
+                    if (soilSection.BuildingSite.Childs.Count == 0) { throw new Exception("Building site not contain any buildings"); }
                     //Иначе присваиваем первое здание
-                    else building = soilSection.BuildingSite.Buildings[0];
+                    else building = soilSection.BuildingSite.Childs[0];
                 }
                 //Назначаем уровень верха по отметке нуля для здания
                 topLevel = building.AbsoluteLevel - building.RelativeLevel;

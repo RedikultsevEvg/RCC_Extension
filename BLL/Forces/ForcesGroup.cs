@@ -33,7 +33,7 @@ namespace RDBLL.Forces
         /// <summary>
         /// Обратная ссылка на коллекцию фундаментов
         /// </summary>
-        public List<Foundation> Foundations { get; set; }
+        public List<IHasForcesGroups> Owner { get; set; }
         /// <summary>
         /// Коллекция набора нагрузок
         /// </summary>
@@ -58,32 +58,19 @@ namespace RDBLL.Forces
         public ForcesGroup()
         {
             SteelBases = new List<SteelBase>();
-            Foundations = new List<Foundation>();
+            Owner = new List<IHasForcesGroups>();
             LoadSets = new ObservableCollection<LoadSet>();
-        }
-        /// <summary>
-        /// Конструктор по стальной базе
-        /// </summary>
-        /// <param name="steelColumnBase"></param>
-        public ForcesGroup(SteelBase steelColumnBase)
-        {
-            Id = ProgrammSettings.CurrentId;
-            SteelBases = new List<SteelBase>();
-            Foundations = new List<Foundation>();
-            SteelBases.Add(steelColumnBase);
-            LoadSets = new ObservableCollection<LoadSet>();
-            Name = "Новая группа нагрузок";
         }
         /// <summary>
         /// Конструктор по фундаменту
         /// </summary>
         /// <param name="foundation"></param>
-        public ForcesGroup(Foundation foundation)
+        public ForcesGroup(IHasForcesGroups parent)
         {
             Id = ProgrammSettings.CurrentId;
             SteelBases = new List<SteelBase>();
-            Foundations = new List<Foundation>();
-            Foundations.Add(foundation);
+            Owner = new List<IHasForcesGroups>();
+            Owner.Add(parent);
             LoadSets = new ObservableCollection<LoadSet>();
             Name = "Новая группа нагрузок";
         }
@@ -130,28 +117,29 @@ namespace RDBLL.Forces
             if (createNew)
             {
                 //Данные по нагрузкам на стальные базы
-                dataTable = dataSet.Tables["SteelBaseForcesGroups"];
+                dataTable = dataSet.Tables["ParentForcesGroups"];
                 foreach (SteelBase steelBase in SteelBases)
                 {
                     row = dataTable.NewRow();
                     dataTable.Rows.Add(row);
                     #region
                     row.SetField("Id", ProgrammSettings.CurrentId);
-                    row.SetField("SteelBaseId", steelBase.Id);
+                    row.SetField("ParentId", steelBase.Id);
                     row.SetField("ForcesGroupId", Id);
                     #endregion
                 }
                 dataTable.AcceptChanges();
                 //Данные по нагрузкам на фундамент
-                dataTable = dataSet.Tables["FoundationForcesGroups"];
-                foreach (Foundation foundation in Foundations)
+                dataTable = dataSet.Tables["ParentForcesGroups"];
+                foreach (Foundation foundation in Owner)
                 {
                     row = dataTable.NewRow();
-                    dataTable.Rows.Add(row);
-                    #region
                     row.SetField("Id", ProgrammSettings.CurrentId);
-                    row.SetField("FoundationId", foundation.Id);
+                    row.SetField("ParentId", foundation.Id);
                     row.SetField("ForcesGroupId", Id);
+                    dataTable.Rows.Add(row); 
+                    #region
+
                     #endregion
                 }
                 dataTable.AcceptChanges();
@@ -180,8 +168,7 @@ namespace RDBLL.Forces
         public void DeleteFromDataSet(DataSet dataSet)
         {
             DeleteSubElements(dataSet);
-            DsOperation.DeleteRow(dataSet, "SteelBaseForcesGroups","ForcesGroupId", Id);
-            DsOperation.DeleteRow(dataSet, "FoundationForcesGroups", "ForcesGroupId", Id);
+            DsOperation.DeleteRow(dataSet, "ParentForcesGroups", "ForcesGroupId", Id);
             DsOperation.DeleteRow(dataSet, GetTableName(), Id);
         }
         #endregion
@@ -227,7 +214,7 @@ namespace RDBLL.Forces
                 steelBase.IsActual = false;
                 steelBase.IsLoadCasesActual = false;
             }
-            foreach (Foundation foundation in Foundations)
+            foreach (Foundation foundation in Owner)
             {
                 foundation.IsLoadCasesActual = false;
             }

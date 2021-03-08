@@ -7,15 +7,13 @@ using RDBLL.Entity.Soils;
 
 namespace RDBLL.Common.Interfaces
 {
-    interface IHasSoilSection
+    public interface IHasSoilSection : IDsSaveable
     {
         /// <summary>
-        /// Код скважины
+        /// Использование скважины
         /// </summary>
-        int? SoilSectionId { get; set; }
-        /// <summary>
-        /// Обратная ссылка на скважину
-        /// </summary>
-        SoilSection SoilSection { get; set; }
+        SoilSectionUsing SoilSectionUsing { get; }
+        void RegSSUsing(SoilSectionUsing soilSectionUsing);
+        void UnRegSSUsing(SoilSectionUsing soilSectionUsing);
     }
 }

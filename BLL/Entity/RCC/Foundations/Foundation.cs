@@ -22,7 +22,7 @@ namespace RDBLL.Entity.RCC.Foundations
     /// <summary>
     /// Класс столбчатого фундамента
     /// </summary>
-    public class Foundation : IHasForcesGroups, IDsSaveable, IDataErrorInfo, IRDObserver, ICloneable, IHasSoilSection
+    public class Foundation : IHasForcesGroups, IHasParent, IDataErrorInfo, IRDObserver, ICloneable, IHasSoilSection
     {
         /// <summary>
         /// Класс для хранения результатов расчета фундамента
@@ -52,21 +52,13 @@ namespace RDBLL.Entity.RCC.Foundations
         /// </summary>
         public int Id { get; set; }
         /// <summary>
-        /// Код уровня
-        /// </summary>
-        public int LevelId { get; set; }
-        /// <summary>
         /// Обратная ссылка на уровень
         /// </summary>
-        public Level Level { get; set; }
-        /// <summary>
-        /// Код скважины
-        /// </summary>
-        public int? SoilSectionId { get; set; }
+        public IDsSaveable ParentMember { get; private set; }
         /// <summary>
         /// Обратная ссылка на скважину
         /// </summary>
-        public SoilSection SoilSection {get;set;}
+        public SoilSectionUsing SoilSectionUsing { get; private set; }
         /// <summary>
         /// Наименование
         /// </summary>
@@ -190,7 +182,6 @@ namespace RDBLL.Entity.RCC.Foundations
             ForceCurvaturesWithWeight = new List<ForceCurvature>();
             ForceCurvaturesWithoutWeight = new List<ForceCurvature>();
             Result = new FoundationResult();
-
             addMaterial(this);
         }
         /// <summary>
@@ -200,8 +191,7 @@ namespace RDBLL.Entity.RCC.Foundations
         public Foundation(Level level)
         {
             Id = ProgrammSettings.CurrentId;
-            LevelId = level.Id;
-            Level = level;
+            ParentMember = level;
             Name = "Новый фундамент";
             RelativeTopLevel = -0.2;
             SoilRelativeTopLevel = -0.2;
@@ -218,10 +208,12 @@ namespace RDBLL.Entity.RCC.Foundations
             LoadCases = new ObservableCollection<LoadSet>();
             ForceCurvaturesWithWeight = new List<ForceCurvature>();
             ForceCurvaturesWithoutWeight = new List<ForceCurvature>();
+            //Использование скважины грунта
+            SoilSectionUsing soilSectionUsing = new SoilSectionUsing(true);
+            soilSectionUsing.RegisterParent(this);
             IsLoadCasesActual = true;
             IsPartsActual = true;
             Result = new FoundationResult();
-
             addMaterial(this);
         }
         #endregion
@@ -239,15 +231,10 @@ namespace RDBLL.Entity.RCC.Foundations
         {
             try
             {
-                RenewAll();
                 DataTable dataTable = dataSet.Tables[GetTableName()];
                 DataRow row = DsOperation.CreateNewRow(Id, createNew, dataTable);
-
                 #region setFields
-                row.SetField("Id", Id);
-                row.SetField("LevelId", LevelId);
-                row.SetField("SoilSectionId", SoilSectionId);
-                row.SetField("Name", Name);
+                DsOperation.SetId(row, Id, Name, ParentMember.Id);
                 row.SetField("RelativeTopLevel", RelativeTopLevel);
                 row.SetField("SoilRelativeTopLevel", SoilRelativeTopLevel);
                 row.SetField("SoilVolumeWeight", SoilVolumeWeight);
@@ -270,6 +257,7 @@ namespace RDBLL.Entity.RCC.Foundations
                 BottomReinforcement.SaveToDataSet(dataSet, createNew);
                 VerticalReinforcement.SaveToDataSet(dataSet, createNew);
                 Concrete.SaveToDataSet(dataSet, createNew);
+                SoilSectionUsing.SaveToDataSet(dataSet, createNew);
             }
             catch (Exception ex)
             {
@@ -289,8 +277,7 @@ namespace RDBLL.Entity.RCC.Foundations
             catch (Exception ex)
             {
                 CommonErrorProcessor.ShowErrorMessage("Ошибка получения элемента из базы данных. Элемент: " + Name, ex);
-            }
-            
+            }        
         }
         /// <summary>
         /// Обновляет запись в соответствии со строкой датасета
@@ -299,8 +286,6 @@ namespace RDBLL.Entity.RCC.Foundations
         public void OpenFromDataSet(DataRow dataRow)
         {
             Id = dataRow.Field<int>("Id");
-            LevelId = dataRow.Field<int>("LevelId");
-            SoilSectionId = dataRow.Field<int?>("SoilSectionId");
             Name = dataRow.Field<string>("Name");
             RelativeTopLevel = dataRow.Field<double>("RelativeTopLevel");
             SoilRelativeTopLevel = dataRow.Field<double>("SoilRelativeTopLevel");
@@ -312,8 +297,6 @@ namespace RDBLL.Entity.RCC.Foundations
             ConcreteFloorLoadFactor = dataRow.Field<double>("ConcreteFloorLoadFactor");
             CompressedLayerRatio = dataRow.Field<double>("CompressedLayerRatio");
             //Если у фундамента есть код скважины
-            if (!(SoilSectionId is null)) RenewSoilSection();
-
             List<MaterialContainer> materialContainers = GetEntity.GetContainers(dataRow.Table.DataSet, this);
             foreach (MaterialContainer materialContainer in materialContainers)
             {
@@ -358,10 +341,9 @@ namespace RDBLL.Entity.RCC.Foundations
         {
             //Удаляем вложенные части
             DeleteSubElements(dataSet, "FoundationParts");
-            DeleteSubElements(dataSet, "FoundationForcesGroups");
+            DeleteSubElements(dataSet, "ParentForcesGroups");
             foreach (ForcesGroup forcesGroup in ForcesGroups)
             {
-
                 forcesGroup.DeleteFromDataSet(dataSet);
             }
             BottomReinforcement.DeleteFromDataSet(dataSet);
@@ -371,7 +353,7 @@ namespace RDBLL.Entity.RCC.Foundations
         }
         public void DeleteSubElements(DataSet dataSet, string tableName)
         {
-            DsOperation.DeleteRow(dataSet, tableName, "FoundationId", Id);
+            DsOperation.DeleteRow(dataSet, tableName, "ParentId", Id);
 
         }
         #endregion
@@ -403,11 +385,6 @@ namespace RDBLL.Entity.RCC.Foundations
             foundation.Id = ProgrammSettings.CurrentId;
             #region Copy properties
             foundation.Name = Name;
-            if (!(SoilSectionId is null))
-            {
-                foundation.SoilSectionId = SoilSectionId;
-                foundation.SoilSection = SoilSection;
-            }
             foundation.RelativeTopLevel = RelativeTopLevel;
             foundation.SoilRelativeTopLevel = SoilRelativeTopLevel;
             foundation.SoilVolumeWeight = SoilVolumeWeight;
@@ -421,7 +398,7 @@ namespace RDBLL.Entity.RCC.Foundations
             foreach (ForcesGroup forcesGroup in ForcesGroups)
             {
                 ForcesGroup newForcesGroup = forcesGroup.Clone() as ForcesGroup;
-                newForcesGroup.Foundations.Add(foundation);
+                newForcesGroup.Owner.Add(foundation);
                 foundation.ForcesGroups.Clear();
                 foundation.ForcesGroups.Add(newForcesGroup);
             }
@@ -429,37 +406,21 @@ namespace RDBLL.Entity.RCC.Foundations
             foreach (RectFoundationPart rectFoundationPart in this.Parts)
             {
                 RectFoundationPart newFoundationPart = rectFoundationPart.Clone() as RectFoundationPart;
-                newFoundationPart.FoundationId = foundation.Id;
+                newFoundationPart.ParentId = foundation.Id;
                 newFoundationPart.Foundation = foundation;
                 foundation.Parts.Add(newFoundationPart);
             }
             //копируем материалы
             DuplicateMaterial(foundation);
+            //Копируем скважину
+            SoilSectionUsing soilSectionUsing = this.SoilSectionUsing.Clone() as SoilSectionUsing;
+            soilSectionUsing.RegisterParent(foundation);
             return foundation;
         }
         #endregion
-        public void RenewSoilSection()
-        {
-            Building building = Level.ParentMember as Building;
-            BuildingSite buildingSite = building.ParentMember as BuildingSite;
-            //получаем ссылку на скважину
-            foreach (SoilSection soilSection in buildingSite.SoilSections)
-            {
-                if (!(SoilSection is null)) SoilSection.RemoveObserver(this);
-                if (soilSection.Id == SoilSectionId)
-                {
-                    SoilSection = soilSection;
-                    SoilSection.AddObserver(this);
-                }
-            }
-        }
-        public void RenewAll()
-        {
-            RenewSoilSection();
-        }
         public void DeleteFromObservables()
         {
-            if (!(SoilSection is null)) SoilSection.RemoveObserver(this);
+            
         }
 
         private void addMaterial(Foundation foundation)
@@ -524,6 +485,25 @@ namespace RDBLL.Entity.RCC.Foundations
             foundation.Concrete.SelectedId = Concrete.MaterialKind.Id;
             foundation.Concrete.AddGammaB1();
             #endregion
+        }
+
+        public void RegisterParent(IDsSaveable parent)
+        {
+            ParentMember = parent;
+        }
+        public void UnRegisterParent()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void RegSSUsing(SoilSectionUsing soilSectionUsing)
+        {
+            SoilSectionUsing = soilSectionUsing;
+        }
+
+        public void UnRegSSUsing(SoilSectionUsing soilSectionUsing)
+        {
+            SoilSectionUsing = null;
         }
         #endregion
         /// <summary>
