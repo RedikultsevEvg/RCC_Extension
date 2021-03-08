@@ -107,6 +107,7 @@
     <Compile Include="ViewModels\Base\ViewModelBase.cs" />
     <Compile Include="ViewModels\MatUsings\MatUsingVM.cs" />
     <Compile Include="ViewModels\MatUsings\SafetyFactorsVM.cs" />
+    <Compile Include="ViewModels\Soils\SoilSections\SoilSectionUsingVM.cs" />
     <Compile Include="Views\MatUsings\WndSafetyFactors.xaml.cs">
       <DependentUpon>WndSafetyFactors.xaml</DependentUpon>
     </Compile>
@@ -153,6 +154,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="ResourcesDicts\MaterialUsing.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ResourcesDicts\Soils\SoilSections\SoilSectionUsing.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -54,7 +54,7 @@ namespace RDBLL.Entity.RCC.Foundations
         /// <summary>
         /// Код фундамента
         /// </summary>
-        public int FoundationId { get; set; }
+        public int ParentId { get; set; }
         /// <summary>
         /// Обратная ссылка на фундамент
         /// </summary>
@@ -118,7 +118,7 @@ namespace RDBLL.Entity.RCC.Foundations
         public FoundationPart(Foundation foundation)
         {
             Id = ProgrammSettings.CurrentId;
-            FoundationId = foundation.Id;
+            ParentId = foundation.Id;
             Foundation = foundation;
             if (foundation.Parts.Count == 0)
             {
@@ -152,11 +152,7 @@ namespace RDBLL.Entity.RCC.Foundations
         /// <param name="dataSet"></param>
         public virtual void OpenFromDataSet(DataSet dataSet)
         {
-            DataTable dataTable = dataSet.Tables[GetTableName()];
-            var row = (from dataRow in dataTable.AsEnumerable()
-                       where dataRow.Field<int>("FoundationId") == Id
-                       select dataRow).Single();
-            OpenFromDataSet(row);
+            OpenFromDataSet(DsOperation.OpenFromDataSetById(dataSet, GetTableName(), Id));
         }
         /// <summary>
         /// Обновляет запись в соответствии со строкой датасета
@@ -165,7 +161,7 @@ namespace RDBLL.Entity.RCC.Foundations
         public virtual void OpenFromDataSet(DataRow dataRow)
         {
             Id = dataRow.Field<int>("Id");
-            FoundationId = dataRow.Field<int>("FoundationId");
+            ParentId = dataRow.Field<int>("ParentId");
             Name = dataRow.Field<string>("Name");
             Height = dataRow.Field<double>("Height");
             CenterX = dataRow.Field<double>("CenterX");

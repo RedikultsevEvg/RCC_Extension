@@ -121,7 +121,7 @@ namespace RDBLL.Entity.Soils
             }
             #region setFields
             row.SetField("Id", Id);
-            row.SetField("BuildingSiteId", BuildingSiteId);
+            row.SetField("ParentId", BuildingSiteId);
             row.SetField("Name", Name);
             row.SetField("HasWater", HasWater);
             row.SetField("NaturalWaterLevel", NaturalWaterLevel);
@@ -159,7 +159,7 @@ namespace RDBLL.Entity.Soils
         public void OpenFromDataSet(DataRow dataRow)
         {
             Id = dataRow.Field<int>("Id");
-            BuildingSiteId = dataRow.Field<int>("BuildingSiteId");
+            BuildingSiteId = dataRow.Field<int>("ParentId");
             Name = dataRow.Field<string>("Name");
             HasWater = dataRow.Field<bool>("HasWater");
             NaturalWaterLevel = dataRow.Field<double>("NaturalWaterLevel");

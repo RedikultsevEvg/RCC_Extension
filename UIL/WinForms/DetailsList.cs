@@ -679,7 +679,7 @@ namespace RDUIL.WinForms
             this.Visible = true;
             foreach (ListViewItem i in lvDetails.Items)
             {
-                EditItemFromLevel(i, building.Levels[i.Index]);
+                EditItemFromLevel(i, building.Childs[i.Index]);
             }
             
         }

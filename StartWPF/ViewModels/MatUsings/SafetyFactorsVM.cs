@@ -17,7 +17,6 @@ namespace StartWPF.ViewModels.MatUsings
         private MaterialUsing _ParentMember;
 
         public ObservableCollection<SafetyFactor> SafetyFactors { get; set; }
-
         public SafetyFactor SelectedPSF
         {
             get

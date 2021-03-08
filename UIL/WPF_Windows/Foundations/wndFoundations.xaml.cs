@@ -42,7 +42,6 @@ namespace RDUIL.WPF_Windows.Foundations
         private void BtnAdd_Click(object sender, RoutedEventArgs e)
         {
             Foundation foundation = new Foundation(_level);
-            foundation.RenewAll();
             //Надо создать элемент, иначе некуда будет сохранять дочерние
             foundation.SaveToDataSet(ProgrammSettings.CurrentDataSet, true);
             wndFoundation wndFoundation = new wndFoundation(foundation);
@@ -106,7 +105,6 @@ namespace RDUIL.WPF_Windows.Foundations
                 wndChild.ShowDialog();
                 if (wndChild.DialogResult == true)
                 {
-                    foundation.RenewAll();
                     try
                     {
                         foundation.SaveToDataSet(ProgrammSettings.CurrentDataSet, false);
@@ -137,8 +135,7 @@ namespace RDUIL.WPF_Windows.Foundations
                 int a = LvMain.SelectedIndex;
                 Foundation foundation = _collection[a];
                 Foundation newFoundation = foundation.Clone() as Foundation;
-                newFoundation.LevelId = foundation.LevelId;
-                newFoundation.Level = foundation.Level;
+                newFoundation.RegisterParent(foundation.ParentMember);
                 try
                 {
                     newFoundation.SaveToDataSet(ProgrammSettings.CurrentDataSet, true);

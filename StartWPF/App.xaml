@@ -13,6 +13,7 @@
                 <ResourceDictionary Source="ResourcesDicts\IconBitmaps.xaml" />
                 <ResourceDictionary Source="ResourcesDicts\MaterialUsing.xaml" />
                 <ResourceDictionary Source="ResourcesDicts\TextBlockStyles.xaml" />
+                <ResourceDictionary Source="ResourcesDicts\Soils\SoilSections\SoilSectionUsing.xaml" />
             </ResourceDictionary.MergedDictionaries>
 
             <Style x:Key="OperationStack" TargetType="StackPanel">

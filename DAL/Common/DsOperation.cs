@@ -45,7 +45,7 @@ namespace DAL.Common
         /// Добавление внешного ключа
         /// </summary>
         /// <param name="parentDataTableName">Таблица данных</param>
-        /// <param name="parentColumnName">Наименование толбца в дочерней таблице</param>
+        /// <param name="parentColumnName">Наименование столбца в дочерней таблице</param>
         /// <param name="childDataTable">Наименование дочерней таблицы</param>
         /// <param name="allowNull">Флаг допустимости Null</param>
         public static DataColumn AddFkIdColumn(string parentDataTableName, string parentColumnName, DataTable childDataTable, bool allowNull = false)
@@ -55,7 +55,7 @@ namespace DAL.Common
             string columnName = parentColumnName;
             DataColumn FkIdColumn;
             FkIdColumn = new DataColumn(columnName, Type.GetType("System.Int32"));
-            //FkIdColumn.AllowDBNull = allowNull;
+            FkIdColumn.ColumnMapping = MappingType.Attribute;
             childDataTable.Columns.Add(FkIdColumn);
             ForeignKeyConstraint foreignKey;
             //Если допускается нулевое значение, то при удалении устанавливаем в нулл
@@ -82,6 +82,17 @@ namespace DAL.Common
             dataSet.EnforceConstraints = true;
             dataSet.Relations.Add(parentDataTable.TableName + childDataTable.TableName, parentDataTable.Columns["Id"], childDataTable.Columns[columnName]);
 
+            return FkIdColumn;
+        }
+        public static DataColumn AddFkIdColumn(string parentColumnName, DataTable childDataTable, bool allowNull = false)
+        {
+            DataSet dataSet = childDataTable.DataSet;
+            string columnName = parentColumnName;
+            DataColumn FkIdColumn;
+            FkIdColumn = new DataColumn(columnName, Type.GetType("System.Int32"));
+            FkIdColumn.AllowDBNull = allowNull;
+            FkIdColumn.ColumnMapping = MappingType.Attribute;
+            childDataTable.Columns.Add(FkIdColumn);
             return FkIdColumn;
         }
         private static DataColumn AddNameColumn(DataTable dataTable)

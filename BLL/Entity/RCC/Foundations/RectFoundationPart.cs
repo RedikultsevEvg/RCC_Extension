@@ -62,10 +62,8 @@ namespace RDBLL.Entity.RCC.Foundations
             DataTable dataTable = dataSet.Tables["FoundationParts"];
             DataRow row = DsOperation.CreateNewRow(Id, createNew, dataTable);
             #region
-            row.SetField("Id", Id);
+            DsOperation.SetId(row, Id, Name, ParentId);
             row.SetField("Type", "Rect");
-            row.SetField("FoundationId", FoundationId);
-            row.SetField("Name", Name);
             row.SetField("Width", Width);
             row.SetField("Length", Length);
             row.SetField("Height", Height);

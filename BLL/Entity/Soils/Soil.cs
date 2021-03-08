@@ -138,7 +138,7 @@ namespace RDBLL.Entity.Soils
         {
             //Не удалять, так как этот участок необходим с учетом наследования
             dataRow["Id"] = Id;
-            dataRow["BuildingSiteId"] = BuildingSiteId;
+            dataRow["ParentId"] = BuildingSiteId;
             dataRow["Name"] = Name;
             dataRow["Description"] = Description;
             dataRow["CrcDensity"] = CrcDensity;
@@ -169,7 +169,7 @@ namespace RDBLL.Entity.Soils
         public virtual void OpenFromDataSet(DataRow dataRow)
         {
             Id = dataRow.Field<int>("Id");
-            BuildingSiteId = dataRow.Field<int>("BuildingSiteId");
+            BuildingSiteId = dataRow.Field<int>("ParentId");
             Name = dataRow.Field<string>("Name");
             Description = dataRow.Field<string>("Description");
             CrcDensity = dataRow.Field<double>("CrcDensity");
