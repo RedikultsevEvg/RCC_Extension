@@ -73,7 +73,6 @@ namespace RDUIL.WPF_Windows
             {
                 try
                 {
-                    _steelColumnBase.IsBasePartsActual = false;
                     _steelColumnBase.IsActual = false;
 
                     _steelColumnBase.DeleteSubElements(ProgrammSettings.CurrentDataSet, "SteelBaseParts");
@@ -102,7 +101,6 @@ namespace RDUIL.WPF_Windows
             {
                 try
                 {
-                    _steelColumnBase.IsBoltsActual = false;
                     _steelColumnBase.IsActual = false;
                     _steelColumnBase.DeleteSubElements(ProgrammSettings.CurrentDataSet, "SteelBolts");
                     foreach (SteelBolt steelBolt in _steelColumnBase.SteelBolts)

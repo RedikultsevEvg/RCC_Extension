@@ -212,7 +212,6 @@ namespace RDBLL.Forces
             foreach (SteelBase steelBase in SteelBases)
             {
                 steelBase.IsActual = false;
-                steelBase.IsLoadCasesActual = false;
             }
             foreach (Foundation foundation in Owner)
             {
@@ -227,8 +226,10 @@ namespace RDBLL.Forces
         /// <returns></returns>
         public object Clone()
         {
-            ForcesGroup forcesGroup = new ForcesGroup();
+            ForcesGroup forcesGroup = this.MemberwiseClone() as ForcesGroup;
             forcesGroup.Id = ProgrammSettings.CurrentId;
+            forcesGroup.Owner = new List<IHasForcesGroups>();
+            forcesGroup.LoadSets = new ObservableCollection<LoadSet>();
             //копируем лоадсеты
             foreach (LoadSet loadSet in LoadSets)
             {

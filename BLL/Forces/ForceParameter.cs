@@ -200,14 +200,8 @@ namespace RDBLL.Forces
         /// <returns></returns>
         public object Clone()
         {
-            ForceParameter forceParameter = new ForceParameter();
+            ForceParameter forceParameter = this.MemberwiseClone() as ForceParameter;
             forceParameter.Id = ProgrammSettings.CurrentId;
-            forceParameter.KindId = KindId;
-            forceParameter.ForceParamKind = ForceParamKind;
-            forceParameter.Name = Name;
-            forceParameter.CrcValue = CrcValue;
-            forceParameter.CrcValueInCurUnit = CrcValueInCurUnit;
-            forceParameter.DesignValue = DesignValue;
             return forceParameter;
         }
         #endregion

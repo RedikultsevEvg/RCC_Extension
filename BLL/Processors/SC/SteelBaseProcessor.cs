@@ -14,7 +14,7 @@ using System.Collections.ObjectModel;
 using System.Windows.Forms;
 using RDBLL.Entity.Results.NDM;
 using RDBLL.Entity.Common.NDM.Processors;
-
+using RDBLL.Entity.Common.Materials;
 
 namespace RDBLL.Processors.SC
 {
@@ -44,11 +44,7 @@ namespace RDBLL.Processors.SC
         /// <param name="steelBase">База стальной колонны</param>
         public static void ActualizeLoadCases(SteelBase steelBase)
         {
-            if (! steelBase.IsLoadCasesActual)
-            {
-                steelBase.LoadCases = LoadSetProcessor.GetLoadCases(steelBase.ForcesGroups);
-                steelBase.IsLoadCasesActual = true;
-            }   
+            steelBase.LoadCases = LoadSetProcessor.GetLoadCases(steelBase.ForcesGroups); 
         }
         /// <summary>
         /// Актуализирует участки базы стальной колонны
@@ -58,13 +54,11 @@ namespace RDBLL.Processors.SC
         /// <param name="steelBase"></param>
         public static void ActualizeBaseParts(SteelBase steelBase)
         {
-            if (steelBase.IsBasePartsActual) { return;}
             steelBase.ActualSteelBaseParts = new List<SteelBasePart>();
             foreach (SteelBasePart steelBasePart in steelBase.SteelBaseParts)
             {
                 steelBase.ActualSteelBaseParts.AddRange(SteelBasePartProcessor.GetSteelBasePartsFromPart(steelBasePart));
             }
-            steelBase.IsBasePartsActual = true;
         }
         /// <summary>
         /// Актуализирует болты базы стальной колонны
@@ -74,13 +68,11 @@ namespace RDBLL.Processors.SC
         /// <param name="steelBase"></param>
         public static void ActualizeSteelBolts(SteelBase steelBase)
         {
-            if (steelBase.IsBoltsActual) { return;}
             steelBase.ActualSteelBolts = new List<SteelBolt>();
             foreach (SteelBolt steelBolt in steelBase.SteelBolts)
             {
                 steelBase.ActualSteelBolts.AddRange(SteelBoltProcessor.GetSteelBoltsFromBolt(steelBolt));
             }
-            steelBase.IsBoltsActual = true;
         }
         /// <summary>
         /// Заносит коллекцию элементарных участков для базы стальной колонны
@@ -130,10 +122,12 @@ namespace RDBLL.Processors.SC
         public static List<NdmArea> GetConcreteNdmAreas(SteelBase steelBase)
         {
             List<NdmArea>  NdmAreas = new List<NdmArea>();
+            ConcreteKind concreteKind = steelBase.Conrete.MaterialKind as ConcreteKind;
+            double concreteStrength = concreteKind.FstCompStrength;
             foreach (SteelBasePart steelBasePart in steelBase.ActualSteelBaseParts)
             {
                 if (steelBase.UseSimpleMethod) { SteelBasePartProcessor.GetSubParts(steelBasePart); }
-                else { SteelBasePartProcessor.GetSubParts(steelBasePart, steelBase.ConcreteStrength); }
+                else { SteelBasePartProcessor.GetSubParts(steelBasePart, concreteStrength); }
                 foreach (NdmRectangleArea ndmConcreteArea in steelBasePart.SubParts)
                 {
                     NdmAreas.Add(ndmConcreteArea);

@@ -64,16 +64,17 @@ namespace CSL.Reports
         {
             foreach (Building building in _buildingSite.Childs)
             {
-                foreach (Level level in building.Childs)
+                foreach (Level level in building.Children)
                 {
                     DataTable Foundations = dataSet.Tables["Foundations"];
-                    foreach (Foundation foundation in level.Foundations)
+                    foreach (IHasParent child in level.Children)
                     {
+                        Foundation foundation = child as Foundation;
                         //Если данные по фундаменту неактуальны выполняем расчет
                         //if (!(foundation.IsLoadCasesActual & foundation.IsPartsActual))
                         //{
-                            //Если расчет выполнен успешно
-                            if (FoundationProcessor.SolveFoundation(foundation))
+                        //Если расчет выполнен успешно
+                        if (FoundationProcessor.SolveFoundation(foundation))
                             {
                                 //Заносим результаты расчета в таблицы датасета
                                 ProcessSubElements(Foundations, foundation);
@@ -197,7 +198,7 @@ namespace CSL.Reports
             foreach (RectFoundationPart part in foundation.Parts)
             {
                 DataRow newPart = FoundationParts.NewRow();
-                DsOperation.SetId(newPart, part.Id, part.Name, part.Foundation.Id);
+                DsOperation.SetId(newPart, part.Id, part.Name, part.ParentMember.Id);
                 newPart.SetField("Width", part.Width * MeasureUnitConverter.GetCoefficient(0));
                 newPart.SetField("Length", part.Length * MeasureUnitConverter.GetCoefficient(0));
                 newPart.SetField("Heigth", part.Height * MeasureUnitConverter.GetCoefficient(0));

@@ -108,7 +108,7 @@ namespace RDBLL.Entity.RCC.WallAndColumn
         {
             Building = building;
             SetDefault();
-            building.OpeningTypeList.Add(this);
+            //building.OpeningTypeList.Add(this);
         }
         public OpeningType(Building building, XmlNode xmlNode)
         {

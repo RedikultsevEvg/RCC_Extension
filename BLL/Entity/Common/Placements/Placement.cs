@@ -38,9 +38,9 @@ namespace RDBLL.Entity.Common.Placements
         /// <summary>
         /// Default constructor 
         /// </summary>
-        public Placement()
+        public Placement(bool genId = false)
         {
-            Id = ProgrammSettings.CurrentId;
+            if (genId) Id = ProgrammSettings.CurrentId;
             StoredParams = new List<StoredParam>();
             StoredParams.Add(new StoredParam(this) { Id = ProgrammSettings.CurrentId, Name = "ItemAngle" });
             StoredParams[0].SetDoubleValue(0.00);
