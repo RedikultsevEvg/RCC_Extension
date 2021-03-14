@@ -60,7 +60,7 @@ namespace RDBLL.Entity.Common.Placements
         /// <summary>
         /// Default constructor
         /// </summary>
-        public RectArrayPlacement () : base()
+        public RectArrayPlacement (bool genId = false) : base(genId)
         {
             // Размер вдоль оси X
             StoredParams.Add(new StoredParam(this) { Id = ProgrammSettings.CurrentId, Name = "SizeX" });

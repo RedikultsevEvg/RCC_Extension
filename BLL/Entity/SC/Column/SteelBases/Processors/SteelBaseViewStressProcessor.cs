@@ -10,6 +10,7 @@ using RDBLL.Entity.SC.Column;
 using System.Windows;
 using RDBLL.Processors.SC;
 using RDBLL.Entity.MeasureUnits;
+using RDBLL.Entity.Common.Materials.SteelMaterialUsing;
 
 namespace RDBLL.Entity.SC.Column.SteelBases.Processors
 {
@@ -47,7 +48,7 @@ namespace RDBLL.Entity.SC.Column.SteelBases.Processors
             double sizeCoff = MeasureUnitConverter.GetCoefficient(0);
             double stressCoff = MeasureUnitConverter.GetCoefficient(3);
             double actualThickness = steelBase.Thickness;
-            double steelStrength = steelBase.SteelStrength;
+            double steelStrength = (steelBase.Steel.MaterialKind as SteelKind).FstStrength;
 
             List<LoadCaseRectangleValue> loadCaseRectangleValues = new List<LoadCaseRectangleValue>();
             #region Stresses
@@ -60,8 +61,8 @@ namespace RDBLL.Entity.SC.Column.SteelBases.Processors
                 double maxBedStress = SteelBasePartProcessor.GetGlobalMinStressNonLinear(steelBasePart) * (-1D);
                 double maxStress = SteelBasePartProcessor.GetResult(steelBasePart, maxBedStress)[1];
                 RectangleValue aRV = new RectangleValue();
-                aRV.CenterX = steelBasePart.CenterX * zoomCoff;
-                aRV.CenterY = steelBasePart.CenterY * zoomCoff;
+                //aRV.CenterX = steelBasePart.CenterX * zoomCoff;
+                //aRV.CenterY = steelBasePart.CenterY * zoomCoff;
                 aRV.Width = steelBasePart.Width * zoomCoff;
                 aRV.Length = steelBasePart.Length * zoomCoff;
                 aRV.Value = maxStress;
@@ -82,8 +83,8 @@ namespace RDBLL.Entity.SC.Column.SteelBases.Processors
                 double recomendedThickness = 0;
                 if (maxStress > 0) { recomendedThickness = actualThickness * Math.Pow((maxStress / steelStrength), 0.5); }
                 RectangleValue aRV = new RectangleValue();
-                aRV.CenterX = steelBasePart.CenterX * zoomCoff;
-                aRV.CenterY = steelBasePart.CenterY * zoomCoff;
+                //aRV.CenterX = steelBasePart.CenterX * zoomCoff;
+                //aRV.CenterY = steelBasePart.CenterY * zoomCoff;
                 aRV.Width = steelBasePart.Width * zoomCoff;
                 aRV.Length = steelBasePart.Length * zoomCoff;
                 aRV.Value = Math.Round(recomendedThickness * sizeCoff, 3);

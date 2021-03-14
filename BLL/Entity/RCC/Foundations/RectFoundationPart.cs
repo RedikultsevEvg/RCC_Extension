@@ -62,7 +62,7 @@ namespace RDBLL.Entity.RCC.Foundations
             DataTable dataTable = dataSet.Tables["FoundationParts"];
             DataRow row = DsOperation.CreateNewRow(Id, createNew, dataTable);
             #region
-            DsOperation.SetId(row, Id, Name, ParentId);
+            DsOperation.SetId(row, Id, Name, ParentMember.Id);
             row.SetField("Type", "Rect");
             row.SetField("Width", Width);
             row.SetField("Length", Length);

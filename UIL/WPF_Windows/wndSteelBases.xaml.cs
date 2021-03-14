@@ -10,7 +10,7 @@ using System.IO;
 using System.Windows;
 using Winforms = System.Windows.Forms;
 using RDUIL.Common.Reports;
-
+using RDBLL.Entity.SC.Column.SteelBases.Builders;
 
 namespace RDUIL.WPF_Windows
 {
@@ -36,7 +36,9 @@ namespace RDUIL.WPF_Windows
 
         private void BtnAdd_Click(object sender, RoutedEventArgs e)
         {
-            SteelBase steelBase = new SteelBase(_level);
+            BuilderTempate1 builder = new BuilderTempate1();
+            SteelBase steelBase = BaseMaker.MakeSteelBase(builder);
+            steelBase.RegisterParent(_level);
             steelBase.SaveToDataSet(ProgrammSettings.CurrentDataSet, true);
             WndSteelColumnBase wndSteelColumnBase = new WndSteelColumnBase(steelBase);
             wndSteelColumnBase.ShowDialog();

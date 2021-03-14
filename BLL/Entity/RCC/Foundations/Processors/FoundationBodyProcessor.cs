@@ -289,7 +289,7 @@ namespace RDBLL.Entity.RCC.Foundations.Processors
                 return mxList.Max();
             }
             //Получаем ссылки на армирование подошвы вдоль оси X и вдоль оси Y
-            MaterialContainer materialContainer = part.Foundation.BottomReinforcement;
+            MaterialContainer materialContainer = part.ParentMember.BottomReinforcement;
             ReinforcementUsing rfX = (materialContainer.MaterialUsings[0]) as ReinforcementUsing;
             ReinforcementUsing rfY = (materialContainer.MaterialUsings[1]) as ReinforcementUsing;
             //Получаем ссылки на материалы армирования вдоль оси
@@ -299,7 +299,7 @@ namespace RDBLL.Entity.RCC.Foundations.Processors
             LineToSurfBySpacing rfSpacingX = rfX.Extender as LineToSurfBySpacing;
             LineToSurfBySpacing rfSpacingY = rfY.Extender as LineToSurfBySpacing;
 
-            ConcreteKind concreteKind = part.Foundation.Concrete.MaterialKind as ConcreteKind;
+            ConcreteKind concreteKind = part.ParentMember.Concrete.MaterialKind as ConcreteKind;
             double mx = GetMaxMoment(part.Result.partMomentAreas.LoadCombinationsX);
             double my = GetMaxMoment(part.Result.partMomentAreas.LoadCombinationsY);
             double RsX = rfKindX.FstTensStrength;

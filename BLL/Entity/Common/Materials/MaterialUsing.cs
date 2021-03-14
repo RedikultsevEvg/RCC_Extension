@@ -12,6 +12,7 @@ using RDBLL.Common.Service;
 using System.Collections.ObjectModel;
 using RDBLL.Entity.Common.Placements;
 using RDBLL.Entity.Common.Materials.RFExtenders;
+using RDBLL.Entity.Common.Materials.SteelMaterialUsing;
 
 namespace RDBLL.Entity.Common.Materials
 {
@@ -63,6 +64,8 @@ namespace RDBLL.Entity.Common.Materials
                 List<IMaterialKind> materialKinds = new List<IMaterialKind>();
                 if (this is ConcreteUsing) materialKinds.AddRange(ProgrammSettings.ConcreteKinds);
                 else if (this is ReinforcementUsing) materialKinds.AddRange(ProgrammSettings.ReinforcementKinds);
+                else if (this is SteelUsing) materialKinds.AddRange(ProgrammSettings.SteelKinds);
+                else if (this is BoltUsing) materialKinds.AddRange(ProgrammSettings.SteelKinds);
                 else throw new Exception("Material kind is not valid");
                 return materialKinds;
             }
@@ -104,11 +107,12 @@ namespace RDBLL.Entity.Common.Materials
             DataTable dataTable = dataSet.Tables[GetTableName()];
             DataRow row = DsOperation.CreateNewRow(Id, createNew, dataTable);
             #region setFields
-            row.SetField("Id", Id);
-            row.SetField("Name", Name);
+            SetEntity.SetRow(row, this);
             row.SetField("Purpose", Purpose);
             if (this is ConcreteUsing) row.SetField("Materialkindname", "Concrete");
             else if (this is ReinforcementUsing) row.SetField("Materialkindname", "Reinforcement");
+            else if (this is SteelUsing) row.SetField("Materialkindname", "Steel");
+            else if (this is BoltUsing) row.SetField("Materialkindname", "SteelBolt");
             else throw new NotImplementedException("Material kind is not valid");
             row.SetField("SelectedId", SelectedId);
             row.SetField("ParentId", ParentMember.Id);

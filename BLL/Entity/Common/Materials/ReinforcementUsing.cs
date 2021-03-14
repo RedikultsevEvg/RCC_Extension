@@ -16,28 +16,8 @@ namespace RDBLL.Entity.Common.Materials
     /// <summary>
     /// Класс использования арматуры в конструкции
     /// </summary>
-    public class ReinforcementUsing : MaterialUsing, IHasPlacement
+    public class ReinforcementUsing : CircleUsingBase, IHasPlacement
     {
-        /// <summary>
-        /// Диаметр арматурного стержня
-        /// </summary>
-        public double Diameter { get; set; }
-        /// <summary>
-        /// Предварительная деформация, д.ед.
-        /// </summary>
-        public double Prestrain { get; set; }
-        /// <summary>
-        /// Площадь арматурного стержня
-        /// </summary>
-        public double BarArea { get { return Diameter * Diameter * Math.PI / 4; } }
-        /// <summary>
-        /// Суммарная площадь арматурных стержней
-        /// </summary>
-        public double TotalBarsArea { get { return BarArea*Placement.GetElementPoints().Count(); } }
-        /// <summary>
-        /// Класс расположения арматуры
-        /// </summary>
-        public Placement Placement { get; private set; }
         /// <summary>
         /// Класс преобразующий условную раскладку от поверхности в действительную по координатам
         /// </summary>
@@ -54,8 +34,7 @@ namespace RDBLL.Entity.Common.Materials
         /// <param name="placement">Раскладка арматуры</param>
         public void SetPlacement(Placement placement)
         {
-            Placement = placement;
-            Placement.RegisterParent(this);
+            base.SetPlacement(placement);
             if (!(Extender == null)) { Extender.SetPlacement(placement); }
         }
         public void SetExtender(RFExtender extender)

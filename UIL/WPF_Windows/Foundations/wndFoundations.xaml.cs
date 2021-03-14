@@ -19,6 +19,7 @@ using RDUIL.Common.Reports;
 using Winforms = System.Windows.Forms;
 using System.Data;
 using BLL.ErrorProcessing;
+using RDBLL.Common.Interfaces;
 
 namespace RDUIL.WPF_Windows.Foundations
 {
@@ -28,12 +29,12 @@ namespace RDUIL.WPF_Windows.Foundations
     public partial class wndFoundations : Window
     {
         private Level _level;
-        private ObservableCollection<Foundation> _collection;
+        private ObservableCollection<IHasParent> _collection;
 
         public wndFoundations(Level level)
         {
             _level = level;
-            _collection = _level.Foundations;
+            _collection = _level.Children;
             InitializeComponent();
             this.DataContext = _collection;
             if (_collection.Count > 0) { LvMain.SelectedIndex = 0; }
@@ -51,7 +52,6 @@ namespace RDUIL.WPF_Windows.Foundations
                 try
                 {
                     foundation.SaveToDataSet(ProgrammSettings.CurrentDataSet, false);
-                    _collection.Add(foundation);
                     ProgrammSettings.IsDataChanged = true;
                 }
                 catch (Exception ex)
@@ -62,6 +62,7 @@ namespace RDUIL.WPF_Windows.Foundations
             }
             else //Если пользователь не подтвердил создание, то удаляем элемент
             {
+                foundation.UnRegisterParent();
                 foundation.DeleteFromDataSet(ProgrammSettings.CurrentDataSet);
             }
         }
@@ -82,7 +83,7 @@ namespace RDUIL.WPF_Windows.Foundations
                     if (LvMain.Items.Count == 1) LvMain.UnselectAll();
                     else if (a < (LvMain.Items.Count - 1)) LvMain.SelectedIndex = a + 1;
                     else LvMain.SelectedIndex = a - 1;
-                    _collection[a].DeleteFromObservables();
+                    (_collection[a] as Foundation).DeleteFromObservables();
                     _collection[a].DeleteFromDataSet(ProgrammSettings.CurrentDataSet);
                     _collection.RemoveAt(a);
 
@@ -100,7 +101,7 @@ namespace RDUIL.WPF_Windows.Foundations
             if (LvMain.SelectedIndex >= 0)
             {
                 int a = LvMain.SelectedIndex;
-                Foundation foundation = _collection[a];
+                Foundation foundation = _collection[a] as Foundation;
                 wndFoundation wndChild = new wndFoundation(foundation);
                 wndChild.ShowDialog();
                 if (wndChild.DialogResult == true)
@@ -133,7 +134,7 @@ namespace RDUIL.WPF_Windows.Foundations
             if (LvMain.SelectedIndex >= 0)
             {
                 int a = LvMain.SelectedIndex;
-                Foundation foundation = _collection[a];
+                Foundation foundation = (_collection[a] as Foundation);
                 Foundation newFoundation = foundation.Clone() as Foundation;
                 newFoundation.RegisterParent(foundation.ParentMember);
                 try

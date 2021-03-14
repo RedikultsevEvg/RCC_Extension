@@ -73,7 +73,7 @@ namespace RDBLL.Entity.RCC.BuildingAndSite
         /// <summary>
         /// Коллекция фундаментов
         /// </summary>
-        public ObservableCollection<Foundation> Foundations { get; set; }
+        public ObservableCollection<IHasParent> Children { get; set; }
 
         /// <summary>
         /// Получение суммарного объема бетона
@@ -134,7 +134,7 @@ namespace RDBLL.Entity.RCC.BuildingAndSite
             {
                 steelBase.SaveToDataSet(dataSet, createNew);
             }
-            foreach (Foundation foundation in Foundations)
+            foreach (Foundation foundation in Children)
             {
                 foundation.SaveToDataSet(dataSet, createNew);
             }
@@ -176,7 +176,7 @@ namespace RDBLL.Entity.RCC.BuildingAndSite
             {
                 steelBase.DeleteFromDataSet(dataSet);
             }
-            foreach (Foundation foundation in Foundations)
+            foreach (Foundation foundation in Children)
             {
                 foundation.DeleteFromDataSet(dataSet);
             }
@@ -190,7 +190,7 @@ namespace RDBLL.Entity.RCC.BuildingAndSite
         {
             Walls = new ObservableCollection<Wall>();
             SteelBases = new ObservableCollection<SteelBase>();
-            Foundations = new ObservableCollection<Foundation>();
+            Children = new ObservableCollection<IHasParent>();
         }
 
         /// <summary>
@@ -208,9 +208,9 @@ namespace RDBLL.Entity.RCC.BuildingAndSite
             Elevation = 0;
             Height = 3;
             TopOffset = -0.2;
-            Walls = new ObservableCollection<Wall>();
+            //Walls = new ObservableCollection<Wall>();
             SteelBases = new ObservableCollection<SteelBase>();
-            Foundations = new ObservableCollection<Foundation>();
+            Children = new ObservableCollection<IHasParent>();
         }
 
         /// <summary>
@@ -225,14 +225,14 @@ namespace RDBLL.Entity.RCC.BuildingAndSite
         public void RegisterParent(IDsSaveable parent)
         {
             Building building = parent as Building;
-            building.Childs.Add(this);
+            building.Children.Add(this);
             ParentMember = parent;
         }
 
         public void UnRegisterParent()
         {
             Building building = ParentMember as Building;
-            building.Childs.Remove(this);
+            building.Children.Remove(this);
             ParentMember = null;
         }
     }

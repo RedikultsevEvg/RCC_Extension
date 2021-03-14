@@ -191,7 +191,7 @@ namespace RDBLL.Entity.RCC.Foundations
         public Foundation(Level level)
         {
             Id = ProgrammSettings.CurrentId;
-            ParentMember = level;
+            RegisterParent(level);
             Name = "Новый фундамент";
             RelativeTopLevel = -0.2;
             SoilRelativeTopLevel = -0.2;
@@ -342,6 +342,7 @@ namespace RDBLL.Entity.RCC.Foundations
             //Удаляем вложенные части
             DeleteSubElements(dataSet, "FoundationParts");
             DeleteSubElements(dataSet, "ParentForcesGroups");
+            DeleteSubElements(dataSet, "SoilSectionsUsings");
             foreach (ForcesGroup forcesGroup in ForcesGroups)
             {
                 forcesGroup.DeleteFromDataSet(dataSet);
@@ -372,49 +373,9 @@ namespace RDBLL.Entity.RCC.Foundations
         /// <returns></returns>
         public object Clone()
         {
-            void DuplicateMaterial(Foundation found)
-            {
-                found.BottomReinforcement = BottomReinforcement.Clone() as MaterialContainer;
-                found.BottomReinforcement.RegisterParent(found);
-                found.VerticalReinforcement = VerticalReinforcement.Clone() as MaterialContainer;
-                found.VerticalReinforcement.RegisterParent(found);
-                found.Concrete = Concrete.Clone() as ConcreteUsing;
-                found.Concrete.RegisterParent(found);
-            }
-            Foundation foundation = new Foundation();
+            Foundation foundation = MemberwiseClone() as Foundation;
             foundation.Id = ProgrammSettings.CurrentId;
-            #region Copy properties
-            foundation.Name = Name;
-            foundation.RelativeTopLevel = RelativeTopLevel;
-            foundation.SoilRelativeTopLevel = SoilRelativeTopLevel;
-            foundation.SoilVolumeWeight = SoilVolumeWeight;
-            foundation.ConcreteVolumeWeight = ConcreteVolumeWeight;
-            foundation.FloorLoad = FloorLoad;
-            foundation.FloorLoadFactor = FloorLoadFactor;
-            foundation.ConcreteFloorLoad = ConcreteFloorLoad;
-            foundation.ConcreteFloorLoadFactor = ConcreteFloorLoadFactor;
-            #endregion
-            //Копируем нагрузки
-            foreach (ForcesGroup forcesGroup in ForcesGroups)
-            {
-                ForcesGroup newForcesGroup = forcesGroup.Clone() as ForcesGroup;
-                newForcesGroup.Owner.Add(foundation);
-                foundation.ForcesGroups.Clear();
-                foundation.ForcesGroups.Add(newForcesGroup);
-            }
-            //Копируем ступени
-            foreach (RectFoundationPart rectFoundationPart in this.Parts)
-            {
-                RectFoundationPart newFoundationPart = rectFoundationPart.Clone() as RectFoundationPart;
-                newFoundationPart.ParentId = foundation.Id;
-                newFoundationPart.Foundation = foundation;
-                foundation.Parts.Add(newFoundationPart);
-            }
-            //копируем материалы
-            DuplicateMaterial(foundation);
-            //Копируем скважину
-            SoilSectionUsing soilSectionUsing = this.SoilSectionUsing.Clone() as SoilSectionUsing;
-            soilSectionUsing.RegisterParent(foundation);
+            FoundCloneProcessor.FoundationClone(this, foundation);
             return foundation;
         }
         #endregion
@@ -449,7 +410,7 @@ namespace RDBLL.Entity.RCC.Foundations
             {
                 ReinforcementUsing rf = GetRF(container, rusName, engName);
                 RectArrayPlacement placement = new RectArrayPlacement();
-                placement.CoveringLayer = 0.05;
+                placement.OffSet = 0.05;
                 placement.RegisterParent(rf);
                 rf.SetExtender(ExtenderFactory.GetCoveredArray(ExtenderType.CoveredArray));
                 rf.SetPlacement(placement);
@@ -489,11 +450,14 @@ namespace RDBLL.Entity.RCC.Foundations
 
         public void RegisterParent(IDsSaveable parent)
         {
-            ParentMember = parent;
+            Level level = parent as Level;
+            ParentMember = level;
+            level.Children.Add(this);
         }
         public void UnRegisterParent()
         {
-            throw new NotImplementedException();
+            Level level = ParentMember as Level;
+            level.Children.Remove(this);
         }
 
         public void RegSSUsing(SoilSectionUsing soilSectionUsing)

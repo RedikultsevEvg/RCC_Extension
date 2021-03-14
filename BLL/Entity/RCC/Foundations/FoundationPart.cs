@@ -52,13 +52,9 @@ namespace RDBLL.Entity.RCC.Foundations
         /// </summary>
         public int Id { get; set; }
         /// <summary>
-        /// Код фундамента
-        /// </summary>
-        public int ParentId { get; set; }
-        /// <summary>
         /// Обратная ссылка на фундамент
         /// </summary>
-        public Foundation Foundation { get; set; }
+        public Foundation ParentMember { get; set; }
         /// <summary>
         /// Наименование
         /// </summary>
@@ -92,7 +88,7 @@ namespace RDBLL.Entity.RCC.Foundations
 
         public void Change()
         {
-            Foundation.IsActual = false;
+            ParentMember.IsActual = false;
             AfterChanged?.Invoke(this, new PartEventHandler());
         }
         public void Delete()
@@ -118,8 +114,7 @@ namespace RDBLL.Entity.RCC.Foundations
         public FoundationPart(Foundation foundation)
         {
             Id = ProgrammSettings.CurrentId;
-            ParentId = foundation.Id;
-            Foundation = foundation;
+            ParentMember = foundation;
             if (foundation.Parts.Count == 0)
             {
                 Name = "Подколонник";
@@ -161,7 +156,6 @@ namespace RDBLL.Entity.RCC.Foundations
         public virtual void OpenFromDataSet(DataRow dataRow)
         {
             Id = dataRow.Field<int>("Id");
-            ParentId = dataRow.Field<int>("ParentId");
             Name = dataRow.Field<string>("Name");
             Height = dataRow.Field<double>("Height");
             CenterX = dataRow.Field<double>("CenterX");

@@ -55,15 +55,15 @@ namespace RDBLL.Entity.RCC.BuildingAndSite
         /// <summary>
         /// Коллекция уровней
         /// </summary>
-        public ObservableCollection<Level> Childs { get; set; }
-        /// <summary>
-        /// Коллекция типов стен
-        /// </summary>
-        public ObservableCollection<WallType> WallTypeList { get; set; }
-        /// <summary>
-        /// Коллекция отверстий
-        /// </summary>
-        public ObservableCollection<OpeningType> OpeningTypeList { get; set; }
+        public ObservableCollection<Level> Children { get; set; }
+        ///// <summary>
+        ///// Коллекция типов стен
+        ///// </summary>
+        //public ObservableCollection<WallType> WallTypeList { get; set; }
+        ///// <summary>
+        ///// Коллекция отверстий
+        ///// </summary>
+        //public ObservableCollection<OpeningType> OpeningTypeList { get; set; }
         /// <summary>
         /// Наименование линейных единиц измерения
         /// </summary>
@@ -73,9 +73,9 @@ namespace RDBLL.Entity.RCC.BuildingAndSite
         /// </summary>
         public Building()
         {
-            Childs = new ObservableCollection<Level>();
-            WallTypeList = new ObservableCollection<WallType>();
-            OpeningTypeList = new ObservableCollection<OpeningType>();
+            Children = new ObservableCollection<Level>();
+            //WallTypeList = new ObservableCollection<WallType>();
+            //OpeningTypeList = new ObservableCollection<OpeningType>();
         }
         /// <summary>
         /// Конструктор по строительному объекту
@@ -92,9 +92,9 @@ namespace RDBLL.Entity.RCC.BuildingAndSite
             MaxFoundationSettlement = 0.08;
             IsRigid = false;
             RigidRatio = 4;
-            Childs = new ObservableCollection<Level>();
-            WallTypeList = new ObservableCollection<WallType>();
-            OpeningTypeList = new ObservableCollection<OpeningType>();
+            Children = new ObservableCollection<Level>();
+            //WallTypeList = new ObservableCollection<WallType>();
+            //OpeningTypeList = new ObservableCollection<OpeningType>();
         }
         #region IODataset
         /// <summary>
@@ -132,7 +132,7 @@ namespace RDBLL.Entity.RCC.BuildingAndSite
             row.SetField("IsRigid", IsRigid);
             row.SetField("RigidRatio", RigidRatio);
             dataTable.AcceptChanges();
-            foreach (Level level in Childs)
+            foreach (Level level in Children)
             {
                 level.SaveToDataSet(dataSet, createNew);
             }

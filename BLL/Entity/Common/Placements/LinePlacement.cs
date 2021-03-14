@@ -61,7 +61,7 @@ namespace RDBLL.Entity.Common.Placements
         private Point2D _StartPoint;
         private Point2D _EndPoint;
 
-        public LinePlacement() : base()
+        public LinePlacement(bool genId = false) : base(genId)
         {
             StoredParams.Add(new StoredParam(this) { Id = ProgrammSettings.CurrentId, Name = "StartX" });
             //StoredParams[0 + ParamQuant].SetDoubleValue(0);

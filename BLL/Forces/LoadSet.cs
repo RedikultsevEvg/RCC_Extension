@@ -194,13 +194,10 @@ namespace RDBLL.Forces
         /// <returns></returns>
         public object Clone()
         {
-            LoadSet loadSet = new LoadSet();
+            LoadSet loadSet = this.MemberwiseClone() as LoadSet;
             loadSet.Id = ProgrammSettings.CurrentId;
-            loadSet.Name = this.Name;
-            loadSet.PartialSafetyFactor = PartialSafetyFactor;
-            loadSet.IsLiveLoad = IsLiveLoad;
-            loadSet.IsCombination = IsCombination;
-            loadSet.BothSign = BothSign;
+            loadSet.ForcesGroups = new List<ForcesGroup>();
+            loadSet.ForceParameters = new ObservableCollection<ForceParameter>();
             //Копируем параметры нагрузки
             foreach (ForceParameter forceParameter in ForceParameters)
             {

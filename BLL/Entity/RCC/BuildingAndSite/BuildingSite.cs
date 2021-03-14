@@ -184,8 +184,9 @@ namespace RDBLL.Entity.RCC.BuildingAndSite
         /// <summary>
         /// Конструктор без параметров
         /// </summary>
-        public BuildingSite()
+        public BuildingSite(bool genId = false)
         {
+            if (genId) Id = ProgrammSettings.CurrentId;
             Name = "Мой объект";
             Childs = new ObservableCollection<Building>();
             Soils = new ObservableCollection<Soil>();

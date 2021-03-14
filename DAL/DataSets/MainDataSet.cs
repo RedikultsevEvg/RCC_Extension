@@ -8,6 +8,11 @@ using DAL.Common;
 
 namespace DAL.DataSets
 {
+    public enum TableNames
+    {
+        SteelKinds,
+        Foudations,
+    }
     /// <summary>
     /// Класс датасета для хранения исходных данных элементов
     /// </summary>

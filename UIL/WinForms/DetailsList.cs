@@ -496,11 +496,11 @@ namespace RDUIL.WinForms
         }
         private void EditItemFromColumnBasePart(ListViewItem Item, SteelBasePart basePart)
         {
-            Item.SubItems.Clear();
-            Item.Text = basePart.Name;
-            Item.SubItems.Add(Convert.ToString(basePart.Width * 1000) +"x" + Convert.ToString(basePart.Length * 1000));
-            double maxStress = Math.Round(SteelBasePartProcessor.GetResult(basePart)[1] / 1000) / 1000;
-            Item.SubItems.Add(Convert.ToString(maxStress));
+            //Item.SubItems.Clear();
+            //Item.Text = basePart.Name;
+            //Item.SubItems.Add(Convert.ToString(basePart.Width * 1000) +"x" + Convert.ToString(basePart.Length * 1000));
+            //double maxStress = Math.Round(SteelBasePartProcessor.GetResult(basePart)[1] / 1000) / 1000;
+            //Item.SubItems.Add(Convert.ToString(maxStress));
         }
         private void EditItemFromColumnLoadSet(ListViewItem Item, BarLoadSet loadSet)
         {
@@ -670,28 +670,28 @@ namespace RDUIL.WinForms
         }
         private void tsbWallType_Click(object sender, EventArgs e)
         {
-            Building building = (Building)_parentObject;
-            var detailObjectList = new DetailObjectList("WallTypes", building, building.WallTypeList, false);
-            detailObjectList.BtnVisibilityList = new List<short>() { 1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0 };
-            frmDetailList DetailForm = new frmDetailList(detailObjectList);
-            this.Visible = false;
-            DetailForm.ShowDialog();
-            this.Visible = true;
-            foreach (ListViewItem i in lvDetails.Items)
-            {
-                EditItemFromLevel(i, building.Childs[i.Index]);
-            }
+            //Building building = (Building)_parentObject;
+            //var detailObjectList = new DetailObjectList("WallTypes", building, building.WallTypeList, false);
+            //detailObjectList.BtnVisibilityList = new List<short>() { 1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0 };
+            //frmDetailList DetailForm = new frmDetailList(detailObjectList);
+            //this.Visible = false;
+            //DetailForm.ShowDialog();
+            //this.Visible = true;
+            //foreach (ListViewItem i in lvDetails.Items)
+            //{
+            //    EditItemFromLevel(i, building.Children[i.Index]);
+            //}
             
         }
         private void tsbOpeningTypes_Click(object sender, EventArgs e)
         {
-            Building building = (Building)_parentObject;
-            var detailObjectList = new DetailObjectList("OpeningTypes", building, building.OpeningTypeList, false);
-            detailObjectList.BtnVisibilityList = new List<short>() { 1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0 };
-            frmDetailList DetailForm = new frmDetailList(detailObjectList);
-            this.Visible = false;
-            DetailForm.ShowDialog();
-            this.Visible = true;
+            //Building building = (Building)_parentObject;
+            //var detailObjectList = new DetailObjectList("OpeningTypes", building, building.OpeningTypeList, false);
+            //detailObjectList.BtnVisibilityList = new List<short>() { 1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0 };
+            //frmDetailList DetailForm = new frmDetailList(detailObjectList);
+            //this.Visible = false;
+            //DetailForm.ShowDialog();
+            //this.Visible = true;
         }
         private void tsbOpenings_Click(object sender, EventArgs e)
         {

@@ -17,29 +17,29 @@ namespace RDBLL.Processors.SC
         public static List<SteelBolt> GetSteelBoltsFromBolt (SteelBolt steelBolt)
         {
             List<SteelBolt> steelBolts = new List<SteelBolt>();
-            steelBolts.Add(steelBolt);
-            if (steelBolt.AddSymmetricX)
-            {
-                SteelBolt newSteelBolt = (SteelBolt)steelBolt.Clone();
-                newSteelBolt.Id = ProgrammSettings.CurrentTmpId;
-                newSteelBolt.CenterY = (-1.0) * steelBolt.CenterY;
-                steelBolts.Add(newSteelBolt);
-            }
-            if (steelBolt.AddSymmetricY)
-            {
-                SteelBolt newSteelBolt = (SteelBolt)steelBolt.Clone();
-                newSteelBolt.Id = ProgrammSettings.CurrentTmpId;
-                newSteelBolt.CenterX = (-1.0) * steelBolt.CenterX;
-                steelBolts.Add(newSteelBolt);
-            }
-            if (steelBolt.AddSymmetricX & steelBolt.AddSymmetricY)
-            {
-                SteelBolt newSteelBolt = (SteelBolt)steelBolt.Clone();
-                newSteelBolt.Id = ProgrammSettings.CurrentTmpId;
-                newSteelBolt.CenterX = (-1.0) * steelBolt.CenterX;
-                newSteelBolt.CenterY = (-1.0) * steelBolt.CenterY;
-                steelBolts.Add(newSteelBolt);
-            }
+            //steelBolts.Add(steelBolt);
+            //if (steelBolt.AddSymmetricX)
+            //{
+            //    SteelBolt newSteelBolt = (SteelBolt)steelBolt.Clone();
+            //    newSteelBolt.Id = ProgrammSettings.CurrentTmpId;
+            //    newSteelBolt.CenterY = (-1.0) * steelBolt.CenterY;
+            //    steelBolts.Add(newSteelBolt);
+            //}
+            //if (steelBolt.AddSymmetricY)
+            //{
+            //    SteelBolt newSteelBolt = (SteelBolt)steelBolt.Clone();
+            //    newSteelBolt.Id = ProgrammSettings.CurrentTmpId;
+            //    newSteelBolt.CenterX = (-1.0) * steelBolt.CenterX;
+            //    steelBolts.Add(newSteelBolt);
+            //}
+            //if (steelBolt.AddSymmetricX & steelBolt.AddSymmetricY)
+            //{
+            //    SteelBolt newSteelBolt = (SteelBolt)steelBolt.Clone();
+            //    newSteelBolt.Id = ProgrammSettings.CurrentTmpId;
+            //    newSteelBolt.CenterX = (-1.0) * steelBolt.CenterX;
+            //    newSteelBolt.CenterY = (-1.0) * steelBolt.CenterY;
+            //    steelBolts.Add(newSteelBolt);
+            //}
             return steelBolts;
         }
 
@@ -47,9 +47,9 @@ namespace RDBLL.Processors.SC
         {
             IMaterialModel materialModel = new LinearIsotropic(2e+11, 0.000001, 1);
             steelBolt.SubPart = new NdmCircleArea(materialModel);
-            steelBolt.SubPart.Diametr = steelBolt.Diameter;
-            steelBolt.SubPart.CenterX = steelBolt.CenterX;
-            steelBolt.SubPart.CenterY = steelBolt.CenterY;
+            //steelBolt.SubPart.Diametr = steelBolt.Diameter;
+            //steelBolt.SubPart.CenterX = steelBolt.CenterX;
+            //steelBolt.SubPart.CenterY = steelBolt.CenterY;
         }
 
         public static double GetStressNonLinear(SteelBolt steelBolt, Curvature curvature)
@@ -73,10 +73,11 @@ namespace RDBLL.Processors.SC
         public static double GetMaxStressNonLinear(SteelBolt steelBolt)
         {
             List<double> stresses = new List<double>();
-            foreach (ForceDoubleCurvature forceCurvature in steelBolt.SteelBase.ForceCurvatures)
+            SteelBase steelBase = steelBolt.ParentMember as SteelBase;
+            foreach (ForceDoubleCurvature forceCurvature in steelBase.ForceCurvatures)
             {
                 //При расчете по упрощенном методу кривизна бетона и болтов не совпадает
-                if (steelBolt.SteelBase.UseSimpleMethod)
+                if (steelBase.UseSimpleMethod)
                 {
                     double stress = GetStressNonLinear(steelBolt, forceCurvature.DesignCurvature);
                     //Проверяем, находится ли болт в сжатой зоне бетона

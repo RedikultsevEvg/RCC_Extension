@@ -7,7 +7,18 @@ using RDBLL.Common.Interfaces;
 
 namespace RDBLL.Entity.Common.Materials.Interfaces
 {
+    /// <summary>
+    /// Интерфейс для материалов, применяемых для расчетов
+    /// </summary>
     public interface IMaterialKind :IDsSaveable
     {
+        /// <summary>
+        /// модуль упругости
+        /// </summary>
+        double ElasticModulus { get; set; }
+        /// <summary>
+        /// Коэффициент Пуассона
+        /// </summary>
+        double PoissonRatio { get; }
     }
 }

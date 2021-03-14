@@ -57,6 +57,7 @@ namespace RDBLL.Entity.Common.Materials
         /// модуль упругости
         /// </summary>
         public double ElasticModulus { get; set; }
+        public double PoissonRatio { get => 0.3; }
 
         #region IODataset
         /// <summary>

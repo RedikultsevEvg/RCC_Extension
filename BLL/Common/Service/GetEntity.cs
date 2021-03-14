@@ -59,7 +59,7 @@ namespace RDBLL.Common.Service
                 newObject.OpenFromDataSet(dataRow);
                 newObject.RegisterParent(building);
                 newObject.SteelBases = GetSteelBases(dataSet, newObject);
-                newObject.Foundations = GetFoundations(dataSet, newObject);
+                GetFoundations(dataSet, newObject);
                 newObjects.Add(newObject);
             }
             return newObjects;
@@ -81,7 +81,7 @@ namespace RDBLL.Common.Service
             {
                 SteelBase newObject = new SteelBase();
                 newObject.OpenFromDataSet(dataRow);
-                newObject.Level = level;
+                newObject.ParentMember = level;
                 newObject.SteelBaseParts = GetSteelBaseParts(dataSet, newObject);
                 newObject.SteelBolts = GetSteelBolts(dataSet, newObject);
                 newObject.ForcesGroups = GetSteelBaseForcesGroups(dataSet, newObject);
@@ -106,7 +106,7 @@ namespace RDBLL.Common.Service
             {
                 SteelBasePart newObject = new SteelBasePart();
                 newObject.OpenFromDataSet(dataRow);
-                newObject.SteelBase = steelBase;
+                newObject.RegisterParent(steelBase);
                 newObjects.Add(newObject);
             }
             return newObjects;
@@ -128,7 +128,7 @@ namespace RDBLL.Common.Service
             {
                 SteelBolt newObject = new SteelBolt();
                 newObject.OpenFromDataSet(dataRow);
-                newObject.SteelBase = steelBase;
+                newObject.RegisterParent(steelBase);
                 newObjects.Add(newObject);
             }
             return newObjects;
@@ -307,7 +307,7 @@ namespace RDBLL.Common.Service
             {
                 RectFoundationPart newObject = new RectFoundationPart();
                 newObject.OpenFromDataSet(dataRow);
-                newObject.Foundation = foundation;
+                newObject.ParentMember = foundation;
                 newObjects.Add(newObject);
             }
             return newObjects;

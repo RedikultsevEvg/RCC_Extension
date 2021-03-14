@@ -21,9 +21,5 @@ namespace RDBLL.Common.Interfaces
         /// Коллекция комбинаций
         /// </summary>
         ObservableCollection<LoadSet> LoadCases { get; set; }
-        /// <summary>
-        /// Флаг актуальности нагрузок
-        /// </summary>
-        bool IsLoadCasesActual { get; set; }
     }
 }

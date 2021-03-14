@@ -9,66 +9,37 @@ using System.Collections.ObjectModel;
 using System.Data;
 using System.Linq;
 using DAL.Common;
+using RDBLL.Entity.Common.Materials.SteelMaterialUsing;
+using RDBLL.Entity.Common.Materials;
 
 namespace RDBLL.Entity.SC.Column
 {
     /// <summary>
     /// База стальной колонны
     /// </summary>
-    public class SteelBase : ICloneable, IDsSaveable, IHasForcesGroups
+    public class SteelBase : ICloneable, IHasForcesGroups, IHasParent
     {
         #region Fields
-        //private bool _isActual;
-        private bool _isLoadCasesActual;
-        private bool _isBoltsActual;
-        private bool _isBasePartsActual;
-
         /// <summary>
         /// Код базы
         /// </summary>
         public int Id { get; set; }
         /// <summary>
-        /// Код уровня
-        /// </summary>
-        public int LevelId { get; set; }
-        /// <summary>
         /// Ссылка на уровень
         /// </summary>
-        public Level Level { get; set; }
-        /// <summary>
-        /// Код стали
-        /// </summary>
-        public int SteelClassId { get; set; }
-        /// <summary>
-        /// Код бетона
-        /// </summary>
-        public int ConcreteClassId { get; set; }
+        public IDsSaveable ParentMember { get; set; }
         /// <summary>
         /// Наименование
         /// </summary>
         public String Name { get; set; } //Наименование
-        public double SteelStrength { get; set; } //Расчетное сопротивление базы
-        public double ConcreteStrength { get; set; } //Прочность бетона подливки
         /// <summary>
         /// Признак актуальности расчета
         /// </summary>
         public bool IsActual { get; set; }
         /// <summary>
-        /// Ширина базы, м
-        /// </summary>
-        public double Width { get; set; }
-        /// <summary>
-        /// Длина базы, м
-        /// </summary>
-        public double Length { get; set; }
-        /// <summary>
         /// Толщина, м
         /// </summary>
         public double Thickness { get; set; }
-        /// <summary>
-        /// Коэффициент условий работы
-        /// </summary>
-        public double WorkCondCoef { get; set; }
         /// <summary>
         /// Флаг расчета по упрощенному методу
         /// </summary>
@@ -81,6 +52,10 @@ namespace RDBLL.Entity.SC.Column
         /// Коллекция участков
         /// </summary>
         public ObservableCollection<SteelBasePart> SteelBaseParts { get; set; }
+
+        public ConcreteUsing Conrete { get; set; }
+        public SteelUsing Steel { get; set; }
+
         /// <summary>
         /// Коллекция участков с учетом симметрии
         /// </summary>
@@ -113,42 +88,10 @@ namespace RDBLL.Entity.SC.Column
         /// Коллекция комбинаций и кривизны 
         /// </summary>
         public List<ForceDoubleCurvature> ForceCurvatures { get; set; }
-        /// <summary>
-        /// Флаг актуальности нагрузок
-        /// </summary>
-        public bool IsLoadCasesActual
-        {
-            get {return _isLoadCasesActual; }
-            set
-            {
-                if (!value) SetNotActual();
-                _isLoadCasesActual = value;
-            }
-        }
-        /// <summary>
-        /// Флаг актуальности участков
-        /// </summary>
-        public bool IsBasePartsActual
-        {
-            get { return _isBasePartsActual; }
-            set
-            {
-                if (!value) SetNotActual();
-                _isBasePartsActual = value;
-            }
-        }
-        /// <summary>
-        /// Флаг актуальности болтов
-        /// </summary>
-        public bool IsBoltsActual
-        {
-            get { return _isBoltsActual; }
-            set
-            {
-                if (!value) SetNotActual();
-                _isBoltsActual = value;
-            }
-        }
+
+
+        //public ObservableCollection<BoltUsing> Bolts { get; set; }
+
         #endregion
         #region Constructors
         /// <summary>
@@ -158,15 +101,10 @@ namespace RDBLL.Entity.SC.Column
         {
             Id = ProgrammSettings.CurrentId;
             Name = "Новая база";
-            Width = 0.6;
-            Length = 0.9;
+            
             Thickness = 0.06;
-            WorkCondCoef = 1.1;
-            SteelClassId = 1;
-            ConcreteClassId = 1;
             IsActual = false;
-            SteelStrength = 240000000;
-            ConcreteStrength = 10000000;
+            
             UseSimpleMethod = false;
             ForcesGroups = new ObservableCollection<ForcesGroup>();
             ForcesGroups.Add(new ForcesGroup(this));
@@ -176,6 +114,7 @@ namespace RDBLL.Entity.SC.Column
             NdmAreas = new List<NdmArea>();
             ConcreteNdmAreas = new List<NdmArea>();
             SteelNdmAreas = new List<NdmArea>();
+
 
             // Вложенные объекты по умолчанию
             StartObjects();
@@ -203,32 +142,22 @@ namespace RDBLL.Entity.SC.Column
             basePart1.Name = "1";
             basePart1.Width = 0.300;
             basePart1.Length = 0.200;
-            basePart1.CenterX = 0.150;
-            basePart1.CenterY = 0.350;
             basePart1.FixLeft = true;
             basePart1.FixRight = false;
             basePart1.FixTop = false;
             basePart1.FixBottom = true;
-            basePart1.AddSymmetricX = true;
-            basePart1.AddSymmetricY = true;
             this.SteelBaseParts.Add(basePart1);
             //Участок №2
             SteelBasePart basePart2 = new SteelBasePart(this);
             basePart2.Name = "2";
             basePart2.Width = 0.300;
             basePart2.Length = 0.500;
-            basePart2.CenterX = 0.150;
-            basePart2.CenterY = 0;
             basePart2.FixLeft = true;
             basePart2.FixRight = false;
             basePart2.FixTop = true;
             basePart2.FixBottom = true;
-            basePart2.AddSymmetricX = false;
-            basePart2.AddSymmetricY = true;
             this.SteelBaseParts.Add(basePart2);
-            //Болты
-            SteelBolt steelBolt = new SteelBolt(this);
-            this.SteelBolts.Add(steelBolt);
+
         }
         /// <summary>
         /// Создает базу стальной колонны по указанному уровню
@@ -237,15 +166,15 @@ namespace RDBLL.Entity.SC.Column
         public SteelBase(Level level)
         {
             SetDefault();
-            LevelId = level.Id;
-            Level = level;
+            RegisterParent(level);
         }
 
         /// <summary>
         /// Создает базу стальной колонны со значениями по умолчанию
         /// </summary>
-        public SteelBase()
+        public SteelBase(bool genId = false)
         {
+            if (genId) { Id = ProgrammSettings.CurrentId; }
             SetDefault();
         }
 
@@ -284,18 +213,9 @@ namespace RDBLL.Entity.SC.Column
                 row = tmpRow;
             }
             #region
-            row.SetField("Id", Id);
-            row.SetField("LevelId", LevelId);
-            row.SetField("SteelClassId", SteelClassId);
-            row.SetField("ConcreteClassId", ConcreteClassId);
-            row.SetField("Name", Name);
-            row.SetField("SteelStrength", SteelStrength);
-            row.SetField("ConcreteStrength", ConcreteStrength);
+            SetEntity.SetRow(row, this);
             row.SetField("IsActual", IsActual);
-            row.SetField("Width", Width);
-            row.SetField("Length", Length);
             row.SetField("Thickness", Thickness);
-            row.SetField("WorkCondCoef", WorkCondCoef);
             row.SetField("UseSimpleMethod", UseSimpleMethod);
             #endregion
             dataTable.AcceptChanges();
@@ -331,23 +251,9 @@ namespace RDBLL.Entity.SC.Column
         /// <param name="dataRow"></param>
         public void OpenFromDataSet(DataRow dataRow)
         {
-            Id = dataRow.Field<int>("Id");
-            LevelId = dataRow.Field<int>("LevelId");
-            SteelClassId = dataRow.Field<int>("SteelClassId");
-            ConcreteClassId = dataRow.Field<int>("ConcreteClassId");
-            //Надо получить ссылки на сталь и бетон
-            Name = dataRow.Field<string>("Name");
-            SteelStrength = dataRow.Field<double>("SteelStrength");
-            ConcreteStrength = dataRow.Field<double>("ConcreteStrength");
-            IsActual = false;
-            //dataRow.Field<bool>("IsActual"), В любом случае при загрузке данные неактуальны
-            IsLoadCasesActual = false;
-            IsBasePartsActual = false;
-            IsBoltsActual = false;
-            Width = dataRow.Field<double>("Width");
-            Length = dataRow.Field<double>("Length");
+            SetEntity.SetProps(dataRow, this);
+            IsActual = false;           
             Thickness = dataRow.Field<double>("Thickness");
-            WorkCondCoef = dataRow.Field<double>("WorkCondCoef");
             UseSimpleMethod = dataRow.Field<bool>("UseSimpleMethod");
         }
         /// <summary>
@@ -374,7 +280,7 @@ namespace RDBLL.Entity.SC.Column
         /// <param name="dataSet"></param>
         public void DeleteSubElements(DataSet dataSet, string tableName)
         {
-            DsOperation.DeleteRow(dataSet, tableName, "SteelBaseId", Id);
+            DsOperation.DeleteRow(dataSet, tableName, "ParentId", Id);
         }
         #endregion
 
@@ -382,6 +288,19 @@ namespace RDBLL.Entity.SC.Column
         public object Clone()
         {
             return this.MemberwiseClone();
+        }
+
+        public void RegisterParent(IDsSaveable parent)
+        {
+            Level level = parent as Level;
+            ParentMember = level;
+            level.SteelBases.Add(this);
+        }
+
+        public void UnRegisterParent()
+        {
+            Level level = ParentMember as Level;
+            level.SteelBases.Remove(this);
         }
     }
 }
