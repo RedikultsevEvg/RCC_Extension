@@ -1,5 +1,4 @@
-﻿using DAL.Common;
-using FastReport;
+﻿using FastReport;
 using RDBLL.Common.Interfaces;
 using RDBLL.Common.Service;
 using RDBLL.Entity.MeasureUnits;
@@ -14,6 +13,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Collections.ObjectModel;
 using System.Collections.Generic;
+using RDBLL.Common.Service.DsOperations;
 
 namespace CSL.Common
 {

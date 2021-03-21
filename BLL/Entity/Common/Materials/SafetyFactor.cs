@@ -5,8 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using RDBLL.Common.Interfaces;
 using System.Data;
-using DAL.Common;
 using RDBLL.Common.Service;
+using RDBLL.Common.Service.DsOperations;
 
 namespace RDBLL.Entity.Common.Materials
 {
@@ -118,19 +118,14 @@ namespace RDBLL.Entity.Common.Materials
         /// <param name="createNew"></param>
         public void SaveToDataSet(DataSet dataSet, bool createNew)
         {
-            DataTable dataTable;
-            dataTable = dataSet.Tables[GetTableName()];
-            DataRow row = DsOperation.CreateNewRow(Id, createNew, dataTable);
+            DataRow row = EntityOperation.SaveEntity(dataSet, createNew, this);
             #region setFields
-            row.SetField("Id", Id);
-            row.SetField("Name", Name);
-            row.SetField("ParentId", ParentMember.Id);
             for (int i=0; i<=CoefCount - 1; i++)
             {
                 row.SetField(Convert.ToString(i), _Coefficients[i]);
             }
             #endregion
-            dataTable.AcceptChanges();
+            row.AcceptChanges();
 
         }
         /// <summary>

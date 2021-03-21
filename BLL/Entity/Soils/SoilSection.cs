@@ -10,8 +10,8 @@ using RDBLL.Entity.MeasureUnits;
 using RDBLL.Common.Interfaces;
 using System.ComponentModel;
 using System.Data;
-using DAL.Common;
 using RDBLL.Entity.RCC.Foundations;
+using RDBLL.Common.Service.DsOperations;
 
 namespace RDBLL.Entity.Soils
 {

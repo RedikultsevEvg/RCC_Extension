@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 using RDBLL.Common.Interfaces;
 using System.ComponentModel;
 using System.Data;
-using DAL.Common;
 using RDBLL.Common.Service;
 using RDBLL.Entity.RCC.BuildingAndSite;
+using RDBLL.Common.Service.DsOperations;
 
 namespace RDBLL.Entity.Soils
 {

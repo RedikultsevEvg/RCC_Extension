@@ -8,16 +8,17 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data;
 using System.Linq;
-using DAL.Common;
 using RDBLL.Entity.Common.Materials.SteelMaterialUsing;
 using RDBLL.Entity.Common.Materials;
+using RDBLL.Common.Service.DsOperations;
+using RDBLL.Common.Interfaces.Materials;
 
 namespace RDBLL.Entity.SC.Column
 {
     /// <summary>
     /// База стальной колонны
     /// </summary>
-    public class SteelBase : ICloneable, IHasForcesGroups, IHasParent
+    public class SteelBase : ICloneable, IHasForcesGroups, IHasParent, IHasConcrete, IHasSteel
     {
         #region Fields
         /// <summary>
@@ -53,21 +54,13 @@ namespace RDBLL.Entity.SC.Column
         /// </summary>
         public ObservableCollection<SteelBasePart> SteelBaseParts { get; set; }
 
-        public ConcreteUsing Conrete { get; set; }
+        public ConcreteUsing Concrete { get; set; }
         public SteelUsing Steel { get; set; }
 
-        /// <summary>
-        /// Коллекция участков с учетом симметрии
-        /// </summary>
-        public List<SteelBasePart> ActualSteelBaseParts { get; set; }
         /// <summary>
         /// Коллекция болтов
         /// </summary>
         public ObservableCollection<SteelBolt> SteelBolts { get; set; }
-        /// <summary>
-        /// Коллекция болтов с учетом симметрии
-        /// </summary>
-        public List<SteelBolt> ActualSteelBolts { get; set; }
         /// <summary>
         /// Коллекция комбинаций
         /// </summary>
@@ -114,50 +107,6 @@ namespace RDBLL.Entity.SC.Column
             NdmAreas = new List<NdmArea>();
             ConcreteNdmAreas = new List<NdmArea>();
             SteelNdmAreas = new List<NdmArea>();
-
-
-            // Вложенные объекты по умолчанию
-            StartObjects();
-        }
-        /// <summary>
-        /// Создание вложенных объектов по умолчанию
-        /// </summary>
-        public void StartObjects()
-        {
-            //Нагрузка
-            LoadSet loadSet = new LoadSet(this.ForcesGroups[0]);
-            this.ForcesGroups[0].LoadSets.Add(loadSet);
-            loadSet.Name = "Постоянная";
-            loadSet.ForceParameters.Add(new ForceParameter(loadSet));
-            loadSet.ForceParameters[0].KindId = 1; //Продольная сила
-            loadSet.ForceParameters[0].CrcValue = -100000; //Продольная сила
-            loadSet.ForceParameters.Add(new ForceParameter(loadSet));
-            loadSet.ForceParameters[1].KindId = 2; //Изгибающий момент
-            loadSet.ForceParameters[1].CrcValue = 200000; //Изгибающий момент
-            loadSet.IsLiveLoad = false;
-            loadSet.BothSign = false;
-            loadSet.PartialSafetyFactor = 1.1;
-            //Участок №1
-            SteelBasePart basePart1 = new SteelBasePart(this);
-            basePart1.Name = "1";
-            basePart1.Width = 0.300;
-            basePart1.Length = 0.200;
-            basePart1.FixLeft = true;
-            basePart1.FixRight = false;
-            basePart1.FixTop = false;
-            basePart1.FixBottom = true;
-            this.SteelBaseParts.Add(basePart1);
-            //Участок №2
-            SteelBasePart basePart2 = new SteelBasePart(this);
-            basePart2.Name = "2";
-            basePart2.Width = 0.300;
-            basePart2.Length = 0.500;
-            basePart2.FixLeft = true;
-            basePart2.FixRight = false;
-            basePart2.FixTop = true;
-            basePart2.FixBottom = true;
-            this.SteelBaseParts.Add(basePart2);
-
         }
         /// <summary>
         /// Создает базу стальной колонны по указанному уровню
@@ -185,7 +134,6 @@ namespace RDBLL.Entity.SC.Column
 
         #endregion
         #region Methods
-        #region IODataSet
         /// <summary>
         /// Return name of table in dataset for CRUD operation
         /// </summary>
@@ -197,29 +145,13 @@ namespace RDBLL.Entity.SC.Column
         /// <param name="dataSet">Датасет</param>
         public void SaveToDataSet(DataSet dataSet, bool createNew)
         {
-            DataTable dataTable;
-            DataRow row;
-            dataTable = dataSet.Tables[GetTableName()];
-            if (createNew)
-            {
-                row = dataTable.NewRow();
-                dataTable.Rows.Add(row);
-            }
-            else
-            {
-                var tmpRow = (from dataRow in dataTable.AsEnumerable()
-                              where dataRow.Field<int>("Id") == Id
-                              select dataRow).Single();
-                row = tmpRow;
-            }
+            DataRow row = EntityOperation.SaveEntity(dataSet, createNew, this);
             #region
-            SetEntity.SetRow(row, this);
             row.SetField("IsActual", IsActual);
             row.SetField("Thickness", Thickness);
             row.SetField("UseSimpleMethod", UseSimpleMethod);
             #endregion
-            dataTable.AcceptChanges();
-
+            row.AcceptChanges();
             foreach (SteelBasePart steelBasePart in SteelBaseParts)
             {
                 steelBasePart.SaveToDataSet(dataSet, createNew);
@@ -228,10 +160,6 @@ namespace RDBLL.Entity.SC.Column
             {
                 steelBolt.SaveToDataSet(dataSet, createNew);
             }
-            foreach (ForcesGroup forcesGroup in ForcesGroups)
-            {
-                forcesGroup.SaveToDataSet(dataSet, createNew);
-            }
         }
         /// <summary>
         /// Обновляет запись по датасету
@@ -239,11 +167,7 @@ namespace RDBLL.Entity.SC.Column
         /// <param name="dataSet"></param>
         public void OpenFromDataSet(DataSet dataSet)
         {
-            DataTable dataTable = dataSet.Tables[GetTableName()];
-            var row = (from dataRow in dataTable.AsEnumerable()
-                       where dataRow.Field<int>("Id") == Id
-                       select dataRow).Single();
-            OpenFromDataSet(row);
+            OpenFromDataSet(DsOperation.OpenFromDataSetById(dataSet, GetTableName(), Id));
         }
         /// <summary>
         /// Обновляет запись в соответствии со строкой датасета
@@ -251,7 +175,7 @@ namespace RDBLL.Entity.SC.Column
         /// <param name="dataRow"></param>
         public void OpenFromDataSet(DataRow dataRow)
         {
-            SetEntity.SetProps(dataRow, this);
+            EntityOperation.SetProps(dataRow, this);
             IsActual = false;           
             Thickness = dataRow.Field<double>("Thickness");
             UseSimpleMethod = dataRow.Field<bool>("UseSimpleMethod");
@@ -262,45 +186,51 @@ namespace RDBLL.Entity.SC.Column
         /// <param name="dataSet"></param>
         public void DeleteFromDataSet(DataSet dataSet)
         {
-            DeleteSubElements(dataSet, "SteelBaseParts");
-            DeleteSubElements(dataSet, "SteelBolts");
-            DeleteSubElements(dataSet, "SteelBaseForcesGroups");
-            foreach (ForcesGroup forcesGroup in ForcesGroups)
+            DsOperation.DeleteRow(dataSet, "SteelBaseParts", "ParentId", Id);
+            foreach (SteelBolt bolt in SteelBolts)
             {
-                //Нужно сделать проверку, встречается ли группа еще-где-то
-                //Если не встречается, то удалять
-                forcesGroup.DeleteFromDataSet(dataSet);
+                bolt.DeleteFromDataSet(dataSet);
             }
-            DsOperation.DeleteRow(dataSet, GetTableName(), Id);
+            EntityOperation.DeleteEntity(dataSet, this);
         }
-        #endregion
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="dataSet"></param>
-        public void DeleteSubElements(DataSet dataSet, string tableName)
-        {
-            DsOperation.DeleteRow(dataSet, tableName, "ParentId", Id);
-        }
-        #endregion
-
         //IClonable
+        /// <summary>
+        /// Возвращает полную копию элемента
+        /// </summary>
+        /// <returns></returns>
         public object Clone()
         {
-            return this.MemberwiseClone();
+            SteelBase steelBase = this.MemberwiseClone() as SteelBase;
+            steelBase.SteelBolts = new ObservableCollection<SteelBolt>();
+            foreach (SteelBolt bolt in SteelBolts)
+            {
+                steelBase.SteelBolts.Add(bolt.Clone() as SteelBolt);
+            }
+            steelBase.SteelBaseParts = new ObservableCollection<SteelBasePart>();
+            foreach (SteelBasePart part in SteelBaseParts)
+            {
+                steelBase.SteelBaseParts.Add(part.Clone() as SteelBasePart);
+            }
+            return steelBase; 
         }
-
+        /// <summary>
+        /// Регистрация родителя
+        /// </summary>
+        /// <param name="parent"></param>
         public void RegisterParent(IDsSaveable parent)
         {
             Level level = parent as Level;
             ParentMember = level;
             level.SteelBases.Add(this);
         }
-
+        /// <summary>
+        /// Удаление регистрации родителя
+        /// </summary>
         public void UnRegisterParent()
         {
             Level level = ParentMember as Level;
             level.SteelBases.Remove(this);
         }
+        #endregion
     }
 }

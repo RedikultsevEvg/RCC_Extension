@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using RDBLL.Entity.Common.Materials.Interfaces;
 using RDBLL.Common.Interfaces;
 using System.Data;
-using DAL.Common;
 using RDBLL.Common.Service;
 using RDBLL.Entity.Common.Placements;
 using RDBLL.Entity.Common.Materials.RFExtenders;
@@ -16,7 +15,7 @@ namespace RDBLL.Entity.Common.Materials
     /// <summary>
     /// Класс использования арматуры в конструкции
     /// </summary>
-    public class ReinforcementUsing : CircleUsingBase, IHasPlacement
+    public class ReinforcementUsing : CircleUsingBase
     {
         /// <summary>
         /// Класс преобразующий условную раскладку от поверхности в действительную по координатам

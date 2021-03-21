@@ -54,8 +54,8 @@ namespace RDBLL.Entity.Common.Placements
         /// </summary>
         public bool FillArray
         {
-            get { return StoredParams[3 + ParamQuant].GetBoolValue(); }
-            set { StoredParams[3 + ParamQuant].SetBoolValue(value); }
+            get { return StoredParams[4 + ParamQuant].GetBoolValue(); }
+            set { StoredParams[4 + ParamQuant].SetBoolValue(value); }
         }
         /// <summary>
         /// Default constructor

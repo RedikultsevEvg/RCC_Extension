@@ -47,15 +47,6 @@ namespace RDBLL.Common.Geometry
             Y = coord_Y;
         }
 
-        public Point2D(XmlNode xmlNode)
-        {
-            foreach (XmlAttribute obj in xmlNode.Attributes)
-            {
-                if (obj.Name == "Coord_X") X = Convert.ToDouble(obj.Value);
-                if (obj.Name == "Coord_Y") Y = Convert.ToDouble(obj.Value);
-            }
-        }
-
         public object Clone()
         {
             return this.MemberwiseClone();

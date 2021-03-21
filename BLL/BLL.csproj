@@ -61,6 +61,9 @@
     <Compile Include="Common\Geometry\Mathematic\Constants.cs" />
     <Compile Include="Common\Geometry\Mathematic\Matrix.cs" />
     <Compile Include="Common\Geometry\RectCrossSection.cs" />
+    <Compile Include="Common\Interfaces\Materials\IHasConcrete.cs" />
+    <Compile Include="Common\Interfaces\Materials\IHasSteel.cs" />
+    <Compile Include="Common\Interfaces\Shapes\ICircle.cs" />
     <Compile Include="Common\Interfaces\IDuplicate.cs" />
     <Compile Include="Common\Interfaces\IHasParent.cs" />
     <Compile Include="Common\Interfaces\IHasSoilSection.cs" />
@@ -68,13 +71,17 @@
     <Compile Include="Common\Interfaces\IRDObserver.cs" />
     <Compile Include="Common\Interfaces\IDsSaveable.cs" />
     <Compile Include="Common\Interfaces\IRDObservable.cs" />
+    <Compile Include="Common\Interfaces\Shapes\IRectangle.cs" />
+    <Compile Include="Common\Interfaces\Shapes\IShape.cs" />
     <Compile Include="Common\Params\IHasStoredParams.cs" />
     <Compile Include="Common\Params\StoredParam.cs" />
     <Compile Include="Common\Service\CommonOperation.cs" />
     <Compile Include="Common\Service\Compare.cs" />
     <Compile Include="Common\Service\CommonErrorProcessor.cs" />
+    <Compile Include="Common\Service\DsOperations\DsOperation.cs" />
+    <Compile Include="Common\Service\DsOperations\Factory\DsFactory.cs" />
     <Compile Include="Common\Service\GetEntity.cs" />
-    <Compile Include="Common\Service\SetEntity.cs" />
+    <Compile Include="Common\Service\DsOperations\EntityOperation.cs" />
     <Compile Include="DrawUtils\SteelBase\DrawFoundation.cs" />
     <Compile Include="DrawUtils\SteelBase\DrawSteelBase.cs" />
     <Compile Include="DrawUtils\SteelBase\DrawUtils.cs" />
@@ -130,6 +137,7 @@
     <Compile Include="Entity\MeasureUnits\MeasureUnit.cs" />
     <Compile Include="Entity\MeasureUnits\MeasureUnitConverter.cs" />
     <Compile Include="Entity\MeasureUnits\MeasureUnitLabel.cs" />
+    <Compile Include="Entity\MeasureUnits\MeasureUnitList.cs" />
     <Compile Include="Entity\RCC\BuildingAndSite\Building.cs" />
     <Compile Include="Entity\RCC\BuildingAndSite\BuildingProcessor.cs" />
     <Compile Include="Entity\RCC\BuildingAndSite\BuildingSite.cs" />
@@ -165,6 +173,8 @@
     <Compile Include="Entity\SC\Column\SteelBases\Builders\BaseMaker.cs" />
     <Compile Include="Entity\SC\Column\SteelBases\Builders\BuilderBase.cs" />
     <Compile Include="Entity\SC\Column\SteelBases\Builders\BuilderTempate1.cs" />
+    <Compile Include="Entity\SC\Column\SteelBases\Factorys\PartFactProc.cs" />
+    <Compile Include="Entity\SC\Column\SteelBases\Factorys\SteelBoltFactory.cs" />
     <Compile Include="Entity\SC\Column\SteelBases\Processors\SteelBaseViewStressProcessor.cs" />
     <Compile Include="Entity\SC\Column\SteelBolt.cs" />
     <Compile Include="Entity\SC\Column\SteelBase.cs" />
@@ -204,12 +214,6 @@
   <ItemGroup>
     <Folder Include="Common\Delegates\" />
     <Folder Include="Entity\Results\RCC\" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\DAL\DAL.csproj">
-      <Project>{81dd6ebb-5934-473c-88a7-41ef9811e05f}</Project>
-      <Name>DAL</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Common\ErrorProcessing\IconBug128.png" />

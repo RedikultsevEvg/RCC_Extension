@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Data;
+using RDBLL.Entity.MeasureUnits;
 
 namespace RDBLL.Common.Interfaces
 {
@@ -46,5 +47,6 @@ namespace RDBLL.Common.Interfaces
         /// </summary>
         /// <param name="dataSet"></param>
         void DeleteFromDataSet(DataSet dataSet);
+        //MeasureUnitList Measures { get; }
     }
 }

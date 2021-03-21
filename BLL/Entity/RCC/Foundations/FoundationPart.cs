@@ -7,8 +7,8 @@ using RDBLL.Entity.MeasureUnits;
 using RDBLL.Common.Service;
 using RDBLL.Common.Interfaces;
 using System.Data;
-using DAL.Common;
 using RDBLL.Entity.RCC.Foundations.Processors;
+using RDBLL.Common.Service.DsOperations;
 
 namespace RDBLL.Entity.RCC.Foundations
 {
@@ -76,9 +76,9 @@ namespace RDBLL.Entity.RCC.Foundations
         /// </summary>
         public PartResult Result { get; set; }
         /// <summary>
-        /// Наименование линейных единиц измерения
+        /// Наименование единиц измерения
         /// </summary>
-        public string LinearMeasure { get { return MeasureUnitConverter.GetUnitLabelText(0); } }
+        public MeasureUnitList Measures { get => new MeasureUnitList(); }
 
         #region events
         public class PartEventHandler : EventArgs

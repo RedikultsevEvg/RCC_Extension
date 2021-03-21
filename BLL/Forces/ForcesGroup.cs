@@ -12,7 +12,7 @@ using System.Data;
 using RDBLL.Entity.RCC.Foundations;
 using Winforms = System.Windows.Forms;
 using System.Windows;
-using DAL.Common;
+using RDBLL.Common.Service.DsOperations;
 
 namespace RDBLL.Forces
 {
@@ -27,13 +27,9 @@ namespace RDBLL.Forces
         /// </summary>
         public int Id { get; set; }
         /// <summary>
-        /// Обратная ссылка. База стальной колонны к котрой относится группа нагрузок
+        /// Обратная ссылка на коллекцию владельцев
         /// </summary>
-        public List<SteelBase> SteelBases { get; set; }
-        /// <summary>
-        /// Обратная ссылка на коллекцию фундаментов
-        /// </summary>
-        public List<IHasForcesGroups> Owner { get; set; }
+        public List<IHasForcesGroups> Owners { get; set; }
         /// <summary>
         /// Коллекция набора нагрузок
         /// </summary>
@@ -57,8 +53,7 @@ namespace RDBLL.Forces
         /// </summary>
         public ForcesGroup()
         {
-            SteelBases = new List<SteelBase>();
-            Owner = new List<IHasForcesGroups>();
+            Owners = new List<IHasForcesGroups>();
             LoadSets = new ObservableCollection<LoadSet>();
         }
         /// <summary>
@@ -68,9 +63,8 @@ namespace RDBLL.Forces
         public ForcesGroup(IHasForcesGroups parent)
         {
             Id = ProgrammSettings.CurrentId;
-            SteelBases = new List<SteelBase>();
-            Owner = new List<IHasForcesGroups>();
-            Owner.Add(parent);
+            Owners = new List<IHasForcesGroups>();
+            Owners.Add(parent);
             LoadSets = new ObservableCollection<LoadSet>();
             Name = "Новая группа нагрузок";
         }
@@ -86,61 +80,28 @@ namespace RDBLL.Forces
         /// Сохранение в датасет
         /// </summary>
         /// <param name="dataSet"></param>
+        /// <param name="createNew"></param>
         public void SaveToDataSet(DataSet dataSet, bool createNew)
         {
-            DataTable dataTable;
-            DataRow row;
-            //Данные по группам нагрузок
-            dataTable = dataSet.Tables[GetTableName()];
-            if (createNew)
-            {
-                row = dataTable.NewRow();
-                dataTable.Rows.Add(row);
-            }
-            else
-            {
-                var tmpRow = (from dataRow in dataTable.AsEnumerable()
-                              where dataRow.Field<int>("Id") == Id
-                              select dataRow).Single();
-                row = tmpRow;
-            }
-            #region
-            row.SetField("Id", Id);
-            row.SetField("Name", Name);
+            DataRow row = EntityOperation.SaveEntity(dataSet, createNew, this);
             row.SetField("CenterX", CenterX);
             row.SetField("CenterY", CenterY);
-            #endregion
-            dataTable.AcceptChanges();
+            row.AcceptChanges();
             //Удаляем записи по вложенным элементам
             DeleteSubElements(dataSet);
             //И создаем все нагрузки заново
             if (createNew)
             {
-                //Данные по нагрузкам на стальные базы
+                DataTable dataTable;
+                //Данные по нагрузкам на владельцев
                 dataTable = dataSet.Tables["ParentForcesGroups"];
-                foreach (SteelBase steelBase in SteelBases)
+                foreach (IHasForcesGroups hasForces in Owners)
                 {
                     row = dataTable.NewRow();
+                    row.SetField("Id", ProgrammSettings.CurrentId);
+                    row.SetField("ParentId", hasForces.Id);
+                    row.SetField("ForcesGroupId", Id);
                     dataTable.Rows.Add(row);
-                    #region
-                    row.SetField("Id", ProgrammSettings.CurrentId);
-                    row.SetField("ParentId", steelBase.Id);
-                    row.SetField("ForcesGroupId", Id);
-                    #endregion
-                }
-                dataTable.AcceptChanges();
-                //Данные по нагрузкам на фундамент
-                dataTable = dataSet.Tables["ParentForcesGroups"];
-                foreach (Foundation foundation in Owner)
-                {
-                    row = dataTable.NewRow();
-                    row.SetField("Id", ProgrammSettings.CurrentId);
-                    row.SetField("ParentId", foundation.Id);
-                    row.SetField("ForcesGroupId", Id);
-                    dataTable.Rows.Add(row); 
-                    #region
-
-                    #endregion
                 }
                 dataTable.AcceptChanges();
             }
@@ -204,22 +165,8 @@ namespace RDBLL.Forces
 
             }
         }
-        /// <summary>
-        /// Установка родителей неактуальными
-        /// </summary>
-        public void SetParentsNotActual()
-        {
-            foreach (SteelBase steelBase in SteelBases)
-            {
-                steelBase.IsActual = false;
-            }
-            foreach (Foundation foundation in Owner)
-            {
-                foundation.IsLoadCasesActual = false;
-            }
-        }
         #endregion
-        #region IDuplicate
+        #region IClone
         /// <summary>
         /// Клонирование объекта
         /// </summary>
@@ -228,7 +175,7 @@ namespace RDBLL.Forces
         {
             ForcesGroup forcesGroup = this.MemberwiseClone() as ForcesGroup;
             forcesGroup.Id = ProgrammSettings.CurrentId;
-            forcesGroup.Owner = new List<IHasForcesGroups>();
+            forcesGroup.Owners = new List<IHasForcesGroups>();
             forcesGroup.LoadSets = new ObservableCollection<LoadSet>();
             //копируем лоадсеты
             foreach (LoadSet loadSet in LoadSets)

@@ -14,6 +14,8 @@
                 <ResourceDictionary Source="ResourcesDicts\MaterialUsing.xaml" />
                 <ResourceDictionary Source="ResourcesDicts\TextBlockStyles.xaml" />
                 <ResourceDictionary Source="ResourcesDicts\Soils\SoilSections\SoilSectionUsing.xaml" />
+                <ResourceDictionary Source="ResourcesDicts/Placements/Placement.xaml"  />
+                <ResourceDictionary Source="ResourcesDicts/MatUsings/MatUsing.xaml"  />
             </ResourceDictionary.MergedDictionaries>
 
             <Style x:Key="OperationStack" TargetType="StackPanel">

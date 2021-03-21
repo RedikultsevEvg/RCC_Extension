@@ -6,7 +6,8 @@ using System.Linq;
 using RDBLL.Common.Service;
 using RDBLL.Entity.RCC.Foundations.Processors;
 using System.Collections.Generic;
-using DAL.Common;
+using RDBLL.Common.Service.DsOperations;
+using RDBLL.Common.Interfaces.Shapes;
 
 namespace RDBLL.Entity.RCC.Foundations
 {
@@ -14,7 +15,7 @@ namespace RDBLL.Entity.RCC.Foundations
     /// <summary>
     /// Класс части (ступени) фундамента
     /// </summary>
-    public class RectFoundationPart :FoundationPart, IDsSaveable, IDataErrorInfo, IDuplicate
+    public class RectFoundationPart :FoundationPart, IDsSaveable, IDataErrorInfo, IDuplicate, IRectangle
     {
         #region fields and properties
         /// <summary>
@@ -59,18 +60,15 @@ namespace RDBLL.Entity.RCC.Foundations
         /// </summary>
         public override void SaveToDataSet(DataSet dataSet, bool createNew)
         {
-            DataTable dataTable = dataSet.Tables["FoundationParts"];
-            DataRow row = DsOperation.CreateNewRow(Id, createNew, dataTable);
+            DataRow row = EntityOperation.SaveEntity(dataSet, createNew, this);
             #region
             DsOperation.SetId(row, Id, Name, ParentMember.Id);
             row.SetField("Type", "Rect");
-            row.SetField("Width", Width);
-            row.SetField("Length", Length);
             row.SetField("Height", Height);
             row.SetField("CenterX", CenterX);
             row.SetField("CenterY", CenterY);
             #endregion
-            dataTable.AcceptChanges();
+            row.Table.AcceptChanges();
         }
         /// <summary>
         /// Обновляет запись по строке датасета
@@ -93,6 +91,11 @@ namespace RDBLL.Entity.RCC.Foundations
             RectFoundationPart rectFoundationPart = MemberwiseClone() as RectFoundationPart;
             rectFoundationPart.Id = ProgrammSettings.CurrentId;
             return rectFoundationPart;
+        }
+
+        public double GetArea()
+        {
+            throw new NotImplementedException();
         }
         #endregion
         public string Error { get { throw new NotImplementedException(); } }

@@ -7,7 +7,7 @@ using RDBLL.Common.Interfaces;
 using System.Data;
 using System.Collections.ObjectModel;
 using RDBLL.Common.Service;
-using DAL.Common;
+using RDBLL.Common.Service.DsOperations;
 
 namespace RDBLL.Entity.Common.Materials
 {
@@ -70,16 +70,11 @@ namespace RDBLL.Entity.Common.Materials
         /// <param name="createNew"></param>
         public void SaveToDataSet(DataSet dataSet, bool createNew)
         {
-            DataTable dataTable;
-            dataTable = dataSet.Tables[GetTableName()];
-            DataRow row = DsOperation.CreateNewRow(Id, createNew, dataTable);
+            DataRow row = EntityOperation.SaveEntity(dataSet, createNew, this);
             #region setFields
-            row.SetField("Id", Id);
-            row.SetField("Name", Name);
             row.SetField("Purpose", Purpose);
-            row.SetField("ParentId", ParentMember.Id);
             #endregion
-            dataTable.AcceptChanges();
+            row.AcceptChanges();
             foreach (MaterialUsing materialUsing in MaterialUsings)
             {
                 materialUsing.SaveToDataSet(dataSet, createNew);

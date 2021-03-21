@@ -10,10 +10,10 @@ using System.Collections.ObjectModel;
 using RDBLL.Common.Interfaces;
 using System.Data;
 using RDBLL.Entity.Soils;
-using DAL.Common;
 using RDBLL.Entity.MeasureUnits;
 using System.ComponentModel;
 using System.Windows;
+using RDBLL.Common.Service.DsOperations;
 
 namespace RDBLL.Entity.RCC.BuildingAndSite
 {
@@ -54,26 +54,8 @@ namespace RDBLL.Entity.RCC.BuildingAndSite
         /// <param name="dataSet"></param>
         public void SaveToDataSet(DataSet dataSet, bool createNew)
         {
-            DataTable dataTable;
-            DataRow row;
-            dataTable = dataSet.Tables[GetTableName()];
-            if (createNew)
-            {
-                row = dataTable.NewRow();
-                dataTable.Rows.Add(row);
-            }
-            else
-            {
-                var tmpRow = (from dataRow in dataTable.AsEnumerable()
-                            where dataRow.Field<int>("Id") == Id
-                            select dataRow).Single();
-                row = tmpRow;
-            }
-            //Задаем свойства элемента
-            row["Id"] = Id;
-            row["ParentId"] = 0;
-            row["Name"] = Name;
-            dataTable.AcceptChanges();
+            DataRow row = EntityOperation.SaveEntity(dataSet, createNew, this);
+            row.Table.AcceptChanges();
             //Добавляем вложенные элементы
             foreach (Soil soil in Soils)
             {

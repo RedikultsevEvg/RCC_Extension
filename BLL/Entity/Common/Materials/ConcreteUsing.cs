@@ -22,6 +22,12 @@ namespace RDBLL.Entity.Common.Materials
 
         }
 
+        public ConcreteUsing(IDsSaveable parentMember) : base(parentMember)
+        {
+
+        }
+
+
         #region Methods
         public void AddGammaB1()
         {

@@ -157,6 +157,14 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="ResourcesDicts\MatUsings\MatUsing.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ResourcesDicts\Placements\Placement.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="ResourcesDicts\Soils\SoilSections\SoilSectionUsing.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

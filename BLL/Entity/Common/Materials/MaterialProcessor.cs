@@ -5,16 +5,23 @@ using System.Text;
 using System.Threading.Tasks;
 using RDBLL.Entity.Common.Materials.Interfaces;
 using RDBLL.Common.Service;
+using RDBLL.Entity.Common.Materials.SteelMaterialUsing;
 
 namespace RDBLL.Entity.Common.Materials
 {
+    public enum MaterialKindTypes
+    {
+        Concrete,
+        Reinforcement,
+        Steel,
+    }
     public static class MaterialProcessor
     {
-        public static IMaterialKind GetMaterialKindById (string materialKindName, int Id)
+        public static IMaterialKind GetMaterialKindById (MaterialKindTypes type, int Id)
         {
-            switch (materialKindName)
+            switch (type)
             {
-                case "Concrete":
+                case MaterialKindTypes.Concrete:
                     foreach (ConcreteKind concreteKind in ProgrammSettings.ConcreteKinds)
                     {
                         if (concreteKind.Id == Id)
@@ -23,12 +30,21 @@ namespace RDBLL.Entity.Common.Materials
                         }
                     }
                     break;
-                case "Reinforcement":
+                case MaterialKindTypes.Reinforcement:
                     foreach (ReinforcementKind reinforcementKind in ProgrammSettings.ReinforcementKinds)
                     {
                         if (reinforcementKind.Id == Id)
                         {
                             return reinforcementKind;
+                        }
+                    }
+                    break;
+                case MaterialKindTypes.Steel:
+                    foreach (SteelKind steelKind in ProgrammSettings.SteelKinds)
+                    {
+                        if (steelKind.Id == Id)
+                        {
+                            return steelKind;
                         }
                     }
                     break;

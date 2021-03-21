@@ -294,81 +294,6 @@ namespace RDBLL.Processors.SC
         }
         #endregion
         /// <summary>
-        /// Получает коллекцию всех участков базы с учетом симметрии
-        /// </summary>
-        /// <param name="steelColumnBase">База стальной колонны</param>
-        /// <returns>Коллекция участков базы стальной колонны</returns>
-        public static List<SteelBasePart> GetSteelBasePartsFromColumnBase(SteelBase steelColumnBase)
-        {
-            List<SteelBasePart> steelBaseParts = new List<SteelBasePart>(); 
-            foreach (SteelBasePart steelBasePart in steelColumnBase.SteelBaseParts)
-            {
-                List<SteelBasePart> locSteelBaseParts = GetSteelBasePartsFromPart(steelBasePart);
-                foreach (SteelBasePart locSteelBasePart in locSteelBaseParts)
-                {
-                    steelBaseParts.Add(locSteelBasePart);
-                }
-            }
-            return steelBaseParts;
-        }
-        /// <summary>
-        /// Возвращает коллекцию участков по заданному участку с учетом симметрии
-        /// </summary>
-        /// <param name="steelBasePart"></param>
-        /// <returns></returns>
-        public static List<SteelBasePart> GetSteelBasePartsFromPart(SteelBasePart steelBasePart)
-        {
-            List<SteelBasePart> steelBaseParts = new List<SteelBasePart>();
-            steelBaseParts.Add(steelBasePart);
-            //if (steelBasePart.AddSymmetricX)
-            //{
-            //    SteelBasePart newSteelBasePart = (SteelBasePart)(steelBasePart.Clone());
-            //    newSteelBasePart.Id = ProgrammSettings.CurrentTmpId;
-            //    newSteelBasePart.Name = steelBasePart.Name + 'X';
-            //    newSteelBasePart.ParentMember = steelBasePart.ParentMember;
-            //    newSteelBasePart.CenterX = (1.0) * steelBasePart.CenterX;
-            //    newSteelBasePart.CenterY = (-1.0) * steelBasePart.CenterY;
-            //    newSteelBasePart.FixTop = steelBasePart.FixBottom;
-            //    newSteelBasePart.TopOffset = steelBasePart.BottomOffset;
-            //    newSteelBasePart.FixBottom = steelBasePart.FixTop;
-            //    newSteelBasePart.BottomOffset = steelBasePart.TopOffset;
-            //    steelBaseParts.Add(newSteelBasePart);
-            //}
-            //if (steelBasePart.AddSymmetricY)
-            //{
-            //    SteelBasePart newSteelBasePart = (SteelBasePart)(steelBasePart.Clone());
-            //    newSteelBasePart.Id = ProgrammSettings.CurrentTmpId;
-            //    newSteelBasePart.Name = steelBasePart.Name + 'Y';
-            //    newSteelBasePart.ParentMember = steelBasePart.ParentMember;
-            //    newSteelBasePart.CenterX = (-1.0) * steelBasePart.CenterX;
-            //    newSteelBasePart.CenterY = (1.0) * steelBasePart.CenterY;
-            //    newSteelBasePart.FixLeft = steelBasePart.FixRight;
-            //    newSteelBasePart.LeftOffset = steelBasePart.RightOffset;
-            //    newSteelBasePart.FixRight = steelBasePart.FixLeft;
-            //    newSteelBasePart.RightOffset = steelBasePart.LeftOffset;
-            //    steelBaseParts.Add(newSteelBasePart);
-            //}
-            //if (steelBasePart.AddSymmetricX & steelBasePart.AddSymmetricY)
-            //{
-            //    SteelBasePart newSteelBasePart = (SteelBasePart)(steelBasePart.Clone());
-            //    newSteelBasePart.Id = ProgrammSettings.CurrentTmpId;
-            //    newSteelBasePart.Name = steelBasePart.Name + "XY";
-            //    newSteelBasePart.ParentMember = steelBasePart.ParentMember;
-            //    newSteelBasePart.CenterX = (-1.0) * steelBasePart.CenterX;
-            //    newSteelBasePart.CenterY = (-1.0) * steelBasePart.CenterY;
-            //    newSteelBasePart.FixTop = steelBasePart.FixBottom;
-            //    newSteelBasePart.TopOffset = steelBasePart.BottomOffset;
-            //    newSteelBasePart.FixBottom = steelBasePart.FixTop;
-            //    newSteelBasePart.BottomOffset = steelBasePart.TopOffset;
-            //    newSteelBasePart.FixLeft = steelBasePart.FixRight;
-            //    newSteelBasePart.LeftOffset = steelBasePart.RightOffset;
-            //    newSteelBasePart.FixRight = steelBasePart.FixLeft;
-            //    newSteelBasePart.RightOffset = steelBasePart.LeftOffset;
-            //    steelBaseParts.Add(newSteelBasePart);
-            //}
-            return steelBaseParts;
-        }
-        /// <summary>
         /// Возвращает коллекцию элементарных участков для участка базы
         /// </summary>
         /// <param name="steelBasePart">Участок базы стальной колонны</param>
@@ -378,16 +303,16 @@ namespace RDBLL.Processors.SC
             double elemSize = 0.01;
             if (Rc == 0)
             {
-                //IMaterialModel materialModel = new LinearIsotropic(1e+10, 1, 0);
-                //steelBasePart.SubParts = NdmAreaProcessor.MeshRectangle(materialModel, steelBasePart.Width, steelBasePart.Length, steelBasePart.CenterX, steelBasePart.CenterY, elemSize);
+                IMaterialModel materialModel = new LinearIsotropic(1e+10, 1, 0);
+                steelBasePart.SubParts = NdmAreaProcessor.MeshRectangle(materialModel, steelBasePart.Width, steelBasePart.Length, steelBasePart.CenterX, steelBasePart.CenterY, elemSize);
             }
             else
             {
-                //List<double> constantList = new List<double> { Rc * (-1D), -0.0015, -0.0035, 0, 0.0015, 0.0035 };
-                //IMaterialModel materialModel = new DoubleLinear(constantList);
-                //steelBasePart.SubParts = NdmAreaProcessor.MeshRectangle(materialModel, steelBasePart.Width, steelBasePart.Length, steelBasePart.CenterX, steelBasePart.CenterY, elemSize);
+                List<double> constantList = new List<double> { Rc * (-1D), -0.0015, -0.0035, 0, 0.0015, 0.0035 };
+                IMaterialModel materialModel = new DoubleLinear(constantList);
+                steelBasePart.SubParts = NdmAreaProcessor.MeshRectangle(materialModel, steelBasePart.Width, steelBasePart.Length, steelBasePart.CenterX, steelBasePart.CenterY, elemSize);
             }
-          
+
         }
         /// <summary>
         /// Вычисляет минимальное напряжение на участке по линейно упругой теории сопротивления материалов

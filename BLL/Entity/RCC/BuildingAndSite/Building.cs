@@ -1,6 +1,6 @@
-﻿using DAL.Common;
-using RDBLL.Common.Interfaces;
+﻿using RDBLL.Common.Interfaces;
 using RDBLL.Common.Service;
+using RDBLL.Common.Service.DsOperations;
 using RDBLL.Entity.MeasureUnits;
 using RDBLL.Entity.RCC.WallAndColumn;
 using System;
@@ -109,29 +109,13 @@ namespace RDBLL.Entity.RCC.BuildingAndSite
         /// <param name="createNew">Флаг инсерт/апдейт</param>
         public void SaveToDataSet(DataSet dataSet, bool createNew)
         {
-            DataTable dataTable;
-            DataRow row;
-            dataTable = dataSet.Tables[GetTableName()];
-            if (createNew)
-            {
-                row = dataTable.NewRow();
-                dataTable.Rows.Add(row);
-            }
-            else
-            {
-                var tmpRow = (from dataRow in dataTable.AsEnumerable()
-                              where dataRow.Field<int>("Id") == Id
-                              select dataRow).Single();
-                row = tmpRow;
-            }
-            DsOperation.SetId(row, Id, Name, ParentMember.Id);
-            row.SetField("RelativeLevel", RelativeLevel);
+            DataRow row = EntityOperation.SaveEntity(dataSet, createNew, this);
             row.SetField("AbsoluteLevel", AbsoluteLevel);
             row.SetField("AbsolutePlaningLevel", AbsolutePlaningLevel);
             row.SetField("MaxFoundationSettlement", MaxFoundationSettlement);
             row.SetField("IsRigid", IsRigid);
             row.SetField("RigidRatio", RigidRatio);
-            dataTable.AcceptChanges();
+            row.AcceptChanges();
             foreach (Level level in Children)
             {
                 level.SaveToDataSet(dataSet, createNew);

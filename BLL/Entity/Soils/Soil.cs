@@ -8,8 +8,8 @@ using RDBLL.Common.Service;
 using RDBLL.Entity.MeasureUnits;
 using RDBLL.Common.Interfaces;
 using System.Data;
-using DAL.Common;
 using System.Collections.ObjectModel;
+using RDBLL.Common.Service.DsOperations;
 
 namespace RDBLL.Entity.Soils
 {

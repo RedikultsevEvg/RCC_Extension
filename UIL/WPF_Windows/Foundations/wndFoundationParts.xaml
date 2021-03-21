@@ -113,12 +113,12 @@
                                                                     </Binding.ValidationRules>
                                                                 </Binding>
                                                             </TextBox>
-                                                                     
-                                                            <TextBlock Grid.Column="3" Grid.Row="1" Style="{StaticResource PropertyTextBlock}" Text="{Binding LinearMeasure}" />
-                                                            <TextBlock Grid.Column="3" Grid.Row="2" Style="{StaticResource PropertyTextBlock}" Text="{Binding LinearMeasure}" />
-                                                            <TextBlock Grid.Column="3" Grid.Row="3" Style="{StaticResource PropertyTextBlock}" Text="{Binding LinearMeasure}" />
-                                                            <TextBlock Grid.Column="3" Grid.Row="4" Style="{StaticResource PropertyTextBlock}" Text="{Binding LinearMeasure}" />
-                                                            <TextBlock Grid.Column="3" Grid.Row="5" Style="{StaticResource PropertyTextBlock}" Text="{Binding LinearMeasure}" />
+
+                                                            <TextBlock Grid.Column="3" Grid.Row="1" Style="{StaticResource PropertyTextBlock}" Text="{Binding Measures.Linear}" />
+                                                            <TextBlock Grid.Column="3" Grid.Row="2" Style="{StaticResource PropertyTextBlock}" Text="{Binding Measures.Linear}" />
+                                                            <TextBlock Grid.Column="3" Grid.Row="3" Style="{StaticResource PropertyTextBlock}" Text="{Binding Measures.Linear}" />
+                                                            <TextBlock Grid.Column="3" Grid.Row="4" Style="{StaticResource PropertyTextBlock}" Text="{Binding Measures.Linear}" />
+                                                            <TextBlock Grid.Column="3" Grid.Row="5" Style="{StaticResource PropertyTextBlock}" Text="{Binding Measures.Linear}" />
                                                         </Grid>
                                                     </HeaderedContentControl>
                                                 </Expander>
