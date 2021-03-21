@@ -14,11 +14,11 @@ using RDBLL.Forces;
 using RDBLL.Entity.MeasureUnits;
 using System.Collections.ObjectModel;
 using System.Data;
-using DAL.DataSets;
 using RDBLL.Entity.Common.Materials;
 using RDBLL.Entity.Common.Materials.MatFactorys;
 using RDBLL.Entity.Common.Materials.SteelMaterialUsing;
 using RDBLL.Entity.MeasureUnits.Factorys;
+using RDBLL.Common.Service.DsOperations.Factory;
 
 namespace RDBLL.Common.Service
 {
@@ -116,9 +116,7 @@ namespace RDBLL.Common.Service
         public static void InicializeNew()
         {
             DataSets = new List<DataSet>();
-            MainDataSet mainDataSet = new MainDataSet();
-            mainDataSet.GetNewDataSet();
-            DataSet dataSet = mainDataSet.DataSet;
+            DataSet dataSet = DsFactory.GetDataSet();
             DataSets.Add(dataSet);
             BuildingSite = new BuildingSite(true);
             Building building =  new Building(BuildingSite);
@@ -155,9 +153,7 @@ namespace RDBLL.Common.Service
                 if (openFileDialog.ShowDialog() == true) FilePath = openFileDialog.FileName; else return false;
                 ClearAll();
                 DataSets = new List<DataSet>();
-                MainDataSet mainDataSet = new MainDataSet();
-                mainDataSet.GetNewDataSet();
-                DataSet dataSet = mainDataSet.DataSet;
+                DataSet dataSet = DsFactory.GetDataSet();
                 DataSets.Add(dataSet);
                 OpenExistDataset(FilePath);
                 IsDataChanged = false;
@@ -214,9 +210,7 @@ namespace RDBLL.Common.Service
         /// <returns></returns>
         public static DataSet GetDataSet()
         {
-            MainDataSet mainDataSet = new MainDataSet();
-            mainDataSet.GetNewDataSet();
-            DataSet dataSet = mainDataSet.DataSet;
+            DataSet dataSet = DsFactory.GetDataSet();
             DataTable dataTable;
             DataRow dataRow;
             #region Generator
@@ -252,9 +246,7 @@ namespace RDBLL.Common.Service
         /// <param name="fileName"></param>
         public static void OpenExistDataset(string fileName)
         {
-            MainDataSet mainDataSet = new MainDataSet();
-            mainDataSet.GetNewDataSet();
-            DataSet dataSet = mainDataSet.DataSet;
+            DataSet dataSet = DsFactory.GetDataSet();
             DataTable dataTable;
             dataSet.ReadXml(fileName);
             #region Generator

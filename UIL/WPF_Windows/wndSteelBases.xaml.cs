@@ -48,7 +48,6 @@ namespace RDUIL.WPF_Windows
                 {
                     steelBase.SaveToDataSet(ProgrammSettings.CurrentDataSet, false);
                     steelBase.IsActual = false;
-                    _level.SteelBases.Add(steelBase);
                     ProgrammSettings.IsDataChanged = true;
                 }
                 catch (Exception ex)
@@ -58,6 +57,7 @@ namespace RDUIL.WPF_Windows
             }
             else
             {
+                steelBase.UnRegisterParent();
                 steelBase.DeleteFromDataSet(ProgrammSettings.CurrentDataSet);
             }
         }

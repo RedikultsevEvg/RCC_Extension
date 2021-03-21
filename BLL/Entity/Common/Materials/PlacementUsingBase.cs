@@ -11,7 +11,7 @@ namespace RDBLL.Entity.Common.Materials
     /// <summary>
     /// Базовый класс использования материалов, которые имеют расположение
     /// </summary>
-    public abstract class PlacementUsingBase : MaterialUsing
+    public abstract class PlacementUsingBase : MaterialUsing, IHasPlacement, ICloneable
     {
         /// <summary>
         /// Класс расположения
@@ -30,6 +30,5 @@ namespace RDBLL.Entity.Common.Materials
             Placement = placement;
             Placement.RegisterParent(this);
         }
-
     }
 }

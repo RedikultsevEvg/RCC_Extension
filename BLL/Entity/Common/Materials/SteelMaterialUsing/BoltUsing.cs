@@ -25,8 +25,6 @@ namespace RDBLL.Entity.Common.Materials.SteelMaterialUsing
         public object Clone()
         {
             BoltUsing newObject = base.Clone() as BoltUsing;
-            Placement placement = Placement.Clone() as Placement;
-            newObject.SetPlacement(placement);
             return newObject;
         }
     }

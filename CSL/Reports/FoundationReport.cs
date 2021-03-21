@@ -20,8 +20,8 @@ using RDBLL.Entity.Soils.Processors;
 using RDBLL.Entity.Soils;
 using System.Linq;
 using RDBLL.Entity.Common.NDM;
-using DAL.Common;
 using RDBLL.Common.Interfaces;
+using RDBLL.Common.Service.DsOperations;
 
 namespace CSL.Reports
 {

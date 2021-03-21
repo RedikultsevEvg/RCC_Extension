@@ -10,19 +10,20 @@ using System.ComponentModel;
 using System.Data;
 using RDBLL.Entity.MeasureUnits;
 using System.Linq;
-using DAL.Common;
 using RDBLL.Entity.Soils;
 using RDBLL.Entity.RCC.Foundations.Processors;
 using RDBLL.Entity.Common.Materials;
 using RDBLL.Entity.Common.Placements;
 using RDBLL.Entity.Common.Materials.RFExtenders;
+using RDBLL.Common.Service.DsOperations;
+using RDBLL.Common.Interfaces.Materials;
 
 namespace RDBLL.Entity.RCC.Foundations
 {
     /// <summary>
     /// Класс столбчатого фундамента
     /// </summary>
-    public class Foundation : IHasForcesGroups, IHasParent, IDataErrorInfo, IRDObserver, ICloneable, IHasSoilSection
+    public class Foundation : IHasForcesGroups, IHasParent, IDataErrorInfo, IRDObserver, ICloneable, IHasSoilSection, IHasConcrete
     {
         /// <summary>
         /// Класс для хранения результатов расчета фундамента
@@ -231,8 +232,7 @@ namespace RDBLL.Entity.RCC.Foundations
         {
             try
             {
-                DataTable dataTable = dataSet.Tables[GetTableName()];
-                DataRow row = DsOperation.CreateNewRow(Id, createNew, dataTable);
+                DataRow row = EntityOperation.SaveEntity(dataSet, createNew, this);
                 #region setFields
                 DsOperation.SetId(row, Id, Name, ParentMember.Id);
                 row.SetField("RelativeTopLevel", RelativeTopLevel);
@@ -244,20 +244,14 @@ namespace RDBLL.Entity.RCC.Foundations
                 row.SetField("ConcreteFloorLoad", ConcreteFloorLoad);
                 row.SetField("CompressedLayerRatio", CompressedLayerRatio);
                 #endregion
-                dataTable.AcceptChanges();
+                row.Table.AcceptChanges();
 
                 foreach (RectFoundationPart foundationPart in Parts)
                 {
                     foundationPart.SaveToDataSet(dataSet, createNew);
                 }
-                foreach (ForcesGroup forcesGroup in ForcesGroups)
-                {
-                    forcesGroup.SaveToDataSet(dataSet, createNew);
-                }
                 BottomReinforcement.SaveToDataSet(dataSet, createNew);
                 VerticalReinforcement.SaveToDataSet(dataSet, createNew);
-                Concrete.SaveToDataSet(dataSet, createNew);
-                SoilSectionUsing.SaveToDataSet(dataSet, createNew);
             }
             catch (Exception ex)
             {
@@ -426,7 +420,7 @@ namespace RDBLL.Entity.RCC.Foundations
             materialContainer.MaterialUsings.Add(rfX);
             materialContainer.MaterialUsings.Add(rfY);
             foundation.BottomReinforcement = materialContainer;
-            #endregion
+            #endregion 
             #region Армирование подколонника
             MaterialContainer verticalContainer = new MaterialContainer(this);
             verticalContainer.Name = "Вертикальное армирование";
@@ -438,12 +432,12 @@ namespace RDBLL.Entity.RCC.Foundations
             #endregion
             #region Добавляем бетон
             foundation.Concrete = new ConcreteUsing();
-            Concrete.RegisterParent(this);
+            foundation.Concrete.RegisterParent(this);
             foundation.Concrete.Id = ProgrammSettings.CurrentId;
             foundation.Concrete.Name = "Бетон";
             foundation.Concrete.Purpose = "MainConcrete";
             foundation.Concrete.SelectedId = ProgrammSettings.ConcreteKinds[0].Id;
-            foundation.Concrete.SelectedId = Concrete.MaterialKind.Id;
+            //foundation.Concrete.SelectedId = Concrete.MaterialKind.Id;
             foundation.Concrete.AddGammaB1();
             #endregion
         }

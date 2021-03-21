@@ -21,7 +21,7 @@ namespace RDBLL.Forces.Processors
             newObject.ForcesGroups = new ObservableCollection<ForcesGroup>();
             foreach (ForcesGroup forcesGroup in forces)
             {
-                forcesGroup.Owner.Add(newObject);
+                forcesGroup.Owners.Add(newObject);
                 newObject.ForcesGroups.Add(forcesGroup);
             }
         }

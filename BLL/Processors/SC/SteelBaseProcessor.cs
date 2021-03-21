@@ -15,6 +15,9 @@ using System.Windows.Forms;
 using RDBLL.Entity.Results.NDM;
 using RDBLL.Entity.Common.NDM.Processors;
 using RDBLL.Entity.Common.Materials;
+using RDBLL.Entity.Common.Materials.SteelMaterialUsing;
+using RDBLL.Entity.Common.NDM.Interfaces;
+using RDBLL.Entity.Common.NDM.MaterialModels;
 
 namespace RDBLL.Processors.SC
 {
@@ -24,14 +27,14 @@ namespace RDBLL.Processors.SC
     /// </summary>
     public static class SteelBaseProcessor
     {
+        public static NdmCircleArea NdmCircleArea { get; private set; }
+
         /// <summary>
         /// Актуализирует все данные стальной базы
         /// </summary>
         /// <param name="steelBase">База стальной колонны</param>
         public static void SolveSteelColumnBase(SteelBase steelBase)
         {
-            ActualizeBaseParts(steelBase);
-            ActualizeSteelBolts(steelBase);
             ActualizeLoadCases(steelBase);
             GetNdmAreas(steelBase);
             steelBase.ForceCurvatures.Clear();
@@ -45,34 +48,6 @@ namespace RDBLL.Processors.SC
         public static void ActualizeLoadCases(SteelBase steelBase)
         {
             steelBase.LoadCases = LoadSetProcessor.GetLoadCases(steelBase.ForcesGroups); 
-        }
-        /// <summary>
-        /// Актуализирует участки базы стальной колонны
-        /// с учетом возможной симметрии
-        /// т.е. заносит все участки как параметр стальной базы
-        /// </summary>
-        /// <param name="steelBase"></param>
-        public static void ActualizeBaseParts(SteelBase steelBase)
-        {
-            steelBase.ActualSteelBaseParts = new List<SteelBasePart>();
-            foreach (SteelBasePart steelBasePart in steelBase.SteelBaseParts)
-            {
-                steelBase.ActualSteelBaseParts.AddRange(SteelBasePartProcessor.GetSteelBasePartsFromPart(steelBasePart));
-            }
-        }
-        /// <summary>
-        /// Актуализирует болты базы стальной колонны
-        /// с учетом возможной симметрии
-        /// т.е. заносит все болты как параметр стальной базы
-        /// </summary>
-        /// <param name="steelBase"></param>
-        public static void ActualizeSteelBolts(SteelBase steelBase)
-        {
-            steelBase.ActualSteelBolts = new List<SteelBolt>();
-            foreach (SteelBolt steelBolt in steelBase.SteelBolts)
-            {
-                steelBase.ActualSteelBolts.AddRange(SteelBoltProcessor.GetSteelBoltsFromBolt(steelBolt));
-            }
         }
         /// <summary>
         /// Заносит коллекцию элементарных участков для базы стальной колонны
@@ -122,9 +97,9 @@ namespace RDBLL.Processors.SC
         public static List<NdmArea> GetConcreteNdmAreas(SteelBase steelBase)
         {
             List<NdmArea>  NdmAreas = new List<NdmArea>();
-            ConcreteKind concreteKind = steelBase.Conrete.MaterialKind as ConcreteKind;
+            ConcreteKind concreteKind = steelBase.Concrete.MaterialKind as ConcreteKind;
             double concreteStrength = concreteKind.FstCompStrength;
-            foreach (SteelBasePart steelBasePart in steelBase.ActualSteelBaseParts)
+            foreach (SteelBasePart steelBasePart in steelBase.SteelBaseParts)
             {
                 if (steelBase.UseSimpleMethod) { SteelBasePartProcessor.GetSubParts(steelBasePart); }
                 else { SteelBasePartProcessor.GetSubParts(steelBasePart, concreteStrength); }
@@ -143,10 +118,19 @@ namespace RDBLL.Processors.SC
         public static List<NdmArea> GetSteelNdmAreas(SteelBase columnBase)
         {
             List<NdmArea> NdmAreas = new List<NdmArea>();
-            foreach (SteelBolt steelBolt in columnBase.ActualSteelBolts)
+            foreach (SteelBolt steelBolt in columnBase.SteelBolts)
             {
-                SteelBoltProcessor.GetSubParts(steelBolt);
-                NdmAreas.Add(steelBolt.SubPart);
+                SteelUsing steel = steelBolt.Steel;
+                IMaterialModel materialModel = new LinearIsotropic(steel.MaterialKind.ElasticModulus, 0.000001, 1);
+
+                foreach (Point2D point in steelBolt.Placement.GetElementPoints())
+                {
+                    NdmCircleArea circle = new NdmCircleArea(materialModel);
+                    circle.Diametr = steelBolt.Diameter;
+                    circle.CenterX = point.X;
+                    circle.CenterY = point.Y;
+                    NdmAreas.Add(circle);
+                } 
             }
             return NdmAreas;
         }
@@ -260,7 +244,7 @@ namespace RDBLL.Processors.SC
             {
                 LoadCaseRectangleValue loadCaseRectangleValue = new LoadCaseRectangleValue();
                 loadCaseRectangleValue.LoadCase = forceCurvature.LoadSet;
-                foreach (SteelBasePart steelBasePart in steelBase.ActualSteelBaseParts)
+                foreach (SteelBasePart steelBasePart in steelBase.SteelBaseParts)
                 {
                     foreach (NdmRectangleArea ndmConcreteArea in steelBasePart.SubParts)
                     {

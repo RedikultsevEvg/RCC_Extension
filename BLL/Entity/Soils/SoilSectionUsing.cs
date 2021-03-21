@@ -1,6 +1,6 @@
-﻿using DAL.Common;
-using RDBLL.Common.Interfaces;
+﻿using RDBLL.Common.Interfaces;
 using RDBLL.Common.Service;
+using RDBLL.Common.Service.DsOperations;
 using RDBLL.Entity.RCC.BuildingAndSite;
 using System;
 using System.Collections.Generic;
@@ -68,9 +68,7 @@ namespace RDBLL.Entity.Soils
 
         public void SaveToDataSet(DataSet dataSet, bool createNew)
         {
-            DataTable dataTable = dataSet.Tables[GetTableName()];
-            DataRow row = DsOperation.CreateNewRow(Id, createNew, dataTable);
-            DsOperation.SetId(row, Id, Name, ParentMember.Id);
+            DataRow row = EntityOperation.SaveEntity(dataSet, createNew, this);
             row.SetField("SelectedId", SelectedId);
         }
 

@@ -9,54 +9,19 @@ using RDBLL.Entity.Common.NDM.Processors;
 using RDBLL.Common.Service;
 using RDBLL.Entity.Common.NDM.Interfaces;
 using RDBLL.Entity.Common.NDM.MaterialModels;
+using RDBLL.Common.Geometry;
+using RDBLL.Entity.Common.Placements;
+using RDBLL.Entity.Common.Materials.SteelMaterialUsing;
 
 namespace RDBLL.Processors.SC
 {
     public static class SteelBoltProcessor
     {
-        public static List<SteelBolt> GetSteelBoltsFromBolt (SteelBolt steelBolt)
-        {
-            List<SteelBolt> steelBolts = new List<SteelBolt>();
-            //steelBolts.Add(steelBolt);
-            //if (steelBolt.AddSymmetricX)
-            //{
-            //    SteelBolt newSteelBolt = (SteelBolt)steelBolt.Clone();
-            //    newSteelBolt.Id = ProgrammSettings.CurrentTmpId;
-            //    newSteelBolt.CenterY = (-1.0) * steelBolt.CenterY;
-            //    steelBolts.Add(newSteelBolt);
-            //}
-            //if (steelBolt.AddSymmetricY)
-            //{
-            //    SteelBolt newSteelBolt = (SteelBolt)steelBolt.Clone();
-            //    newSteelBolt.Id = ProgrammSettings.CurrentTmpId;
-            //    newSteelBolt.CenterX = (-1.0) * steelBolt.CenterX;
-            //    steelBolts.Add(newSteelBolt);
-            //}
-            //if (steelBolt.AddSymmetricX & steelBolt.AddSymmetricY)
-            //{
-            //    SteelBolt newSteelBolt = (SteelBolt)steelBolt.Clone();
-            //    newSteelBolt.Id = ProgrammSettings.CurrentTmpId;
-            //    newSteelBolt.CenterX = (-1.0) * steelBolt.CenterX;
-            //    newSteelBolt.CenterY = (-1.0) * steelBolt.CenterY;
-            //    steelBolts.Add(newSteelBolt);
-            //}
-            return steelBolts;
-        }
-
-        public static void GetSubParts(SteelBolt steelBolt)
-        {
-            IMaterialModel materialModel = new LinearIsotropic(2e+11, 0.000001, 1);
-            steelBolt.SubPart = new NdmCircleArea(materialModel);
-            //steelBolt.SubPart.Diametr = steelBolt.Diameter;
-            //steelBolt.SubPart.CenterX = steelBolt.CenterX;
-            //steelBolt.SubPart.CenterY = steelBolt.CenterY;
-        }
-
         public static double GetStressNonLinear(SteelBolt steelBolt, Curvature curvature)
         {
-            double stress;
-            NdmArea ndmArea = steelBolt.SubPart;
-            stress = NdmAreaProcessor.GetStrainFromCuvature(ndmArea, curvature)[1];
+            double stress = 0;
+            //NdmArea ndmArea = steelBolt.SubPart;
+            //stress = NdmAreaProcessor.GetStrainFromCuvature(ndmArea, curvature)[1];
             return stress;
         }
 

@@ -81,10 +81,6 @@
       <Project>{4af80724-4ad7-4bef-ae1c-5a2768395fd7}</Project>
       <Name>BLL</Name>
     </ProjectReference>
-    <ProjectReference Include="..\DAL\DAL.csproj">
-      <Project>{81dd6ebb-5934-473c-88a7-41ef9811e05f}</Project>
-      <Name>DAL</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="DataSets\Interfaces\" />

@@ -7,7 +7,7 @@ using RDBLL.Common.Service;
 using RDBLL.Entity.MeasureUnits;
 using RDBLL.Common.Interfaces;
 using System.Data;
-using DAL.Common;
+using RDBLL.Common.Service.DsOperations;
 
 namespace RDBLL.Forces
 {
@@ -131,29 +131,13 @@ namespace RDBLL.Forces
         /// <param name="dataSet">Датасет</param>
         public void SaveToDataSet(DataSet dataSet, bool createNew)
         {
-            DataTable dataTable;
-            DataRow row;
-            dataTable = dataSet.Tables[GetTableName()];
-            if (createNew)
-            {
-                row = dataTable.NewRow();
-                dataTable.Rows.Add(row);
-            }
-            else
-            {
-                var tmpRow = (from dataRow in dataTable.AsEnumerable()
-                              where dataRow.Field<int>("Id") == Id
-                              select dataRow).Single();
-                row = tmpRow;
-            }
+            DataRow row = EntityOperation.SaveEntity(dataSet, createNew, this);
             #region
-            row.SetField("Id", Id);
             row.SetField("LoadSetId", LoadId);
             row.SetField("KindId", KindId);
-            row.SetField("Name", Name);
             row.SetField("CrcValue", CrcValue);
             #endregion
-            dataTable.AcceptChanges();
+            row.AcceptChanges();
         }
         public void OpenFromDataSet(DataSet dataSet)
         {

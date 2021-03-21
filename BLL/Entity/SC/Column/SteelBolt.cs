@@ -4,13 +4,16 @@ using System;
 using RDBLL.Common.Interfaces;
 using System.Data;
 using System.Linq;
-using DAL.Common;
 using RDBLL.Entity.Common.Placements;
 using RDBLL.Entity.Common.Materials.SteelMaterialUsing;
+using RDBLL.Common.Service.DsOperations;
+using RDBLL.Entity.MeasureUnits;
+using RDBLL.Common.Interfaces.Shapes;
+using RDBLL.Common.Interfaces.Materials;
 
 namespace RDBLL.Entity.SC.Column
 {
-    public class SteelBolt: ICloneable, IHasParent
+    public class SteelBolt: ICloneable, IHasParent, ICircle, IHasSteel, IHasPlacement
     {
         /// <summary>
         /// Код
@@ -24,13 +27,21 @@ namespace RDBLL.Entity.SC.Column
         /// Наименование
         /// </summary>
         public String Name { get; set; }
-
-        public BoltUsing BoltUsing { get; set; }
-
         /// <summary>
-        /// Участки НДМ
+        /// Диаметр болта
         /// </summary>
-        public NdmCircleArea SubPart { get; set; }
+        public double Diameter { get; set; }
+        /// <summary>
+        /// Класс стали
+        /// </summary>
+        public SteelUsing Steel { get; set; }
+        /// <summary>
+        /// Размещение
+        /// </summary>
+        public Placement Placement { get; set; }
+
+        //public BoltUsing BoltUsing { get; set; }
+        public MeasureUnitList Measures { get => new MeasureUnitList(); }
 
         #region Constructors
         public SteelBolt(bool genId = false)
@@ -53,26 +64,8 @@ namespace RDBLL.Entity.SC.Column
         public string GetTableName() { return "SteelBolts"; }
         public void SaveToDataSet(DataSet dataSet, bool createNew)
         {
-            DataTable dataTable;
-            DataRow row;
-            dataTable = dataSet.Tables[GetTableName()];
-            if (createNew)
-            {
-                row = dataTable.NewRow();
-                dataTable.Rows.Add(row);
-            }
-            else
-            {
-                var tmpRow = (from dataRow in dataTable.AsEnumerable()
-                              where dataRow.Field<int>("Id") == Id
-                              select dataRow).Single();
-                row = tmpRow;
-            }
-            #region
-            SetEntity.SetRow(row, this);
-            BoltUsing.SaveToDataSet(dataSet, createNew);
-            #endregion
-            dataTable.AcceptChanges();
+            DataRow row = EntityOperation.SaveEntity(dataSet, createNew, this);
+            row.AcceptChanges();
         }
         public void OpenFromDataSet(DataSet dataSet)
         {
@@ -88,8 +81,7 @@ namespace RDBLL.Entity.SC.Column
         /// <param name="dataRow"></param>
         public void OpenFromDataSet(DataRow dataRow)
         {
-            Id = dataRow.Field<int>("Id");
-            Name = dataRow.Field<string>("Name");
+            EntityOperation.SetProps(dataRow, this);
         }
         /// <summary>
         /// Удаляет запись из датасета
@@ -97,7 +89,7 @@ namespace RDBLL.Entity.SC.Column
         /// <param name="dataSet"></param>
         public void DeleteFromDataSet(DataSet dataSet)
         {
-            DsOperation.DeleteRow(dataSet, GetTableName(), Id);
+            EntityOperation.DeleteEntity(dataSet, this);
         }
         #endregion
         #region Methods
@@ -109,6 +101,8 @@ namespace RDBLL.Entity.SC.Column
         public object Clone()
         {
             SteelBolt steelBolt = this.MemberwiseClone() as SteelBolt;
+            steelBolt.Id = ProgrammSettings.CurrentId;
+            steelBolt.SetPlacement(this.Placement.Clone() as Placement);
             return steelBolt;
         }
 
@@ -124,6 +118,16 @@ namespace RDBLL.Entity.SC.Column
             SteelBase steelBase = ParentMember as SteelBase;
             steelBase.SteelBolts.Remove(this);
             ParentMember = null;
+        }
+
+        public double GetArea()
+        {
+            return Math.PI * Diameter * Diameter / 4;
+        }
+
+        public void SetPlacement(Placement placement)
+        {
+            this.Placement = placement;
         }
     }
 }
