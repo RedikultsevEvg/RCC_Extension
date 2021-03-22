@@ -35,7 +35,6 @@ namespace RDUIL.WPF_Windows.Foundations
                 {
                     _element.ForcesGroups[0].DeleteFromDataSet(ProgrammSettings.CurrentDataSet);
                     _element.ForcesGroups[0].SaveToDataSet(ProgrammSettings.CurrentDataSet, true);
-                    _element.ForcesGroups[0].SetParentsNotActual();
                     ProgrammSettings.IsDataChanged = true;
                 }
                 catch (Exception ex)
@@ -46,7 +45,7 @@ namespace RDUIL.WPF_Windows.Foundations
             }
             else
             {
-                _element.ForcesGroups = GetEntity.GetFoundationForcesGroups(ProgrammSettings.CurrentDataSet, _element);
+                _element.ForcesGroups = GetEntity.GetParentForcesGroups(ProgrammSettings.CurrentDataSet, _element);
             }          
         }
 

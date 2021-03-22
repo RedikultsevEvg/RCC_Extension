@@ -4,69 +4,56 @@ using System;
 using RDBLL.Common.Interfaces;
 using System.Data;
 using System.Linq;
-using DAL.Common;
+using RDBLL.Entity.Common.Placements;
+using RDBLL.Entity.Common.Materials.SteelMaterialUsing;
+using RDBLL.Common.Service.DsOperations;
+using RDBLL.Entity.MeasureUnits;
+using RDBLL.Common.Interfaces.Shapes;
+using RDBLL.Common.Interfaces.Materials;
 
 namespace RDBLL.Entity.SC.Column
 {
-    public class SteelBolt: ICloneable, IDsSaveable
+    public class SteelBolt: ICloneable, IHasParent, ICircle, IHasSteel, IHasPlacement
     {
         /// <summary>
         /// Код
         /// </summary>
         public int Id { get; set; }
         /// <summary>
-        /// Код базы
-        /// </summary>
-        public int SteelBaseId { get; set; }
-        /// <summary>
         /// Ссылка на базу
         /// </summary>
-        public SteelBase SteelBase { get; set; }
+        public IDsSaveable ParentMember { get; private set; }
         /// <summary>
         /// Наименование
         /// </summary>
         public String Name { get; set; }
         /// <summary>
-        /// Диаметр
+        /// Диаметр болта
         /// </summary>
         public double Diameter { get; set; }
         /// <summary>
-        /// Положение центра X
+        /// Класс стали
         /// </summary>
-        public double CenterX { get; set; }
+        public SteelUsing Steel { get; set; }
         /// <summary>
-        /// Положение центра Y
+        /// Размещение
         /// </summary>
-        public double CenterY { get; set; }
-        /// <summary>
-        /// Наличие симметричного участка относительно оси X
-        /// </summary>
-        public bool AddSymmetricX { get; set; }
-        /// <summary>
-        /// Наличие симметричного участка по оси Y
-        /// </summary>
-        public bool AddSymmetricY { get; set; } 
-        /// <summary>
-        /// Участки НДМ
-        /// </summary>
-        public NdmCircleArea SubPart { get; set; }
+        public Placement Placement { get; set; }
+
+        //public BoltUsing BoltUsing { get; set; }
+        public MeasureUnitList Measures { get => new MeasureUnitList(); }
 
         #region Constructors
-        public SteelBolt()
+        public SteelBolt(bool genId = false)
         {
+            if (genId) Id = ProgrammSettings.CurrentId;
         }
 
         public SteelBolt(SteelBase steelBase)
         {
             Id = ProgrammSettings.CurrentId;
-            SteelBaseId = steelBase.Id;
-            SteelBase = steelBase;
+            RegisterParent(steelBase);
             Name = "Новый болт";
-            Diameter = 0.030;
-            CenterX = 0.200;
-            CenterY = 0.300;
-            AddSymmetricX = true;
-            AddSymmetricY = true;
         }
         #endregion
         #region IODataSet
@@ -77,32 +64,8 @@ namespace RDBLL.Entity.SC.Column
         public string GetTableName() { return "SteelBolts"; }
         public void SaveToDataSet(DataSet dataSet, bool createNew)
         {
-            DataTable dataTable;
-            DataRow row;
-            dataTable = dataSet.Tables[GetTableName()];
-            if (createNew)
-            {
-                row = dataTable.NewRow();
-                dataTable.Rows.Add(row);
-            }
-            else
-            {
-                var tmpRow = (from dataRow in dataTable.AsEnumerable()
-                              where dataRow.Field<int>("Id") == Id
-                              select dataRow).Single();
-                row = tmpRow;
-            }
-            #region
-            row.SetField("Id", Id);
-            row.SetField("SteelBaseId", SteelBaseId);
-            row.SetField("Name", Name);
-            row.SetField("Diameter", Diameter);
-            row.SetField("CenterX", CenterX);
-            row.SetField("CenterY", CenterY);
-            row.SetField("AddSymmetricX", AddSymmetricX);
-            row.SetField("AddSymmetricY", AddSymmetricY);
-            #endregion
-            dataTable.AcceptChanges();
+            DataRow row = EntityOperation.SaveEntity(dataSet, createNew, this);
+            row.AcceptChanges();
         }
         public void OpenFromDataSet(DataSet dataSet)
         {
@@ -118,14 +81,7 @@ namespace RDBLL.Entity.SC.Column
         /// <param name="dataRow"></param>
         public void OpenFromDataSet(DataRow dataRow)
         {
-            Id = dataRow.Field<int>("Id");
-            SteelBaseId = dataRow.Field<int>("SteelBaseId");
-            Name = dataRow.Field<string>("Name");
-            Diameter = dataRow.Field<double>("Diameter");
-            CenterX = dataRow.Field<double>("CenterX");
-            CenterY = dataRow.Field<double>("CenterY");
-            AddSymmetricX = dataRow.Field<bool>("AddSymmetricX");
-            AddSymmetricY = dataRow.Field<bool>("AddSymmetricY");
+            EntityOperation.SetProps(dataRow, this);
         }
         /// <summary>
         /// Удаляет запись из датасета
@@ -133,20 +89,45 @@ namespace RDBLL.Entity.SC.Column
         /// <param name="dataSet"></param>
         public void DeleteFromDataSet(DataSet dataSet)
         {
-            DsOperation.DeleteRow(dataSet, GetTableName(), Id);
+            EntityOperation.DeleteEntity(dataSet, this);
         }
         #endregion
         #region Methods
         public void SetParentNotActual()
         {
-            SteelBase.IsActual = false;
-            SteelBase.IsBoltsActual = false;
+            //ParentMember.IsActual = false;
         }
         #endregion
         public object Clone()
         {
             SteelBolt steelBolt = this.MemberwiseClone() as SteelBolt;
+            steelBolt.Id = ProgrammSettings.CurrentId;
+            steelBolt.SetPlacement(this.Placement.Clone() as Placement);
             return steelBolt;
+        }
+
+        public void RegisterParent(IDsSaveable parent)
+        {
+            SteelBase steelBase = parent as SteelBase;
+            ParentMember = steelBase;
+            steelBase.SteelBolts.Add(this);
+        }
+
+        public void UnRegisterParent()
+        {
+            SteelBase steelBase = ParentMember as SteelBase;
+            steelBase.SteelBolts.Remove(this);
+            ParentMember = null;
+        }
+
+        public double GetArea()
+        {
+            return Math.PI * Diameter * Diameter / 4;
+        }
+
+        public void SetPlacement(Placement placement)
+        {
+            this.Placement = placement;
         }
     }
 }

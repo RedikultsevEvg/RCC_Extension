@@ -108,7 +108,7 @@ namespace RDBLL.Entity.RCC.WallAndColumn
         {
             Building = building;
             SetDefault();
-            building.OpeningTypeList.Add(this);
+            //building.OpeningTypeList.Add(this);
         }
         public OpeningType(Building building, XmlNode xmlNode)
         {
@@ -159,41 +159,41 @@ namespace RDBLL.Entity.RCC.WallAndColumn
         public XmlElement SaveToXMLNode(XmlDocument xmlDocument)
         {
             XmlElement xmlNode = xmlDocument.CreateElement("OpeningPlacing");
-            int counter = 0;
-            foreach (OpeningType OpeningTypeItem in Wall.Level.Building.OpeningTypeList)
-            {
-                if (ReferenceEquals(OpeningTypeItem, OpeningType))
-                { XMLOperations.AddAttribute(xmlNode, xmlDocument, "OpeningTypeNumber", Convert.ToString(counter)); }
-                counter++;
-            }
-            XMLOperations.AddAttribute(xmlNode, xmlDocument, "Left", Convert.ToString(Left));
-            XMLOperations.AddAttribute(xmlNode, xmlDocument, "OverrideBottom", Convert.ToString(OverrideBottom));
-            XMLOperations.AddAttribute(xmlNode, xmlDocument, "Bottom", Convert.ToString(Bottom));
+            //int counter = 0;
+            //foreach (OpeningType OpeningTypeItem in Wall.Level.ParentMember.OpeningTypeList)
+            //{
+            //    if (ReferenceEquals(OpeningTypeItem, OpeningType))
+            //    { XMLOperations.AddAttribute(xmlNode, xmlDocument, "OpeningTypeNumber", Convert.ToString(counter)); }
+            //    counter++;
+            //}
+            //XMLOperations.AddAttribute(xmlNode, xmlDocument, "Left", Convert.ToString(Left));
+            //XMLOperations.AddAttribute(xmlNode, xmlDocument, "OverrideBottom", Convert.ToString(OverrideBottom));
+            //XMLOperations.AddAttribute(xmlNode, xmlDocument, "Bottom", Convert.ToString(Bottom));
             return xmlNode;
         }
 
         public OpeningPlacing(Wall wall)
         {
-            Wall = wall;
-            Building building = Wall.Level.Building;
-            if (building.OpeningTypeList.Count == 0)
-            { OpeningType = new OpeningType(building); }
-            else { OpeningType = building.OpeningTypeList[0]; }
-            Left = 1000;
-            OverrideBottom = false;
-            Bottom = 0;
-            wall.OpeningPlacingList.Add(this);
+            //Wall = wall;
+            //Building building = Wall.Level.ParentMember;
+            //if (building.OpeningTypeList.Count == 0)
+            //{ OpeningType = new OpeningType(building); }
+            //else { OpeningType = building.OpeningTypeList[0]; }
+            //Left = 1000;
+            //OverrideBottom = false;
+            //Bottom = 0;
+            //wall.OpeningPlacingList.Add(this);
         }
         public OpeningPlacing(Wall wall, XmlNode xmlNode)
         {
-            Wall = wall;
-            foreach (XmlAttribute obj in xmlNode.Attributes)
-            {
-                if (obj.Name == "OpeningTypeNumber") OpeningType = wall.Level.Building.OpeningTypeList[Convert.ToInt16(obj.Value)];
-                if (obj.Name == "Left") Left = Convert.ToDouble(obj.Value);
-                if (obj.Name == "OverrideBottom") OverrideBottom = Convert.ToBoolean(obj.Value);
-                if (obj.Name == "Bottom") Bottom = Convert.ToDouble(obj.Value);            
-            }
+            //Wall = wall;
+            //foreach (XmlAttribute obj in xmlNode.Attributes)
+            //{
+            //    if (obj.Name == "OpeningTypeNumber") OpeningType = wall.Level.ParentMember.OpeningTypeList[Convert.ToInt16(obj.Value)];
+            //    if (obj.Name == "Left") Left = Convert.ToDouble(obj.Value);
+            //    if (obj.Name == "OverrideBottom") OverrideBottom = Convert.ToBoolean(obj.Value);
+            //    if (obj.Name == "Bottom") Bottom = Convert.ToDouble(obj.Value);            
+            //}
         }
     }
 }

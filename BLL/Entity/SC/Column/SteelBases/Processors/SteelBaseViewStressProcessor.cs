@@ -10,6 +10,7 @@ using RDBLL.Entity.SC.Column;
 using System.Windows;
 using RDBLL.Processors.SC;
 using RDBLL.Entity.MeasureUnits;
+using RDBLL.Entity.Common.Materials.SteelMaterialUsing;
 
 namespace RDBLL.Entity.SC.Column.SteelBases.Processors
 {
@@ -47,7 +48,7 @@ namespace RDBLL.Entity.SC.Column.SteelBases.Processors
             double sizeCoff = MeasureUnitConverter.GetCoefficient(0);
             double stressCoff = MeasureUnitConverter.GetCoefficient(3);
             double actualThickness = steelBase.Thickness;
-            double steelStrength = steelBase.SteelStrength;
+            double steelStrength = (steelBase.Steel.MaterialKind as SteelKind).FstStrength;
 
             List<LoadCaseRectangleValue> loadCaseRectangleValues = new List<LoadCaseRectangleValue>();
             #region Stresses
@@ -55,7 +56,7 @@ namespace RDBLL.Entity.SC.Column.SteelBases.Processors
             StressesValue.LoadCase = new LoadSet();
             StressesValue.LoadCase.Id = 1;
             StressesValue.LoadCase.Name = $"Напряжения_MAX, {MeasureUnitConverter.GetUnitLabelText(3)}";
-            foreach (SteelBasePart steelBasePart in steelBase.ActualSteelBaseParts)
+            foreach (SteelBasePart steelBasePart in steelBase.SteelBaseParts)
             {
                 double maxBedStress = SteelBasePartProcessor.GetGlobalMinStressNonLinear(steelBasePart) * (-1D);
                 double maxStress = SteelBasePartProcessor.GetResult(steelBasePart, maxBedStress)[1];
@@ -75,7 +76,7 @@ namespace RDBLL.Entity.SC.Column.SteelBases.Processors
             ThicknessValue.LoadCase = new LoadSet();
             ThicknessValue.LoadCase.Id = 2;
             ThicknessValue.LoadCase.Name = $"Рекомендуемая толщина, {MeasureUnitConverter.GetUnitLabelText(0)}";
-            foreach (SteelBasePart steelBasePart in steelBase.ActualSteelBaseParts)
+            foreach (SteelBasePart steelBasePart in steelBase.SteelBaseParts)
             {
                 double maxBedStress = SteelBasePartProcessor.GetGlobalMinStressNonLinear(steelBasePart) * (-1D);
                 double maxStress = SteelBasePartProcessor.GetResult(steelBasePart, maxBedStress)[1];

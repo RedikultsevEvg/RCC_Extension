@@ -9,7 +9,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Windows;
 using RDBLL.Entity.SC.Column.SteelBases.Processors;
-
+using RDBLL.Common.Service.DsOperations;
+using System.Data;
 
 namespace RDUIL.WPF_Windows
 {
@@ -25,11 +26,7 @@ namespace RDUIL.WPF_Windows
             InitializeComponent();
             _steelColumnBase = steelColumnBase;
             this.DataContext = _steelColumnBase;
-            tbWidthMeasure.Text = MeasureUnitConverter.GetUnitLabelText(0);
-            tbLengthMeasure.Text = MeasureUnitConverter.GetUnitLabelText(0);
             tbThicknessMeasure.Text = MeasureUnitConverter.GetUnitLabelText(0);
-            tbSteelStrengthMeasure.Text = MeasureUnitConverter.GetUnitLabelText(3);
-            tbConcreteStrengthMeasure.Text = MeasureUnitConverter.GetUnitLabelText(3);
         }
 
         private void btnOK_Click(object sender, RoutedEventArgs e)
@@ -52,7 +49,6 @@ namespace RDUIL.WPF_Windows
                 {
                     _steelColumnBase.ForcesGroups[0].DeleteFromDataSet(ProgrammSettings.CurrentDataSet);
                     _steelColumnBase.ForcesGroups[0].SaveToDataSet(ProgrammSettings.CurrentDataSet, true);
-                    _steelColumnBase.ForcesGroups[0].SetParentsNotActual();
                     ProgrammSettings.IsDataChanged = true;
                 }
                 catch (Exception ex)
@@ -62,7 +58,7 @@ namespace RDUIL.WPF_Windows
             }
             else
             {
-                _steelColumnBase.ForcesGroups = GetEntity.GetSteelBaseForcesGroups(ProgrammSettings.CurrentDataSet, _steelColumnBase);
+                _steelColumnBase.ForcesGroups = GetEntity.GetParentForcesGroups(ProgrammSettings.CurrentDataSet, _steelColumnBase);
             }
         }
         private void BtnParts_Click(object sender, RoutedEventArgs e)
@@ -73,10 +69,8 @@ namespace RDUIL.WPF_Windows
             {
                 try
                 {
-                    _steelColumnBase.IsBasePartsActual = false;
                     _steelColumnBase.IsActual = false;
-
-                    _steelColumnBase.DeleteSubElements(ProgrammSettings.CurrentDataSet, "SteelBaseParts");
+                    DsOperation.DeleteRow(ProgrammSettings.CurrentDataSet, "SteelBaseParts", "ParentId", _steelColumnBase.Id);
                     foreach (SteelBasePart steelBasePart in _steelColumnBase.SteelBaseParts)
                     {
                         steelBasePart.SaveToDataSet(ProgrammSettings.CurrentDataSet, true);
@@ -98,16 +92,19 @@ namespace RDUIL.WPF_Windows
         {
             wndSteelBaseBolts wndSteelBaseBolts = new wndSteelBaseBolts(_steelColumnBase);
             wndSteelBaseBolts.ShowDialog();
+            DataSet dataSet = ProgrammSettings.CurrentDataSet;
             if (wndSteelBaseBolts.DialogResult == true)
             {
                 try
                 {
-                    _steelColumnBase.IsBoltsActual = false;
                     _steelColumnBase.IsActual = false;
-                    _steelColumnBase.DeleteSubElements(ProgrammSettings.CurrentDataSet, "SteelBolts");
+                    foreach (SteelBolt bolt in _steelColumnBase.SteelBolts)
+                    {
+                        bolt.DeleteFromDataSet(dataSet);
+                    }
                     foreach (SteelBolt steelBolt in _steelColumnBase.SteelBolts)
                     {
-                        steelBolt.SaveToDataSet(ProgrammSettings.CurrentDataSet, true);
+                        steelBolt.SaveToDataSet(dataSet, true);
                     }
                     ProgrammSettings.IsDataChanged = true;
                 }
@@ -118,7 +115,7 @@ namespace RDUIL.WPF_Windows
             }
             else
             {
-                _steelColumnBase.SteelBolts = GetEntity.GetSteelBolts(ProgrammSettings.CurrentDataSet, _steelColumnBase);
+                _steelColumnBase.SteelBolts = GetEntity.GetSteelBolts(dataSet, _steelColumnBase);
             }
         }
 

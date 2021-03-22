@@ -7,8 +7,8 @@ using RDBLL.Entity.MeasureUnits;
 using RDBLL.Common.Service;
 using RDBLL.Common.Interfaces;
 using System.Data;
-using DAL.Common;
 using RDBLL.Entity.RCC.Foundations.Processors;
+using RDBLL.Common.Service.DsOperations;
 
 namespace RDBLL.Entity.RCC.Foundations
 {
@@ -52,13 +52,9 @@ namespace RDBLL.Entity.RCC.Foundations
         /// </summary>
         public int Id { get; set; }
         /// <summary>
-        /// Код фундамента
-        /// </summary>
-        public int FoundationId { get; set; }
-        /// <summary>
         /// Обратная ссылка на фундамент
         /// </summary>
-        public Foundation Foundation { get; set; }
+        public Foundation ParentMember { get; set; }
         /// <summary>
         /// Наименование
         /// </summary>
@@ -80,9 +76,9 @@ namespace RDBLL.Entity.RCC.Foundations
         /// </summary>
         public PartResult Result { get; set; }
         /// <summary>
-        /// Наименование линейных единиц измерения
+        /// Наименование единиц измерения
         /// </summary>
-        public string LinearMeasure { get { return MeasureUnitConverter.GetUnitLabelText(0); } }
+        public MeasureUnitList Measures { get => new MeasureUnitList(); }
 
         #region events
         public class PartEventHandler : EventArgs
@@ -92,7 +88,7 @@ namespace RDBLL.Entity.RCC.Foundations
 
         public void Change()
         {
-            Foundation.IsActual = false;
+            ParentMember.IsActual = false;
             AfterChanged?.Invoke(this, new PartEventHandler());
         }
         public void Delete()
@@ -118,8 +114,7 @@ namespace RDBLL.Entity.RCC.Foundations
         public FoundationPart(Foundation foundation)
         {
             Id = ProgrammSettings.CurrentId;
-            FoundationId = foundation.Id;
-            Foundation = foundation;
+            ParentMember = foundation;
             if (foundation.Parts.Count == 0)
             {
                 Name = "Подколонник";
@@ -152,11 +147,7 @@ namespace RDBLL.Entity.RCC.Foundations
         /// <param name="dataSet"></param>
         public virtual void OpenFromDataSet(DataSet dataSet)
         {
-            DataTable dataTable = dataSet.Tables[GetTableName()];
-            var row = (from dataRow in dataTable.AsEnumerable()
-                       where dataRow.Field<int>("FoundationId") == Id
-                       select dataRow).Single();
-            OpenFromDataSet(row);
+            OpenFromDataSet(DsOperation.OpenFromDataSetById(dataSet, GetTableName(), Id));
         }
         /// <summary>
         /// Обновляет запись в соответствии со строкой датасета
@@ -165,7 +156,6 @@ namespace RDBLL.Entity.RCC.Foundations
         public virtual void OpenFromDataSet(DataRow dataRow)
         {
             Id = dataRow.Field<int>("Id");
-            FoundationId = dataRow.Field<int>("FoundationId");
             Name = dataRow.Field<string>("Name");
             Height = dataRow.Field<double>("Height");
             CenterX = dataRow.Field<double>("CenterX");

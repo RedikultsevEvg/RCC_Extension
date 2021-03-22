@@ -40,7 +40,7 @@ namespace RDBLL.Common.Geometry.Mathematic
             List<Point2D> points = new List<Point2D>();
             if (addStart) points.Add(startPoint.Clone() as Point2D);
             double length = GetDistance(startPoint, endPoint);
-            double spacing = length / quant;
+            double spacing = length / (quant + 1);
             for (int i = 1; i <= quant; i++)
             {
                 points.Add(GeometryProc.GetPointOfset(startPoint, endPoint, spacing * i));
@@ -75,7 +75,7 @@ namespace RDBLL.Common.Geometry.Mathematic
                 {
                     points.AddRange(GeometryProc.GetInternalPoints(pointsLeftY[i], pointsRightY[i], quantityX - 2, false, false));
                 }
-                points.Add(pointsLeftY[i]);
+                points.Add(pointsRightY[i]);
             }
             points.AddRange(GeometryProc.GetInternalPoints(topLeft, topRight, quantityX - 2, true, true));
             return points;

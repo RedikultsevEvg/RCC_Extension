@@ -97,12 +97,20 @@
     <Compile Include="CalcTypeControl.xaml.cs">
       <DependentUpon>CalcTypeControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="InfraStructure\Comands\Base\CommandBase.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="ResourcesDicts\RFTemplateSelector.cs" />
+    <Compile Include="ViewModels\Base\ViewModelBase.cs" />
+    <Compile Include="ViewModels\MatUsings\MatUsingVM.cs" />
+    <Compile Include="ViewModels\MatUsings\SafetyFactorsVM.cs" />
+    <Compile Include="ViewModels\Soils\SoilSections\SoilSectionUsingVM.cs" />
+    <Compile Include="Views\MatUsings\WndSafetyFactors.xaml.cs">
+      <DependentUpon>WndSafetyFactors.xaml</DependentUpon>
+    </Compile>
     <Compile Include="WndAbout.xaml.cs">
       <DependentUpon>WndAbout.xaml</DependentUpon>
     </Compile>
@@ -149,7 +157,23 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="ResourcesDicts\MatUsings\MatUsing.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ResourcesDicts\Placements\Placement.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ResourcesDicts\Soils\SoilSections\SoilSectionUsing.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="ResourcesDicts\TextBlockStyles.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\MatUsings\WndSafetyFactors.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -256,6 +280,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Soil.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Views\RCC\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

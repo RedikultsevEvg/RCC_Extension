@@ -7,7 +7,7 @@ using System.Collections.ObjectModel;
 using RDBLL.Common.Service;
 using RDBLL.Common.Interfaces;
 using System.Data;
-using DAL.Common;
+using RDBLL.Common.Service.DsOperations;
 
 namespace RDBLL.Forces
 {
@@ -57,7 +57,6 @@ namespace RDBLL.Forces
             Id = ProgrammSettings.CurrentId;
             ForcesGroups = new List<ForcesGroup>();
             ForcesGroups.Add(forcesGroup);
-            forcesGroup.SetParentsNotActual();
             Name = "Новая нагрузка";
             PartialSafetyFactor = 1.1;
             IsLiveLoad = false;
@@ -79,32 +78,16 @@ namespace RDBLL.Forces
         /// <param name="createNew"></param>
         public void SaveToDataSet(DataSet dataSet, bool createNew)
         {
-            DataTable dataTable;
-            DataRow row;
-            dataTable = dataSet.Tables[GetTableName()];
-            if (createNew)
-            {
-                row = dataTable.NewRow();
-                dataTable.Rows.Add(row);
-            }
-            else
-            {
-                var tmpRow = (from dataRow in dataTable.AsEnumerable()
-                              where dataRow.Field<int>("Id") == Id
-                              select dataRow).Single();
-                row = tmpRow;
-            }
+            DataRow row = EntityOperation.SaveEntity(dataSet, createNew, this);
             #region
-            row.SetField("Id", Id);
-            row.SetField("Name", Name);
             row.SetField("PartialSafetyFactor", PartialSafetyFactor);
             row.SetField("IsLiveLoad", IsLiveLoad);
             row.SetField("IsCombination", IsCombination);
             row.SetField("BothSign", BothSign);
             #endregion
-            dataTable.AcceptChanges();
+            row.AcceptChanges();
 
-            dataTable = dataSet.Tables["ForcesGroupLoadSets"];
+            DataTable dataTable = dataSet.Tables["ForcesGroupLoadSets"];
             foreach (ForcesGroup forcesGroup in ForcesGroups)
             {
                 if (createNew)
@@ -194,13 +177,10 @@ namespace RDBLL.Forces
         /// <returns></returns>
         public object Clone()
         {
-            LoadSet loadSet = new LoadSet();
+            LoadSet loadSet = this.MemberwiseClone() as LoadSet;
             loadSet.Id = ProgrammSettings.CurrentId;
-            loadSet.Name = this.Name;
-            loadSet.PartialSafetyFactor = PartialSafetyFactor;
-            loadSet.IsLiveLoad = IsLiveLoad;
-            loadSet.IsCombination = IsCombination;
-            loadSet.BothSign = BothSign;
+            loadSet.ForcesGroups = new List<ForcesGroup>();
+            loadSet.ForceParameters = new ObservableCollection<ForceParameter>();
             //Копируем параметры нагрузки
             foreach (ForceParameter forceParameter in ForceParameters)
             {

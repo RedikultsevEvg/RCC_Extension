@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using RDBLL.Common.Service;
 using RDBLL.Common.Interfaces;
 using System.Data;
-using DAL.Common;
+using RDBLL.Common.Service.DsOperations;
 
 namespace RDBLL.Common.Params
 {
@@ -163,16 +163,12 @@ namespace RDBLL.Common.Params
         /// <param name="createNew"></param>
         public void SaveToDataSet(DataSet dataSet, bool createNew)
         {
-            DataTable dataTable = dataSet.Tables[GetTableName()];
-            DataRow row = DsOperation.CreateNewRow(Id, createNew, dataTable);
+            DataRow row = EntityOperation.SaveEntity(dataSet, createNew, this);
             #region setFields
-            row.SetField("Id", Id);
-            row.SetField("Name", Name);
-            row.SetField("ParentId", ParentMember.Id);
             row.SetField("Type", ValueType);
             row.SetField("Value", ParameterValue);
             #endregion
-            dataTable.AcceptChanges();
+            row.Table.AcceptChanges();
         }
         /// <summary>
         /// Открывает запись из датасета

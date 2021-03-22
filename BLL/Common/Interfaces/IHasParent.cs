@@ -14,7 +14,7 @@ namespace RDBLL.Common.Interfaces
         /// <summary>
         /// Свойство для хранения ссылки на родителя
         /// </summary>
-        IDsSaveable ParentMember { get;}
+        IDsSaveable ParentMember { get; }
         /// <summary>
         /// Регистрирует родителя
         /// </summary>

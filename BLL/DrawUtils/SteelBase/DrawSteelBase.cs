@@ -8,6 +8,7 @@ using System.Windows.Controls;
 using System.Windows.Shapes;
 using System.Windows.Media;
 using RDBLL.Processors.SC;
+using RDBLL.Common.Geometry;
 
 namespace RDBLL.DrawUtils.SteelBase
 {
@@ -24,44 +25,28 @@ namespace RDBLL.DrawUtils.SteelBase
         public static void DrawBase(Entity.SC.Column.SteelBase steelBase, Canvas canvas)
         {
             canvas.Children.Clear();
-            double zoom_factor_X = canvas.Width / steelBase.Width / 1.2;
-            double zoom_factor_Y = canvas.Height / steelBase.Length / 1.2;
+            double width = 1.0;
+            double length = 1.0;
+            double zoom_factor_X = canvas.Width / width / 1.2;
+            double zoom_factor_Y = canvas.Height / length / 1.2;
             double scale_factor;
             double[] columnBaseCenter = new double[2] { canvas.Width / 2, canvas.Height / 2 };
             if (zoom_factor_X < zoom_factor_Y) { scale_factor = zoom_factor_X; } else { scale_factor = zoom_factor_Y; }
-            #region Рисуем прямоугольник для базы
-            Rectangle steelBaseRect = new Rectangle();
-            steelBaseRect.Width = steelBase.Width * scale_factor;
-            steelBaseRect.Height = steelBase.Length * scale_factor;
-            steelBaseRect.Fill = Brushes.Gray;
-            steelBaseRect.Opacity = 0.3;
-            steelBaseRect.Stroke = Brushes.Black;
-            steelBaseRect.StrokeThickness = 3;
-            canvas.Children.Add(steelBaseRect);
-            Canvas.SetLeft(steelBaseRect, columnBaseCenter[0] - steelBaseRect.Width / 2);
-            Canvas.SetTop(steelBaseRect, columnBaseCenter[1] - steelBaseRect.Height / 2);
-            #endregion
             // Рисуем оси координат
             DrawUtils.DrawAxis(canvas, true, true);
 
             //Рисуем участки
             foreach (SteelBasePart basePart in steelBase.SteelBaseParts)
             {
-                foreach (SteelBasePart steelBasePart in steelBase.SteelBaseParts)
+                foreach (SteelBasePart part in steelBase.SteelBaseParts)
                 {
-                    foreach (SteelBasePart steelBasePartEh in SteelBasePartProcessor.GetSteelBasePartsFromPart(steelBasePart))
-                    {
-                        DrawBasePart(steelBasePartEh, canvas, columnBaseCenter, scale_factor, 1, 1, 0.8, true);
-                    }
+                    DrawBasePart(part, canvas, columnBaseCenter, scale_factor, 1, 1, 0.8, true);
                 }
             }
             //Рисуем болты
             foreach (SteelBolt baseBolt in steelBase.SteelBolts)
             {
-                foreach (SteelBolt baseBoltEh in SteelBoltProcessor.GetSteelBoltsFromBolt(baseBolt))
-                {
-                    DrawBolts(baseBoltEh, canvas, columnBaseCenter, scale_factor, 1, 1, 1, true);
-                }
+                DrawBolts(baseBolt, canvas, columnBaseCenter, scale_factor, 1, 1, 1, true);
             }
         }
         /// <summary>
@@ -168,16 +153,19 @@ namespace RDBLL.DrawUtils.SteelBase
         /// <param name="showName">Флаг отображения имени болта</param>
         public static void DrawBolts(SteelBolt steelBolt, Canvas canvas, double[] columnBaseCenter, double scale_factor, int koeffX, int koeffY, double opacity, bool showName)
         {
-            Ellipse centerEllipse = new Ellipse();
-            centerEllipse.Width = steelBolt.Diameter * scale_factor;
-            centerEllipse.Height = centerEllipse.Width;
-            centerEllipse.Fill = Brushes.Black;
-            centerEllipse.Opacity = opacity;
-            canvas.Children.Add(centerEllipse);
-            double leftCornerX = columnBaseCenter[0] + steelBolt.CenterX * scale_factor * koeffX- centerEllipse.Width/2;
-            double topCornerY = columnBaseCenter[1] - steelBolt.CenterY * scale_factor * koeffY- centerEllipse.Width/2;
-            Canvas.SetLeft(centerEllipse, leftCornerX);
-            Canvas.SetTop(centerEllipse, topCornerY);
+            foreach (Point2D point in steelBolt.Placement.GetElementPoints())
+            {
+                Ellipse centerEllipse = new Ellipse();
+                centerEllipse.Width = steelBolt.Diameter * scale_factor;
+                centerEllipse.Height = centerEllipse.Width;
+                centerEllipse.Fill = Brushes.Black;
+                centerEllipse.Opacity = opacity;
+                canvas.Children.Add(centerEllipse);
+                double leftCornerX = columnBaseCenter[0] + point.X * scale_factor * koeffX - centerEllipse.Width / 2;
+                double topCornerY = columnBaseCenter[1] - point.Y * scale_factor * koeffY - centerEllipse.Width / 2;
+                Canvas.SetLeft(centerEllipse, leftCornerX);
+                Canvas.SetTop(centerEllipse, topCornerY);
+            }
         }
     }
 }

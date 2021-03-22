@@ -201,76 +201,76 @@ namespace RDBLL.Entity.RCC.WallAndColumn
         public XmlElement SaveToXMLNode(XmlDocument xmlDocument)
         {
             XmlElement xmlNode = xmlDocument.CreateElement("Wall");
-            XMLOperations.AddAttribute(xmlNode, xmlDocument, "Name", Name);
-            int counter = 0;
-            foreach (WallType wallTypeItem in Level.Building.WallTypeList)
-            {
-                if (ReferenceEquals(wallTypeItem, WallType))
-                { XMLOperations.AddAttribute(xmlNode, xmlDocument, "WallTypeNumber", Convert.ToString(counter)); }
-                counter ++;
-            }
-            XMLOperations.AddAttribute(xmlNode, xmlDocument, "ReWriteHeight", Convert.ToString(ReWriteHeight));
-            XMLOperations.AddAttribute(xmlNode, xmlDocument, "Height", Convert.ToString(Height));
-            XMLOperations.AddAttribute(xmlNode, xmlDocument, "ConcreteStartOffset", Convert.ToString(ConcreteStartOffset));
-            XMLOperations.AddAttribute(xmlNode, xmlDocument, "ConcreteEndOffset", Convert.ToString(ConcreteEndOffset));
-            XMLOperations.AddAttribute(xmlNode, xmlDocument, "ReiforcementStartOffset", Convert.ToString(ReiforcementStartOffset));
-            XMLOperations.AddAttribute(xmlNode, xmlDocument, "ReiforcementEndOffset", Convert.ToString(ReiforcementEndOffset));
-            XMLOperations.AddAttribute(xmlNode, xmlDocument, "OverrideVertSpacing", Convert.ToString(OverrideVertSpacing));
-            XMLOperations.AddAttribute(xmlNode, xmlDocument, "OverrideHorSpacing", Convert.ToString(OverrideHorSpacing));
-            XmlElement StartPointNode = StartPoint.SaveToXMLNode(xmlDocument, "StartPoint");
-            xmlNode.AppendChild(StartPointNode);
-            XmlElement EndPointNode = EndPoint.SaveToXMLNode(xmlDocument, "EndPoint");
-            xmlNode.AppendChild(EndPointNode);
-            foreach (OpeningPlacing obj in OpeningPlacingList)
-            {
-                xmlNode.AppendChild(obj.SaveToXMLNode(xmlDocument));
-            }
-            XmlElement VertSpacingSettingNode = VertSpacingSetting.SaveToXMLNode(xmlDocument, "VertSpacingSetting");
-            xmlNode.AppendChild(VertSpacingSettingNode);
-            XmlElement HorSpacingSettingNode = HorSpacingSetting.SaveToXMLNode(xmlDocument, "HorSpacingSetting");
-            xmlNode.AppendChild(HorSpacingSettingNode);
+            //XMLOperations.AddAttribute(xmlNode, xmlDocument, "Name", Name);
+            //int counter = 0;
+            //foreach (WallType wallTypeItem in Level.ParentMember.WallTypeList)
+            //{
+            //    if (ReferenceEquals(wallTypeItem, WallType))
+            //    { XMLOperations.AddAttribute(xmlNode, xmlDocument, "WallTypeNumber", Convert.ToString(counter)); }
+            //    counter ++;
+            //}
+            //XMLOperations.AddAttribute(xmlNode, xmlDocument, "ReWriteHeight", Convert.ToString(ReWriteHeight));
+            //XMLOperations.AddAttribute(xmlNode, xmlDocument, "Height", Convert.ToString(Height));
+            //XMLOperations.AddAttribute(xmlNode, xmlDocument, "ConcreteStartOffset", Convert.ToString(ConcreteStartOffset));
+            //XMLOperations.AddAttribute(xmlNode, xmlDocument, "ConcreteEndOffset", Convert.ToString(ConcreteEndOffset));
+            //XMLOperations.AddAttribute(xmlNode, xmlDocument, "ReiforcementStartOffset", Convert.ToString(ReiforcementStartOffset));
+            //XMLOperations.AddAttribute(xmlNode, xmlDocument, "ReiforcementEndOffset", Convert.ToString(ReiforcementEndOffset));
+            //XMLOperations.AddAttribute(xmlNode, xmlDocument, "OverrideVertSpacing", Convert.ToString(OverrideVertSpacing));
+            //XMLOperations.AddAttribute(xmlNode, xmlDocument, "OverrideHorSpacing", Convert.ToString(OverrideHorSpacing));
+            //XmlElement StartPointNode = StartPoint.SaveToXMLNode(xmlDocument, "StartPoint");
+            //xmlNode.AppendChild(StartPointNode);
+            //XmlElement EndPointNode = EndPoint.SaveToXMLNode(xmlDocument, "EndPoint");
+            //xmlNode.AppendChild(EndPointNode);
+            //foreach (OpeningPlacing obj in OpeningPlacingList)
+            //{
+            //    xmlNode.AppendChild(obj.SaveToXMLNode(xmlDocument));
+            //}
+            //XmlElement VertSpacingSettingNode = VertSpacingSetting.SaveToXMLNode(xmlDocument, "VertSpacingSetting");
+            //xmlNode.AppendChild(VertSpacingSettingNode);
+            //XmlElement HorSpacingSettingNode = HorSpacingSetting.SaveToXMLNode(xmlDocument, "HorSpacingSetting");
+            //xmlNode.AppendChild(HorSpacingSettingNode);
             return xmlNode;
         }
         //Конструктор стены по уровню (выбирается первый из списка или создается)
         public Wall(Level level)
         {
-            Building building = level.Building;
-            WallType wallType;
-            if (building.WallTypeList.Count == 0)
-            { wallType = new WallType(building); }
-            else { wallType = building.WallTypeList[0]; }
-            Level = level;
-            WallType = wallType;
-            SetDefault();
-            level.Walls.Add(this);
+            //Building building = level.ParentMember;
+            //WallType wallType;
+            //if (building.WallTypeList.Count == 0)
+            //{ wallType = new WallType(building); }
+            //else { wallType = building.WallTypeList[0]; }
+            //Level = level;
+            //WallType = wallType;
+            //SetDefault();
+            //level.Walls.Add(this);
 
         }
         public Wall(Level level, XmlNode xmlNode)
         {
-            Level = level;
-            SetDefault();
-            foreach (XmlAttribute obj in xmlNode.Attributes)
-            {
-                if (obj.Name == "WallTypeNumber") WallType = level.Building.WallTypeList[Convert.ToInt16(obj.Value)];
-                if (obj.Name == "Name") Name = obj.Value; 
-                if (obj.Name == "ReWriteHeight") ReWriteHeight = Convert.ToBoolean(obj.Value);
-                if (obj.Name == "Height") Height = Convert.ToDouble(obj.Value);
-                if (obj.Name == "ConcreteStartOffset") ConcreteStartOffset = Convert.ToDouble(obj.Value);
-                if (obj.Name == "ConcreteEndOffset") ConcreteEndOffset = Convert.ToDouble(obj.Value);
-                if (obj.Name == "ReiforcementStartOffset") ReiforcementStartOffset = Convert.ToDouble(obj.Value);
-                if (obj.Name == "ReiforcementEndOffset") ReiforcementEndOffset = Convert.ToDouble(obj.Value);
-                if (obj.Name == "OverrideVertSpacing") OverrideVertSpacing = Convert.ToBoolean(obj.Value);
-                if (obj.Name == "OverrideHorSpacing") OverrideHorSpacing = Convert.ToBoolean(obj.Value);
-            }
-            OpeningPlacingList = new List<OpeningPlacing>();
-            foreach (XmlNode childNode in xmlNode.ChildNodes)
-            {
-                if (childNode.Name == "StartPoint") StartPoint = new Point2D(childNode);
-                if (childNode.Name == "EndPoint") EndPoint = new Point2D(childNode);
-                if (childNode.Name == "OpeningPlacing") OpeningPlacingList.Add(new OpeningPlacing(this, childNode));
-                if (childNode.Name == "VertSpacingSetting") VertSpacingSetting = new BarSpacingSettings(childNode);
-                if (childNode.Name == "HorSpacingSetting") HorSpacingSetting = new BarSpacingSettings(childNode);
-            }
+            //Level = level;
+            //SetDefault();
+            //foreach (XmlAttribute obj in xmlNode.Attributes)
+            //{
+            //    if (obj.Name == "WallTypeNumber") WallType = level.ParentMember.WallTypeList[Convert.ToInt16(obj.Value)];
+            //    if (obj.Name == "Name") Name = obj.Value; 
+            //    if (obj.Name == "ReWriteHeight") ReWriteHeight = Convert.ToBoolean(obj.Value);
+            //    if (obj.Name == "Height") Height = Convert.ToDouble(obj.Value);
+            //    if (obj.Name == "ConcreteStartOffset") ConcreteStartOffset = Convert.ToDouble(obj.Value);
+            //    if (obj.Name == "ConcreteEndOffset") ConcreteEndOffset = Convert.ToDouble(obj.Value);
+            //    if (obj.Name == "ReiforcementStartOffset") ReiforcementStartOffset = Convert.ToDouble(obj.Value);
+            //    if (obj.Name == "ReiforcementEndOffset") ReiforcementEndOffset = Convert.ToDouble(obj.Value);
+            //    if (obj.Name == "OverrideVertSpacing") OverrideVertSpacing = Convert.ToBoolean(obj.Value);
+            //    if (obj.Name == "OverrideHorSpacing") OverrideHorSpacing = Convert.ToBoolean(obj.Value);
+            //}
+            //OpeningPlacingList = new List<OpeningPlacing>();
+            //foreach (XmlNode childNode in xmlNode.ChildNodes)
+            //{
+            //    if (childNode.Name == "StartPoint") StartPoint = new Point2D(childNode);
+            //    if (childNode.Name == "EndPoint") EndPoint = new Point2D(childNode);
+            //    if (childNode.Name == "OpeningPlacing") OpeningPlacingList.Add(new OpeningPlacing(this, childNode));
+            //    if (childNode.Name == "VertSpacingSetting") VertSpacingSetting = new BarSpacingSettings(childNode);
+            //    if (childNode.Name == "HorSpacingSetting") HorSpacingSetting = new BarSpacingSettings(childNode);
+            //}
 
         }
             //Конструктор стены по уровню и типу стены

@@ -54,13 +54,13 @@ namespace RDBLL.Entity.Common.Placements
         /// </summary>
         public bool FillArray
         {
-            get { return StoredParams[3 + ParamQuant].GetBoolValue(); }
-            set { StoredParams[3 + ParamQuant].SetBoolValue(value); }
+            get { return StoredParams[4 + ParamQuant].GetBoolValue(); }
+            set { StoredParams[4 + ParamQuant].SetBoolValue(value); }
         }
         /// <summary>
         /// Default constructor
         /// </summary>
-        public RectArrayPlacement () : base()
+        public RectArrayPlacement (bool genId = false) : base(genId)
         {
             // Размер вдоль оси X
             StoredParams.Add(new StoredParam(this) { Id = ProgrammSettings.CurrentId, Name = "SizeX" });

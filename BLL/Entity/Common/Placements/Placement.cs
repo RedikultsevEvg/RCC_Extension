@@ -9,7 +9,7 @@ using RDBLL.Common.Service;
 using RDBLL.Common.Params;
 using RDBLL.Common.Geometry;
 using RDBLL.Common.Geometry.Mathematic;
-using DAL.Common;
+using RDBLL.Common.Service.DsOperations;
 
 namespace RDBLL.Entity.Common.Placements
 {
@@ -38,9 +38,9 @@ namespace RDBLL.Entity.Common.Placements
         /// <summary>
         /// Default constructor 
         /// </summary>
-        public Placement()
+        public Placement(bool genId = false)
         {
-            Id = ProgrammSettings.CurrentId;
+            if (genId) Id = ProgrammSettings.CurrentId;
             StoredParams = new List<StoredParam>();
             StoredParams.Add(new StoredParam(this) { Id = ProgrammSettings.CurrentId, Name = "ItemAngle" });
             StoredParams[0].SetDoubleValue(0.00);
@@ -90,17 +90,12 @@ namespace RDBLL.Entity.Common.Placements
         /// <param name="createNew"></param>
         public void SaveToDataSet(DataSet dataSet, bool createNew)
         {
-            DataTable dataTable;
-            dataTable = dataSet.Tables[GetTableName()];
-            DataRow row = DsOperation.CreateNewRow(Id, createNew, dataTable);
+            DataRow row = EntityOperation.SaveEntity(dataSet, createNew, this);
             #region setFields
-            row.SetField("Id", Id);
-            row.SetField("Name", Name);
-            row.SetField("ParentId", ParentMember.Id);
             if (this is LineBySpacing) { row.SetField("Type", "LineBySpacing"); }
             else if (this is RectArrayPlacement) { row.SetField("Type", "RectArrayPlacement"); }
             else { throw new Exception("Type of Placement is unknown"); }
-            dataTable.AcceptChanges();
+            row.AcceptChanges();
             #endregion
             foreach (StoredParam param in StoredParams) { param.SaveToDataSet(dataSet, createNew);}
         }

@@ -12,6 +12,7 @@ using System.Data;
 using System.Linq;
 using RDBLL.Entity.Common.Placements;
 using RDBLL.Common.Params;
+using RDBLL.Entity.Common.Materials.SteelMaterialUsing;
 
 namespace RDBLL.Common.Service
 {
@@ -28,14 +29,14 @@ namespace RDBLL.Common.Service
             ObservableCollection<Building> newObjects = new ObservableCollection<Building>();
             DataTable dataTable = dataSet.Tables["Buildings"];
             var query = from dataRow in dataTable.AsEnumerable()
-                        where dataRow.Field<int>("BuildingSiteId") == buildingSite.Id
+                        where dataRow.Field<int>("ParentId") == buildingSite.Id
                         select dataRow;
             foreach (var dataRow in query)
             {
                 Building newObject = new Building();
                 newObject.OpenFromDataSet(dataRow);
-                newObject.BuildingSite = buildingSite;
-                newObject.Levels = GetLevels(dataSet, newObject);
+                newObject.RegisterParent(buildingSite);
+                GetLevels(dataSet, newObject);
                 newObjects.Add(newObject);
             }
             return newObjects;
@@ -51,15 +52,15 @@ namespace RDBLL.Common.Service
             ObservableCollection<Level> newObjects = new ObservableCollection<Level>();
             DataTable dataTable = dataSet.Tables["Levels"];
             var query = from dataRow in dataTable.AsEnumerable()
-                                         where dataRow.Field<int>("BuildingId") == building.Id
+                                         where dataRow.Field<int>("ParentId") == building.Id
                                          select dataRow;
             foreach (var dataRow in query)
             {
                 Level newObject = new Level();
                 newObject.OpenFromDataSet(dataRow);
-                newObject.Building = building;
+                newObject.RegisterParent(building);
                 newObject.SteelBases = GetSteelBases(dataSet, newObject);
-                newObject.Foundations = GetFoundations(dataSet, newObject);
+                GetFoundations(dataSet, newObject);
                 newObjects.Add(newObject);
             }
             return newObjects;
@@ -75,16 +76,22 @@ namespace RDBLL.Common.Service
             ObservableCollection<SteelBase> newObjects = new ObservableCollection<SteelBase>();
             DataTable dataTable = dataSet.Tables["SteelBases"];
             var query = from dataRow in dataTable.AsEnumerable()
-                        where dataRow.Field<int>("LevelId") == level.Id
+                        where dataRow.Field<int>("ParentId") == level.Id
                         select dataRow;
             foreach (var dataRow in query)
             {
                 SteelBase newObject = new SteelBase();
                 newObject.OpenFromDataSet(dataRow);
-                newObject.Level = level;
+                newObject.ParentMember = level;
                 newObject.SteelBaseParts = GetSteelBaseParts(dataSet, newObject);
                 newObject.SteelBolts = GetSteelBolts(dataSet, newObject);
-                newObject.ForcesGroups = GetSteelBaseForcesGroups(dataSet, newObject);
+                newObject.ForcesGroups = GetParentForcesGroups(dataSet, newObject);
+                List<MaterialUsing> materials = GetMaterialUsings(dataSet, newObject);
+                foreach (MaterialUsing material in materials)
+                {
+                    if (material is SteelUsing) newObject.Steel = material as SteelUsing;
+                    if (material is ConcreteUsing) newObject.Concrete = material as ConcreteUsing;
+                }
                 newObjects.Add(newObject);
             }
             return newObjects;
@@ -100,13 +107,13 @@ namespace RDBLL.Common.Service
             ObservableCollection<SteelBasePart> newObjects = new ObservableCollection<SteelBasePart>();
             DataTable dataTable = dataSet.Tables["SteelBaseParts"];
             var query = from dataRow in dataTable.AsEnumerable()
-                        where dataRow.Field<int>("SteelBaseId") == steelBase.Id
+                        where dataRow.Field<int>("ParentId") == steelBase.Id
                         select dataRow;
             foreach (var dataRow in query)
             {
                 SteelBasePart newObject = new SteelBasePart();
                 newObject.OpenFromDataSet(dataRow);
-                newObject.SteelBase = steelBase;
+                newObject.RegisterParent(steelBase);
                 newObjects.Add(newObject);
             }
             return newObjects;
@@ -122,13 +129,16 @@ namespace RDBLL.Common.Service
             ObservableCollection<SteelBolt> newObjects = new ObservableCollection<SteelBolt>();
             DataTable dataTable = dataSet.Tables["SteelBolts"];
             var query = from dataRow in dataTable.AsEnumerable()
-                        where dataRow.Field<int>("SteelBaseId") == steelBase.Id
+                        where dataRow.Field<int>("ParentId") == steelBase.Id
                         select dataRow;
             foreach (var dataRow in query)
             {
                 SteelBolt newObject = new SteelBolt();
                 newObject.OpenFromDataSet(dataRow);
-                newObject.SteelBase = steelBase;
+                newObject.RegisterParent(steelBase);
+                //не очень корректно достаем единственный элемент
+                newObject.Steel = GetMaterialUsings(dataSet, newObject)[0] as SteelUsing;
+                newObject.Placement = GetPlacement(dataSet, newObject);
                 newObjects.Add(newObject);
             }
             return newObjects;
@@ -158,7 +168,7 @@ namespace RDBLL.Common.Service
                     CenterX = dataRow.Field<double>("CenterX"),
                     CenterY = dataRow.Field<double>("CenterY"),
                 };
-                newObject.SteelBases.Add(steelBase);
+                newObject.Owners.Add(steelBase);
                 newObjects.Add(newObject);
             }
             foreach (ForcesGroup forcesGroup in newObjects)
@@ -173,14 +183,14 @@ namespace RDBLL.Common.Service
         /// <param name="dataSet"></param>
         /// <param name="foundation"></param>
         /// <returns></returns>
-        public static ObservableCollection<ForcesGroup> GetFoundationForcesGroups(DataSet dataSet, Foundation foundation)
+        public static ObservableCollection<ForcesGroup> GetParentForcesGroups(DataSet dataSet, IHasForcesGroups parent)
         {
             ObservableCollection<ForcesGroup> newObjects = new ObservableCollection<ForcesGroup>();
-            DataTable adjDataTable = dataSet.Tables["FoundationForcesGroups"];
+            DataTable adjDataTable = dataSet.Tables["ParentForcesGroups"];
             DataTable dataTable = dataSet.Tables["ForcesGroups"];
             var query = from adjDataRow in adjDataTable.AsEnumerable()
                         from dataRow in dataTable.AsEnumerable()
-                        where adjDataRow.Field<int>("FoundationId") == foundation.Id
+                        where adjDataRow.Field<int>("ParentId") == parent.Id
                         where adjDataRow.Field<int>("ForcesGroupId") == dataRow.Field<int>("Id")
                         select dataRow;
             foreach (var dataRow in query)
@@ -192,7 +202,7 @@ namespace RDBLL.Common.Service
                     CenterX = dataRow.Field<double>("CenterX"),
                     CenterY = dataRow.Field<double>("CenterY"),
                 };
-                newObject.Foundations.Add(foundation);
+                newObject.Owners.Add(parent);
                 newObjects.Add(newObject);
             }
             foreach (ForcesGroup forcesGroup in newObjects)
@@ -276,15 +286,16 @@ namespace RDBLL.Common.Service
             ObservableCollection<Foundation> newObjects = new ObservableCollection<Foundation>();
             DataTable dataTable = dataSet.Tables["Foundations"];
             var query = from dataRow in dataTable.AsEnumerable()
-                        where dataRow.Field<int>("LevelId") == level.Id
+                        where dataRow.Field<int>("ParentId") == level.Id
                         select dataRow;
             foreach (var dataRow in query)
             {
                 Foundation newObject = new Foundation();
-                newObject.Level = level;
+                newObject.RegisterParent(level);
                 newObject.OpenFromDataSet(dataRow);
                 newObject.Parts = GetFoundationParts(dataSet, newObject);                
-                newObject.ForcesGroups = GetFoundationForcesGroups(dataSet, newObject);
+                newObject.ForcesGroups = GetParentForcesGroups(dataSet, newObject);
+                GetSoilSection(dataSet, newObject);
                 newObjects.Add(newObject);
             }
             return newObjects;
@@ -300,13 +311,13 @@ namespace RDBLL.Common.Service
             ObservableCollection<RectFoundationPart> newObjects = new ObservableCollection<RectFoundationPart>();
             DataTable dataTable = dataSet.Tables["FoundationParts"];
             var query = from dataRow in dataTable.AsEnumerable()
-                        where dataRow.Field<int>("FoundationId") == foundation.Id
+                        where dataRow.Field<int>("ParentId") == foundation.Id
                         select dataRow;
             foreach (var dataRow in query)
             {
                 RectFoundationPart newObject = new RectFoundationPart();
                 newObject.OpenFromDataSet(dataRow);
-                newObject.Foundation = foundation;
+                newObject.ParentMember = foundation;
                 newObjects.Add(newObject);
             }
             return newObjects;
@@ -322,7 +333,7 @@ namespace RDBLL.Common.Service
             ObservableCollection<Soil> newObjects = new ObservableCollection<Soil>();
             DataTable dataTable = dataSet.Tables["Soils"];
             var query = from dataRow in dataTable.AsEnumerable()
-                        where dataRow.Field<int>("BuildingSiteId") == buildingSite.Id
+                        where dataRow.Field<int>("ParentId") == buildingSite.Id
                         select dataRow;
             foreach (var dataRow in query)
             {
@@ -355,7 +366,7 @@ namespace RDBLL.Common.Service
             ObservableCollection<SoilSection> newObjects = new ObservableCollection<SoilSection>();
             DataTable dataTable = dataSet.Tables["SoilSections"];
             var query = from dataRow in dataTable.AsEnumerable()
-                        where dataRow.Field<int>("BuildingSiteId") == buildingSite.Id
+                        where dataRow.Field<int>("ParentId") == buildingSite.Id
                         select dataRow;
             foreach (var dataRow in query)
             {
@@ -433,10 +444,12 @@ namespace RDBLL.Common.Service
                 MaterialUsing materialUsing;
                 if (string.Compare(materialKindName, "Concrete") == 0) { materialUsing = new ConcreteUsing(); }
                 else if (string.Compare(materialKindName, "Reinforcement") == 0) { materialUsing = new ReinforcementUsing();}
+                else if (string.Compare(materialKindName, "Steel") == 0) { materialUsing = new SteelUsing(); }
+                else if (string.Compare(materialKindName, "SteelBolt") == 0) { materialUsing = new BoltUsing(); }
                 else throw new Exception("Material type is not valid");
                 materialUsing.RegisterParent(parent);
                 materialUsing.OpenFromDataSet(dataRow);
-                if (materialUsing is ReinforcementUsing) { GetPlacement(dataSet, materialUsing as ReinforcementUsing); }
+                if (materialUsing is IHasPlacement) { GetPlacement(dataSet, materialUsing as IHasPlacement); }
                 #region SafetyFActors
                 List<SafetyFactor> safetyFactorsList = GetSafetyFactors(dataSet, materialUsing);
                 ObservableCollection<SafetyFactor> safetyFactors = new ObservableCollection<SafetyFactor>();
@@ -467,14 +480,13 @@ namespace RDBLL.Common.Service
             string type = row.Field<string>("Type");
             if (string.Compare(type, "LineBySpacing") == 0) { placement = new LineBySpacing(); }
             else if (string.Compare(type, "RectArrayPlacement") == 0) { placement = new RectArrayPlacement(); }
-            else throw new Exception("Reinforcement spacing type is not valid");
+            else throw new Exception("Spacing type is not valid");
             placement.OpenFromDataSet(row);
             parent.SetPlacement(placement);
             placement.RegisterParent(savableParent);
             placement.StoredParams = GetStoredParams(dataSet, placement);
             return placement;
         }
-
         private static List<SafetyFactor> GetSafetyFactors(DataSet dataSet, MaterialUsing parent)
         {
             List<SafetyFactor> newObjects = new List<SafetyFactor>();
@@ -491,7 +503,6 @@ namespace RDBLL.Common.Service
             }
             return newObjects;
         }
-
         private static List<StoredParam> GetStoredParams(DataSet dataSet, IDsSaveable parent)
         {
             List<StoredParam> newObjects = new List<StoredParam>();
@@ -507,6 +518,18 @@ namespace RDBLL.Common.Service
                 newObjects.Add(newObject);
             }
             return newObjects;
+        }
+        private static SoilSectionUsing GetSoilSection (DataSet dataSet, IHasSoilSection parent)
+        {
+            SoilSectionUsing soilSectionUsing;
+            DataTable dataTable = dataSet.Tables["SoilSectionUsings"];
+            var query = (from dataRow in dataTable.AsEnumerable()
+                        where dataRow.Field<int>("ParentId") == parent.Id
+                        select dataRow).Single();
+            soilSectionUsing = new SoilSectionUsing();
+            soilSectionUsing.OpenFromDataSet(query);
+            soilSectionUsing.RegisterParent(parent);
+            return soilSectionUsing;
         }
     }
 }

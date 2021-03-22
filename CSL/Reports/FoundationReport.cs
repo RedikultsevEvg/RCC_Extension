@@ -20,8 +20,8 @@ using RDBLL.Entity.Soils.Processors;
 using RDBLL.Entity.Soils;
 using System.Linq;
 using RDBLL.Entity.Common.NDM;
-
-
+using RDBLL.Common.Interfaces;
+using RDBLL.Common.Service.DsOperations;
 
 namespace CSL.Reports
 {
@@ -62,18 +62,19 @@ namespace CSL.Reports
         }
         private void PrepareReport()
         {
-            foreach (Building building in _buildingSite.Buildings)
+            foreach (Building building in _buildingSite.Childs)
             {
-                foreach (Level level in building.Levels)
+                foreach (Level level in building.Children)
                 {
                     DataTable Foundations = dataSet.Tables["Foundations"];
-                    foreach (Foundation foundation in level.Foundations)
+                    foreach (IHasParent child in level.Children)
                     {
+                        Foundation foundation = child as Foundation;
                         //Если данные по фундаменту неактуальны выполняем расчет
                         //if (!(foundation.IsLoadCasesActual & foundation.IsPartsActual))
                         //{
-                            //Если расчет выполнен успешно
-                            if (FoundationProcessor.SolveFoundation(foundation))
+                        //Если расчет выполнен успешно
+                        if (FoundationProcessor.SolveFoundation(foundation))
                             {
                                 //Заносим результаты расчета в таблицы датасета
                                 ProcessSubElements(Foundations, foundation);
@@ -113,7 +114,7 @@ namespace CSL.Reports
             double foundationSoilVolume = FoundationProcessor.GetSoilVolume(foundation);
             double foundationConcreteVolume = FoundationProcessor.GetConcreteVolume(foundation);
 
-            DataRow newFoundation = dataTable.NewRow();
+            DataRow newFound = dataTable.NewRow();
             double A = foundationWidth * foundationLength;
             double Wx = foundationWidth * foundationLength * foundationLength / 6;
             double Wy = foundationWidth * foundationWidth * foundationLength / 6;
@@ -124,24 +125,25 @@ namespace CSL.Reports
             DrawFoundation.DrawTopScatch(foundation, canvas);
             byte[] b = CommonServices.ExportToByte(canvas);
             #endregion
-            newFoundation.ItemArray = new object[]
-            { foundation.Id, foundation.Name, b,
-                            foundationWidth * MeasureUnitConverter.GetCoefficient(0),
-                            foundationLength * MeasureUnitConverter.GetCoefficient(0),
-                            foundationHeight * MeasureUnitConverter.GetCoefficient(0),
-                            foundation.SoilVolumeWeight * MeasureUnitConverter.GetCoefficient(9),
-                            foundation.ConcreteVolumeWeight * MeasureUnitConverter.GetCoefficient(9),
-                            foundationSoilVolume * MeasureUnitConverter.GetCoefficient(11),
-                            foundationConcreteVolume * MeasureUnitConverter.GetCoefficient(11),
-                            A * MeasureUnitConverter.GetCoefficient(4),
-                            Wx * MeasureUnitConverter.GetCoefficient(5),
-                            Wy * MeasureUnitConverter.GetCoefficient(5)};
+            DsOperation.SetId(newFound, foundation.Id, foundation.Name, foundation.ParentMember.Id);
+            newFound.SetField("Picture", b);
+            newFound.SetField("Width", foundationWidth * MeasureUnitConverter.GetCoefficient(0));
+            newFound.SetField("Length", foundationLength * MeasureUnitConverter.GetCoefficient(0));
+            newFound.SetField("Height", foundationHeight * MeasureUnitConverter.GetCoefficient(0));
+            newFound.SetField("SoilVolumeWeight", foundation.SoilVolumeWeight * MeasureUnitConverter.GetCoefficient(9));
+            newFound.SetField("ConcreteVolumeWeight", foundation.ConcreteVolumeWeight * MeasureUnitConverter.GetCoefficient(9));
+            newFound.SetField("SoilVolume", foundationSoilVolume * MeasureUnitConverter.GetCoefficient(11));
+            newFound.SetField("ConcreteVolume", foundationConcreteVolume * MeasureUnitConverter.GetCoefficient(11));
+            newFound.SetField("Area", A * MeasureUnitConverter.GetCoefficient(4));
+            newFound.SetField("Wx", Wx * MeasureUnitConverter.GetCoefficient(5));
+            newFound.SetField("Wy", Wy * MeasureUnitConverter.GetCoefficient(5));
+
             //Actual area of reinforcement in cm^2
-            newFoundation.SetField("AsBottomXAct", foundation.Result.AsAct[0] * 1e4);
-            newFoundation.SetField("AsBottomYAct", foundation.Result.AsAct[1] * 1e4);
+            newFound.SetField("AsBottomXAct", foundation.Result.AsAct[0] * 1e4);
+            newFound.SetField("AsBottomYAct", foundation.Result.AsAct[1] * 1e4);
             //Recuared area of reinforcement in cm^2
-            newFoundation.SetField("AsBottomXMax", foundation.Result.AsRec[0] * 1e4);
-            newFoundation.SetField("AsBottomYMax", foundation.Result.AsRec[1] * 1e4);
+            newFound.SetField("AsBottomXMax", foundation.Result.AsRec[0] * 1e4);
+            newFound.SetField("AsBottomYMax", foundation.Result.AsRec[1] * 1e4);
             #region AsXCheck
             Compare compare = new Compare();
             compare.Name = "Проверка площади армирования вдоль оси X";
@@ -151,7 +153,7 @@ namespace CSL.Reports
             compare.Val1 = foundation.Result.AsRec[0] * 1e4;
             compare.Val2 = foundation.Result.AsAct[0] * 1e4;
             if (!compare.BoolResult()) foundation.Result.GeneralResult = false;
-            newFoundation.SetField("AsFstConclusionX", compare.CompareResult());
+            newFound.SetField("AsFstConclusionX", compare.CompareResult());
             #endregion
             #region AsYCheck
             compare = new Compare();
@@ -162,10 +164,10 @@ namespace CSL.Reports
             compare.Val1 = foundation.Result.AsRec[1] * 1e4;
             compare.Val2 = foundation.Result.AsAct[1] * 1e4;
             if (!compare.BoolResult()) foundation.Result.GeneralResult = false;
-            newFoundation.SetField("AsFstConclusionY", compare.CompareResult());
+            newFound.SetField("AsFstConclusionY", compare.CompareResult());
             #endregion
-            dataTable.Rows.Add(newFoundation);
-            return newFoundation;
+            dataTable.Rows.Add(newFound);
+            return newFound;
         }
         /// <summary>
         /// Добавление в датасет данных по нагрузкам
@@ -173,14 +175,14 @@ namespace CSL.Reports
         /// <param name="foundation"></param>
         private void ProcessLoadSets(Foundation foundation)
         {
-            CommonServices.AddLoadsToDataset(dataSet, "LoadSets", "Foundations", "FoundationId", foundation.ForcesGroups[0].LoadSets, foundation.Id, foundation.Name);
-            CommonServices.AddLoadsToDataset(dataSet, "LoadCases", "Foundations", "FoundationId", foundation.LoadCases, foundation.Id, foundation.Name);
+            CommonServices.AddLoadsToDataset(dataSet, "LoadSets", "Foundations", foundation.ForcesGroups[0].LoadSets, foundation.Id, foundation.Name);
+            CommonServices.AddLoadsToDataset(dataSet, "LoadCases", "Foundations", foundation.LoadCases, foundation.Id, foundation.Name);
 
             ObservableCollection<LoadSet> loadSetsWith = foundation.btmLoadSetsWithWeight;
-            CommonServices.AddLoadsToDataset(dataSet, "BottomLoadCasesWithWeight", "Foundations", "FoundationId", loadSetsWith, foundation.Id, foundation.Name);
+            CommonServices.AddLoadsToDataset(dataSet, "BottomLoadCasesWithWeight", "Foundations", loadSetsWith, foundation.Id, foundation.Name);
 
             ObservableCollection<LoadSet> loadSetsWithout = foundation.btmLoadSetsWithoutWeight;
-            CommonServices.AddLoadsToDataset(dataSet, "BottomLoadCases", "Foundations", "FoundationId", loadSetsWithout, foundation.Id, foundation.Name);
+            CommonServices.AddLoadsToDataset(dataSet, "BottomLoadCases", "Foundations", loadSetsWithout, foundation.Id, foundation.Name);
         }
         /// <summary>
         /// Добавление в датасет данных по ступеням фундаментов
@@ -195,19 +197,15 @@ namespace CSL.Reports
             DataTable FoundationParts = dataSet.Tables["FoundationParts"];
             foreach (RectFoundationPart part in foundation.Parts)
             {
-                DataRow newFoundationPart = FoundationParts.NewRow();
-                newFoundationPart.ItemArray = new object[]
-                        {
-                            part.Id,
-                            part.Foundation.Id,
-                            part.Name,
-                            part.Width * MeasureUnitConverter.GetCoefficient(0),
-                            part.Length * MeasureUnitConverter.GetCoefficient(0),
-                            part.Height * MeasureUnitConverter.GetCoefficient(0),
-                            part.Width * part.Length * part.Height * MeasureUnitConverter.GetCoefficient(11),
-                            part.CenterX * MeasureUnitConverter.GetCoefficient(0),
-                            part.CenterY * MeasureUnitConverter.GetCoefficient(0)
-                        };
+                DataRow newPart = FoundationParts.NewRow();
+                DsOperation.SetId(newPart, part.Id, part.Name, part.ParentMember.Id);
+                newPart.SetField("Width", part.Width * MeasureUnitConverter.GetCoefficient(0));
+                newPart.SetField("Length", part.Length * MeasureUnitConverter.GetCoefficient(0));
+                newPart.SetField("Heigth", part.Height * MeasureUnitConverter.GetCoefficient(0));
+                newPart.SetField("Volume", part.Width * part.Length * part.Height * MeasureUnitConverter.GetCoefficient(11));
+                newPart.SetField("CenterX", part.CenterX * MeasureUnitConverter.GetCoefficient(0));
+                newPart.SetField("CenterY", part.CenterY * MeasureUnitConverter.GetCoefficient(0));
+
                 #region Moments
                 List<double>[] moments;
                 double momentCoff = MeasureUnitConverter.GetCoefficient(2);
@@ -227,19 +225,18 @@ namespace CSL.Reports
                             moments[3].Add(forceParameter.DesignValue);
                         }
                     }
-
                 }
                 #region MomentsX
                 //Получаем моменты на ширину ступени
-                newFoundationPart.SetField("CrcMomentXMin", moments[1].Min() * momentCoff);
-                newFoundationPart.SetField("DesignMomentXMin", moments[3].Min() * momentCoff);
-                newFoundationPart.SetField("CrcMomentXMax", moments[1].Max() * momentCoff);
-                newFoundationPart.SetField("DesignMomentXMax", moments[3].Max() * momentCoff);
+                newPart.SetField("CrcMomentXMin", moments[1].Min() * momentCoff);
+                newPart.SetField("DesignMomentXMin", moments[3].Min() * momentCoff);
+                newPart.SetField("CrcMomentXMax", moments[1].Max() * momentCoff);
+                newPart.SetField("DesignMomentXMax", moments[3].Max() * momentCoff);
                 //Получаем моменты на единицу ширины ступени
-                newFoundationPart.SetField("CrcMomentXMinDistr", moments[1].Min() * momentCoff / length);
-                newFoundationPart.SetField("DesignMomentXMinDistr", moments[3].Min() * momentCoff / length);
-                newFoundationPart.SetField("CrcMomentXMaxDistr", moments[1].Max() * momentCoff / length);
-                newFoundationPart.SetField("DesignMomentXMaxDistr", moments[3].Max() * momentCoff / length);
+                newPart.SetField("CrcMomentXMinDistr", moments[1].Min() * momentCoff / length);
+                newPart.SetField("DesignMomentXMinDistr", moments[3].Min() * momentCoff / length);
+                newPart.SetField("CrcMomentXMaxDistr", moments[1].Max() * momentCoff / length);
+                newPart.SetField("DesignMomentXMaxDistr", moments[3].Max() * momentCoff / length);
                 #endregion
                 moments = new List<double>[4];
                 moments[0] = new List<double>();
@@ -259,85 +256,82 @@ namespace CSL.Reports
                 }
                 #region MomentsY
                 //Получаем моменты на ширину ступени
-                newFoundationPart.SetField("CrcMomentYMin", moments[1].Min() * momentCoff);
-                newFoundationPart.SetField("DesignMomentYMin", moments[3].Min() * momentCoff);
-                newFoundationPart.SetField("CrcMomentYMax", moments[1].Max() * momentCoff);
-                newFoundationPart.SetField("DesignMomentYMax", moments[3].Max() * momentCoff);
+                newPart.SetField("CrcMomentYMin", moments[1].Min() * momentCoff);
+                newPart.SetField("DesignMomentYMin", moments[3].Min() * momentCoff);
+                newPart.SetField("CrcMomentYMax", moments[1].Max() * momentCoff);
+                newPart.SetField("DesignMomentYMax", moments[3].Max() * momentCoff);
                 //Получаем моменты на единицу ширины ступени
-                newFoundationPart.SetField("CrcMomentYMinDistr", moments[1].Min() * momentCoff / width);
-                newFoundationPart.SetField("DesignMomentYMinDistr", moments[3].Min() * momentCoff / width);
-                newFoundationPart.SetField("CrcMomentYMaxDistr", moments[1].Max() * momentCoff / width);
-                newFoundationPart.SetField("DesignMomentYMaxDistr", moments[3].Max() * momentCoff / width);
+                newPart.SetField("CrcMomentYMinDistr", moments[1].Min() * momentCoff / width);
+                newPart.SetField("DesignMomentYMinDistr", moments[3].Min() * momentCoff / width);
+                newPart.SetField("CrcMomentYMaxDistr", moments[1].Max() * momentCoff / width);
+                newPart.SetField("DesignMomentYMaxDistr", moments[3].Max() * momentCoff / width);
                 #endregion
                 #endregion
                 #region Mcrc
-                newFoundationPart.SetField("CrcMomentX", part.Result.Mcrc[1] * momentCoff);
-                newFoundationPart.SetField("CrcMomentY", part.Result.Mcrc[0] * momentCoff);
+                newPart.SetField("CrcMomentX", part.Result.Mcrc[1] * momentCoff);
+                newPart.SetField("CrcMomentY", part.Result.Mcrc[0] * momentCoff);
                 #endregion
                 #region CrackWidth
                 #endregion
-                FoundationParts.Rows.Add(newFoundationPart);
+                FoundationParts.Rows.Add(newPart);
             }
         }
         /// <summary>
         /// Добавление в датасет данных по давлениям под подошвой
         /// </summary>
         /// <param name="foundation"></param>
-        private void ProcessBtmStresses(Foundation foundation, DataRow newFoundation)
+        private void ProcessBtmStresses(Foundation foundation, DataRow foundRow)
         {
             double stressCoefficient = MeasureUnitConverter.GetCoefficient(3);
             DataTable FoundationStresses = dataSet.Tables["FoundationStressesWithWeight"];
             foreach (double[] stresses in foundation.Result.StressesWithWeigth)
             {
-                DataRow newTableItem = FoundationStresses.NewRow();
-                
-                newTableItem.ItemArray = new object[]
-                        { ProgrammSettings.CurrentTmpId,
-                        foundation.Id,
-                        stresses[0] * stressCoefficient,
-                        stresses[1] * stressCoefficient,
-                        stresses[2] * stressCoefficient,
-                        stresses[3] * stressCoefficient,
-                        stresses[4] * stressCoefficient,
-                        stresses[5] * stressCoefficient,
-                        stresses[6] * stressCoefficient,
-                        stresses[7] * stressCoefficient,
-                        stresses[8] * stressCoefficient,
-                        stresses[9] * stressCoefficient,
-                        stresses[10]/(stresses[10]+stresses[11]),
-                        stresses[12]/(stresses[12]+stresses[13])
-                        };
-                FoundationStresses.Rows.Add(newTableItem);
+                DataRow stress = FoundationStresses.NewRow();
+                DsOperation.SetId(stress, ProgrammSettings.CurrentTmpId, null, foundation.Id);
+                stress.SetField("crcAvgStress", stresses[0] * stressCoefficient);
+                stress.SetField("crcCenterStress", stresses[1] * stressCoefficient);
+                stress.SetField("crcMiddleSresses", stresses[2] * stressCoefficient);
+                stress.SetField("crcCornerSressesMin", stresses[3] * stressCoefficient);
+                stress.SetField("crcCornerSressesMax", stresses[4] * stressCoefficient);
+                stress.SetField("designAvgStress", stresses[5] * stressCoefficient);
+                stress.SetField("designCenterStress", stresses[6] * stressCoefficient);
+                stress.SetField("designMiddleSresses", stresses[7] * stressCoefficient);
+                stress.SetField("designCornerSressesMin", stresses[8] * stressCoefficient);
+                stress.SetField("designCornerSressesMax", stresses[9] * stressCoefficient);
+                stress.SetField("CrcTensionAreaRatio", stresses[10] / (stresses[10] + stresses[11]));
+                stress.SetField("DesignTensionAreaRatio", stresses[12] / (stresses[12] + stresses[13]));
+
+                FoundationStresses.Rows.Add(stress);
             }
 
-            newFoundation.SetField("MinSndAvgStressesWithWeight", foundation.Result.MinSndAvgStressesWithWeight * stressCoefficient);
-            newFoundation.SetField("MinSndMiddleStressesWithWeight", foundation.Result.MinSndMiddleStressesWithWeight * stressCoefficient);
-            newFoundation.SetField("MinSndCornerStressesWithWeight", foundation.Result.MinSndCornerStressesWithWeight * stressCoefficient);
-            newFoundation.SetField("MaxSndCornerStressesWithWeight", foundation.Result.MaxSndCornerStressesWithWeight * stressCoefficient);
-            newFoundation.SetField("MaxSndTensionAreaRatioWithWeight", foundation.Result.MaxSndTensionAreaRatioWithWeight);
-            newFoundation.SetField("sndResistance", foundation.Result.SndResistance * stressCoefficient);
+
+
+            foundRow.SetField("MinSndAvgStressesWithWeight", foundation.Result.MinSndAvgStressesWithWeight * stressCoefficient);
+            foundRow.SetField("MinSndMiddleStressesWithWeight", foundation.Result.MinSndMiddleStressesWithWeight * stressCoefficient);
+            foundRow.SetField("MinSndCornerStressesWithWeight", foundation.Result.MinSndCornerStressesWithWeight * stressCoefficient);
+            foundRow.SetField("MaxSndCornerStressesWithWeight", foundation.Result.MaxSndCornerStressesWithWeight * stressCoefficient);
+            foundRow.SetField("MaxSndTensionAreaRatioWithWeight", foundation.Result.MaxSndTensionAreaRatioWithWeight);
+            foundRow.SetField("sndResistance", foundation.Result.SndResistance * stressCoefficient);
 
             List<double[]> stressesWithoutWeigth = FoundationProcessor.GetStresses(foundation, foundation.ForceCurvaturesWithoutWeight);
             FoundationStresses = dataSet.Tables["FoundationStressesWithoutWeight"];
             foreach (double[] stresses in stressesWithoutWeigth)
             {
                 DataRow newTableItem = FoundationStresses.NewRow();
-                newTableItem.ItemArray = new object[]
-                        { ProgrammSettings.CurrentTmpId,
-                        foundation.Id,
-                        stresses[0] * stressCoefficient,
-                        stresses[1] * stressCoefficient,
-                        stresses[2] * stressCoefficient,
-                        stresses[3] * stressCoefficient,
-                        stresses[4] * stressCoefficient,
-                        stresses[5] * stressCoefficient,
-                        stresses[6] * stressCoefficient,
-                        stresses[7] * stressCoefficient,
-                        stresses[8] * stressCoefficient,
-                        stresses[9] * stressCoefficient,
-                        stresses[10]/(stresses[10]+stresses[11]),
-                        stresses[12]/(stresses[12]+stresses[13])
-                        };
+                DsOperation.SetId(newTableItem, ProgrammSettings.CurrentTmpId, null, foundation.Id);
+                newTableItem.SetField("crcAvgStress", stresses[0] * stressCoefficient);
+                newTableItem.SetField("crcCenterStress", stresses[1] * stressCoefficient);
+                newTableItem.SetField("crcMiddleSresses", stresses[2] * stressCoefficient);
+                newTableItem.SetField("crcCornerSressesMin", stresses[3] * stressCoefficient);
+                newTableItem.SetField("crcCornerSressesMax", stresses[4] * stressCoefficient);
+                newTableItem.SetField("designAvgStress", stresses[5] * stressCoefficient);
+                newTableItem.SetField("designCenterStress", stresses[6] * stressCoefficient);
+                newTableItem.SetField("designMiddleSresses", stresses[7] * stressCoefficient);
+                newTableItem.SetField("designCornerSressesMin", stresses[8] * stressCoefficient);
+                newTableItem.SetField("designCornerSressesMax", stresses[9] * stressCoefficient);
+                newTableItem.SetField("CrcTensionAreaRatio", stresses[10] / (stresses[10] + stresses[11]));
+                newTableItem.SetField("DesignTensionAreaRatio", stresses[12] / (stresses[12] + stresses[13]));
+
                 FoundationStresses.Rows.Add(newTableItem);
 
                 Compare compare = new Compare(3);
@@ -348,7 +342,7 @@ namespace CSL.Reports
                 compare.Val1 = foundation.Result.MinSndAvgStressesWithWeight * (-1D);
                 compare.Val2 = foundation.Result.SndResistance;
                 if (!compare.BoolResult()) foundation.Result.GeneralResult = false;
-                newFoundation.SetField("AvgStressConclusion", compare.CompareResult());
+                foundRow.SetField("AvgStressConclusion", compare.CompareResult());
                 #endregion
                 #region MiddleStresCheck
                 compare.Name = "Проверка величины краевого давления";
@@ -357,7 +351,7 @@ namespace CSL.Reports
                 compare.Val1 = foundation.Result.MinSndMiddleStressesWithWeight * (-1D);
                 compare.Val2 = foundation.Result.SndResistance * 1.2;
                 if (!compare.BoolResult()) foundation.Result.GeneralResult = false;
-                newFoundation.SetField("MiddleStressConclusion", compare.CompareResult());
+                foundRow.SetField("MiddleStressConclusion", compare.CompareResult());
                 #endregion
                 #region CornerStresCheck
                 compare.Name = "Проверка величины углового давления";
@@ -366,7 +360,7 @@ namespace CSL.Reports
                 compare.Val1 = foundation.Result.MinSndCornerStressesWithWeight * (-1D);
                 compare.Val2 = foundation.Result.SndResistance * 1.5;
                 if (!compare.BoolResult()) foundation.Result.GeneralResult = false;
-                newFoundation.SetField("CornerStressConclusion", compare.CompareResult());
+                foundRow.SetField("CornerStressConclusion", compare.CompareResult());
                 #endregion
             }
         }
@@ -374,8 +368,8 @@ namespace CSL.Reports
         /// Обработчик данных по осадкам
         /// </summary>
         /// <param name="foundation"></param>
-        /// <param name="newFoundation"></param>
-        private void ProcessSettlement(Foundation foundation, DataRow newFoundation)
+        /// <param name="newFound"></param>
+        private void ProcessSettlement(Foundation foundation, DataRow newFound)
         {
             List<CompressedLayerList> mainCompressedLayers = foundation.Result.CompressedLayers;
             double stressCoefficient = MeasureUnitConverter.GetCoefficient(3);
@@ -385,17 +379,16 @@ namespace CSL.Reports
             foreach (CompressedLayerList compressedLayersList in mainCompressedLayers)
             {
                 int setId = ProgrammSettings.CurrentTmpId;
-                DataRow newTableItem = SettlementSets.NewRow();
+                DataRow SettleSet = SettlementSets.NewRow();
+                SettleSet.SetField("Id", setId);
+                SettleSet.SetField("Name", foundation.LoadCases[i].Name);
+                SettleSet.SetField("ParentId", foundation.Id);
+
                 double sumSettlement = compressedLayersList.CompressedLayers[0].SumSettlement;
                 double roundSumSettlement = sumSettlement * MeasureUnitConverter.GetCoefficient(0);
                 double compressionHeight = SoilLayerProcessor.ComressedHeight(compressedLayersList.CompressedLayers);
-                newTableItem.ItemArray = new object[]
-                        { setId,
-                        foundation.Id,
-                        foundation.LoadCases[i].Name,
-                        roundSumSettlement,
-                        compressionHeight
-                        };
+                SettleSet.SetField("MinSettlement", roundSumSettlement);
+                SettleSet.SetField("CompressedHeight", compressionHeight);
 
                 SumForces sumForces = new SumForces(foundation.LoadCases[i], false);
                 double Nz = sumForces.ForceMatrix[2, 0];
@@ -429,46 +422,43 @@ namespace CSL.Reports
                     }
                 }
 
-                newTableItem.SetField("SumRotateX", MxInc);
-                newTableItem.SetField("SumRotateY", MyInc);
-                newTableItem.SetField("SumRotateXY", Math.Sqrt(MxInc * MxInc + MyInc * MyInc));
-                newTableItem.SetField("NzStiffness", NzStiffnessString);
-                newTableItem.SetField("MxStiffness", MxStiffnessString);
-                newTableItem.SetField("MyStiffness", MyStiffnessString);
+                SettleSet.SetField("SumRotateX", MxInc);
+                SettleSet.SetField("SumRotateY", MyInc);
+                SettleSet.SetField("SumRotateXY", Math.Sqrt(MxInc * MxInc + MyInc * MyInc));
+                SettleSet.SetField("NzStiffness", NzStiffnessString);
+                SettleSet.SetField("MxStiffness", MxStiffnessString);
+                SettleSet.SetField("MyStiffness", MyStiffnessString);
 
-                SettlementSets.Rows.Add(newTableItem);
+                SettlementSets.Rows.Add(SettleSet);
                 i++;
-                foreach (CompressedLayer compressedLayer in compressedLayersList.CompressedLayers)
+                foreach (CompressedLayer compLayer in compressedLayersList.CompressedLayers)
                 {
-                    DataRow newSettleItem = ComressedLayers.NewRow();
-                    newSettleItem.ItemArray = new object[]
-                        { ProgrammSettings.CurrentTmpId,
-                        setId,
-                        compressedLayer.Zlevel,
-                        compressedLayer.SoilElementaryLayer.TopLevel,
-                        compressedLayer.SoilElementaryLayer.BottomLevel,
-                        compressedLayer.Alpha,
-                        compressedLayer.SigmZg * stressCoefficient,
-                        compressedLayer.SigmZgamma * stressCoefficient,
-                        compressedLayer.SigmZp * stressCoefficient,
-                        compressedLayer.LocalSettlement * MeasureUnitConverter.GetCoefficient(0),
-                        compressedLayer.SumSettlement * MeasureUnitConverter.GetCoefficient(0)
-                        };
-                    ComressedLayers.Rows.Add(newSettleItem);
+                    DataRow compLayerRow = ComressedLayers.NewRow();
+                    DsOperation.SetId(compLayerRow, ProgrammSettings.CurrentTmpId, null, setId);
+                    compLayerRow.SetField("ZLevel", compLayer.Zlevel);
+                    compLayerRow.SetField("TopLevel", compLayer.SoilElementaryLayer.TopLevel);
+                    compLayerRow.SetField("BtmLevel", compLayer.SoilElementaryLayer.BottomLevel);
+                    compLayerRow.SetField("Alpha", compLayer.Alpha);
+                    compLayerRow.SetField("SigmZg", compLayer.SigmZg * stressCoefficient);
+                    compLayerRow.SetField("SigmZgamma", compLayer.SigmZgamma * stressCoefficient);
+                    compLayerRow.SetField("SigmZp", compLayer.SigmZp * stressCoefficient);
+                    compLayerRow.SetField("LocalSettlement", compLayer.LocalSettlement * MeasureUnitConverter.GetCoefficient(0));
+                    compLayerRow.SetField("SumSettlement", compLayer.SumSettlement * MeasureUnitConverter.GetCoefficient(0));
+                    ComressedLayers.Rows.Add(compLayerRow);
                 }
             }
             FoundationProcessor.SettleMentResult SettleMentResult = FoundationProcessor.GetSettleMentResult(foundation);
-            newFoundation.SetField("SettlementMin", SettleMentResult.Settlement * MeasureUnitConverter.GetCoefficient(0));
-            newFoundation.SetField("CompressionHeightMax", SettleMentResult.CompressionHeight);
-            newFoundation.SetField("IncXMax", SettleMentResult.IncX);
-            newFoundation.SetField("IncYMax", SettleMentResult.IncY);
-            newFoundation.SetField("IncXYMax", SettleMentResult.IncXY);
-            newFoundation.SetField("NzStiffnessStringMin", SettleMentResult.NzStiffnessStringMin);
-            newFoundation.SetField("MxStiffnessStringMin", SettleMentResult.MxStiffnessStringMin);
-            newFoundation.SetField("MyStiffnessStringMin", SettleMentResult.MyStiffnessStringMin);
-            newFoundation.SetField("NzStiffnessStringMax", SettleMentResult.NzStiffnessStringMax);
-            newFoundation.SetField("MxStiffnessStringMax", SettleMentResult.MxStiffnessStringMax);
-            newFoundation.SetField("MyStiffnessStringMax", SettleMentResult.MyStiffnessStringMax);
+            newFound.SetField("SettlementMin", SettleMentResult.Settlement * MeasureUnitConverter.GetCoefficient(0));
+            newFound.SetField("CompressionHeightMax", SettleMentResult.CompressionHeight);
+            newFound.SetField("IncXMax", SettleMentResult.IncX);
+            newFound.SetField("IncYMax", SettleMentResult.IncY);
+            newFound.SetField("IncXYMax", SettleMentResult.IncXY);
+            newFound.SetField("NzStiffnessStringMin", SettleMentResult.NzStiffnessStringMin);
+            newFound.SetField("MxStiffnessStringMin", SettleMentResult.MxStiffnessStringMin);
+            newFound.SetField("MyStiffnessStringMin", SettleMentResult.MyStiffnessStringMin);
+            newFound.SetField("NzStiffnessStringMax", SettleMentResult.NzStiffnessStringMax);
+            newFound.SetField("MxStiffnessStringMax", SettleMentResult.MxStiffnessStringMax);
+            newFound.SetField("MyStiffnessStringMax", SettleMentResult.MyStiffnessStringMax);
 
             #region SettlementCheck
             Compare compare = new Compare(0);
@@ -476,9 +466,9 @@ namespace CSL.Reports
             compare.Val1Name = "S";
             compare.Val2Name = "Smax";
             compare.Val1 = foundation.Result.MaxSettlement * (-1D);
-            compare.Val2 = foundation.Level.Building.MaxFoundationSettlement;
+            compare.Val2 = ((foundation.ParentMember as IHasParent).ParentMember as Building).MaxFoundationSettlement;
             if (!compare.BoolResult()) foundation.Result.GeneralResult = false;
-            newFoundation.SetField("SettlementConclusion", compare.CompareResult());
+            newFound.SetField("SettlementConclusion", compare.CompareResult());
             #endregion
         }
         private void ProcessSubElements(DataTable Foundations, Foundation foundation)
@@ -491,7 +481,7 @@ namespace CSL.Reports
             ProcessSettlement(foundation, newFoundation);
             string result = $"В соответствии с выполненным расчетом, несущая способность, надежность и долговечность фундамента {foundation.Name} ";
             if (! foundation.Result.GeneralResult) result += "не ";
-            result += "соответствуют требованиям действуйющих норм.";
+            result += "соответствуют требованиям действующих норм.";
             newFoundation.SetField("GeneralConclusion", result);
         }
     }

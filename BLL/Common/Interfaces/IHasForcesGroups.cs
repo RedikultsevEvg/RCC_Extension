@@ -11,7 +11,7 @@ namespace RDBLL.Common.Interfaces
     /// <summary>
     /// Интерфейс для сущностей, которые включают группу нагрузок
     /// </summary>
-    public interface IHasForcesGroups
+    public interface IHasForcesGroups : IDsSaveable
     {
         /// <summary>
         /// Коллекция групп нагрузок
@@ -21,9 +21,5 @@ namespace RDBLL.Common.Interfaces
         /// Коллекция комбинаций
         /// </summary>
         ObservableCollection<LoadSet> LoadCases { get; set; }
-        /// <summary>
-        /// Флаг актуальности нагрузок
-        /// </summary>
-        bool IsLoadCasesActual { get; set; }
     }
 }

@@ -5,14 +5,18 @@ using System.Collections.Generic;
 using RDBLL.Common.Interfaces;
 using System.Data;
 using System.Linq;
-using DAL.Common;
+using RDBLL.Entity.Common.Placements;
+using RDBLL.Common.Geometry;
+using RDBLL.Common.Service.DsOperations;
+using RDBLL.Entity.MeasureUnits;
+using RDBLL.Common.Interfaces.Shapes;
 
 namespace RDBLL.Entity.SC.Column
 {
     /// <summary>
     /// Класс участков баз стальных колонн
     /// </summary>
-    public class SteelBasePart : ICloneable, IDsSaveable
+    public class SteelBasePart : ICloneable, IHasParent, IRectangle
     {
         #region Properties
         /// <summary>
@@ -20,13 +24,9 @@ namespace RDBLL.Entity.SC.Column
         /// </summary>
         public int Id { get; set; }
         /// <summary>
-        /// Код стальной базы
+        /// Обратная ссылка на родительский элемент
         /// </summary>
-        public int SteelBaseId { get; set; }
-        /// <summary>
-        /// Обратная ссылка на базу стальной колонны
-        /// </summary>
-        public SteelBase SteelBase { get; set; } //База стальной колонны к которой относится участок
+        public IDsSaveable ParentMember { get; private set; }
         /// <summary>
         /// Наименование
         /// </summary>
@@ -40,11 +40,11 @@ namespace RDBLL.Entity.SC.Column
         /// </summary>
         public double Length { get; set; }
         /// <summary>
-        /// Привязка центра
+        /// Центр участка
         /// </summary>
         public double CenterX { get; set; }
         /// <summary>
-        /// Привязка центра
+        /// Центр участка
         /// </summary>
         public double CenterY { get; set; }
         /// <summary>
@@ -79,20 +79,12 @@ namespace RDBLL.Entity.SC.Column
         /// Опора по нижней границе
         /// </summary>
         public bool FixBottom { get; set; }
-        /// <summary>
-        /// Наличие симметричного участка относительно оси X
-        /// </summary>
-        public bool AddSymmetricX { get; set; }
-        /// <summary>
-        /// Наличие симметричного участка по оси Y
-        /// </summary>
-        public bool AddSymmetricY { get; set; }
 
         /// <summary>
         /// Коллекция элементарных участков
         /// </summary>
         public List<NdmRectangleArea> SubParts { get; set; }
-
+        public MeasureUnitList Measures { get => new MeasureUnitList(); }
         #endregion
 
         #region Constructors
@@ -107,27 +99,25 @@ namespace RDBLL.Entity.SC.Column
             Length = 0.2;
             CenterX = 0;
             CenterY = 0;
-            FixLeft = true;
-            FixRight = true;
-            FixTop = true;
-            FixBottom = true;
-            AddSymmetricX = true;
-            AddSymmetricY = true;
+            FixLeft = false;
+            FixRight = false;
+            FixTop = false;
+            FixBottom = false;
         }
         /// <summary>
         /// Конструктор без параметров
         /// </summary>
-        public SteelBasePart()
+        public SteelBasePart(bool genId = false)
         {
+            if (genId) Id = ProgrammSettings.CurrentId;
         }
         /// <summary>
         /// Конструктор по стальной базе
         /// </summary>
-        /// <param name="columnBase"></param>
-        public SteelBasePart(SteelBase columnBase)
+        /// <param name="parent"></param>
+        public SteelBasePart(SteelBase parent)
         {
-            SteelBaseId = columnBase.Id;
-            SteelBase = columnBase;
+            RegisterParent(parent);
             SetDefault();
         }
         #endregion
@@ -143,27 +133,8 @@ namespace RDBLL.Entity.SC.Column
         /// <param name="dataSet">Датасет</param>
         public void SaveToDataSet(DataSet dataSet, bool createNew)
         {
-            DataTable dataTable;
-            DataRow row;
-            dataTable = dataSet.Tables[GetTableName()];
-            if (createNew)
-            {
-                row = dataTable.NewRow();
-                dataTable.Rows.Add(row);
-            }
-            else
-            {
-                var tmpRow = (from dataRow in dataTable.AsEnumerable()
-                              where dataRow.Field<int>("Id") == Id
-                              select dataRow).Single();
-                row = tmpRow;
-            }
-            #region
-            row.SetField("Id", Id);
-            row.SetField("SteelBaseId", SteelBaseId);
-            row.SetField("Name", Name);
-            row.SetField("Width", Width);
-            row.SetField("Length", Length);
+            DataRow row = EntityOperation.SaveEntity(dataSet, createNew, this);
+            #region        
             row.SetField("CenterX", CenterX);
             row.SetField("CenterY", CenterY);
             row.SetField("LeftOffset", LeftOffset);
@@ -174,10 +145,8 @@ namespace RDBLL.Entity.SC.Column
             row.SetField("FixRight", FixRight);
             row.SetField("FixTop", FixTop);
             row.SetField("FixBottom", FixBottom);
-            row.SetField("AddSymmetricX", AddSymmetricX);
-            row.SetField("AddSymmetricY", AddSymmetricY);
             #endregion
-            dataTable.AcceptChanges();
+            row.AcceptChanges();
         }
         public void OpenFromDataSet(DataSet dataSet)
         {
@@ -193,11 +162,7 @@ namespace RDBLL.Entity.SC.Column
         /// <param name="dataRow"></param>
         public void OpenFromDataSet(DataRow dataRow)
         {
-            Id = dataRow.Field<int>("Id");
-            SteelBaseId = dataRow.Field<int>("SteelBaseId");
-            Name = dataRow.Field<string>("Name");
-            Width = dataRow.Field<double>("Width");
-            Length = dataRow.Field<double>("Length");
+            EntityOperation.SetProps(dataRow, this);
             CenterX = dataRow.Field<double>("CenterX");
             CenterY = dataRow.Field<double>("CenterY");
             LeftOffset = dataRow.Field<double>("LeftOffset");
@@ -208,8 +173,6 @@ namespace RDBLL.Entity.SC.Column
             FixRight = dataRow.Field<bool>("FixRight");
             FixTop = dataRow.Field<bool>("FixTop");
             FixBottom = dataRow.Field<bool>("FixBottom");
-            AddSymmetricX = dataRow.Field<bool>("AddSymmetricX");
-            AddSymmetricY = dataRow.Field<bool>("AddSymmetricY");
         }
         /// <summary>
         /// Удаляет запись из датасета
@@ -220,9 +183,6 @@ namespace RDBLL.Entity.SC.Column
             DsOperation.DeleteRow(dataSet, GetTableName(), Id);
         }
         #endregion
-        #region Methods
-        #endregion
-        //IClonable
         /// <summary>
         /// Клонирование объекта
         /// </summary>
@@ -230,9 +190,29 @@ namespace RDBLL.Entity.SC.Column
         public object Clone()
         {
             SteelBasePart steelBasePart = this.MemberwiseClone() as SteelBasePart;
-            steelBasePart.CenterX = this.CenterX;
-            steelBasePart.CenterY = this.CenterY;
             return steelBasePart;
+        }
+        /// <summary>
+        /// Регистрация на родителе
+        /// </summary>
+        /// <param name="parent"></param>
+        public void RegisterParent(IDsSaveable parent)
+        {
+            SteelBase steelBase = parent as SteelBase;
+            ParentMember = steelBase;
+            steelBase.SteelBaseParts.Add(this);
+        }
+        //Удаление регистрации родителя
+        public void UnRegisterParent()
+        {
+            SteelBase steelBase = ParentMember as SteelBase;
+            steelBase.SteelBaseParts.Remove(this);
+            ParentMember = null;
+        }
+
+        public double GetArea()
+        {
+            throw new NotImplementedException();
         }
     }
 }

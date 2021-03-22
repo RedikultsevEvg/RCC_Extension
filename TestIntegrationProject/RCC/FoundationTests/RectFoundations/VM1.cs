@@ -84,9 +84,9 @@ namespace TestIntegrationProject.RCC.FoundationTests.RectFoundations
             building.AbsoluteLevel = 260;
             building.AbsolutePlaningLevel = 259.5;
             building.IsRigid = false;
-            buildingSite.Buildings.Add(building);
+            buildingSite.Childs.Add(building);
             Level level = new Level(building);
-            building.Levels.Add(level);
+            building.Children.Add(level);
             #endregion
             #region Soil
             DispersedSoil soil = new ClaySoil(buildingSite);
@@ -122,8 +122,9 @@ namespace TestIntegrationProject.RCC.FoundationTests.RectFoundations
             Foundation foundation = new Foundation(level);
             foundation.RelativeTopLevel = -0.200;
             foundation.SoilRelativeTopLevel = -0.200;
-            foundation.SoilSectionId = soilSection.Id;
-            foundation.SoilSection = soilSection;
+            SoilSectionUsing soilSectionUsing = new SoilSectionUsing(true);
+            soilSectionUsing.SelectedId = soilSection.Id;
+            soilSectionUsing.RegisterParent(foundation);
             foundation.SoilVolumeWeight = 19000;
             #endregion
             #region Parts

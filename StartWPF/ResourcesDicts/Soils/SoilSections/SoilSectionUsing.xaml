@@ -1,0 +1,23 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:local="clr-namespace:StartWPF.ResourcesDicts.Soils.SoilSections"
+                    xmlns:vm ="clr-namespace:StartWPF.ViewModels.Soils.SoilSections">
+  
+   
+    <DataTemplate x:Key="SoilSectionUsing">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="170"/>
+            </Grid.ColumnDefinitions>
+            <TextBlock x:Name="tbSoilSection" Grid.Row="0" Style="{StaticResource PropertyTextBlock}" Text="Скважина"/>
+            <ComboBox Grid.Column="1" Grid.Row="0"
+                        Height="22"
+                        ItemsSource="{Binding SoilSections}"
+                        ItemTemplate="{StaticResource cbTemplate}"
+                        SelectedValuePath="Id"
+                        SelectedValue="{Binding SelectedId}" VerticalAlignment="Center" Margin="5">
+            </ComboBox>
+        </Grid>
+    </DataTemplate>    
+</ResourceDictionary>

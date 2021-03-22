@@ -23,7 +23,7 @@ namespace RDBLL.Entity.Common.Placements
           get { return StoredParams[0 + ParamQuant].GetDoubleValue(); }
           set { StoredParams[0 + ParamQuant].SetDoubleValue( value); }
         }
-        public LineBySpacing() : base ()
+        public LineBySpacing(bool genId = false) : base (genId)
         {
             StoredParams.Add(new StoredParam(this) { Id = ProgrammSettings.CurrentId, Name = "Spacing" });
             StoredParams[0 + ParamQuant].SetDoubleValue(0.2);

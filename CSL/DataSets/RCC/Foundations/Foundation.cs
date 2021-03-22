@@ -4,8 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Data;
-using DAL.Common;
 using CSL.Common;
+using RDBLL.Common.Service.DsOperations;
 
 namespace CSL.DataSets.RCC.Foundations
 {
@@ -21,8 +21,7 @@ namespace CSL.DataSets.RCC.Foundations
             #region Foundations
             newTable = new DataTable("Foundations");
             dataSet.Tables.Add(newTable);
-            DsOperation.AddIdColumn(newTable);
-            DsOperation.AddNameColumn(newTable);
+            DsOperation.AddIdNameParentIdColumn(newTable);
             DsOperation.AddByteColumn(newTable, "Picture");
             DsOperation.AddDoubleColumn(newTable, "Width");
             DsOperation.AddDoubleColumn(newTable, "Length");
@@ -68,15 +67,13 @@ namespace CSL.DataSets.RCC.Foundations
             #region FoundationParts
             newTable = new DataTable("FoundationParts");
             dataSet.Tables.Add(newTable);
-            DsOperation.AddIdColumn(newTable);
-            DsOperation.AddFkIdColumn("Foundations", "FoundationId", newTable);
-            DsOperation.AddNameColumn(newTable);
+            DsOperation.AddIdNameParentIdColumn(newTable, "Foundations");
             DsOperation.AddDoubleColumn(newTable, "Width");
             DsOperation.AddDoubleColumn(newTable, "Length");
             DsOperation.AddDoubleColumn(newTable, "Heigth");
             DsOperation.AddDoubleColumn(newTable, "Volume");
             DsOperation.AddDoubleColumn(newTable, "CenterX");
-            DsOperation.AddDoubleColumn(newTable, "CentrY");
+            DsOperation.AddDoubleColumn(newTable, "CenterY");
             DsOperation.AddDoubleColumn(newTable, "CrcMomentXMax");
             DsOperation.AddDoubleColumn(newTable, "CrcMomentYMax");
             DsOperation.AddDoubleColumn(newTable, "CrcMomentXMin");
@@ -103,45 +100,17 @@ namespace CSL.DataSets.RCC.Foundations
             #region StressesWithWeight
             newTable = new DataTable("FoundationStressesWithWeight");
             dataSet.Tables.Add(newTable);
-            DsOperation.AddIdColumn(newTable);
-            DsOperation.AddFkIdColumn("Foundations", "FoundationId", newTable);
-            DsOperation.AddDoubleColumn(newTable, "crcAvgStress");
-            DsOperation.AddDoubleColumn(newTable, "crcCenterStress");
-            DsOperation.AddDoubleColumn(newTable, "crcMiddleSresses");
-            DsOperation.AddDoubleColumn(newTable, "crcCornerSressesMin");
-            DsOperation.AddDoubleColumn(newTable, "crcCornerSressesMax");
-            DsOperation.AddDoubleColumn(newTable, "designAvgStress");
-            DsOperation.AddDoubleColumn(newTable, "designCenterStress");
-            DsOperation.AddDoubleColumn(newTable, "designMiddleSresses");
-            DsOperation.AddDoubleColumn(newTable, "designCornerSressesMin");
-            DsOperation.AddDoubleColumn(newTable, "designCornerSressesMax");
-            DsOperation.AddDoubleColumn(newTable, "CrcTensionAreaRatio");
-            DsOperation.AddDoubleColumn(newTable, "DesignTensionAreaRatio");
+            AddFoundStress(newTable);
             #endregion
             #region StressesWithoutWeight
             newTable = new DataTable("FoundationStressesWithoutWeight");
             dataSet.Tables.Add(newTable);
-            DsOperation.AddIdColumn(newTable);
-            DsOperation.AddFkIdColumn("Foundations", "FoundationId", newTable);
-            DsOperation.AddDoubleColumn(newTable, "crcAvgStress");
-            DsOperation.AddDoubleColumn(newTable, "crcCenterStress");
-            DsOperation.AddDoubleColumn(newTable, "crcMiddleSresses");
-            DsOperation.AddDoubleColumn(newTable, "crcCornerSressesMin");
-            DsOperation.AddDoubleColumn(newTable, "crcCornerSressesMax");
-            DsOperation.AddDoubleColumn(newTable, "designAvgStress");
-            DsOperation.AddDoubleColumn(newTable, "designCenterStress");
-            DsOperation.AddDoubleColumn(newTable, "designMiddleSresses");
-            DsOperation.AddDoubleColumn(newTable, "designCornerSressesMin");
-            DsOperation.AddDoubleColumn(newTable, "designCornerSressesMax");
-            DsOperation.AddDoubleColumn(newTable, "CrcTensionAreaRatio");
-            DsOperation.AddDoubleColumn(newTable, "DesignTensionAreaRatio");
+            AddFoundStress(newTable);
             #endregion
             #region SettlementSets
             newTable = new DataTable("SettlementSets");
             dataSet.Tables.Add(newTable);
-            DsOperation.AddIdColumn(newTable);
-            DsOperation.AddFkIdColumn("Foundations", "FoundationId", newTable);
-            DsOperation.AddNameColumn(newTable);
+            DsOperation.AddIdNameParentIdColumn(newTable, "Foundations");
             DsOperation.AddDoubleColumn(newTable, "MinSettlement");
             DsOperation.AddDoubleColumn(newTable, "CompressedHeight");
             DsOperation.AddDoubleColumn(newTable, "SumRotateX");
@@ -154,8 +123,7 @@ namespace CSL.DataSets.RCC.Foundations
             #region ComressedLayers
             newTable = new DataTable("ComressedLayers");
             dataSet.Tables.Add(newTable);
-            DsOperation.AddIdColumn(newTable);
-            DsOperation.AddFkIdColumn("SettlementSets", "SettlementSetId", newTable);
+            DsOperation.AddIdNameParentIdColumn(newTable, "SettlementSets");
             DsOperation.AddDoubleColumn(newTable, "ZLevel");
             DsOperation.AddDoubleColumn(newTable, "TopLevel");
             DsOperation.AddDoubleColumn(newTable, "BtmLevel");
@@ -167,14 +135,29 @@ namespace CSL.DataSets.RCC.Foundations
             DsOperation.AddDoubleColumn(newTable, "SumSettlement");
             #endregion
             #region FoundationPartMoments
-            newTable = new DataTable("PartMoment");
+            newTable = new DataTable("PartMoments");
             dataSet.Tables.Add(newTable);
-            DsOperation.AddIdColumn(newTable);
-            DsOperation.AddFkIdColumn("FoundationParts", "FoundationPartId", newTable);
+            DsOperation.AddIdNameParentIdColumn(newTable, "FoundationParts");
             DsOperation.AddDoubleColumn(newTable, "CrcMomentX");
             DsOperation.AddDoubleColumn(newTable, "DesignMomentY");
             #endregion
             return dataSet;
+        }
+        private static void AddFoundStress(DataTable dataTable)
+        {
+            DsOperation.AddIdNameParentIdColumn(dataTable, "Foundations");
+            DsOperation.AddDoubleColumn(dataTable, "crcAvgStress");
+            DsOperation.AddDoubleColumn(dataTable, "crcCenterStress");
+            DsOperation.AddDoubleColumn(dataTable, "crcMiddleSresses");
+            DsOperation.AddDoubleColumn(dataTable, "crcCornerSressesMin");
+            DsOperation.AddDoubleColumn(dataTable, "crcCornerSressesMax");
+            DsOperation.AddDoubleColumn(dataTable, "designAvgStress");
+            DsOperation.AddDoubleColumn(dataTable, "designCenterStress");
+            DsOperation.AddDoubleColumn(dataTable, "designMiddleSresses");
+            DsOperation.AddDoubleColumn(dataTable, "designCornerSressesMin");
+            DsOperation.AddDoubleColumn(dataTable, "designCornerSressesMax");
+            DsOperation.AddDoubleColumn(dataTable, "CrcTensionAreaRatio");
+            DsOperation.AddDoubleColumn(dataTable, "DesignTensionAreaRatio");
         }
     }
 }

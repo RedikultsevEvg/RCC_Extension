@@ -25,9 +25,9 @@ namespace RDBLL.Entity.Common.Placements
             set { StoredParams[0 + ParamQuant].SetDoubleValue(value); }
         }
         /// <summary>
-        /// Величина защитного слоя
+        /// Величина отступа
         /// </summary>
-        public double CoveringLayer
+        public double OffSet
         {
             get { return StoredParams[1 + ParamQuant].GetDoubleValue(); }
             set { StoredParams[1 + ParamQuant].SetDoubleValue(value); }
@@ -49,7 +49,7 @@ namespace RDBLL.Entity.Common.Placements
         /// <summary>
         /// Default constructor
         /// </summary>
-        public ArrayPlacement() : base()
+        public ArrayPlacement(bool genId = false) : base(genId)
         {
             _Center = new Point2D();
             // Угол поворота массива относительно родительского элемента

@@ -29,7 +29,7 @@ namespace RDBLL.Entity.Soils.Processors
             double foundationAbsBtmLevel = levels[2];
             List<SoilElementaryLayer> soilElementaryLayers = new List<SoilElementaryLayer>();
             List<SoilElementaryLayer> tmpSoilElementaryLayers = new List<SoilElementaryLayer>();
-            SoilSection soilSection = foundation.SoilSection;
+            SoilSection soilSection = foundation.SoilSectionUsing.SoilSection;
             //Проверка на опирание фундамента на грунт
             if (soilSection.SoilLayers[0].TopLevel< foundationAbsBtmLevel) { throw new Exception("Низ фундамента расположен выше слоев грунта"); }
             int soilCount = soilSection.SoilLayers.Count;

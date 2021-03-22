@@ -7,6 +7,17 @@ using System.Data;
 
 namespace DAL.Common
 {
+    public enum TableNames
+    {
+        Fondations,
+        FoundationParts,
+    }
+    public enum FieldsNames
+    {
+        Id,
+        Name,
+        ParentId,
+    }
     /// <summary>
     /// Базовые операции с датасетами
     /// </summary>
@@ -17,30 +28,34 @@ namespace DAL.Common
         /// </summary>
         /// <param name="dataTable">Таблица датасета</param>
         /// <param name="addNameColumn">Флаг необходимости добавления столбца с наименованием</param>
-        public static void AddIdColumn(DataTable dataTable, bool addNameColumn = false)
+        public static List<DataColumn> AddIdColumn(DataTable dataTable, bool addNameColumn = false)
         {
+            List<DataColumn> dataColumns = new List<DataColumn>();
             DataColumn IdColumn;
             IdColumn = new DataColumn("Id", Type.GetType("System.Int32"));
+            IdColumn.ColumnMapping = MappingType.Attribute;
             //IdColumn.Unique = true;
             dataTable.Columns.Add(IdColumn);
+            dataColumns.Add(IdColumn);
             //dataTable.PrimaryKey = new DataColumn[] { dataTable.Columns["Id"] };
-            if (addNameColumn) AddNameColumn(dataTable);
+            if (addNameColumn) { dataColumns.Add(AddNameColumn(dataTable)); }
+            return dataColumns;
         }
         /// <summary>
         /// Добавление внешного ключа
         /// </summary>
         /// <param name="parentDataTableName">Таблица данных</param>
-        /// <param name="parentColumnName">Наименование родительской таблицы</param>
+        /// <param name="parentColumnName">Наименование столбца в дочерней таблице</param>
         /// <param name="childDataTable">Наименование дочерней таблицы</param>
         /// <param name="allowNull">Флаг допустимости Null</param>
-        public static void AddFkIdColumn(string parentDataTableName, string parentColumnName, DataTable childDataTable, bool allowNull = false)
+        public static DataColumn AddFkIdColumn(string parentDataTableName, string parentColumnName, DataTable childDataTable, bool allowNull = false)
         {
             DataSet dataSet = childDataTable.DataSet;
             DataTable parentDataTable = dataSet.Tables[parentDataTableName];
             string columnName = parentColumnName;
             DataColumn FkIdColumn;
             FkIdColumn = new DataColumn(columnName, Type.GetType("System.Int32"));
-            //FkIdColumn.AllowDBNull = allowNull;
+            FkIdColumn.ColumnMapping = MappingType.Attribute;
             childDataTable.Columns.Add(FkIdColumn);
             ForeignKeyConstraint foreignKey;
             //Если допускается нулевое значение, то при удалении устанавливаем в нулл
@@ -66,12 +81,42 @@ namespace DAL.Common
             childDataTable.Constraints.Add(foreignKey);
             dataSet.EnforceConstraints = true;
             dataSet.Relations.Add(parentDataTable.TableName + childDataTable.TableName, parentDataTable.Columns["Id"], childDataTable.Columns[columnName]);
+
+            return FkIdColumn;
         }
-        public static void AddNameColumn(DataTable dataTable)
+        public static DataColumn AddFkIdColumn(string parentColumnName, DataTable childDataTable, bool allowNull = false)
+        {
+            DataSet dataSet = childDataTable.DataSet;
+            string columnName = parentColumnName;
+            DataColumn FkIdColumn;
+            FkIdColumn = new DataColumn(columnName, Type.GetType("System.Int32"));
+            FkIdColumn.AllowDBNull = allowNull;
+            FkIdColumn.ColumnMapping = MappingType.Attribute;
+            childDataTable.Columns.Add(FkIdColumn);
+            return FkIdColumn;
+        }
+        private static DataColumn AddNameColumn(DataTable dataTable)
         {
             DataColumn NameColumn;
             NameColumn = new DataColumn("Name", Type.GetType("System.String"));
+            NameColumn.ColumnMapping = MappingType.Attribute;
             dataTable.Columns.Add(NameColumn);
+            return NameColumn;
+        }
+        public static List<DataColumn> AddIdNameParentIdColumn(DataTable dataTable, string parentTable = null)
+        {
+            List<DataColumn> dataColumns = new List<DataColumn>();
+            dataColumns.AddRange(AddIdColumn(dataTable, true));
+            if (string.IsNullOrEmpty(parentTable))
+            {
+                DataColumn ParentIdColumn;
+                ParentIdColumn = new DataColumn("ParentId", Type.GetType("System.Int32"));
+                ParentIdColumn.ColumnMapping = MappingType.Attribute;
+                dataTable.Columns.Add(ParentIdColumn);
+                dataColumns.Add(ParentIdColumn);
+            }
+            else dataColumns.Add(AddFkIdColumn(parentTable, "ParentId", dataTable));
+            return dataColumns;
         }
         public static void AddIntColumn(DataTable dataTable, string columnName)
         {
@@ -170,11 +215,21 @@ namespace DAL.Common
             //Иначе
             else
             {
-                //Находим нужную запись
-                var foundation = (from dataRow in dataTable.AsEnumerable()
+                try
+                {
+                    //Находим нужную запись
+
+                    var oldRow = (from dataRow in dataTable.AsEnumerable()
                                   where dataRow.Field<int>("Id") == Id
                                   select dataRow).Single();
-                row = foundation;
+                    row = oldRow;
+                }
+                catch //Если нужная запись не находится
+                {
+                    //Добавляем ее
+                    row = dataTable.NewRow();
+                    dataTable.Rows.Add(row);
+                }
             }
             return row;
         }
@@ -192,6 +247,13 @@ namespace DAL.Common
                        where dataRow.Field<int>("Id") == Id
                        select dataRow).Single();
             return row;
+        }
+
+        public static void SetId(DataRow dataRow, int id, string name = null, int? parentId = null)
+        {
+            dataRow.SetField("Id", id);
+            if (name != null) dataRow.SetField("Name", name);
+            if (parentId != null) dataRow.SetField("ParentId", parentId);
         }
     }
 }
