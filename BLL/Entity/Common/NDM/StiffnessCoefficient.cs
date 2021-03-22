@@ -59,26 +59,15 @@ namespace RDBLL.Entity.Common.NDM
                 D23 += ndmArea.Area * ndmArea.CenterX * secantModulus;
                 D33 += ndmArea.Area * secantModulus;
                 #endregion                
-                #region по СП
-                //Вариант, который должен быть по СП
-                //D11 += ndmArea.Area * ndmArea.CenterX * ndmArea.CenterX * secantModulus;
-                //D12 += ndmArea.Area * ndmArea.CenterX * ndmArea.CenterY * secantModulus;
-                //D13 += ndmArea.Area * ndmArea.CenterX * secantModulus;
-                //D22 += ndmArea.Area * ndmArea.CenterY * ndmArea.CenterY * secantModulus;
-                //D23 += ndmArea.Area * ndmArea.CenterY * secantModulus;
-                //D33 += ndmArea.Area * secantModulus;
-                #endregion
             }
             #region
             StifMatrix[0, 0] = D11;
             //В СП даны коэффициенты для момента в плоскоскости X
-            //Для учета моменто относительно оси, меняем коэффициенты местами
-            //StifMatrix[0, 0] = D22;
+            //Для учета моментов относительно оси, меняем коэффициенты местами
             StifMatrix[0, 1] = D12;
             StifMatrix[0, 2] = D13;
             StifMatrix[1, 0] = D12;
             StifMatrix[1, 1] = D22;
-            //StifMatrix[1, 1] = D11;
             StifMatrix[1, 2] = D23;
             StifMatrix[2, 0] = D13;
             StifMatrix[2, 1] = D23;
