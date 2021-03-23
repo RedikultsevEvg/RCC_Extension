@@ -68,8 +68,7 @@ namespace RDBLL.Entity.SC.Column.SteelBases.Factorys
             part.FixTop = true;
             part.LeftOffset = 0.008;
             part.TopOffset = 0.008;
-            widthOuterPart = 0.3;
-            lengthOuterPart = 0.5;
+
             //Участок левый средний
             part = new SteelBasePart(steelBase);
             part.Id = ProgrammSettings.CurrentId;

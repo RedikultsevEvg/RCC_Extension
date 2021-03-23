@@ -1,15 +1,15 @@
-﻿using StartWPF.InfraStructure.Comands.Base;
-using StartWPF.ViewModels.Base;
+﻿using RDStartWPF.InfraStructure.Comands.Base;
+using RDStartWPF.ViewModels.Base;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using StartWPF.Views.MatUsings;
+using RDStartWPF.Views.MatUsings;
 using System.Collections.ObjectModel;
 using RDBLL.Entity.Common.Materials;
 
-namespace StartWPF.ViewModels.MatUsings
+namespace RDStartWPF.ViewModels.MatUsings
 {
     internal class MatUsingVM : ViewModelBase
     {

@@ -35,7 +35,7 @@ namespace RDBLL.Entity.Common.Materials.MatFactorys
         {
             List<ConcreteKind> concreteKinds = new List<ConcreteKind>();
             ConcreteKind concreteKind;
-            #region
+            #region B20
             concreteKind = new ConcreteKind();
             concreteKind.Id = 5;
             concreteKind.Name = "B20";
@@ -53,11 +53,11 @@ namespace RDBLL.Entity.Common.Materials.MatFactorys
             concreteKind.PoissonRatio = 0.2;
             concreteKinds.Add(concreteKind);
             #endregion
-            #region
+            #region B25
             concreteKind = new ConcreteKind();
             concreteKind.Id = 6;
-            concreteKind.Name = "B25";
-            concreteKind.FstCompStrength = 11.7e6;
+            concreteKind.Name = "B25"; //Неверно
+            concreteKind.FstCompStrength = 14.5e6;
             concreteKind.FstTensStrength = 0.98e6;
             concreteKind.SndCompStrength = 17.7e6;
             concreteKind.SndTensStrength = 0.98e6;

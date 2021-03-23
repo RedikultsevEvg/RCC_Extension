@@ -41,7 +41,7 @@ namespace RDBLL.Processors.SC
              */
             //double maxStress = GetMinStressLinear(basePart);
             double[] result = new double[2] { 0, 0 };
-            double thickness = (basePart.ParentMember as SteelBase).Thickness;
+            double thickness = (basePart.ParentMember as SteelBase).Height;
             double Wx = thickness * thickness / 6;
             double maxMoment = 0;
             int countFixSides = 0;

@@ -34,6 +34,7 @@ namespace RDBLL.Entity.Common.Placements
         /// Коллекция хранимых параметров
         /// </summary>
         public List<StoredParam> StoredParams { get; set; }
+        public string Type { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
         #region Constructors
         /// <summary>
         /// Default constructor 
@@ -53,14 +54,14 @@ namespace RDBLL.Entity.Common.Placements
         /// <param name="dataSet"></param>
         public void DeleteFromDataSet(DataSet dataSet)
         {
-            foreach (StoredParam param in StoredParams) { param.DeleteFromDataSet(dataSet); }
+
             DsOperation.DeleteRow(dataSet, GetTableName(), Id);
         }
         /// <summary>
         /// Возвращает имя таблицы
         /// </summary>
         /// <returns></returns>
-        public string GetTableName() => "Placements";
+        public string GetTableName() => "ParametricObjects";
         /// <summary>
         /// Обновление записи в датасете
         /// </summary>
@@ -75,8 +76,7 @@ namespace RDBLL.Entity.Common.Placements
         /// <param name="dataRow"></param>
         public void OpenFromDataSet(DataRow dataRow)
         {
-            Id = dataRow.Field<int>("Id");
-            Name = dataRow.Field<string>("Name");
+            EntityOperation.SetProps(dataRow, this);
         }
         /// <summary>
         /// Добавление ссылки на родителя
@@ -97,7 +97,6 @@ namespace RDBLL.Entity.Common.Placements
             else { throw new Exception("Type of Placement is unknown"); }
             row.AcceptChanges();
             #endregion
-            foreach (StoredParam param in StoredParams) { param.SaveToDataSet(dataSet, createNew);}
         }
         /// <summary>
         /// Удаление ссылки на родителя

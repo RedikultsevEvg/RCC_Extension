@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
-namespace StartWPF.InfraStructure.Comands.Base
+namespace RDStartWPF.InfraStructure.Comands.Base
 {
     class CommandBase : ICommand
     {

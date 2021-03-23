@@ -1,5 +1,5 @@
 ﻿using RDBLL.Entity.Soils;
-using StartWPF.ViewModels.Base;
+using RDStartWPF.ViewModels.Base;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace StartWPF.ViewModels.Soils.SoilSections
+namespace RDStartWPF.ViewModels.Soils.SoilSections
 {
     internal class SoilSectionUsingVM : ViewModelBase
     {

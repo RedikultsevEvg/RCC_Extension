@@ -15,13 +15,14 @@ using System.Windows.Shapes;
 using RDBLL.Common.Service;
 using RDUIL.WinForms;
 using winForms = System.Windows.Forms;
-using RDUIL.WPF_Windows.ControlClasses;
 using RDBLL.Entity.SC.Column;
 using System.Threading;
-using RDUIL.WPF_Windows;
-using RDUIL.WPF_Windows.BuildingsAndSites;
+using RDStartWPF.Infrasructure.ControlClasses;
+using RDStartWPF.Views.Common.BuildingsAndSites;
+using RDStartWPF.Views.Common.Service;
+using RDStartWPF.Views.WinForms;
 
-namespace StartWPF
+namespace RDStartWPF
 {
     /// <summary>
     /// Логика взаимодействия для MainWindow.xaml

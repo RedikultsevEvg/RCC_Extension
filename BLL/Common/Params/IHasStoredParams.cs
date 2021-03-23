@@ -11,6 +11,7 @@ namespace RDBLL.Common.Params
     /// </summary>
     public interface IHasStoredParams
     {
+        string Type { get; set; }
         /// <summary>
         /// Коллекция хранимых параметров
         /// </summary>

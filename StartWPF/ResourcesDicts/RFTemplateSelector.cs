@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 
-namespace StartWPF.ResourcesDicts
+namespace RDStartWPF.ResourcesDicts
 {
 
     public class RFTemplateSelector : DataTemplateSelector

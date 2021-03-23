@@ -1,6 +1,6 @@
 ﻿using RDBLL.Entity.Common.Materials;
-using StartWPF.InfraStructure.Comands.Base;
-using StartWPF.ViewModels.MatUsings;
+using RDStartWPF.InfraStructure.Comands.Base;
+using RDStartWPF.ViewModels.MatUsings;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -16,7 +16,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
-namespace StartWPF.Views.MatUsings
+namespace RDStartWPF.Views.MatUsings
 {
     /// <summary>
     /// Логика взаимодействия для SafetyFactors.xaml

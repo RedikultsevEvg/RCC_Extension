@@ -47,7 +47,7 @@ namespace RDBLL.Entity.SC.Column.SteelBases.Processors
             double zoomCoff = 100;
             double sizeCoff = MeasureUnitConverter.GetCoefficient(0);
             double stressCoff = MeasureUnitConverter.GetCoefficient(3);
-            double actualThickness = steelBase.Thickness;
+            double actualThickness = steelBase.Height;
             double steelStrength = (steelBase.Steel.MaterialKind as SteelKind).FstStrength;
 
             List<LoadCaseRectangleValue> loadCaseRectangleValues = new List<LoadCaseRectangleValue>();

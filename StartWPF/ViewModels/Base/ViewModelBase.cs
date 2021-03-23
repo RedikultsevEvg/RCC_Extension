@@ -7,11 +7,16 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
-namespace StartWPF.ViewModels.Base
+namespace RDStartWPF.ViewModels.Base
 {
-    internal abstract class ViewModelBase : INotifyPropertyChanged
+    internal abstract class ViewModelBase : INotifyPropertyChanged, IDataErrorInfo
     {
         private ICommand _Command;
+
+        public string this[string columnName] => throw new NotImplementedException();
+
+        public string Error => throw new NotImplementedException();
+
         public event PropertyChangedEventHandler PropertyChanged;
 
         public void OnPropertyChanged([CallerMemberName]string prop = "")
