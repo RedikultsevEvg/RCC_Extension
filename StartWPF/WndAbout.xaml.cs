@@ -3,7 +3,7 @@ using System.Reflection;
 using System.Windows;
 using System.Windows.Navigation;
 
-namespace StartWPF
+namespace RDStartWPF
 {
     /// <summary>
     /// Логика взаимодействия для Window1.xaml

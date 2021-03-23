@@ -1,0 +1,54 @@
+﻿<Window x:Class="RDStartWPF.Views.Common.Service.wndMeasureUnits"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:RDStartWPF.Views.Common.Service"
+        xmlns:Setting="clr-namespace:RDBLL.Common.Service;assembly=BLL"
+        mc:Ignorable="d"
+        Title="Настройка единиц измерения" Height="300" Width="420" WindowStartupLocation="CenterScreen" MinWidth="420" MinHeight="300">
+    <Window.Resources>
+        <DataTemplate  x:Key="cbTemplate">
+            <TextBlock Text="{Binding Path=UnitName}" VerticalAlignment="Center"></TextBlock>
+        </DataTemplate>
+        <DataTemplate x:Key="MeasureUnitsTemplate">
+            <Grid Height="30">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="280"/>
+                    <ColumnDefinition Width="100"/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <TextBlock x:Name="ParamName"
+                           Grid.Column="0"
+                           Text="{Binding Path=MeasureUnitKind}">
+                </TextBlock>
+                <ComboBox x:Name="cbUnits"
+                    Grid.Column="1"
+                    Height="22"
+                    ItemsSource="{Binding Path=UnitLabels}"
+                    ItemTemplate="{StaticResource cbTemplate}"
+                    SelectedValuePath="Id"
+                    SelectedValue="{Binding Path=CurrentUnitLabelId}" VerticalAlignment="Center">
+                </ComboBox>
+            </Grid>
+        </DataTemplate>
+    </Window.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition Height="80"/>
+        </Grid.RowDefinitions>
+        <ListView x:Name="lvMeasureUnits"
+                  ItemTemplate="{StaticResource MeasureUnitsTemplate}"
+                  ItemsSource="{Binding Source={x:Static Setting:ProgrammSettings.MeasureUnits}}">
+        </ListView>
+        <StackPanel Height="60" Grid.Row="1" Margin="0,10,10,10" Orientation="Horizontal" HorizontalAlignment="Right" Background="#FFE2E2E2" Width="110">
+            <Button x:Name="btnOK" Style="{StaticResource OkServiceButton}" HorizontalAlignment="Stretch" Click="BtnOK_Click">
+                <Image x:Name="OK_png" Style="{StaticResource ServiceButtonImage}" Source="{DynamicResource IconOK}"/>
+            </Button>
+            <Button x:Name="btnCancel" Style="{StaticResource CancelServiceButton}" HorizontalAlignment="Stretch" Visibility="Hidden">
+                <Image x:Name="Cancel_png" Style="{StaticResource ServiceButtonImage}" Source="{DynamicResource IconCancel}"/>
+            </Button>
+        </StackPanel>
+    </Grid>
+</Window>

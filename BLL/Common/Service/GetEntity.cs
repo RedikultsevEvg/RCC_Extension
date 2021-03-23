@@ -472,7 +472,7 @@ namespace RDBLL.Common.Service
                 savableParent = parent as IDsSaveable;
             }
             else throw new Exception("Parent is not SavableToDataSet");
-            DataTable dataTable = dataSet.Tables["Placements"];
+            DataTable dataTable = dataSet.Tables["ParametricObjects"];
             var row = (from dataRow in dataTable.AsEnumerable()
                        where dataRow.Field<int>("ParentId") == savableParent.Id
                        select dataRow).Single();

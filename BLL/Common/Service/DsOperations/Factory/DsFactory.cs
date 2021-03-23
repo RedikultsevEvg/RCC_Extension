@@ -126,7 +126,7 @@ namespace RDBLL.Common.Service.DsOperations.Factory
             DsOperation.AddBoolColumn(dataTable, "IsActual");
             DsOperation.AddDoubleColumn(dataTable, "Width");
             DsOperation.AddDoubleColumn(dataTable, "Length");
-            DsOperation.AddDoubleColumn(dataTable, "Thickness");
+            DsOperation.AddDoubleColumn(dataTable, "Height");
             DsOperation.AddDoubleColumn(dataTable, "WorkCondCoef");
             DsOperation.AddBoolColumn(dataTable, "UseSimpleMethod", true);
             #endregion
@@ -255,8 +255,8 @@ namespace RDBLL.Common.Service.DsOperations.Factory
             DsOperation.AddIdNameParentIdColumn(dataTable);
             DsOperation.AddStringColumn(dataTable, "Type");
             #endregion
-            #region Placements
-            dataTable = new DataTable("Placements");
+            #region ParametricObjects
+            dataTable = new DataTable("ParametricObjects");
             dataSet.Tables.Add(dataTable);
             DsOperation.AddIdNameParentIdColumn(dataTable);
             DsOperation.AddStringColumn(dataTable, "Type");

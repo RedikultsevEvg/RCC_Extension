@@ -71,9 +71,11 @@
     <Compile Include="Common\Interfaces\IRDObserver.cs" />
     <Compile Include="Common\Interfaces\IDsSaveable.cs" />
     <Compile Include="Common\Interfaces\IRDObservable.cs" />
+    <Compile Include="Common\Interfaces\Shapes\IHasHeight.cs" />
     <Compile Include="Common\Interfaces\Shapes\IRectangle.cs" />
     <Compile Include="Common\Interfaces\Shapes\IShape.cs" />
     <Compile Include="Common\Params\IHasStoredParams.cs" />
+    <Compile Include="Common\Params\ParametriсBase.cs" />
     <Compile Include="Common\Params\StoredParam.cs" />
     <Compile Include="Common\Service\CommonOperation.cs" />
     <Compile Include="Common\Service\Compare.cs" />
@@ -173,8 +175,11 @@
     <Compile Include="Entity\SC\Column\SteelBases\Builders\BaseMaker.cs" />
     <Compile Include="Entity\SC\Column\SteelBases\Builders\BuilderBase.cs" />
     <Compile Include="Entity\SC\Column\SteelBases\Builders\BuilderTempate1.cs" />
+    <Compile Include="Entity\SC\Column\SteelBases\Factorys\BoltFactProc.cs" />
+    <Compile Include="Entity\SC\Column\SteelBases\Patterns\PatternBase.cs" />
     <Compile Include="Entity\SC\Column\SteelBases\Factorys\PartFactProc.cs" />
     <Compile Include="Entity\SC\Column\SteelBases\Factorys\SteelBoltFactory.cs" />
+    <Compile Include="Entity\SC\Column\SteelBases\Patterns\PatternType1.cs" />
     <Compile Include="Entity\SC\Column\SteelBases\Processors\SteelBaseViewStressProcessor.cs" />
     <Compile Include="Entity\SC\Column\SteelBolt.cs" />
     <Compile Include="Entity\SC\Column\SteelBase.cs" />

@@ -17,9 +17,9 @@ namespace Test.SC.SteelBasePart.CheckMoment
             double maxStress = 10000000;
 
             SteelBase steelColumnBase = new SteelBase();
-            steelColumnBase.Width = 1;
-            steelColumnBase.Length = 1;
-            steelColumnBase.Thickness = 0.05;
+            //steelColumnBase.Width = 1;
+            //steelColumnBase.Length = 1;
+            steelColumnBase.Height = 0.05;
 
             LoadSet loadSet = steelColumnBase.ForcesGroups[0].LoadSets[0];
             ForceParameter forceParameter = new ForceParameter();
@@ -53,9 +53,9 @@ namespace Test.SC.SteelBasePart.CheckMoment
             double maxStress = 10000000;
 
             SteelBase steelColumnBase = new SteelBase();
-            steelColumnBase.Width = 1;
-            steelColumnBase.Length = 1;
-            steelColumnBase.Thickness = 0.05;
+            //steelColumnBase.Width = 1;
+            //steelColumnBase.Length = 1;
+            steelColumnBase.Height = 0.05;
 
             LoadSet loadSet = steelColumnBase.ForcesGroups[0].LoadSets[0];
             ForceParameter forceParameter = new ForceParameter();
@@ -92,9 +92,9 @@ namespace Test.SC.SteelBasePart.CheckMoment
             double maxStress = force * (-1D);
 
             SteelBase steelColumnBase = new SteelBase();
-            steelColumnBase.Width = baseWidth;
-            steelColumnBase.Length = baseLength;
-            steelColumnBase.Thickness = 0.05;
+            //steelColumnBase.Width = baseWidth;
+            //steelColumnBase.Length = baseLength;
+            steelColumnBase.Height = 0.05;
 
             LoadSet loadSet = steelColumnBase.ForcesGroups[0].LoadSets[0];
             ForceParameter forceParameter = new ForceParameter();
@@ -131,9 +131,9 @@ namespace Test.SC.SteelBasePart.CheckMoment
             double maxStress = force * (-1D);
 
             SteelBase steelColumnBase = new SteelBase();
-            steelColumnBase.Width = baseWidth;
-            steelColumnBase.Length = baseLength;
-            steelColumnBase.Thickness = 0.05;
+            //steelColumnBase.Width = baseWidth;
+            //steelColumnBase.Length = baseLength;
+            steelColumnBase.Height = 0.05;
 
             LoadSet loadSet = steelColumnBase.ForcesGroups[0].LoadSets[0];
             ForceParameter forceParameter = new ForceParameter();
@@ -170,9 +170,9 @@ namespace Test.SC.SteelBasePart.CheckMoment
             double maxStress = force * (-1D);
 
             SteelBase steelColumnBase = new SteelBase();
-            steelColumnBase.Width = baseWidth;
-            steelColumnBase.Length = baseLength;
-            steelColumnBase.Thickness = 0.05;
+            //steelColumnBase.Width = baseWidth;
+            //steelColumnBase.Length = baseLength;
+            steelColumnBase.Height = 0.05;
 
             LoadSet loadSet = steelColumnBase.ForcesGroups[0].LoadSets[0];
             ForceParameter forceParameter = new ForceParameter();
@@ -209,9 +209,9 @@ namespace Test.SC.SteelBasePart.CheckMoment
             double maxStress = force * (-1D);
 
             SteelBase steelColumnBase = new SteelBase();
-            steelColumnBase.Width = baseWidth;
-            steelColumnBase.Length = baseLength;
-            steelColumnBase.Thickness = 0.05;
+            //steelColumnBase.Width = baseWidth;
+            //steelColumnBase.Length = baseLength;
+            steelColumnBase.Height = 0.05;
 
             LoadSet loadSet = steelColumnBase.ForcesGroups[0].LoadSets[0];
             ForceParameter forceParameter = new ForceParameter();
@@ -248,9 +248,9 @@ namespace Test.SC.SteelBasePart.CheckMoment
             double maxStress = force * (-1D);
 
             SteelBase steelColumnBase = new SteelBase();
-            steelColumnBase.Width = baseWidth;
-            steelColumnBase.Length = baseLength;
-            steelColumnBase.Thickness = 0.05;
+            //steelColumnBase.Width = baseWidth;
+            //steelColumnBase.Length = baseLength;
+            steelColumnBase.Height = 0.05;
 
             LoadSet loadSet = steelColumnBase.ForcesGroups[0].LoadSets[0];
             ForceParameter forceParameter = new ForceParameter();

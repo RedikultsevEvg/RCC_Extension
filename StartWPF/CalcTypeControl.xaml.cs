@@ -12,10 +12,10 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using RDUIL.WPF_Windows.ControlClasses;
-using StartWPF;
+using RDStartWPF;
+using RDStartWPF.Infrasructure.ControlClasses;
 
-namespace StartWPF
+namespace RDStartWPF
 {
     /// <summary>
     /// Логика взаимодействия для CalcTypeControl.xaml

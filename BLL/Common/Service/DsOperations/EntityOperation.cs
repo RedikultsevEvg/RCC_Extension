@@ -1,6 +1,7 @@
 ﻿using RDBLL.Common.Interfaces;
 using RDBLL.Common.Interfaces.Materials;
 using RDBLL.Common.Interfaces.Shapes;
+using RDBLL.Common.Params;
 using RDBLL.Common.Service.DsOperations;
 using RDBLL.Entity.Common.Placements;
 using RDBLL.Forces;
@@ -69,12 +70,25 @@ namespace RDBLL.Common.Service
                 row.SetField("Width", obj.Width);
                 row.SetField("Length", obj.Length);
             }
+            //Сохранение высоты
+            if (entity is IHasHeight) //Сохранение стали
+            {
+                IHasHeight obj = entity as IHasHeight;
+                row.SetField("Height", obj.Height);
+            }
             //Сохранение расположения элементов
             if (entity is IHasPlacement)
             {
                 IHasPlacement obj = entity as IHasPlacement;
                 if (obj.Placement != null) obj.Placement.SaveToDataSet(dataSet, createNew);
             }
+            //Сохранение хранимых параметров
+            if (entity is IHasStoredParams)
+            {
+                IHasStoredParams obj = entity as IHasStoredParams;
+                foreach (StoredParam param in obj.StoredParams) { param.SaveToDataSet(dataSet, createNew); }
+            }
+
             return row;
         }
         public static void SetProps(DataRow row, IDsSaveable entity)
@@ -94,9 +108,15 @@ namespace RDBLL.Common.Service
                 obj.Width = row.Field<double>("Width");
                 obj.Length = row.Field<double>("Length");
             }
+            if (entity is IHasHeight) //Сохранение стали
+            {
+                IHasHeight obj = entity as IHasHeight;
+                obj.Height = row.Field<double>("Height");
+            }
         }
-            public static void DeleteEntity (DataSet dataSet, IDsSaveable entity)
+        public static void DeleteEntity (DataSet dataSet, IDsSaveable entity)
         {
+            //Удаление объекта, имеющего нагрузки
             if (entity is IHasForcesGroups)
             {
                 IHasForcesGroups child = entity as IHasForcesGroups;
@@ -105,11 +125,19 @@ namespace RDBLL.Common.Service
                     forcesGroup.DeleteFromDataSet(dataSet);
                 }
             }
+            //Удаление объекта, имеющего раскладку
             if (entity is IHasPlacement)
             {
                 IHasPlacement child = entity as IHasPlacement;
                 child.Placement.DeleteFromDataSet(dataSet);
             }
+            //Удаление объекта, содержащего параметры
+            if (entity is IHasStoredParams)
+            {
+                IHasStoredParams obj = entity as IHasStoredParams;
+                foreach (StoredParam param in obj.StoredParams) { param.DeleteFromDataSet(dataSet); }
+            }
+
             DsOperation.DeleteRow(dataSet, entity.GetTableName(), entity.Id);
         }
     }

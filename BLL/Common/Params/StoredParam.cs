@@ -21,6 +21,9 @@ namespace RDBLL.Common.Params
         b //bool
     }
 
+    /// <summary>
+    /// Класс универсального хранимого параметра
+    /// </summary>
     public class StoredParam : IHasParent, ICloneable
     {
         /// <summary>
@@ -51,7 +54,9 @@ namespace RDBLL.Common.Params
         /// Значение параметра
         /// </summary>
         public string ParameterValue { get; set; }
-
+        /// <summary>
+        /// Ссылка на родительский элемент
+        /// </summary>
         public IDsSaveable ParentMember { get; private set; }
 
         public StoredParam (IDsSaveable parent)
@@ -88,7 +93,6 @@ namespace RDBLL.Common.Params
         /// <summary>
         /// Устанавливает значение параметра как строку
         /// </summary>
-        /// <param name="param"></param>
         /// <param name="value"></param>
         public void SetStringValue(string value)
         {

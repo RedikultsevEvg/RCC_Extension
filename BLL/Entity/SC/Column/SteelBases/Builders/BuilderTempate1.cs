@@ -12,6 +12,7 @@ using RDBLL.Entity.Common.Materials;
 using RDBLL.Forces;
 using RDBLL.Common.Service;
 
+
 namespace RDBLL.Entity.SC.Column.SteelBases.Builders
 {
     /// <summary>
@@ -27,12 +28,7 @@ namespace RDBLL.Entity.SC.Column.SteelBases.Builders
         {
             double width = 0.4;
             double length = 0.7;
-            _SteelBase.SteelBolts = new ObservableCollection<SteelBolt>();
-            SteelBolt steelBolt = SteelBoltFactory.BoltFactory(BoltType.Array2x2);
-            RectArrayPlacement placement = steelBolt.Placement as RectArrayPlacement;
-            placement.SizeX = width;
-            placement.SizeY = length;
-            steelBolt.RegisterParent(_SteelBase);
+            BoltFactProc.GetBoltsType1(_SteelBase, width, length, 2, 2);
         }
 
         /// <summary>
@@ -87,7 +83,7 @@ namespace RDBLL.Entity.SC.Column.SteelBases.Builders
         public override void CreateGeometry()
         {
             _SteelBase.Name = "Новая база";
-            _SteelBase.Thickness = 0.06;
+            _SteelBase.Height = 0.06;
             _SteelBase.IsActual = false;
         }
 

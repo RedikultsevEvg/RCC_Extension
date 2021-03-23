@@ -35,6 +35,7 @@ namespace RDBLL.Processors.SC
         /// <param name="steelBase">База стальной колонны</param>
         public static void SolveSteelColumnBase(SteelBase steelBase)
         {
+            if (steelBase.Pattern != null) { steelBase.Pattern.GetBaseParts(); }
             ActualizeLoadCases(steelBase);
             GetNdmAreas(steelBase);
             steelBase.ForceCurvatures.Clear();

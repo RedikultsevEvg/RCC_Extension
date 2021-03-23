@@ -12,13 +12,15 @@ using RDBLL.Entity.Common.Materials.SteelMaterialUsing;
 using RDBLL.Entity.Common.Materials;
 using RDBLL.Common.Service.DsOperations;
 using RDBLL.Common.Interfaces.Materials;
+using RDBLL.Common.Interfaces.Shapes;
+using RDBLL.Entity.SC.Column.SteelBases.Patterns;
 
 namespace RDBLL.Entity.SC.Column
 {
     /// <summary>
     /// База стальной колонны
     /// </summary>
-    public class SteelBase : ICloneable, IHasForcesGroups, IHasParent, IHasConcrete, IHasSteel
+    public class SteelBase : ICloneable, IHasForcesGroups, IHasParent, IHasConcrete, IHasSteel, IHasHeight
     {
         #region Fields
         /// <summary>
@@ -40,11 +42,12 @@ namespace RDBLL.Entity.SC.Column
         /// <summary>
         /// Толщина, м
         /// </summary>
-        public double Thickness { get; set; }
+        public double Height { get; set; }
         /// <summary>
         /// Флаг расчета по упрощенному методу
         /// </summary>
         public bool UseSimpleMethod { get; set; }
+        public PatternBase Pattern { get; set; }
         /// <summary>
         /// Коллекция групп нагрузок
         /// </summary>
@@ -95,7 +98,7 @@ namespace RDBLL.Entity.SC.Column
             Id = ProgrammSettings.CurrentId;
             Name = "Новая база";
             
-            Thickness = 0.06;
+            Height = 0.06;
             IsActual = false;
             
             UseSimpleMethod = false;
@@ -148,7 +151,6 @@ namespace RDBLL.Entity.SC.Column
             DataRow row = EntityOperation.SaveEntity(dataSet, createNew, this);
             #region
             row.SetField("IsActual", IsActual);
-            row.SetField("Thickness", Thickness);
             row.SetField("UseSimpleMethod", UseSimpleMethod);
             #endregion
             row.AcceptChanges();
@@ -177,7 +179,6 @@ namespace RDBLL.Entity.SC.Column
         {
             EntityOperation.SetProps(dataRow, this);
             IsActual = false;           
-            Thickness = dataRow.Field<double>("Thickness");
             UseSimpleMethod = dataRow.Field<bool>("UseSimpleMethod");
         }
         /// <summary>
