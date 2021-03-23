@@ -62,9 +62,8 @@ namespace RDBLL.Common.Service
                 _CurrentTmpId = value;
             }
         }
-        /// <summary>
-        /// Параметры усилий
-        /// </summary>
+        public static List<DataSet> DataSets { get; set; }
+        public static DataSet CurrentDataSet { get { return DataSets[0]; } }
         public static List<ForceParamKind> ForceParamKinds { get; set; }
         /// <summary>
         /// Единицы измерения
@@ -111,9 +110,6 @@ namespace RDBLL.Common.Service
         /// Справочник классов арматуры
         /// </summary>
         public static List<ReinforcementKind> ReinforcementKinds { get; set; }
-        public static List<DataSet> DataSets { get; private set; }
-        public static DataSet CurrentDataSet { get; private set; }
-
         /// <summary>
         /// Метод задания начальных параметров
         /// </summary>
@@ -122,7 +118,6 @@ namespace RDBLL.Common.Service
             DataSets = new List<DataSet>();
             DataSet dataSet = DsFactory.GetDataSet();
             DataSets.Add(dataSet);
-            CurrentDataSet = DataSets[0];
             BuildingSite = new BuildingSite(true);
             Building building =  new Building(BuildingSite);
             BuildingSite.SaveToDataSet(CurrentDataSet, true);
