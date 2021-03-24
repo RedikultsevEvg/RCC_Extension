@@ -39,7 +39,7 @@ namespace RDStartWPF.Views.SC.Columns.Bases
             BuilderTempate1 builder = new BuilderTempate1();
             SteelBase steelBase = BaseMaker.MakeSteelBase(builder);
             steelBase.RegisterParent(_level);
-            PatternBase Pattern = new PatternType1(true);
+            PatternBase Pattern = new PatternType2(true);
             Pattern.RegisterParent(steelBase);
             steelBase.Pattern = Pattern;
             steelBase.SaveToDataSet(ProgrammSettings.CurrentDataSet, true);

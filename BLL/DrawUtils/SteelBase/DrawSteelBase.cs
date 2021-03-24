@@ -27,6 +27,20 @@ namespace RDBLL.DrawUtils.SteelBase
             canvas.Children.Clear();
             double width = 1.0;
             double length = 1.0;
+            List<double> PointX = new List<double>();
+            List<double> PointY = new List<double>();
+            if (steelBase.SteelBaseParts.Count > 0)
+            {
+                foreach (SteelBasePart part1 in steelBase.SteelBaseParts)
+                {
+                    PointX.Add(part1.CenterX + part1.Width / 2);
+                    PointX.Add(part1.CenterX - part1.Width / 2);
+                    PointY.Add(part1.CenterY + part1.Length / 2);
+                    PointY.Add(part1.CenterY - part1.Length / 2);
+                }
+                width = PointX.Max() - PointX.Min();
+                length = PointY.Max() - PointY.Min();
+            }
             double zoom_factor_X = canvas.Width / width / 1.2;
             double zoom_factor_Y = canvas.Height / length / 1.2;
             double scale_factor;

@@ -152,17 +152,9 @@ namespace RDBLL.Entity.RCC.Foundations
         /// </summary>
         public bool IsPartsActual { get; set; }
         /// <summary>
-        /// Наименование линейных единиц измерения
+        /// Наименование единиц измерения
         /// </summary>
-        public string LinearMeasure { get { return MeasureUnitConverter.GetUnitLabelText(0); } }
-        /// <summary>
-        /// Единица измерения объемного веса
-        /// </summary>
-        public string VolumeWeightMeasure { get { return MeasureUnitConverter.GetUnitLabelText(9); } }
-        /// <summary>
-        /// Единица измерения нагрузки, распределенной по площади
-        /// </summary>
-        public string DistributedLoadMeasure { get { return MeasureUnitConverter.GetUnitLabelText(13); } }
+        public MeasureUnitList Measures { get => new MeasureUnitList(); }
         /// <summary>
         /// Свойство для сохранения результатов
         /// </summary>

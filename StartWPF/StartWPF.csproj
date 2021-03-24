@@ -135,12 +135,18 @@
     <Compile Include="Views\Common\BuildingsAndSites\wndLevels.xaml.cs">
       <DependentUpon>wndLevels.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\Common\Patterns\WndPatternSelect.xaml.cs">
+      <DependentUpon>WndPatternSelect.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\MatUsings\WndSafetyFactors.xaml.cs">
       <DependentUpon>WndSafetyFactors.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\MSControls\numericupdown.cs" />
     <Compile Include="Views\MSControls\numericupdown.xaml.cs">
       <DependentUpon>numericupdown.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\SC\Columns\Bases\UserControls\PatternCard.xaml.cs">
+      <DependentUpon>PatternCard.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\SC\Columns\Bases\wndSteelBase.xaml.cs">
       <DependentUpon>wndSteelBase.xaml</DependentUpon>
@@ -329,6 +335,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Views\Common\Patterns\WndPatternSelect.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\MatUsings\WndSafetyFactors.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -336,6 +346,10 @@
     <Page Include="Views\MSControls\numericupdown.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\SC\Columns\Bases\UserControls\PatternCard.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\SC\Columns\Bases\wndSteelBase.xaml">
       <Generator>MSBuild:Compile</Generator>

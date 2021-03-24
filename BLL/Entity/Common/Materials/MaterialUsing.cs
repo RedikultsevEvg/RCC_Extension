@@ -29,6 +29,24 @@ namespace RDBLL.Entity.Common.Materials
         /// Наименование применения
         /// </summary>
         public string Name { get; set; }
+        public string ExpanderName
+        {
+            get
+            {
+                if (this is ConcreteUsing) return "Бетон";
+                if (this is SteelUsing) return "Сталь";
+                else return null;
+            }
+        }
+        public string ClassName
+        {
+            get
+            {
+                if (this is ConcreteUsing) return "Класс бетона";
+                if (this is SteelUsing) return "Класс стали";
+                else return null;
+            }
+        }
         /// <summary>
         /// Назначение контейнера в родительском элементе
         /// </summary>

@@ -151,28 +151,26 @@
         </Expander>
     </DataTemplate>
 
-    <DataTemplate x:Key="DtConcreteSelect">
-        <Expander Header="Бетон">
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition/>
-                    <ColumnDefinition Width="100"/>
-                    <ColumnDefinition Width="50"/>
-                </Grid.ColumnDefinitions>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="35"/>
-                </Grid.RowDefinitions>
-                <TextBlock x:Name="tbConcrClass" Grid.Row="0" Style="{StaticResource PropertyTextBlock}" Text="Класс бетона"/>
-                <ComboBox Grid.Column="1" Grid.Row="0"
+    <DataTemplate x:Key="DtMaterialSelect">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="100"/>
+                <ColumnDefinition Width="50"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="35"/>
+            </Grid.RowDefinitions>
+            <TextBlock x:Name="tbConcrClass" Grid.Row="0" Style="{StaticResource PropertyTextBlock}" Text="{Binding ClassName}"/>
+            <ComboBox Grid.Column="1" Grid.Row="0"
                         Height="22"
                         ItemsSource="{Binding Path=MaterialKinds}"
                         ItemTemplate="{StaticResource cbTemplate}"
                         SelectedValuePath="Id"
                         SelectedValue="{Binding Path=SelectedId}" VerticalAlignment="Center" Margin="5,6,5,7">
-                </ComboBox>
-                <ContentControl Grid.Column="2" ContentTemplate="{StaticResource PSF_Button}" Content="{Binding}"/>
-            </Grid>
-        </Expander>
+            </ComboBox>
+            <ContentControl Grid.Column="2" ContentTemplate="{StaticResource PSF_Button}" Content="{Binding}"/>
+        </Grid>
     </DataTemplate>
 
 </ResourceDictionary>

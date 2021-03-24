@@ -37,32 +37,24 @@ namespace RDBLL.Common.Service
         /// </summary>
         public static int CurrentId
         {
-            get
-            {
-                _CurrentId++;
-                return _CurrentId;
-            }
-            set
-            {
-                _CurrentId = value;
-            }
+            get =>  _CurrentId++;
+            set  { _CurrentId = value;}
         }
         /// <summary>
         /// Генератор временных Id
         /// </summary>
         public static int CurrentTmpId
         {
-            get
-            {
-                _CurrentTmpId++;
-                return _CurrentTmpId;
-            }
-            set
-            {
-                _CurrentTmpId = value;
-            }
+            get => _CurrentTmpId++;
+            set  {_CurrentTmpId = value;}
         }
+        /// <summary>
+        /// Перечень датасетов (на будущее если будет предусмотрена обработка нескольких файлов)
+        /// </summary>
         public static List<DataSet> DataSets { get; set; }
+        /// <summary>
+        /// Текущий датасет
+        /// </summary>
         public static DataSet CurrentDataSet { get { return DataSets[0]; } }
         public static List<ForceParamKind> ForceParamKinds { get; set; }
         /// <summary>

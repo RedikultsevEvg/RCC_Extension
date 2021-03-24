@@ -46,6 +46,7 @@ namespace RDBLL.Entity.Common.NDM.Processors
                     if (i > maxIterationCount)
                     {
                         errorText = $"Достигнуто максимальное количество итераций, актуальная точность {curAccuracy}";
+                        throw new Exception("Nonlinear model operation error");
                     }
                 }
                 sumForces2 = new SumForces(newStiffnessCoefficient, newCurvature);
@@ -53,7 +54,7 @@ namespace RDBLL.Entity.Common.NDM.Processors
             catch
             {
                 //Пока показываем сообщени, в будущем надо будет делать нормальное окно хода нелинейного расчета
-                MessageBox.Show("Проверьте исходные данные", errorText);
+                //MessageBox.Show("Проверьте исходные данные", errorText);
                 //Генерируем новое исключение, для перехвата в вызывающей функции
                 throw new Exception($"Nonlinear model operation error: {errorText}");
             }

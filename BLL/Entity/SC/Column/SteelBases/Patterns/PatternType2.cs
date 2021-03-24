@@ -10,21 +10,23 @@ using System.Threading.Tasks;
 
 namespace RDBLL.Entity.SC.Column.SteelBases.Patterns
 {
-    public class PatternType1 : PatternBase
+    public class PatternType2 : PatternBase
     {
-        public override string Type { get => "SteelBasePatternType1"; }
-        public PatternType1(bool genId = false) : base(genId)
+        public override string Type { get => "SteelBasePatternType2"; }
+        public PatternType2(bool genId = false) : base(genId)
         {
             StoredParams.Add(new StoredParam(this) { Id = ProgrammSettings.CurrentId, Name = "Ширина базы, B" });
             StoredParams[0].SetDoubleValue(0.36);
             StoredParams.Add(new StoredParam(this) { Id = ProgrammSettings.CurrentId, Name = "Длина базы, L" });
             StoredParams[1].SetDoubleValue(0.66);
+            StoredParams.Add(new StoredParam(this) { Id = ProgrammSettings.CurrentId, Name = "Ширина свеса, B1" });
+            StoredParams[2].SetDoubleValue(0.1);
             StoredParams.Add(new StoredParam(this) { Id = ProgrammSettings.CurrentId, Name = "Внутренний размер, L1" });
-            StoredParams[2].SetDoubleValue(0.35);
+            StoredParams[3].SetDoubleValue(0.35);
             StoredParams.Add(new StoredParam(this) { Id = ProgrammSettings.CurrentId, Name = "Размер по болтам, B2" });
-            StoredParams[3].SetDoubleValue(0.2);
+            StoredParams[4].SetDoubleValue(0.2);
             StoredParams.Add(new StoredParam(this) { Id = ProgrammSettings.CurrentId, Name = "Размер по болтам, L2" });
-            StoredParams[4].SetDoubleValue(0.49);
+            StoredParams[5].SetDoubleValue(0.49);
         }
         public override void GetBaseParts()
         {

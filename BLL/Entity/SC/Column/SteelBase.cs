@@ -14,6 +14,7 @@ using RDBLL.Common.Service.DsOperations;
 using RDBLL.Common.Interfaces.Materials;
 using RDBLL.Common.Interfaces.Shapes;
 using RDBLL.Entity.SC.Column.SteelBases.Patterns;
+using RDBLL.Entity.MeasureUnits;
 
 namespace RDBLL.Entity.SC.Column
 {
@@ -56,14 +57,17 @@ namespace RDBLL.Entity.SC.Column
         /// Коллекция участков
         /// </summary>
         public ObservableCollection<SteelBasePart> SteelBaseParts { get; set; }
-
-        public ConcreteUsing Concrete { get; set; }
-        public SteelUsing Steel { get; set; }
-
         /// <summary>
         /// Коллекция болтов
         /// </summary>
         public ObservableCollection<SteelBolt> SteelBolts { get; set; }
+        public ConcreteUsing Concrete { get; set; }
+        public SteelUsing Steel { get; set; }
+        /// <summary>
+        /// Наименование единиц измерения
+        /// </summary>
+        public MeasureUnitList Measures { get => new MeasureUnitList(); }
+
         /// <summary>
         /// Коллекция комбинаций
         /// </summary>
@@ -84,9 +88,6 @@ namespace RDBLL.Entity.SC.Column
         /// Коллекция комбинаций и кривизны 
         /// </summary>
         public List<ForceDoubleCurvature> ForceCurvatures { get; set; }
-
-
-        //public ObservableCollection<BoltUsing> Bolts { get; set; }
 
         #endregion
         #region Constructors
@@ -162,6 +163,7 @@ namespace RDBLL.Entity.SC.Column
             {
                 steelBolt.SaveToDataSet(dataSet, createNew);
             }
+            if (Pattern != null) EntityOperation.SaveEntity(dataSet, true, Pattern);
         }
         /// <summary>
         /// Обновляет запись по датасету

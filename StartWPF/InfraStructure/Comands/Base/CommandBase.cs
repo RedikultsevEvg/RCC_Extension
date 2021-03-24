@@ -26,7 +26,7 @@ namespace RDStartWPF.InfraStructure.Comands.Base
 
         public bool CanExecute(object parameter)
         {
-            return true;
+            return this._CanExecute == null || this._CanExecute(parameter);
         }
 
         public void Execute(object parameter)

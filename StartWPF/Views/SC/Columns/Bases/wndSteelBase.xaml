@@ -4,9 +4,23 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:RDStartWPF.Views.SC.Columns.Bases"
+        xmlns:vm="clr-namespace:RDStartWPF.ViewModels.SC.Columns.Bases"
+        xmlns:SteelConvert="clr-namespace:RDStartWPF.InfraStructure.Converters.SC.Columns.Bases"
         mc:Ignorable="d"
-        Title="База колонны" Height="400" Width="850" Background="White" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
+        Title="База колонны" Height="400" Width="850" Background="White" WindowStartupLocation="CenterScreen" MinHeight="400" MinWidth="850" MaxHeight="600" MaxWidth="900">
     <Window.Resources>
+        <SteelConvert:SteelBaseToGeometryConverter x:Key="SteelBaseToGeometryConverter"/>
+        <DataTemplate x:Key="Param">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width ="200"/>
+                    <ColumnDefinition Width ="100"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Style="{StaticResource PropertyTextBlock}" Text="{Binding Name}"/>
+                <TextBox Grid.Column="1" Style="{StaticResource PropertyTextBox}" Text="{Binding ParameterValue}"/>
+            </Grid>
+        </DataTemplate>
     </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
@@ -21,33 +35,44 @@
                 <ColumnDefinition Width ="110"/>
             </Grid.ColumnDefinitions>
             <TabControl>
-                <TabItem Header="Эскиз"/>
-                <TabItem Header="Шаблон"/>
+                <TabItem Header="Эскиз">
+                    <Viewbox>
+                        <ScrollViewer Content="{Binding Base, Converter={StaticResource SteelBaseToGeometryConverter}}"
+                                      HorizontalScrollBarVisibility="Hidden"
+                                      VerticalScrollBarVisibility ="Hidden">
+                        </ScrollViewer>
+                    </Viewbox>
+                </TabItem>
+                <TabItem Header="Паттерн"/>
 
             </TabControl>
-            <Canvas Grid.Column="0" x:Name="cvBase" Margin="5"/>
-            <StackPanel Grid.Column="1">
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="30"/>
-                        <RowDefinition Height="30"/>
-                        <RowDefinition Height="30"/>
-                    </Grid.RowDefinitions>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width ="*"/>
-                        <ColumnDefinition Width ="100"/>
-                        <ColumnDefinition Width="70"/>
-                    </Grid.ColumnDefinitions>
-                    <TextBlock x:Name="tbName" Style="{StaticResource PropertyTextBlock}" Text="Наименование"/>
-                    <TextBlock x:Name="tbThickness" Grid.Row="1" Style="{StaticResource PropertyTextBlock}" Text="Толщина"/>
-                    <TextBlock x:Name="tbUseSimpleMethod" Grid.Row="2" Style="{StaticResource PropertyTextBlock}" Text="Упрощенный метод"/>
-                    <TextBox x:Name="tbxName" Grid.Column="1" Style="{StaticResource PropertyTextBox}" Text="{Binding Path=Name}"/>
-                    <TextBox x:Name="tbxThickness" Grid.Row="1" Grid.Column="1" Style="{StaticResource PropertyTextBox}" Text="{Binding Path=Thickness, Converter={StaticResource LinearSizeConverter}}"/>
-                    <CheckBox Grid.Column="1" Grid.Row="2" x:Name="cbUseSimpleMethod" IsChecked="{Binding Path=UseSimpleMethod}" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5,0,0,0"/>
-                    <TextBlock Grid.Column="2" Grid.Row="1" x:Name="tbThicknessMeasure" Style="{StaticResource PropertyTextBlock}" Text="мм" />
-                </Grid>
-                <ContentControl ContentTemplate="{StaticResource DtConcreteSelect}"  Content="{Binding Path=Concrete}"/>
-            </StackPanel>
+            <ScrollViewer Grid.Column="1">
+                <StackPanel Grid.Column="1" DataContext="{Binding Base}">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="30"/>
+                            <RowDefinition Height="30"/>
+                            <RowDefinition Height="30"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width ="*"/>
+                            <ColumnDefinition Width ="100"/>
+                            <ColumnDefinition Width="70"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock x:Name="tbName" Style="{StaticResource PropertyTextBlock}" Text="Наименование"/>
+                        <TextBlock x:Name="tbThickness" Grid.Row="1" Style="{StaticResource PropertyTextBlock}" Text="Толщина"/>
+                        <TextBlock x:Name="tbUseSimpleMethod" Grid.Row="2" Style="{StaticResource PropertyTextBlock}" Text="Упрощенный метод"/>
+                        <TextBox x:Name="tbxName" Grid.Column="1" Style="{StaticResource PropertyTextBox}" Text="{Binding Name}"/>
+                        <TextBox x:Name="tbxThickness" Grid.Row="1" Grid.Column="1" Style="{StaticResource PropertyTextBox}" Text="{Binding Path=Height, Converter={StaticResource LinearSizeConverter}}"/>
+                        <CheckBox Grid.Column="1" Grid.Row="2" x:Name="cbUseSimpleMethod" IsChecked="{Binding Path=UseSimpleMethod}" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5,0,0,0"/>
+                        <TextBlock Grid.Column="2" Grid.Row="1" x:Name="tbThicknessMeasure" Style="{StaticResource PropertyTextBlock}" Text="мм" />
+                    </Grid>
+                    <ContentControl ContentTemplate="{StaticResource DtMaterialSelect}"  Content="{Binding Path=Steel}"/>
+                    <ContentControl ContentTemplate="{StaticResource DtMaterialSelect}"  Content="{Binding Path=Concrete}"/>
+                    <ListView ItemsSource="{Binding Pattern.StoredParams}" ItemTemplate="{StaticResource Param}"/>
+                </StackPanel>
+            </ScrollViewer>
+
             <StackPanel Grid.Column="2" Background="#FFE2E2E2" VerticalAlignment="Top">
                 <Button x:Name="btnForces" Style="{StaticResource ServiceButton}" Height="50" Click="btnForces_Click">
                     <Button.Effect>
@@ -58,7 +83,7 @@
                         <TextBlock Margin="3" Foreground="Black">Усилия...</TextBlock>
                     </Button.ToolTip>
                 </Button>
-                <Button x:Name="btnParts" Style="{StaticResource ServiceButton}" Height="50" Click="BtnParts_Click">
+                <Button x:Name="btnParts" Style="{StaticResource ServiceButton}" Height="50" Command="{Binding ViewPartsCommand}">
                     <Button.Effect>
                         <DropShadowEffect Opacity="0.6"/>
                     </Button.Effect>
@@ -67,7 +92,7 @@
                         <TextBlock Margin="3" Foreground="Black">Участки...</TextBlock>
                     </Button.ToolTip>
                 </Button>
-                <Button x:Name="btnBolts" Style="{StaticResource ServiceButton}" Height="50" Click="BtnBolts_Click">
+                <Button x:Name="btnBolts" Style="{StaticResource ServiceButton}" Height="50" Command="{Binding ViewBoltsCommand}">
                     <Button.Effect>
                         <DropShadowEffect Opacity="0.6"/>
                     </Button.Effect>

@@ -12,6 +12,7 @@ using RDBLL.Entity.SC.Column.SteelBases.Processors;
 using RDBLL.Common.Service.DsOperations;
 using System.Data;
 using RDStartWPF.Views.Common.Forces;
+using RDStartWPF.ViewModels.SC.Columns.Bases;
 
 namespace RDStartWPF.Views.SC.Columns.Bases
 {
@@ -26,12 +27,12 @@ namespace RDStartWPF.Views.SC.Columns.Bases
         {
             InitializeComponent();
             _steelColumnBase = steelColumnBase;
-            this.DataContext = _steelColumnBase;
-            tbThicknessMeasure.Text = MeasureUnitConverter.GetUnitLabelText(0);
+            this.DataContext = new SteelBaseVM(_steelColumnBase);
         }
 
         private void btnOK_Click(object sender, RoutedEventArgs e)
         {
+            if (_steelColumnBase.Pattern != null) _steelColumnBase.Pattern.GetBaseParts();
             DialogResult = true;
             Close();
         }
@@ -60,63 +61,6 @@ namespace RDStartWPF.Views.SC.Columns.Bases
             else
             {
                 _steelColumnBase.ForcesGroups = GetEntity.GetParentForcesGroups(ProgrammSettings.CurrentDataSet, _steelColumnBase);
-            }
-        }
-        private void BtnParts_Click(object sender, RoutedEventArgs e)
-        {
-            WndSteelBasePart wndSteelBasePart = new WndSteelBasePart(_steelColumnBase);
-            wndSteelBasePart.ShowDialog();
-            if (wndSteelBasePart.DialogResult == true)
-            {
-                try
-                {
-                    _steelColumnBase.IsActual = false;
-                    DsOperation.DeleteRow(ProgrammSettings.CurrentDataSet, "SteelBaseParts", "ParentId", _steelColumnBase.Id);
-                    foreach (SteelBasePart steelBasePart in _steelColumnBase.SteelBaseParts)
-                    {
-                        steelBasePart.SaveToDataSet(ProgrammSettings.CurrentDataSet, true);
-                    }
-                    ProgrammSettings.IsDataChanged = true;
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Ошибка сохранения :" + ex);
-                }
-            }
-            else
-            {
-                _steelColumnBase.SteelBaseParts = GetEntity.GetSteelBaseParts(ProgrammSettings.CurrentDataSet, _steelColumnBase);
-            }
-        }
-
-        private void BtnBolts_Click(object sender, RoutedEventArgs e)
-        {
-            wndSteelBaseBolts wndSteelBaseBolts = new wndSteelBaseBolts(_steelColumnBase);
-            wndSteelBaseBolts.ShowDialog();
-            DataSet dataSet = ProgrammSettings.CurrentDataSet;
-            if (wndSteelBaseBolts.DialogResult == true)
-            {
-                try
-                {
-                    _steelColumnBase.IsActual = false;
-                    foreach (SteelBolt bolt in _steelColumnBase.SteelBolts)
-                    {
-                        bolt.DeleteFromDataSet(dataSet);
-                    }
-                    foreach (SteelBolt steelBolt in _steelColumnBase.SteelBolts)
-                    {
-                        steelBolt.SaveToDataSet(dataSet, true);
-                    }
-                    ProgrammSettings.IsDataChanged = true;
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Ошибка сохранения :" + ex);
-                }
-            }
-            else
-            {
-                _steelColumnBase.SteelBolts = GetEntity.GetSteelBolts(dataSet, _steelColumnBase);
             }
         }
 
