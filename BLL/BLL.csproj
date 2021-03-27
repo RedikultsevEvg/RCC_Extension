@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>RDBLL</RootNamespace>
     <AssemblyName>BLL</AssemblyName>
-    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
     <TargetFrameworkProfile />
@@ -84,9 +84,9 @@
     <Compile Include="Common\Service\DsOperations\Factory\DsFactory.cs" />
     <Compile Include="Common\Service\GetEntity.cs" />
     <Compile Include="Common\Service\DsOperations\EntityOperation.cs" />
-    <Compile Include="DrawUtils\SteelBase\DrawFoundation.cs" />
-    <Compile Include="DrawUtils\SteelBase\DrawSteelBase.cs" />
-    <Compile Include="DrawUtils\SteelBase\DrawUtils.cs" />
+    <Compile Include="DrawUtils\SteelBases\DrawFoundation.cs" />
+    <Compile Include="DrawUtils\SteelBases\DrawSteelBase.cs" />
+    <Compile Include="DrawUtils\SteelBases\DrawUtils.cs" />
     <Compile Include="Entity\Common\Materials\CircleUsingBase.cs" />
     <Compile Include="Entity\Common\Materials\ConcreteUsing.cs" />
     <Compile Include="Entity\Common\Materials\Interfaces\IMaterialUsing.cs" />
@@ -176,6 +176,7 @@
     <Compile Include="Entity\SC\Column\SteelBases\Builders\BuilderBase.cs" />
     <Compile Include="Entity\SC\Column\SteelBases\Builders\BuilderTempate1.cs" />
     <Compile Include="Entity\SC\Column\SteelBases\Factorys\BoltFactProc.cs" />
+    <Compile Include="Entity\SC\Column\SteelBases\Factorys\MatFactProc.cs" />
     <Compile Include="Entity\SC\Column\SteelBases\Patterns\PatternBase.cs" />
     <Compile Include="Entity\SC\Column\SteelBases\Factorys\PartFactProc.cs" />
     <Compile Include="Entity\SC\Column\SteelBases\Factorys\SteelBoltFactory.cs" />

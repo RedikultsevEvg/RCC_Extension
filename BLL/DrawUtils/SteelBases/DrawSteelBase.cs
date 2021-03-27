@@ -10,7 +10,7 @@ using System.Windows.Media;
 using RDBLL.Processors.SC;
 using RDBLL.Common.Geometry;
 
-namespace RDBLL.DrawUtils.SteelBase
+namespace RDBLL.DrawUtils.SteelBases
 {
     /// <summary>
     /// Рисует стальную базу на канвасе
@@ -22,21 +22,22 @@ namespace RDBLL.DrawUtils.SteelBase
         /// </summary>
         /// <param name="steelBase">Стальная база</param>
         /// <param name="canvas">Канвас</param>
-        public static void DrawBase(Entity.SC.Column.SteelBase steelBase, Canvas canvas)
+        public static void DrawBase(SteelBase steelBase, Canvas canvas)
         {
             canvas.Children.Clear();
             double width = 1.0;
             double length = 1.0;
             List<double> PointX = new List<double>();
             List<double> PointY = new List<double>();
+            //if (steelBase.Pattern != null) steelBase.Pattern.GetBaseParts();
             if (steelBase.SteelBaseParts.Count > 0)
             {
                 foreach (SteelBasePart part1 in steelBase.SteelBaseParts)
                 {
-                    PointX.Add(part1.CenterX + part1.Width / 2);
-                    PointX.Add(part1.CenterX - part1.Width / 2);
-                    PointY.Add(part1.CenterY + part1.Length / 2);
-                    PointY.Add(part1.CenterY - part1.Length / 2);
+                    PointX.Add(part1.Center.X + part1.Width / 2);
+                    PointX.Add(part1.Center.X - part1.Width / 2);
+                    PointY.Add(part1.Center.Y + part1.Length / 2);
+                    PointY.Add(part1.Center.Y - part1.Length / 2);
                 }
                 width = PointX.Max() - PointX.Min();
                 length = PointY.Max() - PointY.Min();
@@ -76,7 +77,7 @@ namespace RDBLL.DrawUtils.SteelBase
         /// <param name="showName">Флаг отрисовки имени участка</param>
         public static void DrawBasePart(SteelBasePart basePart, Canvas canvas, double[] columnBaseCenter, double scale_factor, int koeffX, int koeffY, double opacity, bool showName)
         {
-            double[] basePartCenter = new double[2] { columnBaseCenter[0] + basePart.CenterX * scale_factor * koeffX, columnBaseCenter[1] - basePart.CenterY * scale_factor * koeffY };
+            double[] basePartCenter = new double[2] { columnBaseCenter[0] + basePart.Center.X * scale_factor * koeffX, columnBaseCenter[1] - basePart.Center.Y * scale_factor * koeffY };
             Rectangle basePartRect = new Rectangle();
             basePartRect.Width = basePart.Width * scale_factor;
             basePartRect.Height = basePart.Length * scale_factor;

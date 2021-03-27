@@ -101,7 +101,15 @@
                         <TextBlock Margin="3" Foreground="Black">Болты...</TextBlock>
                     </Button.ToolTip>
                 </Button>
-
+                <Button x:Name="btnAntiPat" Style="{StaticResource ServiceButton}" Height="50" Command="{Binding AntiPatCommand}">
+                    <Button.Effect>
+                        <DropShadowEffect Opacity="0.6"/>
+                    </Button.Effect>
+                    <Image x:Name="Antipat_png" Style="{StaticResource ServiceButtonImage}" Source="{DynamicResource IconExplode}"/>
+                    <Button.ToolTip>
+                        <TextBlock Margin="3" Foreground="Black">Отсоединить паттерн...</TextBlock>
+                    </Button.ToolTip>
+                </Button>
             </StackPanel>
             <StackPanel Grid.Column="3" Background="#FFE2E2E2" VerticalAlignment="Top">
                 <Button x:Name="btnConcreteStresses" Style="{StaticResource ServiceButton}" Height="50" Click="BtnConcreteStresses_Click">

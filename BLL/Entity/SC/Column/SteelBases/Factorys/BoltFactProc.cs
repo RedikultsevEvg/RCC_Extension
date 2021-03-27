@@ -10,10 +10,11 @@ namespace RDBLL.Entity.SC.Column.SteelBases.Factorys
 {
     internal static class BoltFactProc
     {
-        public static void GetBoltsType1(SteelBase steelBase, double width, double length, int quantityX, int quantityY)
+        public static void GetBoltsType1(SteelBase steelBase, double diameter, double width, double length, int quantityX, int quantityY)
         {
             steelBase.SteelBolts = new ObservableCollection<SteelBolt>();
             SteelBolt steelBolt = SteelBoltFactory.BoltFactory(BoltType.Array2x2);
+            steelBolt.Diameter = diameter;
             RectArrayPlacement placement = steelBolt.Placement as RectArrayPlacement;
             placement.SizeX = width;
             placement.SizeY = length;

@@ -15,6 +15,7 @@ using RDBLL.Common.Interfaces.Materials;
 using RDBLL.Common.Interfaces.Shapes;
 using RDBLL.Entity.SC.Column.SteelBases.Patterns;
 using RDBLL.Entity.MeasureUnits;
+using RDBLL.Entity.SC.Column.SteelBases.Factorys;
 
 namespace RDBLL.Entity.SC.Column
 {
@@ -111,15 +112,17 @@ namespace RDBLL.Entity.SC.Column
             NdmAreas = new List<NdmArea>();
             ConcreteNdmAreas = new List<NdmArea>();
             SteelNdmAreas = new List<NdmArea>();
+            //Добавляем материалы
+            MatFactProc.GetMatType1(this);
         }
         /// <summary>
         /// Создает базу стальной колонны по указанному уровню
         /// </summary>
-        /// <param name="level">Уровень, по которому создается колонна</param>
-        public SteelBase(Level level)
+        /// <param name="parent">Ссылка на родительский элемент</param>
+        public SteelBase(IDsSaveable parent)
         {
             SetDefault();
-            RegisterParent(level);
+            RegisterParent(parent);
         }
 
         /// <summary>

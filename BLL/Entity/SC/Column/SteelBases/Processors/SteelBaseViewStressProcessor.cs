@@ -61,8 +61,10 @@ namespace RDBLL.Entity.SC.Column.SteelBases.Processors
                 double maxBedStress = SteelBasePartProcessor.GetGlobalMinStressNonLinear(steelBasePart) * (-1D);
                 double maxStress = SteelBasePartProcessor.GetResult(steelBasePart, maxBedStress)[1];
                 RectangleValue aRV = new RectangleValue();
-                aRV.CenterX = steelBasePart.CenterX * zoomCoff;
-                aRV.CenterY = steelBasePart.CenterY * zoomCoff;
+                aRV.CenterX = steelBasePart.Center.X * zoomCoff;
+                //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                //Поправка с учетом ошибки во вьювере
+                aRV.CenterY = steelBasePart.Center.Y * zoomCoff * (-1.0);
                 aRV.Width = steelBasePart.Width * zoomCoff;
                 aRV.Length = steelBasePart.Length * zoomCoff;
                 aRV.Value = maxStress;
@@ -83,8 +85,10 @@ namespace RDBLL.Entity.SC.Column.SteelBases.Processors
                 double recomendedThickness = 0;
                 if (maxStress > 0) { recomendedThickness = actualThickness * Math.Pow((maxStress / steelStrength), 0.5); }
                 RectangleValue aRV = new RectangleValue();
-                aRV.CenterX = steelBasePart.CenterX * zoomCoff;
-                aRV.CenterY = steelBasePart.CenterY * zoomCoff;
+                aRV.CenterX = steelBasePart.Center.X * zoomCoff;
+                //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                //Поправка с учетом ошибки во вьювере
+                aRV.CenterY = steelBasePart.Center.Y * zoomCoff * (-1);
                 aRV.Width = steelBasePart.Width * zoomCoff;
                 aRV.Length = steelBasePart.Length * zoomCoff;
                 aRV.Value = Math.Round(recomendedThickness * sizeCoff, 3);

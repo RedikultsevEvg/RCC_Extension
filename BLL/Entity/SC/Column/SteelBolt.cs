@@ -10,6 +10,8 @@ using RDBLL.Common.Service.DsOperations;
 using RDBLL.Entity.MeasureUnits;
 using RDBLL.Common.Interfaces.Shapes;
 using RDBLL.Common.Interfaces.Materials;
+using RDBLL.Common.Geometry;
+using RDBLL.Entity.Common.NDM.Interfaces;
 
 namespace RDBLL.Entity.SC.Column
 {
@@ -42,6 +44,9 @@ namespace RDBLL.Entity.SC.Column
 
         //public BoltUsing BoltUsing { get; set; }
         public MeasureUnitList Measures { get => new MeasureUnitList(); }
+        public Point2D Center { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+
+        public IMaterialModel MaterialModel { get; set; }
 
         #region Constructors
         public SteelBolt(bool genId = false)

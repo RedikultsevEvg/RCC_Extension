@@ -70,6 +70,24 @@ namespace RDBLL.Entity.Common.Materials
             }
         }
         /// <summary>
+        /// Суммарный коэффициент надежности
+        /// </summary>
+        public SafetyFactor TotalSafetyFactor
+        {
+            get
+            {
+                SafetyFactor safetyFactor = new SafetyFactor();
+                foreach (SafetyFactor safetyFactorLoc in SafetyFactors)
+                {
+                    for (int i = 0; i < SafetyFactor.CoefCount; i++)
+                    {
+                        safetyFactor.Coefficients[i] *= safetyFactorLoc.Coefficients[i];
+                    }
+                }
+                return safetyFactor;
+            }
+        }
+        /// <summary>
         /// Список коэффициентов надежности
         /// </summary>
         public ObservableCollection<SafetyFactor> SafetyFactors { get; set; }
@@ -219,18 +237,18 @@ namespace RDBLL.Entity.Common.Materials
         {
             ParentMember = null;
         }
-        public double[] GetTotalSafetyFactor()
-        {
-            double[] safetyFactors = new double[] { 1, 1, 1, 1 };
-            foreach (SafetyFactor safetyFactor in SafetyFactors)
-            {
-                safetyFactors[0] *= safetyFactor.PsfFst;
-                safetyFactors[1] *= safetyFactor.PsfSnd;
-                safetyFactors[2] *= safetyFactor.PsfFstLong;
-                safetyFactors[3] *= safetyFactor.PsfSndLong;
-            }
-            return safetyFactors;
-        }
+        //public double[] GetTotalSafetyFactor()
+        //{
+        //    double[] safetyFactors = new double[] { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 };
+        //    foreach (SafetyFactor safetyFactor in SafetyFactors)
+        //    {
+        //        for (int i = 0; i<SafetyFactor.CoefCount; i++)
+        //        {
+        //            safetyFactors[i] *= safetyFactor.Coefficients[i];
+        //        }
+        //    }
+        //    return safetyFactors;
+        //}
         #endregion
     }
 }

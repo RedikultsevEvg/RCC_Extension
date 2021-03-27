@@ -304,13 +304,13 @@ namespace RDBLL.Processors.SC
             if (Rc == 0)
             {
                 IMaterialModel materialModel = new LinearIsotropic(1e+10, 1, 0);
-                steelBasePart.SubParts = NdmAreaProcessor.MeshRectangle(materialModel, steelBasePart.Width, steelBasePart.Length, steelBasePart.CenterX, steelBasePart.CenterY, elemSize);
+                steelBasePart.SubParts = NdmAreaProcessor.MeshRectangle(materialModel, steelBasePart.Width, steelBasePart.Length, steelBasePart.Center.X, steelBasePart.Center.Y, elemSize);
             }
             else
             {
                 List<double> constantList = new List<double> { Rc * (-1D), -0.0015, -0.0035, 0, 0.0015, 0.0035 };
                 IMaterialModel materialModel = new DoubleLinear(constantList);
-                steelBasePart.SubParts = NdmAreaProcessor.MeshRectangle(materialModel, steelBasePart.Width, steelBasePart.Length, steelBasePart.CenterX, steelBasePart.CenterY, elemSize);
+                steelBasePart.SubParts = NdmAreaProcessor.MeshRectangle(materialModel, steelBasePart.Width, steelBasePart.Length, steelBasePart.Center.X, steelBasePart.Center.Y, elemSize);
             }
 
         }
@@ -376,8 +376,7 @@ namespace RDBLL.Processors.SC
             List<double> stresses = new List<double>();
             foreach (NdmRectangleArea ndmConcreteArea in basePart.SubParts)
             {
-                NdmArea ndmArea = ndmConcreteArea;
-                stresses.Add(NdmAreaProcessor.GetStrainFromCuvature(ndmArea, curvature)[1]);
+                stresses.Add(NdmAreaProcessor.GetStrainFromCuvature(ndmConcreteArea, curvature)[1]);
             }
             return stresses.Min();
         }

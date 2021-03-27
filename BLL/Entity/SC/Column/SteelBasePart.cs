@@ -42,11 +42,7 @@ namespace RDBLL.Entity.SC.Column
         /// <summary>
         /// Центр участка
         /// </summary>
-        public double CenterX { get; set; }
-        /// <summary>
-        /// Центр участка
-        /// </summary>
-        public double CenterY { get; set; }
+        public Point2D Center { get; set; }
         /// <summary>
         /// Смещение левой границы 
         /// </summary>
@@ -85,6 +81,7 @@ namespace RDBLL.Entity.SC.Column
         /// </summary>
         public List<NdmRectangleArea> SubParts { get; set; }
         public MeasureUnitList Measures { get => new MeasureUnitList(); }
+
         #endregion
 
         #region Constructors
@@ -97,12 +94,11 @@ namespace RDBLL.Entity.SC.Column
             Name = "Новый участок";
             Width = 0.2;
             Length = 0.2;
-            CenterX = 0;
-            CenterY = 0;
             FixLeft = false;
             FixRight = false;
             FixTop = false;
             FixBottom = false;
+            Center = new Point2D();
         }
         /// <summary>
         /// Конструктор без параметров
@@ -110,6 +106,7 @@ namespace RDBLL.Entity.SC.Column
         public SteelBasePart(bool genId = false)
         {
             if (genId) Id = ProgrammSettings.CurrentId;
+            Center = new Point2D();
         }
         /// <summary>
         /// Конструктор по стальной базе
@@ -135,8 +132,8 @@ namespace RDBLL.Entity.SC.Column
         {
             DataRow row = EntityOperation.SaveEntity(dataSet, createNew, this);
             #region        
-            row.SetField("CenterX", CenterX);
-            row.SetField("CenterY", CenterY);
+            row.SetField("CenterX", Center.X);
+            row.SetField("CenterY", Center.Y);
             row.SetField("LeftOffset", LeftOffset);
             row.SetField("RightOffset", RightOffset);
             row.SetField("TopOffset", TopOffset);
@@ -163,8 +160,8 @@ namespace RDBLL.Entity.SC.Column
         public void OpenFromDataSet(DataRow dataRow)
         {
             EntityOperation.SetProps(dataRow, this);
-            CenterX = dataRow.Field<double>("CenterX");
-            CenterY = dataRow.Field<double>("CenterY");
+            Center.X = dataRow.Field<double>("CenterX");
+            Center.Y = dataRow.Field<double>("CenterY");
             LeftOffset = dataRow.Field<double>("LeftOffset");
             RightOffset = dataRow.Field<double>("RightOffset");
             TopOffset = dataRow.Field<double>("TopOffset");
@@ -212,7 +209,7 @@ namespace RDBLL.Entity.SC.Column
 
         public double GetArea()
         {
-            throw new NotImplementedException();
+            return Width * Length;
         }
     }
 }

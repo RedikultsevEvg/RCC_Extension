@@ -11,6 +11,8 @@ using Winforms = System.Windows.Forms;
 using RDBLL.Entity.SC.Column.SteelBases.Builders;
 using RDStartWPF.Infrasructure.Reports;
 using RDBLL.Entity.SC.Column.SteelBases.Patterns;
+using RDStartWPF.Views.Common.Patterns;
+using RDStartWPF.Views.Common.Patterns.ControlClasses;
 
 namespace RDStartWPF.Views.SC.Columns.Bases
 {
@@ -36,33 +38,9 @@ namespace RDStartWPF.Views.SC.Columns.Bases
 
         private void BtnAdd_Click(object sender, RoutedEventArgs e)
         {
-            BuilderTempate1 builder = new BuilderTempate1();
-            SteelBase steelBase = BaseMaker.MakeSteelBase(builder);
-            steelBase.RegisterParent(_level);
-            PatternBase Pattern = new PatternType2(true);
-            Pattern.RegisterParent(steelBase);
-            steelBase.Pattern = Pattern;
-            steelBase.SaveToDataSet(ProgrammSettings.CurrentDataSet, true);
-            WndSteelColumnBase wndSteelColumnBase = new WndSteelColumnBase(steelBase);
-            wndSteelColumnBase.ShowDialog();
-            if (wndSteelColumnBase.DialogResult == true)
-            {
-                try
-                {
-                    steelBase.SaveToDataSet(ProgrammSettings.CurrentDataSet, false);
-                    steelBase.IsActual = false;
-                    ProgrammSettings.IsDataChanged = true;
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Ошибка сохранения :" + ex);
-                }
-            }
-            else
-            {
-                steelBase.UnRegisterParent();
-                steelBase.DeleteFromDataSet(ProgrammSettings.CurrentDataSet);
-            }
+            List<PatternCard> patternCards = SelectPatternProcessor.SelectSteelBasePattern(_level);
+            WndPatternSelect wndPatternSelect = new WndPatternSelect(patternCards);
+            wndPatternSelect.ShowDialog();
         }
 
         private void BtnDelete_Click(object sender, RoutedEventArgs e)

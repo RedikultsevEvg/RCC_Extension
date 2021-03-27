@@ -299,12 +299,14 @@ namespace RDBLL.Entity.RCC.Foundations.Processors
             LineToSurfBySpacing rfSpacingX = rfX.Extender as LineToSurfBySpacing;
             LineToSurfBySpacing rfSpacingY = rfY.Extender as LineToSurfBySpacing;
 
-            ConcreteKind concreteKind = part.ParentMember.Concrete.MaterialKind as ConcreteKind;
+            ConcreteUsing concrete = part.ParentMember.Concrete;
+            ConcreteKind concreteKind = concrete.MaterialKind as ConcreteKind;
             double mx = GetMaxMoment(part.Result.partMomentAreas.LoadCombinationsX);
             double my = GetMaxMoment(part.Result.partMomentAreas.LoadCombinationsY);
             double RsX = rfKindX.FstTensStrength;
             double RsY = rfKindY.FstTensStrength;
-            double Rc = concreteKind.FstCompStrength;
+            //определяем расчетное сопротивление бетона для 1й группы предельных состояний
+            double Rc = concreteKind.FstCompStrength * concrete.TotalSafetyFactor.PsfEFst;
             double bx = part.Length;
             double by = part.Width;
             double h0x = part.Result.ZMax - rfSpacingX.CoveringLayer;

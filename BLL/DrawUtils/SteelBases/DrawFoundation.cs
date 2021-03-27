@@ -9,7 +9,7 @@ using System.Windows.Media;
 using RDBLL.Entity.RCC.Foundations;
 using RDBLL.Entity.RCC.Foundations.Processors;
 
-namespace RDBLL.DrawUtils.SteelBase
+namespace RDBLL.DrawUtils.SteelBases
 {
     /// <summary>
     /// Рисование эскиза фундамента

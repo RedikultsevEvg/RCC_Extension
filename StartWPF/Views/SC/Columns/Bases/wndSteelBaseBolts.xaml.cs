@@ -13,7 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using RDBLL.Entity.SC.Column;
 using Winforms = System.Windows.Forms;
-using RDBLL.DrawUtils.SteelBase;
+using RDBLL.DrawUtils.SteelBases;
 using RDBLL.Common.Service;
 
 namespace RDStartWPF.Views.SC.Columns.Bases

@@ -24,5 +24,6 @@
     <BitmapImage x:Key="IconBuilding" CreateOptions="IgnoreImageCache" CacheOption="OnLoad" UriSource="/UIL;component/Resources/IconBuilding40.png"/>
     <BitmapImage x:Key="IconSoil" CreateOptions="IgnoreImageCache" CacheOption="OnLoad" UriSource="/UIL;component/Resources/IconSoil40.png"/>
     <BitmapImage x:Key="IconSoilSection" CreateOptions="IgnoreImageCache" CacheOption="OnLoad" UriSource="/UIL;component/Resources/IconSoilSection40.png"/>
+    <BitmapImage x:Key="IconExplode" CreateOptions="IgnoreImageCache" CacheOption="OnLoad" UriSource="/UIL;component/Resources/IconExplode40.png"/>
     
 </ResourceDictionary>

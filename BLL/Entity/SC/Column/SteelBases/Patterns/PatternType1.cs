@@ -10,6 +10,9 @@ using System.Threading.Tasks;
 
 namespace RDBLL.Entity.SC.Column.SteelBases.Patterns
 {
+    /// <summary>
+    /// Создание стальной базы по паттерну 1
+    /// </summary>
     public class PatternType1 : PatternBase
     {
         public override string Type { get => "SteelBasePatternType1"; }
@@ -25,6 +28,8 @@ namespace RDBLL.Entity.SC.Column.SteelBases.Patterns
             StoredParams[3].SetDoubleValue(0.2);
             StoredParams.Add(new StoredParam(this) { Id = ProgrammSettings.CurrentId, Name = "Размер по болтам, L2" });
             StoredParams[4].SetDoubleValue(0.49);
+            StoredParams.Add(new StoredParam(this) { Id = ProgrammSettings.CurrentId, Name = "Диаметр болтов, d" });
+            StoredParams[5].SetDoubleValue(0.03);
         }
         public override void GetBaseParts()
         {
@@ -34,6 +39,7 @@ namespace RDBLL.Entity.SC.Column.SteelBases.Patterns
             double baseIntLength = StoredParams[2].GetDoubleValue();
             double width = StoredParams[3].GetDoubleValue();
             double length = StoredParams[4].GetDoubleValue();
+            double diam = StoredParams[5].GetDoubleValue();
             steelBase.SteelBolts.Clear();
             DataSet dataSet = ProgrammSettings.CurrentDataSet;
             foreach (SteelBasePart part in steelBase.SteelBaseParts)
@@ -45,7 +51,7 @@ namespace RDBLL.Entity.SC.Column.SteelBases.Patterns
                 EntityOperation.DeleteEntity(dataSet, part);
             }
             steelBase.SteelBaseParts.Clear();
-            BoltFactProc.GetBoltsType1(steelBase, width, length, 2, 2);
+            BoltFactProc.GetBoltsType1(steelBase, diam, width, length, 2, 2);
             PartFactProc.GetPartsType1(steelBase, baseWidth, baseLength, baseIntLength);
         }
     }

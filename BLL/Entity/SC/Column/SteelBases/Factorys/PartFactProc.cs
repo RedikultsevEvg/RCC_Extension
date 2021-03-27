@@ -26,8 +26,8 @@ namespace RDBLL.Entity.SC.Column.SteelBases.Factorys
             part.Name = "1";
             part.Width = widthOuterPart;
             part.Length = lengthOuterPart;
-            part.CenterX = -widthOuterPart / 2;
-            part.CenterY = (addY + lengthOuterPart / 2);
+            part.Center.X = -widthOuterPart / 2;
+            part.Center.Y = (addY + lengthOuterPart / 2);
             part.FixRight = true;
             part.FixBottom = true;
             part.RightOffset = 0.008;
@@ -38,8 +38,8 @@ namespace RDBLL.Entity.SC.Column.SteelBases.Factorys
             part.Name = "2";
             part.Width = widthOuterPart;
             part.Length = lengthOuterPart;
-            part.CenterX = widthOuterPart / 2;
-            part.CenterY = (addY + lengthOuterPart / 2);
+            part.Center.X = widthOuterPart / 2;
+            part.Center.Y = (addY + lengthOuterPart / 2);
             part.FixLeft = true;
             part.FixBottom = true;
             part.LeftOffset = 0.008;
@@ -50,8 +50,8 @@ namespace RDBLL.Entity.SC.Column.SteelBases.Factorys
             part.Name = "3";
             part.Width = widthOuterPart;
             part.Length = lengthOuterPart;
-            part.CenterX = -widthOuterPart / 2;
-            part.CenterY = -(addY + lengthOuterPart / 2);
+            part.Center.X = -widthOuterPart / 2;
+            part.Center.Y = -(addY + lengthOuterPart / 2);
             part.FixRight = true;
             part.FixTop = true;
             part.RightOffset = 0.008;
@@ -62,8 +62,8 @@ namespace RDBLL.Entity.SC.Column.SteelBases.Factorys
             part.Name = "4";
             part.Width = widthOuterPart;
             part.Length = lengthOuterPart;
-            part.CenterX = widthOuterPart / 2;
-            part.CenterY = -(addY + lengthOuterPart / 2);
+            part.Center.X = widthOuterPart / 2;
+            part.Center.Y = -(addY + lengthOuterPart / 2);
             part.FixLeft = true;
             part.FixTop = true;
             part.LeftOffset = 0.008;
@@ -75,8 +75,8 @@ namespace RDBLL.Entity.SC.Column.SteelBases.Factorys
             part.Name = "5";
             part.Width = widthOuterPart;
             part.Length = baseInternalLength;
-            part.CenterX = -widthOuterPart / 2;
-            part.CenterY = 0;
+            part.Center.X = -widthOuterPart / 2;
+            part.Center.Y = 0;
             part.FixRight = true;
             part.FixTop = true;
             part.FixBottom = true;
@@ -89,8 +89,8 @@ namespace RDBLL.Entity.SC.Column.SteelBases.Factorys
             part.Name = "6";
             part.Width = widthOuterPart;
             part.Length = baseInternalLength;
-            part.CenterX = widthOuterPart / 2;
-            part.CenterY = 0;
+            part.Center.X = widthOuterPart / 2;
+            part.Center.Y = 0;
             part.FixLeft = true;
             part.FixTop = true;
             part.FixBottom = true;

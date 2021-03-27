@@ -26,7 +26,6 @@ namespace RDBLL.Common.Geometry
             double result = y1 + (y2-y1)/(x2-x1)*(xn-x1);
             return result;
         }
-
         /// <summary>
         /// Линейная интерполяция по диапазону
         /// </summary>

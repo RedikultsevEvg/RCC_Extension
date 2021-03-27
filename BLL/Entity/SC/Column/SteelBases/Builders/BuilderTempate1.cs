@@ -28,7 +28,7 @@ namespace RDBLL.Entity.SC.Column.SteelBases.Builders
         {
             double width = 0.4;
             double length = 0.7;
-            BoltFactProc.GetBoltsType1(_SteelBase, width, length, 2, 2);
+            BoltFactProc.GetBoltsType1(_SteelBase, 0.03, width, length, 2, 2);
         }
 
         /// <summary>
@@ -48,24 +48,6 @@ namespace RDBLL.Entity.SC.Column.SteelBases.Builders
             loadSet.IsLiveLoad = false;
             loadSet.BothSign = false;
             loadSet.PartialSafetyFactor = 1.1;
-        }
-        /// <summary>
-        /// Добавление материалов
-        /// </summary>
-        public override void AddMaterial()
-        {
-            SteelUsing steel = new SteelUsing(_SteelBase);
-            steel.Name = "Сталь";
-            steel.Purpose = "BaseSteel";
-            steel.SelectedId = ProgrammSettings.SteelKinds[0].Id;
-            _SteelBase.Steel = steel;
-            ConcreteUsing concrete = new ConcreteUsing(_SteelBase);
-            concrete.Name = "Бетон";
-            concrete.Purpose = "Filling";
-            concrete.SelectedId = ProgrammSettings.ConcreteKinds[0].Id;
-            concrete.AddGammaB1();
-            _SteelBase.Concrete = concrete;
-
         }
         /// <summary>
         /// Добавление участков
@@ -90,7 +72,6 @@ namespace RDBLL.Entity.SC.Column.SteelBases.Builders
         public override SteelBase GetSteelBase()
         {
             CreateGeometry();
-            AddMaterial();
             AddParts();
             AddBolts();
             AddLoads();

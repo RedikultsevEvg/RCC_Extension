@@ -16,7 +16,6 @@ namespace RDBLL.Entity.SC.Column.SteelBases.Builders
         public abstract void CreateGeometry();
         public abstract void AddParts();
         public abstract void AddBolts();
-        public abstract void AddMaterial();
         public abstract void AddLoads();
         public abstract SteelBase GetSteelBase();
     }

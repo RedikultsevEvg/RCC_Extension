@@ -1,4 +1,6 @@
-﻿using System;
+﻿using RDStartWPF.Views.Common.Patterns.ControlClasses;
+using RDStartWPF.Views.SC.Columns.Bases.UserControls;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -19,9 +21,16 @@ namespace RDStartWPF.Views.Common.Patterns
     /// </summary>
     public partial class WndPatternSelect : Window
     {
-        public WndPatternSelect()
+        private List<PatternCard> _PatternCards;
+        public WndPatternSelect(List<PatternCard> patternCards)
         {
+            _PatternCards = patternCards;
             InitializeComponent();
+            foreach (PatternCard patternCard in _PatternCards)
+            {
+                PatternCardControl card = new PatternCardControl(patternCard);
+                wrpPatternCards.Children.Add(card);
+            }
         }
     }
 }

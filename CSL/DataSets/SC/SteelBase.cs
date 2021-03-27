@@ -19,13 +19,13 @@ namespace CSL.DataSets.SC
             //Базы стальных колонн
             newTable = new DataTable("SteelBases");
             dataSet.Tables.Add(newTable);
-            DsOperation.AddIdColumn(newTable, true);
+            DsOperation.AddIdNameParentIdColumn(newTable);
             DsOperation.AddByteColumn(newTable, "Picture");
             DsOperation.AddDoubleColumn(newTable, "SteelStrength");
             DsOperation.AddDoubleColumn(newTable, "ConcreteStrength");
             DsOperation.AddDoubleColumn(newTable, "Width");
             DsOperation.AddDoubleColumn(newTable, "Length");
-            DsOperation.AddDoubleColumn(newTable, "Thickness");
+            DsOperation.AddDoubleColumn(newTable, "Height");
             DsOperation.AddDoubleColumn(newTable, "Area");
             DsOperation.AddDoubleColumn(newTable, "Wx");
             DsOperation.AddDoubleColumn(newTable, "Wy");
@@ -36,8 +36,7 @@ namespace CSL.DataSets.SC
             #region SteelBasesParts
             newTable = new DataTable("SteelBasesParts");
             dataSet.Tables.Add(newTable);
-            DsOperation.AddIdColumn(newTable, true);
-            DsOperation.AddFkIdColumn("SteelBases", "SteelBaseId", newTable);
+            DsOperation.AddIdNameParentIdColumn(newTable, "SteelBases");
             DsOperation.AddByteColumn(newTable, "Picture");
             DsOperation.AddDoubleColumn(newTable, "CenterX");
             DsOperation.AddDoubleColumn(newTable, "CenterY");
@@ -50,8 +49,7 @@ namespace CSL.DataSets.SC
             #region SteelBolts
             newTable = new DataTable("SteelBasesBolts");
             dataSet.Tables.Add(newTable);
-            DsOperation.AddIdColumn(newTable, true);
-            DsOperation.AddFkIdColumn("SteelBases", "SteelBaseId", newTable);
+            DsOperation.AddIdNameParentIdColumn(newTable, "SteelBases");
             DsOperation.AddDoubleColumn(newTable, "Diameter");
             DsOperation.AddDoubleColumn(newTable, "CenterX");
             DsOperation.AddDoubleColumn(newTable, "CenterY");

@@ -7,7 +7,7 @@ using System.Windows.Controls;
 using System.Windows.Shapes;
 using System.Windows.Media;
 
-namespace RDBLL.DrawUtils.SteelBase
+namespace RDBLL.DrawUtils.SteelBases
 {
     /// <summary>
     /// Утилиты рисования

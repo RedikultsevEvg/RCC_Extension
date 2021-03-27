@@ -9,6 +9,7 @@ using RDBLL.Common.Interfaces;
 using System.Data;
 using RDBLL.Entity.RCC.Foundations.Processors;
 using RDBLL.Common.Service.DsOperations;
+using RDBLL.Common.Geometry;
 
 namespace RDBLL.Entity.RCC.Foundations
 {
@@ -64,6 +65,10 @@ namespace RDBLL.Entity.RCC.Foundations
         /// </summary>
         public double Height { get; set; }
         /// <summary>
+        /// Положение центра ступени
+        /// </summary>
+        public Point2D Center { get; set; }
+        /// <summary>
         /// Положение центра ступени по X
         /// </summary>
         public double CenterX { get; set; }
@@ -103,9 +108,10 @@ namespace RDBLL.Entity.RCC.Foundations
         /// <summary>
         /// Конструктор без параметров
         /// </summary>
-        public FoundationPart()
+        public FoundationPart(bool genId = false)
         {
-
+            if (genId) Id = ProgrammSettings.CurrentId;
+            Center = new Point2D();
         }
         /// <summary>
         /// Конструктор по фундаменту
@@ -127,6 +133,7 @@ namespace RDBLL.Entity.RCC.Foundations
             }
             CenterX = 0;
             CenterY = 0;
+            Center = new Point2D();
         }
         #region IODataset
         /// <summary>

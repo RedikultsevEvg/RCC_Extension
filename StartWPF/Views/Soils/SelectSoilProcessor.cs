@@ -17,7 +17,7 @@ namespace RDStartWPF.Views.Soils
     {
         public static void SelectSoils(BuildingSite buildingSite)
         {
-            string directory = Directory.GetCurrentDirectory() + "\\Images\\Soils\\";
+            string directory = Directory.GetCurrentDirectory() + "\\Images\\Patterns\\Soils\\";
             List<SoilCard> soilCards = new List<SoilCard>();
 
             #region GravelSoil

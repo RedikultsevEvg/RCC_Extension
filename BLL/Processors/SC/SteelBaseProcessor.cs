@@ -18,6 +18,8 @@ using RDBLL.Entity.Common.Materials;
 using RDBLL.Entity.Common.Materials.SteelMaterialUsing;
 using RDBLL.Entity.Common.NDM.Interfaces;
 using RDBLL.Entity.Common.NDM.MaterialModels;
+using RDBLL.Common.Interfaces.Shapes;
+using RDBLL.Common.Geometry.Mathematic;
 
 namespace RDBLL.Processors.SC
 {
@@ -28,7 +30,6 @@ namespace RDBLL.Processors.SC
     public static class SteelBaseProcessor
     {
         public static NdmCircleArea NdmCircleArea { get; private set; }
-
         /// <summary>
         /// Актуализирует все данные стальной базы
         /// </summary>
@@ -123,6 +124,7 @@ namespace RDBLL.Processors.SC
             {
                 SteelUsing steel = steelBolt.Steel;
                 IMaterialModel materialModel = new LinearIsotropic(steel.MaterialKind.ElasticModulus, 0.000001, 1);
+                steelBolt.MaterialModel = materialModel;
 
                 foreach (Point2D point in steelBolt.Placement.GetElementPoints())
                 {
@@ -262,8 +264,52 @@ namespace RDBLL.Processors.SC
             }
             return loadCaseRectangleValues;
         }
-
-
+        public static double GetSteelStrength(SteelBase steelBase)
+        {
+            SteelUsing steel = steelBase.Steel;
+            return (steel.MaterialKind as SteelKind).FstStrength * steel.TotalSafetyFactor.PsfFst;
+        }
+        public static double GetConcreteStrength(SteelBase steelBase)
+        {
+            ConcreteUsing mat = steelBase.Concrete;
+            return (mat.MaterialKind as ConcreteKind).FstCompStrength * mat.TotalSafetyFactor.PsfFst;
+        }
+        public static double GetArea(SteelBase steelBase)
+        {
+            List<IShape> shapes = new List<IShape>();
+            foreach (SteelBasePart part in steelBase.SteelBaseParts)
+            {
+                shapes.Add(part);
+            }
+            return GeometryProc.GetArea(shapes);
+        }
+        public static double[] GetMomInertia(SteelBase steelBase)
+        {
+            List<IShape> shapes = new List<IShape>();
+            foreach (SteelBasePart part in steelBase.SteelBaseParts)
+            {
+                shapes.Add(part);
+            }
+            return GeometryProc.GetMomInertia(shapes);
+        }
+        public static double[] GetMinSecMomInertia(SteelBase steelBase)
+        {
+            List<IShape> shapes = new List<IShape>();
+            foreach (SteelBasePart part in steelBase.SteelBaseParts)
+            {
+                shapes.Add(part);
+            }
+            return GeometryProc.GetMinSecMomentInertia(shapes);
+        }
+        public static double[] GetMaxSizes(SteelBase steelBase)
+        {
+            List<IShape> shapes = new List<IShape>();
+            foreach (SteelBasePart part in steelBase.SteelBaseParts)
+            {
+                shapes.Add(part);
+            }
+            return GeometryProc.GetEdgeDist(shapes);
+        }
     }
 }
 
