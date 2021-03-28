@@ -14,10 +14,6 @@
         <vm:MatUsingVM x:Key="MatUsing"/>
     </ResourceDictionary>
 
-    <DataTemplate x:Key="PartialSafetyFactors">
-
-    </DataTemplate>
-
     <DataTemplate x:Key="PSF_Button">
         <Grid Height="22">
             <Button Content="Gm" Command="{x:Static vm:MatUsingVM.OpenPSF}" CommandParameter="{Binding}"/>

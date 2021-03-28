@@ -34,7 +34,7 @@ namespace RDBLL.Entity.Common.Placements
         /// Коллекция хранимых параметров
         /// </summary>
         public List<StoredParam> StoredParams { get; set; }
-        public string Type { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public string Type { get; set; }
         #region Constructors
         /// <summary>
         /// Default constructor 
@@ -54,7 +54,6 @@ namespace RDBLL.Entity.Common.Placements
         /// <param name="dataSet"></param>
         public void DeleteFromDataSet(DataSet dataSet)
         {
-
             DsOperation.DeleteRow(dataSet, GetTableName(), Id);
         }
         /// <summary>
@@ -91,12 +90,7 @@ namespace RDBLL.Entity.Common.Placements
         public void SaveToDataSet(DataSet dataSet, bool createNew)
         {
             DataRow row = EntityOperation.SaveEntity(dataSet, createNew, this);
-            #region setFields
-            if (this is LineBySpacing) { row.SetField("Type", "LineBySpacing"); }
-            else if (this is RectArrayPlacement) { row.SetField("Type", "RectArrayPlacement"); }
-            else { throw new Exception("Type of Placement is unknown"); }
             row.AcceptChanges();
-            #endregion
         }
         /// <summary>
         /// Удаление ссылки на родителя

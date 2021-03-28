@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Windows.Data;
 using RDBLL.Entity.MeasureUnits;
 using RDBLL.Common.Service;
+using RDBLL.Common.Geometry;
 
 namespace RDStartWPF.InfraStructure.Converters
 {
@@ -20,7 +21,7 @@ namespace RDStartWPF.InfraStructure.Converters
             try
             {
                 string s = System.Convert.ToString(value);
-                return CommonOperation.ConvertToDouble(s,3);
+                return MathOperation.Round(CommonOperation.ConvertToDouble(s,3));
             }
             catch (Exception e)
             {

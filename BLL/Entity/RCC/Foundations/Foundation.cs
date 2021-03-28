@@ -226,15 +226,14 @@ namespace RDBLL.Entity.RCC.Foundations
             {
                 DataRow row = EntityOperation.SaveEntity(dataSet, createNew, this);
                 #region setFields
-                DsOperation.SetId(row, Id, Name, ParentMember.Id);
-                row.SetField("RelativeTopLevel", RelativeTopLevel);
-                row.SetField("SoilRelativeTopLevel", SoilRelativeTopLevel);
-                row.SetField("SoilVolumeWeight", SoilVolumeWeight);
-                row.SetField("ConcreteVolumeWeight", ConcreteVolumeWeight);
-                row.SetField("FloorLoad", FloorLoad);
-                row.SetField("FloorLoadFactor", FloorLoadFactor);
-                row.SetField("ConcreteFloorLoad", ConcreteFloorLoad);
-                row.SetField("CompressedLayerRatio", CompressedLayerRatio);
+                DsOperation.SetField(row, "RelativeTopLevel", RelativeTopLevel);
+                DsOperation.SetField(row, "SoilRelativeTopLevel", SoilRelativeTopLevel);
+                DsOperation.SetField(row, "SoilVolumeWeight", SoilVolumeWeight);
+                DsOperation.SetField(row, "ConcreteVolumeWeight", ConcreteVolumeWeight);
+                DsOperation.SetField(row, "FloorLoad", FloorLoad);
+                DsOperation.SetField(row, "FloorLoadFactor", FloorLoadFactor);
+                DsOperation.SetField(row, "ConcreteFloorLoad", ConcreteFloorLoad);
+                DsOperation.SetField(row, "CompressedLayerRatio", CompressedLayerRatio);
                 #endregion
                 row.Table.AcceptChanges();
 
@@ -271,17 +270,26 @@ namespace RDBLL.Entity.RCC.Foundations
         /// <param name="dataRow"></param>
         public void OpenFromDataSet(DataRow dataRow)
         {
-            Id = dataRow.Field<int>("Id");
-            Name = dataRow.Field<string>("Name");
-            RelativeTopLevel = dataRow.Field<double>("RelativeTopLevel");
-            SoilRelativeTopLevel = dataRow.Field<double>("SoilRelativeTopLevel");
-            SoilVolumeWeight = dataRow.Field<double>("SoilVolumeWeight");
-            ConcreteVolumeWeight = dataRow.Field<double>("ConcreteVolumeWeight");
-            FloorLoad = dataRow.Field<double>("FloorLoad");
-            FloorLoadFactor = dataRow.Field<double>("FloorLoadFactor");
-            ConcreteFloorLoad = dataRow.Field<double>("ConcreteFloorLoad");
-            ConcreteFloorLoadFactor = dataRow.Field<double>("ConcreteFloorLoadFactor");
-            CompressedLayerRatio = dataRow.Field<double>("CompressedLayerRatio");
+            EntityOperation.SetProps(dataRow, this);
+            double d = 0;
+            DsOperation.Field(dataRow, ref d, "RelativeTopLevel", -0.2);
+            RelativeTopLevel = d;
+            DsOperation.Field(dataRow, ref d, "SoilRelativeTopLevel", -0.2);
+            SoilRelativeTopLevel = d;
+            DsOperation.Field(dataRow, ref d, "SoilVolumeWeight", 18000);
+            SoilVolumeWeight = d;
+            DsOperation.Field(dataRow, ref d, "ConcreteVolumeWeight", 25000);
+            ConcreteVolumeWeight = d;
+            DsOperation.Field(dataRow, ref d, "FloorLoad", 0);
+            FloorLoad = d;
+            DsOperation.Field(dataRow, ref d, "FloorLoadFactor", 1.2);
+            FloorLoadFactor = d;
+            DsOperation.Field(dataRow, ref d, "ConcreteFloorLoad", 0);
+            ConcreteFloorLoad = d;
+            DsOperation.Field(dataRow, ref d, "ConcreteFloorLoadFactor", 1.2);
+            ConcreteFloorLoadFactor = d;
+            DsOperation.Field(dataRow, ref d, "CompressedLayerRatio", 0.2);
+            CompressedLayerRatio = d;
             //Если у фундамента есть код скважины
             List<MaterialContainer> materialContainers = GetEntity.GetContainers(dataRow.Table.DataSet, this);
             foreach (MaterialContainer materialContainer in materialContainers)
@@ -352,7 +360,6 @@ namespace RDBLL.Entity.RCC.Foundations
             IsPartsActual = false;
         }
         #endregion
-        #region IDuplicate
         /// <summary>
         /// Клонирование объекта
         /// </summary>
@@ -364,7 +371,6 @@ namespace RDBLL.Entity.RCC.Foundations
             FoundCloneProcessor.FoundationClone(this, foundation);
             return foundation;
         }
-        #endregion
         public void DeleteFromObservables()
         {
             
@@ -384,7 +390,7 @@ namespace RDBLL.Entity.RCC.Foundations
             ReinforcementUsing GetBottomReinforcement(MaterialContainer container, double coveringLayer, string rusName, string engName)
             {
                 ReinforcementUsing rf = GetRF(container, rusName, engName);
-                LineBySpacing placement = new LineBySpacing();
+                LineBySpacing placement = new LineBySpacing(true);
                 placement.RegisterParent(rf);
                 LineToSurfBySpacing extender = ExtenderFactory.GetCoveredArray(ExtenderType.CoveredLine) as LineToSurfBySpacing;
                 rf.SetExtender(extender);
@@ -395,7 +401,7 @@ namespace RDBLL.Entity.RCC.Foundations
             ReinforcementUsing GetUndColumnRF(MaterialContainer container, double coveringLayer, string rusName, string engName)
             {
                 ReinforcementUsing rf = GetRF(container, rusName, engName);
-                RectArrayPlacement placement = new RectArrayPlacement();
+                RectArrayPlacement placement = new RectArrayPlacement(true);
                 placement.OffSet = 0.05;
                 placement.RegisterParent(rf);
                 rf.SetExtender(ExtenderFactory.GetCoveredArray(ExtenderType.CoveredArray));

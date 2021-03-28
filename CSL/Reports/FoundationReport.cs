@@ -22,6 +22,7 @@ using System.Linq;
 using RDBLL.Entity.Common.NDM;
 using RDBLL.Common.Interfaces;
 using RDBLL.Common.Service.DsOperations;
+using RDBLL.Common.Geometry;
 
 namespace CSL.Reports
 {
@@ -315,8 +316,9 @@ namespace CSL.Reports
 
             List<double[]> stressesWithoutWeigth = FoundationProcessor.GetStresses(foundation, foundation.ForceCurvaturesWithoutWeight);
             FoundationStresses = dataSet.Tables["FoundationStressesWithoutWeight"];
-            foreach (double[] stresses in stressesWithoutWeigth)
+            foreach (double[] stresses in MathOperation.Round(stressesWithoutWeigth))
             {
+                
                 DataRow newTableItem = FoundationStresses.NewRow();
                 DsOperation.SetId(newTableItem, ProgrammSettings.CurrentTmpId, null, foundation.Id);
                 newTableItem.SetField("crcAvgStress", stresses[0] * stressCoefficient);

@@ -19,7 +19,7 @@ namespace RDBLL.Entity.RCC.BuildingAndSite
     /// <summary>
     /// Уровень
     /// </summary>
-    public class Level :ICloneable, IHasParent
+    public class Level :ICloneable, IHasParent, IHasChildren
     {
         /// <summary>
         /// Код уровня
@@ -72,7 +72,7 @@ namespace RDBLL.Entity.RCC.BuildingAndSite
         /// <summary>
         /// Коллекция фундаментов
         /// </summary>
-        public ObservableCollection<IHasParent> Children { get; set; }
+        public ObservableCollection<IHasParent> Children { get; private set; }
 
         /// <summary>
         /// Получение суммарного объема бетона
@@ -101,21 +101,7 @@ namespace RDBLL.Entity.RCC.BuildingAndSite
         /// <param name="createNew"></param>
         public void SaveToDataSet(DataSet dataSet, bool createNew)
         {
-            DataTable dataTable;
-            DataRow row;
-            dataTable = dataSet.Tables[GetTableName()];
-            if (createNew)
-            {
-                row = dataTable.NewRow();
-                dataTable.Rows.Add(row);
-            }
-            else
-            {
-                var tmpRow = (from dataRow in dataTable.AsEnumerable()
-                              where dataRow.Field<int>("Id") == Id
-                              select dataRow).Single();
-                row = tmpRow;
-            }
+            DataRow row = EntityOperation.SaveEntity(dataSet, createNew, this);
             #region SetField
             row.SetField("Id", Id);
             row.SetField("ParentId", ParentMember.Id);
@@ -127,15 +113,11 @@ namespace RDBLL.Entity.RCC.BuildingAndSite
             row.SetField("BasePointY", BasePointY);
             row.SetField("BasePointZ", BasePointZ);
             #endregion
-            dataTable.AcceptChanges();
+            row.AcceptChanges();
 
             foreach (SteelBase steelBase in SteelBases)
             {
                 steelBase.SaveToDataSet(dataSet, createNew);
-            }
-            foreach (Foundation foundation in Children)
-            {
-                foundation.SaveToDataSet(dataSet, createNew);
             }
         }
         /// <summary>

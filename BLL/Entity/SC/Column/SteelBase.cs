@@ -158,15 +158,18 @@ namespace RDBLL.Entity.SC.Column
             row.SetField("UseSimpleMethod", UseSimpleMethod);
             #endregion
             row.AcceptChanges();
-            foreach (SteelBasePart steelBasePart in SteelBaseParts)
+            if (Pattern is null)
             {
-                steelBasePart.SaveToDataSet(dataSet, createNew);
+                foreach (SteelBasePart steelBasePart in SteelBaseParts)
+                {
+                    steelBasePart.SaveToDataSet(dataSet, createNew);
+                }
+                foreach (SteelBolt steelBolt in SteelBolts)
+                {
+                    steelBolt.SaveToDataSet(dataSet, createNew);
+                }
             }
-            foreach (SteelBolt steelBolt in SteelBolts)
-            {
-                steelBolt.SaveToDataSet(dataSet, createNew);
-            }
-            if (Pattern != null) EntityOperation.SaveEntity(dataSet, true, Pattern);
+            else EntityOperation.SaveEntity(dataSet, true, Pattern);
         }
         /// <summary>
         /// Обновляет запись по датасету

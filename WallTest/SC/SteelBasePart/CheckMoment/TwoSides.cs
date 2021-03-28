@@ -1,4 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using RDBLL.Common.Geometry;
 using RDBLL.Entity.SC.Column;
 using RDBLL.Forces;
 using RDBLL.Processors.SC;
@@ -31,8 +32,7 @@ namespace Test.SC.SteelBasePart.CheckMoment
             RDBLL.Entity.SC.Column.SteelBasePart basePart = new RDBLL.Entity.SC.Column.SteelBasePart(steelColumnBase);
             basePart.Width = width;
             basePart.Length = length;
-            basePart.CenterX = 0;
-            basePart.CenterY = 0;
+            basePart.Center = new Point2D();
             basePart.FixLeft = false;
             basePart.FixRight = false;
             basePart.FixTop = true;
@@ -67,8 +67,7 @@ namespace Test.SC.SteelBasePart.CheckMoment
             RDBLL.Entity.SC.Column.SteelBasePart basePart = new RDBLL.Entity.SC.Column.SteelBasePart(steelColumnBase);
             basePart.Width = width;
             basePart.Length = length;
-            basePart.CenterX = 0;
-            basePart.CenterY = 0;
+            basePart.Center = new Point2D();
             basePart.FixLeft = true;
             basePart.FixRight = true;
             basePart.FixTop = false;
@@ -106,8 +105,7 @@ namespace Test.SC.SteelBasePart.CheckMoment
             RDBLL.Entity.SC.Column.SteelBasePart basePart = new RDBLL.Entity.SC.Column.SteelBasePart(steelColumnBase);
             basePart.Width = width;
             basePart.Length = length;
-            basePart.CenterX = 0;
-            basePart.CenterY = 0;
+            basePart.Center = new Point2D();
             basePart.FixLeft = true;
             basePart.FixRight = false;
             basePart.FixTop = false;
@@ -145,8 +143,7 @@ namespace Test.SC.SteelBasePart.CheckMoment
             RDBLL.Entity.SC.Column.SteelBasePart basePart = new RDBLL.Entity.SC.Column.SteelBasePart(steelColumnBase);
             basePart.Width = width;
             basePart.Length = length;
-            basePart.CenterX = 0;
-            basePart.CenterY = 0;
+            basePart.Center = new Point2D();
             basePart.FixLeft = true;
             basePart.FixRight = false;
             basePart.FixTop = false;
@@ -184,8 +181,7 @@ namespace Test.SC.SteelBasePart.CheckMoment
             RDBLL.Entity.SC.Column.SteelBasePart basePart = new RDBLL.Entity.SC.Column.SteelBasePart(steelColumnBase);
             basePart.Width = width;
             basePart.Length = length;
-            basePart.CenterX = 0;
-            basePart.CenterY = 0;
+            basePart.Center = new Point2D();
             basePart.FixLeft = true;
             basePart.FixRight = false;
             basePart.FixTop = false;
@@ -223,8 +219,7 @@ namespace Test.SC.SteelBasePart.CheckMoment
             RDBLL.Entity.SC.Column.SteelBasePart basePart = new RDBLL.Entity.SC.Column.SteelBasePart(steelColumnBase);
             basePart.Width = width;
             basePart.Length = length;
-            basePart.CenterX = 0;
-            basePart.CenterY = 0;
+            basePart.Center = new Point2D();
             basePart.FixLeft = true;
             basePart.FixRight = false;
             basePart.FixTop = false;
@@ -262,8 +257,7 @@ namespace Test.SC.SteelBasePart.CheckMoment
             RDBLL.Entity.SC.Column.SteelBasePart basePart = new RDBLL.Entity.SC.Column.SteelBasePart(steelColumnBase);
             basePart.Width = width;
             basePart.Length = length;
-            basePart.CenterX = 0;
-            basePart.CenterY = 0;
+            basePart.Center = new Point2D();
             basePart.FixLeft = true;
             basePart.FixRight = false;
             basePart.FixTop = false;

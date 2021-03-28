@@ -16,7 +16,7 @@ namespace RDBLL.Common.Params
         public int Id { get; set ; }
         public string Name { get; set; }
 
-        public List<StoredParam> StoredParams { get; private set; }
+        public List<StoredParam> StoredParams { get; set; }
 
         public virtual string Type { get; set; }
 
@@ -41,7 +41,7 @@ namespace RDBLL.Common.Params
         public void SaveToDataSet(DataSet dataSet, bool createNew)
         {
             DataRow row = EntityOperation.SaveEntity(dataSet, createNew, this);
-            row.SetField<string>("Type", Type);
+            row.AcceptChanges();
         }
 
         public void UnRegisterParent()

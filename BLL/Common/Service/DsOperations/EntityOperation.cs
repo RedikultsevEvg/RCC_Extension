@@ -26,15 +26,32 @@ namespace RDBLL.Common.Service
         /// <param name="entity"></param>
         public static DataRow SaveEntity(DataSet dataSet, bool createNew, IDsSaveable entity)
         {
-            DataTable dataTable = dataSet.Tables[entity.GetTableName()];
+            string tableName = entity.GetTableName();
+            DataTable dataTable;
+            //Если датасет содержит нужную таблиц, то получаем ее
+            if (dataSet.Tables.Contains(tableName)) { dataTable = dataSet.Tables[tableName]; }
+            //Иначе создаем нужную таблицу
+            else
+            {
+                dataTable = new DataTable(tableName);
+                dataSet.Tables.Add(dataTable);
+            }
             DataRow row = DsOperation.CreateNewRow(entity.Id, createNew, dataTable);
-            row.SetField("Id", entity.Id);
-            if (entity.Name != null) row.SetField("Name", entity.Name);
+            DsOperation.SetField(row, "Id", entity.Id);
+            if (! string.IsNullOrEmpty(entity.Name)) DsOperation.SetField(row, "Name", entity.Name);
+            //Сохраняем родителя
             if (entity is IHasParent)
             {
                 IHasParent child = entity as IHasParent;
-                row.SetField("ParentId", child.ParentMember.Id);
+                DsOperation.SetField(row, "ParentId", child.ParentMember.Id);
             }
+            //Сохраняем детей
+            if (entity is IHasChildren)
+            {
+                IHasChildren parent = entity as IHasChildren;
+                foreach (IHasParent child in parent.Children) { child.SaveToDataSet(dataSet, createNew);}
+            }
+            //Сохраняем нагрузки
             if (entity is IHasForcesGroups)
             {
                 IHasForcesGroups child = entity as IHasForcesGroups;
@@ -57,18 +74,25 @@ namespace RDBLL.Common.Service
                 IHasSteel child = entity as IHasSteel;
                 if (child.Steel != null) child.Steel.SaveToDataSet(dataSet, createNew);
             }
+            //Сохранение центра фигуры
+            if (entity is IShape) 
+            {
+                IShape obj = entity as IShape;
+                DsOperation.SetField(row, "CenterX", obj.Center.X);
+                DsOperation.SetField(row, "CenterY", obj.Center.Y);
+            }
             //Сохранение диаметра
-            if (entity is ICircle) //Сохранение стали
+            if (entity is ICircle)
             {
                 ICircle obj = entity as ICircle;
-                row.SetField("Diameter", obj.Diameter);
+                DsOperation.SetField(row, "Diameter", obj.Diameter);
             }
             //Сохранение длины и ширины
-            if (entity is IRectangle) //Сохранение стали
+            if (entity is IRectangle)
             {
                 IRectangle obj = entity as IRectangle;
-                row.SetField("Width", obj.Width);
-                row.SetField("Length", obj.Length);
+                DsOperation.SetField(row, "Width", obj.Width);
+                DsOperation.SetField(row, "Length", obj.Length);
             }
             //Сохранение высоты
             if (entity is IHasHeight) //Сохранение стали
@@ -87,6 +111,7 @@ namespace RDBLL.Common.Service
             {
                 IHasStoredParams obj = entity as IHasStoredParams;
                 foreach (StoredParam param in obj.StoredParams) { param.SaveToDataSet(dataSet, createNew); }
+                row.SetField<string>("Type", obj.Type);
             }
 
             return row;
@@ -95,23 +120,37 @@ namespace RDBLL.Common.Service
         {
             entity.Id = row.Field<int>("Id");
             entity.Name = row.Field<string>("Name");
+            if (entity is IShape)
+            {
+                IShape obj = entity as IShape;
+                double dX = 0;
+                DsOperation.Field(row, ref dX, "CenterX", 0);
+                double dY = 0;
+                DsOperation.Field(row, ref dY, "CenterY", 0);
+                obj.Center = new Geometry.Point2D(dX, dY);
+            }
             //Сохранение диаметра
-            if (entity is ICircle) //Сохранение стали
+            if (entity is ICircle)
             {
                 ICircle obj = entity as ICircle;
                 obj.Diameter = row.Field<double>("Diameter");
             }
             //Сохранение длины и ширины
-            if (entity is IRectangle) //Сохранение стали
+            if (entity is IRectangle)
             {
                 IRectangle obj = entity as IRectangle;
                 obj.Width = row.Field<double>("Width");
                 obj.Length = row.Field<double>("Length");
             }
-            if (entity is IHasHeight) //Сохранение стали
+            if (entity is IHasHeight)
             {
                 IHasHeight obj = entity as IHasHeight;
                 obj.Height = row.Field<double>("Height");
+            }
+            if (entity is IHasStoredParams)
+            {
+                IHasStoredParams obj = entity as IHasStoredParams;
+                obj.Type = row.Field<string>("Type");
             }
         }
         public static void DeleteEntity (DataSet dataSet, IDsSaveable entity)

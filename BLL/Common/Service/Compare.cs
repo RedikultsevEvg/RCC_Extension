@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using RDBLL.Common.Geometry;
 using RDBLL.Entity.MeasureUnits;
 
 namespace RDBLL.Common.Service
@@ -79,13 +80,13 @@ namespace RDBLL.Common.Service
         public string CompareResult()
         {
             string s = $"{Name}:";
-            Val1 = Math.Round(Val1 * Cofficient, 3);
-            Val2 = Math.Round(Val2 * Cofficient, 3);
-            s += $" {Val1Name} = {Val1} {ValUnitName}";
+            Val1 = Val1 * Cofficient;
+            Val2 = Val2 * Cofficient;
+            s += $" {Val1Name} = {MathOperation.Round(Val1)} {ValUnitName}";
             if (Val1 < Val2) { s += $" <"; }
             if (Val1 == Val2) { s += $" ="; }
             if (Val1 > Val2) { s += $" >"; }
-            s += $" {Val2Name} = {Val2} {ValUnitName}. ";
+            s += $" {Val2Name} = {MathOperation.Round(Val2)} {ValUnitName}. ";
             if (BoolResult()) s += "Проверка выполнена"; else s += "Проверка не выполнена";
             return s;
         }

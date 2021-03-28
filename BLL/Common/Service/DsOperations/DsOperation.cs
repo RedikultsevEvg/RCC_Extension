@@ -262,5 +262,26 @@ namespace RDBLL.Common.Service.DsOperations
                         select dataRow;
             return query;
         }
+        public static void SetField<T>(DataRow row, string columnName, T value)
+        {
+            DataTable table = row.Table;
+            if (! table.Columns.Contains(columnName))
+            {
+                DataColumn column = new DataColumn(columnName, typeof(T));
+                table.Columns.Add(column);
+            }
+            row.SetField<T>(columnName, value);
+        }
+        public static void Field<T>(DataRow row, ref T target, string columnName, T defaultValue)
+        {
+            DataTable table = row.Table;
+            if (!table.Columns.Contains(columnName))
+            {
+                DataColumn column = new DataColumn(columnName, typeof(T));
+                column.DefaultValue = defaultValue;
+                table.Columns.Add(column);
+            }
+            target = row.Field<T>(columnName);
+        }
     }
 }

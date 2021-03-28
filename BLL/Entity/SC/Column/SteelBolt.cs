@@ -44,7 +44,7 @@ namespace RDBLL.Entity.SC.Column
 
         //public BoltUsing BoltUsing { get; set; }
         public MeasureUnitList Measures { get => new MeasureUnitList(); }
-        public Point2D Center { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public Point2D Center { get { return new Point2D(); } set {; } }
 
         public IMaterialModel MaterialModel { get; set; }
 

@@ -113,7 +113,7 @@
                     </Expander>
                     <ContentControl x:Name="BtmReinf" ContentTemplate="{StaticResource Reinforcement}" Content="{Binding Path=BottomReinforcement}"/>
                     <ContentControl x:Name="VertReinf" ContentTemplate="{StaticResource Reinforcement}" Content="{Binding Path=VerticalReinforcement}"/>
-                    <ContentControl ContentTemplate="{StaticResource DtConcreteSelect}"  Content="{Binding Path=Concrete}"/>
+                    <ContentControl ContentTemplate="{StaticResource DtMaterialSelect}"  Content="{Binding Path=Concrete}"/>
                 </StackPanel>
             </ScrollViewer>
             <StackPanel Grid.Column="2" Background="#FFE2E2E2" VerticalAlignment="Top">

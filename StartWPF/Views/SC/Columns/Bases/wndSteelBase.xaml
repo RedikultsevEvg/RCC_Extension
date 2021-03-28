@@ -10,17 +10,6 @@
         Title="База колонны" Height="400" Width="850" Background="White" WindowStartupLocation="CenterScreen" MinHeight="400" MinWidth="850" MaxHeight="600" MaxWidth="900">
     <Window.Resources>
         <SteelConvert:SteelBaseToGeometryConverter x:Key="SteelBaseToGeometryConverter"/>
-        <DataTemplate x:Key="Param">
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width ="200"/>
-                    <ColumnDefinition Width ="100"/>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
-                <TextBlock Style="{StaticResource PropertyTextBlock}" Text="{Binding Name}"/>
-                <TextBox Grid.Column="1" Style="{StaticResource PropertyTextBox}" Text="{Binding ParameterValue}"/>
-            </Grid>
-        </DataTemplate>
     </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
@@ -69,7 +58,7 @@
                     </Grid>
                     <ContentControl ContentTemplate="{StaticResource DtMaterialSelect}"  Content="{Binding Path=Steel}"/>
                     <ContentControl ContentTemplate="{StaticResource DtMaterialSelect}"  Content="{Binding Path=Concrete}"/>
-                    <ListView ItemsSource="{Binding Pattern.StoredParams}" ItemTemplate="{StaticResource Param}"/>
+                    <ContentControl ContentTemplate="{StaticResource Params}"  Content="{Binding Path=Pattern}"/>
                 </StackPanel>
             </ScrollViewer>
 

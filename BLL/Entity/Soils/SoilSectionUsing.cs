@@ -55,7 +55,7 @@ namespace RDBLL.Entity.Soils
         {
             Id = dataRow.Field<int>("Id");
             Name = dataRow.Field<string>("Name");
-            SelectedId = dataRow.Field<int>("SelectedId");
+            SelectedId = dataRow.Field<int?>("SelectedId");
         }
 
         public void RegisterParent(IDsSaveable parent)

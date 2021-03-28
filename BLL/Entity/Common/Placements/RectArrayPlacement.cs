@@ -62,6 +62,7 @@ namespace RDBLL.Entity.Common.Placements
         /// </summary>
         public RectArrayPlacement (bool genId = false) : base(genId)
         {
+            Type = "RectArrayPlacement";
             // Размер вдоль оси X
             StoredParams.Add(new StoredParam(this) { Id = ProgrammSettings.CurrentId, Name = "SizeX" });
             StoredParams[0 + ParamQuant].SetDoubleValue(0.9);

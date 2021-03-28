@@ -144,13 +144,13 @@ namespace RDBLL.Entity.Common.Materials
         {
             DataRow row = EntityOperation.SaveEntity(dataSet, createNew, this);
             #region setFields
-            row.SetField("Purpose", Purpose);
-            if (this is ConcreteUsing) row.SetField("Materialkindname", "Concrete");
-            else if (this is ReinforcementUsing) row.SetField("Materialkindname", "Reinforcement");
-            else if (this is SteelUsing) row.SetField("Materialkindname", "Steel");
-            else if (this is BoltUsing) row.SetField("Materialkindname", "SteelBolt");
+            DsOperation.SetField(row, "Purpose", Purpose);
+            if (this is ConcreteUsing) DsOperation.SetField(row, "Materialkindname", "Concrete");
+            else if (this is ReinforcementUsing) DsOperation.SetField(row, "Materialkindname", "Reinforcement");
+            else if (this is SteelUsing) DsOperation.SetField(row, "Materialkindname", "Steel");
+            else if (this is BoltUsing) DsOperation.SetField(row, "Materialkindname", "SteelBolt");
             else throw new NotImplementedException("Material kind is not valid");
-            row.SetField("SelectedId", SelectedId);
+            DsOperation.SetField(row, "SelectedId", SelectedId);
             #endregion
             row.Table.AcceptChanges();
             foreach (SafetyFactor safetyFactor in SafetyFactors)
@@ -162,7 +162,7 @@ namespace RDBLL.Entity.Common.Materials
                 CircleUsingBase crclUsing = (this) as CircleUsingBase;
                 row.SetField("Diameter", crclUsing.Diameter);
                 row.SetField("Prestrain", crclUsing.Prestrain);
-                crclUsing.Placement.SaveToDataSet(dataSet, createNew);              
+                //crclUsing.Placement.SaveToDataSet(dataSet, createNew);              
             }
         }
         /// <summary>

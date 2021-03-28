@@ -195,19 +195,6 @@ namespace RDBLL.Common.Service.DsOperations.Factory
             dataSet.Tables.Add(dataTable);
             DsOperation.AddIdNameParentIdColumn(dataTable, "Levels");
             DsOperation.AddFkIdColumn("SoilSections", "SoilSectionId", dataTable, true);
-            FkIdColumn = new DataColumn("ReinfSteelClassId", Type.GetType("System.Int32"));
-            dataTable.Columns.Add(FkIdColumn);
-            FkIdColumn = new DataColumn("ConcreteClassId", Type.GetType("System.Int32"));
-            dataTable.Columns.Add(FkIdColumn);
-            DsOperation.AddDoubleColumn(dataTable, "RelativeTopLevel", -0.2);
-            DsOperation.AddDoubleColumn(dataTable, "SoilRelativeTopLevel", -0.2);
-            DsOperation.AddDoubleColumn(dataTable, "SoilVolumeWeight", 18000);
-            DsOperation.AddDoubleColumn(dataTable, "ConcreteVolumeWeight", 25000);
-            DsOperation.AddDoubleColumn(dataTable, "FloorLoad", 0);
-            DsOperation.AddDoubleColumn(dataTable, "FloorLoadFactor", 1.2);
-            DsOperation.AddDoubleColumn(dataTable, "ConcreteFloorLoad", 0);
-            DsOperation.AddDoubleColumn(dataTable, "ConcreteFloorLoadFactor", 1.2);
-            DsOperation.AddDoubleColumn(dataTable, "CompressedLayerRatio", 0.2);
             #endregion
             #region FoundationParts
             dataTable = new DataTable("FoundationParts");

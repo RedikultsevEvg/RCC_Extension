@@ -13,6 +13,8 @@ using System.Linq;
 using RDBLL.Entity.Common.Placements;
 using RDBLL.Common.Params;
 using RDBLL.Entity.Common.Materials.SteelMaterialUsing;
+using RDBLL.Common.Params;
+using RDBLL.Entity.SC.Column.SteelBases.Patterns;
 
 namespace RDBLL.Common.Service
 {
@@ -83,8 +85,18 @@ namespace RDBLL.Common.Service
                 SteelBase newObject = new SteelBase();
                 newObject.OpenFromDataSet(dataRow);
                 newObject.ParentMember = level;
-                newObject.SteelBaseParts = GetSteelBaseParts(dataSet, newObject);
-                newObject.SteelBolts = GetSteelBolts(dataSet, newObject);
+                PatternBase pattern = GetPapametricObject(dataSet, newObject) as PatternBase;
+                
+                if (pattern is null)
+                {
+                    newObject.SteelBaseParts = GetSteelBaseParts(dataSet, newObject);
+                    newObject.SteelBolts = GetSteelBolts(dataSet, newObject);
+                }
+                else
+                {
+                    pattern.RegisterParent(newObject);
+                    newObject.Pattern = pattern;
+                }
                 newObject.ForcesGroups = GetParentForcesGroups(dataSet, newObject);
                 List<MaterialUsing> materials = GetMaterialUsings(dataSet, newObject);
                 foreach (MaterialUsing material in materials)
@@ -149,34 +161,34 @@ namespace RDBLL.Common.Service
         /// <param name="dataSet"></param>
         /// <param name="steelBase"></param>
         /// <returns></returns>
-        public static ObservableCollection<ForcesGroup> GetSteelBaseForcesGroups(DataSet dataSet, SteelBase steelBase)
-        {
-            ObservableCollection<ForcesGroup> newObjects = new ObservableCollection<ForcesGroup>();
-            DataTable adjDataTable = dataSet.Tables["SteelBaseForcesGroups"];
-            DataTable dataTable = dataSet.Tables["ForcesGroups"]; 
-            var query = from adjDataRow in adjDataTable.AsEnumerable()
-                        from dataRow in dataTable.AsEnumerable()
-                        where adjDataRow.Field<int>("SteelBaseId") == steelBase.Id
-                        where adjDataRow.Field<int>("ForcesGroupId") == dataRow.Field<int>("Id")
-                        select dataRow;
-            foreach (var dataRow in query)
-            {
-                ForcesGroup newObject = new ForcesGroup
-                {
-                    Id = dataRow.Field<int>("Id"),
-                    Name = dataRow.Field<string>("Name"),
-                    CenterX = dataRow.Field<double>("CenterX"),
-                    CenterY = dataRow.Field<double>("CenterY"),
-                };
-                newObject.Owners.Add(steelBase);
-                newObjects.Add(newObject);
-            }
-            foreach (ForcesGroup forcesGroup in newObjects)
-            {
-                forcesGroup.LoadSets = GetLoadSets(dataSet, forcesGroup);
-            }
-            return newObjects;
-        }
+        //public static ObservableCollection<ForcesGroup> GetSteelBaseForcesGroups(DataSet dataSet, SteelBase steelBase)
+        //{
+        //    ObservableCollection<ForcesGroup> newObjects = new ObservableCollection<ForcesGroup>();
+        //    DataTable adjDataTable = dataSet.Tables["SteelBaseForcesGroups"];
+        //    DataTable dataTable = dataSet.Tables["ForcesGroups"]; 
+        //    var query = from adjDataRow in adjDataTable.AsEnumerable()
+        //                from dataRow in dataTable.AsEnumerable()
+        //                where adjDataRow.Field<int>("SteelBaseId") == steelBase.Id
+        //                where adjDataRow.Field<int>("ForcesGroupId") == dataRow.Field<int>("Id")
+        //                select dataRow;
+        //    foreach (var dataRow in query)
+        //    {
+        //        ForcesGroup newObject = new ForcesGroup
+        //        {
+        //            Id = dataRow.Field<int>("Id"),
+        //            Name = dataRow.Field<string>("Name"),
+        //            CenterX = dataRow.Field<double>("CenterX"),
+        //            CenterY = dataRow.Field<double>("CenterY"),
+        //        };
+        //        newObject.Owners.Add(steelBase);
+        //        newObjects.Add(newObject);
+        //    }
+        //    foreach (ForcesGroup forcesGroup in newObjects)
+        //    {
+        //        forcesGroup.LoadSets = GetLoadSets(dataSet, forcesGroup);
+        //    }
+        //    return newObjects;
+        //}
         /// <summary>
         /// Получает коллекцию групп усилий по датасету и фундаменту
         /// </summary>
@@ -530,6 +542,37 @@ namespace RDBLL.Common.Service
             soilSectionUsing.OpenFromDataSet(query);
             soilSectionUsing.RegisterParent(parent);
             return soilSectionUsing;
+        }
+        private static ParametriсBase GetPapametricObject(DataSet dataSet, IDsSaveable parent)
+        {
+            ParametriсBase newObj;
+            DataTable dataTable = dataSet.Tables["ParametricObjects"];
+            var query = (from dataRow in dataTable.AsEnumerable()
+                         where dataRow.Field<int>("ParentId") == parent.Id
+                         select dataRow).SingleOrDefault();
+            if (query is null) return null;
+            switch (query.Field<string>("Type"))
+            {
+                case "SteelBasePatternType1" :
+                    {
+                        newObj = new PatternType1();
+                        newObj.OpenFromDataSet(query);
+                        newObj.StoredParams = GetStoredParams(dataSet, newObj);
+                        return newObj;
+                    }
+                case "SteelBasePatternType2":
+                    {
+                        newObj = new PatternType2();
+                        newObj.OpenFromDataSet(query);
+                        newObj.StoredParams = GetStoredParams(dataSet, newObj);
+                        return newObj;
+                    }
+                default:
+                    {
+                        return null;
+                    }
+            }
+
         }
     }
 }

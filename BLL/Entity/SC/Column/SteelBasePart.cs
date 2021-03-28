@@ -132,8 +132,6 @@ namespace RDBLL.Entity.SC.Column
         {
             DataRow row = EntityOperation.SaveEntity(dataSet, createNew, this);
             #region        
-            row.SetField("CenterX", Center.X);
-            row.SetField("CenterY", Center.Y);
             row.SetField("LeftOffset", LeftOffset);
             row.SetField("RightOffset", RightOffset);
             row.SetField("TopOffset", TopOffset);
@@ -160,8 +158,6 @@ namespace RDBLL.Entity.SC.Column
         public void OpenFromDataSet(DataRow dataRow)
         {
             EntityOperation.SetProps(dataRow, this);
-            Center.X = dataRow.Field<double>("CenterX");
-            Center.Y = dataRow.Field<double>("CenterY");
             LeftOffset = dataRow.Field<double>("LeftOffset");
             RightOffset = dataRow.Field<double>("RightOffset");
             TopOffset = dataRow.Field<double>("TopOffset");
