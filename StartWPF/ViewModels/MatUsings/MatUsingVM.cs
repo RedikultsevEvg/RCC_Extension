@@ -14,6 +14,9 @@ namespace RDStartWPF.ViewModels.MatUsings
     internal class MatUsingVM : ViewModelBase
     {
         private static CommandBase _OpenPSF;
+
+        public override string this[string columnName] => throw new NotImplementedException();
+
         public static CommandBase OpenPSF
         {
             get

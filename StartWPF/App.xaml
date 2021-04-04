@@ -17,6 +17,7 @@
                 <ResourceDictionary Source="ResourcesDicts/Placements/Placement.xaml"  />
                 <ResourceDictionary Source="ResourcesDicts/MatUsings/MatUsing.xaml"  />
                 <ResourceDictionary Source="ResourcesDicts/Parameters/Params.xaml"  />
+                <ResourceDictionary Source="ResourcesDicts/Levels/Children/Child.xaml"  />
             </ResourceDictionary.MergedDictionaries>
 
             <Style x:Key="OperationStack" TargetType="StackPanel">

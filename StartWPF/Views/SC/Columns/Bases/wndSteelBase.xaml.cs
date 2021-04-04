@@ -27,7 +27,7 @@ namespace RDStartWPF.Views.SC.Columns.Bases
         {
             InitializeComponent();
             _steelColumnBase = steelColumnBase;
-            this.DataContext = new SteelBaseVM(_steelColumnBase);
+            this.DataContext = new SteelBaseVM(_steelColumnBase, this);
         }
 
         private void btnOK_Click(object sender, RoutedEventArgs e)

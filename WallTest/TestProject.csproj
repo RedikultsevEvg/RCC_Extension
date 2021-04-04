@@ -62,6 +62,7 @@
     <Compile Include="SC\SteelBasePart\CheckMoment\ThreeSides.cs" />
     <Compile Include="SC\SteelBasePart\CheckMoment\TwoSides.cs" />
     <Compile Include="SC\CheckSteelBase\CheckPressure\Pressure.cs" />
+    <Compile Include="SC\SteelBases\SteelBaseFactory.cs" />
     <Compile Include="WallTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace RDBLL.Common.Interfaces.Shapes
 {
-    internal interface IHasHeight
+    public interface IHasHeight
     {
         double Height { get; set; }
     }

@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RDBLL.Entity.SC.Column.SteelBases.Factorys
+namespace RDBLL.Entity.SC.Column.SteelBases.Factories
 {
     internal static class BoltFactProc
     {

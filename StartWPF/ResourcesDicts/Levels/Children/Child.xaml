@@ -1,0 +1,33 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:local="clr-namespace:RDStartWPF.ResourcesDicts.Levels.Children"
+                    xmlns:SteelConvert="clr-namespace:RDStartWPF.InfraStructure.Converters.SC.Columns.Bases">
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="/RD-Calculator;component/ResourcesDicts/TextBlockStyles.xaml" />
+    </ResourceDictionary.MergedDictionaries>
+    <SteelConvert:SteelBaseToGeometryConverter x:Key="SteelBase"/>
+    <DataTemplate x:Key="SteelBaseTemplate">
+        <Expander Header="{Binding Path=Name}" Background="#FF97FF92" MinWidth="400" MinHeight="30" Margin="0,5">
+            <HeaderedContentControl>
+                <Grid Height="130" Width="550" Margin="5">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="200"/>
+                        <ColumnDefinition Width="200"/>
+                        <ColumnDefinition Width="200"/>
+                    </Grid.ColumnDefinitions>
+                    <ScrollViewer Content="{Binding Converter={StaticResource SteelBase}}"
+                                      HorizontalScrollBarVisibility="Hidden"
+                                      VerticalScrollBarVisibility ="Hidden">
+                    </ScrollViewer>
+                    <Grid Grid.Column="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width ="*"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Style="{StaticResource PropertyTextBlock}" Text="{Binding Path=Name}" FontSize="24" TextWrapping="Wrap"/>
+                    </Grid>
+
+                </Grid>
+            </HeaderedContentControl>
+        </Expander>
+    </DataTemplate>
+</ResourceDictionary>

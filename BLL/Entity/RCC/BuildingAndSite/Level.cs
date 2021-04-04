@@ -68,7 +68,7 @@ namespace RDBLL.Entity.RCC.BuildingAndSite
         /// <summary>
         /// Коллекция стальных баз
         /// </summary>
-        public ObservableCollection<SteelBase> SteelBases { get; set; }
+        public ObservableCollection<IHasParent> SteelBases { get; set; }
         /// <summary>
         /// Коллекция фундаментов
         /// </summary>
@@ -170,7 +170,7 @@ namespace RDBLL.Entity.RCC.BuildingAndSite
         public Level ()
         {
             Walls = new ObservableCollection<Wall>();
-            SteelBases = new ObservableCollection<SteelBase>();
+            SteelBases = new ObservableCollection<IHasParent>();
             Children = new ObservableCollection<IHasParent>();
         }
 
@@ -190,7 +190,7 @@ namespace RDBLL.Entity.RCC.BuildingAndSite
             Height = 3;
             TopOffset = -0.2;
             //Walls = new ObservableCollection<Wall>();
-            SteelBases = new ObservableCollection<SteelBase>();
+            SteelBases = new ObservableCollection<IHasParent>();
             Children = new ObservableCollection<IHasParent>();
         }
 

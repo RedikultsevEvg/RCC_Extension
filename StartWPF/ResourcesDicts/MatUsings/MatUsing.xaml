@@ -5,6 +5,7 @@
         <ResourceDictionary Source="/RD-Calculator;component/ResourcesDicts/TextBlockStyles.xaml" />
         <ResourceDictionary Source="/RD-Calculator;component/ResourcesDicts/Placements/Placement.xaml" />
     </ResourceDictionary.MergedDictionaries>
+    
     <DataTemplate x:Key="CircleUsing">
         <StackPanel>
             <Grid>

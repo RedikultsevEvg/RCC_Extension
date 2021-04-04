@@ -17,7 +17,9 @@ namespace RDStartWPF.InfraStructure.Converters
     {
         public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
-            return (double)value * MeasureUnitConverter.GetCoefficient(0);
+            string s = System.Convert.ToString(value);
+            double d = CommonOperation.ConvertToDouble(s);
+            return d * MeasureUnitConverter.GetCoefficient(0);
         }
         public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {

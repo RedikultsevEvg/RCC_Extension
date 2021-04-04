@@ -26,12 +26,23 @@ namespace RDBLL.Processors.SC
     public static class SteelBasePartProcessor
     {
         /// <summary>
+        /// Возвращает момент в пластине по моменту и толщине
+        /// </summary>
+        /// <param name="moment"></param>
+        /// <param name="thickness"></param>
+        /// <returns></returns>
+        public static double GetPlateStress(double moment, double thickness)
+        {
+            double Wx = thickness * thickness / 6;
+            return moment / Wx;
+        }
+        /// <summary>
         /// Возвращает момент и напряжения для участка базы стальной колонны
         /// </summary>
         /// <param name="basePart">Участок базы стальной колонны</param>
         /// <param name="maxStress">Максимальное давление на участок</param>
         /// <returns>Массив: 0-максимальный момент, 1 - максимальные напряжения </returns>
-        public static double[] GetResult(SteelBasePart basePart, double maxStress)
+        public static double GetResult(SteelBasePart basePart, double maxStress)
         {
             /*Алгоритм расчета основан на подходе из учебника Белени по
              * таблицам Галеркина
@@ -40,9 +51,7 @@ namespace RDBLL.Processors.SC
              * Иначе считаетася, что участок оперт шарнирно
              */
             //double maxStress = GetMinStressLinear(basePart);
-            double[] result = new double[2] { 0, 0 };
-            double thickness = (basePart.ParentMember as SteelBase).Height;
-            double Wx = thickness * thickness / 6;
+            double result = 0;
             double maxMoment = 0;
             int countFixSides = 0;
             
@@ -55,8 +64,7 @@ namespace RDBLL.Processors.SC
             //Участок отрывается, напряжения равны нулю
             if (maxStress < 0)
             {
-                result[0] = 0;
-                result[1] = 0;
+                result = 0;
                 return result;
             }
             switch (countFixSides)
@@ -77,8 +85,7 @@ namespace RDBLL.Processors.SC
                     maxMoment = CalcStreessFourSide(maxStress, basePart);
                     break;
             }
-            result[0] = maxMoment;
-            result[1] = maxMoment / Wx;
+            result = maxMoment;
             return result;
         }
         /// <summary>

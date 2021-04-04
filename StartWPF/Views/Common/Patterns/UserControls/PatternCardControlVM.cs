@@ -29,6 +29,8 @@ namespace RDStartWPF.Views.Common.Patterns.UserControls
             }
         }
 
+        public override string this[string columnName] => throw new NotImplementedException();
+
         public PatternCardControlVM(PatternCard patternCard)
         {
             PatternCard = patternCard;

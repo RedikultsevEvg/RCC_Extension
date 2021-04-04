@@ -15,7 +15,7 @@ using RDBLL.Common.Interfaces.Materials;
 using RDBLL.Common.Interfaces.Shapes;
 using RDBLL.Entity.SC.Column.SteelBases.Patterns;
 using RDBLL.Entity.MeasureUnits;
-using RDBLL.Entity.SC.Column.SteelBases.Factorys;
+using RDBLL.Entity.SC.Column.SteelBases.Factories;
 
 namespace RDBLL.Entity.SC.Column
 {

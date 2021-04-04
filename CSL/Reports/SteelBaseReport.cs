@@ -16,6 +16,7 @@ using System.Data;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using RDBLL.Common.Interfaces.Shapes;
 
 namespace CSL.Reports
 {
@@ -185,7 +186,9 @@ namespace CSL.Reports
                 DataRow newSteelBasePart = dataTable.NewRow();
                 //double maxBedStress = SteelColumnBasePartProcessor.GetGlobalMinStressLinear(steelBasePart) * (-1D);
                 double maxBedStress = SteelBasePartProcessor.GetGlobalMinStressNonLinear(steelBasePart) * (-1D);
-                double maxStress = SteelBasePartProcessor.GetResult(steelBasePart, maxBedStress)[1];
+                double maxMoment = SteelBasePartProcessor.GetResult(steelBasePart, maxBedStress);
+                double thickness = (steelBasePart.ParentMember as IHasHeight).Height;
+                double maxStress = SteelBasePartProcessor.GetPlateStress(maxMoment, thickness);
                 double actHeight = steelBase.Height;
                 //Расчетное сопротивление стали
                 double steelStrength = SteelBaseProcessor.GetSteelStrength(steelBasePart.ParentMember as SteelBase);

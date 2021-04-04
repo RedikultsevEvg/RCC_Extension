@@ -13,6 +13,9 @@ using RDStartWPF.Infrasructure.Reports;
 using RDBLL.Entity.SC.Column.SteelBases.Patterns;
 using RDStartWPF.Views.Common.Patterns;
 using RDStartWPF.Views.Common.Patterns.ControlClasses;
+using RDBLL.Common.Interfaces;
+using RDBLL.Entity.RCC.Foundations;
+using RDStartWPF.Views.RCC.Foundations;
 
 namespace RDStartWPF.Views.SC.Columns.Bases
 {
@@ -22,7 +25,7 @@ namespace RDStartWPF.Views.SC.Columns.Bases
     public partial class wndSteelBases : Window
     {
         private Level _level;
-        private ObservableCollection<SteelBase> _collection;
+        private ObservableCollection<IHasParent> _collection;
         public wndSteelBases(Level level)
         {
             _level = level;
@@ -76,14 +79,27 @@ namespace RDStartWPF.Views.SC.Columns.Bases
             if (LvSteelBases.SelectedIndex >= 0)
             {
                 int a = LvSteelBases.SelectedIndex;
-                WndSteelColumnBase wndSteelColumnBase = new WndSteelColumnBase(_collection[a]);
-                wndSteelColumnBase.ShowDialog();
-                if (wndSteelColumnBase.DialogResult == true)
+                bool dialogResult = false;
+                if (_collection[a] is SteelBase)
+                {
+                    SteelBase child = _collection[a] as SteelBase;
+                    WndSteelColumnBase wnd = new WndSteelColumnBase(child);
+                    wnd.ShowDialog();
+                    if (wnd.DialogResult == true) dialogResult = true;
+                }
+                if (_collection[a] is Foundation)
+                {
+                    Foundation child = _collection[a] as Foundation;
+                    wndFoundation wnd = new wndFoundation(child);
+                    wnd.ShowDialog();
+                    if (wnd.DialogResult == true) dialogResult = true;
+                }
+                if (dialogResult)
                 {
                     try
                     {
                         _collection[a].SaveToDataSet(ProgrammSettings.CurrentDataSet, false);
-                        _collection[a].IsActual = false;
+                        (_collection[a] as SteelBase).IsActual = false;
                         ProgrammSettings.IsDataChanged = true;
                     }
                     catch (Exception ex)

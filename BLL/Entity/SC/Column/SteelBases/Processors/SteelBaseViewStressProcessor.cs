@@ -11,6 +11,7 @@ using System.Windows;
 using RDBLL.Processors.SC;
 using RDBLL.Entity.MeasureUnits;
 using RDBLL.Entity.Common.Materials.SteelMaterialUsing;
+using RDBLL.Common.Interfaces.Shapes;
 
 namespace RDBLL.Entity.SC.Column.SteelBases.Processors
 {
@@ -59,7 +60,9 @@ namespace RDBLL.Entity.SC.Column.SteelBases.Processors
             foreach (SteelBasePart steelBasePart in steelBase.SteelBaseParts)
             {
                 double maxBedStress = SteelBasePartProcessor.GetGlobalMinStressNonLinear(steelBasePart) * (-1D);
-                double maxStress = SteelBasePartProcessor.GetResult(steelBasePart, maxBedStress)[1];
+                double maxMoment = SteelBasePartProcessor.GetResult(steelBasePart, maxBedStress);
+                double thickness = (steelBasePart.ParentMember as IHasHeight).Height;
+                double maxStress = SteelBasePartProcessor.GetPlateStress(maxMoment, thickness);
                 RectangleValue aRV = new RectangleValue();
                 aRV.CenterX = steelBasePart.Center.X * zoomCoff;
                 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -81,7 +84,9 @@ namespace RDBLL.Entity.SC.Column.SteelBases.Processors
             foreach (SteelBasePart steelBasePart in steelBase.SteelBaseParts)
             {
                 double maxBedStress = SteelBasePartProcessor.GetGlobalMinStressNonLinear(steelBasePart) * (-1D);
-                double maxStress = SteelBasePartProcessor.GetResult(steelBasePart, maxBedStress)[1];
+                double maxMoment = SteelBasePartProcessor.GetResult(steelBasePart, maxBedStress);
+                double thickness = (steelBasePart.ParentMember as IHasHeight).Height;
+                double maxStress = SteelBasePartProcessor.GetPlateStress(maxMoment, thickness);
                 double recomendedThickness = 0;
                 if (maxStress > 0) { recomendedThickness = actualThickness * Math.Pow((maxStress / steelStrength), 0.5); }
                 RectangleValue aRV = new RectangleValue();

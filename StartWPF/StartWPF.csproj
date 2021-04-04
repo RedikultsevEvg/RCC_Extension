@@ -123,6 +123,8 @@
     <Compile Include="ResourcesDicts\Parameters\ParamTemplSelector.cs" />
     <Compile Include="ResourcesDicts\RFTemplateSelector.cs" />
     <Compile Include="ViewModels\Base\ViewModelBase.cs" />
+    <Compile Include="ViewModels\Base\ViewModelDialog.cs" />
+    <Compile Include="ViewModels\Common\Parameters\ParametersVM.cs" />
     <Compile Include="ViewModels\MatUsings\MatUsingVM.cs" />
     <Compile Include="ViewModels\MatUsings\SafetyFactorsVM.cs" />
     <Compile Include="ViewModels\SC\Columns\Bases\SteelBaseVM.cs" />
@@ -136,6 +138,7 @@
     <Compile Include="Views\Common\BuildingsAndSites\wndLevels.xaml.cs">
       <DependentUpon>wndLevels.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\Common\Patterns\ControlClasses\Factories\SteelBaseCardFactory.cs" />
     <Compile Include="Views\Common\Patterns\ControlClasses\PatternCard.cs" />
     <Compile Include="Views\Common\Patterns\ControlClasses\SelectPatternProcessor.cs" />
     <Compile Include="Views\Common\Patterns\UserControls\PatternCardControlVM.cs" />
@@ -304,6 +307,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="ResourcesDicts\IconBitmaps.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ResourcesDicts\Levels\Children\Child.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -7,6 +7,7 @@ using RDBLL.Common.Service;
 using RDBLL.Common.Interfaces;
 using System.Data;
 using RDBLL.Common.Service.DsOperations;
+using RDBLL.Entity.MeasureUnits;
 
 namespace RDBLL.Common.Params
 {
@@ -50,10 +51,74 @@ namespace RDBLL.Common.Params
                 _ValueType = value;
             }
         }
+        public ValueType Value
+        {
+            get
+            {
+                if (ValueType == "bool") { return Convert.ToBoolean(ParameterValue);}
+                else if (ValueType == "double") { return CommonOperation.ConvertToDouble(ParameterValue); }
+                else return 0;
+            }
+            set
+            {
+                _ParameterValue = Convert.ToString(value);
+            }
+        }
+        private string _ParameterValue;
         /// <summary>
         /// Значение параметра
         /// </summary>
-        public string ParameterValue { get; set; }
+        public string ParameterValue
+        { get
+            {
+                if (ValueType == "double")
+                {
+                    return Convert.ToString(Convert.ToDouble(_ParameterValue));
+                }
+                else if (ValueType == "int")
+                {
+                    return Convert.ToString(Convert.ToInt32(_ParameterValue));
+                }
+                else return _ParameterValue;
+            }
+          set
+            {
+                if (ValueType == "bool") { _ParameterValue = Convert.ToString(value); }
+                if (ValueType == "double")
+                {
+                    try //Пробуем конвертировать значение в double
+                    {
+                        _ParameterValue = Convert.ToString(CommonOperation.ConvertToDouble(value));
+                    }
+                    catch
+                    {
+                        _ParameterValue = "";
+                    }
+                }
+                if (ValueType == "int")
+                {
+                    try //Пробуем конвертировать значение в double
+                    {
+                        _ParameterValue = Convert.ToString(Convert.ToInt32(value));
+                    }
+                    catch
+                    {
+                        _ParameterValue = "";
+                    }
+                }
+            }
+        }
+        public double MinValue { get; set; }
+        public double MaxValue { get; set; }
+        public int? MeasureUnitIndex { get; set; }
+        public string MeasureUnit
+        {
+            get
+            {
+                if (MeasureUnitIndex != null) return MeasureUnitConverter.GetUnitLabelText(Convert.ToInt32(MeasureUnitIndex));
+                else return "";
+            }
+        }
         /// <summary>
         /// Ссылка на родительский элемент
         /// </summary>
@@ -89,6 +154,14 @@ namespace RDBLL.Common.Params
         {
             SetValueType("double");
             ParameterValue = Convert.ToString(value);
+        }
+        public void SetDoubleValue(double value, double minValue, double maxValue, int measureIndex)
+        {
+            SetValueType("double");
+            ParameterValue = Convert.ToString(value);
+            MinValue = minValue;
+            MaxValue = maxValue;
+            MeasureUnitIndex = measureIndex;
         }
         /// <summary>
         /// Устанавливает значение параметра как строку

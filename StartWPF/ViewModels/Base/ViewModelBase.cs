@@ -13,15 +13,23 @@ namespace RDStartWPF.ViewModels.Base
     {
         private ICommand _Command;
 
-        public string this[string columnName] => throw new NotImplementedException();
+        public abstract string this[string columnName] { get; }
 
-        public string Error => throw new NotImplementedException();
+        public string Error { get; set; }
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        public void OnPropertyChanged([CallerMemberName]string prop = "")
+        public void OnPropertyChanged([CallerMemberName]string propertyName = null)
         {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(prop));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        protected bool SetProperty<T>(ref T storage, T value, [CallerMemberName]string propertyName = null)
+        {
+            if (object.Equals(storage, value)) return false;
+            storage = value;
+            this.OnPropertyChanged(propertyName);
+            return true;
         }
     }
 }

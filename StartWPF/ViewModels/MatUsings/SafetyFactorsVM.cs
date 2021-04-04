@@ -61,6 +61,8 @@ namespace RDStartWPF.ViewModels.MatUsings
             }
         }
 
+        public override string this[string columnName] => throw new NotImplementedException();
+
         public SafetyFactorsVM(MaterialUsing parentMember)
         {
             SafetyFactors = parentMember.SafetyFactors;

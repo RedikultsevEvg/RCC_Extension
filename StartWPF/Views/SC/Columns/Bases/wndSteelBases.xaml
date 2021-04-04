@@ -9,38 +9,8 @@
         mc:Ignorable="d"
         Title="Базы стальных колонн" Height="800" Width="900" MinWidth="500" MinHeight="450" MaxWidth="900" WindowStartupLocation="CenterScreen">
     <Window.Resources>
-        <SteelConvert:SteelBaseToGeometryConverter x:Key="SteelBaseToGeometryConverter"/>
-        <DataTemplate x:Key="SteelBaseTemplate">
-            <Expander Header="{Binding Path=Name}" Background="#FF97FF92" MinWidth="{Binding ActualWidth, ElementName=LvSteelBases, Mode=OneWay}" MinHeight="30" Margin="0,5">
-                <HeaderedContentControl>
-                    <Grid Height="130" Width="550" Margin="5">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="200"/>
-                            <ColumnDefinition/>
-                            <ColumnDefinition Width="200"/>
-                        </Grid.ColumnDefinitions>
-                        <ScrollViewer Content="{Binding Converter={StaticResource SteelBaseToGeometryConverter}}"
-                                      HorizontalScrollBarVisibility="Hidden"
-                                      VerticalScrollBarVisibility ="Hidden">
-                        </ScrollViewer>
-                        <Grid Grid.Column="1">
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="30"/>
-                                <RowDefinition Height="30"/>
-                                <RowDefinition Height="30"/>
-                                <RowDefinition Height="30"/>
-                            </Grid.RowDefinitions>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width ="*"/>
-                                <ColumnDefinition Width ="100"/>
-                                <ColumnDefinition Width="70"/>
-                            </Grid.ColumnDefinitions>
-                            <TextBlock x:Name="tbName" Style="{StaticResource PropertyTextBlock}" Text="{Binding Name}"/>
-                        </Grid>
-
-                    </Grid>
-                </HeaderedContentControl>
-            </Expander>
+        <DataTemplate x:Key="ChildTemplate">
+            <ContentControl ContentTemplate="{StaticResource SteelBaseTemplate}"  Content="{Binding}"/>
         </DataTemplate>
     </Window.Resources>
     <Grid>

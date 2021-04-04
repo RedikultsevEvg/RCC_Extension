@@ -26,6 +26,8 @@ namespace RDStartWPF.ViewModels.Soils.SoilSections
         }
         public ObservableCollection<SoilSection> SoilSections { get => _SoilSectionUsing.SoilSections; }
 
+        public override string this[string columnName] => throw new NotImplementedException();
+
         public SoilSectionUsingVM()
         {
         }

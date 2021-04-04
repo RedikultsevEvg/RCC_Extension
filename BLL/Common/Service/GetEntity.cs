@@ -61,7 +61,7 @@ namespace RDBLL.Common.Service
                 Level newObject = new Level();
                 newObject.OpenFromDataSet(dataRow);
                 newObject.RegisterParent(building);
-                newObject.SteelBases = GetSteelBases(dataSet, newObject);
+                GetSteelBases(dataSet, newObject);
                 GetFoundations(dataSet, newObject);
                 newObjects.Add(newObject);
             }
@@ -84,7 +84,7 @@ namespace RDBLL.Common.Service
             {
                 SteelBase newObject = new SteelBase();
                 newObject.OpenFromDataSet(dataRow);
-                newObject.ParentMember = level;
+                newObject.RegisterParent(level);
                 PatternBase pattern = GetPapametricObject(dataSet, newObject) as PatternBase;
                 
                 if (pattern is null)
@@ -563,6 +563,13 @@ namespace RDBLL.Common.Service
                 case "SteelBasePatternType2":
                     {
                         newObj = new PatternType2();
+                        newObj.OpenFromDataSet(query);
+                        newObj.StoredParams = GetStoredParams(dataSet, newObj);
+                        return newObj;
+                    }
+                case "SteelBasePatternType3":
+                    {
+                        newObj = new PatternType3();
                         newObj.OpenFromDataSet(query);
                         newObj.StoredParams = GetStoredParams(dataSet, newObj);
                         return newObj;

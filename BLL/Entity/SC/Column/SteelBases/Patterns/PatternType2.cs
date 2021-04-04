@@ -1,6 +1,6 @@
 ﻿using RDBLL.Common.Params;
 using RDBLL.Common.Service;
-using RDBLL.Entity.SC.Column.SteelBases.Factorys;
+using RDBLL.Entity.SC.Column.SteelBases.Factories;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -16,19 +16,19 @@ namespace RDBLL.Entity.SC.Column.SteelBases.Patterns
         public PatternType2(bool genId = false) : base(genId)
         {
             StoredParams.Add(new StoredParam(this) { Id = ProgrammSettings.CurrentId, Name = "Ширина базы, B" });
-            StoredParams[0].SetDoubleValue(0.36);
+            StoredParams[0].SetDoubleValue(0.5, 0, double.PositiveInfinity, 0);
             StoredParams.Add(new StoredParam(this) { Id = ProgrammSettings.CurrentId, Name = "Длина базы, L" });
-            StoredParams[1].SetDoubleValue(0.66);
+            StoredParams[1].SetDoubleValue(0.8, 0, double.PositiveInfinity, 0);
             StoredParams.Add(new StoredParam(this) { Id = ProgrammSettings.CurrentId, Name = "Ширина свеса, B1" });
-            StoredParams[2].SetDoubleValue(0.1);
+            StoredParams[2].SetDoubleValue(0.07, 0, double.PositiveInfinity, 0);
             StoredParams.Add(new StoredParam(this) { Id = ProgrammSettings.CurrentId, Name = "Внутренний размер, L1" });
-            StoredParams[3].SetDoubleValue(0.35);
+            StoredParams[3].SetDoubleValue(0.35, 0, double.PositiveInfinity, 0);
             StoredParams.Add(new StoredParam(this) { Id = ProgrammSettings.CurrentId, Name = "Размер по болтам, B2" });
-            StoredParams[4].SetDoubleValue(0.2);
+            StoredParams[4].SetDoubleValue(0.2, 0, double.PositiveInfinity, 0);
             StoredParams.Add(new StoredParam(this) { Id = ProgrammSettings.CurrentId, Name = "Размер по болтам, L2" });
-            StoredParams[5].SetDoubleValue(0.49);
+            StoredParams[5].SetDoubleValue(0.49, 0, double.PositiveInfinity, 0);
             StoredParams.Add(new StoredParam(this) { Id = ProgrammSettings.CurrentId, Name = "Диаметр болтов, d" });
-            StoredParams[6].SetDoubleValue(0.03);
+            StoredParams[6].SetDoubleValue(0.03, 0.3, double.PositiveInfinity, 0);
             StoredParams.Add(new StoredParam(this) { Id = ProgrammSettings.CurrentId, Name = "Наличие ребра по X" });
             StoredParams[7].SetBoolValue(true);
             StoredParams.Add(new StoredParam(this) { Id = ProgrammSettings.CurrentId, Name = "Наличие ребра по Y" });
@@ -39,10 +39,14 @@ namespace RDBLL.Entity.SC.Column.SteelBases.Patterns
             SteelBase steelBase = ParentMember as SteelBase;
             double baseWidth = StoredParams[0].GetDoubleValue();
             double baseLength = StoredParams[1].GetDoubleValue();
-            double baseIntLength = StoredParams[2].GetDoubleValue();
-            double width = StoredParams[3].GetDoubleValue();
-            double length = StoredParams[4].GetDoubleValue();
+            double contilever = StoredParams[2].GetDoubleValue();
+            double baseIntLength = StoredParams[3].GetDoubleValue();
+            double width = StoredParams[4].GetDoubleValue();
+            double length = StoredParams[5].GetDoubleValue();
             double diam = StoredParams[6].GetDoubleValue();
+            bool edgeX = StoredParams[7].GetBoolValue();
+            bool edgeY = StoredParams[8].GetBoolValue();
+
             steelBase.SteelBolts.Clear();
             DataSet dataSet = ProgrammSettings.CurrentDataSet;
             foreach (SteelBasePart part in steelBase.SteelBaseParts)
@@ -55,7 +59,7 @@ namespace RDBLL.Entity.SC.Column.SteelBases.Patterns
             }
             steelBase.SteelBaseParts.Clear();
             BoltFactProc.GetBoltsType1(steelBase, diam, width, length, 2, 2);
-            PartFactProc.GetPartsType1(steelBase, baseWidth, baseLength, baseIntLength);
+            PartFactProc.GetPartsType1(steelBase, baseWidth, baseLength, contilever, baseIntLength, edgeX, edgeY);
         }
     }
 }
