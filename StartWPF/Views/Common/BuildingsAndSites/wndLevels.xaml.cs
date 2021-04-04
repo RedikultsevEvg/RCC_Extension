@@ -121,19 +121,9 @@ namespace RDStartWPF.Views.Common.BuildingsAndSites
             if (LvMain.SelectedIndex >= 0)
             {
                 int a = LvMain.SelectedIndex;
-                
-                if (_childName == "SteelBases")
-                {
-                    wndSteelBases childWindow;
-                    childWindow = new wndSteelBases(_collection[a]);
-                    childWindow.ShowDialog();
-                }
-                else if (_childName == "Foundations")
-                {
-                    wndFoundations childWindow;
-                    childWindow = new wndFoundations(_collection[a]);
-                    childWindow.ShowDialog();
-                }              
+                wndLevelChilds childWindow;
+                childWindow = new wndLevelChilds(_collection[a], _childName);
+                childWindow.ShowDialog();
             }
             else
             {

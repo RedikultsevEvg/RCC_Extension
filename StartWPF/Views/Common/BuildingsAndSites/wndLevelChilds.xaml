@@ -1,13 +1,10 @@
-﻿<Window x:Class="RDStartWPF.Views.SC.Columns.Bases.wndSteelBases"
+﻿<Window x:Class="RDStartWPF.Views.Common.BuildingsAndSites.wndLevelChilds"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:RDStartWPF.Views.SC.Columns.Bases"
-        xmlns:Column="clr-namespace:RDBLL.Entity.SC.Column;assembly=BLL" 
-        xmlns:SteelConvert="clr-namespace:RDStartWPF.InfraStructure.Converters.SC.Columns.Bases"
         mc:Ignorable="d"
-        Title="Базы стальных колонн" Height="800" Width="900" MinWidth="500" MinHeight="450" MaxWidth="900" WindowStartupLocation="CenterScreen">
+        Title="Элементы уровня" Height="800" Width="900" MinWidth="500" MinHeight="450" MaxWidth="900" WindowStartupLocation="CenterScreen">
     <Window.Resources>
         <DataTemplate x:Key="ChildTemplate">
             <ContentControl ContentTemplate="{StaticResource SteelBaseTemplate}"  Content="{Binding}"/>
@@ -46,6 +43,9 @@
                 </Button.ToolTip>
                 <Image x:Name="EditPng" Style="{StaticResource ServiceButtonImage}" Source="{DynamicResource IconEdit40}"/>
             </Button>
+            <Button x:Name="BtnDuplicate" Style="{StaticResource ServiceButton}" ToolTip="Дублировать" Click="BtnDuplicate_Click">
+                <Image x:Name="DuplicatePng" Style="{StaticResource ServiceButtonImage}" Source="{DynamicResource IconDuplicate40}"/>
+            </Button>
             <Button x:Name="BtnReport" Style="{StaticResource ServiceButton}" Height="50" Click="BtnReport_Click">
                 <Button.Effect>
                     <DropShadowEffect Opacity="0.6"/>
@@ -56,6 +56,14 @@
                 <Image x:Name="ReportPng" Style="{StaticResource ServiceButtonImage}" Source="{DynamicResource IconReport}"/>
             </Button>
         </StackPanel>
-        <ListView x:Name="LvSteelBases" ItemTemplate="{StaticResource SteelBaseTemplate}" Grid.Row="1" ItemsSource="{Binding}"/>
+        <ListView x:Name="LvMain" Grid.Row="1" ItemsSource="{Binding}" SelectionMode="Single">
+            <ListView.ItemContainerStyle>
+                <Style TargetType="{x:Type ListViewItem}">
+                    <Setter Property="Margin" Value="5"/>
+                    <Setter Property="Template" Value="{StaticResource ListTemplate}">
+                    </Setter>
+                </Style>
+            </ListView.ItemContainerStyle>
+        </ListView>
     </Grid>
 </Window>

@@ -238,9 +238,6 @@
     <Compile Include="Views\RCC\Foundations\wndFoundationParts.xaml.cs">
       <DependentUpon>wndFoundationParts.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\RCC\Foundations\wndFoundations.xaml.cs">
-      <DependentUpon>wndFoundations.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Views\WPF_Windows\UserControls\ReinforcementControl.xaml.cs">
       <DependentUpon>ReinforcementControl.xaml</DependentUpon>
     </Compile>
@@ -265,8 +262,8 @@
     <Compile Include="Views\WPF_Windows\wndSteelBaseResult.xaml.cs">
       <DependentUpon>wndSteelBaseResult.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\SC\Columns\Bases\wndSteelBases.xaml.cs">
-      <DependentUpon>wndSteelBases.xaml</DependentUpon>
+    <Compile Include="Views\Common\BuildingsAndSites\wndLevelChilds.xaml.cs">
+      <DependentUpon>wndLevelChilds.xaml</DependentUpon>
     </Compile>
     <Compile Include="WndAbout.xaml.cs">
       <DependentUpon>WndAbout.xaml</DependentUpon>
@@ -402,10 +399,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\RCC\Foundations\wndFoundations.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
     <Page Include="Views\WPF_Windows\UserControls\ReinforcementControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -438,7 +431,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\SC\Columns\Bases\wndSteelBases.xaml">
+    <Page Include="Views\Common\BuildingsAndSites\wndLevelChilds.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

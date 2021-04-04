@@ -183,6 +183,7 @@ namespace RDBLL.Entity.SC.Column
         public object Clone()
         {
             SteelBasePart steelBasePart = this.MemberwiseClone() as SteelBasePart;
+            steelBasePart.Id = ProgrammSettings.CurrentId;
             return steelBasePart;
         }
         /// <summary>

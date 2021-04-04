@@ -21,6 +21,7 @@ using RDBLL.Processors.SC;
 using System.Collections.ObjectModel;
 using RDStartWPF.Views.SC.Columns.Bases;
 using RDStartWPF.Views.Common.Forces;
+using RDStartWPF.Views.Common.BuildingsAndSites;
 
 namespace RDStartWPF.Views.WinForms
 {
@@ -758,7 +759,7 @@ namespace RDStartWPF.Views.WinForms
                 foreach (int i in lvDetails.SelectedIndices)
                 {
                     level = ((ObservableCollection<Level>)_objectList)[i];
-                    wndSteelBases wndSteelBases = new wndSteelBases(level);
+                    wndLevelChilds wndSteelBases = new wndLevelChilds(level, "SteelBases");
                     wndSteelBases.ShowDialog();
                 }
             }

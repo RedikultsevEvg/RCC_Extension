@@ -30,4 +30,26 @@
             </HeaderedContentControl>
         </Expander>
     </DataTemplate>
+    <ControlTemplate x:Key="ListTemplate" TargetType="{x:Type ListViewItem}">
+        <Border x:Name="LvItemBorder" Background="#FF84E9F3">
+            <Grid Height="30">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="30"/>
+                    <ColumnDefinition Width="200"/>
+                    <ColumnDefinition Width="130"/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <Grid Background="{TemplateBinding Background}" Width="30" >
+                    <RadioButton  IsChecked="{Binding Path=IsSelected, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Width="10" Height="10"/>
+                </Grid>
+                <TextBlock x:Name="tbName" Grid.Column="1" Style="{StaticResource PropertyTextBlock}" Text="Наименование" FontSize="14" FontWeight="Bold"/>
+                <TextBox x:Name="tbxName" Grid.Column="2" Style="{StaticResource PropertyTextBox}" Text="{Binding Name}"/>
+            </Grid>
+        </Border>
+        <ControlTemplate.Triggers>
+            <Trigger Property="IsSelected" Value="True">
+                <Setter Property="Background" Value="LimeGreen"/>
+            </Trigger>
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
 </ResourceDictionary>

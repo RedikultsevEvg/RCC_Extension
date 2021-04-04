@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace RDBLL.Common.Params
 {
-    public abstract class ParametriсBase : IHasParent, IHasStoredParams
+    public abstract class ParametriсBase : IHasParent, IHasStoredParams, ICloneable
     {
         public IDsSaveable ParentMember { get; private set; }
 
@@ -47,6 +47,19 @@ namespace RDBLL.Common.Params
         public void UnRegisterParent()
         {
             ParentMember = null;
+        }
+
+        public object Clone()
+        {
+            ParametriсBase newObj = this.MemberwiseClone() as ParametriсBase;
+            newObj.StoredParams = new List<StoredParam>();
+            foreach (StoredParam param in StoredParams)
+            {
+                StoredParam newParam = param.Clone() as StoredParam;
+                newParam.RegisterParent(newObj);
+                newObj.StoredParams.Add(newParam);
+            }
+            return newObj;
         }
     }
 }

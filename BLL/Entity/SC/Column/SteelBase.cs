@@ -68,7 +68,6 @@ namespace RDBLL.Entity.SC.Column
         /// Наименование единиц измерения
         /// </summary>
         public MeasureUnitList Measures { get => new MeasureUnitList(); }
-
         /// <summary>
         /// Коллекция комбинаций
         /// </summary>
@@ -210,6 +209,14 @@ namespace RDBLL.Entity.SC.Column
         public object Clone()
         {
             SteelBase steelBase = this.MemberwiseClone() as SteelBase;
+            steelBase.Id = ProgrammSettings.CurrentId;
+            steelBase.ForcesGroups = new ObservableCollection<ForcesGroup>();
+            foreach (ForcesGroup load in ForcesGroups)
+            {
+                ForcesGroup newLoad = load.Clone() as ForcesGroup;
+                newLoad.Owners.Add(steelBase);
+                steelBase.ForcesGroups.Add(newLoad);
+            }
             steelBase.SteelBolts = new ObservableCollection<SteelBolt>();
             foreach (SteelBolt bolt in SteelBolts)
             {
@@ -220,6 +227,7 @@ namespace RDBLL.Entity.SC.Column
             {
                 steelBase.SteelBaseParts.Add(part.Clone() as SteelBasePart);
             }
+            if (this.Pattern != null) steelBase.Pattern = Pattern.Clone() as PatternBase;
             return steelBase; 
         }
         /// <summary>
@@ -230,7 +238,7 @@ namespace RDBLL.Entity.SC.Column
         {
             Level level = parent as Level;
             ParentMember = level;
-            level.SteelBases.Add(this);
+            level.Children.Add(this);
         }
         /// <summary>
         /// Удаление регистрации родителя
@@ -238,7 +246,7 @@ namespace RDBLL.Entity.SC.Column
         public void UnRegisterParent()
         {
             Level level = ParentMember as Level;
-            level.SteelBases.Remove(this);
+            level.Children.Remove(this);
         }
         #endregion
     }

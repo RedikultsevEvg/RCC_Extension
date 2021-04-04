@@ -63,6 +63,7 @@ namespace RDBLL.Entity.Common.Placements
 
         public LinePlacement(bool genId = false) : base(genId)
         {
+            Type = "LinePlacement";
             StoredParams.Add(new StoredParam(this) { Id = ProgrammSettings.CurrentId, Name = "StartX" });
             //StoredParams[0 + ParamQuant].SetDoubleValue(0);
             StoredParams.Add(new StoredParam(this) { Id = ProgrammSettings.CurrentId, Name = "StartY" });

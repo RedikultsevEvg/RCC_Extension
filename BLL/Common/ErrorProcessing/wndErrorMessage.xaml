@@ -25,7 +25,9 @@
             </TabItem>
             <TabItem Header="Техническая информация">
                 <Grid Background="#FFE5E5E5">
-                    <TextBlock x:Name="ExtendedText" TextWrapping="Wrap" Text="Техническая информация по ошибке"/>
+                    <ScrollViewer>
+                        <TextBlock x:Name="ExtendedText" TextWrapping="Wrap" Text="Техническая информация по ошибке"/>
+                    </ScrollViewer>
                 </Grid>
             </TabItem>
         </TabControl>

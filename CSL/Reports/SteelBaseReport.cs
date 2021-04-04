@@ -71,7 +71,7 @@ namespace CSL.Reports
                 foreach (Level level in building.Children)
                 {
                     DataTable SteelBases = dataSet.Tables["SteelBases"];
-                    foreach (SteelBase steelBase in level.SteelBases)
+                    foreach (SteelBase steelBase in level.Children)
                     {
                         if (!steelBase.IsActual)
                         {

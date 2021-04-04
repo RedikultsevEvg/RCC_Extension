@@ -25,12 +25,9 @@ namespace RDBLL.Entity.Common.Placements
         }
         public LineBySpacing(bool genId = false) : base (genId)
         {
+            Type = "LineBySpacing";
             StoredParams.Add(new StoredParam(this) { Id = ProgrammSettings.CurrentId, Name = "Spacing" });
             StoredParams[0 + ParamQuant].SetDoubleValue(0.2);
-        }
-        public LineBySpacing()
-        {
-            Type = "LineBySpacing";
         }
         /// <summary>
         /// Возвращает коллекцию точек расположения элементов

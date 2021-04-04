@@ -14,7 +14,7 @@ namespace RDBLL.Forces
     /// <summary>
     ///Клас комбинации загружений 
     /// </summary>
-    public class LoadSet : Load, IEquatable<LoadSet>, IDsSaveable, IDuplicate
+    public class LoadSet : Load, IEquatable<LoadSet>, IDsSaveable, ICloneable
     {
         #region
         /// <summary>

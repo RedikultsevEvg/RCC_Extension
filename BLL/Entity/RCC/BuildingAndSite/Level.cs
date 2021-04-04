@@ -66,11 +66,7 @@ namespace RDBLL.Entity.RCC.BuildingAndSite
         /// </summary>
         public ObservableCollection<Column> Columns { get; set; }
         /// <summary>
-        /// Коллекция стальных баз
-        /// </summary>
-        public ObservableCollection<IHasParent> SteelBases { get; set; }
-        /// <summary>
-        /// Коллекция фундаментов
+        /// Коллекция дочерних элементов
         /// </summary>
         public ObservableCollection<IHasParent> Children { get; private set; }
 
@@ -114,11 +110,6 @@ namespace RDBLL.Entity.RCC.BuildingAndSite
             row.SetField("BasePointZ", BasePointZ);
             #endregion
             row.AcceptChanges();
-
-            foreach (SteelBase steelBase in SteelBases)
-            {
-                steelBase.SaveToDataSet(dataSet, createNew);
-            }
         }
         /// <summary>
         /// Открывает запись из датасета
@@ -153,13 +144,9 @@ namespace RDBLL.Entity.RCC.BuildingAndSite
         /// <param name="dataSet"></param>
         public void DeleteFromDataSet(DataSet dataSet)
         {
-            foreach (SteelBase steelBase in SteelBases)
+            foreach (IDsSaveable child in Children)
             {
-                steelBase.DeleteFromDataSet(dataSet);
-            }
-            foreach (Foundation foundation in Children)
-            {
-                foundation.DeleteFromDataSet(dataSet);
+                child.DeleteFromDataSet(dataSet);
             }
             DsOperation.DeleteRow(dataSet, GetTableName(), Id);
         }
@@ -170,7 +157,6 @@ namespace RDBLL.Entity.RCC.BuildingAndSite
         public Level ()
         {
             Walls = new ObservableCollection<Wall>();
-            SteelBases = new ObservableCollection<IHasParent>();
             Children = new ObservableCollection<IHasParent>();
         }
 
@@ -190,7 +176,6 @@ namespace RDBLL.Entity.RCC.BuildingAndSite
             Height = 3;
             TopOffset = -0.2;
             //Walls = new ObservableCollection<Wall>();
-            SteelBases = new ObservableCollection<IHasParent>();
             Children = new ObservableCollection<IHasParent>();
         }
 
