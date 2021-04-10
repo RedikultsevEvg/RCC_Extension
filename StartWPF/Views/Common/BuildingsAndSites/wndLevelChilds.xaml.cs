@@ -16,7 +16,8 @@ using RDStartWPF.Views.Common.Patterns.ControlClasses;
 using RDBLL.Common.Interfaces;
 using RDBLL.Entity.RCC.Foundations;
 using RDStartWPF.Views.RCC.Foundations;
-using RDStartWPF.Views.SC.Columns.Bases;
+using RDStartWPF.Views.SC.Columns.Bases;  
+using FoundBuilder = RDBLL.Entity.RCC.Foundations.Builders;
 
 namespace RDStartWPF.Views.Common.BuildingsAndSites
 {
@@ -53,7 +54,9 @@ namespace RDStartWPF.Views.Common.BuildingsAndSites
             }
             if (_childName == "Foundations")
             {
-                Foundation foundation = new Foundation(_level);
+                FoundBuilder.BuilderBase builder = new FoundBuilder.BuilderTemplate1();
+                Foundation foundation = FoundBuilder.FoundMaker.MakeFoundation(builder);
+                foundation.RegisterParent(_level);
                 //Надо создать элемент, иначе некуда будет сохранять дочерние
                 foundation.SaveToDataSet(ProgrammSettings.CurrentDataSet, true);
                 wndFoundation wndFoundation = new wndFoundation(foundation);

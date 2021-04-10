@@ -150,6 +150,13 @@
     <Compile Include="Common\Geometry\Point3D.cs" />
     <Compile Include="Entity\Common\Materials\ConcreteKind.cs" />
     <Compile Include="Entity\RCC\Common\Processors\RectSectionProcessor.cs" />
+    <Compile Include="Entity\RCC\Foundations\Builders\BuilderBase.cs" />
+    <Compile Include="Entity\RCC\Foundations\Builders\BuilderTemplate1.cs" />
+    <Compile Include="Entity\RCC\Foundations\Builders\BuilderVM1.cs" />
+    <Compile Include="Entity\RCC\Foundations\Builders\BuilderVM2.cs" />
+    <Compile Include="Entity\RCC\Foundations\Builders\FoundMaker.cs" />
+    <Compile Include="Entity\RCC\Foundations\Factories\ConcreteFactProc.cs" />
+    <Compile Include="Entity\RCC\Foundations\Factories\ReinforcementFactProc.cs" />
     <Compile Include="Entity\RCC\Foundations\Foundation.cs" />
     <Compile Include="Entity\RCC\Foundations\FoundationPart.cs" />
     <Compile Include="Entity\RCC\Foundations\Processors\FoundCloneProcessor.cs" />
@@ -158,6 +165,7 @@
     <Compile Include="Entity\RCC\Foundations\Processors\SoilResistantProc.cs" />
     <Compile Include="Entity\RCC\Foundations\RectFoundationPart.cs" />
     <Compile Include="Entity\RCC\Foundations\Processors\FoundationProcessor.cs" />
+    <Compile Include="Entity\RCC\Foundations\Results\FoundationResult.cs" />
     <Compile Include="Entity\RCC\Reinforcement\Bar.cs" />
     <Compile Include="Common\Service\DetailObjectList.cs" />
     <Compile Include="Common\Service\ProgrammSettings.cs" />

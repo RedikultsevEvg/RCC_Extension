@@ -17,7 +17,7 @@ namespace RDBLL.Entity.Common.Materials
         /// <summary>
         /// Конструктор без параметров
         /// </summary>
-        public ConcreteUsing() : base()
+        public ConcreteUsing(bool genId = false) : base(genId)
         {
 
         }

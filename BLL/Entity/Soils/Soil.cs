@@ -24,10 +24,6 @@ namespace RDBLL.Entity.Soils
         /// </summary>
         public int Id { get; set; }
         /// <summary>
-        /// Код строительного объекта
-        /// </summary>
-        public int BuildingSiteId { get; set; }
-        /// <summary>
         /// Обратная ссылка на строительный объект
         /// </summary>
         public BuildingSite BuildingSite { get; set; }
@@ -93,7 +89,6 @@ namespace RDBLL.Entity.Soils
         public Soil(BuildingSite buildingSite)
         {
             Id = ProgrammSettings.CurrentId;
-            BuildingSiteId = buildingSite.Id;
             BuildingSite = buildingSite;
             Name = $"ИГЭ-{buildingSite.Soils.Count + 1}";
             FiltrationCoeff = 0.0001;
@@ -138,7 +133,7 @@ namespace RDBLL.Entity.Soils
         {
             //Не удалять, так как этот участок необходим с учетом наследования
             dataRow["Id"] = Id;
-            dataRow["ParentId"] = BuildingSiteId;
+            dataRow["ParentId"] = BuildingSite.Id;
             dataRow["Name"] = Name;
             dataRow["Description"] = Description;
             dataRow["CrcDensity"] = CrcDensity;
@@ -169,7 +164,6 @@ namespace RDBLL.Entity.Soils
         public virtual void OpenFromDataSet(DataRow dataRow)
         {
             Id = dataRow.Field<int>("Id");
-            BuildingSiteId = dataRow.Field<int>("ParentId");
             Name = dataRow.Field<string>("Name");
             Description = dataRow.Field<string>("Description");
             CrcDensity = dataRow.Field<double>("CrcDensity");

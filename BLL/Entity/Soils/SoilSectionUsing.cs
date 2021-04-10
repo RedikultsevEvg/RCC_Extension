@@ -12,12 +12,23 @@ using System.Threading.Tasks;
 
 namespace RDBLL.Entity.Soils
 {
+    /// <summary>
+    /// Класс скважины грунта
+    /// </summary>
     public class SoilSectionUsing : IHasParent, ICloneable
     {
 
-
+        /// <summary>
+        /// Код использования скважины
+        /// </summary>
         public int Id { get; set; }
+        /// <summary>
+        /// Наименование скважины
+        /// </summary>
         public string Name { get; set; }
+        /// <summary>
+        /// Обратная ссылка на родителя
+        /// </summary>
         public IDsSaveable ParentMember { get; private set; }
         //Код выбранной скважины
         public int? SelectedId { get ; set ; }

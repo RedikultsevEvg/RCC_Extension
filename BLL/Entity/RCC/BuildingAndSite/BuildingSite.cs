@@ -149,7 +149,6 @@ namespace RDBLL.Entity.RCC.BuildingAndSite
                 MessageBox.Show("Для объекта не задано ни одной скважины", "Будет создана скважина по умолчанию");
                 SoilSection section = new SoilSection(this);
                 AddSoilLayer(section);
-                SoilSections.Add(section);
                 //Сохраняем в датасет новую скважину
                 section.SaveToDataSet(ProgrammSettings.CurrentDataSet, true);
                 return section;

@@ -18,7 +18,7 @@ namespace RDBLL.Entity.Soils
     /// <summary>
     /// Класс геологического разреза
     /// </summary>
-    public class SoilSection : IDsSaveable, IDataErrorInfo, IRDObservable, IRDObserver
+    public class SoilSection : IHasParent, IDataErrorInfo
     {
         #region Properies
         /// <summary>
@@ -26,13 +26,9 @@ namespace RDBLL.Entity.Soils
         /// </summary>
         public int Id { get; set; }
         /// <summary>
-        /// Код строительного объекта
-        /// </summary>
-        public int BuildingSiteId { get; set; }
-        /// <summary>
         /// Обратная ссылка на строительный объект
         /// </summary>
-        public BuildingSite BuildingSite {get;set;}
+        public IDsSaveable ParentMember {get; private set;}
         /// <summary>
         /// Наименование
         /// </summary>
@@ -65,7 +61,6 @@ namespace RDBLL.Entity.Soils
         /// Наименование линейных единиц измерения
         /// </summary>
         public string LinearMeasure { get { return MeasureUnitConverter.GetUnitLabelText(0); } }
-        private List<IRDObserver> Observers;
         #endregion
         /// <summary>
         /// Конструктор без параметров
@@ -73,7 +68,6 @@ namespace RDBLL.Entity.Soils
         public SoilSection()
         {
             SoilLayers = new ObservableCollection<SoilLayer>();
-            Observers = new List<IRDObserver>();
         }
         /// <summary>
         /// Конструктор по строительному объекту
@@ -82,8 +76,7 @@ namespace RDBLL.Entity.Soils
         public SoilSection(BuildingSite buildingSite)
         {
             Id = ProgrammSettings.CurrentId;
-            BuildingSiteId = buildingSite.Id;
-            BuildingSite = buildingSite;
+            RegisterParent(buildingSite);
             Name = "Скважина-" + (buildingSite.SoilSections.Count + 1);
             HasWater = false;
             NaturalWaterLevel = 200;
@@ -91,7 +84,6 @@ namespace RDBLL.Entity.Soils
             CenterX = 0;
             CenterY = 0;
             SoilLayers = new ObservableCollection<SoilLayer>();
-            Observers = new List<IRDObserver>();
         }
         #region IODataSet
         /// <summary>
@@ -105,31 +97,15 @@ namespace RDBLL.Entity.Soils
         public void SaveToDataSet(DataSet dataSet, bool createNew)
         {
             DataTable dataTable;
-            DataRow row;
-            dataTable = dataSet.Tables[GetTableName()];
-            if (createNew)
-            {
-                row = dataTable.NewRow();
-                dataTable.Rows.Add(row);
-            }
-            else
-            {
-                var soil = (from dataRow in dataTable.AsEnumerable()
-                            where dataRow.Field<int>("Id") == Id
-                            select dataRow).Single();
-                row = soil;
-            }
             #region setFields
-            row.SetField("Id", Id);
-            row.SetField("ParentId", BuildingSiteId);
-            row.SetField("Name", Name);
+            DataRow row = EntityOperation.SaveEntity(dataSet, createNew, this);
             row.SetField("HasWater", HasWater);
             row.SetField("NaturalWaterLevel", NaturalWaterLevel);
             row.SetField("WaterLevel", WaterLevel);
             row.SetField("CenterX", CenterX);
             row.SetField("CenterY", CenterY);
             #endregion
-            dataTable.AcceptChanges();
+            row.AcceptChanges();
             //Удаляем из датасета все вложенные слои грунта
             DeleteLayers(dataSet);
             //Добавляем в датасет вложенные слои грунта
@@ -158,9 +134,7 @@ namespace RDBLL.Entity.Soils
         /// <param name="dataRow"></param>
         public void OpenFromDataSet(DataRow dataRow)
         {
-            Id = dataRow.Field<int>("Id");
-            BuildingSiteId = dataRow.Field<int>("ParentId");
-            Name = dataRow.Field<string>("Name");
+            EntityOperation.SetProps(dataRow, this);
             HasWater = dataRow.Field<bool>("HasWater");
             NaturalWaterLevel = dataRow.Field<double>("NaturalWaterLevel");
             WaterLevel = dataRow.Field<double>("WaterLevel");
@@ -188,49 +162,25 @@ namespace RDBLL.Entity.Soils
             }
             dataTable.AcceptChanges();
         }
-        #endregion
-        #region IRDObservable
-        /// <summary>
-        /// Добавляет объект в коллекцию наблюдателей
-        /// </summary>
-        /// <param name="obj"></param>
-        public void AddObserver(IRDObserver obj)
+
+        public void RegisterParent(IDsSaveable parent)
         {
-            Observers.Add(obj);
+            BuildingSite buildingSite = parent as BuildingSite;
+            ParentMember = buildingSite;
+            buildingSite.SoilSections.Add(this);
         }
-        /// <summary>
-        /// Удаляет объект из коллекции наблюдателей
-        /// </summary>
-        /// <param name="obj"></param>
-        public void RemoveObserver(IRDObserver obj)
+
+        public void UnRegisterParent()
         {
-            Observers.Remove(obj);
+            BuildingSite buildingSite = ParentMember as BuildingSite;
+            buildingSite.SoilSections.Remove(this);
+            ParentMember = null;
         }
-        /// <summary>
-        /// Уведомляет наблюдателей об изменении
-        /// </summary>
-        public void NotifyObservers()
-        {
-            foreach (IRDObserver observer in Observers)
-            {
-                observer.Update();
-            }
-        }
-        /// <summary>
-        /// Возвращат наличие объектов, где применяется данный объект
-        /// </summary>
-        /// <returns></returns>
         public bool HasChild()
         {
             bool result = false;
-            if (Observers.Count > 0) return true;
+            //if (Observers.Count > 0) return true;
             return result;
-        }
-        #endregion
-        #region IRDObserver
-        public void Update()
-        {
-            NotifyObservers();
         }
         #endregion
         #region errors

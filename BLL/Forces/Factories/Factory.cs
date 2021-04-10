@@ -12,6 +12,7 @@ namespace RDBLL.Forces.Factories
     {
         N100MX200,
         N100MX200MY50,
+        N1000MX200MY50,
     }
     public static class Factory
     {
@@ -48,7 +49,26 @@ namespace RDBLL.Forces.Factories
                         loadSet.ForceParameters[1].CrcValue = 200000; //Изгибающий момент
                         loadSet.ForceParameters.Add(new ForceParameter(loadSet));
                         loadSet.ForceParameters[2].KindId = 3; //Изгибающий момент
-                        loadSet.ForceParameters[3].CrcValue = 50000; //Изгибающий момент
+                        loadSet.ForceParameters[2].CrcValue = 50000; //Изгибающий момент
+                        loadSet.IsLiveLoad = false;
+                        loadSet.BothSign = false;
+                        loadSet.PartialSafetyFactor = 1.1;
+                        break;
+                    }
+                case ForceType.N1000MX200MY50:
+                    {
+                        LoadSet loadSet = new LoadSet(owner.ForcesGroups[0]);
+                        owner.ForcesGroups[0].LoadSets.Add(loadSet);
+                        loadSet.Name = "Постоянная";
+                        loadSet.ForceParameters.Add(new ForceParameter(loadSet));
+                        loadSet.ForceParameters[0].KindId = 1; //Продольная сила
+                        loadSet.ForceParameters[0].CrcValue = -1000000; //Продольная сила
+                        loadSet.ForceParameters.Add(new ForceParameter(loadSet));
+                        loadSet.ForceParameters[1].KindId = 2; //Изгибающий момент
+                        loadSet.ForceParameters[1].CrcValue = 200000; //Изгибающий момент
+                        loadSet.ForceParameters.Add(new ForceParameter(loadSet));
+                        loadSet.ForceParameters[2].KindId = 3; //Изгибающий момент
+                        loadSet.ForceParameters[2].CrcValue = 50000; //Изгибающий момент
                         loadSet.IsLiveLoad = false;
                         loadSet.BothSign = false;
                         loadSet.PartialSafetyFactor = 1.1;

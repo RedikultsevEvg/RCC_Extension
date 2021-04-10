@@ -384,7 +384,7 @@ namespace RDBLL.Common.Service
             {
                 SoilSection newObject = new SoilSection(buildingSite);
                 newObject.OpenFromDataSet(dataRow);
-                newObject.BuildingSite = buildingSite;
+                newObject.RegisterParent(buildingSite);
                 //Получаем коллекцию слоев грунта
                 newObject.SoilLayers = GetSoilLayers(dataSet, newObject);
                 newObjects.Add(newObject);
@@ -409,7 +409,7 @@ namespace RDBLL.Common.Service
                 SoilLayer newObject = new SoilLayer();
                 newObject.OpenFromDataSet(dataRow);
                 newObject.SoilSection = soilSection;
-                foreach (Soil soil in soilSection.BuildingSite.Soils)
+                foreach (Soil soil in (soilSection.ParentMember as BuildingSite).Soils)
                 {
                     if (soil.Id == newObject.SoilId) { newObject.Soil = soil; }
                 }

@@ -56,8 +56,6 @@ namespace RDStartWPF.Views.RCC.Foundations
             wndFoundationParts.ShowDialog();
             if (wndFoundationParts.DialogResult == true)
             {
-                _element.IsPartsActual = false;
-                _element.IsLoadCasesActual = false;
                 try
                 {
                     _element.DeleteSubElements(ProgrammSettings.CurrentDataSet, "FoundationParts");
@@ -91,7 +89,6 @@ namespace RDStartWPF.Views.RCC.Foundations
             if (message != "") { MessageBox.Show(message); }
             else
             {
-                _element.IsLoadCasesActual = false;
                 DialogResult = true;
                 Close();
             }

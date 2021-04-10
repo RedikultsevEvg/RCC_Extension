@@ -233,9 +233,7 @@ namespace RDBLL.Entity.RCC.Foundations.Processors
                         if (foundation.LoadCases == null) { foundation.LoadCases = new ObservableCollection<LoadSet>(); }
                         double[] delta = GetDeltaDistance(foundation);
                         foundation.btmLoadSetsWithoutWeight = LoadSetProcessor.GetLoadSetsTransform(foundation.LoadCases, delta);
-                        foundation.IsLoadCasesActual = true;
                     //}
-                    foundation.IsPartsActual = true;
                     foundation.NdmAreas = GetNdmAreas(foundation);
                     foundation.ForceCurvaturesWithoutWeight = GetForceCurvatures(foundation, foundation.btmLoadSetsWithoutWeight);
                     foundation.ForceCurvaturesWithWeight = GetForceCurvatures(foundation, foundation.btmLoadSetsWithWeight);

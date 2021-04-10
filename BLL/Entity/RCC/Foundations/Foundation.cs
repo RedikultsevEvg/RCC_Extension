@@ -17,36 +17,16 @@ using RDBLL.Entity.Common.Placements;
 using RDBLL.Entity.Common.Materials.RFExtenders;
 using RDBLL.Common.Service.DsOperations;
 using RDBLL.Common.Interfaces.Materials;
+using RDBLL.Entity.RCC.Foundations.Results;
+using RDBLL.Entity.RCC.Foundations.Factories;
 
 namespace RDBLL.Entity.RCC.Foundations
 {
     /// <summary>
     /// Класс столбчатого фундамента
     /// </summary>
-    public class Foundation : IHasForcesGroups, IHasParent, IDataErrorInfo, IRDObserver, ICloneable, IHasSoilSection, IHasConcrete
+    public class Foundation : IHasForcesGroups, IHasParent, IDataErrorInfo, ICloneable, IHasSoilSection, IHasConcrete
     {
-        /// <summary>
-        /// Класс для хранения результатов расчета фундамента
-        /// </summary>
-        public class FoundationResult
-        {
-            public List<CompressedLayerList> CompressedLayers { get; set; }
-            public List<double[]> StressesWithWeigth { get; set; }
-            public double MaxSettlement { get; set; }
-            public double CompressHeight { get; set; }
-            public double IncX { get; set; }
-            public double IncY { get; set; }
-            public double IncXY { get; set; }
-            public double MinSndAvgStressesWithWeight { get; set; }
-            public double MinSndMiddleStressesWithWeight { get; set; }
-            public double MinSndCornerStressesWithWeight { get; set; }
-            public double MaxSndCornerStressesWithWeight { get; set; }
-            public double MaxSndTensionAreaRatioWithWeight { get; set; }
-            public double SndResistance { get; set; }
-            public double[] AsAct { get; set; }
-            public double[] AsRec { get; set; }
-            public bool GeneralResult { get; set; }
-        }
         #region fields and properties
         /// <summary>
         /// Код фундамента
@@ -144,14 +124,6 @@ namespace RDBLL.Entity.RCC.Foundations
         /// </summary>
         public bool IsActual { get; set; }
         /// <summary>
-        /// Признак актуальности нагрузок
-        /// </summary>
-        public bool IsLoadCasesActual { get; set; }
-        /// <summary>
-        /// Признак актуальности ступеней
-        /// </summary>
-        public bool IsPartsActual { get; set; }
-        /// <summary>
         /// Наименование единиц измерения
         /// </summary>
         public MeasureUnitList Measures { get => new MeasureUnitList(); }
@@ -164,51 +136,50 @@ namespace RDBLL.Entity.RCC.Foundations
         /// <summary>
         /// Конструктор без параметров
         /// </summary>
-        public Foundation()
+        public Foundation(bool genId = false)
         {
-            IsLoadCasesActual = false;
-            IsPartsActual = false;
+            if (genId) Id = ProgrammSettings.CurrentId;
             ForcesGroups = new ObservableCollection<ForcesGroup>();
             ForcesGroups.Add(new ForcesGroup(this));
             Parts = new ObservableCollection<RectFoundationPart>();
             LoadCases = new ObservableCollection<LoadSet>();
             ForceCurvaturesWithWeight = new List<ForceCurvature>();
             ForceCurvaturesWithoutWeight = new List<ForceCurvature>();
+            IsActual = false;
             Result = new FoundationResult();
-            addMaterial(this);
+            ConcreteFactProc.AddConcrete(this);
+            ReinforcementFactProc.GetReinforcement(this);
         }
         /// <summary>
         /// Конструктор по уровню
         /// </summary>
         /// <param name="level">Уровень</param>
-        public Foundation(Level level)
-        {
-            Id = ProgrammSettings.CurrentId;
-            RegisterParent(level);
-            Name = "Новый фундамент";
-            RelativeTopLevel = -0.2;
-            SoilRelativeTopLevel = -0.2;
-            SoilVolumeWeight = 18000;
-            ConcreteVolumeWeight = 25000;
-            FloorLoad = 0;
-            FloorLoadFactor = 1.2;
-            ConcreteFloorLoad = 0;
-            ConcreteFloorLoadFactor = 1.2;
-            CompressedLayerRatio = 0.2;
-            ForcesGroups = new ObservableCollection<ForcesGroup>();
-            ForcesGroups.Add(new ForcesGroup(this));
-            Parts = new ObservableCollection<RectFoundationPart>();
-            LoadCases = new ObservableCollection<LoadSet>();
-            ForceCurvaturesWithWeight = new List<ForceCurvature>();
-            ForceCurvaturesWithoutWeight = new List<ForceCurvature>();
-            //Использование скважины грунта
-            SoilSectionUsing soilSectionUsing = new SoilSectionUsing(true);
-            soilSectionUsing.RegisterParent(this);
-            IsLoadCasesActual = true;
-            IsPartsActual = true;
-            Result = new FoundationResult();
-            addMaterial(this);
-        }
+        //public Foundation(Level level)
+        //{
+        //    Id = ProgrammSettings.CurrentId;
+        //    RegisterParent(level);
+        //    Name = "Новый фундамент";
+        //    RelativeTopLevel = -0.2;
+        //    SoilRelativeTopLevel = -0.2;
+        //    SoilVolumeWeight = 18000;
+        //    ConcreteVolumeWeight = 25000;
+        //    FloorLoad = 0;
+        //    FloorLoadFactor = 1.2;
+        //    ConcreteFloorLoad = 0;
+        //    ConcreteFloorLoadFactor = 1.2;
+        //    CompressedLayerRatio = 0.2;
+        //    ForcesGroups = new ObservableCollection<ForcesGroup>();
+        //    ForcesGroups.Add(new ForcesGroup(this));
+        //    Parts = new ObservableCollection<RectFoundationPart>();
+        //    LoadCases = new ObservableCollection<LoadSet>();
+        //    ForceCurvaturesWithWeight = new List<ForceCurvature>();
+        //    ForceCurvaturesWithoutWeight = new List<ForceCurvature>();
+        //    //Использование скважины грунта
+        //    SoilSectionUsing soilSectionUsing = new SoilSectionUsing(true);
+        //    soilSectionUsing.RegisterParent(this);
+        //    Result = new FoundationResult();
+        //    addMaterial(this);
+        //}
         #endregion
         #region methods
         #region IODataset
@@ -235,7 +206,7 @@ namespace RDBLL.Entity.RCC.Foundations
                 DsOperation.SetField(row, "ConcreteFloorLoad", ConcreteFloorLoad);
                 DsOperation.SetField(row, "CompressedLayerRatio", CompressedLayerRatio);
                 #endregion
-                row.Table.AcceptChanges();
+                row.AcceptChanges();
 
                 foreach (RectFoundationPart foundationPart in Parts)
                 {
@@ -336,7 +307,7 @@ namespace RDBLL.Entity.RCC.Foundations
             //Удаляем вложенные части
             DeleteSubElements(dataSet, "FoundationParts");
             DeleteSubElements(dataSet, "ParentForcesGroups");
-            DeleteSubElements(dataSet, "SoilSectionsUsings");
+            DeleteSubElements(dataSet, "SoilSectionUsings");
             foreach (ForcesGroup forcesGroup in ForcesGroups)
             {
                 forcesGroup.DeleteFromDataSet(dataSet);
@@ -356,8 +327,6 @@ namespace RDBLL.Entity.RCC.Foundations
         public void Update()
         {
             IsActual = false;
-            IsLoadCasesActual = false;
-            IsPartsActual = false;
         }
         #endregion
         /// <summary>
@@ -375,71 +344,6 @@ namespace RDBLL.Entity.RCC.Foundations
         {
             
         }
-
-        private void addMaterial(Foundation foundation)
-        {
-            ReinforcementUsing GetRF(MaterialContainer container, string rusName, string engName)
-            {
-                ReinforcementUsing rf = new ReinforcementUsing(container);
-                rf.Name = rusName;
-                rf.Purpose = engName;
-                rf.Diameter = 0.012;
-                rf.SelectedId = ProgrammSettings.ReinforcementKinds[0].Id;
-                return rf;
-            }
-            ReinforcementUsing GetBottomReinforcement(MaterialContainer container, double coveringLayer, string rusName, string engName)
-            {
-                ReinforcementUsing rf = GetRF(container, rusName, engName);
-                LineBySpacing placement = new LineBySpacing(true);
-                placement.RegisterParent(rf);
-                LineToSurfBySpacing extender = ExtenderFactory.GetCoveredArray(ExtenderType.CoveredLine) as LineToSurfBySpacing;
-                rf.SetExtender(extender);
-                rf.SetPlacement(placement);
-                extender.CoveringLayer = coveringLayer;
-                return rf;
-            }
-            ReinforcementUsing GetUndColumnRF(MaterialContainer container, double coveringLayer, string rusName, string engName)
-            {
-                ReinforcementUsing rf = GetRF(container, rusName, engName);
-                RectArrayPlacement placement = new RectArrayPlacement(true);
-                placement.OffSet = 0.05;
-                placement.RegisterParent(rf);
-                rf.SetExtender(ExtenderFactory.GetCoveredArray(ExtenderType.CoveredArray));
-                rf.SetPlacement(placement);
-                return rf;
-            }
-
-            #region Армирование подошвы
-            MaterialContainer materialContainer = new MaterialContainer(this);
-            materialContainer.Name = "Армирование подошвы";
-            materialContainer.Purpose = "BtmRF";
-            ReinforcementUsing rfX = GetBottomReinforcement(materialContainer, 0.07, "Вдоль оси X", "Along X-axes");
-            ReinforcementUsing rfY = GetBottomReinforcement(materialContainer, 0.07, "Вдоль оси Y", "Along Y-axes");
-            materialContainer.MaterialUsings.Add(rfX);
-            materialContainer.MaterialUsings.Add(rfY);
-            foundation.BottomReinforcement = materialContainer;
-            #endregion 
-            #region Армирование подколонника
-            MaterialContainer verticalContainer = new MaterialContainer(this);
-            verticalContainer.Name = "Вертикальное армирование";
-            verticalContainer.Purpose = "UndColumn";
-            foundation.VerticalReinforcement = verticalContainer;
-            ReinforcementUsing rfVert = GetUndColumnRF(verticalContainer, 0.07, "Подколонник", "UndColumn");
-            verticalContainer.MaterialUsings.Add(rfVert);
-            foundation.VerticalReinforcement = verticalContainer;
-            #endregion
-            #region Добавляем бетон
-            foundation.Concrete = new ConcreteUsing();
-            foundation.Concrete.RegisterParent(this);
-            foundation.Concrete.Id = ProgrammSettings.CurrentId;
-            foundation.Concrete.Name = "Бетон";
-            foundation.Concrete.Purpose = "MainConcrete";
-            foundation.Concrete.SelectedId = ProgrammSettings.ConcreteKinds[0].Id;
-            //foundation.Concrete.SelectedId = Concrete.MaterialKind.Id;
-            foundation.Concrete.AddGammaB1();
-            #endregion
-        }
-
         public void RegisterParent(IDsSaveable parent)
         {
             Level level = parent as Level;

@@ -33,7 +33,7 @@ namespace RDStartWPF.Views.Soils
             _collection = _element.SoilLayers;
             this.DataContext = _element;
             InitializeComponent();
-            if (_element.BuildingSite.Soils.Count > 0) { LvSoils.SelectedIndex = 0; }
+            if ((_element.ParentMember as BuildingSite).Soils.Count > 0) { LvSoils.SelectedIndex = 0; }
             if (_collection.Count > 0) { LvAssignedSoils.SelectedIndex = 0; }
         }
 
@@ -106,7 +106,7 @@ namespace RDStartWPF.Views.Soils
             if (LvSoils.SelectedIndex >= 0)
             {
                 int a = LvSoils.SelectedIndex;
-                Soil soil = _element.BuildingSite.Soils[a];
+                Soil soil = (_element.ParentMember as BuildingSite).Soils[a];
                 int count = _element.SoilLayers.Count;
                 SoilLayer soilLayer = new SoilLayer(soil, _element, null, 2);
                 LvAssignedSoils.SelectedIndex = _element.SoilLayers.Count - 1;

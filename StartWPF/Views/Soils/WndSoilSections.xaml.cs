@@ -38,25 +38,25 @@ namespace RDStartWPF.Views.Soils
         {
             SoilSection soilSection = new SoilSection(_buildingSite);
             WndSoilSection wndSoilSection = new WndSoilSection(soilSection);
+            try
+            {
+                soilSection.SaveToDataSet(ProgrammSettings.CurrentDataSet, true);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Ошибка сохранения :" + ex);
+                return;
+            }
             wndSoilSection.ShowDialog();
             if (wndSoilSection.DialogResult == true)
             {
-                try
-                {
-                    soilSection.SaveToDataSet(ProgrammSettings.CurrentDataSet, true);
-                    _collection.Add(soilSection);
-                    ProgrammSettings.IsDataChanged = true;
-                    LvMain.SelectedIndex = _collection.Count - 1;
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Ошибка сохранения :" + ex);
-                }
-                
+                ProgrammSettings.IsDataChanged = true;
+                LvMain.SelectedIndex = _collection.Count - 1; 
             }
             else
             {
-                soilSection.OpenFromDataSet(ProgrammSettings.CurrentDataSet);
+                soilSection.UnRegisterParent();
+                soilSection.DeleteFromDataSet(ProgrammSettings.CurrentDataSet);
             }
         }
 
@@ -120,11 +120,12 @@ namespace RDStartWPF.Views.Soils
             //Если скважину можно удалить
             if (canDelete)
             {//удаляем
+                SoilSection soilSection = _collection[a];
                 if (LvMain.Items.Count == 1) LvMain.UnselectAll();
                 else if (a < (LvMain.Items.Count - 1)) LvMain.SelectedIndex = a + 1;
                 else LvMain.SelectedIndex = a - 1;
-                _collection[a].DeleteFromDataSet(ProgrammSettings.CurrentDataSet);
-                _collection.RemoveAt(a);
+                soilSection.UnRegisterParent();
+                soilSection.DeleteFromDataSet(ProgrammSettings.CurrentDataSet);
                 ProgrammSettings.IsDataChanged = true;
                 LvMain.SelectedIndex = _collection.Count - 1;
             }
