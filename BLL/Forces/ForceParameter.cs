@@ -104,8 +104,9 @@ namespace RDBLL.Forces
         /// <summary>
         /// Конструктор без параметров
         /// </summary>
-        public ForceParameter()
+        public ForceParameter(bool genId = false)
         {
+            if (genId) Id = ProgrammSettings.CurrentId;
         }
         /// <summary>
         /// Конструктор по комбинации нагрузок

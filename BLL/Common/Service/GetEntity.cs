@@ -354,14 +354,14 @@ namespace RDBLL.Common.Service
                 {
                     newObject = new ClaySoil(buildingSite);
                     newObject.OpenFromDataSet(dataRow);
-                    newObject.BuildingSite = buildingSite;
+                    newObject.RegisterParent(buildingSite);
                     newObjects.Add(newObject);
                 }
                 if (dataRow.Field<string>("Type") == "RockSoil")
                 {
                     newObject = new RockSoil(buildingSite);
                     newObject.OpenFromDataSet(dataRow);
-                    newObject.BuildingSite = buildingSite;
+                    newObject.RegisterParent(buildingSite);
                     newObjects.Add(newObject);
                 }
             }
@@ -411,7 +411,7 @@ namespace RDBLL.Common.Service
                 newObject.SoilSection = soilSection;
                 foreach (Soil soil in (soilSection.ParentMember as BuildingSite).Soils)
                 {
-                    if (soil.Id == newObject.SoilId) { newObject.Soil = soil; }
+                    if (soil.Id == newObject.Soil.Id) { newObject.Soil = soil; }
                 }
                 newObjects.Add(newObject);
             }

@@ -33,7 +33,7 @@ namespace RDBLL.Entity.RCC.BuildingAndSite
         /// <summary>
         /// Коллекция зданий
         /// </summary>
-        public ObservableCollection<Building> Childs { get; private set; }
+        public ObservableCollection<Building> Children { get; private set; }
         /// <summary>
         /// Коллекция грунтов строительного объекта
         /// </summary>
@@ -66,7 +66,7 @@ namespace RDBLL.Entity.RCC.BuildingAndSite
                 soilSection.SaveToDataSet(dataSet, createNew);
             }
             //Здание надо добавлять позже грунтов, так как грунты нужны для фундаментов
-            foreach (Building building in Childs)
+            foreach (Building building in Children)
             {
                 building.SaveToDataSet(dataSet, createNew);
             }
@@ -98,6 +98,19 @@ namespace RDBLL.Entity.RCC.BuildingAndSite
         /// <param name="dataSet"></param>
         public void DeleteFromDataSet(DataSet dataSet)
         {
+            foreach (SoilSection section in SoilSections)
+            {
+                section.DeleteFromDataSet(dataSet);
+            }
+            foreach (Soil soil in Soils)
+            {
+                soil.DeleteFromDataSet(dataSet);
+            }
+            //EntityOperation.DeleteEntity(dataSet, this);
+            foreach (IDsSaveable child in Children)
+            {
+                child.DeleteFromDataSet(dataSet);
+            }
             DsOperation.DeleteRow(dataSet, GetTableName(), Id);
         }
         #endregion
@@ -169,7 +182,7 @@ namespace RDBLL.Entity.RCC.BuildingAndSite
         {
             if (genId) Id = ProgrammSettings.CurrentId;
             Name = "Мой объект";
-            Childs = new ObservableCollection<Building>();
+            Children = new ObservableCollection<Building>();
             Soils = new ObservableCollection<Soil>();
             SoilSections = new ObservableCollection<SoilSection>();
         }

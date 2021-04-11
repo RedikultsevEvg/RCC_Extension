@@ -153,8 +153,7 @@ namespace RDBLL.Forces
                             from dataRow in dataTable.AsEnumerable()
                             where adjDataRow.Field<int>("LoadSetId") == loadSetId
                             select dataRow;
-                int countLoadSet = 0;
-                foreach (var dataRow in query) { countLoadSet++; }
+                int countLoadSet = query.Count();
                 //Если данная комбинация больше нигде не встречается
                 if (countLoadSet == 0)
                 {

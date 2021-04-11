@@ -759,7 +759,7 @@ namespace RDStartWPF.Views.WinForms
                 foreach (int i in lvDetails.SelectedIndices)
                 {
                     level = ((ObservableCollection<Level>)_objectList)[i];
-                    wndLevelChilds wndSteelBases = new wndLevelChilds(level, "SteelBases");
+                    wndLevelChilds wndSteelBases = new wndLevelChilds(level, LvlChildType.SteelBase);
                     wndSteelBases.ShowDialog();
                 }
             }

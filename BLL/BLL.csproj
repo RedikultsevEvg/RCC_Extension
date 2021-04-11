@@ -203,6 +203,7 @@
     <Compile Include="Entity\Soils\CompressedLayer.cs" />
     <Compile Include="Entity\Soils\CompressedLayerList.cs" />
     <Compile Include="Entity\Soils\DispersedSoil.cs" />
+    <Compile Include="Entity\Soils\Factories\SoilFactory.cs" />
     <Compile Include="Entity\Soils\GravelSoil.cs" />
     <Compile Include="Entity\Soils\NominalSoil.cs" />
     <Compile Include="Entity\Soils\NonBearingSoil.cs" />

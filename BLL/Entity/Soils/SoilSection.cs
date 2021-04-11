@@ -152,14 +152,9 @@ namespace RDBLL.Entity.Soils
         }
         private void DeleteLayers(DataSet dataSet)
         {
+            DsOperation.DeleteRow(dataSet, "SoilLayers", "SoilSectionId", Id);
             DataTable dataTable;
             dataTable = dataSet.Tables["SoilLayers"];
-            DataRow[] soilRows = dataTable.Select("id="+Id);
-            int count = soilRows.Length;
-            for (int i = count-1; i>=0; i--)
-            {
-                dataTable.Rows.Remove(soilRows[i]);
-            }
             dataTable.AcceptChanges();
         }
 

@@ -12,6 +12,7 @@ namespace RDStartWPF.ViewModels.Base
     {
         public Window Window;
         private CommandBase _CloseOkAction;
+        private CommandBase _CloseCancelAction;
         public CommandBase CloseOkAction
         {
             get
@@ -29,11 +30,36 @@ namespace RDStartWPF.ViewModels.Base
                     );
             }
         }
+        public CommandBase CloseCancelAction
+        {
+            get
+            {
+                return _CloseCancelAction ??
+                    (_CloseCancelAction = new CommandBase(
+                        newObject =>
+                        {
+                            BeforeCancelClose();
+                            Window.DialogResult = false;
+                            Window.Close();
+                        },
+                        //Команда может выполняться только если нет ошибок
+                        newObject => true)
+                    );
+            }
+        }
         /// <summary>
         /// Метод для выполнени необходимых действий перед закрытием окна
         /// </summary>
         /// <param name="obj"></param>
         public virtual void BeforeOkClose(object obj = null)
+        {
+
+        }
+        /// <summary>
+        /// Метод для выполнени необходимых действий перед закрытием окна по отмене
+        /// </summary>
+        /// <param name="obj"></param>
+        public virtual void BeforeCancelClose(object obj = null)
         {
 
         }

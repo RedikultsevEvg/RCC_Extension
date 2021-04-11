@@ -27,12 +27,18 @@ namespace RDStartWPF.Views.Common.BuildingsAndSites
     public partial class wndLevelChilds : Window
     {
         private Level _level;
+        private LvlChildType _ChildType;
         private string _childName;
         private ObservableCollection<IHasParent> _collection;
-        public wndLevelChilds(Level level, string childName)
+        /// <summary>
+        /// Конструктор окна
+        /// </summary>
+        /// <param name="level"></param>
+        /// <param name="childType"></param>
+        public wndLevelChilds(Level level, LvlChildType childType)
         {
             _level = level;
-            _childName = childName;
+            _ChildType = childType;
             _collection = _level.Children;
             InitializeComponent();
             this.DataContext = level.Children;           
@@ -40,47 +46,70 @@ namespace RDStartWPF.Views.Common.BuildingsAndSites
 
         private void BtnReport_Click(object sender, RoutedEventArgs e)
         {
-            if (_childName == "SteelBases") ShowReportProcessor.ShowSteelBasesReport();
-            if (_childName == "Foundations") ShowReportProcessor.ShowFoundationsReport();
+            try
+            {
+                switch (_ChildType)
+                {
+                    case LvlChildType.SteelBase:
+                        {
+                            ShowReportProcessor.ShowSteelBasesReport();
+                            break;
+                        }
+                    case LvlChildType.Foundation:
+                        {
+                            ShowReportProcessor.ShowFoundationsReport();
+                            break;
+                        }
+                }
+            }
+            catch (Exception ex)
+            {
+                CommonErrorProcessor.ShowErrorMessage("Ошибка вывода отчета: ", ex);
+            }
+            
         }
 
         private void BtnAdd_Click(object sender, RoutedEventArgs e)
         {
-            if (_childName == "SteelBases")
+            switch (_ChildType)
             {
-                List<PatternCard> patternCards = SelectPatternProcessor.SelectSteelBasePattern(_level);
-                WndPatternSelect wndPatternSelect = new WndPatternSelect(patternCards);
-                wndPatternSelect.ShowDialog();
-            }
-            if (_childName == "Foundations")
-            {
-                FoundBuilder.BuilderBase builder = new FoundBuilder.BuilderTemplate1();
-                Foundation foundation = FoundBuilder.FoundMaker.MakeFoundation(builder);
-                foundation.RegisterParent(_level);
-                //Надо создать элемент, иначе некуда будет сохранять дочерние
-                foundation.SaveToDataSet(ProgrammSettings.CurrentDataSet, true);
-                wndFoundation wndFoundation = new wndFoundation(foundation);
-                wndFoundation.ShowDialog();
-                if (wndFoundation.DialogResult == true)
-                {
-                    try
+                case LvlChildType.SteelBase:
                     {
-                        foundation.SaveToDataSet(ProgrammSettings.CurrentDataSet, false);
-                        ProgrammSettings.IsDataChanged = true;
+                        List<PatternCard> patternCards = SelectPatternProcessor.SelectSteelBasePattern(_level);
+                        WndPatternSelect wndPatternSelect = new WndPatternSelect(patternCards);
+                        wndPatternSelect.ShowDialog();
+                        break;
                     }
-                    catch (Exception ex)
+                case LvlChildType.Foundation:
                     {
-                        CommonErrorProcessor.ShowErrorMessage("Ошибка сохранения в элементе: " + foundation.Name, ex);
+                        FoundBuilder.BuilderBase builder = new FoundBuilder.BuilderTemplate1();
+                        Foundation foundation = FoundBuilder.FoundMaker.MakeFoundation(builder);
+                        foundation.RegisterParent(_level);
+                        //Надо создать элемент, иначе некуда будет сохранять дочерние
+                        foundation.SaveToDataSet(ProgrammSettings.CurrentDataSet, true);
+                        wndFoundation wndFoundation = new wndFoundation(foundation);
+                        wndFoundation.ShowDialog();
+                        if (wndFoundation.DialogResult == true)
+                        {
+                            try
+                            {
+                                foundation.SaveToDataSet(ProgrammSettings.CurrentDataSet, false);
+                                ProgrammSettings.IsDataChanged = true;
+                            }
+                            catch (Exception ex)
+                            {
+                                CommonErrorProcessor.ShowErrorMessage("Ошибка сохранения в элементе: " + foundation.Name, ex);
+                            }
+
+                        }
+                        else //Если пользователь не подтвердил создание, то удаляем элемент
+                        {
+                            foundation.UnRegisterParent();
+                            foundation.DeleteFromDataSet(ProgrammSettings.CurrentDataSet);
+                        }
+                        break;
                     }
-
-                }
-                else //Если пользователь не подтвердил создание, то удаляем элемент
-                {
-                    foundation.UnRegisterParent();
-                    foundation.DeleteFromDataSet(ProgrammSettings.CurrentDataSet);
-                }
             }
-
         }
 
         private void BtnDelete_Click(object sender, RoutedEventArgs e)

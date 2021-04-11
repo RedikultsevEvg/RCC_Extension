@@ -27,17 +27,9 @@ namespace RDBLL.Entity.Soils
         /// </summary>
         public string Name { get; set; }
         /// <summary>
-        /// Код модели грунта
-        /// </summary>
-        public int SoilId { get; set; }
-        /// <summary>
         /// Ссылка на модель грунта
         /// </summary>
         public Soil Soil { get; set; }
-        /// <summary>
-        /// Код геологического разреза
-        /// </summary>
-        public int SoilSectionId { get; set; }
         /// <summary>
         /// Обратная ссылка на геологический разрез
         /// </summary>
@@ -51,7 +43,10 @@ namespace RDBLL.Entity.Soils
         /// <summary>
         /// Default constructor
         /// </summary>
-        public SoilLayer() {; }
+        public SoilLayer(bool genId = false)
+        {
+            if (genId) Id = ProgrammSettings.CurrentId;
+        }
         /// <summary>
         /// Constructor from soil and soil section (borehole)
         /// </summary>
@@ -63,9 +58,7 @@ namespace RDBLL.Entity.Soils
         {
             Id = ProgrammSettings.CurrentId;
             Soil = soil;
-            SoilId = soil.Id;
             SoilSection = soilSection;
-            SoilSectionId = soilSection.Id;
             //Количество слоев грунта, существующих в скважине до создания данного грунта
             int count = soilSection.SoilLayers.Count;
             double topLevel;
@@ -77,9 +70,9 @@ namespace RDBLL.Entity.Soils
                 if (building == null)
                 {
                     //Если в объекте нет зданий, то выдаем ошибку
-                    if ((soilSection.ParentMember as BuildingSite).Childs.Count == 0) { throw new Exception("Building site not contain any buildings"); }
+                    if ((soilSection.ParentMember as BuildingSite).Children.Count == 0) { throw new Exception("Building site not contain any buildings"); }
                     //Иначе присваиваем первое здание
-                    else building = (soilSection.ParentMember as BuildingSite).Childs[0];
+                    else building = (soilSection.ParentMember as BuildingSite).Children[0];
                 }
                 //Назначаем уровень верха по отметке нуля для здания
                 topLevel = building.AbsoluteLevel - building.RelativeLevel;
@@ -112,8 +105,8 @@ namespace RDBLL.Entity.Soils
             }
             #region setFields
             row.SetField("Id", Id);
-            row.SetField("SoilId", SoilId);
-            row.SetField("SoilSectionId", SoilSectionId);
+            row.SetField("SoilId", Soil.Id);
+            row.SetField("SoilSectionId", SoilSection.Id);
             row.SetField("TopLevel", TopLevel);
             #endregion
             dataTable.AcceptChanges();
@@ -137,8 +130,6 @@ namespace RDBLL.Entity.Soils
         public void OpenFromDataSet(DataRow dataRow)
         {
             Id = dataRow.Field<int>("Id");
-            SoilId = dataRow.Field<int>("SoilId");
-            SoilSectionId = dataRow.Field<int>("SoilSectionId");
             TopLevel = dataRow.Field<double>("TopLevel");
         }
         /// <summary>

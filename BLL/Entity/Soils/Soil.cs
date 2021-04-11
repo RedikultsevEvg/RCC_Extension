@@ -16,7 +16,7 @@ namespace RDBLL.Entity.Soils
     /// <summary>
     /// Абстрактный класс грунта
     /// </summary>
-    public abstract class Soil : IDsSaveable, IRDObservable
+    public abstract class Soil : IHasParent, IRDObservable
     {
         #region Properties
         /// <summary>
@@ -26,7 +26,7 @@ namespace RDBLL.Entity.Soils
         /// <summary>
         /// Обратная ссылка на строительный объект
         /// </summary>
-        public BuildingSite BuildingSite { get; set; }
+        public IDsSaveable ParentMember { get; private set; }
         /// <summary>
         /// Наименование
         /// </summary>
@@ -89,7 +89,7 @@ namespace RDBLL.Entity.Soils
         public Soil(BuildingSite buildingSite)
         {
             Id = ProgrammSettings.CurrentId;
-            BuildingSite = buildingSite;
+            RegisterParent(buildingSite);
             Name = $"ИГЭ-{buildingSite.Soils.Count + 1}";
             FiltrationCoeff = 0.0001;
             Observers = new List<IRDObserver>();
@@ -133,7 +133,7 @@ namespace RDBLL.Entity.Soils
         {
             //Не удалять, так как этот участок необходим с учетом наследования
             dataRow["Id"] = Id;
-            dataRow["ParentId"] = BuildingSite.Id;
+            dataRow["ParentId"] = ParentMember.Id;
             dataRow["Name"] = Name;
             dataRow["Description"] = Description;
             dataRow["CrcDensity"] = CrcDensity;
@@ -163,8 +163,7 @@ namespace RDBLL.Entity.Soils
         /// <param name="dataRow">Строка датасета</param>
         public virtual void OpenFromDataSet(DataRow dataRow)
         {
-            Id = dataRow.Field<int>("Id");
-            Name = dataRow.Field<string>("Name");
+            EntityOperation.SetProps(dataRow, this);
             Description = dataRow.Field<string>("Description");
             CrcDensity = dataRow.Field<double>("CrcDensity");
             FstDesignDensity = dataRow.Field<double>("FstDesignDensity");
@@ -216,7 +215,7 @@ namespace RDBLL.Entity.Soils
         public bool HasChild()
         {
             bool result = false;
-            foreach (SoilSection soilSection in BuildingSite.SoilSections)
+            foreach (SoilSection soilSection in (ParentMember as BuildingSite).SoilSections)
             {
                 foreach (SoilLayer soilLayer in soilSection.SoilLayers)
                 {
@@ -225,6 +224,21 @@ namespace RDBLL.Entity.Soils
             }
             return result;
         }
+
+        public void RegisterParent(IDsSaveable parent)
+        {
+            BuildingSite buildingSite = parent as BuildingSite;
+            ParentMember = buildingSite;
+            buildingSite.Soils.Add(this);
+        }
+
+        public void UnRegisterParent()
+        {
+            BuildingSite buildingSite = ParentMember as BuildingSite;
+            buildingSite.Soils.Remove(this);
+            ParentMember = null;
+        }
+
         public string Error { get { throw new NotImplementedException(); } }
         public string this[string columnName]
         {

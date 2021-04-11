@@ -28,6 +28,8 @@ namespace RDBLL.Entity.RCC.Foundations.Processors
             //Копируем скважину
             SoilSectionUsing soilSectionUsing = source.SoilSectionUsing.Clone() as SoilSectionUsing;
             soilSectionUsing.RegisterParent(found);
+            found.IsActual = false;
+            found.Result = new Results.FoundationResult();
         }
         /// <summary>
         /// Добавляет копию ступеней

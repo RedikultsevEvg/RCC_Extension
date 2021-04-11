@@ -130,7 +130,7 @@ namespace RDBLL.Common.Service
         /// </summary>
         public static void ClearAll()
         {
-            BuildingSite.Childs.Clear();
+            BuildingSite.Children.Clear();
         }
         /// <summary>
         /// Открыть проект из файла
@@ -228,8 +228,8 @@ namespace RDBLL.Common.Service
                 };
                 dataTable.Rows.Add(dataRow);
             }
-            BuildingSite.SaveToDataSet(dataSet, true);
             #endregion
+            BuildingSite.SaveToDataSet(dataSet, true);
             return dataSet;
         }
         /// <summary>

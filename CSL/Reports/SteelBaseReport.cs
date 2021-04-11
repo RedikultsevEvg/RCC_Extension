@@ -17,6 +17,7 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using RDBLL.Common.Interfaces.Shapes;
+using RDBLL.Common.Interfaces;
 
 namespace CSL.Reports
 {
@@ -66,31 +67,34 @@ namespace CSL.Reports
         }
         private void PrepareReport()
         {
-            foreach (Building building in _buildingSite.Childs)
+            foreach (Building building in _buildingSite.Children)
             {
                 foreach (Level level in building.Children)
                 {
                     DataTable SteelBases = dataSet.Tables["SteelBases"];
-                    foreach (SteelBase steelBase in level.Children)
+                    foreach (IHasParent child in level.Children)
                     {
-                        if (!steelBase.IsActual)
+                        if (child is SteelBase)
                         {
-                            SteelBaseProcessor.SolveSteelColumnBase(steelBase);
-                        }
+                            SteelBase steelBase = child as SteelBase;
+                            if (!steelBase.IsActual)
+                            {
+                                SteelBaseProcessor.SolveSteelColumnBase(steelBase);
+                            }
 
-                        DataRow newSteelBase = SteelBases.NewRow();
-                        double A = SteelBaseProcessor.GetArea(steelBase);
-                        double Wx = SteelBaseProcessor.GetMinSecMomInertia(steelBase)[0];
-                        double Wy = SteelBaseProcessor.GetMinSecMomInertia(steelBase)[1];
-                        #region Picture
-                        Canvas canvas = new Canvas();
-                        canvas.Width = 600;
-                        canvas.Height = 600;
-                        DrawSteelBase.DrawBase(steelBase, canvas);
-                        byte[] b = CommonServices.ExportToByte(canvas);
-                        #endregion
-                        newSteelBase.ItemArray = new object[]
-                        { steelBase.Id, steelBase.Name, steelBase.ParentMember.Id, b,
+                            DataRow newSteelBase = SteelBases.NewRow();
+                            double A = SteelBaseProcessor.GetArea(steelBase);
+                            double Wx = SteelBaseProcessor.GetMinSecMomInertia(steelBase)[0];
+                            double Wy = SteelBaseProcessor.GetMinSecMomInertia(steelBase)[1];
+                            #region Picture
+                            Canvas canvas = new Canvas();
+                            canvas.Width = 600;
+                            canvas.Height = 600;
+                            DrawSteelBase.DrawBase(steelBase, canvas);
+                            byte[] b = CommonServices.ExportToByte(canvas);
+                            #endregion
+                            newSteelBase.ItemArray = new object[]
+                            { steelBase.Id, steelBase.Name, steelBase.ParentMember.Id, b,
                             SteelBaseProcessor.GetSteelStrength(steelBase) * stressCoefficient,
                             SteelBaseProcessor.GetConcreteStrength(steelBase) * stressCoefficient,
                             Math.Abs(SteelBaseProcessor.GetMaxSizes(steelBase)[0] - SteelBaseProcessor.GetMaxSizes(steelBase)[1]) * linearSizeCoefficient,
@@ -100,12 +104,14 @@ namespace CSL.Reports
                             Wx * geometrySecMomentCoefficient,
                             Wy * geometrySecMomentCoefficient};
 
-                        SteelBases.Rows.Add(newSteelBase);
+                            SteelBases.Rows.Add(newSteelBase);
 
-                        ProcessLoadSets(steelBase);
-                        //ProcessLoadCases(steelBase);
-                        ProcessPart(steelBase);
-                        ProcessBolt(steelBase);
+                            ProcessLoadSets(steelBase);
+                            //ProcessLoadCases(steelBase);
+                            ProcessPart(steelBase);
+                            ProcessBolt(steelBase);
+                        }
+
                     }
                 }
             }

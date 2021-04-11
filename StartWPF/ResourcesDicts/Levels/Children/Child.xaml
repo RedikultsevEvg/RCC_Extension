@@ -23,7 +23,7 @@
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width ="*"/>
                         </Grid.ColumnDefinitions>
-                        <TextBlock Style="{StaticResource PropertyTextBlock}" Text="{Binding Path=Name}" FontSize="24" TextWrapping="Wrap"/>
+                        <TextBox Style="{StaticResource PropertyTextBox}" Text="{Binding Path=Name}" FontSize="24" TextWrapping="Wrap"/>
                     </Grid>
 
                 </Grid>
@@ -32,18 +32,17 @@
     </DataTemplate>
     <ControlTemplate x:Key="ListTemplate" TargetType="{x:Type ListViewItem}">
         <Border x:Name="LvItemBorder" Background="#FF84E9F3">
-            <Grid Height="30">
+            <Grid Height="60">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="30"/>
-                    <ColumnDefinition Width="200"/>
-                    <ColumnDefinition Width="130"/>
+                    <ColumnDefinition Width="40"/>
+                    <ColumnDefinition Width="330"/>
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
                 <Grid Background="{TemplateBinding Background}" Width="30" >
-                    <RadioButton  IsChecked="{Binding Path=IsSelected, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Width="10" Height="10"/>
+                    <RadioButton  IsChecked="{Binding Path=IsSelected, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay}" HorizontalAlignment="Stretch" VerticalAlignment="Center" Width="15" Height="15"/>
                 </Grid>
-                <TextBlock x:Name="tbName" Grid.Column="1" Style="{StaticResource PropertyTextBlock}" Text="Наименование" FontSize="14" FontWeight="Bold"/>
-                <TextBox x:Name="tbxName" Grid.Column="2" Style="{StaticResource PropertyTextBox}" Text="{Binding Name}"/>
+                <Border Grid.Column="1" CornerRadius="10" Background="White" BorderThickness="1" BorderBrush="Black" Margin="2"/>
+                <TextBlock Grid.Column="1" Style="{StaticResource PropertyTextBlock}" Text="{Binding Name}" FontSize="14" FontWeight="Bold" TextWrapping="Wrap"/>
             </Grid>
         </Border>
         <ControlTemplate.Triggers>

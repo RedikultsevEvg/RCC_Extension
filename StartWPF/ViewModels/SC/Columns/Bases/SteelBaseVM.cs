@@ -145,7 +145,6 @@ namespace RDStartWPF.ViewModels.SC.Columns.Bases
                         ));
             }
         }
-
         /// <summary>
         /// Метод выполняется перед закрытием окна
         /// </summary>

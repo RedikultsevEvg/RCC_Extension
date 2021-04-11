@@ -99,9 +99,6 @@ namespace RDBLL.Entity.RCC.BuildingAndSite
         {
             DataRow row = EntityOperation.SaveEntity(dataSet, createNew, this);
             #region SetField
-            row.SetField("Id", Id);
-            row.SetField("ParentId", ParentMember.Id);
-            row.SetField("Name", Name);
             row.SetField("FloorLevel", Elevation);
             row.SetField("Height", Height);
             row.SetField("TopOffset", TopOffset);
@@ -166,12 +163,9 @@ namespace RDBLL.Entity.RCC.BuildingAndSite
         /// <param name="building"></param>
         public Level (Building building)
         {
-            if (Id == 0) { Id = ProgrammSettings.CurrentId; }
-            else {
-                this.Id = Id;
-            }         
+            Id = ProgrammSettings.CurrentId;
             Name = "Этаж 1";
-            ParentMember = building;
+            RegisterParent(building);
             Elevation = 0;
             Height = 3;
             TopOffset = -0.2;

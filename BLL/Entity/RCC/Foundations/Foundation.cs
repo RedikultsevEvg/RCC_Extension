@@ -150,36 +150,6 @@ namespace RDBLL.Entity.RCC.Foundations
             ConcreteFactProc.AddConcrete(this);
             ReinforcementFactProc.GetReinforcement(this);
         }
-        /// <summary>
-        /// Конструктор по уровню
-        /// </summary>
-        /// <param name="level">Уровень</param>
-        //public Foundation(Level level)
-        //{
-        //    Id = ProgrammSettings.CurrentId;
-        //    RegisterParent(level);
-        //    Name = "Новый фундамент";
-        //    RelativeTopLevel = -0.2;
-        //    SoilRelativeTopLevel = -0.2;
-        //    SoilVolumeWeight = 18000;
-        //    ConcreteVolumeWeight = 25000;
-        //    FloorLoad = 0;
-        //    FloorLoadFactor = 1.2;
-        //    ConcreteFloorLoad = 0;
-        //    ConcreteFloorLoadFactor = 1.2;
-        //    CompressedLayerRatio = 0.2;
-        //    ForcesGroups = new ObservableCollection<ForcesGroup>();
-        //    ForcesGroups.Add(new ForcesGroup(this));
-        //    Parts = new ObservableCollection<RectFoundationPart>();
-        //    LoadCases = new ObservableCollection<LoadSet>();
-        //    ForceCurvaturesWithWeight = new List<ForceCurvature>();
-        //    ForceCurvaturesWithoutWeight = new List<ForceCurvature>();
-        //    //Использование скважины грунта
-        //    SoilSectionUsing soilSectionUsing = new SoilSectionUsing(true);
-        //    soilSectionUsing.RegisterParent(this);
-        //    Result = new FoundationResult();
-        //    addMaterial(this);
-        //}
         #endregion
         #region methods
         #region IODataset
@@ -320,7 +290,6 @@ namespace RDBLL.Entity.RCC.Foundations
         public void DeleteSubElements(DataSet dataSet, string tableName)
         {
             DsOperation.DeleteRow(dataSet, tableName, "ParentId", Id);
-
         }
         #endregion
         #region IRDObserver
@@ -354,6 +323,7 @@ namespace RDBLL.Entity.RCC.Foundations
         {
             Level level = ParentMember as Level;
             level.Children.Remove(this);
+            ParentMember = null;
         }
 
         public void RegSSUsing(SoilSectionUsing soilSectionUsing)

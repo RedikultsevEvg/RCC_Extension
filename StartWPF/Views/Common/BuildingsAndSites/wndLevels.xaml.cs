@@ -28,24 +28,29 @@ namespace RDStartWPF.Views.Common.BuildingsAndSites
     public partial class wndLevels : Window
     {
         private ObservableCollection<Level> _collection;
-        private string _childName;
+        private LvlChildType _ChildType;
         private Building _building;
 
-        public wndLevels(Building building, ObservableCollection<Level> levels, string childName)
+        public wndLevels(Building building, ObservableCollection<Level> levels, LvlChildType childType)
         {
             _building = building;
             _collection = levels;
-            _childName = childName;
+            _ChildType = childType;
             InitializeComponent();
-            if (_childName == "SteelBases")
+            switch (_ChildType)
             {
-                BtnChildItem.ToolTip = "Новая база стальной колонны";
-                ChildPng.SetResourceReference(Image.SourceProperty, "IconBase40");
-            }
-            else if (_childName == "Foundations")
-            {
-                BtnChildItem.ToolTip = "Новый столбчатый фундамент";
-                ChildPng.SetResourceReference(Image.SourceProperty, "IconFoundation40");
+                case LvlChildType.SteelBase:
+                    {
+                        BtnChildItem.ToolTip = "Новая база стальной колонны";
+                        ChildPng.SetResourceReference(Image.SourceProperty, "IconBase40");
+                        break;
+                    }
+                case LvlChildType.Foundation:
+                    {
+                        BtnChildItem.ToolTip = "Новый столбчатый фундамент";
+                        ChildPng.SetResourceReference(Image.SourceProperty, "IconFoundation40");
+                        break;
+                    }
             }
             this.DataContext = _collection;
         }
@@ -59,7 +64,6 @@ namespace RDStartWPF.Views.Common.BuildingsAndSites
             {
                 DataSet dataSet = ProgrammSettings.CurrentDataSet;
                 level.SaveToDataSet(dataSet, true);
-                _collection.Add(level);
                 ProgrammSettings.IsDataChanged = true;
             }
             ProgrammSettings.IsDataChanged = true;
@@ -112,8 +116,19 @@ namespace RDStartWPF.Views.Common.BuildingsAndSites
 
         private void BtnReport_Click(object sender, RoutedEventArgs e)
         {
-            if (_childName == "SteelBases") { ShowReportProcessor.ShowSteelBasesReport(); }
-            if (_childName == "Foundations") { ShowReportProcessor.ShowFoundationsReport(); }
+            switch (_ChildType)
+            {
+                case LvlChildType.SteelBase:
+                    {
+                        ShowReportProcessor.ShowSteelBasesReport();
+                        break;
+                    }
+                case LvlChildType.Foundation:
+                    {
+                        ShowReportProcessor.ShowFoundationsReport();
+                        break;
+                    }
+            }
         }
 
         private void BtnChildItem_Click(object sender, RoutedEventArgs e)
@@ -122,7 +137,7 @@ namespace RDStartWPF.Views.Common.BuildingsAndSites
             {
                 int a = LvMain.SelectedIndex;
                 wndLevelChilds childWindow;
-                childWindow = new wndLevelChilds(_collection[a], _childName);
+                childWindow = new wndLevelChilds(_collection[a], _ChildType);
                 childWindow.ShowDialog();
             }
             else

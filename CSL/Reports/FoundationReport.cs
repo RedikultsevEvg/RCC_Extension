@@ -63,19 +63,21 @@ namespace CSL.Reports
         }
         private void PrepareReport()
         {
-            foreach (Building building in _buildingSite.Childs)
+            foreach (Building building in _buildingSite.Children)
             {
                 foreach (Level level in building.Children)
                 {
                     DataTable Foundations = dataSet.Tables["Foundations"];
                     foreach (IHasParent child in level.Children)
                     {
-                        Foundation foundation = child as Foundation;
-                        //Если данные по фундаменту неактуальны выполняем расчет
-                        //if (!(foundation.IsLoadCasesActual & foundation.IsPartsActual))
-                        //{
-                        //Если расчет выполнен успешно
-                        if (FoundationProcessor.SolveFoundation(foundation))
+                        if (child is Foundation)
+                        {
+                            Foundation foundation = child as Foundation;
+                            //Если данные по фундаменту неактуальны выполняем расчет
+                            //if (!(foundation.IsLoadCasesActual & foundation.IsPartsActual))
+                            //{
+                            //Если расчет выполнен успешно
+                            if (FoundationProcessor.SolveFoundation(foundation))
                             {
                                 //Заносим результаты расчета в таблицы датасета
                                 ProcessSubElements(Foundations, foundation);
@@ -85,12 +87,13 @@ namespace CSL.Reports
                                 //Иначе показываем пользователю, что произошла ошибка расчета
                                 MessageBox.Show($" фундамент: {foundation.Name} Ошибка расчета");
                             }
-                        //}
-                        //else //Если актуальны, то сразу подготавливаем отчет
-                        //{
+                            //}
+                            //else //Если актуальны, то сразу подготавливаем отчет
+                            //{
                             //Заносим результаты расчета в таблицы датасета
                             //ProcessSubElements(Foundations, foundation);
-                        //}
+                            //}
+                        }
                     }
                 }
             }

@@ -154,6 +154,10 @@ namespace RDBLL.Entity.RCC.BuildingAndSite
         /// <param name="dataSet"></param>
         public void DeleteFromDataSet(DataSet dataSet)
         {
+            foreach (IDsSaveable child in Children)
+            {
+                child.DeleteFromDataSet(dataSet);
+            }
             DsOperation.DeleteRow(dataSet, GetTableName(), Id);
         }
         #endregion
@@ -180,14 +184,14 @@ namespace RDBLL.Entity.RCC.BuildingAndSite
             {
                 throw new Exception("Parent type is not valid");
             }
-            buildingSite.Childs.Add(this);
+            buildingSite.Children.Add(this);
             ParentMember = buildingSite;
         }
 
         public void UnRegisterParent()
         {
             BuildingSite buildingSite = ParentMember as BuildingSite;
-            buildingSite.Childs.Remove(this);
+            buildingSite.Children.Remove(this);
             ParentMember = null;
         }
 

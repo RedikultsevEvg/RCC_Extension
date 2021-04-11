@@ -50,7 +50,6 @@ namespace RDBLL.Entity.Soils.Processors
                     if (soilLayerTopLevel > foundationAbsBtmLevel) { soilLayerTopLevel = foundationAbsBtmLevel; }
                     //Создаем новый элементарный слой и добавляем его в коллекцию
                     SoilElementaryLayer soilElementaryLayer = new SoilElementaryLayer();
-                    soilElementaryLayer.SoilId = soilSection.SoilLayers[i].SoilId;
                     soilElementaryLayer.Soil = soilSection.SoilLayers[i].Soil;
                     soilElementaryLayer.TopLevel = soilLayerTopLevel;
                     soilElementaryLayer.BottomLevel = soilLayerBtmLevel;
@@ -73,7 +72,6 @@ namespace RDBLL.Entity.Soils.Processors
                         double tmpBtmLevel = tmpTopLevel - locLayerHeight;
                         SoilElementaryLayer tmpSoilElementaryLayer = new SoilElementaryLayer();
                         tmpSoilElementaryLayer.Id = ProgrammSettings.CurrentTmpId;
-                        tmpSoilElementaryLayer.SoilId = soilElementaryLayer.SoilId;
                         tmpSoilElementaryLayer.Soil = soilElementaryLayer.Soil;
                         tmpSoilElementaryLayer.TopLevel = tmpTopLevel;
                         tmpSoilElementaryLayer.BottomLevel = tmpBtmLevel;

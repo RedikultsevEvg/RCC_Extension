@@ -116,13 +116,13 @@
             </StackPanel>
         </Grid>
         <StackPanel Height="60" Grid.Row="1" Margin="10" Orientation="Horizontal" Grid.ColumnSpan="3" HorizontalAlignment="Right" Background="#FFE2E2E2">
-            <Button x:Name="btnOK" Style="{StaticResource OkServiceButton}" HorizontalAlignment="Stretch" Command="{Binding CloseOkAction}" ToolTip="Bla-bla-bla">
+            <Button x:Name="btnOK" Style="{StaticResource OkServiceButton}" HorizontalAlignment="Stretch" Command="{Binding CloseOkAction}" ToolTip="Подтвердить">
                 <Button.Effect>
                     <DropShadowEffect Opacity="0.6"/>
                 </Button.Effect>
                 <Image x:Name="OK_png" Style="{StaticResource ServiceButtonImage}" Source="{DynamicResource IconOK}"/>
             </Button>
-            <Button x:Name="btnCancel" Style="{StaticResource CancelServiceButton}" HorizontalAlignment="Stretch" Click="btnCancel_Click">
+            <Button x:Name="btnCancel" Style="{StaticResource CancelServiceButton}" HorizontalAlignment="Stretch" Command="{Binding CloseCancelAction}">
                 <Button.Effect>
                     <DropShadowEffect Opacity="0.6"/>
                 </Button.Effect>

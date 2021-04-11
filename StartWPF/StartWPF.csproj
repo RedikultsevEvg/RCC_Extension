@@ -129,6 +129,7 @@
     <Compile Include="ViewModels\MatUsings\SafetyFactorsVM.cs" />
     <Compile Include="ViewModels\SC\Columns\Bases\SteelBaseVM.cs" />
     <Compile Include="ViewModels\Soils\SoilSections\SoilSectionUsingVM.cs" />
+    <Compile Include="Views\Common\BuildingsAndSites\LvlChildType.cs" />
     <Compile Include="Views\Common\BuildingsAndSites\WndBuilding.xaml.cs">
       <DependentUpon>WndBuilding.xaml</DependentUpon>
     </Compile>

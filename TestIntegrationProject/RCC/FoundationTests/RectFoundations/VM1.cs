@@ -8,6 +8,7 @@ using RDBLL.Entity.RCC.BuildingAndSite;
 using RDBLL.Entity.RCC.Foundations.Processors;
 using RDBLL.Common.Service;
 using RDBLL.Entity.RCC.Foundations.Builders;
+using RDBLL.Entity.Soils.Factories;
 
 namespace TestIntegrationProject.RCC.FoundationTests.RectFoundations
 {
@@ -85,31 +86,12 @@ namespace TestIntegrationProject.RCC.FoundationTests.RectFoundations
             building.AbsoluteLevel = 260;
             building.AbsolutePlaningLevel = 259.5;
             building.IsRigid = false;
-            buildingSite.Childs.Add(building);
+            buildingSite.Children.Add(building);
             Level level = new Level(building);
             building.Children.Add(level);
             #endregion
             #region Soil
-            DispersedSoil soil = new ClaySoil(buildingSite);
-            soil.Name = "ИГЭ-1";
-            soil.Description = "Суглинок песчанистый, тугопластичный";
-            soil.CrcDensity = 1950;
-            soil.FstDesignDensity = 1800;
-            soil.SndDesignDensity = 1900;
-            soil.CrcParticularDensity = 2700;
-            soil.FstParticularDensity = 2700;
-            soil.SndParticularDensity = 2700;
-            soil.PorousityCoef = 0.7;
-            soil.ElasticModulus = 15e6;
-            soil.SndElasticModulus = 15e6;
-            soil.PoissonRatio = 0.3;
-            soil.CrcFi = 20;
-            soil.FstDesignFi = 18;
-            soil.SndDesignFi = 19;
-            soil.CrcCohesion = 50000;
-            soil.FstDesignCohesion = 47000;
-            soil.SndDesignCohesion = 49000;
-            soil.IsDefinedFromTest = true;
+            Soil soil = SoilFactory.GetSoil(buildingSite, FactorySoilType.FoundationVM1);
             #endregion
             #region SoilSection
             SoilSection soilSection = new SoilSection(buildingSite);

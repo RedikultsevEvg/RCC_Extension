@@ -29,27 +29,27 @@ namespace RDBLL.Entity.RCC.Foundations.Builders
             loadSet.Name = "Постоянная";
             loadSet.PartialSafetyFactor = 1.1;
             ForceParameter forceParameter;
-            forceParameter = new ForceParameter();
+            forceParameter = new ForceParameter(loadSet);
             forceParameter.KindId = 1; //Продольная сила
             forceParameter.CrcValue = -290000; //Продольная сила
             loadSet.ForceParameters.Add(forceParameter);
 
-            forceParameter = new ForceParameter();
+            forceParameter = new ForceParameter(loadSet);
             forceParameter.KindId = 2; //Момент Mx
             forceParameter.CrcValue = 20000; //Момент Mx
             loadSet.ForceParameters.Add(forceParameter);
 
-            forceParameter = new ForceParameter();
+            forceParameter = new ForceParameter(loadSet);
             forceParameter.KindId = 3; //Момент My
             forceParameter.CrcValue = 97000; //Момент My
             loadSet.ForceParameters.Add(forceParameter);
 
-            forceParameter = new ForceParameter();
+            forceParameter = new ForceParameter(loadSet);
             forceParameter.KindId = 4; //Поперечная сила Qx
             forceParameter.CrcValue = 90000; //Поперечная сила Qx
             loadSet.ForceParameters.Add(forceParameter);
 
-            forceParameter = new ForceParameter();
+            forceParameter = new ForceParameter(loadSet);
             forceParameter.KindId = 5; //Поперечная сила Qy
             forceParameter.CrcValue = -5000; //Поперечная сила Qy
             loadSet.ForceParameters.Add(forceParameter);
