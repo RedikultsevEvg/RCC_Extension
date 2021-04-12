@@ -6,79 +6,51 @@ using System.Threading.Tasks;
 using RDBLL.Entity.SC.Column;
 using RDBLL.Entity.Common.NDM;
 using RDBLL.Entity.Common.NDM.Processors;
+using RDBLL.Common.Service;
+using RDBLL.Entity.Common.NDM.Interfaces;
+using RDBLL.Entity.Common.NDM.MaterialModels;
+using RDBLL.Common.Geometry;
+using RDBLL.Entity.Common.Placements;
+using RDBLL.Entity.Common.Materials.SteelMaterialUsing;
 
 namespace RDBLL.Processors.SC
 {
     public static class SteelBoltProcessor
     {
-        public static List<SteelBolt> GetSteelBoltsFromBolt (SteelBolt steelBolt)
+        public static double GetStressNonLinear(SteelBolt steelBolt, Curvature curvature, Point2D point)
         {
-            List<SteelBolt> steelBolts = new List<SteelBolt>();
-            steelBolts.Add(steelBolt);
-            if (steelBolt.AddSymmetricX)
-            {
-                SteelBolt newSteelBolt = (SteelBolt)steelBolt.Clone();
-                newSteelBolt.CenterY = (-1.0) * steelBolt.CenterY;
-                steelBolts.Add(newSteelBolt);
-            }
-            if (steelBolt.AddSymmetricY)
-            {
-                SteelBolt newSteelBolt = (SteelBolt)steelBolt.Clone();
-                newSteelBolt.CenterX = (-1.0) * steelBolt.CenterX;
-                steelBolts.Add(newSteelBolt);
-            }
-            if (steelBolt.AddSymmetricX & steelBolt.AddSymmetricY)
-            {
-                SteelBolt newSteelBolt = (SteelBolt)steelBolt.Clone();
-                newSteelBolt.CenterX = (-1.0) * steelBolt.CenterX;
-                newSteelBolt.CenterY = (-1.0) * steelBolt.CenterY;
-                steelBolts.Add(newSteelBolt);
-            }
-            return steelBolts;
-        }
-
-        public static void GetSubParts(SteelBolt steelBolt)
-        {
-            steelBolt.SubPart = new NdmSteelArea();
-            steelBolt.SubPart.Diametr = steelBolt.Diameter;
-            steelBolt.SubPart.SteelArea.CenterX = steelBolt.CenterX;
-            steelBolt.SubPart.SteelArea.CenterY = steelBolt.CenterY;
-        }
-
-        public static double GetStressNonLinear(SteelBolt steelBolt, Curvature curvature)
-        {
-            double stress;
-            NdmArea ndmArea = steelBolt.SubPart.SteelArea;
-            stress = NdmAreaProcessor.GetStrainFromCuvature(ndmArea, curvature)[1];
+            double stress = 0;
+            stress = NdmAreaProcessor.GetStrainFromCuvature(steelBolt.MaterialModel, point.X, point.Y, curvature)[1];
             return stress;
         }
 
-        public static double GetMaxStressNonLinear(SteelBolt steelBolt, List<Curvature> curvatures)
+        public static double GetMaxStressNonLinear(SteelBolt steelBolt, List<Curvature> curvatures, Point2D point)
         {
             List<double> stresses = new List<double>();
             foreach (Curvature curvature in curvatures)
             {
-                stresses.Add(GetStressNonLinear(steelBolt, curvature));
+                stresses.Add(GetStressNonLinear(steelBolt, curvature, point));
             }
             return stresses.Max();
         }
 
-        public static double GetMaxStressNonLinear(SteelBolt steelBolt)
+        public static double GetMaxStressNonLinear(SteelBolt steelBolt, Point2D point)
         {
             List<double> stresses = new List<double>();
-            foreach (ForceCurvature forceCurvature in steelBolt.SteelBase.ForceCurvatures)
+            SteelBase steelBase = steelBolt.ParentMember as SteelBase;
+            foreach (ForceDoubleCurvature forceCurvature in steelBase.ForceCurvatures)
             {
                 //При расчете по упрощенном методу кривизна бетона и болтов не совпадает
-                if (steelBolt.SteelBase.UseSimpleMethod)
+                if (steelBase.UseSimpleMethod)
                 {
-                    double stress = GetStressNonLinear(steelBolt, forceCurvature.ConcreteCurvature);
+                    double stress = GetStressNonLinear(steelBolt, forceCurvature.DesignCurvature, point);
                     //Проверяем, находится ли болт в сжатой зоне бетона
                     if (stress <= 0) { stresses.Add(0); } //Если находится, то напряжения принимаем равными нулю
-                    else { stresses.Add(GetStressNonLinear(steelBolt, forceCurvature.SteelCurvature)); }
+                    else { stresses.Add(GetStressNonLinear(steelBolt, forceCurvature.SecondDesignCurvature, point)); }
                 }
                 else
                 {
-                    stresses.Add(GetStressNonLinear(steelBolt, forceCurvature.SteelCurvature));
+                    stresses.Add(GetStressNonLinear(steelBolt, forceCurvature.SecondDesignCurvature, point));
                 }
 
             }

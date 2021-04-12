@@ -15,10 +15,10 @@ using System.Windows.Shapes;
 using System.Windows.Media.Effects;
 using RDBLL.Common.Service;
 using RDUIL.WinForms;
-using RDUIL.WPF_Windows.ControlClasses;
-using StartWPF;
+using RDStartWPF;
+using RDStartWPF.Infrasructure.ControlClasses;
 
-namespace StartWPF
+namespace RDStartWPF
 {
     /// <summary>
     /// Логика взаимодействия для CalcKindControl.xaml

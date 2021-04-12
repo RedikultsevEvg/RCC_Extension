@@ -16,12 +16,23 @@ namespace RDBLL.Entity.Common.NDM
     /// </summary>
     public class SumForces
     {
+        /// <summary>
+        /// Матрица усилий
+        /// </summary>
         public Matrix ForceMatrix { get; set; }
+        //[0,0] - изгибающий момент Mx
+        //[1,0] - изгибающий момент My
+        //[2,0] - Продольная сила Nz
         #region Constructors
         public SumForces()
         {
             ForceMatrix = new Matrix(3, 1);
         }
+        /// <summary>
+        /// Конструктор по жесткостным коэффициентам и кривизне
+        /// </summary>
+        /// <param name="stifCoef"></param>
+        /// <param name="curvature"></param>
         public SumForces(StiffnessCoefficient stifCoef, Curvature curvature)
         {
             ForceMatrix = stifCoef.StifMatrix * curvature.CurvMatrix;
@@ -48,6 +59,32 @@ namespace RDBLL.Entity.Common.NDM
         public SumForces(SumForces initForces, SumForces secForces)
         {
             ForceMatrix = initForces.ForceMatrix - secForces.ForceMatrix;
+        }
+        /// <summary>
+        /// Конструктор по трем усилиям
+        /// </summary>
+        /// <param name="Mx">Mx</param>
+        /// <param name="My">My</param>
+        /// <param name="N">N</param>
+        public SumForces(double Mx, double My, double N)
+        {
+            ForceMatrix = new Matrix(3, 1);
+            ForceMatrix[0, 0] = Mx;
+            ForceMatrix[1, 0] = My;
+            ForceMatrix[2, 0] = N;
+        }
+        /// <summary>
+        /// Конструктор по исходной матрице усилий и координатом точки, к которой приводится новая матрица
+        /// </summary>
+        /// <param name="initSumForces">Исходная матрица</param>
+        /// <param name="dX">координата X новой точки</param>
+        /// <param name="dY">координата Y новой точки</param>
+        public SumForces(SumForces initSumForces, double dX, double dY)
+        {
+            ForceMatrix = new Matrix(3, 1);
+            ForceMatrix[0, 0] = initSumForces.ForceMatrix[0, 0] - initSumForces.ForceMatrix[2, 0] * dY;
+            ForceMatrix[1, 0] = initSumForces.ForceMatrix[1, 0] + initSumForces.ForceMatrix[2, 0] * dX; ;
+            ForceMatrix[2, 0] = initSumForces.ForceMatrix[2, 0];
         }
         #endregion
     }

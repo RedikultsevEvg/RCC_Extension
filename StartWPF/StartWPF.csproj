@@ -6,15 +6,16 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{0B54FEC8-E466-4268-92F1-3FBFAA19BDAB}</ProjectGuid>
     <OutputType>WinExe</OutputType>
-    <RootNamespace>StartWPF</RootNamespace>
+    <RootNamespace>RDStartWPF</RootNamespace>
     <AssemblyName>RD-Calculator</AssemblyName>
-    <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <WarningLevel>4</WarningLevel>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <IsWebBootstrapper>false</IsWebBootstrapper>
-    <PublishUrl>D:\Repos\</PublishUrl>
+    <TargetFrameworkProfile />
+    <PublishUrl>C:\Users\ear\YandexDisk\Прочее\RCC_Extension\RealDocCalculator\Unstable версия\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
     <UpdateEnabled>false</UpdateEnabled>
@@ -24,12 +25,11 @@
     <UpdatePeriodically>false</UpdatePeriodically>
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
-    <ApplicationRevision>4</ApplicationRevision>
+    <ApplicationRevision>7</ApplicationRevision>
     <ApplicationVersion>1.0.1.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
     <BootstrapperEnabled>true</BootstrapperEnabled>
-    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -97,6 +97,175 @@
     <Compile Include="CalcTypeControl.xaml.cs">
       <DependentUpon>CalcTypeControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="InfraStructure\Comands\Base\CommandBase.cs" />
+    <Compile Include="InfraStructure\ControlClasses\CalcKind.cs" />
+    <Compile Include="InfraStructure\ControlClasses\CalcType.cs" />
+    <Compile Include="InfraStructure\ControlClasses\ReportCard.cs" />
+    <Compile Include="InfraStructure\Converters\BoolToVisibilityConverter.cs" />
+    <Compile Include="InfraStructure\Converters\DensityConverter.cs" />
+    <Compile Include="InfraStructure\Converters\DistributedLoadConverter.cs" />
+    <Compile Include="InfraStructure\Converters\DoubleConverter.cs" />
+    <Compile Include="InfraStructure\Converters\FiltrationConverter.cs" />
+    <Compile Include="InfraStructure\Converters\FoundationToGeometryConverter.cs" />
+    <Compile Include="InfraStructure\Converters\LinearSizeConverter.cs" />
+    <Compile Include="InfraStructure\Converters\LinearSizeTextConverter.cs" />
+    <Compile Include="InfraStructure\Converters\MultyThousandConverter.cs" />
+    <Compile Include="InfraStructure\Converters\SC\Columns\Bases\SteelBaseToGeometryConverter.cs" />
+    <Compile Include="InfraStructure\Converters\StressConverter.cs" />
+    <Compile Include="InfraStructure\Converters\VolumeWeightConverter.cs" />
+    <Compile Include="InfraStructure\Reports\ShowReport.cs" />
+    <Compile Include="InfraStructure\Validations\ErrorProcessor.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="ResourcesDicts\Parameters\ParamTemplSelector.cs" />
+    <Compile Include="ResourcesDicts\RFTemplateSelector.cs" />
+    <Compile Include="ViewModels\Base\ViewModelBase.cs" />
+    <Compile Include="ViewModels\Base\ViewModelDialog.cs" />
+    <Compile Include="ViewModels\Common\Parameters\ParametersVM.cs" />
+    <Compile Include="ViewModels\MatUsings\MatUsingVM.cs" />
+    <Compile Include="ViewModels\MatUsings\SafetyFactorsVM.cs" />
+    <Compile Include="ViewModels\SC\Columns\Bases\SteelBaseVM.cs" />
+    <Compile Include="ViewModels\Soils\SoilSections\SoilSectionUsingVM.cs" />
+    <Compile Include="Views\Common\BuildingsAndSites\LvlChildType.cs" />
+    <Compile Include="Views\Common\BuildingsAndSites\WndBuilding.xaml.cs">
+      <DependentUpon>WndBuilding.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Common\BuildingsAndSites\wndLevel.xaml.cs">
+      <DependentUpon>wndLevel.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Common\BuildingsAndSites\wndLevels.xaml.cs">
+      <DependentUpon>wndLevels.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Common\Patterns\ControlClasses\Factories\SteelBaseCardFactory.cs" />
+    <Compile Include="Views\Common\Patterns\ControlClasses\PatternCard.cs" />
+    <Compile Include="Views\Common\Patterns\ControlClasses\SelectPatternProcessor.cs" />
+    <Compile Include="Views\Common\Patterns\UserControls\PatternCardControlVM.cs" />
+    <Compile Include="Views\Common\Patterns\WndPatternSelect.xaml.cs">
+      <DependentUpon>WndPatternSelect.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\MatUsings\WndSafetyFactors.xaml.cs">
+      <DependentUpon>WndSafetyFactors.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\MSControls\numericupdown.cs" />
+    <Compile Include="Views\MSControls\numericupdown.xaml.cs">
+      <DependentUpon>numericupdown.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Common\Patterns\UserControls\PatternCardControl.xaml.cs">
+      <DependentUpon>PatternCardControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\SC\Columns\Bases\wndSteelBase.xaml.cs">
+      <DependentUpon>wndSteelBase.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\WinForms\BarSpacingSettings.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Views\WinForms\BarSpacingSettings.Designer.cs">
+      <DependentUpon>BarSpacingSettings.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\WinForms\DetailsList.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Views\WinForms\DetailsList.Designer.cs">
+      <DependentUpon>DetailsList.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\WinForms\frmLevel.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Views\WinForms\frmLevel.Designer.cs">
+      <DependentUpon>frmLevel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\WinForms\frmOpening.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Views\WinForms\frmOpening.Designer.cs">
+      <DependentUpon>frmOpening.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\WinForms\frmOpeningType.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Views\WinForms\frmOpeningType.Designer.cs">
+      <DependentUpon>frmOpeningType.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\WinForms\frmPoint.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Views\WinForms\frmPoint.Designer.cs">
+      <DependentUpon>frmPoint.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\WinForms\frmResult.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Views\WinForms\frmResult.Designer.cs">
+      <DependentUpon>frmResult.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\WinForms\Wall.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Views\WinForms\Wall.Designer.cs">
+      <DependentUpon>Wall.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\WinForms\WallType.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Views\WinForms\WallType.Designer.cs">
+      <DependentUpon>WallType.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Soils\ControlClasses\SoilCard.cs" />
+    <Compile Include="Views\Soils\SelectSoilProcessor.cs" />
+    <Compile Include="Views\Soils\UserControls\SoilCardControl.xaml.cs">
+      <DependentUpon>SoilCardControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Soils\WndClaySoil.xaml.cs">
+      <DependentUpon>WndClaySoil.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Soils\WndSoils.xaml.cs">
+      <DependentUpon>WndSoils.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Soils\WndSoilSection.xaml.cs">
+      <DependentUpon>WndSoilSection.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Soils\WndSoilSections.xaml.cs">
+      <DependentUpon>WndSoilSections.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Soils\WndSoilSelect.xaml.cs">
+      <DependentUpon>WndSoilSelect.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\RCC\Foundations\wndFoundation.xaml.cs">
+      <DependentUpon>wndFoundation.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\RCC\Foundations\wndFoundationParts.xaml.cs">
+      <DependentUpon>wndFoundationParts.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\WPF_Windows\UserControls\ReinforcementControl.xaml.cs">
+      <DependentUpon>ReinforcementControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\WPF_Windows\UserControls\ReportCardControl.xaml.cs">
+      <DependentUpon>ReportCardControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Common\Forces\wndForces.xaml.cs">
+      <DependentUpon>wndForces.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Common\Service\wndMeasureUnits.xaml.cs">
+      <DependentUpon>wndMeasureUnits.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Common\Service\wndReports.xaml.cs">
+      <DependentUpon>wndReports.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\SC\Columns\Bases\wndSteelBaseBolts.xaml.cs">
+      <DependentUpon>wndSteelBaseBolts.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\SC\Columns\Bases\wndSteelBasePart.xaml.cs">
+      <DependentUpon>wndSteelBasePart.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\WPF_Windows\wndSteelBaseResult.xaml.cs">
+      <DependentUpon>wndSteelBaseResult.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Common\BuildingsAndSites\wndLevelChilds.xaml.cs">
+      <DependentUpon>wndLevelChilds.xaml</DependentUpon>
+    </Compile>
     <Compile Include="WndAbout.xaml.cs">
       <DependentUpon>WndAbout.xaml</DependentUpon>
     </Compile>
@@ -127,6 +296,146 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="ResourcesDicts\ButtonStyles.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ResourcesDicts\Converters.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ResourcesDicts\IconBitmaps.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ResourcesDicts\Levels\Children\Child.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ResourcesDicts\MaterialUsing.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ResourcesDicts\MatUsings\MatUsing.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ResourcesDicts\Parameters\Params.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ResourcesDicts\Placements\Placement.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ResourcesDicts\Soils\SoilSections\SoilSectionUsing.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ResourcesDicts\TextBlockStyles.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Common\BuildingsAndSites\WndBuilding.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Common\BuildingsAndSites\wndLevel.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Common\BuildingsAndSites\wndLevels.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Common\Patterns\WndPatternSelect.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\MatUsings\WndSafetyFactors.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\MSControls\numericupdown.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Common\Patterns\UserControls\PatternCardControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\SC\Columns\Bases\wndSteelBase.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Soils\UserControls\SoilCardControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Soils\WndClaySoil.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Soils\WndSoils.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Soils\WndSoilSection.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Soils\WndSoilSections.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Soils\WndSoilSelect.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\RCC\Foundations\wndFoundation.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\RCC\Foundations\wndFoundationParts.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\WPF_Windows\UserControls\ReinforcementControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\WPF_Windows\UserControls\ReportCardControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Common\Forces\wndForces.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Common\Service\wndMeasureUnits.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Common\Service\wndReports.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\SC\Columns\Bases\wndSteelBaseBolts.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\SC\Columns\Bases\wndSteelBasePart.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\WPF_Windows\wndSteelBaseResult.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Common\BuildingsAndSites\wndLevelChilds.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="WndAbout.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -136,11 +445,6 @@
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Settings.settings</DependentUpon>
@@ -149,6 +453,34 @@
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\WinForms\BarSpacingSettings.resx">
+      <DependentUpon>BarSpacingSettings.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\WinForms\DetailsList.resx">
+      <DependentUpon>DetailsList.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\WinForms\frmLevel.resx">
+      <DependentUpon>frmLevel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\WinForms\frmOpening.resx">
+      <DependentUpon>frmOpening.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\WinForms\frmOpeningType.resx">
+      <DependentUpon>frmOpeningType.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\WinForms\frmPoint.resx">
+      <DependentUpon>frmPoint.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\WinForms\frmResult.resx">
+      <DependentUpon>frmResult.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\WinForms\Wall.resx">
+      <DependentUpon>Wall.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\WinForms\WallType.resx">
+      <DependentUpon>WallType.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="Properties\app.manifest" />
     <None Include="Properties\Settings.settings">
@@ -165,6 +497,10 @@
       <Project>{4af80724-4ad7-4bef-ae1c-5a2768395fd7}</Project>
       <Name>BLL</Name>
       <Aliases>global</Aliases>
+    </ProjectReference>
+    <ProjectReference Include="..\CSL\CSL.csproj">
+      <Project>{c582493c-8856-4b0e-acdc-c4e9f1566bca}</Project>
+      <Name>CSL</Name>
     </ProjectReference>
     <ProjectReference Include="..\UIL\UIL.csproj">
       <Project>{e55425da-3fc6-4bd7-b235-87c420d1d041}</Project>
@@ -232,6 +568,13 @@
   </ItemGroup>
   <ItemGroup>
     <SplashScreen Include="Resources\Splash.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Soil.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="ViewModels\RCC\" />
+    <Folder Include="Views\WPF_Windows\CommonWindows\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -8,7 +8,7 @@
     <OutputType>library</OutputType>
     <RootNamespace>RDUIL</RootNamespace>
     <AssemblyName>UIL</AssemblyName>
-    <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <WarningLevel>4</WarningLevel>
@@ -54,143 +54,11 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Converters\SteelBaseToGeometryConverter.cs" />
-    <Compile Include="Converters\StressConverter.cs" />
-    <Compile Include="Converters\LinearSizeConverter.cs" />
-    <Compile Include="Converters\LinearSizeTextConverter.cs" />
-    <Compile Include="MSControls\numericupdown.cs" />
-    <Compile Include="MSControls\numericupdown.xaml.cs">
-      <DependentUpon>numericupdown.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="WinForms\BarSpacingSettings.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="WinForms\BarSpacingSettings.Designer.cs">
-      <DependentUpon>BarSpacingSettings.cs</DependentUpon>
-    </Compile>
-    <Compile Include="WinForms\DetailsList.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="WinForms\DetailsList.Designer.cs">
-      <DependentUpon>DetailsList.cs</DependentUpon>
-    </Compile>
-    <Compile Include="WinForms\frmLevel.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="WinForms\frmLevel.Designer.cs">
-      <DependentUpon>frmLevel.cs</DependentUpon>
-    </Compile>
-    <Compile Include="WinForms\frmOpening.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="WinForms\frmOpening.Designer.cs">
-      <DependentUpon>frmOpening.cs</DependentUpon>
-    </Compile>
-    <Compile Include="WinForms\frmOpeningType.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="WinForms\frmOpeningType.Designer.cs">
-      <DependentUpon>frmOpeningType.cs</DependentUpon>
-    </Compile>
-    <Compile Include="WinForms\frmPoint.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="WinForms\frmPoint.Designer.cs">
-      <DependentUpon>frmPoint.cs</DependentUpon>
-    </Compile>
-    <Compile Include="WinForms\frmResult.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="WinForms\frmResult.Designer.cs">
-      <DependentUpon>frmResult.cs</DependentUpon>
-    </Compile>
-    <Compile Include="WinForms\Wall.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="WinForms\Wall.Designer.cs">
-      <DependentUpon>Wall.cs</DependentUpon>
-    </Compile>
-    <Compile Include="WinForms\WallType.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="WinForms\WallType.Designer.cs">
-      <DependentUpon>WallType.cs</DependentUpon>
-    </Compile>
-    <Compile Include="WPF_Windows\ControlClasses\CalcKind.cs" />
-    <Compile Include="WPF_Windows\ControlClasses\CalcType.cs" />
-    <Compile Include="WPF_Windows\ControlClasses\ReportCard.cs" />
-    <Compile Include="WPF_Windows\UserControls\ReportCardControl.xaml.cs">
-      <DependentUpon>ReportCardControl.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="WPF_Windows\wndForces.xaml.cs">
-      <DependentUpon>wndForces.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="WPF_Windows\wndMeasureUnits.xaml.cs">
-      <DependentUpon>wndMeasureUnits.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="WPF_Windows\wndReports.xaml.cs">
-      <DependentUpon>wndReports.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="WPF_Windows\wndSteelBaseBolts.xaml.cs">
-      <DependentUpon>wndSteelBaseBolts.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="WPF_Windows\wndSteelBasePart.xaml.cs">
-      <DependentUpon>wndSteelBasePart.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="WPF_Windows\wndSteelBaseResult.xaml.cs">
-      <DependentUpon>wndSteelBaseResult.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="WPF_Windows\wndSteelBase.xaml.cs">
-      <DependentUpon>wndSteelBase.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="WPF_Windows\wndSteelBases.xaml.cs">
-      <DependentUpon>wndSteelBases.xaml</DependentUpon>
-    </Compile>
-    <Page Include="MSControls\numericupdown.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="WPF_Windows\UserControls\ReportCardControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="WPF_Windows\wndForces.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="WPF_Windows\wndMeasureUnits.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="WPF_Windows\wndReports.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="WPF_Windows\wndSteelBaseBolts.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="WPF_Windows\wndSteelBasePart.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="WPF_Windows\wndSteelBaseResult.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="WPF_Windows\wndSteelBase.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="WPF_Windows\wndSteelBases.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">
@@ -204,33 +72,6 @@
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="WinForms\BarSpacingSettings.resx">
-      <DependentUpon>BarSpacingSettings.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="WinForms\DetailsList.resx">
-      <DependentUpon>DetailsList.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="WinForms\frmLevel.resx">
-      <DependentUpon>frmLevel.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="WinForms\frmOpening.resx">
-      <DependentUpon>frmOpening.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="WinForms\frmOpeningType.resx">
-      <DependentUpon>frmOpeningType.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="WinForms\frmPoint.resx">
-      <DependentUpon>frmPoint.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="WinForms\frmResult.resx">
-      <DependentUpon>frmResult.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="WinForms\Wall.resx">
-      <DependentUpon>Wall.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="WinForms\WallType.resx">
-      <DependentUpon>WallType.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -326,6 +167,38 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\IconEdit40.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\IconBasePart40.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\IconForces40.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\IconFoundation40.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\IconBuilding40.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\IconSoil40.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\IconSoilSection40.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\IconBaseStress40.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\IconExplode40.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
   </ItemGroup>

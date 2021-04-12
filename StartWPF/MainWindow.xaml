@@ -1,9 +1,9 @@
-﻿<Window x:Class="StartWPF.MainWindow"
+﻿<Window x:Class="RDStartWPF.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:StartWPF"
+        xmlns:local="clr-namespace:RDStartWPF"
         xmlns:service="clr-namespace:RDBLL.Common.Service;assembly=BLL"
         mc:Ignorable="d"
         Title="RD-Калькулятор" Height="427" Width="904" MinHeight="500" MinWidth="600" Closing="Window_Closing">

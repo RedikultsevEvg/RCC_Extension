@@ -1,61 +1,77 @@
-﻿using RDBLL.Common.Service;
+﻿using RDBLL.Common.Interfaces;
+using RDBLL.Common.Service;
 using RDBLL.Entity.Common.NDM;
 using RDBLL.Entity.RCC.BuildingAndSite;
 using RDBLL.Forces;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using RDBLL.Common.Interfaces;
 using System.Data;
+using System.Linq;
+using RDBLL.Entity.Common.Materials.SteelMaterialUsing;
+using RDBLL.Entity.Common.Materials;
+using RDBLL.Common.Service.DsOperations;
+using RDBLL.Common.Interfaces.Materials;
+using RDBLL.Common.Interfaces.Shapes;
+using RDBLL.Entity.SC.Column.SteelBases.Patterns;
+using RDBLL.Entity.MeasureUnits;
+using RDBLL.Entity.SC.Column.SteelBases.Factories;
 
 namespace RDBLL.Entity.SC.Column
 {
     /// <summary>
     /// База стальной колонны
     /// </summary>
-    public class SteelBase : ICloneable, ISavableToDataSet
+    public class SteelBase : ICloneable, IHasForcesGroups, IHasParent, IHasConcrete, IHasSteel, IHasHeight
     {
         #region Fields
-        //private bool _isActual;
-        private bool _isLoadCasesActual;
-        private bool _isBoltsActual;
-        private bool _isBasePartsActual;
-
         /// <summary>
         /// Код базы
         /// </summary>
         public int Id { get; set; }
         /// <summary>
-        /// Код уровня
-        /// </summary>
-        public int LevelId { get; set; }
-        /// <summary>
         /// Ссылка на уровень
         /// </summary>
-        public Level Level { get; set; }
+        public IDsSaveable ParentMember { get; set; }
         /// <summary>
-        /// Код стали
+        /// Наименование
         /// </summary>
-        public int SteelClassId { get; set; }
-        public int ConcreteClassId { get; set; } //Код бетона
         public String Name { get; set; } //Наименование
-        public double SteelStrength { get; set; } //Расчетное сопротивление базы
-        public double ConcreteStrength { get; set; } //Прочность бетона подливки
-        public bool IsActual { get; set; } //Признак актуальности расчета
-        public double Width { get; set; } //Ширина базы, м
-        public double Length { get; set; } //Длина базы, м
-        public double Thickness { get; set; } //Толщина, м
-        public double WorkCondCoef { get; set; } //Коэффициент условий работы
+        /// <summary>
+        /// Признак актуальности расчета
+        /// </summary>
+        public bool IsActual { get; set; }
+        /// <summary>
+        /// Толщина, м
+        /// </summary>
+        public double Height { get; set; }
         /// <summary>
         /// Флаг расчета по упрощенному методу
         /// </summary>
         public bool UseSimpleMethod { get; set; }
-        public ObservableCollection<ForcesGroup> LoadsGroup { get; set; } //Коллекция групп нагрузок
-        public ObservableCollection<SteelBasePart> SteelBaseParts { get; set; } //Коллекция участков
-        public List<SteelBasePart> ActualSteelBaseParts { get; set; } //Коллекция участков с учетом симметрии
-        public ObservableCollection<SteelBolt> SteelBolts { get; set; } //Коллекция болтов
-        public List<SteelBolt> ActualSteelBolts { get; set; } //Коллекция болтов с учетом симметрии
-        public List<LoadSet> LoadCases { get; set; } //Коллекция комбинаций
+        public PatternBase Pattern { get; set; }
+        /// <summary>
+        /// Коллекция групп нагрузок
+        /// </summary>
+        public ObservableCollection<ForcesGroup> ForcesGroups { get; set; }
+        /// <summary>
+        /// Коллекция участков
+        /// </summary>
+        public ObservableCollection<SteelBasePart> SteelBaseParts { get; set; }
+        /// <summary>
+        /// Коллекция болтов
+        /// </summary>
+        public ObservableCollection<SteelBolt> SteelBolts { get; set; }
+        public ConcreteUsing Concrete { get; set; }
+        public SteelUsing Steel { get; set; }
+        /// <summary>
+        /// Наименование единиц измерения
+        /// </summary>
+        public MeasureUnitList Measures { get => new MeasureUnitList(); }
+        /// <summary>
+        /// Коллекция комбинаций
+        /// </summary>
+        public ObservableCollection<LoadSet> LoadCases { get; set; }
         /// <summary>
         /// Коллекция всех элементарных участков
         /// </summary>
@@ -68,127 +84,52 @@ namespace RDBLL.Entity.SC.Column
         /// Коллекция элементарных участков стали
         /// </summary>
         public List<NdmArea> SteelNdmAreas { get; set; }
-        public List<ForceCurvature> ForceCurvatures { get; set; } //Коллекция комбинаций и кривизны 
+        /// <summary>
+        /// Коллекция комбинаций и кривизны 
+        /// </summary>
+        public List<ForceDoubleCurvature> ForceCurvatures { get; set; }
 
-        public bool IsLoadCasesActual
-        {
-            get {return _isLoadCasesActual; }
-            set
-            {
-                if (!value) SetNotActual();
-                _isLoadCasesActual = value;
-            }
-        }
-        public bool IsBasePartsActual
-        {
-            get { return _isBasePartsActual; }
-            set
-            {
-                if (!value) SetNotActual();
-                _isBasePartsActual = value;
-            }
-        }
-        public bool IsBoltsActual
-        {
-            get { return _isBoltsActual; }
-            set
-            {
-                if (!value) SetNotActual();
-                _isBoltsActual = value;
-            }
-        }
         #endregion
         #region Constructors
+        /// <summary>
+        /// Функция установки начальных параметров
+        /// </summary>
         public void SetDefault()
         {
             Id = ProgrammSettings.CurrentId;
             Name = "Новая база";
-            Width = 0.6;
-            Length = 0.9;
-            Thickness = 0.06;
-            WorkCondCoef = 1.1;
-            SteelClassId = 1;
-            ConcreteClassId = 1;
+            
+            Height = 0.06;
             IsActual = false;
-            SteelStrength = 240000000;
-            ConcreteStrength = 10000000;
-            UseSimpleMethod = true;
-            LoadsGroup = new ObservableCollection<ForcesGroup>();
-            LoadsGroup.Add(new ForcesGroup(this));
+            
+            UseSimpleMethod = false;
+            ForcesGroups = new ObservableCollection<ForcesGroup>();
+            ForcesGroups.Add(new ForcesGroup(this));
             SteelBaseParts = new ObservableCollection<SteelBasePart>();
             SteelBolts = new ObservableCollection<SteelBolt>();
-            ForceCurvatures = new List<ForceCurvature>();
+            ForceCurvatures = new List<ForceDoubleCurvature>();
             NdmAreas = new List<NdmArea>();
             ConcreteNdmAreas = new List<NdmArea>();
             SteelNdmAreas = new List<NdmArea>();
-
-            /// Вложенные объекты по умолчанию
-            StartObjects();
-        }
-        public void StartObjects()
-        {
-            //Нагрузка
-            LoadSet loadSet = new LoadSet(this.LoadsGroup[0]);
-            this.LoadsGroup[0].LoadSets.Add(loadSet);
-            loadSet.Name = "Постоянная";
-            loadSet.ForceParameters.Add(new ForceParameter(loadSet));
-            loadSet.ForceParameters[0].KindId = 1; //Продольная сила
-            loadSet.ForceParameters[0].CrcValue = -100000; //Продольная сила
-            loadSet.ForceParameters.Add(new ForceParameter(loadSet));
-            loadSet.ForceParameters[1].KindId = 2; //Изгибающий момент
-            loadSet.ForceParameters[1].CrcValue = 200000; //Изгибающий момент
-            loadSet.IsLiveLoad = false;
-            loadSet.BothSign = false;
-            loadSet.PartialSafetyFactor = 1.1;
-            //Участок №1
-            SteelBasePart basePart1 = new SteelBasePart(this);
-            basePart1.Name = "1";
-            basePart1.Width = 0.300;
-            basePart1.Length = 0.200;
-            basePart1.CenterX = 0.150;
-            basePart1.CenterY = 0.350;
-            basePart1.FixLeft = true;
-            basePart1.FixRight = false;
-            basePart1.FixTop = false;
-            basePart1.FixBottom = true;
-            basePart1.AddSymmetricX = true;
-            basePart1.AddSymmetricY = true;
-            this.SteelBaseParts.Add(basePart1);
-            //Участок №2
-            SteelBasePart basePart2 = new SteelBasePart(this);
-            basePart2.Name = "2";
-            basePart2.Width = 0.300;
-            basePart2.Length = 0.500;
-            basePart2.CenterX = 0.150;
-            basePart2.CenterY = 0;
-            basePart2.FixLeft = true;
-            basePart2.FixRight = false;
-            basePart2.FixTop = true;
-            basePart2.FixBottom = true;
-            basePart2.AddSymmetricX = false;
-            basePart2.AddSymmetricY = true;
-            this.SteelBaseParts.Add(basePart2);
-            //Болты
-            SteelBolt steelBolt = new SteelBolt(this);
-            this.SteelBolts.Add(steelBolt);
+            //Добавляем материалы
+            MatFactProc.GetMatType1(this);
         }
         /// <summary>
         /// Создает базу стальной колонны по указанному уровню
         /// </summary>
-        /// <param name="level">Уровень, по которому создается колонна</param>
-        public SteelBase(Level level)
+        /// <param name="parent">Ссылка на родительский элемент</param>
+        public SteelBase(IDsSaveable parent)
         {
             SetDefault();
-            LevelId = level.Id;
-            Level = level;
-            level.SteelBases.Add(this);
+            RegisterParent(parent);
         }
 
         /// <summary>
         /// Создает базу стальной колонны со значениями по умолчанию
         /// </summary>
-        public SteelBase()
+        public SteelBase(bool genId = false)
         {
+            if (genId) { Id = ProgrammSettings.CurrentId; }
             SetDefault();
         }
 
@@ -199,41 +140,114 @@ namespace RDBLL.Entity.SC.Column
 
         #endregion
         #region Methods
-        public void SaveToDataSet(DataSet dataSet)
+        /// <summary>
+        /// Return name of table in dataset for CRUD operation
+        /// </summary>
+        /// <returns>Name of table</returns>
+        public string GetTableName() { return "SteelBases"; }
+        /// <summary>
+        /// Сохраняет данные базы стальной колонны в указанный датасет
+        /// </summary>
+        /// <param name="dataSet">Датасет</param>
+        public void SaveToDataSet(DataSet dataSet, bool createNew)
         {
-            DataTable dataTable;
-            DataRow dataRow;
-             dataTable = dataSet.Tables["SteelBases"];
-            dataRow = dataTable.NewRow();
-            dataRow.ItemArray = new object[]
-                { Id, LevelId, SteelClassId, ConcreteClassId,
-                    Name, SteelStrength, ConcreteStrength, IsActual,
-                    Width, Length, Thickness, WorkCondCoef,
-                    UseSimpleMethod };
-            dataTable.Rows.Add(dataRow);
-            foreach (SteelBasePart steelBasePart in SteelBaseParts)
+            DataRow row = EntityOperation.SaveEntity(dataSet, createNew, this);
+            #region
+            row.SetField("IsActual", IsActual);
+            row.SetField("UseSimpleMethod", UseSimpleMethod);
+            #endregion
+            row.AcceptChanges();
+            if (Pattern is null)
             {
-                steelBasePart.SaveToDataSet(dataSet);
+                foreach (SteelBasePart steelBasePart in SteelBaseParts)
+                {
+                    steelBasePart.SaveToDataSet(dataSet, createNew);
+                }
+                foreach (SteelBolt steelBolt in SteelBolts)
+                {
+                    steelBolt.SaveToDataSet(dataSet, createNew);
+                }
             }
-            foreach (SteelBolt steelBolt in SteelBolts)
-            {
-                steelBolt.SaveToDataSet(dataSet);
-            }
-            foreach (ForcesGroup forcesGroup in LoadsGroup)
-            {
-                forcesGroup.SaveToDataSet(dataSet);
-            }
+            else EntityOperation.SaveEntity(dataSet, true, Pattern);
         }
-        public void OpenFromDataSet(DataSet dataSet, int Id)
+        /// <summary>
+        /// Обновляет запись по датасету
+        /// </summary>
+        /// <param name="dataSet"></param>
+        public void OpenFromDataSet(DataSet dataSet)
         {
-
+            OpenFromDataSet(DsOperation.OpenFromDataSetById(dataSet, GetTableName(), Id));
         }
-        #endregion
-
+        /// <summary>
+        /// Обновляет запись в соответствии со строкой датасета
+        /// </summary>
+        /// <param name="dataRow"></param>
+        public void OpenFromDataSet(DataRow dataRow)
+        {
+            EntityOperation.SetProps(dataRow, this);
+            IsActual = false;           
+            UseSimpleMethod = dataRow.Field<bool>("UseSimpleMethod");
+        }
+        /// <summary>
+        /// Удаляет запись из датасета
+        /// </summary>
+        /// <param name="dataSet"></param>
+        public void DeleteFromDataSet(DataSet dataSet)
+        {
+            DsOperation.DeleteRow(dataSet, "SteelBaseParts", "ParentId", Id);
+            foreach (SteelBolt bolt in SteelBolts)
+            {
+                bolt.DeleteFromDataSet(dataSet);
+            }
+            EntityOperation.DeleteEntity(dataSet, this);
+        }
         //IClonable
+        /// <summary>
+        /// Возвращает полную копию элемента
+        /// </summary>
+        /// <returns></returns>
         public object Clone()
         {
-            return this.MemberwiseClone();
+            SteelBase steelBase = this.MemberwiseClone() as SteelBase;
+            steelBase.Id = ProgrammSettings.CurrentId;
+            steelBase.ForcesGroups = new ObservableCollection<ForcesGroup>();
+            foreach (ForcesGroup load in ForcesGroups)
+            {
+                ForcesGroup newLoad = load.Clone() as ForcesGroup;
+                newLoad.Owners.Add(steelBase);
+                steelBase.ForcesGroups.Add(newLoad);
+            }
+            steelBase.SteelBolts = new ObservableCollection<SteelBolt>();
+            foreach (SteelBolt bolt in SteelBolts)
+            {
+                steelBase.SteelBolts.Add(bolt.Clone() as SteelBolt);
+            }
+            steelBase.SteelBaseParts = new ObservableCollection<SteelBasePart>();
+            foreach (SteelBasePart part in SteelBaseParts)
+            {
+                steelBase.SteelBaseParts.Add(part.Clone() as SteelBasePart);
+            }
+            if (this.Pattern != null) steelBase.Pattern = Pattern.Clone() as PatternBase;
+            return steelBase; 
         }
+        /// <summary>
+        /// Регистрация родителя
+        /// </summary>
+        /// <param name="parent"></param>
+        public void RegisterParent(IDsSaveable parent)
+        {
+            Level level = parent as Level;
+            ParentMember = level;
+            level.Children.Add(this);
+        }
+        /// <summary>
+        /// Удаление регистрации родителя
+        /// </summary>
+        public void UnRegisterParent()
+        {
+            Level level = ParentMember as Level;
+            level.Children.Remove(this);
+        }
+        #endregion
     }
 }

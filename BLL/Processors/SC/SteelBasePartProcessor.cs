@@ -12,21 +12,37 @@ using RDBLL.Processors.Forces;
 using RDBLL.Entity.Results.Forces;
 using RDBLL.Entity.Common.NDM;
 using RDBLL.Entity.Common.NDM.Processors;
-
+using RDBLL.Common.Service;
+using RDBLL.Entity.Common.NDM.Interfaces;
+using RDBLL.Entity.Common.NDM.MaterialModels;
 
 namespace RDBLL.Processors.SC
 {
     delegate void EchoDelegate(String S);
 
+    /// <summary>
+    /// Processor of parts of steelbase
+    /// </summary>
     public static class SteelBasePartProcessor
     {
+        /// <summary>
+        /// Возвращает момент в пластине по моменту и толщине
+        /// </summary>
+        /// <param name="moment"></param>
+        /// <param name="thickness"></param>
+        /// <returns></returns>
+        public static double GetPlateStress(double moment, double thickness)
+        {
+            double Wx = thickness * thickness / 6;
+            return moment / Wx;
+        }
         /// <summary>
         /// Возвращает момент и напряжения для участка базы стальной колонны
         /// </summary>
         /// <param name="basePart">Участок базы стальной колонны</param>
         /// <param name="maxStress">Максимальное давление на участок</param>
         /// <returns>Массив: 0-максимальный момент, 1 - максимальные напряжения </returns>
-        public static double[] GetResult(SteelBasePart basePart, double maxStress)
+        public static double GetResult(SteelBasePart basePart, double maxStress)
         {
             /*Алгоритм расчета основан на подходе из учебника Белени по
              * таблицам Галеркина
@@ -35,9 +51,7 @@ namespace RDBLL.Processors.SC
              * Иначе считаетася, что участок оперт шарнирно
              */
             //double maxStress = GetMinStressLinear(basePart);
-            double[] result = new double[2] { 0, 0 };
-            double thickness = basePart.SteelBase.Thickness;
-            double Wx = thickness * thickness / 6;
+            double result = 0;
             double maxMoment = 0;
             int countFixSides = 0;
             
@@ -50,8 +64,7 @@ namespace RDBLL.Processors.SC
             //Участок отрывается, напряжения равны нулю
             if (maxStress < 0)
             {
-                result[0] = 0;
-                result[1] = 0;
+                result = 0;
                 return result;
             }
             switch (countFixSides)
@@ -72,8 +85,7 @@ namespace RDBLL.Processors.SC
                     maxMoment = CalcStreessFourSide(maxStress, basePart);
                     break;
             }
-            result[0] = maxMoment;
-            result[1] = maxMoment / Wx;
+            result = maxMoment;
             return result;
         }
         /// <summary>
@@ -81,10 +93,10 @@ namespace RDBLL.Processors.SC
         /// </summary>
         /// <param name="basePart">Участок базы стальной колонны</param>
         /// <returns>Массив: 0-максимальный момент, 1 - максимальные напряжения </returns>
-        public static double[] GetResult(SteelBasePart basePart)
-        {
-            return GetResult(basePart, GetGlobalMinStressLinear(basePart) * (-1D));
-        }
+        //public static double[] GetResult(SteelBasePart basePart)
+        //{
+        //    return GetResult(basePart, GetGlobalMinStressLinear(basePart) * (-1D));
+        //}
 
             /// <summary>
             /// Выводит сообщения на консоль
@@ -105,8 +117,9 @@ namespace RDBLL.Processors.SC
         private static double CalcStreessOneSide(double maxStress, SteelBasePart basePart)
         {
             double maxMoment;
-            double width = basePart.Width;
-            double length = basePart.Length;
+            double[] sizes = GetPartSizes(basePart);
+            double width = sizes[0];
+            double length = sizes[1];
             //Если опора слева или справа
             //echoDelegate("Для участка задана опора по одной стороне, участок расчитывается как консоль");
             if (basePart.FixLeft || basePart.FixRight)
@@ -135,8 +148,9 @@ namespace RDBLL.Processors.SC
             List<double> yValues23 = new List<double>() { 0.06, 0.074, 0.088, 0.097, 0.107, 0.112, 0.120, 0.126, 0.132 };
             #endregion
             double maxMoment;
-            double width = basePart.Width;
-            double length = basePart.Length;
+            double[] sizes = GetPartSizes(basePart);
+            double width = sizes[0];
+            double length = sizes[1];
             //Если опора слева и справа
             if (basePart.FixLeft && basePart.FixRight)
             {
@@ -193,8 +207,9 @@ namespace RDBLL.Processors.SC
             List<double> yValues23 = new List<double>() { 0.06, 0.074, 0.088, 0.097, 0.107, 0.112, 0.120, 0.126, 0.132 };
             #endregion
             double maxMoment;
-            double width = basePart.Width;
-            double length = basePart.Length;
+            double[] sizes = GetPartSizes(basePart);
+            double width = sizes[0];
+            double length = sizes[1];
             double koeff_a1;
             double koeff_b1;
             #region //Если закрепления слева и справа
@@ -249,8 +264,9 @@ namespace RDBLL.Processors.SC
             List<double> yValues4 = new List<double>() { 0.048, 0.055, 0.063, 0.069, 0.075, 0.081, 0.086, 0.091, 0.094, 0.098, 0.1 };
             #endregion
             double maxMoment;
-            double width = basePart.Width;
-            double length = basePart.Length;
+            double[] sizes = GetPartSizes(basePart);
+            double width = sizes[0];
+            double length = sizes[1];
             //echoDelegate("Для участка заданы четыре опоры, опоры считаются шарнирными");
             double koeff_b;
             double koeff_a;
@@ -285,100 +301,25 @@ namespace RDBLL.Processors.SC
         }
         #endregion
         /// <summary>
-        /// Получает коллекцию всех участков базы с учетом симметрии
-        /// </summary>
-        /// <param name="steelColumnBase">База стальной колонны</param>
-        /// <returns>Коллекция участков базы стальной колонны</returns>
-        public static List<SteelBasePart> GetSteelBasePartsFromColumnBase(SteelBase steelColumnBase)
-        {
-            List<SteelBasePart> steelBaseParts = new List<SteelBasePart>(); 
-            foreach (SteelBasePart steelBasePart in steelColumnBase.SteelBaseParts)
-            {
-                List<SteelBasePart> locSteelBaseParts = GetSteelBasePartsFromPart(steelBasePart);
-                foreach (SteelBasePart locSteelBasePart in locSteelBaseParts)
-                {
-                    steelBaseParts.Add(locSteelBasePart);
-                }
-            }
-            return steelBaseParts;
-        }
-        /// <summary>
-        /// Возвращает коллекцию участков по заданному участку с учетом симметрии
-        /// </summary>
-        /// <param name="steelBasePart"></param>
-        /// <returns></returns>
-        public static List<SteelBasePart> GetSteelBasePartsFromPart(SteelBasePart steelBasePart)
-        {
-            List<SteelBasePart> steelBaseParts = new List<SteelBasePart>();
-            steelBaseParts.Add(steelBasePart);
-            if (steelBasePart.AddSymmetricX)
-            {
-                SteelBasePart newSteelBasePart = (SteelBasePart)(steelBasePart.Clone());
-                newSteelBasePart.Name = steelBasePart.Name + 'X';
-                newSteelBasePart.SteelBase = steelBasePart.SteelBase;
-                newSteelBasePart.CenterX = (1.0) * steelBasePart.CenterX;
-                newSteelBasePart.CenterY = (-1.0) * steelBasePart.CenterY;
-                newSteelBasePart.FixTop = steelBasePart.FixBottom;
-                newSteelBasePart.FixBottom = steelBasePart.FixTop;
-                steelBaseParts.Add(newSteelBasePart);
-            }
-            if (steelBasePart.AddSymmetricY)
-            {
-                SteelBasePart newSteelBasePart = (SteelBasePart)(steelBasePart.Clone());
-                newSteelBasePart.Name = steelBasePart.Name + 'Y';
-                newSteelBasePart.SteelBase = steelBasePart.SteelBase;
-                newSteelBasePart.CenterX = (-1.0) * steelBasePart.CenterX;
-                newSteelBasePart.CenterY = (1.0) * steelBasePart.CenterY;
-                newSteelBasePart.FixLeft = steelBasePart.FixRight;
-                newSteelBasePart.FixRight = steelBasePart.FixLeft;
-                steelBaseParts.Add(newSteelBasePart);
-            }
-            if (steelBasePart.AddSymmetricX & steelBasePart.AddSymmetricY)
-            {
-                SteelBasePart newSteelBasePart = (SteelBasePart)(steelBasePart.Clone());
-                newSteelBasePart.Name = steelBasePart.Name + "XY";
-                newSteelBasePart.SteelBase = steelBasePart.SteelBase;
-                newSteelBasePart.CenterX = (-1.0) * steelBasePart.CenterX;
-                newSteelBasePart.CenterY = (-1.0) * steelBasePart.CenterY;
-                newSteelBasePart.FixTop = steelBasePart.FixBottom;
-                newSteelBasePart.FixBottom = steelBasePart.FixTop;
-                newSteelBasePart.FixLeft = steelBasePart.FixRight;
-                newSteelBasePart.FixRight = steelBasePart.FixLeft;
-                steelBaseParts.Add(newSteelBasePart);
-            }
-            return steelBaseParts;
-        }
-        /// <summary>
         /// Возвращает коллекцию элементарных участков для участка базы
         /// </summary>
-        /// <param name="steelBasePart"></param>
+        /// <param name="steelBasePart">Участок базы стальной колонны</param>
+        /// <param name="Rc">Расчетное сопротивление сжатию</param>
         public static void GetSubParts(SteelBasePart steelBasePart, double Rc = 0)
         {
-            steelBasePart.SubParts = new List<NdmConcreteArea>();
-            double elementSize = 0.02;
-            int numX = Convert.ToInt32(steelBasePart.Width / elementSize);
-            int numY = Convert.ToInt32(steelBasePart.Length / elementSize);
-            //Шаг элементарных участков (совпадает с соответствующим размером участка)
-            double stepX = steelBasePart.Width / numX;
-            double stepY = steelBasePart.Length / numY;
-
-            double startCenterX = steelBasePart.CenterX - steelBasePart.Width / 2 + stepX / 2;
-            double startCenterY = steelBasePart.CenterY - steelBasePart.Length / 2 + stepY / 2;
-
-            for (int i = 0; i < numX; i++)
+            double elemSize = 0.01;
+            if (Rc == 0)
             {
-                for (int j = 0; j < numY; j++)
-                {
-                    NdmConcreteArea subPart;
-                    if (Rc == 0) { subPart = new NdmConcreteArea(); }
-                    else { subPart = new NdmConcreteArea(new List<double>{ Rc * (-1D), -0.0015, -0.0035, 0, 0.0015, 0.0035 }); }
-                    subPart.Width = stepX;
-                    subPart.Length = stepY;
-                    subPart.ConcreteArea.CenterX = startCenterX + stepX * i;
-                    subPart.ConcreteArea.CenterY = startCenterY + stepY * j;
-                    steelBasePart.SubParts.Add(subPart);
-                }
+                IMaterialModel materialModel = new LinearIsotropic(1e+10, 1, 0);
+                steelBasePart.SubParts = NdmAreaProcessor.MeshRectangle(materialModel, steelBasePart.Width, steelBasePart.Length, steelBasePart.Center.X, steelBasePart.Center.Y, elemSize);
             }
+            else
+            {
+                List<double> constantList = new List<double> { Rc * (-1D), -0.0015, -0.0035, 0, 0.0015, 0.0035 };
+                IMaterialModel materialModel = new DoubleLinear(constantList);
+                steelBasePart.SubParts = NdmAreaProcessor.MeshRectangle(materialModel, steelBasePart.Width, steelBasePart.Length, steelBasePart.Center.X, steelBasePart.Center.Y, elemSize);
+            }
+
         }
         /// <summary>
         /// Вычисляет минимальное напряжение на участке по линейно упругой теории сопротивления материалов
@@ -390,19 +331,19 @@ namespace RDBLL.Processors.SC
         public static double GetMinStressLinear(SteelBasePart basePart, MassProperty massProperty, LoadSet loadCase)
         {
             List<double> stresses = new List<double>();
-            List<double> dxList = new List<double>();
-            List<double> dyList = new List<double>();
-            dxList.Add(basePart.CenterX + basePart.Width / 2);
-            dxList.Add(basePart.CenterX - basePart.Width / 2);
-            dyList.Add(basePart.CenterY + basePart.Length / 2);
-            dyList.Add(basePart.CenterY - basePart.Length / 2);
-            foreach (double dx in dxList)
-            {
-                foreach (double dy in dyList)
-                {
-                    stresses.Add(LoadSetProcessor.StressInBarSection(loadCase, massProperty, dx, dy));
-                }
-            }
+            //List<double> dxList = new List<double>();
+            //List<double> dyList = new List<double>();
+            //dxList.Add(basePart.CenterX + basePart.Width / 2);
+            //dxList.Add(basePart.CenterX - basePart.Width / 2);
+            //dyList.Add(basePart.CenterY + basePart.Length / 2);
+            //dyList.Add(basePart.CenterY - basePart.Length / 2);
+            //foreach (double dx in dxList)
+            //{
+            //    foreach (double dy in dyList)
+            //    {
+            //        stresses.Add(LoadSetProcessor.StressInBarSection(loadCase, massProperty, dx, dy));
+            //    }
+            //}
             return stresses.Min();
         }
         public static double GetGlobalMinStressLinear(SteelBasePart basePart, MassProperty massProperty, List<LoadSet> loadCases)
@@ -414,22 +355,23 @@ namespace RDBLL.Processors.SC
             }
             return stresses.Min();
         }
-        public static double GetGlobalMinStressLinear(SteelBasePart basePart, SteelBase columnBase)
-        {
-            List<double> stresses = new List<double>();
-            RectCrossSection baseRect = new RectCrossSection(basePart.SteelBase.Width, basePart.SteelBase.Length);
-            MassProperty massProperty = RectProcessor.GetRectMassProperty(baseRect);
-            foreach (LoadSet loadCase in columnBase.LoadCases)
-            {
-                stresses.Add(GetMinStressLinear(basePart, massProperty, loadCase));
-            }
-            return stresses.Min();
-        }
-        public static double GetGlobalMinStressLinear(SteelBasePart basePart)
-        {
-            SteelBase columnBase = basePart.SteelBase;
-            return GetGlobalMinStressLinear(basePart, columnBase);
-        }
+        //public static double GetGlobalMinStressLinear(SteelBasePart basePart, SteelBase columnBase)
+        //{
+        //    List<double> stresses = new List<double>();
+        //    RectCrossSection baseRect = new RectCrossSection(basePart.ParentMember.Width, basePart.ParentMember.Length);
+        //    MassProperty massProperty = RectProcessor.GetRectMassProperty(baseRect);
+        //    foreach (LoadSet loadCase in columnBase.LoadCases)
+        //    {
+        //        stresses.Add(GetMinStressLinear(basePart, massProperty, loadCase));
+        //    }
+        //    return stresses.Min();
+        //}
+
+        //public static double GetGlobalMinStressLinear(SteelBasePart basePart)
+        //{
+        //    SteelBase columnBase = basePart.ParentMember as SteelBase;
+        //    return GetGlobalMinStressLinear(basePart, columnBase);
+        //}
         /// <summary>
         /// 
         /// </summary>
@@ -439,10 +381,9 @@ namespace RDBLL.Processors.SC
         public static double GetMinStressNonLinear(SteelBasePart basePart, Curvature curvature)
         {
             List<double> stresses = new List<double>();
-            foreach (NdmConcreteArea ndmConcreteArea in basePart.SubParts)
+            foreach (NdmRectangleArea ndmConcreteArea in basePart.SubParts)
             {
-                NdmArea ndmArea = ndmConcreteArea.ConcreteArea;
-                stresses.Add(NdmAreaProcessor.GetStrainFromCuvature(ndmArea, curvature)[1]);
+                stresses.Add(NdmAreaProcessor.GetStrainFromCuvature(ndmConcreteArea, curvature)[1]);
             }
             return stresses.Min();
         }
@@ -469,11 +410,22 @@ namespace RDBLL.Processors.SC
         public static double GetGlobalMinStressNonLinear(SteelBasePart basePart)
         {
             List<double> stresses = new List<double>();
-            foreach (ForceCurvature forceCurvature in basePart.SteelBase.ForceCurvatures)
+            SteelBase steelBase = basePart.ParentMember as SteelBase;
+            foreach (ForceDoubleCurvature forceCurvature in steelBase.ForceCurvatures)
             {
-                stresses.Add(GetMinStressNonLinear(basePart, forceCurvature.ConcreteCurvature));
+                stresses.Add(GetMinStressNonLinear(basePart, forceCurvature.DesignCurvature));
             }
             return stresses.Min();
+        }
+        private static double[] GetPartSizes(SteelBasePart basePart)
+        {
+            double width = basePart.Width;
+            if (basePart.FixLeft) width -= basePart.LeftOffset;
+            if (basePart.FixRight) width -= basePart.RightOffset;
+            double length = basePart.Length;
+            if (basePart.FixTop) length -= basePart.TopOffset;
+            if (basePart.FixBottom) length -= basePart.BottomOffset;
+            return new double[] { width, length };
         }
     }
 }

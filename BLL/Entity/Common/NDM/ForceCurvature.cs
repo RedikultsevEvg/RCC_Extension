@@ -8,8 +8,7 @@ using RDBLL.Forces;
 namespace RDBLL.Entity.Common.NDM
 {
     /// <summary>
-    /// Класс для хранения набора нагрузок, суммарных усилий для определения кривизны
-    /// и двух кривизн - для бетона и арматуры
+    /// Класс набора нагрузок, соответствующих усилий и кривизн
     /// </summary>
     public class ForceCurvature
     {
@@ -18,56 +17,63 @@ namespace RDBLL.Entity.Common.NDM
         /// </summary>
         public LoadSet LoadSet { get; set; }
         /// <summary>
-        /// Суммарные усилия для определения кривизны
+        /// Сумммарные нормативные усилия для кривизны
         /// </summary>
-        public SumForces SumForces { get; set; }
+        public SumForces CrcSumForces { get; set; }
         /// <summary>
-        /// Кривизна для бетона
+        /// Суммарные расчетные усилия для определения кривизны
         /// </summary>
-        public Curvature ConcreteCurvature { get; set; }
+        public SumForces DesignSumForces { get; set; }
         /// <summary>
-        /// Кривизна для стали
+        /// Кривизна для второй группы предельных состояний
         /// </summary>
-        public Curvature SteelCurvature { get; set; }
+        public Curvature CrcCurvature { get; set; }
+        /// <summary>
+        /// Кривизна для первой группы предельных состояний
+        /// </summary>
+        public Curvature DesignCurvature { get; set; }
+
+        /// <summary>
+        /// Конструктор без параметров
+        /// </summary>
+        public ForceCurvature()
+        {
+
+        }
+        /// <summary>
+        /// Конструктор по комбинации нагрузок
+        /// </summary>
+        /// <param name="loadSet"></param>
+        public ForceCurvature(LoadSet loadSet)
+        {
+            this.LoadSet = loadSet;
+            this.CrcSumForces = new SumForces(loadSet, false);
+            this.DesignSumForces = new SumForces(loadSet, true);
+        }
         /// <summary>
         /// Конструктор по всем параметрам
         /// </summary>
         /// <param name="loadSet"></param>
         /// <param name="sumForces"></param>
         /// <param name="concreteCurvature"></param>
-        /// <param name="steelCurvature"></param>
-        public ForceCurvature(LoadSet loadSet, SumForces sumForces, Curvature concreteCurvature, Curvature steelCurvature)
+        public ForceCurvature(LoadSet loadSet, SumForces sumForces, Curvature concreteCurvature)
         {
             this.LoadSet = loadSet;
-            this.SumForces = sumForces;
-            this.ConcreteCurvature = concreteCurvature;
-            this.SteelCurvature = steelCurvature;
+            this.DesignSumForces = sumForces;
+            this.DesignCurvature = concreteCurvature;
         }
-        /// <summary>
-        /// Конструктор по наборну нагрузок и двум кривизнам
-        /// </summary>
-        /// <param name="loadSet"></param>
-        /// <param name="concreteCurvature"></param>
-        /// <param name="steelCurvature"></param>
-        public ForceCurvature(LoadSet loadSet, Curvature concreteCurvature, Curvature steelCurvature)
-        {
-            this.LoadSet = loadSet;
-            this.SumForces = new SumForces(loadSet);
-            this.ConcreteCurvature = concreteCurvature;
-            this.SteelCurvature = steelCurvature;
-        }
+       
         /// <summary>
         /// Конструктор по набору нагрузок и значению кривизны
         /// Предполагается одинаковая кривизна для стали и бетона
         /// </summary>
         /// <param name="loadSet"></param>
-        /// <param name="curvature"></param>
-        public ForceCurvature(LoadSet loadSet, Curvature curvature)
+        /// <param name="designCurvature"></param>
+        public ForceCurvature(LoadSet loadSet, Curvature designCurvature)
         {
             this.LoadSet = loadSet;
-            this.SumForces = new SumForces(loadSet);
-            this.ConcreteCurvature = curvature;
-            this.SteelCurvature = curvature;
+            this.DesignSumForces = new SumForces(loadSet);
+            this.DesignCurvature = designCurvature;
         }
     }
 }

@@ -1,9 +1,9 @@
-﻿<UserControl x:Class="StartWPF.CalcTypeControl"
+﻿<UserControl x:Class="RDStartWPF.CalcTypeControl"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:StartWPF"
+             xmlns:local="clr-namespace:RDStartWPF"
              mc:Ignorable="d" 
              d:DesignHeight="143" d:DesignWidth="180">
     <Button x:Name="btnRCC" Height="133" Margin="5" VerticalAlignment="Top" Click="btnRCC_Click">

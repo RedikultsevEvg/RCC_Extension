@@ -79,42 +79,6 @@ namespace RDBLL.Processors.Forces
             return deduplicatedSet;
         }
         /// <summary>
-        /// Метод преобразует набор групп усилий в набор комбинаций нагрузок
-        /// В результате преобразования множество групп усилий перебором комбинируются в уникальные комбинации
-        /// </summary>
-        /// <param name="forcesGroups"></param>
-        /// <returns></returns>
-        //public static List<BarLoadSet> GetLoadCases(ObservableCollection<ForcesGroup> forcesGroups)
-        //{
-        //    List<BarLoadSet> LoadCases = new List<BarLoadSet>(); //Комбинация нагрузок, которую будем в итоге получать
-        //    LoadCases.Add(new BarLoadSet());
-        //    foreach (ForcesGroup forcesGroup in forcesGroups)
-        //    {
-        //        foreach (BarLoadSet barLoadSet in forcesGroup.Loads)
-        //        {
-        //            BarLoadSet tmpBarLoadSet = DeduplicateLoadSet(barLoadSet);
-        //            int count = LoadCases.Count;
-        //            for (int i=0; i< count; i++)
-        //            {
-        //                if (tmpBarLoadSet.LoadSet.IsDeadLoad) //Если нагрузка является постоянной, то просто добавляем данную нагрузку
-        //                {
-        //                    SumForces(LoadCases[i], tmpBarLoadSet);
-        //                }
-        //                else //Если нагрузка не постоянная, то исходное сочетание не трогаем и добавляем новые с положительным и отрицательным значением
-        //                {
-        //                    LoadCases.Add(SumForcesInNew(LoadCases[i], tmpBarLoadSet));
-        //                    if (tmpBarLoadSet.LoadSet.BothSign) //Если нагрузка может быть знакопеременной, то добавляем сочетание с обратным знаком
-        //                    {
-        //                        LoadCases.Add(SumForcesInNew(LoadCases[i], tmpBarLoadSet, -1.0));
-        //                    }
-        //                }
-        //            }
-        //        }
-        //    }
-
-        //    return LoadCases;
-        //}
-        /// <summary>
         /// Определяет минимальные и максимальные напряжения для прямоугольного сечения
         /// </summary>
         /// <param name="loadCase"></param>

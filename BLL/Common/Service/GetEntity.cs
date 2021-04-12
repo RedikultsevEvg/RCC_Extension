@@ -1,13 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using RDBLL.Common.Interfaces;
+using RDBLL.Entity.Common.Materials;
 using RDBLL.Entity.RCC.BuildingAndSite;
+using RDBLL.Entity.RCC.Foundations;
+using RDBLL.Entity.SC.Column;
+using RDBLL.Entity.Soils;
+using RDBLL.Forces;
+using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data;
-using RDBLL.Entity.SC.Column;
-using RDBLL.Forces;
+using System.Linq;
+using RDBLL.Entity.Common.Placements;
+using RDBLL.Common.Params;
+using RDBLL.Entity.Common.Materials.SteelMaterialUsing;
+using RDBLL.Common.Params;
+using RDBLL.Entity.SC.Column.SteelBases.Patterns;
 
 namespace RDBLL.Common.Service
 {
@@ -24,18 +31,14 @@ namespace RDBLL.Common.Service
             ObservableCollection<Building> newObjects = new ObservableCollection<Building>();
             DataTable dataTable = dataSet.Tables["Buildings"];
             var query = from dataRow in dataTable.AsEnumerable()
-                        where dataRow.Field<int>("BuildingSiteId") == buildingSite.Id
+                        where dataRow.Field<int>("ParentId") == buildingSite.Id
                         select dataRow;
             foreach (var dataRow in query)
             {
-                Building newObject = new Building
-                {
-                    Id = dataRow.Field<int>("Id"),
-                    BuildingSiteId = dataRow.Field<int>("BuildingSiteId"),
-                    BuildingSite = buildingSite,
-                    Name = dataRow.Field<string>("Name")
-                };
-                newObject.Levels = GetLevels(dataSet, newObject);
+                Building newObject = new Building();
+                newObject.OpenFromDataSet(dataRow);
+                newObject.RegisterParent(buildingSite);
+                GetLevels(dataSet, newObject);
                 newObjects.Add(newObject);
             }
             return newObjects;
@@ -51,24 +54,15 @@ namespace RDBLL.Common.Service
             ObservableCollection<Level> newObjects = new ObservableCollection<Level>();
             DataTable dataTable = dataSet.Tables["Levels"];
             var query = from dataRow in dataTable.AsEnumerable()
-                                         where dataRow.Field<int>("BuildingId") == building.Id
+                                         where dataRow.Field<int>("ParentId") == building.Id
                                          select dataRow;
             foreach (var dataRow in query)
             {
-                Level newObject = new Level
-                {
-                    Id = dataRow.Field<int>("Id"),
-                    BuildingId = dataRow.Field<int>("BuildingId"),
-                    Building = building,
-                    Name = dataRow.Field<string>("Name"),
-                    FloorLevel = dataRow.Field<double>("FloorLevel"),
-                    Height = dataRow.Field<double>("Height"),
-                    TopOffset = dataRow.Field<double>("TopOffset"),
-                    BasePointX = dataRow.Field<double>("BasePointX"),
-                    BasePointY = dataRow.Field<double>("BasePointY"),
-                    BasePointZ = dataRow.Field<double>("BasePointZ")
-                };
-                newObject.SteelBases = GetSteelBases(dataSet, newObject);
+                Level newObject = new Level();
+                newObject.OpenFromDataSet(dataRow);
+                newObject.RegisterParent(building);
+                GetSteelBases(dataSet, newObject);
+                GetFoundations(dataSet, newObject);
                 newObjects.Add(newObject);
             }
             return newObjects;
@@ -84,35 +78,32 @@ namespace RDBLL.Common.Service
             ObservableCollection<SteelBase> newObjects = new ObservableCollection<SteelBase>();
             DataTable dataTable = dataSet.Tables["SteelBases"];
             var query = from dataRow in dataTable.AsEnumerable()
-                        where dataRow.Field<int>("LevelId") == level.Id
+                        where dataRow.Field<int>("ParentId") == level.Id
                         select dataRow;
             foreach (var dataRow in query)
             {
-                SteelBase newObject = new SteelBase
+                SteelBase newObject = new SteelBase();
+                newObject.OpenFromDataSet(dataRow);
+                newObject.RegisterParent(level);
+                PatternBase pattern = GetPapametricObject(dataSet, newObject) as PatternBase;
+                
+                if (pattern is null)
                 {
-                    Id = dataRow.Field<int>("Id"),
-                    LevelId = dataRow.Field<int>("LevelId"),
-                    Level = level,
-                    SteelClassId = dataRow.Field<int>("SteelClassId"),
-                    ConcreteClassId = dataRow.Field<int>("ConcreteClassId"),
-                    //Надо получить ссылки на сталь и бетон
-
-                    Name = dataRow.Field<string>("Name"),
-                    SteelStrength = dataRow.Field<double>("SteelStrength"),
-                    ConcreteStrength = dataRow.Field<double>("ConcreteStrength"),
-                    IsActual = false, //dataRow.Field<bool>("IsActual"), В любом случае при загрузке данные неактуальны
-                    IsLoadCasesActual = false,
-                    IsBasePartsActual = false,
-                    IsBoltsActual = false,
-                    Width = dataRow.Field<double>("Width"),
-                    Length = dataRow.Field<double>("Length"),
-                    Thickness = dataRow.Field<double>("Thickness"),
-                    WorkCondCoef = dataRow.Field<double>("WorkCondCoef"),
-                    UseSimpleMethod = dataRow.Field<bool>("UseSimpleMethod")
-                };
-                newObject.SteelBaseParts = GetSteelBaseParts(dataSet, newObject);
-                newObject.SteelBolts = GetSteelBolts(dataSet, newObject);
-                newObject.LoadsGroup = GetForcesGroups(dataSet, newObject);
+                    newObject.SteelBaseParts = GetSteelBaseParts(dataSet, newObject);
+                    newObject.SteelBolts = GetSteelBolts(dataSet, newObject);
+                }
+                else
+                {
+                    pattern.RegisterParent(newObject);
+                    newObject.Pattern = pattern;
+                }
+                newObject.ForcesGroups = GetParentForcesGroups(dataSet, newObject);
+                List<MaterialUsing> materials = GetMaterialUsings(dataSet, newObject);
+                foreach (MaterialUsing material in materials)
+                {
+                    if (material is SteelUsing) newObject.Steel = material as SteelUsing;
+                    if (material is ConcreteUsing) newObject.Concrete = material as ConcreteUsing;
+                }
                 newObjects.Add(newObject);
             }
             return newObjects;
@@ -128,31 +119,13 @@ namespace RDBLL.Common.Service
             ObservableCollection<SteelBasePart> newObjects = new ObservableCollection<SteelBasePart>();
             DataTable dataTable = dataSet.Tables["SteelBaseParts"];
             var query = from dataRow in dataTable.AsEnumerable()
-                        where dataRow.Field<int>("SteelBaseId") == steelBase.Id
+                        where dataRow.Field<int>("ParentId") == steelBase.Id
                         select dataRow;
             foreach (var dataRow in query)
             {
-                SteelBasePart newObject = new SteelBasePart
-                {
-                    Id = dataRow.Field<int>("Id"),
-                    SteelBaseId = dataRow.Field<int>("SteelBaseId"),
-                    SteelBase = steelBase,
-                    Name = dataRow.Field<string>("Name"),
-                    Width = dataRow.Field<double>("Width"),
-                    Length = dataRow.Field<double>("Length"),
-                    CenterX = dataRow.Field<double>("CenterX"),
-                    CenterY = dataRow.Field<double>("CenterY"),
-                    LeftOffset = dataRow.Field<double>("LeftOffset"),
-                    RightOffset = dataRow.Field<double>("RightOffset"),
-                    TopOffset = dataRow.Field<double>("TopOffset"),
-                    BottomOffset = dataRow.Field<double>("BottomOffset"),
-                    FixLeft = dataRow.Field<bool>("FixLeft"),
-                    FixRight = dataRow.Field<bool>("FixRight"),
-                    FixTop = dataRow.Field<bool>("FixTop"),
-                    FixBottom = dataRow.Field<bool>("FixBottom"),
-                    AddSymmetricX = dataRow.Field<bool>("AddSymmetricX"),
-                    AddSymmetricY = dataRow.Field<bool>("AddSymmetricY")
-                };
+                SteelBasePart newObject = new SteelBasePart();
+                newObject.OpenFromDataSet(dataRow);
+                newObject.RegisterParent(steelBase);
                 newObjects.Add(newObject);
             }
             return newObjects;
@@ -168,34 +141,68 @@ namespace RDBLL.Common.Service
             ObservableCollection<SteelBolt> newObjects = new ObservableCollection<SteelBolt>();
             DataTable dataTable = dataSet.Tables["SteelBolts"];
             var query = from dataRow in dataTable.AsEnumerable()
-                        where dataRow.Field<int>("SteelBaseId") == steelBase.Id
+                        where dataRow.Field<int>("ParentId") == steelBase.Id
                         select dataRow;
             foreach (var dataRow in query)
             {
-                SteelBolt newObject = new SteelBolt
-                {
-                    Id = dataRow.Field<int>("Id"),
-                    SteelBaseId = dataRow.Field<int>("SteelBaseId"),
-                    SteelBase = steelBase,
-                    Name = dataRow.Field<string>("Name"),
-                    Diameter = dataRow.Field<double>("Diameter"),
-                    CenterX = dataRow.Field<double>("CenterX"),
-                    CenterY = dataRow.Field<double>("CenterY"),
-                    AddSymmetricX = dataRow.Field<bool>("AddSymmetricX"),
-                    AddSymmetricY = dataRow.Field<bool>("AddSymmetricY")
-                };
+                SteelBolt newObject = new SteelBolt();
+                newObject.OpenFromDataSet(dataRow);
+                newObject.RegisterParent(steelBase);
+                //не очень корректно достаем единственный элемент
+                newObject.Steel = GetMaterialUsings(dataSet, newObject)[0] as SteelUsing;
+                newObject.Placement = GetPlacement(dataSet, newObject);
                 newObjects.Add(newObject);
             }
             return newObjects;
         }
-        public static ObservableCollection<ForcesGroup> GetForcesGroups(DataSet dataSet, SteelBase steelBase)
+        /// <summary>
+        /// Получает коллекцию групп усилий по датасету и стальной базе
+        /// </summary>
+        /// <param name="dataSet"></param>
+        /// <param name="steelBase"></param>
+        /// <returns></returns>
+        //public static ObservableCollection<ForcesGroup> GetSteelBaseForcesGroups(DataSet dataSet, SteelBase steelBase)
+        //{
+        //    ObservableCollection<ForcesGroup> newObjects = new ObservableCollection<ForcesGroup>();
+        //    DataTable adjDataTable = dataSet.Tables["SteelBaseForcesGroups"];
+        //    DataTable dataTable = dataSet.Tables["ForcesGroups"]; 
+        //    var query = from adjDataRow in adjDataTable.AsEnumerable()
+        //                from dataRow in dataTable.AsEnumerable()
+        //                where adjDataRow.Field<int>("SteelBaseId") == steelBase.Id
+        //                where adjDataRow.Field<int>("ForcesGroupId") == dataRow.Field<int>("Id")
+        //                select dataRow;
+        //    foreach (var dataRow in query)
+        //    {
+        //        ForcesGroup newObject = new ForcesGroup
+        //        {
+        //            Id = dataRow.Field<int>("Id"),
+        //            Name = dataRow.Field<string>("Name"),
+        //            CenterX = dataRow.Field<double>("CenterX"),
+        //            CenterY = dataRow.Field<double>("CenterY"),
+        //        };
+        //        newObject.Owners.Add(steelBase);
+        //        newObjects.Add(newObject);
+        //    }
+        //    foreach (ForcesGroup forcesGroup in newObjects)
+        //    {
+        //        forcesGroup.LoadSets = GetLoadSets(dataSet, forcesGroup);
+        //    }
+        //    return newObjects;
+        //}
+        /// <summary>
+        /// Получает коллекцию групп усилий по датасету и фундаменту
+        /// </summary>
+        /// <param name="dataSet"></param>
+        /// <param name="foundation"></param>
+        /// <returns></returns>
+        public static ObservableCollection<ForcesGroup> GetParentForcesGroups(DataSet dataSet, IHasForcesGroups parent)
         {
             ObservableCollection<ForcesGroup> newObjects = new ObservableCollection<ForcesGroup>();
-            DataTable adjDataTable = dataSet.Tables["SteelBaseForcesGroups"];
-            DataTable dataTable = dataSet.Tables["ForcesGroups"]; 
+            DataTable adjDataTable = dataSet.Tables["ParentForcesGroups"];
+            DataTable dataTable = dataSet.Tables["ForcesGroups"];
             var query = from adjDataRow in adjDataTable.AsEnumerable()
                         from dataRow in dataTable.AsEnumerable()
-                        where adjDataRow.Field<int>("SteelBaseId") == steelBase.Id
+                        where adjDataRow.Field<int>("ParentId") == parent.Id
                         where adjDataRow.Field<int>("ForcesGroupId") == dataRow.Field<int>("Id")
                         select dataRow;
             foreach (var dataRow in query)
@@ -207,7 +214,7 @@ namespace RDBLL.Common.Service
                     CenterX = dataRow.Field<double>("CenterX"),
                     CenterY = dataRow.Field<double>("CenterY"),
                 };
-                newObject.SteelBases.Add(steelBase);
+                newObject.Owners.Add(parent);
                 newObjects.Add(newObject);
             }
             foreach (ForcesGroup forcesGroup in newObjects)
@@ -216,6 +223,12 @@ namespace RDBLL.Common.Service
             }
             return newObjects;
         }
+        /// <summary>
+        /// Получает коллекцию наборов усилий по датасету и группе нагрузок
+        /// </summary>
+        /// <param name="dataSet"></param>
+        /// <param name="forcesGroup"></param>
+        /// <returns></returns>
         public static ObservableCollection<LoadSet> GetLoadSets(DataSet dataSet, ForcesGroup forcesGroup)
         {
             ObservableCollection<LoadSet> newObjects = new ObservableCollection<LoadSet>();
@@ -246,6 +259,12 @@ namespace RDBLL.Common.Service
             }
             return newObjects;
         }
+        /// <summary>
+        /// Получает коллекцию параметров усилий по датасету и набору усилий
+        /// </summary>
+        /// <param name="dataSet"></param>
+        /// <param name="loadSet"></param>
+        /// <returns></returns>
         public static ObservableCollection<ForceParameter> GetForceParameters(DataSet dataSet, LoadSet loadSet)
         {
             ObservableCollection<ForceParameter> newObjects = new ObservableCollection<ForceParameter>();
@@ -258,7 +277,7 @@ namespace RDBLL.Common.Service
                 ForceParameter newObject = new ForceParameter
                 {
                     Id = dataRow.Field<int>("Id"),
-                    LoadSetId = dataRow.Field<int>("LoadSetId"),
+                    LoadId = dataRow.Field<int>("LoadSetId"),
                     LoadSet = loadSet,
                     KindId = dataRow.Field<int>("KindId"),
                     Name = dataRow.Field<string>("Name"),
@@ -267,6 +286,300 @@ namespace RDBLL.Common.Service
                 newObjects.Add(newObject);
             }
             return newObjects;
+        }
+        /// <summary>
+        /// Возвращает коллекцию фундаментов по датасету и уровню
+        /// </summary>
+        /// <param name="dataSet"></param>
+        /// <param name="level"></param>
+        /// <returns></returns>
+        public static ObservableCollection<Foundation> GetFoundations(DataSet dataSet, Level level)
+        {
+            ObservableCollection<Foundation> newObjects = new ObservableCollection<Foundation>();
+            DataTable dataTable = dataSet.Tables["Foundations"];
+            var query = from dataRow in dataTable.AsEnumerable()
+                        where dataRow.Field<int>("ParentId") == level.Id
+                        select dataRow;
+            foreach (var dataRow in query)
+            {
+                Foundation newObject = new Foundation();
+                newObject.RegisterParent(level);
+                newObject.OpenFromDataSet(dataRow);
+                newObject.Parts = GetFoundationParts(dataSet, newObject);                
+                newObject.ForcesGroups = GetParentForcesGroups(dataSet, newObject);
+                GetSoilSection(dataSet, newObject);
+                newObjects.Add(newObject);
+            }
+            return newObjects;
+        }
+        /// <summary>
+        /// Возвращает коллекцию ступеней фундамента по датасуту и фундаменту
+        /// </summary>
+        /// <param name="dataSet"></param>
+        /// <param name="foundation"></param>
+        /// <returns></returns>
+        public static ObservableCollection<RectFoundationPart> GetFoundationParts(DataSet dataSet, Foundation foundation)
+        {
+            ObservableCollection<RectFoundationPart> newObjects = new ObservableCollection<RectFoundationPart>();
+            DataTable dataTable = dataSet.Tables["FoundationParts"];
+            var query = from dataRow in dataTable.AsEnumerable()
+                        where dataRow.Field<int>("ParentId") == foundation.Id
+                        select dataRow;
+            foreach (var dataRow in query)
+            {
+                RectFoundationPart newObject = new RectFoundationPart();
+                newObject.OpenFromDataSet(dataRow);
+                newObject.ParentMember = foundation;
+                newObjects.Add(newObject);
+            }
+            return newObjects;
+        }
+        /// <summary>
+        /// Возвращает коллекцию грунтов по датасету и строительному объекту
+        /// </summary>
+        /// <param name="dataSet">Датасет</param>
+        /// <param name="buildingSite">Строительный объект</param>
+        /// <returns></returns>
+        public static ObservableCollection<Soil> GetSoils (DataSet dataSet, BuildingSite buildingSite)
+        {
+            ObservableCollection<Soil> newObjects = new ObservableCollection<Soil>();
+            DataTable dataTable = dataSet.Tables["Soils"];
+            var query = from dataRow in dataTable.AsEnumerable()
+                        where dataRow.Field<int>("ParentId") == buildingSite.Id
+                        select dataRow;
+            foreach (var dataRow in query)
+            {
+                Soil newObject;
+                if (dataRow.Field<string>("Type") == "ClaySoil")
+                {
+                    newObject = new ClaySoil(buildingSite);
+                    newObject.OpenFromDataSet(dataRow);
+                    newObject.RegisterParent(buildingSite);
+                    newObjects.Add(newObject);
+                }
+                if (dataRow.Field<string>("Type") == "RockSoil")
+                {
+                    newObject = new RockSoil(buildingSite);
+                    newObject.OpenFromDataSet(dataRow);
+                    newObject.RegisterParent(buildingSite);
+                    newObjects.Add(newObject);
+                }
+            }
+            return newObjects;
+        }
+        /// <summary>
+        /// Возвращает коллекцию скважин по датасету и строительному объекту
+        /// </summary>
+        /// <param name="dataSet">Датасет</param>
+        /// <param name="buildingSite">Строительный объект</param>
+        /// <returns></returns>
+        public static ObservableCollection<SoilSection> GetSoilSections(DataSet dataSet, BuildingSite buildingSite)
+        {
+            ObservableCollection<SoilSection> newObjects = new ObservableCollection<SoilSection>();
+            DataTable dataTable = dataSet.Tables["SoilSections"];
+            var query = from dataRow in dataTable.AsEnumerable()
+                        where dataRow.Field<int>("ParentId") == buildingSite.Id
+                        select dataRow;
+            foreach (var dataRow in query)
+            {
+                SoilSection newObject = new SoilSection(buildingSite);
+                newObject.OpenFromDataSet(dataRow);
+                newObject.RegisterParent(buildingSite);
+                //Получаем коллекцию слоев грунта
+                newObject.SoilLayers = GetSoilLayers(dataSet, newObject);
+                newObjects.Add(newObject);
+            }
+            return newObjects;
+        }
+        /// <summary>
+        /// Возвращает коллекцию слоев грунта по датасету и скважине
+        /// </summary>
+        /// <param name="dataSet">Датасет</param>
+        /// <param name="soilSection">Скважина</param>
+        /// <returns></returns>
+        public static ObservableCollection<SoilLayer> GetSoilLayers (DataSet dataSet, SoilSection soilSection)
+        {
+            ObservableCollection<SoilLayer> newObjects = new ObservableCollection<SoilLayer>();
+            DataTable dataTable = dataSet.Tables["SoilLayers"];
+            var query = from dataRow in dataTable.AsEnumerable()
+                        where dataRow.Field<int>("SoilSectionId") == soilSection.Id
+                        select dataRow;
+            foreach (var dataRow in query)
+            {
+                SoilLayer newObject = new SoilLayer();
+                newObject.OpenFromDataSet(dataRow);
+                newObject.SoilSection = soilSection;
+                foreach (Soil soil in (soilSection.ParentMember as BuildingSite).Soils)
+                {
+                    if (soil.Id == newObject.Soil.Id) { newObject.Soil = soil; }
+                }
+                newObjects.Add(newObject);
+            }
+            return newObjects;
+        }
+        public static List<MaterialContainer> GetContainers (DataSet dataSet, IDsSaveable parent)
+        {
+            List<MaterialContainer> materialContainers = new List<MaterialContainer>();
+            DataTable dataTable = dataSet.Tables["MaterialContainers"];
+            var query = from dataRow in dataTable.AsEnumerable()
+                        where dataRow.Field<int>("ParentId") == parent.Id
+                        select dataRow;
+            foreach (var dataRow in query)
+            {
+                MaterialContainer materialContainer = new MaterialContainer();
+                materialContainer.OpenFromDataSet(dataRow);
+                materialContainers.Add(materialContainer);
+            }
+            foreach (MaterialContainer materialContainer in materialContainers)
+            {
+                List<MaterialUsing> matUsings = GetEntity.GetMaterialUsings(dataSet, materialContainer);
+                foreach (MaterialUsing materialUsing in matUsings)
+                {
+                    if (materialUsing is ReinforcementUsing)
+                    { materialContainer.MaterialUsings.Add(materialUsing as ReinforcementUsing); }
+                    else if (materialUsing is ConcreteUsing) { materialContainer.MaterialUsings.Add(materialUsing as ConcreteUsing); }
+                    else materialContainer.MaterialUsings.Add(materialUsing);
+                }
+            }
+            return materialContainers;
+        }
+        public static List<MaterialUsing> GetMaterialUsings(DataSet dataSet, IDsSaveable parent)
+        {
+            List<MaterialUsing> materialUsings = new List<MaterialUsing>();
+            DataTable dataTable = dataSet.Tables["MaterialUsings"];
+            var query = from dataRow in dataTable.AsEnumerable()
+                        where dataRow.Field<int>("ParentId") == parent.Id
+                        select dataRow;
+            foreach (var dataRow in query)
+            {
+                string materialKindName = dataRow.Field<string>("Materialkindname");
+                MaterialUsing materialUsing;
+                if (string.Compare(materialKindName, "Concrete") == 0) { materialUsing = new ConcreteUsing(); }
+                else if (string.Compare(materialKindName, "Reinforcement") == 0) { materialUsing = new ReinforcementUsing();}
+                else if (string.Compare(materialKindName, "Steel") == 0) { materialUsing = new SteelUsing(); }
+                else if (string.Compare(materialKindName, "SteelBolt") == 0) { materialUsing = new BoltUsing(); }
+                else throw new Exception("Material type is not valid");
+                materialUsing.RegisterParent(parent);
+                materialUsing.OpenFromDataSet(dataRow);
+                if (materialUsing is IHasPlacement) { GetPlacement(dataSet, materialUsing as IHasPlacement); }
+                #region SafetyFActors
+                List<SafetyFactor> safetyFactorsList = GetSafetyFactors(dataSet, materialUsing);
+                ObservableCollection<SafetyFactor> safetyFactors = new ObservableCollection<SafetyFactor>();
+                foreach (SafetyFactor safetyFactor in safetyFactorsList)
+                {
+                    safetyFactors.Add(safetyFactor);
+                }
+                materialUsing.SafetyFactors = safetyFactors;
+                #endregion
+                materialUsings.Add(materialUsing);
+            }
+            return materialUsings;
+        }
+        public static Placement GetPlacement(DataSet dataSet, IHasPlacement parent)
+        {
+            Placement placement;
+            IDsSaveable savableParent;
+            if (parent is IDsSaveable)
+            {
+                savableParent = parent as IDsSaveable;
+            }
+            else throw new Exception("Parent is not SavableToDataSet");
+            DataTable dataTable = dataSet.Tables["ParametricObjects"];
+            var row = (from dataRow in dataTable.AsEnumerable()
+                       where dataRow.Field<int>("ParentId") == savableParent.Id
+                       select dataRow).Single();
+
+            string type = row.Field<string>("Type");
+            if (string.Compare(type, "LineBySpacing") == 0) { placement = new LineBySpacing(); }
+            else if (string.Compare(type, "RectArrayPlacement") == 0) { placement = new RectArrayPlacement(); }
+            else throw new Exception("Spacing type is not valid");
+            placement.OpenFromDataSet(row);
+            parent.SetPlacement(placement);
+            placement.RegisterParent(savableParent);
+            placement.StoredParams = GetStoredParams(dataSet, placement);
+            return placement;
+        }
+        private static List<SafetyFactor> GetSafetyFactors(DataSet dataSet, MaterialUsing parent)
+        {
+            List<SafetyFactor> newObjects = new List<SafetyFactor>();
+            DataTable dataTable = dataSet.Tables["SafetyFactors"];
+            var query = from dataRow in dataTable.AsEnumerable()
+                        where dataRow.Field<int>("ParentId") == parent.Id
+                        select dataRow;
+            foreach (var dataRow in query)
+            {
+                SafetyFactor newObject = new SafetyFactor();
+                newObject.OpenFromDataSet(dataRow);
+                newObject.RegisterParent(parent);
+                newObjects.Add(newObject);
+            }
+            return newObjects;
+        }
+        private static List<StoredParam> GetStoredParams(DataSet dataSet, IDsSaveable parent)
+        {
+            List<StoredParam> newObjects = new List<StoredParam>();
+            DataTable dataTable = dataSet.Tables["StoredParams"];
+            var query = from dataRow in dataTable.AsEnumerable()
+                        where dataRow.Field<int>("ParentId") == parent.Id
+                        select dataRow;
+            foreach (var dataRow in query)
+            {
+                StoredParam newObject = new StoredParam(parent);
+                newObject.OpenFromDataSet(dataRow);
+                newObject.RegisterParent(parent);
+                newObjects.Add(newObject);
+            }
+            return newObjects;
+        }
+        private static SoilSectionUsing GetSoilSection (DataSet dataSet, IHasSoilSection parent)
+        {
+            SoilSectionUsing soilSectionUsing;
+            DataTable dataTable = dataSet.Tables["SoilSectionUsings"];
+            var query = (from dataRow in dataTable.AsEnumerable()
+                        where dataRow.Field<int>("ParentId") == parent.Id
+                        select dataRow).Single();
+            soilSectionUsing = new SoilSectionUsing();
+            soilSectionUsing.OpenFromDataSet(query);
+            soilSectionUsing.RegisterParent(parent);
+            return soilSectionUsing;
+        }
+        private static ParametriсBase GetPapametricObject(DataSet dataSet, IDsSaveable parent)
+        {
+            ParametriсBase newObj;
+            DataTable dataTable = dataSet.Tables["ParametricObjects"];
+            var query = (from dataRow in dataTable.AsEnumerable()
+                         where dataRow.Field<int>("ParentId") == parent.Id
+                         select dataRow).SingleOrDefault();
+            if (query is null) return null;
+            switch (query.Field<string>("Type"))
+            {
+                case "SteelBasePatternType1" :
+                    {
+                        newObj = new PatternType1();
+                        newObj.OpenFromDataSet(query);
+                        newObj.StoredParams = GetStoredParams(dataSet, newObj);
+                        return newObj;
+                    }
+                case "SteelBasePatternType2":
+                    {
+                        newObj = new PatternType2();
+                        newObj.OpenFromDataSet(query);
+                        newObj.StoredParams = GetStoredParams(dataSet, newObj);
+                        return newObj;
+                    }
+                case "SteelBasePatternType3":
+                    {
+                        newObj = new PatternType3();
+                        newObj.OpenFromDataSet(query);
+                        newObj.StoredParams = GetStoredParams(dataSet, newObj);
+                        return newObj;
+                    }
+                default:
+                    {
+                        return null;
+                    }
+            }
+
         }
     }
 }

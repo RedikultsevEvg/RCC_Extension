@@ -14,33 +14,60 @@ using RDBLL.Forces;
 using RDBLL.Entity.MeasureUnits;
 using System.Collections.ObjectModel;
 using System.Data;
-using DAL.DataSets;
-
+using RDBLL.Entity.Common.Materials;
+using RDBLL.Entity.Common.Materials.MatFactorys;
+using RDBLL.Entity.Common.Materials.SteelMaterialUsing;
+using RDBLL.Entity.MeasureUnits.Factorys;
+using RDBLL.Common.Service.DsOperations.Factory;
 
 namespace RDBLL.Common.Service
 {
+    /// <summary>
+    /// Класс хранения основных настроек программы
+    /// </summary>
     public static class ProgrammSettings
     {
         private static String _filePath;
         private static bool _isDataChanged;
         private static int _CurrentId;
+        private static int _CurrentTmpId;
 
+        /// <summary>
+        /// Генератор Id
+        /// </summary>
         public static int CurrentId
         {
-            get
-            {
-                _CurrentId++;
-                return _CurrentId;
-            }
-            set
-            {
-                _CurrentId = value;
-            }
+            get =>  _CurrentId++;
+            set  { _CurrentId = value;}
         }
+        /// <summary>
+        /// Генератор временных Id
+        /// </summary>
+        public static int CurrentTmpId
+        {
+            get => _CurrentTmpId++;
+            set  {_CurrentTmpId = value;}
+        }
+        /// <summary>
+        /// Перечень датасетов (на будущее если будет предусмотрена обработка нескольких файлов)
+        /// </summary>
+        public static List<DataSet> DataSets { get; set; }
+        /// <summary>
+        /// Текущий датасет
+        /// </summary>
+        public static DataSet CurrentDataSet { get { return DataSets[0]; } }
         public static List<ForceParamKind> ForceParamKinds { get; set; }
+        /// <summary>
+        /// Единицы измерения
+        /// </summary>
         public static ObservableCollection<MeasureUnit> MeasureUnits { get; set; }
-
+        /// <summary>
+        /// Строительный объект
+        /// </summary>
         public static BuildingSite BuildingSite { get; set; }
+        /// <summary>
+        /// Путь к рабочему файлу
+        /// </summary>
         public static String FilePath
         {
             get { return _filePath; }
@@ -50,6 +77,9 @@ namespace RDBLL.Common.Service
                 if (FilePathChanged != null) FilePathChanged(null, EventArgs.Empty);
             }
         }
+        /// <summary>
+        /// Флаг внесения изменений в файл
+        /// </summary>
         public static bool IsDataChanged
         {
             get
@@ -60,135 +90,52 @@ namespace RDBLL.Common.Service
                 if (IsDataChangedChanged != null) IsDataChangedChanged(null, EventArgs.Empty);
             }
         }
+        /// <summary>
+        /// Справочник классов стали
+        /// </summary>
+        public static List<SteelKind> SteelKinds { get; private set; }
+        /// <summary>
+        /// Справочник классов бетона
+        /// </summary>
+        public static List<ConcreteKind> ConcreteKinds { get; set; }
+        /// <summary>
+        /// Справочник классов арматуры
+        /// </summary>
+        public static List<ReinforcementKind> ReinforcementKinds { get; set; }
+        /// <summary>
+        /// Метод задания начальных параметров
+        /// </summary>
         public static void InicializeNew()
         {
-            BuildingSite = new BuildingSite();
-            BuildingSite.Buildings.Add(new Building(BuildingSite));
+            DataSets = new List<DataSet>();
+            DataSet dataSet = DsFactory.GetDataSet();
+            DataSets.Add(dataSet);
+            BuildingSite = new BuildingSite(true);
+            Building building =  new Building(BuildingSite);
+            BuildingSite.SaveToDataSet(CurrentDataSet, true);
             IsDataChanged = false;
-            #region Исходные данные единиц измерения
-            MeasureUnit measureUnitLength = new MeasureUnit();
-            measureUnitLength.MeasureUnitKind = "Линейные размеры";
-            measureUnitLength.UnitLabels.Add(new MeasureUnitLabel { Id = 1, UnitName = "м", AddKoeff = 1.0 });
-            measureUnitLength.UnitLabels.Add(new MeasureUnitLabel { Id = 2, UnitName = "мм", AddKoeff = 1000 });
-            measureUnitLength.UnitLabels.Add(new MeasureUnitLabel { Id = 3, UnitName = "см", AddKoeff = 100 });
-            measureUnitLength.UnitLabels.Add(new MeasureUnitLabel { Id = 4, UnitName = "дм", AddKoeff = 10 });
-            measureUnitLength.UnitLabels.Add(new MeasureUnitLabel { Id = 5, UnitName = "км", AddKoeff = 0.1 });
-            measureUnitLength.CurrentUnitLabelId = 2;
-            MeasureUnit measureUnitForce = new MeasureUnit();
-            measureUnitForce.MeasureUnitKind = "Усилия";
-            measureUnitForce.UnitLabels.Add(new MeasureUnitLabel { Id = 6, UnitName = "Н", AddKoeff= 1.0});
-            measureUnitForce.UnitLabels.Add(new MeasureUnitLabel { Id = 7, UnitName = "кН", AddKoeff = 0.001 });
-            measureUnitForce.UnitLabels.Add(new MeasureUnitLabel { Id = 8, UnitName = "МН", AddKoeff = 0.000001 });
-            measureUnitForce.UnitLabels.Add(new MeasureUnitLabel { Id = 9, UnitName = "кгс", AddKoeff = 1 / 9.81 });
-            measureUnitForce.UnitLabels.Add(new MeasureUnitLabel { Id = 10, UnitName = "тс", AddKoeff = 0.001 / 9.81 });
-            measureUnitForce.CurrentUnitLabelId = 7;
-            MeasureUnit measureUnitMoment = new MeasureUnit();
-            measureUnitMoment.MeasureUnitKind = "Изгибающие моменты";
-            measureUnitMoment.UnitLabels.Add(new MeasureUnitLabel { Id = 11, UnitName = "Н*м", AddKoeff = 1.0 });
-            measureUnitMoment.UnitLabels.Add(new MeasureUnitLabel { Id = 12, UnitName = "кН*м", AddKoeff = 0.001 });
-            measureUnitMoment.UnitLabels.Add(new MeasureUnitLabel { Id = 13, UnitName = "МН*м", AddKoeff = 0.000001 });
-            measureUnitMoment.UnitLabels.Add(new MeasureUnitLabel { Id = 14, UnitName = "кгс*м", AddKoeff = 1 / 9.81 });
-            measureUnitMoment.UnitLabels.Add(new MeasureUnitLabel { Id = 15, UnitName = "тс*м", AddKoeff = 0.001 / 9.81 });
-            measureUnitMoment.CurrentUnitLabelId = 12;
-            MeasureUnit measureUnitStress = new MeasureUnit();
-            measureUnitStress.MeasureUnitKind = "Напряжения";
-            measureUnitStress.UnitLabels.Add(new MeasureUnitLabel { Id = 16, UnitName = "Па", AddKoeff = 1.0 });
-            measureUnitStress.UnitLabels.Add(new MeasureUnitLabel { Id = 17, UnitName = "кПа", AddKoeff = 0.001 });
-            measureUnitStress.UnitLabels.Add(new MeasureUnitLabel { Id = 18, UnitName = "МПа", AddKoeff = 0.000001 });
-            measureUnitStress.UnitLabels.Add(new MeasureUnitLabel { Id = 19, UnitName = "кгс/см^2", AddKoeff = 0.0001 / 9.81 });
-            measureUnitStress.UnitLabels.Add(new MeasureUnitLabel { Id = 20, UnitName = "тс/м^2", AddKoeff = 0.001 / 9.81 });
-            measureUnitStress.CurrentUnitLabelId = 18;
-            MeasureUnit measureUnitGeometryArea = new MeasureUnit();
-            measureUnitGeometryArea.MeasureUnitKind = "Геометрия. Площадь";
-            measureUnitGeometryArea.UnitLabels.Add(new MeasureUnitLabel { Id = 21, UnitName = "м^2", AddKoeff = 1.0 });
-            measureUnitGeometryArea.UnitLabels.Add(new MeasureUnitLabel { Id = 22, UnitName = "мм^2", AddKoeff = 1000000 });
-            measureUnitGeometryArea.UnitLabels.Add(new MeasureUnitLabel { Id = 23, UnitName = "см^2", AddKoeff = 10000 });
-            measureUnitGeometryArea.CurrentUnitLabelId = 22;
-            MeasureUnit measureUnitGeometrySecMoment = new MeasureUnit();
-            measureUnitGeometrySecMoment.MeasureUnitKind = "Геометрия. Момент сопротивления";
-            measureUnitGeometrySecMoment.UnitLabels.Add(new MeasureUnitLabel { Id = 26, UnitName = "м^3", AddKoeff = 1.0 });
-            measureUnitGeometrySecMoment.UnitLabels.Add(new MeasureUnitLabel { Id = 27, UnitName = "мм^3", AddKoeff = 1e9 });
-            measureUnitGeometrySecMoment.UnitLabels.Add(new MeasureUnitLabel { Id = 28, UnitName = "см^3", AddKoeff = 1e6 });
-            measureUnitGeometrySecMoment.CurrentUnitLabelId = 27;
-            MeasureUnit measureUnitGeometryMoment = new MeasureUnit();
-            measureUnitGeometryMoment.MeasureUnitKind = "Геометрия. Момент инерции";
-            measureUnitGeometryMoment.UnitLabels.Add(new MeasureUnitLabel { Id = 31, UnitName = "м^4", AddKoeff = 1.0 });
-            measureUnitGeometryMoment.UnitLabels.Add(new MeasureUnitLabel { Id = 32, UnitName = "мм^4", AddKoeff = 1e12 });
-            measureUnitGeometryMoment.UnitLabels.Add(new MeasureUnitLabel { Id = 33, UnitName = "см^4", AddKoeff = 1e8 });
-            measureUnitGeometryMoment.CurrentUnitLabelId = 32;
-            MeasureUnit measureUnitMass = new MeasureUnit();
-            measureUnitMass.MeasureUnitKind = "Масса";
-            measureUnitMass.UnitLabels.Add(new MeasureUnitLabel { Id = 36, UnitName = "кг", AddKoeff = 1.0 });
-            measureUnitMass.UnitLabels.Add(new MeasureUnitLabel { Id = 37, UnitName = "г", AddKoeff = 1000 });
-            measureUnitMass.UnitLabels.Add(new MeasureUnitLabel { Id = 38, UnitName = "т", AddKoeff = 0.001 });
-            measureUnitMass.CurrentUnitLabelId = 36;
-            MeasureUnits = new ObservableCollection<MeasureUnit>();
-            MeasureUnits.Add(measureUnitLength);
-            MeasureUnits.Add(measureUnitForce);
-            MeasureUnits.Add(measureUnitMoment);
-            MeasureUnits.Add(measureUnitStress);
-            MeasureUnits.Add(measureUnitGeometryArea);
-            MeasureUnits.Add(measureUnitGeometrySecMoment);
-            MeasureUnits.Add(measureUnitGeometryMoment);
-            MeasureUnits.Add(measureUnitMass);
-            #endregion
-            #region Исходные данные видов нагрузки
-            ForceParamKinds = new List<ForceParamKind>();
-            ForceParamKinds.Add(new ForceParamKind
-            {
-                Id = 1,
-                LongLabel = "Продольная сила N",
-                ShortLabel = "N",
-                Addition = "Положительному значению силы соответствует направление вдоль оси Z (направлена вертикально вверх)",
-                MeasureUnit = measureUnitForce
-            });
-            ForceParamKinds.Add(new ForceParamKind
-            {
-                Id = 2,
-                LongLabel = "Изгибающий момент Mx",
-                ShortLabel = "Mx",
-                Addition = "За положительное значение момента принят момент против часовой стрелки если смотреть с конца оси X",
-                MeasureUnit = measureUnitMoment
-            });
-            ForceParamKinds.Add(new ForceParamKind
-            {
-                Id = 3,
-                LongLabel = "Изгибающий момент My",
-                ShortLabel = "My",
-                Addition = "За положительное значение момента принят момент против часовой стрелки если смотреть с конца оси Y",
-                MeasureUnit = measureUnitMoment
-            });
-            ForceParamKinds.Add(new ForceParamKind
-            {
-                Id = 4,
-                LongLabel = "Поперечная сила Qx",
-                ShortLabel = "Qx",
-                Addition = "Положительному значению силы соответствует направление вдоль оси X (направлена вправо по плану)",
-                MeasureUnit = measureUnitForce
-            });
-            ForceParamKinds.Add(new ForceParamKind
-            {
-                Id = 5,
-                LongLabel = "Поперечная сила Qy",
-                ShortLabel = "Qy",
-                Addition = "Положительному значению силы соответствует направление вдоль оси Y (направлена вверх по плану)",
-                MeasureUnit = measureUnitForce
-            });
-            ForceParamKinds.Add(new ForceParamKind
-            {
-                Id = 6,
-                LongLabel = "Крутящий момент Mz",
-                ShortLabel = "Mz",
-                Addition = "За положительное значение момента принят момент против часовой стрелки если смотреть с конца оси Z",
-                MeasureUnit = measureUnitMoment
-            });
-            #endregion
-            
+            CurrentId = 0;
+            CurrentTmpId = 1000000;
+            ObservableCollection<MeasureUnit> MeasureUnitList = new ObservableCollection<MeasureUnit>();
+            List<ForceParamKind> ForceParamKindList = new List<ForceParamKind>();
+            UnitFactory.GetMeasureUnits(ref MeasureUnitList, ref ForceParamKindList);
+            MeasureUnits = MeasureUnitList;
+            ForceParamKinds = ForceParamKindList;
+            SteelKinds = MatFactory.GetSteelKinds();
+            ConcreteKinds = MatFactory.GetConcreteKinds();
+            ReinforcementKinds = MatFactory.GetReinforcementKinds();
         }
+        /// <summary>
+        /// Очистить коллекцию зданий строительного объекта
+        /// </summary>
         public static void ClearAll()
         {
-            BuildingSite.Buildings.Clear();
+            BuildingSite.Children.Clear();
         }
+        /// <summary>
+        /// Открыть проект из файла
+        /// </summary>
+        /// <returns></returns>
         public static bool OpenProjectFromFile()
         {
             try
@@ -197,7 +144,9 @@ namespace RDBLL.Common.Service
                 openFileDialog.Filter = "XML file (*.xml)|*.xml";
                 if (openFileDialog.ShowDialog() == true) FilePath = openFileDialog.FileName; else return false;
                 ClearAll();
-                InicializeNew();
+                DataSets = new List<DataSet>();
+                DataSet dataSet = DsFactory.GetDataSet();
+                DataSets.Add(dataSet);
                 OpenExistDataset(FilePath);
                 IsDataChanged = false;
                 return true;
@@ -208,6 +157,11 @@ namespace RDBLL.Common.Service
                 return false;
             }
         }
+        /// <summary>
+        /// Сохранение проекта в файл
+        /// </summary>
+        /// <param name="InNewFile"></param>
+        /// <returns></returns>
         public static bool SaveProjectToFile(bool InNewFile = false)
         {
             try
@@ -223,18 +177,6 @@ namespace RDBLL.Common.Service
                 }
                 DataSet dataSet = GetDataSet();
                 dataSet.WriteXml(FilePath);
-                #region old
-                //XmlTextWriter textWritter = new XmlTextWriter(FilePath, Encoding.UTF8);
-                //textWritter.WriteStartDocument();
-                //textWritter.WriteStartElement("Project");
-                //textWritter.Close();
-                //XmlDocument xmlDocument = new XmlDocument();
-                //xmlDocument.Load(FilePath);
-                //XmlElement xmlRoot = xmlDocument.DocumentElement;
-                //XmlElement xmlSite = BuildingSite.SaveToXMLNode(xmlDocument);
-                //xmlRoot.AppendChild(xmlSite);
-                //xmlDocument.Save(FilePath);
-                #endregion
                 IsDataChanged = false;
                 return true;
             }
@@ -250,12 +192,17 @@ namespace RDBLL.Common.Service
         /// Параметр определяющий, что данные изменились
         /// </summary>
         public static event EventHandler IsDataChangedChanged;
+        /// <summary>
+        /// Событие изменения пути файла
+        /// </summary>
         public static event EventHandler FilePathChanged;
+        /// <summary>
+        /// Получение датасета
+        /// </summary>
+        /// <returns></returns>
         public static DataSet GetDataSet()
         {
-            MainDataSet mainDataSet = new MainDataSet();
-            mainDataSet.GetNewDataSet();
-            DataSet dataSet = mainDataSet.DataSet;
+            DataSet dataSet = DsFactory.GetDataSet();
             DataTable dataTable;
             DataRow dataRow;
             #region Generator
@@ -281,20 +228,23 @@ namespace RDBLL.Common.Service
                 };
                 dataTable.Rows.Add(dataRow);
             }
-            BuildingSite.SaveToDataSet(dataSet);
             #endregion
+            BuildingSite.SaveToDataSet(dataSet, true);
             return dataSet;
         }
+        /// <summary>
+        /// Открыть существующий проект
+        /// </summary>
+        /// <param name="fileName"></param>
         public static void OpenExistDataset(string fileName)
         {
-            MainDataSet mainDataSet = new MainDataSet();
-            mainDataSet.GetNewDataSet();
-            DataSet dataSet = mainDataSet.DataSet;
+            DataSet dataSet = DsFactory.GetDataSet();
             DataTable dataTable;
             dataSet.ReadXml(fileName);
             #region Generator
             dataTable = dataSet.Tables["Generators"];
             CurrentId = Convert.ToInt32(dataTable.Rows[0].ItemArray[0]);
+            CurrentTmpId = CurrentId + 1000000;
             #endregion
             #region Versions
             #endregion
@@ -302,10 +252,24 @@ namespace RDBLL.Common.Service
             dataTable = dataSet.Tables["MeasurementUnits"];
             for (int i = 0; i < dataTable.Rows.Count; i++)
             {
-                MeasureUnits[i].CurrentUnitLabelId = Convert.ToInt32(dataTable.Rows[i].ItemArray[0]);
+                int labelId = Convert.ToInt32(dataTable.Rows[i].ItemArray[0]);
+                foreach (MeasureUnitLabel measureUnitLabel in MeasureUnits[i].UnitLabels)
+                {
+                    if (measureUnitLabel.Id == labelId) { MeasureUnits[i].CurrentUnitLabelId=labelId; }
+                }
             }
-            BuildingSite.OpenFromDataSet(dataSet, 1);
             #endregion
+            BuildingSite.OpenFromDataSet(dataSet);
+            #region Вложенные объекты
+            //Получаем коллекцию грунтов
+            BuildingSite.Soils = GetEntity.GetSoils(dataSet, BuildingSite);
+            //Получаем коллекцию скважин
+            BuildingSite.SoilSections = GetEntity.GetSoilSections(dataSet, BuildingSite);
+            //Получаем коллекцию зданий
+            GetEntity.GetBuildings(dataSet, BuildingSite);
+            #endregion
+            DataSets.Clear();
+            DataSets.Add(dataSet);
         }
     }
 }

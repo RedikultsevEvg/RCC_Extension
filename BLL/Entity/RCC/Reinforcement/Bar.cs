@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using RDBLL.Common.Geometry;
 using System.Xml;
 using RDBLL.Common.Service;
+using RDBLL.Common.Geometry.Mathematic;
 
 namespace RDBLL.Entity.RCC.Reinforcement
 {
@@ -131,9 +132,8 @@ namespace RDBLL.Entity.RCC.Reinforcement
 
         public Int32 BarQuantity ()
         {
-            Geometry2D geometry2D = new Geometry2D();
             int Quant = 0;
-            double length = geometry2D.GetDistance(this.StartPoint, this.EndPoint);
+            double length = GeometryProc.GetDistance(this.StartPoint, this.EndPoint);
             double mainLength = length - this.StartOffset-this.EndOffset;
              
             if (this.barSpacingSettings.AddBarsLeft)

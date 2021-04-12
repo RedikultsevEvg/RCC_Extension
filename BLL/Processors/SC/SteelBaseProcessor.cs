@@ -14,7 +14,12 @@ using System.Collections.ObjectModel;
 using System.Windows.Forms;
 using RDBLL.Entity.Results.NDM;
 using RDBLL.Entity.Common.NDM.Processors;
-
+using RDBLL.Entity.Common.Materials;
+using RDBLL.Entity.Common.Materials.SteelMaterialUsing;
+using RDBLL.Entity.Common.NDM.Interfaces;
+using RDBLL.Entity.Common.NDM.MaterialModels;
+using RDBLL.Common.Interfaces.Shapes;
+using RDBLL.Common.Geometry.Mathematic;
 
 namespace RDBLL.Processors.SC
 {
@@ -24,20 +29,19 @@ namespace RDBLL.Processors.SC
     /// </summary>
     public static class SteelBaseProcessor
     {
+        public static NdmCircleArea NdmCircleArea { get; private set; }
         /// <summary>
         /// Актуализирует все данные стальной базы
         /// </summary>
         /// <param name="steelBase">База стальной колонны</param>
         public static void SolveSteelColumnBase(SteelBase steelBase)
         {
-            ActualizeBaseParts(steelBase);
-            ActualizeSteelBolts(steelBase);
+            if (steelBase.Pattern != null) { steelBase.Pattern.GetBaseParts(); }
             ActualizeLoadCases(steelBase);
             GetNdmAreas(steelBase);
             steelBase.ForceCurvatures.Clear();
-            if (steelBase.UseSimpleMethod) { SolveSimpleMethod(steelBase); }
-            else { SolveNDMMethod (steelBase); }
-            steelBase.IsActual = true;
+            if (steelBase.UseSimpleMethod) { steelBase.IsActual = SolveSimpleMethod(steelBase); }
+            else { steelBase.IsActual = SolveNDMMethod(steelBase); }
         }
         /// <summary>
         /// Актуализирует наборы нагрузок
@@ -45,43 +49,7 @@ namespace RDBLL.Processors.SC
         /// <param name="steelBase">База стальной колонны</param>
         public static void ActualizeLoadCases(SteelBase steelBase)
         {
-            if (! steelBase.IsLoadCasesActual)
-            {
-                steelBase.LoadCases = LoadSetProcessor.GetLoadCases(steelBase.LoadsGroup);
-                steelBase.IsLoadCasesActual = true;
-            }   
-        }
-        /// <summary>
-        /// Актуализирует участки базы стальной колонны
-        /// с учетом возможной симметрии
-        /// т.е. заносит все участки как параметр стальной базы
-        /// </summary>
-        /// <param name="steelBase"></param>
-        public static void ActualizeBaseParts(SteelBase steelBase)
-        {
-            if (steelBase.IsBasePartsActual) { return;}
-            steelBase.ActualSteelBaseParts = new List<SteelBasePart>();
-            foreach (SteelBasePart steelBasePart in steelBase.SteelBaseParts)
-            {
-                steelBase.ActualSteelBaseParts.AddRange(SteelBasePartProcessor.GetSteelBasePartsFromPart(steelBasePart));
-            }
-            steelBase.IsBasePartsActual = true;
-        }
-        /// <summary>
-        /// Актуализирует болты базы стальной колонны
-        /// с учетом возможной симметрии
-        /// т.е. заносит все болты как параметр стальной базы
-        /// </summary>
-        /// <param name="steelBase"></param>
-        public static void ActualizeSteelBolts(SteelBase steelBase)
-        {
-            if (steelBase.IsBoltsActual) { return;}
-            steelBase.ActualSteelBolts = new List<SteelBolt>();
-            foreach (SteelBolt steelBolt in steelBase.SteelBolts)
-            {
-                steelBase.ActualSteelBolts.AddRange(SteelBoltProcessor.GetSteelBoltsFromBolt(steelBolt));
-            }
-            steelBase.IsBoltsActual = true;
+            steelBase.LoadCases = LoadSetProcessor.GetLoadCases(steelBase.ForcesGroups); 
         }
         /// <summary>
         /// Заносит коллекцию элементарных участков для базы стальной колонны
@@ -96,7 +64,7 @@ namespace RDBLL.Processors.SC
             steelBase.NdmAreas.AddRange(steelBase.ConcreteNdmAreas);
             steelBase.NdmAreas.AddRange(steelBase.SteelNdmAreas);
         }
-        public static ForceCurvature GetCurvature(LoadSet loadCase, SteelBase columnBase)
+        public static ForceDoubleCurvature GetCurvature(LoadSet loadCase, SteelBase columnBase)
         {
             SumForces sumForces = new SumForces(loadCase);
             StiffnessCoefficient stiffnessCoefficient = new StiffnessCoefficient(columnBase.NdmAreas);
@@ -121,7 +89,7 @@ namespace RDBLL.Processors.SC
                 sumForces2 = new SumForces(newStiffnessCoefficient, newCurvature);
             }
             sumForces2 = new SumForces(newStiffnessCoefficient, newCurvature);
-            return new ForceCurvature(loadCase, newCurvature);
+            return new ForceDoubleCurvature(loadCase, newCurvature);
         }
         /// <summary>
         /// Врзвращает коллекцию элементарных участков бетона для всех участков стальной базы
@@ -131,13 +99,15 @@ namespace RDBLL.Processors.SC
         public static List<NdmArea> GetConcreteNdmAreas(SteelBase steelBase)
         {
             List<NdmArea>  NdmAreas = new List<NdmArea>();
-            foreach (SteelBasePart steelBasePart in steelBase.ActualSteelBaseParts)
+            ConcreteKind concreteKind = steelBase.Concrete.MaterialKind as ConcreteKind;
+            double concreteStrength = concreteKind.FstCompStrength;
+            foreach (SteelBasePart steelBasePart in steelBase.SteelBaseParts)
             {
                 if (steelBase.UseSimpleMethod) { SteelBasePartProcessor.GetSubParts(steelBasePart); }
-                else { SteelBasePartProcessor.GetSubParts(steelBasePart, steelBase.ConcreteStrength); }
-                foreach (NdmConcreteArea ndmConcreteArea in steelBasePart.SubParts)
+                else { SteelBasePartProcessor.GetSubParts(steelBasePart, concreteStrength); }
+                foreach (NdmRectangleArea ndmConcreteArea in steelBasePart.SubParts)
                 {
-                    NdmAreas.Add(ndmConcreteArea.ConcreteArea);
+                    NdmAreas.Add(ndmConcreteArea);
                 }
             }
             return NdmAreas;
@@ -150,10 +120,20 @@ namespace RDBLL.Processors.SC
         public static List<NdmArea> GetSteelNdmAreas(SteelBase columnBase)
         {
             List<NdmArea> NdmAreas = new List<NdmArea>();
-            foreach (SteelBolt steelBolt in columnBase.ActualSteelBolts)
+            foreach (SteelBolt steelBolt in columnBase.SteelBolts)
             {
-                SteelBoltProcessor.GetSubParts(steelBolt);
-                NdmAreas.Add(steelBolt.SubPart.SteelArea);
+                SteelUsing steel = steelBolt.Steel;
+                IMaterialModel materialModel = new LinearIsotropic(steel.MaterialKind.ElasticModulus, 0.000001, 1);
+                steelBolt.MaterialModel = materialModel;
+
+                foreach (Point2D point in steelBolt.Placement.GetElementPoints())
+                {
+                    NdmCircleArea circle = new NdmCircleArea(materialModel);
+                    circle.Diametr = steelBolt.Diameter;
+                    circle.CenterX = point.X;
+                    circle.CenterY = point.Y;
+                    NdmAreas.Add(circle);
+                } 
             }
             return NdmAreas;
         }
@@ -163,30 +143,31 @@ namespace RDBLL.Processors.SC
         /// <param name="loadCase">Набор сочетаний</param>
         /// <param name="steelBase">Стальная база</param>
         /// <returns>Набор усилий и кривизн</returns>
-        public static ForceCurvature GetCurvatureSimpleMethod(LoadSet loadCase, SteelBase steelBase)
+        public static ForceDoubleCurvature GetCurvatureSimpleMethod(LoadSet loadCase, SteelBase steelBase)
         {
             SumForces sumForces = new SumForces(loadCase);
              StiffnessCoefficient stiffnessCoefficient = new StiffnessCoefficient(steelBase.ConcreteNdmAreas);
             Curvature curvature = new Curvature(sumForces, stiffnessCoefficient);
-            return new ForceCurvature(loadCase, curvature);
+            return new ForceDoubleCurvature(loadCase, curvature);
         }
-        public static void SolveSimpleMethod(SteelBase steelBase)
+        public static bool SolveSimpleMethod(SteelBase steelBase)
         {
+            bool result = true;
             foreach (LoadSet loadCase in steelBase.LoadCases)
             {
                 try //Запускаем нелинейный расчет
                 {
                     //Получаем кривизну соответствующую начальному модулю упругости
                     //Кривизна будет единой для бетона и стали
-                    ForceCurvature forceCurvature = GetCurvatureSimpleMethod(loadCase, steelBase);
+                    ForceDoubleCurvature forceCurvature = GetCurvatureSimpleMethod(loadCase, steelBase);
                     //Заносим кривизну как параметр стальной базы
                     steelBase.ForceCurvatures.Add(forceCurvature);
                     //Создаем локальную переменную для кривизны соответствующей бетоны
                     //как кривизну, полученную для базы с начальным модулем упругости
-                    Curvature concreteCurvature = forceCurvature.ConcreteCurvature;
+                    Curvature concreteCurvature = forceCurvature.DesignCurvature;
                     //Для начала итерационного расчета кривизну стальных участков
                     //как кривизну базы с начальным модулем упругости
-                    Curvature steelCurvature = forceCurvature.SteelCurvature;
+                    Curvature steelCurvature = forceCurvature.SecondDesignCurvature;
                     //Получаем матрицу жесткостных коэффициентов для бетона с учетом кривизны, полученной на первом этапе
                     //таким образом будут вычислены участки растянутого бетона если они есть
                     //дальнейшие итерации для бетона не требуются
@@ -212,45 +193,45 @@ namespace RDBLL.Processors.SC
                         steelCurvature = new Curvature(deltaForces, steelStiffnessCoefficient);
                     }
                     //заносим полученное значение кривизны стальных участков как параметр базы
-                    forceCurvature.SteelCurvature = steelCurvature;
+                    forceCurvature.SecondDesignCurvature = steelCurvature;
                 }
                 catch //Ошибка нелинейного расчета
                 {
                     //Ошибка нелинейного расчета говорит о том, что сходимость не достигнута,
                     //например, происходит опрокидывание базы из-за недостаточного количества болтов
                     MessageBox.Show("Проверьте исходные данные", "Ошибка нелинейного расчета");
+                    result = false;
                 }
             }
+            return result;
         }
 
-        public static void SolveNDMMethod(SteelBase steelBase)
+        /// <summary>
+        /// Решение базы стальной колонны нелинейным методом
+        /// </summary>
+        /// <param name="steelBase"></param>
+        /// <returns>true - расчет выполнен успешно</returns>
+        public static bool SolveNDMMethod(SteelBase steelBase)
         {
+            bool result = true;
             foreach (LoadSet loadCase in steelBase.LoadCases)
             {
                 SumForces sumForces = new SumForces(loadCase);
-                StiffnessCoefficient stiffnessCoefficient = new StiffnessCoefficient(steelBase.NdmAreas);
-                Curvature curvature = new Curvature(sumForces, stiffnessCoefficient);
-                //Определяем новые жесткостные коэффициенты по полученной кривизне
-                StiffnessCoefficient newStiffnessCoefficient = new StiffnessCoefficient(steelBase.NdmAreas, curvature);
-                Curvature newCurvature = new Curvature(sumForces, newStiffnessCoefficient);
+                List<NdmArea> ndmAreas = steelBase.NdmAreas;
                 try
                 {
-                    SumForces sumForces2 = new SumForces(newStiffnessCoefficient, newCurvature);
-                    for (int i = 1; i <= 20; i++)
-                    {
-                        newCurvature = new Curvature(sumForces, newStiffnessCoefficient);
-                        newStiffnessCoefficient = new StiffnessCoefficient(steelBase.NdmAreas, newCurvature);
-                        sumForces2 = new SumForces(newStiffnessCoefficient, newCurvature);
-                    }
-                    sumForces2 = new SumForces(newStiffnessCoefficient, newCurvature);
-                    ForceCurvature forceCurvature = new ForceCurvature(loadCase, newCurvature);
+                    //Если нелинейный расчет не выполнится, то будет сгенерировано исключение
+                    ForceDoubleCurvature forceCurvature = new ForceDoubleCurvature(loadCase, NdmProcessor.GetCurvature(sumForces, ndmAreas));
                     steelBase.ForceCurvatures.Add(forceCurvature);
                 }
+                //Если хотя бы один случай нагружения даст ошибку, то общий результат будет false
                 catch
                 {
-                    MessageBox.Show("Проверьте исходные данные", "Ошибка нелинейного расчета");
+                    MessageBox.Show("Ошибка нелинейного расчета", $"Сочетание: {loadCase.Name}");
+                    result = false;
                 }
             }
+            return result;
         }
         /// <summary>
         /// Возвращает коллекцию прямоугольных участков со значениями и комбинации нагрузок,
@@ -262,20 +243,20 @@ namespace RDBLL.Processors.SC
         {
             if (! steelBase.IsActual) { SteelBaseProcessor.SolveSteelColumnBase(steelBase); }
             List<LoadCaseRectangleValue> loadCaseRectangleValues = new List<LoadCaseRectangleValue>();
-            foreach (ForceCurvature forceCurvature in steelBase.ForceCurvatures)
+            foreach (ForceDoubleCurvature forceCurvature in steelBase.ForceCurvatures)
             {
                 LoadCaseRectangleValue loadCaseRectangleValue = new LoadCaseRectangleValue();
                 loadCaseRectangleValue.LoadCase = forceCurvature.LoadSet;
-                foreach (SteelBasePart steelBasePart in steelBase.ActualSteelBaseParts)
+                foreach (SteelBasePart steelBasePart in steelBase.SteelBaseParts)
                 {
-                    foreach (NdmConcreteArea ndmConcreteArea in steelBasePart.SubParts)
+                    foreach (NdmRectangleArea ndmConcreteArea in steelBasePart.SubParts)
                     {
                         RectangleValue rectangleValue = new RectangleValue();
-                        rectangleValue.CenterX = ndmConcreteArea.ConcreteArea.CenterX;
-                        rectangleValue.CenterY = ndmConcreteArea.ConcreteArea.CenterY;
+                        rectangleValue.CenterX = ndmConcreteArea.CenterX;
+                        rectangleValue.CenterY = ndmConcreteArea.CenterY;
                         rectangleValue.Width = ndmConcreteArea.Width;
                         rectangleValue.Length = ndmConcreteArea.Length;
-                        rectangleValue.Value = NdmAreaProcessor.GetStrainFromCuvature(ndmConcreteArea.ConcreteArea, forceCurvature.ConcreteCurvature)[1];
+                        rectangleValue.Value = NdmAreaProcessor.GetStrainFromCuvature(ndmConcreteArea, forceCurvature.DesignCurvature)[1];
                         loadCaseRectangleValue.RectangleValues.Add(rectangleValue);
                     }
                 }
@@ -283,8 +264,52 @@ namespace RDBLL.Processors.SC
             }
             return loadCaseRectangleValues;
         }
-
-
+        public static double GetSteelStrength(SteelBase steelBase)
+        {
+            SteelUsing steel = steelBase.Steel;
+            return (steel.MaterialKind as SteelKind).FstStrength * steel.TotalSafetyFactor.PsfFst;
+        }
+        public static double GetConcreteStrength(SteelBase steelBase)
+        {
+            ConcreteUsing mat = steelBase.Concrete;
+            return (mat.MaterialKind as ConcreteKind).FstCompStrength * mat.TotalSafetyFactor.PsfFst;
+        }
+        public static double GetArea(SteelBase steelBase)
+        {
+            List<IShape> shapes = new List<IShape>();
+            foreach (SteelBasePart part in steelBase.SteelBaseParts)
+            {
+                shapes.Add(part);
+            }
+            return GeometryProc.GetArea(shapes);
+        }
+        public static double[] GetMomInertia(SteelBase steelBase)
+        {
+            List<IShape> shapes = new List<IShape>();
+            foreach (SteelBasePart part in steelBase.SteelBaseParts)
+            {
+                shapes.Add(part);
+            }
+            return GeometryProc.GetMomInertia(shapes);
+        }
+        public static double[] GetMinSecMomInertia(SteelBase steelBase)
+        {
+            List<IShape> shapes = new List<IShape>();
+            foreach (SteelBasePart part in steelBase.SteelBaseParts)
+            {
+                shapes.Add(part);
+            }
+            return GeometryProc.GetMinSecMomentInertia(shapes);
+        }
+        public static double[] GetMaxSizes(SteelBase steelBase)
+        {
+            List<IShape> shapes = new List<IShape>();
+            foreach (SteelBasePart part in steelBase.SteelBaseParts)
+            {
+                shapes.Add(part);
+            }
+            return GeometryProc.GetEdgeDist(shapes);
+        }
     }
 }
 

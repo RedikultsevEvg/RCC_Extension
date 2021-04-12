@@ -11,26 +11,69 @@ using RDBLL.Entity.SC.Column;
 using System.Collections.ObjectModel;
 using System.Data;
 using RDBLL.Common.Interfaces;
-
+using RDBLL.Entity.RCC.Foundations;
+using RDBLL.Common.Service.DsOperations;
 
 namespace RDBLL.Entity.RCC.BuildingAndSite
 {
-    public class Level :ICloneable, ISavableToDataSet
+    /// <summary>
+    /// Уровень
+    /// </summary>
+    public class Level :ICloneable, IHasParent, IHasChildren
     {
+        /// <summary>
+        /// Код уровня
+        /// </summary>
         public int Id { get; set; }
-        public int BuildingId { get; set; }
-        public Building Building { get; set; }
+        /// <summary>
+        /// Обратная ссылка на здание
+        /// </summary>
+        public IDsSaveable ParentMember { get; private set; }
+        /// <summary>
+        /// Наименование
+        /// </summary>
         public string Name { get; set; }
-        public double FloorLevel { get; set; }
+        /// <summary>
+        /// Отметка уровня
+        /// </summary>
+        public double Elevation { get; set; }
+        /// <summary>
+        /// Высота этажа
+        /// </summary>
         public double Height { get; set; }
+        /// <summary>
+        /// Сдвижка сверху
+        /// </summary>
         public double TopOffset { get; set; }
+        /// <summary>
+        /// Привязка базовой точки
+        /// </summary>
         public double BasePointX { get; set; }
+        /// <summary>
+        /// Привязка базовой точки
+        /// </summary>
         public double BasePointY { get; set; }
+        /// <summary>
+        /// Привязка базовой точки
+        /// </summary>
         public double BasePointZ { get; set; }
+        /// <summary>
+        /// Привязка базовой точки
+        /// </summary>
         public ObservableCollection<Wall> Walls { get; set; }
+        /// <summary>
+        /// Коллекция колонн
+        /// </summary>
         public ObservableCollection<Column> Columns { get; set; }
-        public ObservableCollection<SteelBase> SteelBases { get; set; }
+        /// <summary>
+        /// Коллекция дочерних элементов
+        /// </summary>
+        public ObservableCollection<IHasParent> Children { get; private set; }
 
+        /// <summary>
+        /// Получение суммарного объема бетона
+        /// </summary>
+        /// <returns></returns>
         public double GetConcreteVolumeNetto()
         {
             double volume = 0;
@@ -41,74 +84,116 @@ namespace RDBLL.Entity.RCC.BuildingAndSite
             return volume;
 
         }
-        public void SaveToDataSet(DataSet dataSet)
+        #region IODataSet
+        /// <summary>
+        /// Return name of table in dataset for CRUD operation
+        /// </summary>
+        /// <returns>Name of table</returns>
+        public string GetTableName() { return "Levels"; }
+        /// <summary>
+        /// Сохранение в датасет
+        /// </summary>
+        /// <param name="dataSet"></param>
+        /// <param name="createNew"></param>
+        public void SaveToDataSet(DataSet dataSet, bool createNew)
         {
-            DataTable dataTable;
-            DataRow dataRow;
-            dataTable = dataSet.Tables["Levels"];
-            dataRow = dataTable.NewRow();
-            dataRow.ItemArray = new object[] { Id, BuildingId, Name, FloorLevel, Height, TopOffset, BasePointX, BasePointY, BasePointY };
-            dataTable.Rows.Add(dataRow);
-            foreach (SteelBase steelBase in SteelBases)
-            {
-                steelBase.SaveToDataSet(dataSet);
-            }
+            DataRow row = EntityOperation.SaveEntity(dataSet, createNew, this);
+            #region SetField
+            row.SetField("FloorLevel", Elevation);
+            row.SetField("Height", Height);
+            row.SetField("TopOffset", TopOffset);
+            row.SetField("BasePointX", BasePointX);
+            row.SetField("BasePointY", BasePointY);
+            row.SetField("BasePointZ", BasePointZ);
+            #endregion
+            row.AcceptChanges();
         }
-
-        public void OpenFromDataSet(DataSet dataSet, int Id)
+        /// <summary>
+        /// Открывает запись из датасета
+        /// </summary>
+        /// <param name="dataSet"></param>
+        public void OpenFromDataSet(DataSet dataSet)
         {
-            DataTable dataTable, childTable;
-            dataTable = dataSet.Tables["Levels"];
-
-            for (int i = 0; i < dataTable.Rows.Count; i++)
-            {
-                if (Convert.ToInt32(dataTable.Rows[i].ItemArray[0]) == Id)
-                {
-                    this.Id = Id;
-                    this.BuildingId = Convert.ToInt32(dataTable.Rows[i].ItemArray[1]);
-                    this.Name = Convert.ToString(dataTable.Rows[i].ItemArray[2]);
-                    childTable = dataSet.Tables["SteelBases"];
-                    if (childTable != null)
-                    {
-                        for (int j = 0; j < childTable.Rows.Count; j++)
-                        {
-                            if (Convert.ToInt32(childTable.Rows[j].ItemArray[1]) == this.Id)
-                            {
-                                SteelBase newObject = new SteelBase(this);
-                                newObject.OpenFromDataSet(dataSet, Convert.ToInt32(childTable.Rows[j].ItemArray[0]));
-                            }
-                        }
-                    }
-                }
-            }
+            DataTable dataTable = dataSet.Tables[GetTableName()];
+            var level = (from dataRow in dataTable.AsEnumerable()
+                            where dataRow.Field<int>("Id") == Id
+                            select dataRow).Single();
+            OpenFromDataSet(level);
         }
-
+        /// <summary>
+        /// Обновляет запись в соответствии со строкой датасета
+        /// </summary>
+        /// <param name="dataRow"></param>
+        public void OpenFromDataSet(DataRow dataRow)
+        {
+            Id = dataRow.Field<int>("Id");
+            Name = dataRow.Field<string>("Name");
+            Elevation = dataRow.Field<double>("FloorLevel");
+            Height = dataRow.Field<double>("Height");
+            TopOffset = dataRow.Field<double>("TopOffset");
+            BasePointX = dataRow.Field<double>("BasePointX");
+            BasePointY = dataRow.Field<double>("BasePointY");
+            BasePointZ = dataRow.Field<double>("BasePointZ");
+        }
+        /// <summary>
+        /// Удаляет запись из датасета
+        /// </summary>
+        /// <param name="dataSet"></param>
+        public void DeleteFromDataSet(DataSet dataSet)
+        {
+            foreach (IDsSaveable child in Children)
+            {
+                child.DeleteFromDataSet(dataSet);
+            }
+            DsOperation.DeleteRow(dataSet, GetTableName(), Id);
+        }
+        #endregion
+        /// <summary>
+        /// Конструктор без параметров
+        /// </summary>
         public Level ()
         {
             Walls = new ObservableCollection<Wall>();
-            SteelBases = new ObservableCollection<SteelBase>();
+            Children = new ObservableCollection<IHasParent>();
         }
 
+        /// <summary>
+        /// Конструктор по зданию
+        /// </summary>
+        /// <param name="building"></param>
         public Level (Building building)
         {
-            if (Id == 0) { Id = ProgrammSettings.CurrentId; }
-            else {
-                this.Id = Id;
-            }         
-            BuildingId = building.Id;
+            Id = ProgrammSettings.CurrentId;
             Name = "Этаж 1";
-            Building = building;
-            building.Levels.Add(this);
-            FloorLevel = 0;
-            Height = 3000;
-            TopOffset = -200;
-            Walls = new ObservableCollection<Wall>();
-            SteelBases = new ObservableCollection<SteelBase>();
+            RegisterParent(building);
+            Elevation = 0;
+            Height = 3;
+            TopOffset = -0.2;
+            //Walls = new ObservableCollection<Wall>();
+            Children = new ObservableCollection<IHasParent>();
         }
 
+        /// <summary>
+        /// Метод клонирования
+        /// </summary>
+        /// <returns></returns>
         public object Clone()
         {
             return this.MemberwiseClone();
+        }
+
+        public void RegisterParent(IDsSaveable parent)
+        {
+            Building building = parent as Building;
+            building.Children.Add(this);
+            ParentMember = parent;
+        }
+
+        public void UnRegisterParent()
+        {
+            Building building = ParentMember as Building;
+            building.Children.Remove(this);
+            ParentMember = null;
         }
     }
 }

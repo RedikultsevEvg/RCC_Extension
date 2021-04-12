@@ -64,7 +64,7 @@ namespace RDBLL.Entity.RCC.WallAndColumn
             VertSpacingSetting = new BarSpacingSettings(1);
             HorSpacingSetting = new BarSpacingSettings(2);
             Building = building;
-            building.WallTypeList.Add(this);
+/*            building.WallTypeList.Add(this)*/;
         }
         public WallType(Building building, XmlNode xmlNode)
         {

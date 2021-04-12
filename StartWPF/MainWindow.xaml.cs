@@ -15,12 +15,14 @@ using System.Windows.Shapes;
 using RDBLL.Common.Service;
 using RDUIL.WinForms;
 using winForms = System.Windows.Forms;
-using RDUIL.WPF_Windows.ControlClasses;
 using RDBLL.Entity.SC.Column;
 using System.Threading;
-using RDUIL.WPF_Windows;
+using RDStartWPF.Infrasructure.ControlClasses;
+using RDStartWPF.Views.Common.BuildingsAndSites;
+using RDStartWPF.Views.Common.Service;
+using RDStartWPF.Views.WinForms;
 
-namespace StartWPF
+namespace RDStartWPF
 {
     /// <summary>
     /// Логика взаимодействия для MainWindow.xaml
@@ -49,6 +51,12 @@ namespace StartWPF
             calcTypeSC.RegisterDelegate(new CalcType.AddCommandDelegate(AddItemWrapPanel));
             calcTypes.Add(calcTypeSC);
 
+            CalcType calcTypeSoil = new CalcType();
+            calcTypeSoil.TypeName = "Грунт";
+            calcTypeSoil.ImageName = "Soil.jpg";
+            calcTypeSoil.RegisterDelegate(new CalcType.AddCommandDelegate(AddItemWrapPanel));
+            calcTypes.Add(calcTypeSoil);
+
             foreach (CalcType calcType in calcTypes)
             {
                 CalcTypeControl calcTypeControl = new CalcTypeControl(calcType);
@@ -67,7 +75,20 @@ namespace StartWPF
             calcKindSteelBase.RegisterDelegate(new CalcKind.CommandDelegate(ShowSteelBase));
             calcTypeSC.CalcKinds.Add(calcKindSteelBase);
 
-            calcTypes[0].RunCommand();
+            CalcKind calcKindFoundation = new CalcKind();
+            calcKindFoundation.KindName = "Расчет столбчатых фундаментов";
+            calcKindFoundation.KindAddition = "Расчет параметров фундаментов с учетом давления под подошвой";
+            calcKindFoundation.RegisterDelegate(new CalcKind.CommandDelegate(ShowFoundation));
+            calcTypeSoil.CalcKinds.Add(calcKindFoundation);
+
+            try
+            {
+                calcTypes[0].RunCommand();
+            }
+            catch (Exception ex)
+            {
+                CommonErrorProcessor.ShowErrorMessage("Неизвестная ошибка, см. техническую информацию", ex);
+            }
         }
 
         private void btnSave_Click(object sender, RoutedEventArgs e)
@@ -121,8 +142,8 @@ namespace StartWPF
 
         private static void ShowWall()
         {
-            var detailObjectList = new DetailObjectList("Levels", ProgrammSettings.BuildingSite.Buildings[0],
-            ProgrammSettings.BuildingSite.Buildings[0].Levels, false);
+            var detailObjectList = new DetailObjectList("Levels", ProgrammSettings.BuildingSite.Children[0],
+            ProgrammSettings.BuildingSite.Children[0].Children, false);
             detailObjectList.BtnVisibilityList = new List<short>() { 1, 1, 0, 1, 1, 1, 1, 0, 1, 0, 0, 0 };
             frmDetailList DetailForm = new frmDetailList(detailObjectList);
             DetailForm.Show();
@@ -130,11 +151,17 @@ namespace StartWPF
 
         private static void ShowSteelBase()
         {
-            var detailObjectList = new DetailObjectList("Levels", ProgrammSettings.BuildingSite.Buildings[0],
-            ProgrammSettings.BuildingSite.Buildings[0].Levels, false);
-            detailObjectList.BtnVisibilityList = new List<short>() { 1, 1, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0 };
-            frmDetailList DetailForm = new frmDetailList(detailObjectList);
-            DetailForm.Show();
+            wndLevels wndLevels = new wndLevels(ProgrammSettings.BuildingSite.Children[0], ProgrammSettings.BuildingSite.Children[0].Children, LvlChildType.SteelBase);
+            wndLevels.ShowDialog();
+        }
+
+        /// <summary>
+        /// Вызов окна уровней для ввода фундаментов
+        /// </summary>
+        private static void ShowFoundation()
+        {
+            wndLevels wndLevels = new wndLevels(ProgrammSettings.BuildingSite.Children[0], ProgrammSettings.BuildingSite.Children[0].Children, LvlChildType.Foundation);
+            wndLevels.ShowDialog();
         }
 
         /// <summary>
