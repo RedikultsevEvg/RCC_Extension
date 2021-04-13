@@ -86,21 +86,6 @@ namespace RDBLL.Entity.SC.Column
 
         #region Constructors
         /// <summary>
-        /// Метод настройки параметров по умолчания
-        /// </summary>
-        public void SetDefault()
-        {
-            Id = ProgrammSettings.CurrentId;
-            Name = "Новый участок";
-            Width = 0.2;
-            Length = 0.2;
-            FixLeft = false;
-            FixRight = false;
-            FixTop = false;
-            FixBottom = false;
-            Center = new Point2D();
-        }
-        /// <summary>
         /// Конструктор без параметров
         /// </summary>
         public SteelBasePart(bool genId = false)
@@ -112,10 +97,18 @@ namespace RDBLL.Entity.SC.Column
         /// Конструктор по стальной базе
         /// </summary>
         /// <param name="parent"></param>
-        public SteelBasePart(SteelBase parent)
+        public SteelBasePart(IDsSaveable parent)
         {
+            Id = ProgrammSettings.CurrentId;
             RegisterParent(parent);
-            SetDefault();
+            Name = "Новый участок";
+            Width = 0.2;
+            Length = 0.2;
+            FixLeft = false;
+            FixRight = false;
+            FixTop = false;
+            FixBottom = false;
+            Center = new Point2D();
         }
         #endregion
         #region IODataSet
@@ -192,15 +185,21 @@ namespace RDBLL.Entity.SC.Column
         /// <param name="parent"></param>
         public void RegisterParent(IDsSaveable parent)
         {
-            SteelBase steelBase = parent as SteelBase;
-            ParentMember = steelBase;
-            steelBase.SteelBaseParts.Add(this);
+            ParentMember = parent;
+            if (parent is SteelBase)
+            {
+                SteelBase steelBase = parent as SteelBase;
+                steelBase.SteelBaseParts.Add(this);
+            }
         }
         //Удаление регистрации родителя
         public void UnRegisterParent()
         {
-            SteelBase steelBase = ParentMember as SteelBase;
-            steelBase.SteelBaseParts.Remove(this);
+            if (ParentMember is SteelBase)
+            {
+                SteelBase steelBase = ParentMember as SteelBase;
+                steelBase.SteelBaseParts.Remove(this);
+            }
             ParentMember = null;
         }
 
