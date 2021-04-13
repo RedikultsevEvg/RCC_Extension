@@ -146,7 +146,7 @@ namespace RDBLL.Common.Geometry.Mathematic
 
         public static Matrix operator *(Matrix matrix, Matrix matrix2)
         {
-            if (matrix.N != matrix2.M)
+             if (matrix.N != matrix2.M)
             {
                 throw new ArgumentException("matrixes can not be multiplied");
             }

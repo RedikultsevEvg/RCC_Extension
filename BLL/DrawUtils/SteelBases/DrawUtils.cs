@@ -35,6 +35,20 @@ namespace RDBLL.DrawUtils.SteelBases
                 axisX.StrokeThickness = 1;
                 axisX.StrokeDashArray = new DoubleCollection { 10, 4 };
                 canvas.Children.Add(axisX);
+
+                TextBlock axisText1 = new TextBlock();
+                axisText1.Text = "X";
+                axisText1.Foreground = Brushes.Red;
+                canvas.Children.Add(axisText1);
+                Canvas.SetLeft(axisText1, canvas.Width - axisText1.FontSize);
+                Canvas.SetTop(axisText1, canvas.Height / 2 - axisText1.FontSize * 1.2);
+
+                axisText1 = new TextBlock();
+                axisText1.Text = "X";
+                axisText1.Foreground = Brushes.Red;
+                canvas.Children.Add(axisText1);
+                Canvas.SetLeft(axisText1, axisText1.FontSize);
+                Canvas.SetTop(axisText1, canvas.Height / 2 - axisText1.FontSize * 1.2);
             }
 
             //Рисуем ось Y
@@ -49,6 +63,20 @@ namespace RDBLL.DrawUtils.SteelBases
                 axisY.StrokeThickness = 1;
                 axisY.StrokeDashArray = new DoubleCollection { 10, 4 };
                 canvas.Children.Add(axisY);
+
+                TextBlock axisText1 = new TextBlock();
+                axisText1.Text = "Y";
+                axisText1.Foreground = Brushes.Red;
+                canvas.Children.Add(axisText1);
+                Canvas.SetLeft(axisText1, canvas.Width / 2 + axisText1.FontSize * 0.2);
+                Canvas.SetTop(axisText1, axisText1.FontSize * 0.4);
+
+                axisText1 = new TextBlock();
+                axisText1.Text = "Y";
+                axisText1.Foreground = Brushes.Red;
+                canvas.Children.Add(axisText1);
+                Canvas.SetLeft(axisText1, canvas.Width / 2 + axisText1.FontSize * 0.2);
+                Canvas.SetTop(axisText1, canvas.Height - axisText1.FontSize * 1.2);
             }
 
         }
