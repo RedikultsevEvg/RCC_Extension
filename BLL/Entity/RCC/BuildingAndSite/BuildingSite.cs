@@ -125,7 +125,6 @@ namespace RDBLL.Entity.RCC.BuildingAndSite
             {
                 MessageBox.Show("Для объекта не задано ни одного грунта", "Будет создан грунт по умолчанию");
                 Soil soil = new ClaySoil(this);
-                Soils.Add(soil);
                 soil.SaveToDataSet(ProgrammSettings.CurrentDataSet, true);
                 ProgrammSettings.IsDataChanged = true;
                 return soil;
