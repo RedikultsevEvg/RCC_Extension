@@ -49,6 +49,9 @@ namespace RDBLL.Entity.SC.Column
         /// Флаг расчета по упрощенному методу
         /// </summary>
         public bool UseSimpleMethod { get; set; }
+        /// <summary>
+        /// Паттерн для стальной базы
+        /// </summary>
         public PatternBase Pattern { get; set; }
         /// <summary>
         /// Коллекция групп нагрузок
@@ -62,7 +65,13 @@ namespace RDBLL.Entity.SC.Column
         /// Коллекция болтов
         /// </summary>
         public ObservableCollection<SteelBolt> SteelBolts { get; set; }
+        /// <summary>
+        /// Использование класса бетона
+        /// </summary>
         public ConcreteUsing Concrete { get; set; }
+        /// <summary>
+        /// Использование класса стали
+        /// </summary>
         public SteelUsing Steel { get; set; }
         /// <summary>
         /// Наименование единиц измерения
@@ -152,10 +161,8 @@ namespace RDBLL.Entity.SC.Column
         public void SaveToDataSet(DataSet dataSet, bool createNew)
         {
             DataRow row = EntityOperation.SaveEntity(dataSet, createNew, this);
-            #region
             row.SetField("IsActual", IsActual);
             row.SetField("UseSimpleMethod", UseSimpleMethod);
-            #endregion
             row.AcceptChanges();
             if (Pattern is null)
             {
@@ -194,7 +201,9 @@ namespace RDBLL.Entity.SC.Column
         /// <param name="dataSet"></param>
         public void DeleteFromDataSet(DataSet dataSet)
         {
+            //Участки являются простым элементом, удаляем просто так
             DsOperation.DeleteRow(dataSet, "SteelBaseParts", "ParentId", Id);
+            //Болт не является простым элементом, поэтому удалять его просто из таблицы нельзя
             foreach (SteelBolt bolt in SteelBolts)
             {
                 bolt.DeleteFromDataSet(dataSet);
