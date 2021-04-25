@@ -10,6 +10,7 @@ using RDBLL.Common.Geometry;
 using RDBLL.Common.Service.DsOperations;
 using RDBLL.Entity.MeasureUnits;
 using RDBLL.Common.Interfaces.Shapes;
+using RDBLL.Entity.SC.Column.SteelBases;
 
 namespace RDBLL.Entity.SC.Column
 {
@@ -191,6 +192,11 @@ namespace RDBLL.Entity.SC.Column
                 SteelBase steelBase = parent as SteelBase;
                 steelBase.SteelBaseParts.Add(this);
             }
+            if (parent is SteelBasePartGroup)
+            {
+                SteelBasePartGroup partGroup = parent as SteelBasePartGroup;
+                partGroup.SteelBaseParts.Add(this);
+            }
         }
         //Удаление регистрации родителя
         public void UnRegisterParent()
@@ -199,6 +205,11 @@ namespace RDBLL.Entity.SC.Column
             {
                 SteelBase steelBase = ParentMember as SteelBase;
                 steelBase.SteelBaseParts.Remove(this);
+            }
+            if (ParentMember is SteelBasePartGroup)
+            {
+                SteelBasePartGroup partGroup = ParentMember as SteelBasePartGroup;
+                partGroup.SteelBaseParts.Remove(this);
             }
             ParentMember = null;
         }

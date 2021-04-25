@@ -8,9 +8,11 @@ using System.Windows;
 
 namespace RDStartWPF.ViewModels.Base
 {
-    internal abstract class ViewModelDialog : ViewModelBase
+    internal class ViewModelDialog : ViewModelBase
     {
         public Window Window;
+        public Action BeforeOk;
+
         private CommandBase _CloseOkAction;
         private CommandBase _CloseCancelAction;
         public CommandBase CloseOkAction
@@ -22,6 +24,7 @@ namespace RDStartWPF.ViewModels.Base
                         newObject =>
                         {
                             BeforeOkClose();
+                            if (BeforeOk != null) BeforeOk.Invoke();
                             Window.DialogResult = true;
                             Window.Close();
                         },
@@ -47,6 +50,9 @@ namespace RDStartWPF.ViewModels.Base
                     );
             }
         }
+
+        public override string this[string columnName] => throw new NotImplementedException();
+
         /// <summary>
         /// Метод для выполнени необходимых действий перед закрытием окна
         /// </summary>
@@ -62,6 +68,11 @@ namespace RDStartWPF.ViewModels.Base
         public virtual void BeforeCancelClose(object obj = null)
         {
 
+        }
+
+        public ViewModelDialog(Window window)
+        {
+            Window = window;
         }
     }
 }

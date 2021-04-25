@@ -45,6 +45,12 @@ namespace RDStartWPF.Views.Common.BuildingsAndSites
                         ChildPng.SetResourceReference(Image.SourceProperty, "IconBase40");
                         break;
                     }
+                case LvlChildType.SteelBasePartGroup:
+                    {
+                        BtnChildItem.ToolTip = "Новая группа участвов базы стальной колонны";
+                        ChildPng.SetResourceReference(Image.SourceProperty, "IconBase40");
+                        break;
+                    }
                 case LvlChildType.Foundation:
                     {
                         BtnChildItem.ToolTip = "Новый столбчатый фундамент";

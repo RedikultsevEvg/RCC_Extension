@@ -12,5 +12,9 @@ namespace RDBLL.Entity.MeasureUnits
         /// Наименование линейных единиц измерения
         /// </summary>
         public string Linear { get => MeasureUnitConverter.GetUnitLabelText(0); }
+        /// <summary>
+        /// Наименование единицы измерения для напряжений/давления
+        /// </summary>
+        public string Stress { get => MeasureUnitConverter.GetUnitLabelText(3); }
     }
 }

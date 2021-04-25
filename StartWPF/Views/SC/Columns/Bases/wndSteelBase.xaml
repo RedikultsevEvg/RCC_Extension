@@ -52,7 +52,7 @@
                         <TextBlock x:Name="tbThickness" Grid.Row="1" Style="{StaticResource PropertyTextBlock}" Text="Толщина"/>
                         <TextBlock x:Name="tbUseSimpleMethod" Grid.Row="2" Style="{StaticResource PropertyTextBlock}" Text="Упрощенный метод"/>
                         <TextBox x:Name="tbxName" Grid.Column="1" Style="{StaticResource PropertyTextBoxError}" Text="{Binding Name, ValidatesOnDataErrors=True}"/>
-                        <TextBox x:Name="tbxThickness" Grid.Row="1" Grid.Column="1" Style="{StaticResource PropertyTextBoxError}" Text="{Binding Path=Height, Converter={StaticResource LinearSizeConverter}, ValidatesOnDataErrors=True}"/>
+                        <TextBox x:Name="tbxThickness" Grid.Row="1" Grid.Column="1" Style="{StaticResource PropertyTextBoxError}" Text="{Binding Path=Height, ValidatesOnDataErrors=True}"/>
                         <CheckBox Grid.Column="1" Grid.Row="2" x:Name="cbUseSimpleMethod" IsChecked="{Binding Path=Base.UseSimpleMethod}" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5,0,0,0"/>
                         <TextBlock Grid.Column="2" Grid.Row="1" x:Name="tbThicknessMeasure" Style="{StaticResource PropertyTextBlock}" Text="мм" />
                     </Grid>

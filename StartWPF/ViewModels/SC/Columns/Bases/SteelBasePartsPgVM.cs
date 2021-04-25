@@ -16,6 +16,7 @@ namespace RDStartWPF.ViewModels.SC.Columns.Bases
     {
         private IDsSaveable _Parent;
         public ObservableCollection<SteelBasePart> Collection { get; set; }
+        public bool IsCenterVisible { get; private set; }
         private SteelBasePart _SelectedItem;
         private CommandBase _AddCommand;
         private CommandBase _RemoveCommand;
@@ -62,10 +63,17 @@ namespace RDStartWPF.ViewModels.SC.Columns.Bases
 
         public override string this[string columnName] => throw new NotImplementedException();
 
-        public SteelBasePartsPgVM(ObservableCollection<SteelBasePart> parts, IDsSaveable parent)
+        /// <summary>
+        /// Конструктор вьюмодели
+        /// </summary>
+        /// <param name="parts">Коллекция частей</param>
+        /// <param name="parent">Ссылка на родительский элемент</param>
+        /// <param name="showCenter">Флаг показа координат центра</param>
+        public SteelBasePartsPgVM(ObservableCollection<SteelBasePart> parts, IDsSaveable parent, bool showCenter = true)
         {
             _Parent = parent;
             Collection = parts;
+            IsCenterVisible = showCenter;
             if (Collection.Count() > 0) { _SelectedItem = Collection[0]; }
         }
     }

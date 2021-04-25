@@ -188,6 +188,7 @@
     <Compile Include="Entity\SC\Column\SteelBases\Builders\BuilderPattern3.cs" />
     <Compile Include="Entity\SC\Column\SteelBases\Builders\BuilderTempate1.cs" />
     <Compile Include="Entity\SC\Column\SteelBases\Factories\BoltFactProc.cs" />
+    <Compile Include="Entity\SC\Column\SteelBases\Factories\GroupFactory.cs" />
     <Compile Include="Entity\SC\Column\SteelBases\Factories\MatFactProc.cs" />
     <Compile Include="Entity\SC\Column\SteelBases\Patterns\PatternBase.cs" />
     <Compile Include="Entity\SC\Column\SteelBases\Factories\PartFactProc.cs" />
@@ -195,6 +196,7 @@
     <Compile Include="Entity\SC\Column\SteelBases\Patterns\PatternType1.cs" />
     <Compile Include="Entity\SC\Column\SteelBases\Patterns\PatternType2.cs" />
     <Compile Include="Entity\SC\Column\SteelBases\Patterns\PatternType3.cs" />
+    <Compile Include="Entity\SC\Column\SteelBases\Processors\SteelBasePartGroupProcessor.cs" />
     <Compile Include="Entity\SC\Column\SteelBases\Processors\SteelBaseViewStressProcessor.cs" />
     <Compile Include="Entity\SC\Column\SteelBases\SteelBasePartGroup.cs" />
     <Compile Include="Entity\SC\Column\SteelBolt.cs" />

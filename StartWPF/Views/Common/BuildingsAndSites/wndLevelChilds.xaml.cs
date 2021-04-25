@@ -18,6 +18,11 @@ using RDBLL.Entity.RCC.Foundations;
 using RDStartWPF.Views.RCC.Foundations;
 using RDStartWPF.Views.SC.Columns.Bases;  
 using FoundBuilder = RDBLL.Entity.RCC.Foundations.Builders;
+using RDBLL.Entity.SC.Column.SteelBases.Factories;
+using RDBLL.Entity.SC.Column.SteelBases;
+using RDStartWPF.Views.Common.Service;
+using RDBLL.Common.Service.DsOperations;
+using System.Data;
 
 namespace RDStartWPF.Views.Common.BuildingsAndSites
 {
@@ -78,6 +83,32 @@ namespace RDStartWPF.Views.Common.BuildingsAndSites
                         List<PatternCard> patternCards = SelectPatternProcessor.SelectSteelBasePattern(_level);
                         WndPatternSelect wndPatternSelect = new WndPatternSelect(patternCards);
                         wndPatternSelect.ShowDialog();
+                        break;
+                    }
+                case LvlChildType.SteelBasePartGroup:
+                    {
+                        SteelBasePartGroup newItem =  GroupFactory.GetSteelBasePartGroup(GroupType.Type1);
+                        newItem.RegisterParent(_level);
+                        newItem.SaveToDataSet(ProgrammSettings.CurrentDataSet, true);
+                        WndCommonDialog dialog = new WndCommonDialog(newItem);
+                        dialog.ShowDialog();
+                        if (dialog.DialogResult == true)
+                        {
+                            try
+                            {
+                                newItem.SaveToDataSet(ProgrammSettings.CurrentDataSet, false);
+                                ProgrammSettings.IsDataChanged = true;
+                            }
+                            catch (Exception ex)
+                            {
+                                CommonErrorProcessor.ShowErrorMessage("Ошибка сохранения в элементе: " + newItem.Name, ex);
+                            }
+                        }
+                        else
+                        {
+                            newItem.UnRegisterParent();
+                            newItem.DeleteFromDataSet(ProgrammSettings.CurrentDataSet);
+                        }
                         break;
                     }
                 case LvlChildType.Foundation:
@@ -146,6 +177,8 @@ namespace RDStartWPF.Views.Common.BuildingsAndSites
             {
                 int a = LvMain.SelectedIndex;
                 bool dialogResult = false;
+                IDsSaveable item = _collection[a];
+                    
                 if (_collection[a] is SteelBase)
                 {
                     SteelBase child = _collection[a] as SteelBase;
@@ -153,7 +186,13 @@ namespace RDStartWPF.Views.Common.BuildingsAndSites
                     wnd.ShowDialog();
                     if (wnd.DialogResult == true) dialogResult = true;
                 }
-                if (_collection[a] is Foundation)
+                else if (item is SteelBasePartGroup)
+                {
+                    WndCommonDialog dialog = new WndCommonDialog(item);
+                    dialog.ShowDialog();
+                    if (dialog.DialogResult == true) dialogResult = true;
+                }
+                else if (_collection[a] is Foundation)
                 {
                     Foundation child = _collection[a] as Foundation;
                     wndFoundation wnd = new wndFoundation(child);
@@ -175,7 +214,8 @@ namespace RDStartWPF.Views.Common.BuildingsAndSites
                 }
                 else
                 {
-                    _collection[a].OpenFromDataSet(ProgrammSettings.CurrentDataSet);
+                    DataRow row = DsOperation.OpenFromDataSetById(ProgrammSettings.CurrentDataSet, item);
+                    _collection[a].OpenFromDataSet(row);
                 }
             }
             else

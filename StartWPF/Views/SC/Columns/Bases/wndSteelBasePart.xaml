@@ -163,7 +163,6 @@
                 <Image x:Name="Refresh_png" Style="{StaticResource ServiceButtonImage}" Source="{DynamicResource IconRefresh40}"/>
             </Button>
         </StackPanel>
-
         <StackPanel Height="60" Grid.Row="1" Margin="0,10,10,10" Orientation="Horizontal" HorizontalAlignment="Right" Background="#FFE2E2E2" Grid.Column="2">
             <Button x:Name="btnOK" Style="{StaticResource OkServiceButton}" HorizontalAlignment="Stretch" Click="btnOK_Click">
                 <Button.Effect>

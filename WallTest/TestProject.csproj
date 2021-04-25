@@ -47,6 +47,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Data" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Forces\LoadCase.cs" />
@@ -63,6 +64,7 @@
     <Compile Include="SC\SteelBasePart\CheckMoment\TwoSides.cs" />
     <Compile Include="SC\CheckSteelBase\CheckPressure\Pressure.cs" />
     <Compile Include="SC\SteelBases\SteelBaseFactory.cs" />
+    <Compile Include="SC\SteelBases\PartGroup.cs" />
     <Compile Include="WallTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

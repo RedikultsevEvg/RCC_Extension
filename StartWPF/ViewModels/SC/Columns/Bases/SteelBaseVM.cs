@@ -32,11 +32,11 @@ namespace RDStartWPF.ViewModels.SC.Columns.Bases
         }
         public double Height
         {
-            get => Base.Height;
+            get => Base.Height * 1000.0;
             set
             {
                 double d = Base.Height;
-                if (SetProperty(ref d, value))
+                if (SetProperty(ref d, value / 1000.0))
                 {
                     Base.Height = d;
                 }
@@ -172,7 +172,7 @@ namespace RDStartWPF.ViewModels.SC.Columns.Bases
                         break;
                     case "Height":
                         {
-                            if (Height < 0.005 || Height>0.2)
+                            if (Height / 1000.0 < 0.005 || Height / 1000.0 > 0.2)
                             {
                                 error = "Неверная толщина элемента";
                             }
@@ -183,7 +183,7 @@ namespace RDStartWPF.ViewModels.SC.Columns.Bases
                 return error;
             }
         }
-        public SteelBaseVM(SteelBase _base, Window wnd)
+        public SteelBaseVM(SteelBase _base, Window wnd) : base (wnd)
         {
             Base = _base;
             Window = wnd;

@@ -27,7 +27,7 @@ namespace Test.SC.SteelBasePart.CheckMoment
             basePart.FixTop = true;
             basePart.FixBottom = true;
 
-            double Actual = SteelBasePartProcessor.GetResult(basePart, maxStress);
+            double Actual = SteelBasePartProcessor.GetMoment(basePart, maxStress);
             double Expected = 32400;
 
             Assert.AreEqual(Expected, Actual, Expected / 1000);
@@ -51,7 +51,7 @@ namespace Test.SC.SteelBasePart.CheckMoment
             basePart.FixTop = true;
             basePart.FixBottom = true;
 
-            double Actual = SteelBasePartProcessor.GetResult(basePart, maxStress);
+            double Actual = SteelBasePartProcessor.GetMoment(basePart, maxStress);
             double Expected = 32400;
 
             Assert.AreEqual(Expected, Actual, Expected / 1000);
@@ -76,7 +76,7 @@ namespace Test.SC.SteelBasePart.CheckMoment
             basePart.FixTop = true;
             basePart.FixBottom = true;
 
-            double Actual = SteelBasePartProcessor.GetResult(basePart, maxStress);
+            double Actual = SteelBasePartProcessor.GetMoment(basePart, maxStress);
             double Expected = 0.8 * ((maxStress / 1 / 1) * width * width / 8);
 
             Assert.AreEqual(Expected, Actual, Expected / 1000);
@@ -101,7 +101,7 @@ namespace Test.SC.SteelBasePart.CheckMoment
             basePart.FixTop = true;
             basePart.FixBottom = true;
 
-            double Actual = SteelBasePartProcessor.GetResult(basePart, maxStress);
+            double Actual = SteelBasePartProcessor.GetMoment(basePart, maxStress);
             double Expected = (maxStress / 1 / 1) * width * width / 8;
 
             Assert.AreEqual(Expected, Actual, Expected / 1000);

@@ -128,6 +128,7 @@
     <Compile Include="ViewModels\Common\Parameters\ParametersVM.cs" />
     <Compile Include="ViewModels\MatUsings\MatUsingVM.cs" />
     <Compile Include="ViewModels\MatUsings\SafetyFactorsVM.cs" />
+    <Compile Include="ViewModels\SC\Columns\Bases\SteelBasePartGroupPgVM.cs" />
     <Compile Include="ViewModels\SC\Columns\Bases\SteelBasePartsPgVM.cs" />
     <Compile Include="ViewModels\SC\Columns\Bases\SteelBaseVM.cs" />
     <Compile Include="ViewModels\Soils\SoilSections\SoilSectionUsingVM.cs" />
@@ -148,6 +149,12 @@
     <Compile Include="Views\Common\Patterns\WndPatternSelect.xaml.cs">
       <DependentUpon>WndPatternSelect.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\Common\Service\WndCommonDialog.xaml.cs">
+      <DependentUpon>WndCommonDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Common\Service\WndReportList.xaml.cs">
+      <DependentUpon>WndReportList.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\MatUsings\WndSafetyFactors.xaml.cs">
       <DependentUpon>WndSafetyFactors.xaml</DependentUpon>
     </Compile>
@@ -158,11 +165,17 @@
     <Compile Include="Views\Common\Patterns\UserControls\PatternCardControl.xaml.cs">
       <DependentUpon>PatternCardControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\SC\Columns\Bases\PgSteelBasePartGroup.xaml.cs">
+      <DependentUpon>PgSteelBasePartGroup.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\SC\Columns\Bases\pgSteelBaseParts.xaml.cs">
       <DependentUpon>pgSteelBaseParts.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\SC\Columns\Bases\wndSteelBase.xaml.cs">
       <DependentUpon>wndSteelBase.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\SC\Columns\Bases\WndSteelBasePartGroup.xaml.cs">
+      <DependentUpon>WndSteelBasePartGroup.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\WinForms\BarSpacingSettings.cs">
       <SubType>Form</SubType>
@@ -357,6 +370,14 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\Common\Service\WndCommonDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Common\Service\WndReportList.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\MatUsings\WndSafetyFactors.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -369,6 +390,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\SC\Columns\Bases\PgSteelBasePartGroup.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\SC\Columns\Bases\pgSteelBaseParts.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -376,6 +401,10 @@
     <Page Include="Views\SC\Columns\Bases\wndSteelBase.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\SC\Columns\Bases\WndSteelBasePartGroup.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Soils\UserControls\SoilCardControl.xaml">
       <Generator>MSBuild:Compile</Generator>

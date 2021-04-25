@@ -27,15 +27,7 @@ namespace RDBLL.Common.Service
         public static DataRow SaveEntity(DataSet dataSet, bool createNew, IDsSaveable entity)
         {
             string tableName = entity.GetTableName();
-            DataTable dataTable;
-            //Если датасет содержит нужную таблиц, то получаем ее
-            if (dataSet.Tables.Contains(tableName)) { dataTable = dataSet.Tables[tableName]; }
-            //Иначе создаем нужную таблицу
-            else
-            {
-                dataTable = new DataTable(tableName);
-                dataSet.Tables.Add(dataTable);
-            }
+            DataTable dataTable = DsOperation.GetDataTable(dataSet, tableName);
             DataRow row = DsOperation.CreateNewRow(entity.Id, createNew, dataTable);
             DsOperation.SetField(row, "Id", entity.Id);
             if (! string.IsNullOrEmpty(entity.Name)) DsOperation.SetField(row, "Name", entity.Name);
@@ -43,7 +35,7 @@ namespace RDBLL.Common.Service
             if (entity is IHasParent)
             {
                 IHasParent child = entity as IHasParent;
-                DsOperation.SetField(row, "ParentId", child.ParentMember.Id);
+                if (child.ParentMember != null) DsOperation.SetField(row, "ParentId", child.ParentMember.Id);
             }
             //Сохраняем детей
             if (entity is IHasChildren)
@@ -98,7 +90,7 @@ namespace RDBLL.Common.Service
             if (entity is IHasHeight) //Сохранение стали
             {
                 IHasHeight obj = entity as IHasHeight;
-                row.SetField("Height", obj.Height);
+                DsOperation.SetField(row, "Height", obj.Height);
             }
             //Сохранение расположения элементов
             if (entity is IHasPlacement)
@@ -118,6 +110,7 @@ namespace RDBLL.Common.Service
         }
         public static void SetProps(DataRow row, IDsSaveable entity)
         {
+            DataTable table = row.Table;
             entity.Id = row.Field<int>("Id");
             entity.Name = row.Field<string>("Name");
             if (entity is IShape)
@@ -145,7 +138,9 @@ namespace RDBLL.Common.Service
             if (entity is IHasHeight)
             {
                 IHasHeight obj = entity as IHasHeight;
-                obj.Height = row.Field<double>("Height");
+                string columnName = "Height";
+                if (!table.Columns.Contains(columnName)) {DsOperation.AddDoubleColumn(table, columnName);}
+                obj.Height = row.Field<double>(columnName);
             }
             if (entity is IHasStoredParams)
             {

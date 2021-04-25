@@ -6,6 +6,7 @@ using RDBLL.Common.Service.DsOperations;
 using RDBLL.Entity.Common.Materials.SteelMaterialUsing;
 using RDBLL.Entity.MeasureUnits;
 using RDBLL.Entity.RCC.BuildingAndSite;
+using RDBLL.Entity.SC.Column.SteelBases.Factories;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -23,6 +24,9 @@ namespace RDBLL.Entity.SC.Column.SteelBases
     {
 
         #region Properties
+        /// <summary>
+        /// Код элемента
+        /// </summary>
         public int Id { get; set ; }
         /// <summary>
         /// Обратная ссылка на родительский элемент
@@ -53,17 +57,21 @@ namespace RDBLL.Entity.SC.Column.SteelBases
         /// </summary>
         public double Pressure { get; set; }
         /// <summary>
-        /// Наименование единиц измерения
+        /// Коллекция строк для протокола расчета
         /// </summary>
-        public MeasureUnitList Measures { get => new MeasureUnitList(); }
+        public List<string> ReportList { get; set; }
         #endregion
         #region Constructor
+        /// <summary>
+        /// Конструктор по умолчанию
+        /// </summary>
+        /// <param name="genId"></param>
         public SteelBasePartGroup (bool genId = false)
         {
             if (genId) Id = ProgrammSettings.CurrentId;
             IsActual = false;
             SteelBaseParts = new ObservableCollection<SteelBasePart>();
-#error Создать добавление материалов - класса стали
+            MatFactProc.GetMatType(this, MatType.SteelBasePartGroup);
         }
         #endregion
         /// <summary>
@@ -73,11 +81,15 @@ namespace RDBLL.Entity.SC.Column.SteelBases
         public object Clone()
         {
             SteelBasePartGroup newObject = this.MemberwiseClone() as SteelBasePartGroup;
+            newObject.Id = ProgrammSettings.CurrentId;
             newObject.SteelBaseParts = new ObservableCollection<SteelBasePart>();
             foreach (SteelBasePart part in SteelBaseParts)
             {
-                newObject.SteelBaseParts.Add(part.Clone() as SteelBasePart);
+                SteelBasePart newPart = part.Clone() as SteelBasePart;
+                newPart.UnRegisterParent();
+                newPart.RegisterParent(newObject);
             }
+            newObject.Steel = this.Steel.Clone() as SteelUsing;
             return newObject;
         }
         /// <summary>
@@ -95,7 +107,7 @@ namespace RDBLL.Entity.SC.Column.SteelBases
         /// Возвращает имя таблицы
         /// </summary>
         /// <returns></returns>
-        public string GetTableName() { return "SteelBasePartGroup"; }
+        public string GetTableName() { return "SteelBasePartGroups"; }
         /// <summary>
         /// Открывает запись из датасета
         /// </summary>
@@ -111,6 +123,9 @@ namespace RDBLL.Entity.SC.Column.SteelBases
         public void OpenFromDataSet(DataRow dataRow)
         {
             EntityOperation.SetProps(dataRow, this);
+            double pressure = 0;
+            DsOperation.Field(dataRow, ref pressure, "Pressure", 0);
+            Pressure = pressure;
             IsActual = false;
         }
         /// <summary>
@@ -131,7 +146,7 @@ namespace RDBLL.Entity.SC.Column.SteelBases
         public void SaveToDataSet(DataSet dataSet, bool createNew)
         {
             DataRow row = EntityOperation.SaveEntity(dataSet, createNew, this);
-            row.SetField("IsActual", IsActual);
+            DsOperation.SetField(row, "Pressure", Pressure);
             row.AcceptChanges();
             foreach (SteelBasePart steelBasePart in SteelBaseParts)
             {

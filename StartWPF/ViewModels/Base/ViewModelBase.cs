@@ -1,4 +1,5 @@
-﻿using System;
+﻿using RDBLL.Entity.MeasureUnits;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -12,6 +13,11 @@ namespace RDStartWPF.ViewModels.Base
     internal abstract class ViewModelBase : INotifyPropertyChanged, IDataErrorInfo
     {
         private ICommand _Command;
+
+        /// <summary>
+        /// Наименование единиц измерения
+        /// </summary>
+        public MeasureUnitList Measures { get => new MeasureUnitList(); }
 
         public abstract string this[string columnName] { get; }
 

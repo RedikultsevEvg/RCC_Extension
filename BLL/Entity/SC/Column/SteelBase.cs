@@ -121,7 +121,7 @@ namespace RDBLL.Entity.SC.Column
             ConcreteNdmAreas = new List<NdmArea>();
             SteelNdmAreas = new List<NdmArea>();
             //Добавляем материалы
-            MatFactProc.GetMatType1(this);
+            MatFactProc.GetMatType(this, MatType.SteelBase);
         }
         /// <summary>
         /// Создает базу стальной колонны по указанному уровню
@@ -183,7 +183,7 @@ namespace RDBLL.Entity.SC.Column
         /// <param name="dataSet"></param>
         public void OpenFromDataSet(DataSet dataSet)
         {
-            OpenFromDataSet(DsOperation.OpenFromDataSetById(dataSet, GetTableName(), Id));
+            OpenFromDataSet(DsOperation.OpenFromDataSetById(dataSet, this));
         }
         /// <summary>
         /// Обновляет запись в соответствии со строкой датасета
@@ -217,27 +217,29 @@ namespace RDBLL.Entity.SC.Column
         /// <returns></returns>
         public object Clone()
         {
-            SteelBase steelBase = this.MemberwiseClone() as SteelBase;
-            steelBase.Id = ProgrammSettings.CurrentId;
-            steelBase.ForcesGroups = new ObservableCollection<ForcesGroup>();
+            SteelBase newObj = this.MemberwiseClone() as SteelBase;
+            newObj.Id = ProgrammSettings.CurrentId;
+            newObj.ForcesGroups = new ObservableCollection<ForcesGroup>();
             foreach (ForcesGroup load in ForcesGroups)
             {
                 ForcesGroup newLoad = load.Clone() as ForcesGroup;
-                newLoad.Owners.Add(steelBase);
-                steelBase.ForcesGroups.Add(newLoad);
+                newLoad.Owners.Add(newObj);
+                newObj.ForcesGroups.Add(newLoad);
             }
-            steelBase.SteelBolts = new ObservableCollection<SteelBolt>();
+            newObj.SteelBolts = new ObservableCollection<SteelBolt>();
             foreach (SteelBolt bolt in SteelBolts)
             {
-                steelBase.SteelBolts.Add(bolt.Clone() as SteelBolt);
+                newObj.SteelBolts.Add(bolt.Clone() as SteelBolt);
             }
-            steelBase.SteelBaseParts = new ObservableCollection<SteelBasePart>();
+            newObj.SteelBaseParts = new ObservableCollection<SteelBasePart>();
             foreach (SteelBasePart part in SteelBaseParts)
             {
-                steelBase.SteelBaseParts.Add(part.Clone() as SteelBasePart);
+                newObj.SteelBaseParts.Add(part.Clone() as SteelBasePart);
             }
-            if (this.Pattern != null) steelBase.Pattern = Pattern.Clone() as PatternBase;
-            return steelBase; 
+            newObj.Steel = this.Steel.Clone() as SteelUsing;
+            newObj.Concrete = this.Concrete.Clone() as ConcreteUsing;
+            if (this.Pattern != null) newObj.Pattern = Pattern.Clone() as PatternBase;
+            return newObj; 
         }
         /// <summary>
         /// Регистрация родителя
