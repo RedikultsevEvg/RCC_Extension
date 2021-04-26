@@ -1,15 +1,15 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Report ScriptLanguage="CSharp" ReportInfo.Created="08/11/2019 20:16:27" ReportInfo.Modified="01/25/2020 11:19:25" ReportInfo.CreatorVersion="2020.1.0.0">
+<Report ScriptLanguage="CSharp" ReportInfo.Created="08/11/2019 20:16:27" ReportInfo.Modified="03/27/2021 17:22:58" ReportInfo.CreatorVersion="2020.1.0.0">
   <Dictionary>
     <TableDataSource Name="LoadCases" ReferenceName="Data.LoadCases" DataType="System.Int32" Enabled="true">
       <Column Name="Id" DataType="System.Int32"/>
       <Column Name="Description" DataType="System.String"/>
-      <Column Name="SteelBaseId" DataType="System.Int32"/>
       <Column Name="PartialSafetyFactor" DataType="System.Double"/>
       <Column Name="ForceDescription" DataType="System.String"/>
       <Column Name="Name" DataType="System.String"/>
       <Column Name="CrcForceDescription" DataType="System.String"/>
       <Column Name="DesignForceDescription" DataType="System.String"/>
+      <Column Name="ParentId" DataType="System.Int32"/>
     </TableDataSource>
     <TableDataSource Name="LoadCasesForceParameters" ReferenceName="Data.LoadCasesForceParameters" DataType="System.Int32" Enabled="true">
       <Column Name="Id" DataType="System.Int32"/>
@@ -18,21 +18,21 @@
       <Column Name="Unit" DataType="System.String"/>
       <Column Name="CrcValue" DataType="System.Double"/>
       <Column Name="DesignValue" DataType="System.Double"/>
-      <Column Name="SteelBaseId" DataType="System.Int32"/>
       <Column Name="ElementName" DataType="System.String"/>
       <Column Name="LoadSetId" DataType="System.Int32"/>
       <Column Name="LoadSetName" DataType="System.String"/>
       <Column Name="Description" DataType="System.String"/>
+      <Column Name="ParentId" DataType="System.Int32"/>
     </TableDataSource>
     <TableDataSource Name="LoadSets" ReferenceName="Data.LoadSets" DataType="System.Int32" Enabled="true">
       <Column Name="Id" DataType="System.Int32"/>
-      <Column Name="SteelBaseId" DataType="System.Int32"/>
       <Column Name="Name" DataType="System.String"/>
       <Column Name="PartialSafetyFactor" DataType="System.Double"/>
       <Column Name="CrcForceDescription" DataType="System.String"/>
       <Column Name="DesignForceDescription" DataType="System.String"/>
       <Column Name="Description" DataType="System.String"/>
       <Column Name="ForceDescription" DataType="System.String"/>
+      <Column Name="ParentId" DataType="System.Int32"/>
     </TableDataSource>
     <TableDataSource Name="LoadSetsForceParameters" ReferenceName="Data.LoadSetsForceParameters" DataType="System.Int32" Enabled="true">
       <Column Name="Id" DataType="System.Int32"/>
@@ -44,8 +44,8 @@
       <Column Name="Unit" DataType="System.String"/>
       <Column Name="CrcValue" DataType="System.Double"/>
       <Column Name="DesignValue" DataType="System.Double"/>
-      <Column Name="SteelBaseId" DataType="System.Int32"/>
       <Column Name="ElementName" DataType="System.String"/>
+      <Column Name="ParentId" DataType="System.Int32"/>
     </TableDataSource>
     <TableDataSource Name="SteelBases" ReferenceName="Data.SteelBases" DataType="System.Int32" Enabled="true">
       <Column Name="Name" DataType="System.String"/>
@@ -58,37 +58,38 @@
       <Column Name="Picture" DataType="System.Byte[]" BindableControl="Picture"/>
       <Column Name="SteelStrength" DataType="System.Double"/>
       <Column Name="ConcreteStrength" DataType="System.Double"/>
-      <Column Name="Thickness" DataType="System.Double"/>
+      <Column Name="ParentId" DataType="System.Int32"/>
+      <Column Name="Height" DataType="System.Double"/>
     </TableDataSource>
     <TableDataSource Name="SteelBasesBolts" ReferenceName="Data.SteelBasesBolts" DataType="System.Int32" Enabled="true">
       <Column Name="Id" DataType="System.Int32"/>
-      <Column Name="SteelBaseId" DataType="System.Int32"/>
       <Column Name="Name" DataType="System.String"/>
       <Column Name="Diameter" DataType="System.Double"/>
       <Column Name="CenterX" DataType="System.Double"/>
       <Column Name="CenterY" DataType="System.Double"/>
       <Column Name="MaxStress" DataType="System.Double"/>
       <Column Name="MaxForce" DataType="System.Double"/>
+      <Column Name="ParentId" DataType="System.Int32"/>
     </TableDataSource>
     <TableDataSource Name="SteelBasesParts" ReferenceName="Data.SteelBasesParts" DataType="System.Int32" Enabled="true">
       <Column Name="Id" DataType="System.Int32"/>
       <Column Name="Name" DataType="System.String"/>
       <Column Name="Width" DataType="System.Double"/>
       <Column Name="Length" DataType="System.Double"/>
-      <Column Name="SteelBaseId" DataType="System.Int32"/>
       <Column Name="CenterX" DataType="System.Double"/>
       <Column Name="CenterY" DataType="System.Double"/>
       <Column Name="Picture" DataType="System.Byte[]" BindableControl="Picture"/>
       <Column Name="MaxBedStress" DataType="System.Double"/>
       <Column Name="MaxSteelStress" DataType="System.Double"/>
       <Column Name="RecomendedThickness" DataType="System.Double"/>
+      <Column Name="ParentId" DataType="System.Int32"/>
     </TableDataSource>
-    <Relation Name="SteelBases_SteelBasesParts" ParentDataSource="SteelBases" ChildDataSource="SteelBasesParts" ParentColumns="Id" ChildColumns="SteelBaseId" Enabled="true"/>
-    <Relation Name="SteelBases_LoadCases" ParentDataSource="SteelBases" ChildDataSource="LoadCases" ParentColumns="Id" ChildColumns="SteelBaseId" Enabled="true"/>
-    <Relation Name="SteelBases_SteelBasesBolts" ParentDataSource="SteelBases" ChildDataSource="SteelBasesBolts" ParentColumns="Id" ChildColumns="SteelBaseId" Enabled="true"/>
-    <Relation Name="SteelBasesLoadSets" ReferenceName="Data.SteelBasesLoadSets" ParentDataSource="SteelBases" ChildDataSource="LoadSets" ParentColumns="Id" ChildColumns="SteelBaseId" Enabled="true"/>
-    <Relation Name="SteelPart" ReferenceName="Data.SteelPart" ParentDataSource="SteelBases" ChildDataSource="SteelBasesParts" ParentColumns="Id" ChildColumns="SteelBaseId" Enabled="true"/>
-    <Relation Name="SteelBolt" ReferenceName="Data.SteelBolt" ParentDataSource="SteelBases" ChildDataSource="SteelBasesBolts" ParentColumns="Id" ChildColumns="SteelBaseId" Enabled="true"/>
+    <Relation Name="SteelBasesLoadSetsForceParameters" ReferenceName="Data.SteelBasesLoadSetsForceParameters" ParentDataSource="SteelBases" ChildDataSource="LoadSetsForceParameters" ParentColumns="Id" ChildColumns="ParentId" Enabled="true"/>
+    <Relation Name="SteelBasesLoadCasesForceParameters" ReferenceName="Data.SteelBasesLoadCasesForceParameters" ParentDataSource="SteelBases" ChildDataSource="LoadCasesForceParameters" ParentColumns="Id" ChildColumns="ParentId" Enabled="true"/>
+    <Relation Name="SteelBasesSteelBasesParts" ReferenceName="Data.SteelBasesSteelBasesParts" ParentDataSource="SteelBases" ChildDataSource="SteelBasesParts" ParentColumns="Id" ChildColumns="ParentId" Enabled="true"/>
+    <Relation Name="SteelBasesSteelBasesBolts" ReferenceName="Data.SteelBasesSteelBasesBolts" ParentDataSource="SteelBases" ChildDataSource="SteelBasesBolts" ParentColumns="Id" ChildColumns="ParentId" Enabled="true"/>
+    <Relation Name="SteelBasesLoadSets" ReferenceName="Data.SteelBasesLoadSets" ParentDataSource="SteelBases" ChildDataSource="LoadSets" ParentColumns="Id" ChildColumns="ParentId" Enabled="true"/>
+    <Relation Name="SteelBasesLoadCases" ReferenceName="Data.SteelBasesLoadCases" ParentDataSource="SteelBases" ChildDataSource="LoadCases" ParentColumns="Id" ChildColumns="ParentId" Enabled="true"/>
     <Parameter Name="Units" DataType="System.String">
       <Parameter Name="LinearSize" DataType="System.String"/>
       <Parameter Name="Force" DataType="System.String"/>
@@ -116,7 +117,7 @@
     </ReportTitleBand>
     <PageHeaderBand Name="PageHeader1" Top="32.35" Width="699.3" Height="28.35"/>
     <DataBand Name="SteelBasesData" Top="64.7" Width="699.3" Height="75.6" CanGrow="true" DataSource="SteelBases" IdColumn="SteelBases.Id">
-      <TextObject Name="Text5" Top="28.35" Width="699.3" Height="47.25" CanGrow="true" GrowToBottom="true" Text="Прочностные характеристики: Расчетное сопротивление стали плиты Ry=[SteelBases.SteelStrength][Units.Stress], Расчетное сопротивление бетона подливки Rb=[SteelBases.ConcreteStrength][Units.Stress].&#13;&#10;Геометрические характеристики: Ширина B=[SteelBases.Width][Units.LinearSize], Длина L=[SteelBases.Length][Units.LinearSize], Толщина t=[SteelBases.Thickness][Units.LinearSize],  Площадь основания A=[SteelBases.Area][Units.Geometry.Area]., Момент сопротивления Wx=[SteelBases.Wx][Units.Geometry.SecMoment], Момент сопротивления Wy=[SteelBases.Wy][Units.Geometry.SecMoment]" Font="Arial, 10pt"/>
+      <TextObject Name="Text5" Top="28.35" Width="699.3" Height="47.25" CanGrow="true" GrowToBottom="true" Text="Прочностные характеристики: Расчетное сопротивление стали плиты Ry=[SteelBases.SteelStrength][Units.Stress], Расчетное сопротивление бетона подливки Rb=[SteelBases.ConcreteStrength][Units.Stress].&#13;&#10;Геометрические характеристики: Ширина B=[SteelBases.Width][Units.LinearSize], Длина L=[SteelBases.Length][Units.LinearSize], Толщина t=[SteelBases.Height][Units.LinearSize],  Площадь основания A=[SteelBases.Area][Units.Geometry.Area]., Момент сопротивления Wx=[SteelBases.Wx][Units.Geometry.SecMoment], Момент сопротивления Wy=[SteelBases.Wy][Units.Geometry.SecMoment]" Font="Arial, 10pt"/>
       <TextObject Name="Text4" Width="699.3" Height="28.35" CanGrow="true" GrowToBottom="true" Text="[SteelBases.Name]" HorzAlign="Center" Font="Arial, 10pt, style=Bold"/>
       <ChildBand Name="Child1" Top="144.3" Width="699.3" Height="378">
         <PictureObject Name="Picture2" Width="699.3" Height="378" CanGrow="true" DataColumn="SteelBases.Picture"/>
