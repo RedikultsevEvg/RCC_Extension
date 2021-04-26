@@ -159,7 +159,7 @@ namespace RDBLL.Processors.SC
                 {
                     //Получаем кривизну соответствующую начальному модулю упругости
                     //Кривизна будет единой для бетона и стали
-                    ForceDoubleCurvature forceCurvature = GetCurvatureSimpleMethod(loadCase, steelBase);
+                     ForceDoubleCurvature forceCurvature = GetCurvatureSimpleMethod(loadCase, steelBase);
                     //Заносим кривизну как параметр стальной базы
                     steelBase.ForceCurvatures.Add(forceCurvature);
                     //Создаем локальную переменную для кривизны соответствующей бетоны

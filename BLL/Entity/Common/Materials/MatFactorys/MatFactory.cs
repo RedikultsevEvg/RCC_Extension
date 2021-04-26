@@ -23,10 +23,13 @@ namespace RDBLL.Entity.Common.Materials.MatFactorys
             steelKind = new SteelKind() { Id = 3, Name = "С255", ElasticModulus = 2.0e11, FstStrength = 2.5e8, SndStrength = 2.55e8 };
             steelKinds.Add(steelKind);
 
-            steelKind = new SteelKind() { Id = 2, Name = "С275", ElasticModulus = 2.0e11, FstStrength = 2.6e8, SndStrength = 2.75e8 };
+            steelKind = new SteelKind() { Id = 4, Name = "С275", ElasticModulus = 2.0e11, FstStrength = 2.7e8, SndStrength = 2.75e8 };
             steelKinds.Add(steelKind);
 
-            steelKind = new SteelKind() { Id = 2, Name = "С345", ElasticModulus = 2.0e11, FstStrength = 3.2e8, SndStrength = 3.45e8 };
+            steelKind = new SteelKind() { Id = 5, Name = "С345", ElasticModulus = 2.0e11, FstStrength = 3.4e8, SndStrength = 3.45e8 };
+            steelKinds.Add(steelKind);
+
+            steelKind = new SteelKind() { Id = 6, Name = "С355", ElasticModulus = 2.0e11, FstStrength = 3.5e8, SndStrength = 3.55e8 };
             steelKinds.Add(steelKind);
 
             return steelKinds;
