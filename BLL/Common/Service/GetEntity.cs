@@ -15,6 +15,8 @@ using RDBLL.Common.Params;
 using RDBLL.Entity.Common.Materials.SteelMaterialUsing;
 using RDBLL.Common.Params;
 using RDBLL.Entity.SC.Column.SteelBases.Patterns;
+using RDBLL.Entity.SC.Column.SteelBases;
+using RDBLL.Common.Service.DsOperations;
 
 namespace RDBLL.Common.Service
 {
@@ -63,6 +65,7 @@ namespace RDBLL.Common.Service
                 newObject.RegisterParent(building);
                 GetSteelBases(dataSet, newObject);
                 GetFoundations(dataSet, newObject);
+                GetSteelBasePartGroups(dataSet, newObject);
                 newObjects.Add(newObject);
             }
             return newObjects;
@@ -71,20 +74,20 @@ namespace RDBLL.Common.Service
         /// Получает коллекцию стальных баз по датасету и уровню
         /// </summary>
         /// <param name="dataSet">Датасет</param>
-        /// <param name="level">Уровень</param>
+        /// <param name="parent">Уровень</param>
         /// <returns></returns>
-        public static ObservableCollection<SteelBase> GetSteelBases(DataSet dataSet, Level level)
+        public static ObservableCollection<SteelBase> GetSteelBases(DataSet dataSet, IDsSaveable parent)
         {
             ObservableCollection<SteelBase> newObjects = new ObservableCollection<SteelBase>();
             DataTable dataTable = dataSet.Tables["SteelBases"];
             var query = from dataRow in dataTable.AsEnumerable()
-                        where dataRow.Field<int>("ParentId") == level.Id
+                        where dataRow.Field<int>("ParentId") == parent.Id
                         select dataRow;
             foreach (var dataRow in query)
             {
                 SteelBase newObject = new SteelBase();
                 newObject.OpenFromDataSet(dataRow);
-                newObject.RegisterParent(level);
+                newObject.RegisterParent(parent);
                 PatternBase pattern = GetPapametricObject(dataSet, newObject) as PatternBase;
                 
                 if (pattern is null)
@@ -114,18 +117,18 @@ namespace RDBLL.Common.Service
         /// <param name="dataSet">Датасет</param>
         /// <param name="steelBase">Стальная база</param>
         /// <returns></returns>
-        public static ObservableCollection<SteelBasePart> GetSteelBaseParts(DataSet dataSet, SteelBase steelBase)
+        public static ObservableCollection<SteelBasePart> GetSteelBaseParts(DataSet dataSet, IDsSaveable parent)
         {
             ObservableCollection<SteelBasePart> newObjects = new ObservableCollection<SteelBasePart>();
             DataTable dataTable = dataSet.Tables["SteelBaseParts"];
             var query = from dataRow in dataTable.AsEnumerable()
-                        where dataRow.Field<int>("ParentId") == steelBase.Id
+                        where dataRow.Field<int>("ParentId") == parent.Id
                         select dataRow;
             foreach (var dataRow in query)
             {
                 SteelBasePart newObject = new SteelBasePart();
                 newObject.OpenFromDataSet(dataRow);
-                newObject.RegisterParent(steelBase);
+                newObject.RegisterParent(parent);
                 newObjects.Add(newObject);
             }
             return newObjects;
@@ -156,39 +159,35 @@ namespace RDBLL.Common.Service
             return newObjects;
         }
         /// <summary>
-        /// Получает коллекцию групп усилий по датасету и стальной базе
+        /// Возвращает коллекцию групп участков стальной базы по родительскому элементу
         /// </summary>
         /// <param name="dataSet"></param>
-        /// <param name="steelBase"></param>
+        /// <param name="parent"></param>
         /// <returns></returns>
-        //public static ObservableCollection<ForcesGroup> GetSteelBaseForcesGroups(DataSet dataSet, SteelBase steelBase)
-        //{
-        //    ObservableCollection<ForcesGroup> newObjects = new ObservableCollection<ForcesGroup>();
-        //    DataTable adjDataTable = dataSet.Tables["SteelBaseForcesGroups"];
-        //    DataTable dataTable = dataSet.Tables["ForcesGroups"]; 
-        //    var query = from adjDataRow in adjDataTable.AsEnumerable()
-        //                from dataRow in dataTable.AsEnumerable()
-        //                where adjDataRow.Field<int>("SteelBaseId") == steelBase.Id
-        //                where adjDataRow.Field<int>("ForcesGroupId") == dataRow.Field<int>("Id")
-        //                select dataRow;
-        //    foreach (var dataRow in query)
-        //    {
-        //        ForcesGroup newObject = new ForcesGroup
-        //        {
-        //            Id = dataRow.Field<int>("Id"),
-        //            Name = dataRow.Field<string>("Name"),
-        //            CenterX = dataRow.Field<double>("CenterX"),
-        //            CenterY = dataRow.Field<double>("CenterY"),
-        //        };
-        //        newObject.Owners.Add(steelBase);
-        //        newObjects.Add(newObject);
-        //    }
-        //    foreach (ForcesGroup forcesGroup in newObjects)
-        //    {
-        //        forcesGroup.LoadSets = GetLoadSets(dataSet, forcesGroup);
-        //    }
-        //    return newObjects;
-        //}
+        public static ObservableCollection<SteelBasePartGroup> GetSteelBasePartGroups(DataSet dataSet, IDsSaveable parent)
+        {
+            ObservableCollection<SteelBasePartGroup> newObjects = new ObservableCollection<SteelBasePartGroup>();
+            DataTable dataTable = DsOperation.GetDataTable(dataSet, "SteelBasePartGroups");
+            var query = from dataRow in dataTable.AsEnumerable()
+                        where dataRow.Field<int>("ParentId") == parent.Id
+                        select dataRow;
+            foreach (var dataRow in query)
+            {
+                SteelBasePartGroup newObject = new SteelBasePartGroup();
+                newObject.OpenFromDataSet(dataRow);
+                newObject.RegisterParent(parent);
+                //Получаем коллекцию участков
+                newObject.SteelBaseParts = GetSteelBaseParts(dataSet, newObject);
+                //Получаем материал
+                List<MaterialUsing> materials = GetMaterialUsings(dataSet, newObject);
+                foreach (MaterialUsing material in materials)
+                {
+                    if (material is SteelUsing) newObject.Steel = material as SteelUsing;
+                }
+                newObjects.Add(newObject);
+            }
+            return newObjects;
+        }
         /// <summary>
         /// Получает коллекцию групп усилий по датасету и фундаменту
         /// </summary>

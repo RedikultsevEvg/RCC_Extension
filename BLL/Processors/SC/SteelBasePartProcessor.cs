@@ -15,6 +15,7 @@ using RDBLL.Entity.Common.NDM.Processors;
 using RDBLL.Common.Service;
 using RDBLL.Entity.Common.NDM.Interfaces;
 using RDBLL.Entity.Common.NDM.MaterialModels;
+using RDBLL.Entity.MeasureUnits;
 
 namespace RDBLL.Processors.SC
 {
@@ -31,10 +32,16 @@ namespace RDBLL.Processors.SC
         /// <param name="moment"></param>
         /// <param name="thickness"></param>
         /// <returns></returns>
-        public static double GetPlateStress(double moment, double thickness)
+        public static double GetPlateStress(double moment, double thickness, List<string> reportList = null)
         {
             double Wx = thickness * thickness / 6;
-            return moment / Wx;
+            string unitWx = thickness * MeasureUnitConverter.GetCoefficient(0) + MeasureUnitConverter.GetUnitLabelText(0);
+            unitWx += "^2/6=" + Wx * MeasureUnitConverter.GetCoefficient(5) + MeasureUnitConverter.GetUnitLabelText(5);
+            if (reportList != null) { reportList.Add($"Момент сопротивления W=1м*" + unitWx); }
+            double stress = moment / Wx;
+            string unitStress = stress * MeasureUnitConverter.GetCoefficient(3) + MeasureUnitConverter.GetUnitLabelText(3);
+            if (reportList != null) { reportList.Add($"Напряжение в плите Sigma=" + unitStress); }
+            return stress;
         }
         /// <summary>
         /// Возвращает момент и напряжения для участка базы стальной колонны
@@ -42,7 +49,7 @@ namespace RDBLL.Processors.SC
         /// <param name="basePart">Участок базы стальной колонны</param>
         /// <param name="maxStress">Максимальное давление на участок</param>
         /// <returns>Массив: 0-максимальный момент, 1 - максимальные напряжения </returns>
-        public static double GetResult(SteelBasePart basePart, double maxStress)
+        public static double GetMoment(SteelBasePart basePart, double maxStress, List<string> reportList = null)
         {
             /*Алгоритм расчета основан на подходе из учебника Белени по
              * таблицам Галеркина
@@ -54,7 +61,8 @@ namespace RDBLL.Processors.SC
             double result = 0;
             double maxMoment = 0;
             int countFixSides = 0;
-            
+            string unitStress = maxStress * MeasureUnitConverter.GetCoefficient(3) + MeasureUnitConverter.GetUnitLabelText(3);
+            if (reportList != null) { reportList.Add($"Максимальное давление на участок Sigma=" + unitStress); }
             #region Определение количества сторон, по которым имеются опоры
             if (basePart.FixLeft) { countFixSides++; }
             if (basePart.FixRight) { countFixSides++; }
@@ -64,45 +72,36 @@ namespace RDBLL.Processors.SC
             //Участок отрывается, напряжения равны нулю
             if (maxStress < 0)
             {
-                result = 0;
-                return result;
+                return maxMoment;
             }
             switch (countFixSides)
             {
                 case 0://Если ни одна из опор не задана, то это ошибка
                     MessageBox.Show("Неверное закрепление сторон", "Ошибка");
+                    if (reportList != null) { reportList.Add("Ошибка! Неверное закрепление сторон участка");}
                     return result;
                 case 1://Если опора только по одной стороне, считаем как консоль
-                    maxMoment = CalcStreessOneSide(maxStress, basePart);
+                    if (reportList != null) { reportList.Add("Закрепление участка предусмотрено по одной стороне"); }
+                    if (reportList != null) { reportList.Add("Расчет производится как для консольного участка"); }
+                    maxMoment = CalcStreessOneSide(maxStress, basePart, reportList);
                     break;
                 case 2://Если опора с двух сторон
-                    maxMoment = CalcStreessTwoSide(maxStress, basePart);
+                    maxMoment = CalcStreessTwoSide(maxStress, basePart, reportList);
                     break;
                 case 3://Если опора с трех сторон 
-                    maxMoment = CalcStreessThreeSide(maxStress, basePart);
+                    maxMoment = CalcStreessThreeSide(maxStress, basePart, reportList);
                     break;
                 case 4://Если опора с 4-х сторон
-                    maxMoment = CalcStreessFourSide(maxStress, basePart);
+                    maxMoment = CalcStreessFourSide(maxStress, basePart, reportList);
                     break;
             }
-            result = maxMoment;
-            return result;
+            return maxMoment;
         }
         /// <summary>
-        /// Возвращает момент и напряжения для участка базы стальной колонны
+        /// Выводит сообщения на консоль
         /// </summary>
-        /// <param name="basePart">Участок базы стальной колонны</param>
-        /// <returns>Массив: 0-максимальный момент, 1 - максимальные напряжения </returns>
-        //public static double[] GetResult(SteelBasePart basePart)
-        //{
-        //    return GetResult(basePart, GetGlobalMinStressLinear(basePart) * (-1D));
-        //}
-
-            /// <summary>
-            /// Выводит сообщения на консоль
-            /// </summary>
-            /// <param name="S"></param>
-            private static void EchoConsole (String S)
+        /// <param name="S"></param>
+        private static void EchoConsole (String S)
         {
             Console.WriteLine(S);
         }
@@ -114,23 +113,33 @@ namespace RDBLL.Processors.SC
         /// <param name="basePart">Экземпляр участка</param>
         /// <param name="echoDelegate">Делегат, в который передается результат расчета</param>
         /// <returns></returns>
-        private static double CalcStreessOneSide(double maxStress, SteelBasePart basePart)
+        private static double CalcStreessOneSide(double maxStress, SteelBasePart basePart, List<string> reportList = null)
         {
+            string reportString;
             double maxMoment;
             double[] sizes = GetPartSizes(basePart);
             double width = sizes[0];
             double length = sizes[1];
+            double actualLength;
             //Если опора слева или справа
             //echoDelegate("Для участка задана опора по одной стороне, участок расчитывается как консоль");
             if (basePart.FixLeft || basePart.FixRight)
             {
-                maxMoment = maxStress * width * width / 2;
+                actualLength = width;
             }
             //Если опора сверху или снизу
             else
             {
-                maxMoment = maxStress * length * length / 2;
+                actualLength = length;
             }
+            maxMoment = maxStress * actualLength * actualLength / 2;
+            string unitLength = actualLength * MeasureUnitConverter.GetCoefficient(0)+MeasureUnitConverter.GetUnitLabelText(0);
+            reportString = "Расчетный вылет консоли L=" + unitLength;
+            if (reportList != null) { reportList.Add(reportString); }
+            string unitStress = maxStress * MeasureUnitConverter.GetCoefficient(3) + MeasureUnitConverter.GetUnitLabelText(3);
+            string unitMoment = maxMoment * MeasureUnitConverter.GetCoefficient(2) + MeasureUnitConverter.GetUnitLabelText(2);
+              reportString = $"Изгибающий момент M={unitStress}*{unitLength}^2/2={unitMoment}";
+            if (reportList != null) { reportList.Add(reportString); }
             return maxMoment;
         }
         /// <summary>
@@ -140,8 +149,10 @@ namespace RDBLL.Processors.SC
         /// <param name="basePart">Экземпляр участка</param>
         /// <param name="echoDelegate">Делегат, в который передается результат расчета</param>
         /// <returns></returns>
-        private static double CalcStreessTwoSide(double maxStress, SteelBasePart basePart)
+        private static double CalcStreessTwoSide(double maxStress, SteelBasePart basePart, List<string> reportList = null)
         {
+            string reportString;
+            string unitStress = maxStress * MeasureUnitConverter.GetCoefficient(3) + MeasureUnitConverter.GetUnitLabelText(3);
             #region Исходные списки для интерполяции коэффициентов
             //Для участков, опертых по 2-м и 3-м сторонам
             List<double> xValues23 = new List<double>() { 0.5, 0.6, 0.7, 0.8, 0.9, 1.0, 1.2, 1.4, 2 };
@@ -152,40 +163,62 @@ namespace RDBLL.Processors.SC
             double width = sizes[0];
             double length = sizes[1];
             //Если опора слева и справа
-            if (basePart.FixLeft && basePart.FixRight)
+
+            //Опирание по противоположным сторонам
+            if ((basePart.FixLeft && basePart.FixRight) || (basePart.FixTop && basePart.FixBottom))
             {
-                //echoDelegate("Для участка заданы две опоры по противоположным сторонам, опоры считаются шарнирными");
-                maxMoment = maxStress * width * width / 8;
-            }
-            else
-            {
-                //Если опора снизу и сверху
-                if (basePart.FixTop && basePart.FixBottom)
+                double actualLength = 0;
+                if (basePart.FixLeft && basePart.FixRight)
                 {
-                    maxMoment = maxStress * length * length / 8;
+                    reportString = $"Опирание по двум противоположным сторонам: слева и справа";
+                    if (reportList != null) { reportList.Add(reportString); }
+                    //echoDelegate("Для участка заданы две опоры по противоположным сторонам, опоры считаются шарнирными");
+                    actualLength = width;
                 }
-                //Иначе плита оперта по двум смежным сторонам, неважно каким
                 else
                 {
-                    //echoDelegate("Для участка заданы две опоры по смежным сторонам, опоры считаются шарнирными");
-                    double koeff_a1 = Math.Sqrt(width * width + length * length);
-                    double koeff_b1 = width * length * 0.25 / koeff_a1;
-                    double ratio = koeff_b1 / koeff_a1;
-                    double koeff_betta;
-
-                    if (ratio > 2)
+                    //Если опора снизу и сверху
+                    if (basePart.FixTop && basePart.FixBottom)
                     {
-                        koeff_betta = 0.133;
+                        reportString = $"Опирание по двум противоположным сторонам: снизу и сверху";
+                        if (reportList != null) { reportList.Add(reportString); }
+                        actualLength = length;
                     }
-                    else
-                    {
 
-                        if (ratio < 0.5) { koeff_betta = 0.06; }
-                        else { koeff_betta = MathOperation.InterpolateList(xValues23, yValues23, ratio); }
-                    }
-                    maxMoment = maxStress * koeff_a1 * koeff_a1 * koeff_betta;
                 }
+                maxMoment = maxStress * actualLength * actualLength / 8;
+                string unitLength = actualLength * MeasureUnitConverter.GetCoefficient(0) + MeasureUnitConverter.GetUnitLabelText(0);
+                string unitMoment = maxMoment * MeasureUnitConverter.GetCoefficient(2) + MeasureUnitConverter.GetUnitLabelText(2);
+                reportString = $"Изгибающий момент M={unitStress}*{unitLength}^2/8={unitMoment}";
+                if (reportList != null) { reportList.Add(reportString); }
+            }
+            //Иначе - опирание по двум противоположным сторонам
+            else
+            {
+                if (reportList != null) { reportList.Add("Опирание по двум смежным сторонам"); }
+                //echoDelegate("Для участка заданы две опоры по смежным сторонам, опоры считаются шарнирными");
+                double koeff_a1 = Math.Sqrt(width * width + length * length);
+                if (reportList != null) { reportList.Add( $"Коэффициент Alpha1 = {koeff_a1}"); }
+                double koeff_b1 = width * length * 0.25 / koeff_a1;
+                if (reportList != null) { reportList.Add($"Коэффициент Betta1 = {koeff_b1}"); }
+                double ratio = koeff_b1 / koeff_a1;
+                double koeff_betta;
 
+                if (ratio > 2)
+                {
+                    koeff_betta = 0.133;
+                }
+                else
+                {
+
+                    if (ratio < 0.5) { koeff_betta = 0.06; }
+                    else { koeff_betta = MathOperation.InterpolateList(xValues23, yValues23, ratio); }
+                }
+                if (reportList != null) { reportList.Add($"Коэффициент Betta = {koeff_betta}"); }
+                maxMoment = maxStress * koeff_a1 * koeff_a1 * koeff_betta;
+                string unitMoment = maxMoment * MeasureUnitConverter.GetCoefficient(2) + MeasureUnitConverter.GetUnitLabelText(2);
+                reportString = $"Изгибающий момент M={unitStress}*{koeff_a1}^2*{koeff_betta}={unitMoment}";
+                if (reportList != null) { reportList.Add(reportString); }
             }
             return maxMoment;
         }
@@ -196,8 +229,10 @@ namespace RDBLL.Processors.SC
         /// <param name="basePart">Экземпляр участка</param>
         /// <param name="echoDelegate">Делегат, в который передается результат расчета</param>
         /// <returns></returns>
-        private static double CalcStreessThreeSide(double maxStress, SteelBasePart basePart)
+        private static double CalcStreessThreeSide(double maxStress, SteelBasePart basePart, List<string> reportList = null)
         {
+            string reportString;
+            string unitStress = maxStress * MeasureUnitConverter.GetCoefficient(3) + MeasureUnitConverter.GetUnitLabelText(3);
             /*Для участка, опертого по трем сторонам в учебнике есть некоторая нелогичность
             * При соотношении сторон менее 0,5 происходит резкий скачок в определении момента
             *Так как данный скачок в запас несущей способности, то решили оставить так*/
@@ -228,21 +263,34 @@ namespace RDBLL.Processors.SC
             #endregion
             double ratio = koeff_b1 / koeff_a1;
             double koeff_betta;
-
+            if (reportList != null) { reportList.Add("Опирание по трем сторонам"); }
             if (ratio < 0.5)
             {
                 koeff_betta = 0.5;
                 maxMoment = maxStress * koeff_b1 * koeff_b1 * koeff_betta;
+
+                string unitMoment = maxMoment * MeasureUnitConverter.GetCoefficient(2) + MeasureUnitConverter.GetUnitLabelText(2);
+                reportString = $"Изгибающий момент M={unitStress}*{koeff_b1}^2*{koeff_betta}={unitMoment}";
+                if (reportList != null) { reportList.Add(reportString); }
             }
             else if (ratio >2)
             {
                 koeff_betta = 0.125;
                 maxMoment = maxStress * koeff_a1 * koeff_a1 * koeff_betta;
+
+                string unitMoment = maxMoment * MeasureUnitConverter.GetCoefficient(2) + MeasureUnitConverter.GetUnitLabelText(2);
+                reportString = $"Изгибающий момент M={unitStress}*{koeff_a1}^2*{koeff_betta}={unitMoment}";
+                if (reportList != null) { reportList.Add(reportString); }
             }
             else 
             {
                 koeff_betta = MathOperation.InterpolateList(xValues23, yValues23, ratio);
                 maxMoment = maxStress * koeff_a1 * koeff_a1 * koeff_betta;
+
+                string unitMoment = maxMoment * MeasureUnitConverter.GetCoefficient(2) + MeasureUnitConverter.GetUnitLabelText(2);
+                reportString = $"Изгибающий момент M={unitStress}*{koeff_a1 * MeasureUnitConverter.GetCoefficient(0) + MeasureUnitConverter.GetUnitLabelText(0)}^2*{koeff_betta}={unitMoment}";
+                if (reportList != null) { reportList.Add(reportString); }
+
                 //echoDelegate($"Отношение сторон ratio =  + {Convert.ToString(ratio)}");
                 //echoDelegate($"Вспомогательный коэффициент koeff_a1 = {Convert.ToString(koeff_a1)}");
                 //echoDelegate($"Вспомогательный коэффициент koeff_betta = {Convert.ToString(koeff_betta)}");
@@ -256,8 +304,10 @@ namespace RDBLL.Processors.SC
         /// <param name="basePart">Экземпляр участка</param>
         /// <param name="echoDelegate">Делегат, в который передается результат расчета</param>
         /// <returns></returns>
-        private static double CalcStreessFourSide(double maxStress, SteelBasePart basePart)
+        private static double CalcStreessFourSide(double maxStress, SteelBasePart basePart, List<string> reportList = null)
         {
+            string reportString;
+            string unitStress = maxStress * MeasureUnitConverter.GetCoefficient(3) + MeasureUnitConverter.GetUnitLabelText(3);
             #region Исходные списки для интерполяции коэффициентов
             //Для участков, опертых по 4-м сторонам
             List<double> xValues4 = new List<double>() { 1, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8, 1.9, 2 };
@@ -270,6 +320,9 @@ namespace RDBLL.Processors.SC
             //echoDelegate("Для участка заданы четыре опоры, опоры считаются шарнирными");
             double koeff_b;
             double koeff_a;
+
+            if (reportList != null) { reportList.Add("Опирание по четырем сторонам"); }
+
             if (width > length)
             {
                 koeff_b = width;
@@ -296,7 +349,14 @@ namespace RDBLL.Processors.SC
                 //echoDelegate("Соотношение сторон не превышает 2, расчет ведется для плиты опертой по контуру");
                 //echoDelegate($"Вспомогательный коэффициент koeff_betta = {Convert.ToString(koeff_betta)}");
             }
+            if (reportList != null) { reportList.Add($"Длинная сторона L= {koeff_b * MeasureUnitConverter.GetCoefficient(0) + MeasureUnitConverter.GetUnitLabelText(0)}"); }
+            if (reportList != null) { reportList.Add($"Короткая сторона B= {koeff_a * MeasureUnitConverter.GetCoefficient(0) + MeasureUnitConverter.GetUnitLabelText(0)}"); }
+            if (reportList != null) { reportList.Add($"Соотношение сторон L/B= {ratio}"); }
+            if (reportList != null) { reportList.Add($"Коэффициент Betta = {koeff_betta}"); }
             maxMoment = maxStress * koeff_a * koeff_a * koeff_betta;
+            string unitMoment = maxMoment * MeasureUnitConverter.GetCoefficient(2) + MeasureUnitConverter.GetUnitLabelText(2);
+            reportString = $"Изгибающий момент M={unitStress}*{koeff_a * MeasureUnitConverter.GetCoefficient(0) + MeasureUnitConverter.GetUnitLabelText(0)}^2*{koeff_betta}={unitMoment}";
+            if (reportList != null) { reportList.Add(reportString); }
             return maxMoment;
         }
         #endregion
@@ -403,7 +463,7 @@ namespace RDBLL.Processors.SC
             return stresses.Min();
         }
         /// <summary>
-        /// 
+        /// Возвращает минимальное (с учетом знака) давление на участок базы стальной колонны
         /// </summary>
         /// <param name="basePart"></param>
         /// <returns></returns>

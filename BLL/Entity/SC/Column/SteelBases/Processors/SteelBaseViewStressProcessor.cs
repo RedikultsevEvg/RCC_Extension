@@ -60,7 +60,7 @@ namespace RDBLL.Entity.SC.Column.SteelBases.Processors
             foreach (SteelBasePart steelBasePart in steelBase.SteelBaseParts)
             {
                 double maxBedStress = SteelBasePartProcessor.GetGlobalMinStressNonLinear(steelBasePart) * (-1D);
-                double maxMoment = SteelBasePartProcessor.GetResult(steelBasePart, maxBedStress);
+                double maxMoment = SteelBasePartProcessor.GetMoment(steelBasePart, maxBedStress);
                 double thickness = (steelBasePart.ParentMember as IHasHeight).Height;
                 double maxStress = SteelBasePartProcessor.GetPlateStress(maxMoment, thickness);
                 RectangleValue aRV = new RectangleValue();
@@ -84,7 +84,7 @@ namespace RDBLL.Entity.SC.Column.SteelBases.Processors
             foreach (SteelBasePart steelBasePart in steelBase.SteelBaseParts)
             {
                 double maxBedStress = SteelBasePartProcessor.GetGlobalMinStressNonLinear(steelBasePart) * (-1D);
-                double maxMoment = SteelBasePartProcessor.GetResult(steelBasePart, maxBedStress);
+                double maxMoment = SteelBasePartProcessor.GetMoment(steelBasePart, maxBedStress);
                 double thickness = (steelBasePart.ParentMember as IHasHeight).Height;
                 double maxStress = SteelBasePartProcessor.GetPlateStress(maxMoment, thickness);
                 double recomendedThickness = 0;

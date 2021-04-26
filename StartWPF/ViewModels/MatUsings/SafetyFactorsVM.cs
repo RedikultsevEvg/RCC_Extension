@@ -8,10 +8,11 @@ using RDBLL.Entity.Common.Materials;
 using System.Collections.ObjectModel;
 using RDStartWPF.InfraStructure.Comands.Base;
 using RDBLL.Common.Interfaces;
+using RDStartWPF.ViewModels.Base.Interfaces;
 
 namespace RDStartWPF.ViewModels.MatUsings
 {
-    internal class SafetyFactorsVM : ViewModelBase
+    internal class SafetyFactorsVM : ViewModelBase, IHasCollection
     {
         private SafetyFactor _SelectedPSF;
         private MaterialUsing _ParentMember;

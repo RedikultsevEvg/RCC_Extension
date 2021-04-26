@@ -75,6 +75,12 @@ namespace RDStartWPF
             calcKindSteelBase.RegisterDelegate(new CalcKind.CommandDelegate(ShowSteelBase));
             calcTypeSC.CalcKinds.Add(calcKindSteelBase);
 
+            CalcKind PartGroup = new CalcKind();
+            PartGroup.KindName = "Расчет участков базы стальной колонны";
+            PartGroup.KindAddition = "Расчет параметров участков по заданному давлению";
+            PartGroup.RegisterDelegate(new CalcKind.CommandDelegate(ShowPartGroup));
+            calcTypeSC.CalcKinds.Add(PartGroup);
+
             CalcKind calcKindFoundation = new CalcKind();
             calcKindFoundation.KindName = "Расчет столбчатых фундаментов";
             calcKindFoundation.KindAddition = "Расчет параметров фундаментов с учетом давления под подошвой";
@@ -148,10 +154,20 @@ namespace RDStartWPF
             frmDetailList DetailForm = new frmDetailList(detailObjectList);
             DetailForm.Show();
         }
-
+        /// <summary>
+        /// Вызов окна уровней для баз стальных колонн
+        /// </summary>
         private static void ShowSteelBase()
         {
             wndLevels wndLevels = new wndLevels(ProgrammSettings.BuildingSite.Children[0], ProgrammSettings.BuildingSite.Children[0].Children, LvlChildType.SteelBase);
+            wndLevels.ShowDialog();
+        }
+        /// <summary>
+        /// Вызов окна уровней для группы участков баз колонн
+        /// </summary>
+        private static void ShowPartGroup()
+        {
+            wndLevels wndLevels = new wndLevels(ProgrammSettings.BuildingSite.Children[0], ProgrammSettings.BuildingSite.Children[0].Children, LvlChildType.SteelBasePartGroup);
             wndLevels.ShowDialog();
         }
 

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Data;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using RDBLL.Common.Service;
 using RDBLL.Entity.SC.Column;
@@ -18,6 +19,14 @@ namespace Test.SC.SteelBases
             SteelBase steelBase = BaseMaker.MakeSteelBase(builder);
             steelBase.Pattern.GetBaseParts();
             Assert.AreEqual(6, steelBase.SteelBaseParts.Count, 0);
+            //Создаем датасет
+            DataSet dataSet = ProgrammSettings.CurrentDataSet;
+            //Сохраняем базу в датасет
+            steelBase.SaveToDataSet(dataSet, true);
+            //Клонируем базу
+            SteelBase newSteelBase = steelBase.Clone() as SteelBase;
+            //Проверяем, что новая база не является тем же объектом
+            Assert.AreNotSame(steelBase, newSteelBase);
         }
         [TestMethod]
         public void Patternt2()
@@ -27,6 +36,14 @@ namespace Test.SC.SteelBases
             SteelBase steelBase = BaseMaker.MakeSteelBase(builder);
             steelBase.Pattern.GetBaseParts();
             Assert.AreEqual (10, steelBase.SteelBaseParts.Count, 0);
+            //Создаем датасет
+            DataSet dataSet = ProgrammSettings.CurrentDataSet;
+            //Сохраняем базу в датасет
+            steelBase.SaveToDataSet(dataSet, true);
+            //Клонируем базу
+            SteelBase newSteelBase = steelBase.Clone() as SteelBase;
+            //Проверяем, что новая база не является тем же объектом
+            Assert.AreNotSame(steelBase, newSteelBase);
         }
         [TestMethod]
         public void Patternt3()
@@ -36,6 +53,14 @@ namespace Test.SC.SteelBases
             SteelBase steelBase = BaseMaker.MakeSteelBase(builder);
             steelBase.Pattern.GetBaseParts();
             Assert.AreEqual(9, steelBase.SteelBaseParts.Count, 0);
+            //Создаем датасет
+            DataSet dataSet = ProgrammSettings.CurrentDataSet;
+            //Сохраняем базу в датасет
+            steelBase.SaveToDataSet(dataSet, true);
+            //Клонируем базу
+            SteelBase newSteelBase = steelBase.Clone() as SteelBase;
+            //Проверяем, что новая база не является тем же объектом
+            Assert.AreNotSame(steelBase, newSteelBase);
         }
     }
 }

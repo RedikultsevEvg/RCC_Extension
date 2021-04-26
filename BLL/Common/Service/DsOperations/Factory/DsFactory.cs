@@ -130,10 +130,17 @@ namespace RDBLL.Common.Service.DsOperations.Factory
             DsOperation.AddDoubleColumn(dataTable, "WorkCondCoef");
             DsOperation.AddBoolColumn(dataTable, "UseSimpleMethod", true);
             #endregion
+            #region SteelBasePartGroups
+            dataTable = new DataTable("SteelBasePartGroups");
+            dataSet.Tables.Add(dataTable);
+            DsOperation.AddIdNameParentIdColumn(dataTable, "Levels");
+            DsOperation.AddDoubleColumn(dataTable, "Height");
+            DsOperation.AddDoubleColumn(dataTable, "Pressure");
+            #endregion
             #region SteelBaseParts
             dataTable = new DataTable("SteelBaseParts");
             dataSet.Tables.Add(dataTable);
-            DsOperation.AddIdNameParentIdColumn(dataTable, "SteelBases");
+            DsOperation.AddIdNameParentIdColumn(dataTable);
             DsOperation.AddDoubleColumn(dataTable, "Width");
             DsOperation.AddDoubleColumn(dataTable, "Length");
             DsOperation.AddDoubleColumn(dataTable, "CenterX");

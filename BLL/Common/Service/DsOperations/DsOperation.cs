@@ -248,6 +248,16 @@ namespace RDBLL.Common.Service.DsOperations
                        select dataRow).Single();
             return row;
         }
+        /// <summary>
+        /// Возвращает строку из датасета по элементу (необходимо для отката изменений)
+        /// </summary>
+        /// <param name="dataSet"></param>
+        /// <param name="item"></param>
+        /// <returns></returns>
+        public static DataRow OpenFromDataSetById(DataSet dataSet, IDsSaveable item)
+        {
+            return OpenFromDataSetById(dataSet, item.GetTableName(), item.Id);
+        }
         public static void SetId(DataRow dataRow, int id, string name = null, int? parentId = null)
         {
             dataRow.SetField("Id", id);
@@ -282,6 +292,38 @@ namespace RDBLL.Common.Service.DsOperations
                 table.Columns.Add(column);
             }
             target = row.Field<T>(columnName);
+        }
+
+        //public static ValueType GetField<T>(DataRow row, string columnName, T defaultValue)
+        //{
+        //    DataTable table = row.Table;
+        //    if (!table.Columns.Contains(columnName))
+        //    {
+        //        DataColumn column = new DataColumn(columnName, typeof(T));
+        //        column.DefaultValue = defaultValue;
+        //        table.Columns.Add(column);
+        //    }
+        //    return row.Field<T>(columnName);
+        //}
+        /// <summary>
+        /// Возвращает таблицу если она имеется в датасете или создает новую
+        /// </summary>
+        /// <param name="dataSet"></param>
+        /// <param name="tableName"></param>
+        /// <returns></returns>
+        public static DataTable GetDataTable(DataSet dataSet, string tableName)
+        {
+            DataTable dataTable;
+            //Если датасет содержит нужную таблицу, то получаем ее
+            if (dataSet.Tables.Contains(tableName)) { dataTable = dataSet.Tables[tableName]; }
+            //Иначе создаем нужную таблицу
+            else
+            {
+                dataTable = new DataTable(tableName);
+                dataSet.Tables.Add(dataTable);
+                AddIdNameParentIdColumn(dataTable);
+            }
+            return dataTable;
         }
     }
 }

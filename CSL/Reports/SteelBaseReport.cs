@@ -192,7 +192,7 @@ namespace CSL.Reports
                 DataRow newSteelBasePart = dataTable.NewRow();
                 //double maxBedStress = SteelColumnBasePartProcessor.GetGlobalMinStressLinear(steelBasePart) * (-1D);
                 double maxBedStress = SteelBasePartProcessor.GetGlobalMinStressNonLinear(steelBasePart) * (-1D);
-                double maxMoment = SteelBasePartProcessor.GetResult(steelBasePart, maxBedStress);
+                double maxMoment = SteelBasePartProcessor.GetMoment(steelBasePart, maxBedStress);
                 double thickness = (steelBasePart.ParentMember as IHasHeight).Height;
                 double maxStress = SteelBasePartProcessor.GetPlateStress(maxMoment, thickness);
                 double actHeight = steelBase.Height;
