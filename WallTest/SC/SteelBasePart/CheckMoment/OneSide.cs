@@ -1,4 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using RDBLL.Common.Service;
 using RDBLL.Entity.SC.Column;
 using RDBLL.Forces;
 using RDBLL.Processors.SC;
@@ -12,6 +13,7 @@ namespace Test.SC.SteelBasePart.CheckMoment
         //Одна сторона, закрепление слева
         public void OneSides1()
         {
+            ProgrammSettings.InicializeNew();
             double force = -10000000;
             double width = 0.2;
             double length = 0.4;
@@ -36,6 +38,7 @@ namespace Test.SC.SteelBasePart.CheckMoment
         //Одна сторона, закрепление снизу
         public void CheckMomentPartOneSides2()
         {
+            ProgrammSettings.InicializeNew();
             double force = -10000000;
             double width = 0.2;
             double length = 0.4;
