@@ -1,4 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using RDBLL.Common.Service;
 using RDBLL.Entity.SC.Column;
 using RDBLL.Forces;
 using RDBLL.Processors.SC;
@@ -12,6 +13,7 @@ namespace Test.SC.SteelBasePart.CheckMoment
         //Четыре стороны по контуру
         public void FourSides1()
         {
+            ProgrammSettings.InicializeNew();
             double force = -10000000;
             double width = 0.2;
             double length = 0.3;
@@ -36,6 +38,7 @@ namespace Test.SC.SteelBasePart.CheckMoment
         //Четыре стороны по контуру
         public void FourSides1a()
         {
+            ProgrammSettings.InicializeNew();
             double force = -10000000;
             double width = 0.3;
             double length = 0.2;
@@ -61,6 +64,7 @@ namespace Test.SC.SteelBasePart.CheckMoment
         //При соотношении сторон 1:2 момент равено 0,8 от балочного момента
         public void FourSides2()
         {
+            ProgrammSettings.InicializeNew();
             double force = -10000000;
             double width = 0.2;
             double length = 0.4;
@@ -86,6 +90,7 @@ namespace Test.SC.SteelBasePart.CheckMoment
         //При соотношении сторон 1:3 момент равен балочному
         public void FourSides3()
         {
+            ProgrammSettings.InicializeNew();
             double force = -10000000;
             double width = 0.2;
             double length = 0.6;
