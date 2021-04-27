@@ -695,7 +695,7 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:BLL, Version=2021.4.12.1, Culture=neutral, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:BLL, Version=2021.4.26.1, Culture=neutral, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
                     "_7D2F160DBAC3D0374B4EB693952B178D"
@@ -866,7 +866,7 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:CSL, Version=2021.4.12.1, Culture=neutral, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:CSL, Version=2021.4.26.1, Culture=neutral, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
                     "_C300FF20FF712A99D7D9DD7D4767B4B8"
@@ -988,7 +988,7 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:UIL, Version=2021.4.21.1, Culture=neutral, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:UIL, Version=2021.4.26.1, Culture=neutral, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
                     "_E502064E34539854168035F475BB0B01"
@@ -1230,15 +1230,15 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:RDCalculator"
-        "ProductCode" = "8:{48782202-6B0B-41DA-9464-40C526B1B655}"
-        "PackageCode" = "8:{419D33C6-8A69-4720-B4CD-A38016764E3D}"
-        "UpgradeCode" = "8:{DCF0119A-96C5-4624-BFE4-480F85CC8FF6}"
+        "ProductCode" = "8:{BB5B998E-EF2A-4209-94C0-5B2C4DA06502}"
+        "PackageCode" = "8:{E0BEC438-DB21-4FAD-AE0F-C8C2DDB354B1}"
+        "UpgradeCode" = "8:{319CD446-60B6-47D4-B96C-1E6DFDB987BA}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:TRUE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:FALSE"
-        "ProductVersion" = "8:20.05.09"
+        "ProductVersion" = "8:21.04.26"
         "Manufacturer" = "8:RealDoc"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:"
