@@ -61,8 +61,12 @@ namespace RDBLL.Processors.SC
             double result = 0;
             double maxMoment = 0;
             int countFixSides = 0;
-            string unitStress = maxStress * MeasureUnitConverter.GetCoefficient(3) + MeasureUnitConverter.GetUnitLabelText(3);
-            if (reportList != null) { reportList.Add($"Максимальное давление на участок Sigma=" + unitStress); }
+
+            if (reportList != null)
+            {
+                string unitStress = maxStress * MeasureUnitConverter.GetCoefficient(3) + MeasureUnitConverter.GetUnitLabelText(3);
+                reportList.Add($"Максимальное давление на участок Sigma=" + unitStress);
+            }
             #region Определение количества сторон, по которым имеются опоры
             if (basePart.FixLeft) { countFixSides++; }
             if (basePart.FixRight) { countFixSides++; }
