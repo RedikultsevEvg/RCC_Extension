@@ -1,4 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using RDBLL.Common.Service;
 using RDBLL.Entity.SC.Column;
 using RDBLL.Forces;
 using RDBLL.Processors.SC;
@@ -14,8 +15,8 @@ namespace Test.SC.SteelBasePart.CheckMoment
         //Три стороны свободная сверху
         public void CheckMomentPartThreeSides1()
         {
+            ProgrammSettings.InicializeNew();
             double force = -10000000;
-
             double width = 0.2;
             double length = 0.3;
             double maxStress = force * (-1D);
@@ -41,6 +42,7 @@ namespace Test.SC.SteelBasePart.CheckMoment
         //Три стороны свободная справа
         public void CheckMomentPartThreeSides1a()
         {
+            ProgrammSettings.InicializeNew();
             double force = -10000000;
             double width = 0.3;
             double length = 0.2;
@@ -68,6 +70,7 @@ namespace Test.SC.SteelBasePart.CheckMoment
         //таким образом, чтобы считалось по шарнирной схеме
         public void CheckMomentPartThreeSides2()
         {
+            ProgrammSettings.InicializeNew();
             double force = -10000000;
             double width = 0.2;
             double length = 0.5;
@@ -95,6 +98,7 @@ namespace Test.SC.SteelBasePart.CheckMoment
         //таким образом, чтобы считалось по шарнирной схеме
         public void CheckMomentPartThreeSides2a()
         {
+            ProgrammSettings.InicializeNew();
             double force = -10000000;
             double width = 0.5;
             double length = 0.2;
@@ -122,6 +126,7 @@ namespace Test.SC.SteelBasePart.CheckMoment
         //таким образом, чтобы считалось по консольной схеме
         public void CheckMomentPartThreeSides3()
         {
+            ProgrammSettings.InicializeNew();
             double force = -10000000;
             double width = 0.5;
             double length = 0.2;
@@ -149,6 +154,7 @@ namespace Test.SC.SteelBasePart.CheckMoment
         //таким образом, чтобы считалось по консольной схеме
         public void CheckMomentPartThreeSides3a()
         {
+            ProgrammSettings.InicializeNew();
             double force = -10000000;
             double width = 0.2;
             double length = 0.5;

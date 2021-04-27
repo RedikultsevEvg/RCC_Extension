@@ -21,6 +21,7 @@ namespace Test.SC.SteelBases
         [TestMethod]
         public void CloneGroup()
         {
+            ProgrammSettings.InicializeNew();
             SteelBasePartGroup partGroup = GroupFactory.GetSteelBasePartGroup(GroupType.Type1);
             SteelBasePartGroup newPartGroup = partGroup.Clone() as SteelBasePartGroup;
             Assert.AreNotSame(partGroup, newPartGroup);
