@@ -171,9 +171,17 @@
     <Compile Include="Common\Service\DetailObjectList.cs" />
     <Compile Include="Common\Service\ProgrammSettings.cs" />
     <Compile Include="Common\Service\XMLOperations.cs" />
+    <Compile Include="Entity\RCC\Slabs\Punchings\Factories\PunchingFactory.cs" />
+    <Compile Include="Entity\RCC\Slabs\Punchings\Processors\BearingProcessor.cs" />
+    <Compile Include="Entity\RCC\Slabs\Punchings\Processors\GeomProcessor.cs" />
+    <Compile Include="Entity\RCC\Slabs\Punchings\Processors\IBearingProcessor.cs" />
+    <Compile Include="Entity\RCC\Slabs\Punchings\Processors\ILayerProcessor.cs" />
+    <Compile Include="Entity\RCC\Slabs\Punchings\Processors\OneLayerProcessor.cs" />
     <Compile Include="Entity\RCC\Slabs\Punchings\Punching.cs" />
     <Compile Include="Entity\RCC\Slabs\Punchings\PunchingContour.cs" />
     <Compile Include="Entity\RCC\Slabs\Punchings\PunchingLayer.cs" />
+    <Compile Include="Entity\RCC\Slabs\Punchings\PunchingLine.cs" />
+    <Compile Include="Entity\RCC\Slabs\Punchings\PunchingSubContour.cs" />
     <Compile Include="Entity\RCC\WallAndColumn\Column.cs" />
     <Compile Include="Entity\RCC\WallAndColumn\Opening.cs" />
     <Compile Include="Entity\RCC\WallAndColumn\Wall.cs" />
@@ -242,6 +250,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Common\Delegates\" />
+    <Folder Include="Entity\RCC\Slabs\Punchings\Interfaces\" />
     <Folder Include="Entity\Results\RCC\" />
   </ItemGroup>
   <ItemGroup>

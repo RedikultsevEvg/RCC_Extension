@@ -34,6 +34,7 @@ namespace RDBLL.Entity.Common.Materials
             SafetyFactor safetyFactor = new SafetyFactor(true);
             safetyFactor.Name = "Коэффициент, учитывающий длительность действия нагрузки";
             safetyFactor.PsfFstLong = 0.9;
+            safetyFactor.PsfFstLongTens = 0.9;
             safetyFactor.RegisterParent(this);
             SafetyFactors.Add(safetyFactor);
         }

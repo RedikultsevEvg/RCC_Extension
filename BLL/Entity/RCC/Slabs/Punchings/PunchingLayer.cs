@@ -1,6 +1,7 @@
 ﻿using RDBLL.Common.Interfaces;
 using RDBLL.Common.Interfaces.Materials;
 using RDBLL.Common.Interfaces.Shapes;
+using RDBLL.Common.Service;
 using RDBLL.Entity.Common.Materials;
 using System;
 using System.Collections.Generic;
@@ -11,14 +12,36 @@ using System.Threading.Tasks;
 
 namespace RDBLL.Entity.RCC.Slabs.Punchings
 {
+    /// <summary>
+    /// Класс слоя продавливания
+    /// </summary>
     public class PunchingLayer : IHasParent, ICloneable, IHasConcrete, IHasHeight
     {
-        public int Id { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public string Name { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public IDsSaveable ParentMember => throw new NotImplementedException();
-        public ConcreteUsing Concrete { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public double Height { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        /// <summary>
+        /// Код слоя
+        /// </summary>
+        public int Id { get; set; }
+        /// <summary>
+        /// Имя слоя
+        /// </summary>
+        public string Name { get; set; }
+        /// <summary>
+        /// Обратная ссылка на родительский элемент
+        /// </summary>
+        public IDsSaveable ParentMember { get; private set; }
+        /// <summary>
+        /// Бетон слоя
+        /// </summary>
+        public ConcreteUsing Concrete { get; set; }
+        /// <summary>
+        /// Высота слоя
+        /// </summary>
+        public double Height { get; set; }
 
+        public PunchingLayer(bool GenId = false)
+        {
+            if (GenId) { Id = ProgrammSettings.CurrentId; }
+        }
         public object Clone()
         {
             throw new NotImplementedException();
@@ -46,7 +69,10 @@ namespace RDBLL.Entity.RCC.Slabs.Punchings
 
         public void RegisterParent(IDsSaveable parent)
         {
-            throw new NotImplementedException();
+            if (ParentMember != null) { UnRegisterParent(); }
+            Punching punching = parent as Punching;
+            punching.Layers.Add(this);
+            ParentMember = parent;
         }
 
         public void SaveToDataSet(DataSet dataSet, bool createNew)
@@ -56,7 +82,9 @@ namespace RDBLL.Entity.RCC.Slabs.Punchings
 
         public void UnRegisterParent()
         {
-            throw new NotImplementedException();
+            Punching punching = ParentMember as Punching;
+            punching.Layers.Remove(this);
+            ParentMember = null;
         }
     }
 }

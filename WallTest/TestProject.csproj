@@ -58,6 +58,7 @@
     <Compile Include="RC\Common\RectCrossSection.cs" />
     <Compile Include="RC\Foundations\NaturalSoilFoundation\CheckStress\AlphaCoff.cs" />
     <Compile Include="RC\Foundations\NaturalSoilFoundation\CheckStress\MCofficients.cs" />
+    <Compile Include="RC\Slabs\Punchings\ForceTest.cs" />
     <Compile Include="SC\SteelBasePart\CheckMoment\FourSides.cs" />
     <Compile Include="SC\SteelBasePart\CheckMoment\OneSide.cs" />
     <Compile Include="SC\SteelBasePart\CheckMoment\ThreeSides.cs" />
