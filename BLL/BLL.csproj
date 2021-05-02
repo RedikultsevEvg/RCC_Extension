@@ -73,6 +73,7 @@
     <Compile Include="Common\Interfaces\IDsSaveable.cs" />
     <Compile Include="Common\Interfaces\IRDObservable.cs" />
     <Compile Include="Common\Interfaces\Shapes\IHasHeight.cs" />
+    <Compile Include="Common\Interfaces\Shapes\IPoligone.cs" />
     <Compile Include="Common\Interfaces\Shapes\IRectangle.cs" />
     <Compile Include="Common\Interfaces\Shapes\IShape.cs" />
     <Compile Include="Common\Params\IHasStoredParams.cs" />
@@ -170,6 +171,9 @@
     <Compile Include="Common\Service\DetailObjectList.cs" />
     <Compile Include="Common\Service\ProgrammSettings.cs" />
     <Compile Include="Common\Service\XMLOperations.cs" />
+    <Compile Include="Entity\RCC\Slabs\Punchings\Punching.cs" />
+    <Compile Include="Entity\RCC\Slabs\Punchings\PunchingContour.cs" />
+    <Compile Include="Entity\RCC\Slabs\Punchings\PunchingLayer.cs" />
     <Compile Include="Entity\RCC\WallAndColumn\Column.cs" />
     <Compile Include="Entity\RCC\WallAndColumn\Opening.cs" />
     <Compile Include="Entity\RCC\WallAndColumn\Wall.cs" />
