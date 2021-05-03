@@ -23,27 +23,63 @@ namespace RDBLL.Entity.RCC.Slabs.Punchings.Processors
         public double GetBearindCapacityCoefficient(PunchingContour contour, double Nz, double Mx, double My, bool fullLoad = true)
         {
             double A = GetForceResistance(contour, fullLoad);
-            double WxPos = GetMomentResistance(contour, fullLoad)[0];
-            double WxNeg = GetMomentResistance(contour, fullLoad)[1];
-            double WyPos = GetMomentResistance(contour, fullLoad)[2];
-            double WyNeg = GetMomentResistance(contour, fullLoad)[3];
-            double forceStress = Math.Abs(Nz / A);
-            double momentStress = Mx / WxPos + My / WyPos;
+            double[] w = GetMomentResistance(contour, fullLoad);
+            double WxPos = w[0];
+            double WxNeg = w[1];
+            double WyPos = w[2];
+            double WyNeg = w[3];
+            double forceStress = Nz / A;
+            double momentStressXPos = Mx / WxPos;
+            double momentStressXNeg = Mx / WxNeg;
+            double momentStressYPos = My / WyPos;
+            double momentStressYNeg = My / WyNeg;
+
+            double momentX;
+            if (Math.Sign(Nz/A) == Math.Sign(momentStressXPos))
+            {
+                momentX = momentStressXPos;
+            }
+            else
+            {
+                momentX = momentStressXNeg;
+            }
+            double momentY;
+            if (Math.Sign(Nz / A) == Math.Sign(momentStressYPos))
+            {
+                momentY = momentStressYPos;
+            }
+            else
+            {
+                momentY = momentStressYNeg;
+            }
+            forceStress = Math.Abs(forceStress);
+            momentX = Math.Abs(momentX);
+            momentY = Math.Abs(momentX);
+            double maxMoment = momentX + momentY;
             //Ограничение по вкладу моментов
-            //Вклад момента не может более чем в 1,5 раза превышать вклад продольной силы
-            double maxMomentStress = forceStress * 1.5;
-            momentStress = momentStress < maxMomentStress ? momentStress : maxMomentStress;
-            return forceStress + momentStress;
+            //Вклад момента не может более чем в 0,5 раза превышать вклад продольной силы
+            double limitMoment = forceStress * 0.5;
+            if (maxMoment > limitMoment)
+            {
+                return 1.5 * forceStress;
+            }
+            return forceStress + maxMoment;
         }
 
-        private double[] GetMomentResistance(PunchingContour contour, bool fullLoad = true)
+        public double[] GetMomentResistance(PunchingContour contour, bool fullLoad = true)
         {
             double rXPos = 0;
             double rXNeg = 0;
             double rYPos = 0;
             double rYNeg = 0;
             //Находим момент инерции контура
-            double[] momentOfInertia = GeomProcessor.GetMomentOfInertia(contour);
+            double[] moments = GeomProcessor.GetMomentOfInertia(contour);
+            double Ix = moments[0];
+            double Iy = moments[1];
+
+            Point2D center = GeomProcessor.GetContourCenter(contour);
+
+            double totalHeight = GeomProcessor.GetContourHeight(contour);
 
             foreach (PunchingSubContour subContour in contour.SubContours)
             {
@@ -53,15 +89,41 @@ namespace RDBLL.Entity.RCC.Slabs.Punchings.Processors
                 double Rbtlong = GetConcreteRbt(subContour)[1];
                 //Расчетное сопротивление бетона растяжению
                 double Rbt = fullLoad ? RbtFull : Rbtlong;
+                double[] dists = GeomProcessor.GetMaxDistFromContour(contour);
                 //Прибавляем несущую способность субконтура
-                double capacityX = GetSubContourMomentCapacityX(subContour, Rbt);
+                double[] capacity = GetSubContourMomentCapacity(subContour, center, dists, Rbt);
+
+                rXPos += capacity[0];
+                rXNeg += capacity[1];
+                rYPos += capacity[2];
+                rYNeg += capacity[3];
+
             }
             return new double[] { rXPos, rXNeg, rYPos, rYNeg};
         }
 
-        private double GetSubContourMomentCapacityX(PunchingSubContour subContour, double rbt)
+        private double[] GetSubContourMomentCapacity(PunchingSubContour subContour, Point2D center, double[] maxSizes, double rbt)
         {
-            throw new NotImplementedException();
+            double maxCounterX = maxSizes[0];
+            double minCounterX = maxSizes[1];
+            double maxCounterY = maxSizes[2];
+            double minCounterY = maxSizes[3];
+
+            double maxXmoment = 0;
+            double minXmoment = 0;
+            double maxYmoment = 0;
+            double minYmoment = 0;
+
+            double[] I = GeomProcessor.GetMomentOfInertia(subContour, center);
+            double Ix = I[0];
+            double Iy = I[1];
+
+            maxXmoment += Ix / maxCounterY * subContour.Height * rbt;
+            minXmoment += Ix / minCounterY * subContour.Height * rbt;
+            maxYmoment += Iy / maxCounterX * subContour.Height * rbt;
+            minYmoment += Iy / minCounterX * subContour.Height * rbt;
+
+            return new double[] { maxXmoment, minXmoment, maxYmoment, minYmoment }; 
         }
 
         /// <summary>

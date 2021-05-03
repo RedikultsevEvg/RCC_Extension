@@ -2,6 +2,7 @@
 using RDBLL.Common.Interfaces.Materials;
 using RDBLL.Common.Interfaces.Shapes;
 using RDBLL.Common.Service;
+using RDBLL.Common.Service.DsOperations;
 using RDBLL.Entity.Common.Materials;
 using System;
 using System.Collections.Generic;
@@ -37,25 +38,29 @@ namespace RDBLL.Entity.RCC.Slabs.Punchings
         /// Высота слоя
         /// </summary>
         public double Height { get; set; }
-
+        /// <summary>
+        /// Конструктор по умолчанию
+        /// </summary>
+        /// <param name="GenId"></param>
         public PunchingLayer(bool GenId = false)
         {
             if (GenId) { Id = ProgrammSettings.CurrentId; }
         }
         public object Clone()
         {
-            throw new NotImplementedException();
+            PunchingLayer layer = this.MemberwiseClone() as PunchingLayer;
+            layer.Id = ProgrammSettings.CurrentId;
+            layer.Concrete = this.Concrete.Clone() as ConcreteUsing;
+            return layer;
         }
 
         public void DeleteFromDataSet(DataSet dataSet)
         {
-            throw new NotImplementedException();
+            Concrete.DeleteFromDataSet(dataSet);
+            DsOperation.DeleteRow(dataSet, GetTableName(), Id);
         }
 
-        public string GetTableName()
-        {
-            throw new NotImplementedException();
-        }
+        public string GetTableName() { return "PunchingLayers"; }
 
         public void OpenFromDataSet(DataSet dataSet)
         {
@@ -74,10 +79,21 @@ namespace RDBLL.Entity.RCC.Slabs.Punchings
             punching.Layers.Add(this);
             ParentMember = parent;
         }
-
+        //Сохранение объекта в датасет
         public void SaveToDataSet(DataSet dataSet, bool createNew)
         {
-            throw new NotImplementedException();
+            try
+            {
+                DataRow row = EntityOperation.SaveEntity(dataSet, createNew, this);
+                #region setFields
+                //DsOperation.SetField(row, "RelativeTopLevel", RelativeTopLevel);
+                #endregion
+                row.AcceptChanges();
+            }
+            catch (Exception ex)
+            {
+                CommonErrorProcessor.ShowErrorMessage($"Ошибка сохранения элемента {this.GetType().Name}: " + Name, ex);
+            }
         }
 
         public void UnRegisterParent()

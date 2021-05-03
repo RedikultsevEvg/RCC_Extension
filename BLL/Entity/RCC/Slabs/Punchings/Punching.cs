@@ -52,7 +52,7 @@ namespace RDBLL.Entity.RCC.Slabs.Punchings
         /// <summary>
         /// Точка центра, не используется
         /// </summary>
-        public Point2D Center { get => new Point2D(0,0); set => throw new NotImplementedException(); }
+        public Point2D Center { get; set; }
         /// <summary>
         /// Величина защитного слоя для арматуры вдоль оси X
         /// </summary>
@@ -69,17 +69,43 @@ namespace RDBLL.Entity.RCC.Slabs.Punchings
         {
             if (GenId) { Id = ProgrammSettings.CurrentId; }
             Layers = new ObservableCollection<PunchingLayer>();
+            ForcesGroups = new ObservableCollection<ForcesGroup>();
+            ForcesGroups.Add(new ForcesGroup(this));
+            Center = new Point2D();
         }
         public object Clone()
         {
             Punching punching = this.MemberwiseClone() as Punching;
             punching.Id = ProgrammSettings.CurrentId;
+            if (ParentMember != null) { punching.RegisterParent(this.ParentMember); }
+            punching.ForcesGroups = new ObservableCollection<ForcesGroup>();
+            foreach (ForcesGroup load in ForcesGroups)
+            {
+                ForcesGroup newLoad = load.Clone() as ForcesGroup;
+                newLoad.Owners.Add(punching);
+                punching.ForcesGroups.Add(newLoad);
+            }
+            punching.Layers = new ObservableCollection<PunchingLayer>();
+            foreach (PunchingLayer layer in Layers)
+            {
+                PunchingLayer newLayer = layer.Clone() as PunchingLayer;
+                newLayer.RegisterParent(punching);
+            }
+            punching.Center = this.Center.Clone() as Point2D;
             return punching;
         }
 
         public void DeleteFromDataSet(DataSet dataSet)
         {
-            throw new NotImplementedException();
+            foreach (ForcesGroup forcesGroup in ForcesGroups)
+            {
+                forcesGroup.DeleteFromDataSet(dataSet);
+            }
+            foreach (PunchingLayer layer in Layers)
+            {
+                layer.DeleteFromDataSet(dataSet);
+            }
+            DsOperation.DeleteRow(dataSet, GetTableName(), Id);
         }
 
         public double GetArea()
@@ -91,34 +117,44 @@ namespace RDBLL.Entity.RCC.Slabs.Punchings
 
         public void OpenFromDataSet(DataSet dataSet)
         {
-            throw new NotImplementedException();
+            try
+            {
+                OpenFromDataSet(DsOperation.OpenFromDataSetById(dataSet, GetTableName(), Id));
+            }
+            catch (Exception ex)
+            {
+                CommonErrorProcessor.ShowErrorMessage($"Ошибка получения элемента из базы данных. Элемент {this.GetType().Name}: " + Name, ex);
+            }
         }
 
         public void OpenFromDataSet(DataRow dataRow)
         {
-            throw new NotImplementedException();
+            EntityOperation.SetProps(dataRow, this);
         }
 
         public void RegisterParent(IDsSaveable parent)
         {
+            if (ParentMember != null) { UnRegisterParent(); }
             Level level = parent as Level;
             ParentMember = level;
             level.Children.Add(this);
         }
-
+        //Сохранение объекта в датасет
         public void SaveToDataSet(DataSet dataSet, bool createNew)
         {
             try
             {
                 DataRow row = EntityOperation.SaveEntity(dataSet, createNew, this);
                 #region setFields
-                //DsOperation.SetField(row, "RelativeTopLevel", RelativeTopLevel);
+                DsOperation.SetField(row, "CoveringLayerX", CoveringLayerX);
+                DsOperation.SetField(row, "CoveringLayerY", CoveringLayerY);
+                foreach (PunchingLayer layer in Layers) { layer.SaveToDataSet(dataSet, createNew); }
                 #endregion
                 row.AcceptChanges();
             }
             catch (Exception ex)
             {
-                CommonErrorProcessor.ShowErrorMessage("Ошибка сохранения элемента: " + Name, ex);
+                CommonErrorProcessor.ShowErrorMessage($"Ошибка сохранения элемента {this.GetType().Name}: " + Name, ex);
             }
         }
 
@@ -127,6 +163,17 @@ namespace RDBLL.Entity.RCC.Slabs.Punchings
             Level level = ParentMember as Level;
             level.Children.Remove(this);
             ParentMember = null;
+        }
+        //Сравнение объектов
+        public override bool Equals(object obj)
+        {
+            if (!(obj is Punching)) return false;
+            Punching punching = obj as Punching;
+            if (punching.Width != this.Width) return false;
+            else if (punching.Length != this.Length) return false;
+            else if (punching.CoveringLayerX != this.CoveringLayerX) return false;
+            else if (punching.CoveringLayerY != this.CoveringLayerY) return false;
+            return true;
         }
     }
 }

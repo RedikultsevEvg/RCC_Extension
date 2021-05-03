@@ -98,7 +98,7 @@ namespace RDBLL.Entity.RCC.Slabs.Punchings.Processors
             //Для верхнего слоя рабочая высота определяется за минусом защитных слоев
             double fstLayerDepth = GetFstLayerDepth(punching);
             double width = punching.Width + fstLayerDepth;
-            double length = punching.Width + fstLayerDepth;
+            double length = punching.Length + fstLayerDepth;
             //Первый контур составляем как замкнутый контур отступая половину рабочей высоты от центра
             PunchingSubContour fstContour = GetSubContour(width, length, fstLayerDepth, punching.Layers[0].Concrete);
             //Так как рассматривается только один слой, то добавляем созданный контур

@@ -27,6 +27,15 @@ namespace RDBLL.Entity.RCC.Slabs.Punchings.Processors
             }
             return length;
         }
+        public static double GetContourHeight(PunchingContour contour)
+        {
+            double totalHeight = 0;
+            foreach (PunchingSubContour subContour in contour.SubContours)
+            {
+                totalHeight += subContour.Height;
+            }
+            return totalHeight;
+        }
 
         public static double[] GetMomentResistance(PunchingContour contour)
         {
@@ -58,7 +67,7 @@ namespace RDBLL.Entity.RCC.Slabs.Punchings.Processors
                         //Длина линии
                         double lineLength = GeometryProc.GetDistance(line.StartPoint, line.EndPoint);
                         //Точка центра линии
-                        Point2D lineCenter = GeometryProc.GetPointOfset(line.StartPoint, line.EndPoint, lineLength / 2);
+                        Point2D lineCenter = GeometryProc.GetMiddlePoint(line.StartPoint, line.EndPoint);
                         //Расстояние от центра линии до заданного центра
                         double dXLoc = lineCenter.X - initCenter.X;
                         double dYLoc = lineCenter.Y - initCenter.Y;
@@ -79,7 +88,11 @@ namespace RDBLL.Entity.RCC.Slabs.Punchings.Processors
             Point2D newCenter = new Point2D(initCenter.X + dX, initCenter.Y + dY);
             return newCenter;
         }
-
+        /// <summary>
+        /// Возвращает суммарный момент инерции расчетного контура с учетом высоты
+        /// </summary>
+        /// <param name="contour"></param>
+        /// <returns></returns>
         public static double[] GetMomentOfInertia(PunchingContour contour)
         {
             double Ix = 0;
@@ -89,16 +102,93 @@ namespace RDBLL.Entity.RCC.Slabs.Punchings.Processors
             {
                 foreach (PunchingLine line in subContour.Lines)
                 {
-                    //Если линия субконтура несущая, то учитываем ее при подсчете центра тяжести
+                    //Если линия субконтура несущая, то учитываем ее при подсчете момента инерции контура
                     if (line.IsBearing)
                     {
-                        //Длина линии
-                        double lineLength = GeometryProc.GetDistance(line.StartPoint, line.EndPoint);
-                        throw new NotImplementedException();
+                        double[] moments = GeometryProc.GetLineMomentInertia(line.StartPoint, line.EndPoint, center);
+                        Ix += moments[0] * subContour.Height;
+                        Iy += moments[1] * subContour.Height;
                     }
                 }
             }
             return new double[] { Ix, Iy };
+        }
+        /// <summary>
+        /// Возвращает суммарный момент инерции расчетного субконтура контура
+        /// </summary>
+        /// <param name="subContour"></param>
+        /// <param name="center"></param>
+        /// <param name="contour"></param>
+        /// <returns></returns>
+        public static double[] GetMomentOfInertia(PunchingSubContour subContour, Point2D center)
+        {
+            double Ix = 0;
+            double Iy = 0;
+            foreach (PunchingLine line in subContour.Lines)
+            {
+                //Если линия субконтура несущая, то учитываем ее при подсчете момента инерции контура
+                if (line.IsBearing)
+                {
+                    double[] moments = GeometryProc.GetLineMomentInertia(line.StartPoint, line.EndPoint, center);
+                    Ix += moments[0];
+                    Iy += moments[1];
+                }
+            }
+            return new double[] { Ix, Iy };
+        }
+        /// <summary>
+        /// Возвращает минимальные и максимальные расстояния от заданного центра до точек линий
+        /// </summary>
+        /// <param name="lines">Коллекция линий</param>
+        /// <param name="center">Заданный центр</param>
+        /// <returns></returns>
+        private static double[] GetMaxDistFromLineList(List<PunchingLine> lines, Point2D center)
+        {
+            //Коллекции для хранения координат линий контура
+            List<double> coordsX = new List<double>();
+            List<double> coordsY = new List<double>();
+            foreach (PunchingLine line in lines)
+            {
+                if (line.IsBearing)
+                {
+                    coordsX.Add(line.StartPoint.X);
+                    coordsX.Add(line.EndPoint.X);
+                    coordsY.Add(line.StartPoint.Y);
+                    coordsY.Add(line.EndPoint.Y);
+                }
+            }
+            double maxX = coordsX.Max() - center.X;
+            double minX = coordsX.Min() - center.X;
+            double maxY = coordsY.Max() - center.Y;
+            double minY = coordsY.Min() - center.Y;
+
+            return new double[] { maxX, minX, maxY, minY };
+        }
+        /// <summary>
+        /// Возвращает минимальные и максимальные расстояния от заданного центра до точек линий
+        /// </summary>
+        /// <param name="contour">Расчетный контур</param>
+        /// <returns></returns>
+        public static double[] GetMaxDistFromContour(PunchingContour contour)
+        {
+            Point2D center = GetContourCenter(contour);
+            //Коллекции для хранения координат линий контура
+            List<double> coordsX = new List<double>();
+            List<double> coordsY = new List<double>();
+            foreach (PunchingSubContour subContour in contour.SubContours)
+            {
+                double[] coords = GetMaxDistFromLineList(subContour.Lines, center);
+                coordsX.Add(coords[0]);
+                coordsX.Add(coords[1]);
+                coordsY.Add(coords[2]);
+                coordsY.Add(coords[3]);
+            }
+            double maxX = coordsX.Max();
+            double minX = coordsX.Min();
+            double maxY = coordsY.Max();
+            double minY = coordsY.Min();
+
+            return new double[] { maxX, minX, maxY, minY };
         }
     }
 }

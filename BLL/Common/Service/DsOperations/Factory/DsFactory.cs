@@ -268,6 +268,16 @@ namespace RDBLL.Common.Service.DsOperations.Factory
             DsOperation.AddIdNameParentIdColumn(dataTable);
             DsOperation.AddFkIdColumn("SoilSections", "SelectedId", dataTable, true);
             #endregion
+            #region Punchings
+            dataTable = new DataTable("Punchings");
+            dataSet.Tables.Add(dataTable);
+            DsOperation.AddIdNameParentIdColumn(dataTable);
+            #endregion
+            #region Punchings
+            dataTable = new DataTable("PunchingLayers");
+            dataSet.Tables.Add(dataTable);
+            DsOperation.AddIdNameParentIdColumn(dataTable);
+            #endregion
             #region
             #endregion
             return dataSet;

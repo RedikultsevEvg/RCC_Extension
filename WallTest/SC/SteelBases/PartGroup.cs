@@ -11,7 +11,7 @@ namespace Test.SC.SteelBases
     public class PartGroup
     {
         [TestMethod]
-        public void SavepartGroup()
+        public void SavePartGroup()
         {
             ProgrammSettings.InicializeNew();
             DataSet dataSet = ProgrammSettings.CurrentDataSet;

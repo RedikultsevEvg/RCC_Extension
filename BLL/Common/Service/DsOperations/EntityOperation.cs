@@ -47,7 +47,10 @@ namespace RDBLL.Common.Service
             if (entity is IHasForcesGroups)
             {
                 IHasForcesGroups child = entity as IHasForcesGroups;
-                foreach (ForcesGroup forcesGroup in child.ForcesGroups) { forcesGroup.SaveToDataSet(dataSet, createNew);}
+                if (child.ForcesGroups != null)
+                {
+                    foreach (ForcesGroup forcesGroup in child.ForcesGroups) { forcesGroup.SaveToDataSet(dataSet, createNew); }
+                }
             }
             if (entity is IHasSoilSection) //Сохранение использования скважины
             {

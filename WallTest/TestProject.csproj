@@ -54,11 +54,13 @@
     <Compile Include="Forces\LoadSetTest.cs" />
     <Compile Include="Geometry\Mathematic\PointGeometry.cs" />
     <Compile Include="Geometry\Mathematic\MathTest.cs" />
+    <Compile Include="Geometry\Mathematic\GeomLineTest.cs" />
     <Compile Include="Ndm\GeometryProperties\GeometryTest.cs" />
     <Compile Include="RC\Common\RectCrossSection.cs" />
     <Compile Include="RC\Foundations\NaturalSoilFoundation\CheckStress\AlphaCoff.cs" />
     <Compile Include="RC\Foundations\NaturalSoilFoundation\CheckStress\MCofficients.cs" />
     <Compile Include="RC\Slabs\Punchings\ForceTest.cs" />
+    <Compile Include="RC\Slabs\Punchings\SaveTest.cs" />
     <Compile Include="SC\SteelBasePart\CheckMoment\FourSides.cs" />
     <Compile Include="SC\SteelBasePart\CheckMoment\OneSide.cs" />
     <Compile Include="SC\SteelBasePart\CheckMoment\ThreeSides.cs" />

@@ -26,6 +26,18 @@ namespace RDBLL.Common.Geometry.Mathematic
             return Convert.ToDouble(Math.Sqrt(Convert.ToDouble(dX * dX + dY * dY)));
         }
         /// <summary>
+        /// Возвращает значение угла между осью X и заданным отрезком
+        /// </summary>
+        /// <param name="startPoint">Начальная точка отрезка</param>
+        /// <param name="endPoint">Конечная точка отрезка</param>
+        /// <returns>Значение угла в радианах</returns>
+        public static double GetAngle(Point2D startPoint, Point2D endPoint)
+        {
+            double dX = endPoint.X - startPoint.X;
+            double dY = endPoint.Y - startPoint.Y;
+            return Math.Atan2(dY, dX);
+        }
+        /// <summary>
         /// Возвращает новую точку
         /// </summary>
         /// <param name="point">Начальная точка</param>
@@ -35,6 +47,20 @@ namespace RDBLL.Common.Geometry.Mathematic
         public static Point2D GetPointOfset(Point2D point, double angle, double dist)
         {
             return new Point2D(point.X + Math.Cos(angle) * dist, point.Y + Math.Sin(angle) * dist);
+        }
+        /// <summary>
+        /// Возвращает новую точку как центр отрезка между заданными точками
+        /// </summary>
+        /// <param name="startPoint">Начальная точка</param>
+        /// <param name="endPoint">Конечная точка</param>
+        /// <returns></returns>
+        public static Point2D GetMiddlePoint(Point2D startPoint, Point2D endPoint)
+        {
+            //Расстояние между точками
+            double lineLength = GetDistance(startPoint, endPoint);
+            //Точка центра линии
+            Point2D lineCenter = GetPointOfset(startPoint, endPoint, lineLength / 2);
+            return lineCenter;
         }
         /// <summary>
         /// Возвращает новую точку
@@ -182,6 +208,33 @@ namespace RDBLL.Common.Geometry.Mathematic
                 moments[1] += locMoments[1];
             }
             return moments;
+        }
+        /// <summary>
+        /// Возвращает моменты инерции линии относительно заданного центра
+        /// </summary>
+        /// <param name="startPoint"></param>
+        /// <param name="endPoint"></param>
+        /// <param name="gravityCenter"></param>
+        /// <returns></returns>
+        public static double[] GetLineMomentInertia(Point2D startPoint, Point2D endPoint, Point2D gravityCenter)
+        {
+            double Ix, Iy;
+            //Находим длину отрезка
+            double lineLength = GetDistance(startPoint, endPoint);
+            //Находим центр отрезка
+            Point2D lineCenter = GetMiddlePoint(startPoint, endPoint);
+            //Находим угол между осью X и отрезком
+            double angle = GetAngle(startPoint, endPoint);
+            //расстояние от заданного центра тяжести до центра отрезка (проекция на ось X)
+            double dX = gravityCenter.X - lineCenter.X;
+            //то же, проекция на ось Y
+            double dY = gravityCenter.Y - lineCenter.Y;
+            //Вспомогательный коэффициент для экономии ресурсов
+            double k1 = lineLength * lineLength * lineLength / 12;
+            //Находим моменты инерции
+            Ix = k1 * Math.Pow(Math.Sin(angle), 2) + lineLength * dY * dY;
+            Iy = k1 * Math.Pow(Math.Cos(angle), 2) + lineLength * dX * dX;
+            return new double[] { Ix, Iy };
         }
         /// <summary>
         /// Возвращает точку центра тяжести по коллекции фигур
