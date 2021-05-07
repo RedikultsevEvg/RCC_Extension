@@ -17,6 +17,8 @@ using RDBLL.Common.Params;
 using RDBLL.Entity.SC.Column.SteelBases.Patterns;
 using RDBLL.Entity.SC.Column.SteelBases;
 using RDBLL.Common.Service.DsOperations;
+using RDBLL.Entity.RCC.Slabs.Punchings;
+using RDBLL.Common.Interfaces.Materials;
 
 namespace RDBLL.Common.Service
 {
@@ -66,6 +68,7 @@ namespace RDBLL.Common.Service
                 GetSteelBases(dataSet, newObject);
                 GetFoundations(dataSet, newObject);
                 GetSteelBasePartGroups(dataSet, newObject);
+                GetPunchings(dataSet, newObject);
                 newObjects.Add(newObject);
             }
             return newObjects;
@@ -102,11 +105,7 @@ namespace RDBLL.Common.Service
                 }
                 newObject.ForcesGroups = GetParentForcesGroups(dataSet, newObject);
                 List<MaterialUsing> materials = GetMaterialUsings(dataSet, newObject);
-                foreach (MaterialUsing material in materials)
-                {
-                    if (material is SteelUsing) newObject.Steel = material as SteelUsing;
-                    if (material is ConcreteUsing) newObject.Concrete = material as ConcreteUsing;
-                }
+                AddMaterial(dataSet, newObject);
                 newObjects.Add(newObject);
             }
             return newObjects;
@@ -416,6 +415,43 @@ namespace RDBLL.Common.Service
             }
             return newObjects;
         }
+        private static ObservableCollection<IHasParent> GetPunchings (DataSet dataSet, IDsSaveable parent)
+        {
+            ObservableCollection<IHasParent> newObjects = new ObservableCollection<IHasParent>();
+            DataTable dataTable = dataSet.Tables["Punchings"];
+            var query = from dataRow in dataTable.AsEnumerable()
+                        where dataRow.Field<int>("ParentId") == parent.Id
+                        select dataRow;
+            foreach (var dataRow in query)
+            {
+                Punching newObject = new Punching();
+                newObject.RegisterParent(parent);
+                newObject.OpenFromDataSet(dataRow);
+                newObject.Children = GetPunchingLayers(dataSet, newObject);
+                newObject.ForcesGroups = GetParentForcesGroups(dataSet, newObject);
+                newObjects.Add(newObject);
+            }
+            return newObjects;
+        }
+
+        private static ObservableCollection<IHasParent> GetPunchingLayers(DataSet dataSet, IDsSaveable parent)
+        {
+            ObservableCollection<IHasParent> newObjects = new ObservableCollection<IHasParent>();
+            DataTable dataTable = dataSet.Tables["PunchingLayers"];
+            var query = from dataRow in dataTable.AsEnumerable()
+                        where dataRow.Field<int>("ParentId") == parent.Id
+                        select dataRow;
+            foreach (var dataRow in query)
+            {
+                PunchingLayer newObject = new PunchingLayer();
+                newObject.RegisterParent(parent);
+                newObject.OpenFromDataSet(dataRow);
+                AddMaterial(dataSet, newObject);
+                newObjects.Add(newObject);
+            }
+            return newObjects;
+        }
+
         public static List<MaterialContainer> GetContainers (DataSet dataSet, IDsSaveable parent)
         {
             List<MaterialContainer> materialContainers = new List<MaterialContainer>();
@@ -579,6 +615,15 @@ namespace RDBLL.Common.Service
                     }
             }
 
+        }
+        private static void AddMaterial(DataSet dataSet, IDsSaveable newObject)
+        {
+            List<MaterialUsing> materials = GetMaterialUsings(dataSet, newObject);
+            foreach (MaterialUsing material in materials)
+            {
+                if (material is SteelUsing & newObject is IHasSteel) (newObject as IHasSteel).Steel = material as SteelUsing;
+                if (material is ConcreteUsing & newObject is IHasConcrete) (newObject as IHasConcrete).Concrete = material as ConcreteUsing;
+            }
         }
     }
 }

@@ -272,10 +272,17 @@ namespace RDBLL.Common.Service.DsOperations.Factory
             dataTable = new DataTable("Punchings");
             dataSet.Tables.Add(dataTable);
             DsOperation.AddIdNameParentIdColumn(dataTable);
+            DsOperation.AddDoubleColumn(dataTable, "Width", 0.4);
+            DsOperation.AddDoubleColumn(dataTable, "Length", 0.4);
+            DsOperation.AddDoubleColumn(dataTable, "CenterX", 0);
+            DsOperation.AddDoubleColumn(dataTable, "CenterY", 0);
+            DsOperation.AddDoubleColumn(dataTable, "CoveringLayerX", 0.03);
+            DsOperation.AddDoubleColumn(dataTable, "CoveringLayerY", 0.03);
             #endregion
             #region Punchings
             dataTable = new DataTable("PunchingLayers");
             dataSet.Tables.Add(dataTable);
+            DsOperation.AddDoubleColumn(dataTable, "Height", 0.2);
             DsOperation.AddIdNameParentIdColumn(dataTable);
             #endregion
             #region

@@ -13,6 +13,7 @@ namespace RDStartWPF.Views.Common.BuildingsAndSites
     {
         Drenage,
         Foundation,
+        Punching,
         RetainingWallPresure,
         SteelBase,
         SteelBasePartGroup,

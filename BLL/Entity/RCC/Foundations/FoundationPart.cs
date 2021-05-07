@@ -10,13 +10,14 @@ using System.Data;
 using RDBLL.Entity.RCC.Foundations.Processors;
 using RDBLL.Common.Service.DsOperations;
 using RDBLL.Common.Geometry;
+using RDBLL.Common.Interfaces.Shapes;
 
 namespace RDBLL.Entity.RCC.Foundations
 {
     /// <summary>
     /// Класс ступени фундамента
     /// </summary>
-    public abstract class FoundationPart : IDsSaveable
+    public abstract class FoundationPart : IDsSaveable, IHasHeight
     {
         /// <summary>
         /// Класс результатов вычислений ступени фундамента
@@ -162,9 +163,7 @@ namespace RDBLL.Entity.RCC.Foundations
         /// <param name="dataRow"></param>
         public virtual void OpenFromDataSet(DataRow dataRow)
         {
-            Id = dataRow.Field<int>("Id");
-            Name = dataRow.Field<string>("Name");
-            Height = dataRow.Field<double>("Height");
+            EntityOperation.SetProps(dataRow, this);
             CenterX = dataRow.Field<double>("CenterX");
             CenterY = dataRow.Field<double>("CenterY");
         }

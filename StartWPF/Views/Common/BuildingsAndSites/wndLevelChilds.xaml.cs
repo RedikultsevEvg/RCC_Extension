@@ -23,6 +23,8 @@ using RDBLL.Entity.SC.Column.SteelBases;
 using RDStartWPF.Views.Common.Service;
 using RDBLL.Common.Service.DsOperations;
 using System.Data;
+using RDBLL.Entity.RCC.Slabs.Punchings;
+using RDBLL.Entity.RCC.Slabs.Punchings.Factories;
 
 namespace RDStartWPF.Views.Common.BuildingsAndSites
 {
@@ -76,6 +78,7 @@ namespace RDStartWPF.Views.Common.BuildingsAndSites
 
         private void BtnAdd_Click(object sender, RoutedEventArgs e)
         {
+
             switch (_ChildType)
             {
                 case LvlChildType.SteelBase:
@@ -88,27 +91,7 @@ namespace RDStartWPF.Views.Common.BuildingsAndSites
                 case LvlChildType.SteelBasePartGroup:
                     {
                         SteelBasePartGroup newItem =  GroupFactory.GetSteelBasePartGroup(GroupType.Type1);
-                        newItem.RegisterParent(_level);
-                        newItem.SaveToDataSet(ProgrammSettings.CurrentDataSet, true);
-                        WndCommonDialog dialog = new WndCommonDialog(newItem);
-                        dialog.ShowDialog();
-                        if (dialog.DialogResult == true)
-                        {
-                            try
-                            {
-                                newItem.SaveToDataSet(ProgrammSettings.CurrentDataSet, false);
-                                ProgrammSettings.IsDataChanged = true;
-                            }
-                            catch (Exception ex)
-                            {
-                                CommonErrorProcessor.ShowErrorMessage("Ошибка сохранения в элементе: " + newItem.Name, ex);
-                            }
-                        }
-                        else
-                        {
-                            newItem.UnRegisterParent();
-                            newItem.DeleteFromDataSet(ProgrammSettings.CurrentDataSet);
-                        }
+                        AddOrEditLevelChild(newItem, true);
                         break;
                     }
                 case LvlChildType.Foundation:
@@ -140,6 +123,13 @@ namespace RDStartWPF.Views.Common.BuildingsAndSites
                         }
                         break;
                     }
+                case LvlChildType.Punching:
+                    {
+                        IPunchingFactory punchingFactory = new CentralColumnPunching();
+                        IHasParent newItem = punchingFactory.CreatePunching();
+                        AddOrEditLevelChild(newItem, true);
+                    }
+                    break;
             }
         }
 
@@ -177,7 +167,7 @@ namespace RDStartWPF.Views.Common.BuildingsAndSites
             {
                 int a = LvMain.SelectedIndex;
                 bool dialogResult = false;
-                IDsSaveable item = _collection[a];
+                IHasParent item = _collection[a];
                     
                 if (_collection[a] is SteelBase)
                 {
@@ -186,11 +176,12 @@ namespace RDStartWPF.Views.Common.BuildingsAndSites
                     wnd.ShowDialog();
                     if (wnd.DialogResult == true) dialogResult = true;
                 }
-                else if (item is SteelBasePartGroup)
+                else if ((item is SteelBasePartGroup) || (item is Punching))
                 {
-                    WndCommonDialog dialog = new WndCommonDialog(item);
-                    dialog.ShowDialog();
-                    if (dialog.DialogResult == true) dialogResult = true;
+                    //WndCommonDialog dialog = new WndCommonDialog(item);
+                    //dialog.ShowDialog();
+                    //if (dialog.DialogResult == true)
+                    dialogResult = AddOrEditLevelChild(item, false);
                 }
                 else if (_collection[a] is Foundation)
                 {
@@ -259,6 +250,40 @@ namespace RDStartWPF.Views.Common.BuildingsAndSites
             else
             {
                 MessageBox.Show("Ничего не выбрано", "Выберите один из элементов");
+            }
+        }
+
+        private bool AddOrEditLevelChild(IHasParent newItem, bool createNew)
+        {
+            if (createNew)
+            {
+                newItem.RegisterParent(_level);
+                newItem.SaveToDataSet(ProgrammSettings.CurrentDataSet, true);
+            }
+            WndCommonDialog dialog = new WndCommonDialog(newItem);
+            dialog.ShowDialog();
+            if (dialog.DialogResult == true)
+            {
+                try
+                {
+                    newItem.SaveToDataSet(ProgrammSettings.CurrentDataSet, false);
+                    ProgrammSettings.IsDataChanged = true;
+                    return true;
+                }
+                catch (Exception ex)
+                {
+                    CommonErrorProcessor.ShowErrorMessage($"Ошибка сохранения в элементе: {newItem.Name}", $"Тип элемента: {newItem.GetType().Name}, \n Код элемента: Id={newItem.Id}, \n Имя элемента: {newItem.Name}", ex);
+                    return false;
+                }
+            }
+            else
+            {
+                if (createNew)
+                {
+                    newItem.UnRegisterParent();
+                    newItem.DeleteFromDataSet(ProgrammSettings.CurrentDataSet);
+                }
+                return false;
             }
         }
     }

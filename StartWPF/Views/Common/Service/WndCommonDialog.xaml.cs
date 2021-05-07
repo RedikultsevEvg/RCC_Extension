@@ -1,8 +1,10 @@
 ﻿using RDBLL.Common.Interfaces;
 using RDBLL.Common.Service;
+using RDBLL.Entity.RCC.Slabs.Punchings;
 using RDBLL.Entity.SC.Column.SteelBases;
 using RDStartWPF.ViewModels.Base;
 using RDStartWPF.ViewModels.SC.Columns.Bases;
+using RDStartWPF.Views.RCC.Slabs.Punchings;
 using RDStartWPF.Views.SC.Columns.Bases;
 using System;
 using System.Collections.Generic;
@@ -44,6 +46,13 @@ namespace RDStartWPF.Views.Common.Service
                 Title = "Группа участков базы стальной колонны";
                 MinWidth = 600;
                 MinHeight = 600;
+            }
+            else if (_Element is Punching)
+            {
+                page = new PgPunching(_Element as Punching);
+                Title = "Продавливание плиты колонной прямоугольного сечения";
+                MinWidth = 600;
+                MinHeight = 400;
             }
             if (page !=null) ElementProps.Navigate(page);
         }

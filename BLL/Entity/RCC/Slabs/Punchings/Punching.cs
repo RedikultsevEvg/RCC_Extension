@@ -15,7 +15,7 @@ using System.Threading.Tasks;
 
 namespace RDBLL.Entity.RCC.Slabs.Punchings
 {
-    public class Punching : IHasParent, ICloneable, IHasForcesGroups, IRectangle
+    public class Punching : IHasParent, ICloneable, IHasForcesGroups, IRectangle, IHasChildren
     {
         /// <summary>
         /// Код элемента
@@ -32,7 +32,7 @@ namespace RDBLL.Entity.RCC.Slabs.Punchings
         /// <summary>
         /// Коллекция слоев продавливания
         /// </summary>
-        public ObservableCollection<PunchingLayer> Layers { get; set; }
+        public ObservableCollection<IHasParent> Children { get; set; }
         /// <summary>
         /// Коллекция групп нагрузок
         /// </summary>
@@ -68,7 +68,7 @@ namespace RDBLL.Entity.RCC.Slabs.Punchings
         public Punching(bool GenId = false)
         {
             if (GenId) { Id = ProgrammSettings.CurrentId; }
-            Layers = new ObservableCollection<PunchingLayer>();
+            Children = new ObservableCollection<IHasParent>();
             ForcesGroups = new ObservableCollection<ForcesGroup>();
             ForcesGroups.Add(new ForcesGroup(this));
             Center = new Point2D();
@@ -85,8 +85,8 @@ namespace RDBLL.Entity.RCC.Slabs.Punchings
                 newLoad.Owners.Add(punching);
                 punching.ForcesGroups.Add(newLoad);
             }
-            punching.Layers = new ObservableCollection<PunchingLayer>();
-            foreach (PunchingLayer layer in Layers)
+            punching.Children = new ObservableCollection<IHasParent>();
+            foreach (PunchingLayer layer in Children)
             {
                 PunchingLayer newLayer = layer.Clone() as PunchingLayer;
                 newLayer.RegisterParent(punching);
@@ -101,9 +101,9 @@ namespace RDBLL.Entity.RCC.Slabs.Punchings
             {
                 forcesGroup.DeleteFromDataSet(dataSet);
             }
-            foreach (PunchingLayer layer in Layers)
+            foreach (IHasParent child in Children)
             {
-                layer.DeleteFromDataSet(dataSet);
+                child.DeleteFromDataSet(dataSet);
             }
             DsOperation.DeleteRow(dataSet, GetTableName(), Id);
         }
@@ -130,11 +130,17 @@ namespace RDBLL.Entity.RCC.Slabs.Punchings
         public void OpenFromDataSet(DataRow dataRow)
         {
             EntityOperation.SetProps(dataRow, this);
+            double d = 0;
+            DsOperation.Field(dataRow, ref d, "CoveringLayerX", 0.03);
+            CoveringLayerX = d;
+            DsOperation.Field(dataRow, ref d, "CoveringLayerY", 0.03);
+            CoveringLayerY = d;
         }
 
         public void RegisterParent(IDsSaveable parent)
         {
             if (ParentMember != null) { UnRegisterParent(); }
+            else if (!(parent is Level)) throw new Exception($"Parent type is not valid. Element type {GetType().Name}, Id = {Id}, Name={Name}");
             Level level = parent as Level;
             ParentMember = level;
             level.Children.Add(this);
@@ -148,7 +154,6 @@ namespace RDBLL.Entity.RCC.Slabs.Punchings
                 #region setFields
                 DsOperation.SetField(row, "CoveringLayerX", CoveringLayerX);
                 DsOperation.SetField(row, "CoveringLayerY", CoveringLayerY);
-                foreach (PunchingLayer layer in Layers) { layer.SaveToDataSet(dataSet, createNew); }
                 #endregion
                 row.AcceptChanges();
             }
@@ -169,10 +174,21 @@ namespace RDBLL.Entity.RCC.Slabs.Punchings
         {
             if (!(obj is Punching)) return false;
             Punching punching = obj as Punching;
-            if (punching.Width != this.Width) return false;
+            if (punching.Id != this.Id) return false;
+            else if (punching.Name != this.Name) return false;
+            else if (punching.Width != this.Width) return false;
             else if (punching.Length != this.Length) return false;
             else if (punching.CoveringLayerX != this.CoveringLayerX) return false;
             else if (punching.CoveringLayerY != this.CoveringLayerY) return false;
+            int count = this.Children.Count();
+            if (count != punching.Children.Count()) return false;
+            else
+            {
+                for (int i=0; i < count; i++)
+                {
+                    if (!Children[i].Equals(punching.Children[i])) return false;
+                }
+            }
             return true;
         }
     }

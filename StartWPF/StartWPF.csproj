@@ -98,6 +98,7 @@
       <DependentUpon>CalcTypeControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="InfraStructure\Comands\Base\CommandBase.cs" />
+    <Compile Include="InfraStructure\Common\CommonOperations\CommonWindowOperation.cs" />
     <Compile Include="InfraStructure\ControlClasses\CalcKind.cs" />
     <Compile Include="InfraStructure\ControlClasses\CalcType.cs" />
     <Compile Include="InfraStructure\ControlClasses\ReportCard.cs" />
@@ -128,10 +129,12 @@
     <Compile Include="ViewModels\Common\Parameters\ParametersVM.cs" />
     <Compile Include="ViewModels\MatUsings\MatUsingVM.cs" />
     <Compile Include="ViewModels\MatUsings\SafetyFactorsVM.cs" />
+    <Compile Include="ViewModels\RCC\Slabs\Punchings\PunchingVM.cs" />
     <Compile Include="ViewModels\SC\Columns\Bases\SteelBasePartGroupPgVM.cs" />
     <Compile Include="ViewModels\SC\Columns\Bases\SteelBasePartsPgVM.cs" />
     <Compile Include="ViewModels\SC\Columns\Bases\SteelBaseVM.cs" />
     <Compile Include="ViewModels\Soils\SoilSections\SoilSectionUsingVM.cs" />
+    <Compile Include="Views\Bases\Pages\PageBase.cs" />
     <Compile Include="Views\Common\BuildingsAndSites\LvlChildType.cs" />
     <Compile Include="Views\Common\BuildingsAndSites\WndBuilding.xaml.cs">
       <DependentUpon>WndBuilding.xaml</DependentUpon>
@@ -164,6 +167,9 @@
     </Compile>
     <Compile Include="Views\Common\Patterns\UserControls\PatternCardControl.xaml.cs">
       <DependentUpon>PatternCardControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\RCC\Slabs\Punchings\PgPunching.xaml.cs">
+      <DependentUpon>PgPunching.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\SC\Columns\Bases\PgSteelBasePartGroup.xaml.cs">
       <DependentUpon>PgSteelBasePartGroup.xaml</DependentUpon>
@@ -390,6 +396,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\RCC\Slabs\Punchings\PgPunching.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\SC\Columns\Bases\PgSteelBasePartGroup.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -525,6 +535,30 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
+    <Content Include="Reports\Foundations\ForceCombinations.frx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Reports\Foundations\Foundations.frx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Reports\Foundations\Settlements.frx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Reports\Foundations\Stresses.frx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Reports\SteelBases\Assignment.frx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Reports\SteelBases\Dictionary.frd">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Reports\SteelBases\SteelBases.frx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Reports\Template.frx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <None Include="StartWPF_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>
@@ -611,8 +645,48 @@
     <Resource Include="Soil.jpg" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="ViewModels\RCC\" />
+    <Folder Include="Reports\RCC\Slabs\Punchings\" />
     <Folder Include="Views\WPF_Windows\CommonWindows\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\IconPunching40.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Images\Patterns\SC\Bases\Default.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\Patterns\SC\Bases\Pattern1.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\Patterns\SC\Bases\Pattern2.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\Patterns\SC\Bases\Pattern3.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\Patterns\Soils\ClaySoil.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\Patterns\Soils\GravelSoil.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\Patterns\Soils\RockSoil.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\Patterns\Soils\SandSoil.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Reports\Foundations\Foundations.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Reports\SteelBases\Assignment.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Reports\SteelBases\SteelBases.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -17,7 +17,13 @@ namespace RDBLL.Common.Service
 
         public static void ShowErrorMessage(String mainText, Exception ex)
         {
-            ShowErrorMessage(mainText, "Возникло исключение: " + ex);
+            ShowErrorMessage(mainText, "Exception: \n" + ex);
+        }
+
+        public static void ShowErrorMessage(String mainText, String extendedText, Exception ex)
+        {
+            wndErrorMessage newErrorMessage = new wndErrorMessage(mainText, extendedText);
+            ShowErrorMessage(mainText, "Exception: \n" + extendedText + "\n" + ex);
         }
     }
 }

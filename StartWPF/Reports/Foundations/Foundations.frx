@@ -1,0 +1,427 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Report ScriptLanguage="CSharp" DoublePass="true" ReportInfo.Created="08/11/2019 20:16:27" ReportInfo.Modified="03/14/2021 12:43:59" ReportInfo.CreatorVersion="2020.1.0.0">
+  <Dictionary>
+    <TableDataSource Name="LoadCases" ReferenceName="Data.LoadCases" DataType="System.Int32" Enabled="true">
+      <Column Name="Id" DataType="System.Int32"/>
+      <Column Name="Description" DataType="System.String"/>
+      <Column Name="PartialSafetyFactor" DataType="System.Double"/>
+      <Column Name="ForceDescription" DataType="System.String"/>
+      <Column Name="Name" DataType="System.String"/>
+      <Column Name="CrcForceDescription" DataType="System.String"/>
+      <Column Name="DesignForceDescription" DataType="System.String"/>
+      <Column Name="ParentId" DataType="System.Int32"/>
+    </TableDataSource>
+    <TableDataSource Name="LoadCasesForceParameters" ReferenceName="Data.LoadCasesForceParameters" DataType="System.Int32" Enabled="true">
+      <Column Name="Id" DataType="System.Int32"/>
+      <Column Name="LongLabel" DataType="System.String"/>
+      <Column Name="ShortLabel" DataType="System.String"/>
+      <Column Name="Unit" DataType="System.String"/>
+      <Column Name="CrcValue" DataType="System.Double"/>
+      <Column Name="DesignValue" DataType="System.Double"/>
+      <Column Name="ElementName" DataType="System.String"/>
+      <Column Name="LoadSetId" DataType="System.Int32"/>
+      <Column Name="LoadSetName" DataType="System.String"/>
+      <Column Name="Description" DataType="System.String"/>
+      <Column Name="ParentId" DataType="System.Int32"/>
+    </TableDataSource>
+    <TableDataSource Name="LoadSets" ReferenceName="Data.LoadSets" DataType="System.Int32" Enabled="true">
+      <Column Name="Id" DataType="System.Int32"/>
+      <Column Name="Name" DataType="System.String"/>
+      <Column Name="PartialSafetyFactor" DataType="System.Double"/>
+      <Column Name="CrcForceDescription" DataType="System.String"/>
+      <Column Name="DesignForceDescription" DataType="System.String"/>
+      <Column Name="Description" DataType="System.String"/>
+      <Column Name="ForceDescription" DataType="System.String"/>
+      <Column Name="ParentId" DataType="System.Int32"/>
+    </TableDataSource>
+    <TableDataSource Name="LoadSetsForceParameters" ReferenceName="Data.LoadSetsForceParameters" DataType="System.Int32" Enabled="true">
+      <Column Name="Id" DataType="System.Int32"/>
+      <Column Name="LoadSetId" DataType="System.Int32"/>
+      <Column Name="LoadSetName" DataType="System.String"/>
+      <Column Name="Description" DataType="System.String"/>
+      <Column Name="LongLabel" DataType="System.String"/>
+      <Column Name="ShortLabel" DataType="System.String"/>
+      <Column Name="Unit" DataType="System.String"/>
+      <Column Name="CrcValue" DataType="System.Double"/>
+      <Column Name="DesignValue" DataType="System.Double"/>
+      <Column Name="ElementName" DataType="System.String"/>
+      <Column Name="ParentId" DataType="System.Int32"/>
+    </TableDataSource>
+    <TableDataSource Name="Foundations" ReferenceName="Data.Foundations" DataType="System.Int32" Enabled="true">
+      <Column Name="Id" DataType="System.Int32"/>
+      <Column Name="Name" DataType="System.String"/>
+      <Column Name="Picture" DataType="System.Byte[]" BindableControl="Picture"/>
+      <Column Name="Width" DataType="System.Double"/>
+      <Column Name="Length" DataType="System.Double"/>
+      <Column Name="Height" DataType="System.Double"/>
+      <Column Name="SoilVolumeWeight" DataType="System.Double"/>
+      <Column Name="ConcreteVolumeWeight" DataType="System.Double"/>
+      <Column Name="SoilVolume" DataType="System.Double"/>
+      <Column Name="ConcreteVolume" DataType="System.Double"/>
+      <Column Name="Area" DataType="System.Double"/>
+      <Column Name="Wx" DataType="System.Double"/>
+      <Column Name="Wy" DataType="System.Double"/>
+      <Column Name="MinSndAvgStressesWithWeight" DataType="System.Double"/>
+      <Column Name="MinSndMiddleStressesWithWeight" DataType="System.Double"/>
+      <Column Name="MinSndCornerStressesWithWeight" DataType="System.Double"/>
+      <Column Name="MaxSndCornerStressesWithWeight" DataType="System.Double"/>
+      <Column Name="MaxSndTensionAreaRatioWithWeight" DataType="System.Double"/>
+      <Column Name="SettlementMin" DataType="System.Double"/>
+      <Column Name="CompressionHeightMax" DataType="System.Double"/>
+      <Column Name="IncXMax" DataType="System.Double"/>
+      <Column Name="IncYMax" DataType="System.Double"/>
+      <Column Name="IncXYMax" DataType="System.Double"/>
+      <Column Name="NzStiffnessStringMin" DataType="System.String"/>
+      <Column Name="MxStiffnessStringMin" DataType="System.String"/>
+      <Column Name="MyStiffnessStringMin" DataType="System.String"/>
+      <Column Name="NzStiffnessStringMax" DataType="System.String"/>
+      <Column Name="MxStiffnessStringMax" DataType="System.String"/>
+      <Column Name="MyStiffnessStringMax" DataType="System.String"/>
+      <Column Name="SndResistance" DataType="System.Double"/>
+      <Column Name="AvgStressConclusion" DataType="System.String"/>
+      <Column Name="MiddleStressConclusion" DataType="System.String"/>
+      <Column Name="CornerStressConclusion" DataType="System.String"/>
+      <Column Name="SettlementConclusion" DataType="System.String"/>
+      <Column Name="GeneralConclusion" DataType="System.String"/>
+      <Column Name="ParentId" DataType="System.Int32"/>
+      <Column Name="AsBottomXAct" DataType="System.Double"/>
+      <Column Name="AsBottomYAct" DataType="System.Double"/>
+      <Column Name="AsBottomXMax" DataType="System.Double"/>
+      <Column Name="AsBottomYMax" DataType="System.Double"/>
+      <Column Name="AsCrcBottomXMax" DataType="System.Double"/>
+      <Column Name="AsCrcBottomYMax" DataType="System.Double"/>
+      <Column Name="AsFstConclusionX" DataType="System.String"/>
+      <Column Name="AsFstConclusionY" DataType="System.String"/>
+    </TableDataSource>
+    <TableDataSource Name="FoundationParts" ReferenceName="Data.FoundationParts" DataType="System.Int32" Enabled="true">
+      <Column Name="Id" DataType="System.Int32"/>
+      <Column Name="Name" DataType="System.String"/>
+      <Column Name="Width" DataType="System.Double"/>
+      <Column Name="Length" DataType="System.Double"/>
+      <Column Name="Heigth" DataType="System.Double"/>
+      <Column Name="Volume" DataType="System.Double"/>
+      <Column Name="CenterX" DataType="System.Double"/>
+      <Column Name="ParentId" DataType="System.Int32"/>
+      <Column Name="CenterY" DataType="System.Double"/>
+      <Column Name="CrcMomentXMax" DataType="System.Double"/>
+      <Column Name="CrcMomentYMax" DataType="System.Double"/>
+      <Column Name="CrcMomentXMin" DataType="System.Double"/>
+      <Column Name="CrcMomentYMin" DataType="System.Double"/>
+      <Column Name="DesignMomentXMax" DataType="System.Double"/>
+      <Column Name="DesignMomentYMax" DataType="System.Double"/>
+      <Column Name="DesignMomentXMin" DataType="System.Double"/>
+      <Column Name="DesignMomentYMin" DataType="System.Double"/>
+      <Column Name="CrcMomentXMaxDistr" DataType="System.Double"/>
+      <Column Name="CrcMomentYMaxDistr" DataType="System.Double"/>
+      <Column Name="CrcMomentXMinDistr" DataType="System.Double"/>
+      <Column Name="CrcMomentYMinDistr" DataType="System.Double"/>
+      <Column Name="DesignMomentXMaxDistr" DataType="System.Double"/>
+      <Column Name="DesignMomentYMaxDistr" DataType="System.Double"/>
+      <Column Name="DesignMomentXMinDistr" DataType="System.Double"/>
+      <Column Name="DesignMomentYMinDistr" DataType="System.Double"/>
+      <Column Name="CrcMomentX" DataType="System.Double"/>
+      <Column Name="CrcMomentY" DataType="System.Double"/>
+      <Column Name="AsBottomXMax" DataType="System.Double"/>
+      <Column Name="AsBottomYMax" DataType="System.Double"/>
+      <Column Name="AsCrcBottomXMax" DataType="System.Double"/>
+      <Column Name="AsCrcBottomYMax" DataType="System.Double"/>
+    </TableDataSource>
+    <TableDataSource Name="BottomLoadCases" ReferenceName="Data.BottomLoadCases" DataType="System.Int32" Enabled="true">
+      <Column Name="Id" DataType="System.Int32"/>
+      <Column Name="Name" DataType="System.String"/>
+      <Column Name="Description" DataType="System.String"/>
+      <Column Name="PartialSafetyFactor" DataType="System.Double"/>
+      <Column Name="CrcForceDescription" DataType="System.String"/>
+      <Column Name="DesignForceDescription" DataType="System.String"/>
+      <Column Name="ForceDescription" DataType="System.String"/>
+      <Column Name="ParentId" DataType="System.Int32"/>
+    </TableDataSource>
+    <TableDataSource Name="BottomLoadCasesForceParameters" ReferenceName="Data.BottomLoadCasesForceParameters" DataType="System.Int32" Enabled="true">
+      <Column Name="Id" DataType="System.Int32"/>
+      <Column Name="ElementName" DataType="System.String"/>
+      <Column Name="LoadSetId" DataType="System.Int32"/>
+      <Column Name="LoadSetName" DataType="System.String"/>
+      <Column Name="Description" DataType="System.String"/>
+      <Column Name="LongLabel" DataType="System.String"/>
+      <Column Name="ShortLabel" DataType="System.String"/>
+      <Column Name="Unit" DataType="System.String"/>
+      <Column Name="CrcValue" DataType="System.Double"/>
+      <Column Name="DesignValue" DataType="System.Double"/>
+      <Column Name="ParentId" DataType="System.Int32"/>
+    </TableDataSource>
+    <TableDataSource Name="BottomLoadCasesWithWeight" ReferenceName="Data.BottomLoadCasesWithWeight" DataType="System.Int32" Enabled="true">
+      <Column Name="Id" DataType="System.Int32"/>
+      <Column Name="Name" DataType="System.String"/>
+      <Column Name="Description" DataType="System.String"/>
+      <Column Name="PartialSafetyFactor" DataType="System.Double"/>
+      <Column Name="CrcForceDescription" DataType="System.String"/>
+      <Column Name="DesignForceDescription" DataType="System.String"/>
+      <Column Name="ForceDescription" DataType="System.String"/>
+      <Column Name="ParentId" DataType="System.Int32"/>
+    </TableDataSource>
+    <TableDataSource Name="BottomLoadCasesWithWeightForceParameters" ReferenceName="Data.BottomLoadCasesWithWeightForceParameters" DataType="System.Int32" Enabled="true">
+      <Column Name="Id" DataType="System.Int32"/>
+      <Column Name="ElementName" DataType="System.String"/>
+      <Column Name="LoadSetId" DataType="System.Int32"/>
+      <Column Name="LoadSetName" DataType="System.String"/>
+      <Column Name="Description" DataType="System.String"/>
+      <Column Name="LongLabel" DataType="System.String"/>
+      <Column Name="ShortLabel" DataType="System.String"/>
+      <Column Name="Unit" DataType="System.String"/>
+      <Column Name="CrcValue" DataType="System.Double"/>
+      <Column Name="DesignValue" DataType="System.Double"/>
+      <Column Name="ParentId" DataType="System.Int32"/>
+    </TableDataSource>
+    <TableDataSource Name="FoundationStressesWithWeight" ReferenceName="Data.FoundationStressesWithWeight" DataType="System.Int32" Enabled="true">
+      <Column Name="Id" DataType="System.Int32"/>
+      <Column Name="crcAvgStress" DataType="System.Double"/>
+      <Column Name="crcCenterStress" DataType="System.Double"/>
+      <Column Name="crcMiddleSresses" DataType="System.Double"/>
+      <Column Name="crcCornerSressesMin" DataType="System.Double"/>
+      <Column Name="crcCornerSressesMax" DataType="System.Double"/>
+      <Column Name="designAvgStress" DataType="System.Double"/>
+      <Column Name="designCenterStress" DataType="System.Double"/>
+      <Column Name="designMiddleSresses" DataType="System.Double"/>
+      <Column Name="designCornerSressesMin" DataType="System.Double"/>
+      <Column Name="designCornerSressesMax" DataType="System.Double"/>
+      <Column Name="CrcTensionAreaRatio" DataType="System.Double"/>
+      <Column Name="DesignTensionAreaRatio" DataType="System.Double"/>
+      <Column Name="Name" DataType="System.String"/>
+      <Column Name="ParentId" DataType="System.Int32"/>
+    </TableDataSource>
+    <TableDataSource Name="FoundationStressesWithoutWeight" ReferenceName="Data.FoundationStressesWithoutWeight" DataType="System.Int32" Enabled="true">
+      <Column Name="Id" DataType="System.Int32"/>
+      <Column Name="crcAvgStress" DataType="System.Double"/>
+      <Column Name="crcCenterStress" DataType="System.Double"/>
+      <Column Name="crcMiddleSresses" DataType="System.Double"/>
+      <Column Name="crcCornerSressesMin" DataType="System.Double"/>
+      <Column Name="crcCornerSressesMax" DataType="System.Double"/>
+      <Column Name="designAvgStress" DataType="System.Double"/>
+      <Column Name="designCenterStress" DataType="System.Double"/>
+      <Column Name="designMiddleSresses" DataType="System.Double"/>
+      <Column Name="designCornerSressesMin" DataType="System.Double"/>
+      <Column Name="designCornerSressesMax" DataType="System.Double"/>
+      <Column Name="CrcTensionAreaRatio" DataType="System.Double"/>
+      <Column Name="DesignTensionAreaRatio" DataType="System.Double"/>
+      <Column Name="Name" DataType="System.String"/>
+      <Column Name="ParentId" DataType="System.Int32"/>
+    </TableDataSource>
+    <TableDataSource Name="SettlementSets" ReferenceName="Data.SettlementSets" DataType="System.Int32" Enabled="true">
+      <Column Name="Id" DataType="System.Int32"/>
+      <Column Name="Name" DataType="System.String"/>
+      <Column Name="MinSettlement" DataType="System.Double"/>
+      <Column Name="CompressedHeight" DataType="System.Double"/>
+      <Column Name="SumRotateX" DataType="System.Double"/>
+      <Column Name="SumRotateY" DataType="System.Double"/>
+      <Column Name="SumRotateXY" DataType="System.Double"/>
+      <Column Name="NzStiffness" DataType="System.String"/>
+      <Column Name="MxStiffness" DataType="System.String"/>
+      <Column Name="MyStiffness" DataType="System.String"/>
+      <Column Name="ParentId" DataType="System.Int32"/>
+    </TableDataSource>
+    <TableDataSource Name="ComressedLayers" ReferenceName="Data.ComressedLayers" DataType="System.Int32" Enabled="true">
+      <Column Name="Id" DataType="System.Int32"/>
+      <Column Name="ZLevel" DataType="System.Double"/>
+      <Column Name="TopLevel" DataType="System.Double"/>
+      <Column Name="BtmLevel" DataType="System.Double"/>
+      <Column Name="SigmZg" DataType="System.Double"/>
+      <Column Name="SigmZgamma" DataType="System.Double"/>
+      <Column Name="SigmZp" DataType="System.Double"/>
+      <Column Name="LocalSettlement" DataType="System.Double"/>
+      <Column Name="SumSettlement" DataType="System.Double"/>
+      <Column Name="Alpha" DataType="System.Double"/>
+      <Column Name="Name" DataType="System.String"/>
+      <Column Name="ParentId" DataType="System.Int32"/>
+    </TableDataSource>
+    <TableDataSource Name="PartMoments" ReferenceName="Data.PartMoments" DataType="System.Int32" Enabled="true">
+      <Column Name="Id" DataType="System.Int32"/>
+      <Column Name="Name" DataType="System.String"/>
+      <Column Name="ParentId" DataType="System.Int32"/>
+      <Column Name="CrcMomentX" DataType="System.Double"/>
+      <Column Name="DesignMomentY" DataType="System.Double"/>
+    </TableDataSource>
+    <Relation Name="FoundationsLoadSets" ReferenceName="Data.FoundationsLoadSets" ParentDataSource="Foundations" ChildDataSource="LoadSets" ParentColumns="Id" ChildColumns="ParentId" Enabled="true"/>
+    <Relation Name="FoundationsLoadSetsForceParameters" ReferenceName="Data.FoundationsLoadSetsForceParameters" ParentDataSource="Foundations" ChildDataSource="LoadSetsForceParameters" ParentColumns="Id" ChildColumns="ParentId" Enabled="true"/>
+    <Relation Name="FoundationsLoadCases" ReferenceName="Data.FoundationsLoadCases" ParentDataSource="Foundations" ChildDataSource="LoadCases" ParentColumns="Id" ChildColumns="ParentId" Enabled="true"/>
+    <Relation Name="FoundationsLoadCasesForceParameters" ReferenceName="Data.FoundationsLoadCasesForceParameters" ParentDataSource="Foundations" ChildDataSource="LoadCasesForceParameters" ParentColumns="Id" ChildColumns="ParentId" Enabled="true"/>
+    <Relation Name="FoundationsBottomLoadCases" ReferenceName="Data.FoundationsBottomLoadCases" ParentDataSource="Foundations" ChildDataSource="BottomLoadCases" ParentColumns="Id" ChildColumns="ParentId" Enabled="true"/>
+    <Relation Name="FoundationsBottomLoadCasesForceParameters" ReferenceName="Data.FoundationsBottomLoadCasesForceParameters" ParentDataSource="Foundations" ChildDataSource="BottomLoadCasesForceParameters" ParentColumns="Id" ChildColumns="ParentId" Enabled="true"/>
+    <Relation Name="FoundationsBottomLoadCasesWithWeight" ReferenceName="Data.FoundationsBottomLoadCasesWithWeight" ParentDataSource="Foundations" ChildDataSource="BottomLoadCasesWithWeight" ParentColumns="Id" ChildColumns="ParentId" Enabled="true"/>
+    <Relation Name="FoundationsBottomLoadCasesWithWeightForceParameters" ReferenceName="Data.FoundationsBottomLoadCasesWithWeightForceParameters" ParentDataSource="Foundations" ChildDataSource="BottomLoadCasesWithWeightForceParameters" ParentColumns="Id" ChildColumns="ParentId" Enabled="true"/>
+    <Relation Name="FoundationsFoundationParts" ReferenceName="Data.FoundationsFoundationParts" ParentDataSource="Foundations" ChildDataSource="FoundationParts" ParentColumns="Id" ChildColumns="ParentId" Enabled="true"/>
+    <Relation Name="FoundationsFoundationStressesWithWeight" ReferenceName="Data.FoundationsFoundationStressesWithWeight" ParentDataSource="Foundations" ChildDataSource="FoundationStressesWithWeight" ParentColumns="Id" ChildColumns="ParentId" Enabled="true"/>
+    <Relation Name="FoundationsFoundationStressesWithoutWeight" ReferenceName="Data.FoundationsFoundationStressesWithoutWeight" ParentDataSource="Foundations" ChildDataSource="FoundationStressesWithoutWeight" ParentColumns="Id" ChildColumns="ParentId" Enabled="true"/>
+    <Relation Name="FoundationsSettlementSets" ReferenceName="Data.FoundationsSettlementSets" ParentDataSource="Foundations" ChildDataSource="SettlementSets" ParentColumns="Id" ChildColumns="ParentId" Enabled="true"/>
+    <Relation Name="SettlementSetsComressedLayers" ReferenceName="Data.SettlementSetsComressedLayers" ParentDataSource="SettlementSets" ChildDataSource="ComressedLayers" ParentColumns="Id" ChildColumns="ParentId" Enabled="true"/>
+    <Relation Name="FoundationPartsPartMoments" ReferenceName="Data.FoundationPartsPartMoments" ParentDataSource="FoundationParts" ChildDataSource="PartMoments" ParentColumns="Id" ChildColumns="ParentId" Enabled="true"/>
+    <Parameter Name="Units" DataType="System.String">
+      <Parameter Name="LinearSize" DataType="System.String"/>
+      <Parameter Name="Force" DataType="System.String"/>
+      <Parameter Name="Moment" DataType="System.String"/>
+      <Parameter Name="Stress" DataType="System.String"/>
+      <Parameter Name="Geometry" DataType="System.String">
+        <Parameter Name="Area" DataType="System.String"/>
+        <Parameter Name="SecMoment" DataType="System.String"/>
+        <Parameter Name="Moment" DataType="System.String"/>
+      </Parameter>
+      <Parameter Name="Mass" DataType="System.String"/>
+      <Parameter Name="Density" DataType="System.String"/>
+      <Parameter Name="VolumeWeight" DataType="System.String"/>
+      <Parameter Name="SizeArea" DataType="System.String"/>
+      <Parameter Name="SizeVolume" DataType="System.String"/>
+      <Parameter Name="DisributedForce" DataType="System.String"/>
+      <Parameter Name="DisributedLoad" DataType="System.String"/>
+      <Parameter Name="Filtration" DataType="System.String"/>
+    </Parameter>
+  </Dictionary>
+  <ReportPage Name="MainReport" RawPaperSize="9" LeftMargin="20" TopMargin="5" RightMargin="5" BottomMargin="5" Watermark.Font="Arial, 60pt">
+    <ReportTitleBand Name="ReportTitle1" Width="699.3" Height="28.35">
+      <TextObject Name="Text1" Width="179.55" Height="28.35" Border.Lines="Bottom" Border.Color="Red" Border.Width="2" Fill.Color="LemonChiffon" Text="[Date]" HorzAlign="Center" Font="Arial, 10pt"/>
+      <TextObject Name="Text2" Left="179.55" Width="519.75" Height="28.35" Border.Lines="Bottom" Border.Color="Red" Border.Width="2" Fill.Color="LemonChiffon" Text="Отчет по столбчатым фундаментам" HorzAlign="Center" Font="Arial, 10pt"/>
+    </ReportTitleBand>
+    <PageHeaderBand Name="PageHeader1" Top="32.35" Width="699.3" Height="28.35"/>
+    <DataBand Name="Foundation" Top="64.7" Width="699.3" Height="75.6" CanGrow="true" OutlineExpression="[Foundations.Name]" DataSource="Foundations" IdColumn="SteelBases.Id">
+      <TextObject Name="Text5" Top="28.35" Width="699.3" Height="47.25" CanGrow="true" GrowToBottom="true" Text="Геометрические характеристики: Ширина B=[Foundations.Width][Units.LinearSize], Длина L=[Foundations.Length][Units.LinearSize], Высота H=[Foundations.Height][Units.LinearSize],  Площадь основания A=[Foundations.Area][Units.Geometry.Area]., Момент сопротивления Wx=[Foundations.Wx][Units.Geometry.SecMoment], Момент сопротивления Wy=[Foundations.Wy][Units.Geometry.SecMoment]. Объем бетона фундамента Vс=[Foundations.ConcreteVolume][Units.SizeVolume], Объем грунта Vс=[Foundations.SoilVolume][Units.SizeVolume]," Font="Arial, 10pt"/>
+      <TextObject Name="Text4" Width="699.3" Height="28.35" CanGrow="true" GrowToBottom="true" Text="Наименование фундамента: [Foundations.Name]" HorzAlign="Center" Font="Arial, 10pt, style=Bold"/>
+      <ChildBand Name="Child1" Top="144.3" Width="699.3" Height="378" OutlineExpression="ToString(&quot;План фундамента&quot;)">
+        <PictureObject Name="Picture2" Width="699.3" Height="378" CanGrow="true" DataColumn="Foundations.Picture"/>
+        <ChildBand Name="Child2" Top="526.3" Width="699.3" Height="18.9">
+          <TextObject Name="Text54" Width="699.3" Height="18.9" CanGrow="true" GrowToBottom="true" Text="Рисунок. План фундамента [Foundations.Name]" HorzAlign="Center" Font="Arial, 10pt, style=Bold"/>
+          <ChildBand Name="Child7" Top="549.2" Width="699.3" Height="18.9" OutlineExpression="ToString(&quot;Нагрузки&quot;)">
+            <SubreportObject Name="SubReportLoadSet" Width="264.6" Height="18.9" ReportPage="ReportLoads"/>
+            <ChildBand Name="Child8" Top="572.1" Width="699.3" Height="18.9" OutlineExpression="ToString(&quot;Ступени&quot;)">
+              <SubreportObject Name="SubReportParts" Width="264.6" Height="18.9" ReportPage="ReportParts"/>
+              <ChildBand Name="Child9" Top="595" Width="699.3" Height="207.9" CanGrow="true" OutlineExpression="ToString(&quot;Давления&quot;)">
+                <TextObject Name="Text23" Width="699.3" Height="18.9" Border.Lines="All" Fill.Color="PaleTurquoise" CanGrow="true" Text="Результаты расчета давления к подошве фундамента (с учетом веса фундамента и грунта на уступах), 2-я группа предельных состояний:" HorzAlign="Center" Font="Arial, 10pt, style=Bold"/>
+                <TextObject Name="Text116" Top="18.9" Width="699.3" Height="18.9" CanGrow="true" GrowToBottom="true" Text="Минимальное значение среднего давления под подошвой [Round([Foundations.MinSndAvgStressesWithWeight],3)] [Units.Stress]" HideZeros="true" Font="Arial, 10pt"/>
+                <TextObject Name="Text117" Top="37.8" Width="699.3" Height="18.9" CanGrow="true" GrowToBottom="true" Text="Минимальное значение краевого давления под подошвой [Round([Foundations.MinSndMiddleStressesWithWeight],3)] [Units.Stress]" HideZeros="true" Font="Arial, 10pt"/>
+                <TextObject Name="Text118" Top="56.7" Width="699.3" Height="18.9" CanGrow="true" GrowToBottom="true" Text="Минимальное значение углового давления под подошвой [Round([Foundations.MinSndCornerStressesWithWeight],3)] [Units.Stress]" HideZeros="true" Font="Arial, 10pt"/>
+                <TextObject Name="Text119" Top="75.6" Width="699.3" Height="18.9" CanGrow="true" GrowToBottom="true" Text="Максимальное значение углового давления под подошвой [Round([Foundations.MaxSndCornerStressesWithWeight],3)] [Units.Stress]" HideZeros="true" Font="Arial, 10pt"/>
+                <TextObject Name="Text120" Top="94.5" Width="699.3" Height="18.9" CanGrow="true" GrowToBottom="true" Text="Максимальное значение относительной площади отрыва [Round([Foundations.MaxSndTensionAreaRatioWithWeight] * 100,1)]%" HideZeros="true" Font="Arial, 10pt"/>
+                <TextObject Name="Text121" Printable="false" Top="113.4" Width="699.3" Height="18.9" Visible="false" Exportable="false" Cursor="Hand" Hyperlink.Kind="DetailReport" Hyperlink.Value="Stresses" Hyperlink.DetailReportName="Stresses.frx" CanGrow="true" GrowToBottom="true" Text="(Подробнее...)" HideZeros="true" Font="Arial, 10pt, style=Bold, Italic, Underline" TextFill.Color="Blue"/>
+                <TextObject Name="Text132" Top="132.3" Width="699.3" Height="18.9" CanGrow="true" GrowToBottom="true" Text="Расчетное сопротивление грунта для 2й группы ПС: R = [Round([Foundations.sndResistance],3)] [Units.Stress]" HideZeros="true" Font="Arial, 10pt"/>
+                <TextObject Name="Text135" Top="151.2" Width="699.3" Height="18.9" CanGrow="true" GrowToBottom="true" Text="[Foundations.AvgStressConclusion]" Font="Arial, 10pt, style=Bold"/>
+                <TextObject Name="Text136" Top="170.1" Width="699.3" Height="18.9" CanGrow="true" GrowToBottom="true" Text="[Foundations.MiddleStressConclusion]" Font="Arial, 10pt, style=Bold"/>
+                <TextObject Name="Text137" Top="189" Width="699.3" Height="18.9" CanGrow="true" GrowToBottom="true" Text="[Foundations.CornerStressConclusion]" Font="Arial, 10pt, style=Bold"/>
+                <ChildBand Name="Child10" Top="806.9" Width="699.3" Height="226.8" CanGrow="true" OutlineExpression="ToString(&quot;Осадки&quot;)">
+                  <TextObject Name="Text108" Width="699.3" Height="18.9" Border.Lines="All" Fill.Color="PaleTurquoise" CanGrow="true" CanShrink="true" Text="Результаты расчета осадки (2-я группа предельных состояний)" HorzAlign="Center" Font="Arial, 10pt, style=Bold"/>
+                  <TextObject Name="Text109" Top="18.9" Width="340.2" Height="18.9" CanGrow="true" GrowToBottom="true" Text="Осадка фундамента (Min): S = [Round([Foundations.SettlementMin],3)][Units.LinearSize]" Font="Arial, 10pt"/>
+                  <TextObject Name="Text110" Left="340.2" Top="18.9" Width="359.1" Height="18.9" CanGrow="true" GrowToBottom="true" Text="Глубина сжимаемой толщи (Max): Hc = [Round([Foundations.CompressionHeightMax],3)]м" Font="Arial, 10pt"/>
+                  <TextObject Name="Text123" Top="37.8" Width="699.3" Height="18.9" CanGrow="true" GrowToBottom="true" Text="Крен (поворот) относительно оси X: i = [Round([Foundations.IncXMax],5)]" Font="Arial, 10pt"/>
+                  <TextObject Name="Text124" Top="56.7" Width="699.3" Height="18.9" CanGrow="true" GrowToBottom="true" Text="Крен (поворот) относительно оси Y: i = [Round([Foundations.IncYMax],5)]" Font="Arial, 10pt"/>
+                  <TextObject Name="Text125" Top="75.6" Width="699.3" Height="18.9" CanGrow="true" GrowToBottom="true" Text="Суммарный крен (поворот): i = [Round([Foundations.IncXYMax],5)]" Font="Arial, 10pt"/>
+                  <TextObject Name="Text126" Top="94.5" Width="699.3" Height="18.9" CanGrow="true" GrowToBottom="true" Text="Минимальная жесткость по Nz: K = [Foundations.NzStiffnessStringMin][Units.Force]/[Units.LinearSize]" Font="Arial, 10pt"/>
+                  <TextObject Name="Text127" Top="113.4" Width="699.3" Height="18.9" CanGrow="true" GrowToBottom="true" Text="Максимальная жесткость по Nz: K = [Foundations.NzStiffnessStringMax][Units.Force]/[Units.LinearSize]" Font="Arial, 10pt"/>
+                  <TextObject Name="Text128" Top="132.3" Width="699.3" Height="18.9" CanGrow="true" GrowToBottom="true" Text="Минимальная жесткость по Mx: K = [Foundations.MxStiffnessStringMin][Units.Moment]/рад" Font="Arial, 10pt"/>
+                  <TextObject Name="Text129" Top="151.2" Width="699.3" Height="18.9" CanGrow="true" GrowToBottom="true" Text="Максимальная жесткость по Mx: K = [Foundations.MxStiffnessStringMax][Units.Moment]/рад" Font="Arial, 10pt"/>
+                  <TextObject Name="Text130" Top="170.1" Width="699.3" Height="18.9" CanGrow="true" GrowToBottom="true" Text="Минимальная жесткость по My: K = [Foundations.MyStiffnessStringMin][Units.Moment]/рад" Font="Arial, 10pt"/>
+                  <TextObject Name="Text131" Top="189" Width="699.3" Height="18.9" CanGrow="true" GrowToBottom="true" Text="Максимальная жесткость по My: K = [Foundations.MyStiffnessStringMax][Units.Moment]/рад" Font="Arial, 10pt"/>
+                  <TextObject Name="Text134" Top="207.9" Width="699.3" Height="18.9" CanGrow="true" GrowToBottom="true" Text="[Foundations.SettlementConclusion]" Font="Arial, 10pt, style=Bold"/>
+                  <ChildBand Name="BndMoments" Top="1037.7" Width="699.3" Height="18.9" CanGrow="true">
+                    <SubreportObject Name="SubReportPartsMoments" Width="94.5" Height="18.9" ReportPage="ReportPartMoments"/>
+                    <ChildBand Name="BndCrcMoments" Top="1060.6" Width="699.3" Height="18.9" CanGrow="true">
+                      <SubreportObject Name="SubRepCrcMoment" Width="94.5" Height="18.9" ReportPage="RepCrcMoment"/>
+                      <ChildBand Name="Child4" Top="1083.5" Width="699.3" Height="94.5" CanGrow="true">
+                        <TextObject Name="Text183" Top="18.9" Width="699.3" Height="18.9" CanGrow="true" GrowToBottom="true" Text="Суммарная требуемая площадь армирования вдоль оси X: [Round([Foundations.AsBottomXMax],2)] кв.см." Font="Arial, 10pt"/>
+                        <TextObject Name="Text184" Top="37.8" Width="699.3" Height="18.9" CanGrow="true" GrowToBottom="true" Text="Суммарная требуемая площадь армирования вдоль оси Y: [Round([Foundations.AsBottomYMax],2)] кв.см." Font="Arial, 10pt"/>
+                        <TextObject Name="Text187" Width="699.3" Height="18.9" Border.Lines="All" Fill.Color="PaleTurquoise" CanGrow="true" Text="Результаты расчета армирования, 1-я группа предельных состояний:" HorzAlign="Center" Font="Arial, 10pt, style=Bold"/>
+                        <TextObject Name="Text188" Top="56.7" Width="699.3" Height="18.9" CanGrow="true" GrowToBottom="true" Text="[Foundations.AsFstConclusionX]" Font="Arial, 10pt, style=Bold"/>
+                        <TextObject Name="Text189" Top="75.6" Width="699.3" Height="18.9" CanGrow="true" GrowToBottom="true" Text="[Foundations.AsFstConclusionY]" Font="Arial, 10pt, style=Bold"/>
+                        <ChildBand Name="Child3" Top="1182" Width="699.3" Height="37.8" CanGrow="true" OutlineExpression="ToString(&quot;Общий вывод&quot;)">
+                          <TextObject Name="Text138" Width="699.3" Height="18.9" Border.Lines="All" Fill.Color="PaleTurquoise" CanGrow="true" CanShrink="true" Text="Общий вывод" HorzAlign="Center" Font="Arial, 10pt, style=Bold"/>
+                          <TextObject Name="Text139" Top="18.9" Width="699.3" Height="18.9" CanGrow="true" GrowToBottom="true" Text="[Foundations.GeneralConclusion]" Font="Arial, 10pt, style=Bold"/>
+                        </ChildBand>
+                      </ChildBand>
+                    </ChildBand>
+                  </ChildBand>
+                </ChildBand>
+              </ChildBand>
+            </ChildBand>
+          </ChildBand>
+        </ChildBand>
+      </ChildBand>
+    </DataBand>
+    <PageFooterBand Name="PageFooter1" Top="1223.8" Width="699.3" Height="28.35">
+      <TextObject Name="Text3" Width="349.65" Height="28.35" Fill.Color="LemonChiffon" Text="RealDoc Calculator" HorzAlign="Center" Font="Arial, 10pt, style=Bold"/>
+      <TextObject Name="Text140" Left="349.65" Width="349.65" Height="28.35" Fill.Color="LemonChiffon" Cursor="Hand" Hyperlink.Value="www.realdoc.info" Text="www.RealDoc.info" HorzAlign="Center" Font="Arial, 10pt, style=Bold, Underline" TextFill.Color="Blue"/>
+    </PageFooterBand>
+  </ReportPage>
+  <ReportPage Name="ReportLoads" Watermark.Font="Arial, 60pt">
+    <DataBand Name="Data2" Top="22.9" Width="718.2" Height="47.25" CanGrow="true" DataSource="LoadSets">
+      <TextObject Name="Text14" Width="699.3" Height="18.9" CanGrow="true" GrowToBottom="true" Text="Нагрузка: [LoadSets.Name]" Font="Arial, 10pt, style=Bold"/>
+      <TextObject Name="Text15" Top="18.9" Width="699.3" Height="28.35" CanGrow="true" GrowToBottom="true" Text="Нормативные значения: [LoadSets.CrcForceDescription]&#13;&#10;Расчетные значения (n=[LoadSets.PartialSafetyFactor]): [LoadSets.DesignForceDescription]" Font="Arial, 10pt"/>
+      <DataHeaderBand Name="DataHeader2" Width="718.2" Height="18.9">
+        <TextObject Name="Text40" Width="699.3" Height="18.9" Border.Lines="All" Fill.Color="PaleTurquoise" CanGrow="true" Text="Нагрузки на фундамент" HorzAlign="Center" Font="Arial, 10pt, style=Bold"/>
+      </DataHeaderBand>
+      <DataFooterBand Name="DataFooter1" Top="74.15" Width="718.2" Height="18.9">
+        <TextObject Name="Text122" Printable="false" Width="699.3" Height="18.9" Visible="false" Exportable="false" Cursor="Hand" Hyperlink.Kind="DetailReport" Hyperlink.Value="ForceCombination" Hyperlink.DetailReportName="ForceCombinations.frx" CanGrow="true" GrowToBottom="true" Text="(Подробнее...)" HideZeros="true" Font="Arial, 10pt, style=Bold, Italic, Underline" TextFill.Color="Blue"/>
+      </DataFooterBand>
+    </DataBand>
+  </ReportPage>
+  <ReportPage Name="ReportParts" Watermark.Font="Arial, 60pt">
+    <DataBand Name="Data1" Top="22.9" Width="718.2" Height="37.8" CanGrow="true" DataSource="FoundationParts">
+      <TextObject Name="Text6" Width="699.3" Height="18.9" CanGrow="true" GrowToBottom="true" Text="Наименование ступени: [FoundationParts.Name]" Font="Arial, 10pt, style=Bold"/>
+      <TextObject Name="Text7" Top="18.9" Width="699.3" Height="18.9" GrowToBottom="true" Text="Ширина B= [FoundationParts.Width][Units.LinearSize], Длина L=[FoundationParts.Length][Units.LinearSize], Высота H=[FoundationParts.Heigth][Units.LinearSize], Объем V=[FoundationParts.Volume][Units.SizeVolume]" Font="Arial, 10pt"/>
+      <DataHeaderBand Name="DataHeader1" Width="718.2" Height="18.9">
+        <TextObject Name="Text39" Width="699.3" Height="18.9" Border.Lines="All" Fill.Color="PaleTurquoise" CanGrow="true" Text="Ступени фундамента" HorzAlign="Center" Font="Arial, 10pt, style=Bold"/>
+      </DataHeaderBand>
+    </DataBand>
+  </ReportPage>
+  <ReportPage Name="ReportPartMoments" Watermark.Font="Arial, 60pt">
+    <DataBand Name="Data3" Top="79.6" Width="718.2" Height="37.8" DataSource="FoundationParts">
+      <TextObject Name="Text141" Width="170.1" Height="37.8" Border.Lines="All" CanGrow="true" GrowToBottom="true" Text="[FoundationParts.Name]" Font="Arial, 10pt, style=Bold"/>
+      <TextObject Name="Text142" Left="434.7" Width="66.15" Height="18.9" Border.Lines="All" GrowToBottom="true" Text="[FoundationParts.CrcMomentXMax]" Format="Number" Format.UseLocale="true" Format.DecimalDigits="3" HorzAlign="Center" Font="Arial, 10pt, style=Bold"/>
+      <TextObject Name="Text152" Left="567" Width="66.15" Height="18.9" Border.Lines="All" GrowToBottom="true" Text="[FoundationParts.CrcMomentYMax]" Format="Number" Format.UseLocale="true" Format.DecimalDigits="3" HorzAlign="Center" Font="Arial, 10pt, style=Bold"/>
+      <TextObject Name="Text153" Left="170.1" Width="66.15" Height="18.9" Border.Lines="All" GrowToBottom="true" Text="[FoundationParts.DesignMomentXMax]" Format="Number" Format.UseLocale="true" Format.DecimalDigits="3" HorzAlign="Center" Font="Arial, 10pt, style=Bold"/>
+      <TextObject Name="Text154" Left="302.4" Width="66.15" Height="18.9" Border.Lines="All" GrowToBottom="true" Text="[FoundationParts.DesignMomentYMax]" Format="Number" Format.UseLocale="true" Format.DecimalDigits="3" HorzAlign="Center" Font="Arial, 10pt, style=Bold"/>
+      <TextObject Name="Text155" Left="633.15" Width="66.15" Height="18.9" Border.Lines="All" GrowToBottom="true" Text="[FoundationParts.CrcMomentYMin]" Format="Number" Format.UseLocale="true" Format.DecimalDigits="3" HorzAlign="Center" Font="Arial, 10pt, style=Bold"/>
+      <TextObject Name="Text156" Left="500.85" Width="66.15" Height="18.9" Border.Lines="All" GrowToBottom="true" Text="[FoundationParts.CrcMomentXMin]" Format="Number" Format.UseLocale="true" Format.DecimalDigits="3" HorzAlign="Center" Font="Arial, 10pt, style=Bold"/>
+      <TextObject Name="Text157" Left="368.55" Width="66.15" Height="18.9" Border.Lines="All" GrowToBottom="true" Text="[FoundationParts.DesignMomentYMin]" Format="Number" Format.UseLocale="true" Format.DecimalDigits="3" HorzAlign="Center" Font="Arial, 10pt, style=Bold"/>
+      <TextObject Name="Text158" Left="236.25" Width="66.15" Height="18.9" Border.Lines="All" GrowToBottom="true" Text="[FoundationParts.DesignMomentXMin]" Format="Number" Format.UseLocale="true" Format.DecimalDigits="3" HorzAlign="Center" Font="Arial, 10pt, style=Bold"/>
+      <TextObject Name="Text160" Left="434.7" Top="18.9" Width="66.15" Height="18.9" Border.Lines="All" GrowToBottom="true" Text="[FoundationParts.CrcMomentXMaxDistr]" Format="Number" Format.UseLocale="true" Format.DecimalDigits="3" HorzAlign="Center" Font="Arial, 10pt"/>
+      <TextObject Name="Text161" Left="567" Top="18.9" Width="66.15" Height="18.9" Border.Lines="All" GrowToBottom="true" Text="[FoundationParts.CrcMomentYMaxDistr]" Format="Number" Format.UseLocale="true" Format.DecimalDigits="3" HorzAlign="Center" Font="Arial, 10pt"/>
+      <TextObject Name="Text162" Left="170.1" Top="18.9" Width="66.15" Height="18.9" Border.Lines="All" GrowToBottom="true" Text="[FoundationParts.DesignMomentXMaxDistr]" Format="Number" Format.UseLocale="true" Format.DecimalDigits="3" HorzAlign="Center" Font="Arial, 10pt"/>
+      <TextObject Name="Text163" Left="302.4" Top="18.9" Width="66.15" Height="18.9" Border.Lines="All" GrowToBottom="true" Text="[FoundationParts.DesignMomentYMaxDistr]" Format="Number" Format.UseLocale="true" Format.DecimalDigits="3" HorzAlign="Center" Font="Arial, 10pt"/>
+      <TextObject Name="Text164" Left="633.15" Top="18.9" Width="66.15" Height="18.9" Border.Lines="All" GrowToBottom="true" Text="[FoundationParts.CrcMomentYMinDistr]" Format="Number" Format.UseLocale="true" Format.DecimalDigits="3" HorzAlign="Center" Font="Arial, 10pt"/>
+      <TextObject Name="Text165" Left="500.85" Top="18.9" Width="66.15" Height="18.9" Border.Lines="All" GrowToBottom="true" Text="[FoundationParts.CrcMomentXMinDistr]" Format="Number" Format.UseLocale="true" Format.DecimalDigits="3" HorzAlign="Center" Font="Arial, 10pt"/>
+      <TextObject Name="Text166" Left="368.55" Top="18.9" Width="66.15" Height="18.9" Border.Lines="All" GrowToBottom="true" Text="[FoundationParts.DesignMomentYMinDistr]" Format="Number" Format.UseLocale="true" Format.DecimalDigits="3" HorzAlign="Center" Font="Arial, 10pt"/>
+      <TextObject Name="Text167" Left="236.25" Top="18.9" Width="66.15" Height="18.9" Border.Lines="All" GrowToBottom="true" Text="[FoundationParts.DesignMomentXMinDistr]" Format="Number" Format.UseLocale="true" Format.DecimalDigits="3" HorzAlign="Center" Font="Arial, 10pt"/>
+      <DataHeaderBand Name="DataHeader3" Width="718.2" Height="75.6">
+        <TextObject Name="Text143" Width="699.3" Height="18.9" Border.Lines="All" Fill.Color="PaleTurquoise" CanGrow="true" Text="Изгибающие моменты в ступенях фундамента на ширину подошвы Max/Min, [Units.Moment]" HorzAlign="Center" Font="Arial, 10pt, style=Bold"/>
+        <TextObject Name="Text144" Top="37.8" Width="170.1" Height="37.8" Border.Lines="All" Fill.Color="PaleTurquoise" CanGrow="true" Text="Наименование" HorzAlign="Center" Font="Arial, 10pt"/>
+        <TextObject Name="Text146" Left="434.7" Top="37.8" Width="264.6" Height="18.9" Border.Lines="All" Fill.Color="PaleTurquoise" CanGrow="true" Text="2 группа ПС" HorzAlign="Center" Font="Arial, 10pt"/>
+        <TextObject Name="Text147" Left="170.1" Top="37.8" Width="264.6" Height="18.9" Border.Lines="All" Fill.Color="PaleTurquoise" CanGrow="true" Text="1 группа ПС" HorzAlign="Center" Font="Arial, 10pt"/>
+        <TextObject Name="Text148" Left="170.1" Top="56.7" Width="132.3" Height="18.9" Border.Lines="All" Fill.Color="PaleTurquoise" CanGrow="true" Text="Mx (YOZ)" HorzAlign="Center" Font="Arial, 10pt"/>
+        <TextObject Name="Text149" Left="302.4" Top="56.7" Width="132.3" Height="18.9" Border.Lines="All" Fill.Color="PaleTurquoise" CanGrow="true" Text="My (XOZ)" HorzAlign="Center" Font="Arial, 10pt"/>
+        <TextObject Name="Text168" Top="18.9" Width="699.3" Height="18.9" Border.Lines="All" Fill.Color="PaleTurquoise" CanGrow="true" Text="Изгибающие моменты в ступенях фундамента на 1м ширины подошвы Max/Min, [Units.Moment]/м" HorzAlign="Center" Font="Arial, 10pt"/>
+        <TextObject Name="Text185" Left="434.7" Top="56.7" Width="132.3" Height="18.9" Border.Lines="All" Fill.Color="PaleTurquoise" CanGrow="true" Text="Mx (YOZ)" HorzAlign="Center" Font="Arial, 10pt"/>
+        <TextObject Name="Text186" Left="567" Top="56.7" Width="132.3" Height="18.9" Border.Lines="All" Fill.Color="PaleTurquoise" CanGrow="true" Text="My (XOZ)" HorzAlign="Center" Font="Arial, 10pt"/>
+      </DataHeaderBand>
+      <DataFooterBand Name="DataFooter2" Top="121.4" Width="718.2" Height="18.9" CanGrow="true">
+        <TextObject Name="Text159" Width="699.3" Height="18.9" CanGrow="true" GrowToBottom="true" Text="* - Положительному значению момента соответствует растяжение в нижней зоне фундамента" Format="Number" Format.UseLocale="true" Format.DecimalDigits="3" Font="Arial, 10pt"/>
+      </DataFooterBand>
+    </DataBand>
+  </ReportPage>
+  <ReportPage Name="RepCrcMoment" Watermark.Font="Arial, 60pt">
+    <DataBand Name="Data4" Top="60.7" Width="718.2" Height="18.9" DataSource="FoundationParts">
+      <TextObject Name="Text170" Width="170.1" Height="18.9" Border.Lines="All" CanGrow="true" GrowToBottom="true" Text="[FoundationParts.Name]" Font="Arial, 10pt, style=Bold"/>
+      <TextObject Name="Text171" Left="170.1" Width="132.3" Height="18.9" Border.Lines="All" GrowToBottom="true" Text="[FoundationParts.CrcMomentXMax]" Format="Number" Format.UseLocale="true" Format.DecimalDigits="3" HorzAlign="Center" Font="Arial, 10pt"/>
+      <TextObject Name="Text179" Left="302.4" Width="132.3" Height="18.9" Border.Lines="All" GrowToBottom="true" Text="[FoundationParts.CrcMomentX]" Format="Number" Format.UseLocale="true" Format.DecimalDigits="3" HorzAlign="Center" Font="Arial, 10pt"/>
+      <TextObject Name="Text180" Left="434.7" Width="132.3" Height="18.9" Border.Lines="All" GrowToBottom="true" Text="[FoundationParts.CrcMomentYMax]" Format="Number" Format.UseLocale="true" Format.DecimalDigits="3" HorzAlign="Center" Font="Arial, 10pt"/>
+      <TextObject Name="Text181" Left="567" Width="132.3" Height="18.9" Border.Lines="All" GrowToBottom="true" Text="[FoundationParts.CrcMomentY]" Format="Number" Format.UseLocale="true" Format.DecimalDigits="3" HorzAlign="Center" Font="Arial, 10pt"/>
+      <DataHeaderBand Name="DataHeader4" Width="718.2" Height="56.7">
+        <TextObject Name="Text169" Width="699.3" Height="18.9" Border.Lines="All" Fill.Color="PaleTurquoise" CanGrow="true" Text="Изгибающие моменты в ступенях фундамента на ширину подошвы Max/Min, [Units.Moment]" HorzAlign="Center" Font="Arial, 10pt, style=Bold"/>
+        <TextObject Name="Text172" Top="18.9" Width="170.1" Height="37.8" Border.Lines="All" Fill.Color="PaleTurquoise" CanGrow="true" Text="Наименование" HorzAlign="Center" Font="Arial, 10pt"/>
+        <TextObject Name="Text173" Left="170.1" Top="18.9" Width="264.6" Height="18.9" Border.Lines="All" Fill.Color="PaleTurquoise" CanGrow="true" Text="Mx (YOZ)" HorzAlign="Center" Font="Arial, 10pt"/>
+        <TextObject Name="Text174" Left="170.1" Top="37.8" Width="132.3" Height="18.9" Border.Lines="All" Fill.Color="PaleTurquoise" CanGrow="true" Text="Действующий" HorzAlign="Center" Font="Arial, 10pt"/>
+        <TextObject Name="Text175" Left="302.4" Top="37.8" Width="132.3" Height="18.9" Border.Lines="All" Fill.Color="PaleTurquoise" CanGrow="true" Text="Mcrc" HorzAlign="Center" Font="Arial, 10pt"/>
+        <TextObject Name="Text176" Left="434.7" Top="18.9" Width="264.6" Height="18.9" Border.Lines="All" Fill.Color="PaleTurquoise" CanGrow="true" Text="My (XOZ)" HorzAlign="Center" Font="Arial, 10pt"/>
+        <TextObject Name="Text177" Left="434.7" Top="37.8" Width="132.3" Height="18.9" Border.Lines="All" Fill.Color="PaleTurquoise" CanGrow="true" Text="Действующий" HorzAlign="Center" Font="Arial, 10pt"/>
+        <TextObject Name="Text178" Left="567" Top="37.8" Width="132.3" Height="18.9" Border.Lines="All" Fill.Color="PaleTurquoise" CanGrow="true" Text="Mcrc" HorzAlign="Center" Font="Arial, 10pt"/>
+      </DataHeaderBand>
+      <DataFooterBand Name="DataFooter3" Top="83.6" Width="718.2" Height="18.9" CanGrow="true">
+        <TextObject Name="Text182" Width="699.3" Height="18.9" CanGrow="true" GrowToBottom="true" Text="* - Положительному значению момента соответствует растяжение в нижней зоне фундамента" Format="Number" Format.UseLocale="true" Format.DecimalDigits="3" Font="Arial, 10pt"/>
+      </DataFooterBand>
+    </DataBand>
+  </ReportPage>
+</Report>

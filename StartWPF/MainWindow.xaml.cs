@@ -37,13 +37,13 @@ namespace RDStartWPF
             InitializeComponent();
             ProgrammSettings.InicializeNew();
 
-            List<CalcType> calcTypes = new List<CalcType>(); 
+            List<CalcType> calcTypes = new List<CalcType>();
 
-            //CalcType calcTypeRCC = new CalcType();
-            //calcTypeRCC.TypeName = "Железобетон";
-            //calcTypeRCC.ImageName = "Bridge.jpg";
-            //calcTypeRCC.RegisterDelegate(new CalcType.AddCommandDelegate(AddItemWrapPanel));
-            //calcTypes.Add(calcTypeRCC);
+            CalcType calcTypeRCC = new CalcType();
+            calcTypeRCC.TypeName = "Железобетон";
+            calcTypeRCC.ImageName = "Bridge.jpg";
+            calcTypeRCC.RegisterDelegate(new CalcType.AddCommandDelegate(AddItemWrapPanel));
+            calcTypes.Add(calcTypeRCC);
 
             CalcType calcTypeSC = new CalcType();
             calcTypeSC.TypeName = "Металл";
@@ -86,6 +86,12 @@ namespace RDStartWPF
             calcKindFoundation.KindAddition = "Расчет параметров фундаментов с учетом давления под подошвой";
             calcKindFoundation.RegisterDelegate(new CalcKind.CommandDelegate(ShowFoundation));
             calcTypeSoil.CalcKinds.Add(calcKindFoundation);
+
+            CalcKind calcKindPunching = new CalcKind();
+            calcKindPunching.KindName = "Расчет плит на продавливание";
+            calcKindPunching.KindAddition = "Расчет на продавливание прямоугольной колонной";
+            calcKindPunching.RegisterDelegate(new CalcKind.CommandDelegate(ShowPunching));
+            calcTypeRCC.CalcKinds.Add(calcKindPunching);
 
             try
             {
@@ -177,6 +183,15 @@ namespace RDStartWPF
         private static void ShowFoundation()
         {
             wndLevels wndLevels = new wndLevels(ProgrammSettings.BuildingSite.Children[0], ProgrammSettings.BuildingSite.Children[0].Children, LvlChildType.Foundation);
+            wndLevels.ShowDialog();
+        }
+
+        /// <summary>
+        /// Вызов окна уровней для ввода фундаментов
+        /// </summary>
+        private static void ShowPunching()
+        {
+            wndLevels wndLevels = new wndLevels(ProgrammSettings.BuildingSite.Children[0], ProgrammSettings.BuildingSite.Children[0].Children, LvlChildType.Punching);
             wndLevels.ShowDialog();
         }
 

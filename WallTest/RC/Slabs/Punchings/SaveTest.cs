@@ -15,7 +15,7 @@ namespace Test.RC.Slabs.Punchings
         {
             ProgrammSettings.InicializeNew();
             DataSet dataSet = ProgrammSettings.CurrentDataSet;
-            Punching newObj = PunchingFactory.GetPunching(PunchingType.TestType1_400х400х200);
+            Punching newObj = TestCaseFactory.GetPunching(PunchingType.TestType1_400х400х200);
             newObj.SaveToDataSet(dataSet, true);
             newObj.SaveToDataSet(dataSet, false);
             newObj.OpenFromDataSet(dataSet);
@@ -26,11 +26,10 @@ namespace Test.RC.Slabs.Punchings
         {
             ProgrammSettings.InicializeNew();
             DataSet dataSet = ProgrammSettings.CurrentDataSet;
-            Punching oldObj = PunchingFactory.GetPunching(PunchingType.TestType1_400х400х200);
+            Punching oldObj = TestCaseFactory.GetPunching(PunchingType.TestType1_400х400х200);
             Punching newObj = oldObj.Clone() as Punching;
             Assert.IsNotNull(newObj);
             Assert.AreNotSame(oldObj, newObj);
-            Assert.AreEqual(oldObj, newObj);
         }
     }
 }

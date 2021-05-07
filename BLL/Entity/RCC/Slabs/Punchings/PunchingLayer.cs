@@ -64,19 +64,27 @@ namespace RDBLL.Entity.RCC.Slabs.Punchings
 
         public void OpenFromDataSet(DataSet dataSet)
         {
-            throw new NotImplementedException();
+            try
+            {
+                OpenFromDataSet(DsOperation.OpenFromDataSetById(dataSet, GetTableName(), Id));
+            }
+            catch (Exception ex)
+            {
+                CommonErrorProcessor.ShowErrorMessage($"Ошибка получения элемента из базы данных. Элемент {this.GetType().Name}: " + Name, ex);
+            }
         }
 
         public void OpenFromDataSet(DataRow dataRow)
         {
-            throw new NotImplementedException();
+            EntityOperation.SetProps(dataRow, this);
         }
 
         public void RegisterParent(IDsSaveable parent)
         {
             if (ParentMember != null) { UnRegisterParent(); }
+            else if (!(parent is Punching)) throw new Exception($"Parent type is not valid. Element type {GetType().Name}, Id = {Id}, Name={Name}");
             Punching punching = parent as Punching;
-            punching.Layers.Add(this);
+            punching.Children.Add(this);
             ParentMember = parent;
         }
         //Сохранение объекта в датасет
@@ -99,8 +107,19 @@ namespace RDBLL.Entity.RCC.Slabs.Punchings
         public void UnRegisterParent()
         {
             Punching punching = ParentMember as Punching;
-            punching.Layers.Remove(this);
+            punching.Children.Remove(this);
             ParentMember = null;
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (!(obj is PunchingLayer)) return false;
+            PunchingLayer layer = obj as PunchingLayer;
+            if (layer.Id != Id) return false;
+            else if (layer.Name != Name) return false;
+            else if (layer.Height != Height) return false;
+
+            return true;
         }
     }
 }

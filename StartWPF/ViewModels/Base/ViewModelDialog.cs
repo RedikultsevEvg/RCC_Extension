@@ -45,7 +45,7 @@ namespace RDStartWPF.ViewModels.Base
                             Window.DialogResult = false;
                             Window.Close();
                         },
-                        //Команда может выполняться только если нет ошибок
+                        //Команда может выполняться в любом случае
                         newObject => true)
                     );
             }

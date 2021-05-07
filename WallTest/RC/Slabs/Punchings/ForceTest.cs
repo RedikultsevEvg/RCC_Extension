@@ -19,7 +19,7 @@ namespace Test.RC.Slabs.Punchings
             double My = 0;
 
             ProgrammSettings.InicializeNew();
-            Punching punching = PunchingFactory.GetPunching(PunchingType.TestType1_400х400х200);
+            Punching punching = TestCaseFactory.GetPunching(PunchingType.TestType1_400х400х200);
             ILayerProcessor layerProcessor = new OneLayerProcessor();
             List<PunchingContour> contours = layerProcessor.GetPunchingContours(punching);
             IBearingProcessor bearingProcessor = new BearingProcessor();
@@ -54,7 +54,7 @@ namespace Test.RC.Slabs.Punchings
             double My = 20000;
 
             ProgrammSettings.InicializeNew();
-            Punching punching = PunchingFactory.GetPunching(PunchingType.TestType1_400х400х200);
+            Punching punching = TestCaseFactory.GetPunching(PunchingType.TestType1_400х400х200);
             ILayerProcessor layerProcessor = new OneLayerProcessor();
             List<PunchingContour> contours = layerProcessor.GetPunchingContours(punching);
             IBearingProcessor bearingProcessor = new BearingProcessor();
@@ -109,7 +109,7 @@ namespace Test.RC.Slabs.Punchings
             double My = 20000;
 
             ProgrammSettings.InicializeNew();
-            Punching punching = PunchingFactory.GetPunching(PunchingType.TestType1_400х400х200);
+            Punching punching = TestCaseFactory.GetPunching(PunchingType.TestType1_400х400х200);
             ILayerProcessor layerProcessor = new OneLayerProcessor();
             List<PunchingContour> contours = layerProcessor.GetPunchingContours(punching);
             IBearingProcessor bearingProcessor = new BearingProcessor();
@@ -165,7 +165,7 @@ namespace Test.RC.Slabs.Punchings
             double My = 20000;
 
             ProgrammSettings.InicializeNew();
-            Punching punching = PunchingFactory.GetPunching(PunchingType.TestType1_400х400х200);
+            Punching punching = TestCaseFactory.GetPunching(PunchingType.TestType1_400х400х200);
             ILayerProcessor layerProcessor = new OneLayerProcessor();
             List<PunchingContour> contours = layerProcessor.GetPunchingContours(punching);
             IBearingProcessor bearingProcessor = new BearingProcessor();
@@ -221,7 +221,7 @@ namespace Test.RC.Slabs.Punchings
             double My = -20000;
 
             ProgrammSettings.InicializeNew();
-            Punching punching = PunchingFactory.GetPunching(PunchingType.TestType1_400х400х200);
+            Punching punching = TestCaseFactory.GetPunching(PunchingType.TestType1_400х400х200);
             ILayerProcessor layerProcessor = new OneLayerProcessor();
             List<PunchingContour> contours = layerProcessor.GetPunchingContours(punching);
             IBearingProcessor bearingProcessor = new BearingProcessor();
@@ -277,7 +277,7 @@ namespace Test.RC.Slabs.Punchings
             double My = -20000;
 
             ProgrammSettings.InicializeNew();
-            Punching punching = PunchingFactory.GetPunching(PunchingType.TestType1_400х400х200);
+            Punching punching = TestCaseFactory.GetPunching(PunchingType.TestType1_400х400х200);
             ILayerProcessor layerProcessor = new OneLayerProcessor();
             List<PunchingContour> contours = layerProcessor.GetPunchingContours(punching);
             IBearingProcessor bearingProcessor = new BearingProcessor();
@@ -327,7 +327,7 @@ namespace Test.RC.Slabs.Punchings
         public void MomentOfResistanceTest1()
         {
             ProgrammSettings.InicializeNew();
-            Punching punching = PunchingFactory.GetPunching(PunchingType.TestType1_400х400х200);
+            Punching punching = TestCaseFactory.GetPunching(PunchingType.TestType1_400х400х200);
             ILayerProcessor layerProcessor = new OneLayerProcessor();
             List<PunchingContour> contours = layerProcessor.GetPunchingContours(punching);
             IBearingProcessor bearingProcessor = new BearingProcessor();
@@ -359,7 +359,7 @@ namespace Test.RC.Slabs.Punchings
         public void MomentOfResistanceTest2()
         {
             ProgrammSettings.InicializeNew();
-            Punching punching = PunchingFactory.GetPunching(PunchingType.TestType2_400х600х300);
+            Punching punching = TestCaseFactory.GetPunching(PunchingType.TestType2_400х600х300);
             ILayerProcessor layerProcessor = new OneLayerProcessor();
             List<PunchingContour> contours = layerProcessor.GetPunchingContours(punching);
             IBearingProcessor bearingProcessor = new BearingProcessor();
@@ -391,7 +391,7 @@ namespace Test.RC.Slabs.Punchings
         public void MomentOfResistanceTest3()
         {
             ProgrammSettings.InicializeNew();
-            Punching punching = PunchingFactory.GetPunching(PunchingType.TestType3_600х400х400);
+            Punching punching = TestCaseFactory.GetPunching(PunchingType.TestType3_600х400х400);
             ILayerProcessor layerProcessor = new OneLayerProcessor();
             List<PunchingContour> contours = layerProcessor.GetPunchingContours(punching);
             IBearingProcessor bearingProcessor = new BearingProcessor();

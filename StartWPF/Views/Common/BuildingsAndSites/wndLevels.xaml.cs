@@ -57,6 +57,12 @@ namespace RDStartWPF.Views.Common.BuildingsAndSites
                         ChildPng.SetResourceReference(Image.SourceProperty, "IconFoundation40");
                         break;
                     }
+                case LvlChildType.Punching:
+                    {
+                        BtnChildItem.ToolTip = "Новый расчет на продавливание";
+                        ChildPng.SetResourceReference(Image.SourceProperty, "IconPunching");
+                        break;
+                    }
             }
             this.DataContext = _collection;
         }

@@ -1,0 +1,71 @@
+﻿<Page x:Class="RDStartWPF.Views.RCC.Slabs.Punchings.PgPunching"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:RDStartWPF.Views.RCC.Slabs.Punchings"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="600"
+      Title="Punching">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition Width="450"/>
+            <ColumnDefinition Width="110"/>
+        </Grid.ColumnDefinitions>
+        <Canvas Name="Scatch">
+        </Canvas>
+        <StackPanel Grid.Column="1">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="30"/>
+                    <RowDefinition Height="30"/>
+                    <RowDefinition Height="30"/>
+                    <RowDefinition Height="30"/>
+                    <RowDefinition Height="30"/>
+                    <RowDefinition Height="30"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="100"/>
+                    <ColumnDefinition Width="70"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock x:Name="tbName" Style="{StaticResource PropertyTextBlock}" Text="Наименование"/>
+                <TextBox x:Name="tbxName" Grid.Column="1" Style="{StaticResource PropertyTextBox}" Text="{Binding Path=Name}" Grid.ColumnSpan="2"/>
+                <TextBlock x:Name="tbWidth" Grid.Column="0" Grid.Row="1" Style="{StaticResource PropertyTextBlock}" Text="Ширина сечения колонны (размер вдоль X)"/>
+                <TextBox x:Name="tbxWidth" Grid.Column="1" Grid.Row="1" Style="{StaticResource PropertyTextBoxError}"
+                    Text="{Binding Width, Converter={StaticResource LinearSizeConverter}, ValidatesOnDataErrors=True}"/>
+                <TextBlock Grid.Column="2" Grid.Row="1" Style="{StaticResource PropertyTextBlock}" Text="{Binding Measures.Linear}" />
+                
+                <TextBlock x:Name="tbLength" Grid.Column="0" Grid.Row="2" Style="{StaticResource PropertyTextBlock}" Text="Высота сечения колонны (размер вдоль Y)"/>
+                <TextBox x:Name="tbxLength" Grid.Column="1" Grid.Row="2" Style="{StaticResource PropertyTextBoxError}"
+                    Text="{Binding Length, Converter={StaticResource LinearSizeConverter}, ValidatesOnDataErrors=True}"/>
+                <TextBlock Grid.Column="2" Grid.Row="2" Style="{StaticResource PropertyTextBlock}" Text="{Binding Measures.Linear}" />
+
+                <TextBlock x:Name="tbCovLayerX" Grid.Column="0" Grid.Row="3" Style="{StaticResource PropertyTextBlock}" Text="Защитный слой (арматуры вдоль оси X)"/>
+                <TextBox x:Name="tbxCovLayerX" Grid.Column="1" Grid.Row="3" Style="{StaticResource PropertyTextBoxError}"
+                    Text="{Binding CoveringLayerX, Converter={StaticResource LinearSizeConverter}, ValidatesOnDataErrors=True}"/>
+                <TextBlock Grid.Column="2" Grid.Row="3" Style="{StaticResource PropertyTextBlock}" Text="{Binding Measures.Linear}" />
+
+                <TextBlock x:Name="tbCovLayerY" Grid.Column="0" Grid.Row="4" Style="{StaticResource PropertyTextBlock}" Text="Защитный слой (арматуры вдоль оси Y)"/>
+                <TextBox x:Name="tbxCovLayerY" Grid.Column="1" Grid.Row="4" Style="{StaticResource PropertyTextBoxError}"
+                    Text="{Binding CoveringLayerY, Converter={StaticResource LinearSizeConverter}, ValidatesOnDataErrors=True}"/>
+                <TextBlock Grid.Column="2" Grid.Row="4" Style="{StaticResource PropertyTextBlock}" Text="{Binding Measures.Linear}" />
+
+                <TextBlock x:Name="tbHeight" Grid.Column="0" Grid.Row="5" Style="{StaticResource PropertyTextBlock}" Text="Толщина плиты"/>
+                <TextBox x:Name="tbxHeight" Grid.Column="1" Grid.Row="5" Style="{StaticResource PropertyTextBoxError}"
+                    Text="{Binding Height, Converter={StaticResource LinearSizeConverter}, ValidatesOnDataErrors=True}"/>
+                <TextBlock Grid.Column="2" Grid.Row="5" Style="{StaticResource PropertyTextBlock}" Text="{Binding Measures.Linear}" />
+            </Grid>
+            <ContentControl ContentTemplate="{StaticResource DtMaterialSelect}"  Content="{Binding Path=Concrete}"/>
+        </StackPanel>
+        <StackPanel Grid.Column="2" Background="#FFE2E2E2" VerticalAlignment="Top">
+            <Button x:Name="btnForces" Style="{StaticResource ServiceButton}" Height="50" Command="{Binding EditForceCommand}">
+                <Image x:Name="Forces_png" Style="{StaticResource ServiceButtonImage}" Source="{DynamicResource IconForces40}"/>
+                <Button.ToolTip>
+                    <TextBlock Margin="3" Foreground="Black">Усилия...</TextBlock>
+                </Button.ToolTip>
+            </Button>
+        </StackPanel>
+    </Grid>
+</Page>

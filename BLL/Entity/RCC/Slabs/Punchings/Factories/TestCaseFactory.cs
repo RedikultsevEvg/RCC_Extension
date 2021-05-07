@@ -10,12 +10,29 @@ namespace RDBLL.Entity.RCC.Slabs.Punchings.Factories
 {
     public enum PunchingType
     {
+        /// <summary>
+        /// Средняя колонна 400х400мм, толщина перекрытия 200мм
+        /// </summary>
         TestType1_400х400х200,
+        /// <summary>
+        /// Средняя колонна 400х600мм, толщина перекрытия 200мм.
+        /// </summary>
         TestType2_400х600х300,
+        /// <summary>
+        /// Средняя колонна 600х400мм, толщина переккрытия 200мм.
+        /// </summary>
         TestType3_600х400х400
     }
-    public static class PunchingFactory
+    /// <summary>
+    /// Фабрика создания тестовых вариантов для расчета на продавливание
+    /// </summary>
+    public static class TestCaseFactory
     {
+        /// <summary>
+        /// Статический класс простой фабрики
+        /// </summary>
+        /// <param name="type"></param>
+        /// <returns></returns>
         public static Punching GetPunching(PunchingType type)
         {
             switch (type)

@@ -20,7 +20,7 @@ namespace RDBLL.Entity.RCC.Slabs.Punchings.Processors
         public List<PunchingContour> GetPunchingContours(Punching punching)
         {
             //Если количество слоев равно нулю или больше одного, то выдаем исключение
-            if (punching.Layers.Count() != 1) { throw new Exception("Count of layers is invalid"); }
+            if (punching.Children.Count() != 1) { throw new Exception("Count of layers is invalid"); }
             List<PunchingContour> contours = new List<PunchingContour>();
             contours.AddRange(GetFstContours(punching));
             return contours;
@@ -33,7 +33,7 @@ namespace RDBLL.Entity.RCC.Slabs.Punchings.Processors
         private double GetFstLayerDepth(Punching punching)
         {
             //Определяем высоту самого верхнего слоя
-            double fullDepth = punching.Layers[0].Height;
+            double fullDepth = (punching.Children[0] as PunchingLayer).Height;
             //Рабочая высота для арматуры вдоль оси X
             double depthX = fullDepth - punching.CoveringLayerX;
             //Рабочая высота для арматуры вдоль оси Y
@@ -100,7 +100,7 @@ namespace RDBLL.Entity.RCC.Slabs.Punchings.Processors
             double width = punching.Width + fstLayerDepth;
             double length = punching.Length + fstLayerDepth;
             //Первый контур составляем как замкнутый контур отступая половину рабочей высоты от центра
-            PunchingSubContour fstContour = GetSubContour(width, length, fstLayerDepth, punching.Layers[0].Concrete);
+            PunchingSubContour fstContour = GetSubContour(width, length, fstLayerDepth, (punching.Children[0] as PunchingLayer).Concrete);
             //Так как рассматривается только один слой, то добавляем созданный контур
             PunchingContour contour;
             contour = new PunchingContour();
