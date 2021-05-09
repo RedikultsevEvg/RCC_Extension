@@ -67,6 +67,11 @@ namespace RDStartWPF.Views.Common.BuildingsAndSites
                             ShowReportProcessor.ShowFoundationsReport();
                             break;
                         }
+                    case LvlChildType.Punching:
+                        {
+                            ShowReportProcessor.ShowPunchingsReport();
+                            break;
+                        }
                 }
             }
             catch (Exception ex)

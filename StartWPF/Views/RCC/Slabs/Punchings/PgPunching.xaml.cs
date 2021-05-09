@@ -24,7 +24,7 @@ namespace RDStartWPF.Views.RCC.Slabs.Punchings
     public partial class PgPunching : Page
     {
         private Punching _Punching;
-        private PunchingVM _PunchingVM;
+        internal PunchingVM PunchingVM { get; set; }
 
         public PgPunching()
         {
@@ -35,8 +35,8 @@ namespace RDStartWPF.Views.RCC.Slabs.Punchings
         {
             InitializeComponent();
             this._Punching = punching;
-            _PunchingVM = new PunchingVM(_Punching);
-            this.DataContext = _PunchingVM;
+            PunchingVM = new PunchingVM(_Punching);
+            this.DataContext = PunchingVM;
         }
     }
 }

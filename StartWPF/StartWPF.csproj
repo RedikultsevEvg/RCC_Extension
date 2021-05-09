@@ -124,6 +124,7 @@
     <Compile Include="ResourcesDicts\Parameters\ParamTemplSelector.cs" />
     <Compile Include="ResourcesDicts\RFTemplateSelector.cs" />
     <Compile Include="ViewModels\Base\Interfaces\IHasCollection.cs" />
+    <Compile Include="ViewModels\Base\Interfaces\IHasParentVM.cs" />
     <Compile Include="ViewModels\Base\ViewModelBase.cs" />
     <Compile Include="ViewModels\Base\ViewModelDialog.cs" />
     <Compile Include="ViewModels\Common\Parameters\ParametersVM.cs" />
@@ -547,6 +548,9 @@
     <Content Include="Reports\Foundations\Stresses.frx">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Resource Include="Reports\RCC\Slabs\Punchings\Punchings.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
     <Content Include="Reports\SteelBases\Assignment.frx">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -557,6 +561,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Reports\Template.frx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Reports\RCC\Slabs\Punchings\Punchings.frx">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <None Include="StartWPF_TemporaryKey.pfx" />
@@ -645,7 +652,6 @@
     <Resource Include="Soil.jpg" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Reports\RCC\Slabs\Punchings\" />
     <Folder Include="Views\WPF_Windows\CommonWindows\" />
   </ItemGroup>
   <ItemGroup>

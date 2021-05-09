@@ -69,11 +69,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Common\CommonServices.cs" />
-    <Compile Include="DataSets\RCC\Foundations\Foundation.cs" />
+    <Compile Include="DataSets\Factories\IReportDataSetFactory.cs" />
+    <Compile Include="DataSets\Factories\RCC\Slabs\Punchings\PunchingDataSetFactory.cs" />
+    <Compile Include="DataSets\RCC\Foundations\FoundationDataSet.cs" />
     <Compile Include="DataSets\SC\SteelBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Reports\FoundationReport.cs" />
     <Compile Include="Reports\Interfaces\IReport.cs" />
+    <Compile Include="Reports\RCC\Slabs\Punchings\PunchingReport.cs" />
     <Compile Include="Reports\SteelBaseReport.cs" />
   </ItemGroup>
   <ItemGroup>

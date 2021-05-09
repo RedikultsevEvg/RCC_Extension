@@ -1,4 +1,5 @@
 ﻿using RDStartWPF.InfraStructure.Comands.Base;
+using RDStartWPF.ViewModels.Base.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,6 +13,8 @@ namespace RDStartWPF.ViewModels.Base
     {
         public Window Window;
         public Action BeforeOk;
+
+        public List<IHasParentVM> Children { get; private set; }
 
         private CommandBase _CloseOkAction;
         private CommandBase _CloseCancelAction;
@@ -51,7 +54,7 @@ namespace RDStartWPF.ViewModels.Base
             }
         }
 
-        public override string this[string columnName] => throw new NotImplementedException();
+        public override string this[string columnName] =>  throw new NotImplementedException();
 
         /// <summary>
         /// Метод для выполнени необходимых действий перед закрытием окна
@@ -70,9 +73,21 @@ namespace RDStartWPF.ViewModels.Base
 
         }
 
+        public void IsChildModified()
+        {
+            Error = string.Empty;
+            foreach (IHasParentVM child in Children)
+            {
+                Error += (child as ViewModelBase).Error;
+            }
+        }
+
         public ViewModelDialog(Window window)
         {
             Window = window;
+            Children = new List<IHasParentVM>();
         }
+
+
     }
 }

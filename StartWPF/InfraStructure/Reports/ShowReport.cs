@@ -6,6 +6,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Windows;
 using RDStartWPF.Views.Common.Service;
+using CSL.Reports.RCC.Slabs.Punchings;
+using CSL.Reports.Interfaces;
+using System;
 
 namespace RDStartWPF.Infrasructure.Reports
 {
@@ -101,6 +104,42 @@ namespace RDStartWPF.Infrasructure.Reports
             wndReports.ShowDialog();
         }
 
+        public static void ShowPunchingsReport()
+        {
+            //Строка пути к файлу отчета
+            string directory = Directory.GetCurrentDirectory() + "\\Reports\\RCC\\Slabs\\Punchings\\";
+            //Создаем карточки отчетов
+            List<ReportCard> reportCards = PunchingsCardsFactory(directory);
+            //Показываем окно для выбора карточки расчета
+            if (reportCards.Count > 1)
+            {
+                wndReports wndReports = new wndReports(reportCards);
+                wndReports.ShowDialog();
+            }
+            //Если карточка только одна, то сразу выводим отчет
+            else if  (reportCards.Count == 1)
+            {
+                reportCards[0].RunCommand();
+            }
+        }
+
+        private static List<ReportCard> PunchingsCardsFactory(string directory)
+        {
+            List<ReportCard> reportCards = new List<ReportCard>();
+            ReportCard newReportCard;
+            newReportCard = new ReportCard
+            {
+                Name = "Основной отчет по расчету на продавливание",
+                FileName = directory + "Punchings.frx",
+                Description = "Основной отчет по результатам расчета на продавливание",
+                ImageName = directory + "Punchings.png",
+                ToolTip = ""
+            };
+            newReportCard.RegisterDelegate(new ReportCard.CommandDelegate(ShowPunchingReport));
+            reportCards.Add(newReportCard);
+            return reportCards;
+        }
+
         private static void ShowSteelReport(string reportFileName)
         {
             SteelBaseReport resultReport = new SteelBaseReport(ProgrammSettings.BuildingSite);
@@ -109,10 +148,14 @@ namespace RDStartWPF.Infrasructure.Reports
 
         private static void ShowFoundationReport(string reportFileName)
         {
-            FoundationReport resultReport = new FoundationReport(ProgrammSettings.BuildingSite);
-            //MessageBox.Show("Точка расчета 01");
-            resultReport.ShowReport(reportFileName);
-            //MessageBox.Show("Точка расчета 02");
+            IReport report = new FoundationReport(ProgrammSettings.BuildingSite);
+            report.ShowReport(reportFileName);
+        }
+
+        private static void ShowPunchingReport(string reportFileName)
+        {
+            IReport report = new PunchingReport(ProgrammSettings.BuildingSite);
+            report.ShowReport(reportFileName);
         }
     }
 }

@@ -7,7 +7,7 @@ using System.Data;
 
 namespace CSL.Reports.Interfaces
 {
-    interface IReport
+    public interface IReport
     {
         DataSet dataSet { get; set; }
         void ShowReport(string fileName);

@@ -3,6 +3,7 @@ using RDBLL.Entity.RCC.Slabs.Punchings;
 using RDStartWPF.InfraStructure.Comands.Base;
 using RDStartWPF.InfraStructure.Common.CommonOperations;
 using RDStartWPF.ViewModels.Base;
+using RDStartWPF.ViewModels.Base.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,9 +13,10 @@ using System.Windows;
 
 namespace RDStartWPF.ViewModels.RCC.Slabs.Punchings
 {
-    internal class PunchingVM : ViewModelBase
+    internal class PunchingVM : ViewModelBase, IHasParentVM
     {
         private Punching _Punching;
+        public ViewModelBase ParentVM { get; set; }
 
         public string Name
         {
@@ -147,6 +149,7 @@ namespace RDStartWPF.ViewModels.RCC.Slabs.Punchings
                         break;
                 }
                 Error = error;
+                (ParentVM as ViewModelDialog).IsChildModified();
                 return error;
             }
         }
@@ -155,5 +158,6 @@ namespace RDStartWPF.ViewModels.RCC.Slabs.Punchings
         {
             _Punching = punching;
         }
+
     }
 }

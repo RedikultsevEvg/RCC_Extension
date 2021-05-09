@@ -4,6 +4,7 @@ using RDBLL.Common.Interfaces.Shapes;
 using RDBLL.Common.Service;
 using RDBLL.Common.Service.DsOperations;
 using RDBLL.Entity.RCC.BuildingAndSite;
+using RDBLL.Entity.RCC.Slabs.Punchings.Results;
 using RDBLL.Forces;
 using System;
 using System.Collections.Generic;
@@ -61,6 +62,12 @@ namespace RDBLL.Entity.RCC.Slabs.Punchings
         /// Величина защитного слоя для арматуры вдоль оси Y
         /// </summary>
         public double CoveringLayerY { get; set; }
+        public bool IsActive { get; set; }
+        /// <summary>
+        /// Свойство для хранения результата
+        /// </summary>
+        public PunchingResult Result { get; set; }
+
         /// <summary>
         /// Клонирование элемента
         /// </summary>

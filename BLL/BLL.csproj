@@ -184,6 +184,12 @@
     <Compile Include="Entity\RCC\Slabs\Punchings\PunchingLayer.cs" />
     <Compile Include="Entity\RCC\Slabs\Punchings\PunchingLine.cs" />
     <Compile Include="Entity\RCC\Slabs\Punchings\PunchingSubContour.cs" />
+    <Compile Include="Entity\RCC\Slabs\Punchings\Results\ContourResult.cs" />
+    <Compile Include="Entity\RCC\Slabs\Punchings\Results\Factories\IPunchingResultBuilder.cs" />
+    <Compile Include="Entity\RCC\Slabs\Punchings\Results\Factories\PunchingResultBuilder.cs" />
+    <Compile Include="Entity\RCC\Slabs\Punchings\Results\LoadCaseResult.cs" />
+    <Compile Include="Entity\RCC\Slabs\Punchings\Results\PunchingCalcResult.cs" />
+    <Compile Include="Entity\RCC\Slabs\Punchings\Results\PunchingResult.cs" />
     <Compile Include="Entity\RCC\WallAndColumn\Column.cs" />
     <Compile Include="Entity\RCC\WallAndColumn\Opening.cs" />
     <Compile Include="Entity\RCC\WallAndColumn\Wall.cs" />

@@ -94,42 +94,12 @@ namespace CSL.Common
         private static void AddLoadsTableToDataSet(DataSet dataSet, string dataTableName, string parentTableName)
         {
             DataTable newTable;
-            #region Loads
             //Таблица нагрузок
-            try
-            {
-                newTable = new DataTable(dataTableName);
-                dataSet.Tables.Add(newTable);
-                DsOperation.AddIdColumn(newTable, true);
-                DsOperation.AddFkIdColumn(parentTableName, "ParentId", newTable);
-                DsOperation.AddStringColumn(newTable, "Description");
-                DsOperation.AddDoubleColumn(newTable, "PartialSafetyFactor");
-                DsOperation.AddStringColumn(newTable, "CrcForceDescription");
-                DsOperation.AddStringColumn(newTable, "DesignForceDescription");
-                DsOperation.AddStringColumn(newTable, "ForceDescription");
-            }
-            catch { }
-            #endregion
-            #region LoadForceParameters
+            newTable = new DataTable(dataTableName);
+            dataSet.Tables.Add(newTable);
             //Таблица параметров нагрузок
-            try
-            {
-                newTable = new DataTable(dataTableName+"ForceParameters");
-                dataSet.Tables.Add(newTable);
-                DsOperation.AddIntColumn(newTable, "Id");
-                DsOperation.AddFkIdColumn(parentTableName, "ParentId", newTable);
-                DsOperation.AddStringColumn(newTable, "ElementName");
-                DsOperation.AddIntColumn(newTable, "LoadSetId");
-                DsOperation.AddStringColumn(newTable, "LoadSetName");
-                DsOperation.AddStringColumn(newTable, "Description");
-                DsOperation.AddStringColumn(newTable, "LongLabel");
-                DsOperation.AddStringColumn(newTable, "ShortLabel");
-                DsOperation.AddStringColumn(newTable, "Unit");
-                DsOperation.AddDoubleColumn(newTable, "CrcValue");
-                DsOperation.AddDoubleColumn(newTable, "DesignValue");
-            }
-            catch { }
-            #endregion
+            newTable = new DataTable(dataTableName + "ForceParameters");
+            dataSet.Tables.Add(newTable);
         }
 
         public static void AddLoadsToDataset(DataSet dataSet, string dataTableName, string parentTableName, ObservableCollection<LoadSet> loadSets, int parentId, string parentName)
@@ -152,18 +122,19 @@ namespace CSL.Common
                     loadSetDescription += ")";
                     var tmpForceParamLabels = from t in ProgrammSettings.ForceParamKinds where t.Id == forceParameter.KindId select t;
                     MeasureUnitLabel measureUnitLabel = tmpForceParamLabels.First().MeasureUnit.GetCurrentLabel();
-                    newForceParameter.ItemArray = new object[] { tmpForceParamLabels.First().Id,
-                        parentId,
-                        parentName,
-                        loadSet.Id,
-                        loadSet.Name,
-                        loadSetDescription,
-                        tmpForceParamLabels.First().LongLabel,
-                        tmpForceParamLabels.First().ShortLabel,
-                        measureUnitLabel.UnitName,
-                        Math.Round(forceParameter.CrcValue * measureUnitLabel.AddKoeff, 3),
-                        Math.Round(forceParameter.DesignValue * measureUnitLabel.AddKoeff, 3)
-                    };
+
+                    DsOperation.SetField(newForceParameter, "Id", tmpForceParamLabels.First().Id);
+                    DsOperation.SetField(newForceParameter, "ParentId", parentId);
+                    DsOperation.SetField(newForceParameter, "ElementName", parentName);
+                    DsOperation.SetField(newForceParameter, "LoadSetId", loadSet.Id);
+                    DsOperation.SetField(newForceParameter, "LoadSetName", loadSet.Name);
+                    DsOperation.SetField(newForceParameter, "Description", loadSetDescription);
+                    DsOperation.SetField(newForceParameter, "LongLabel", tmpForceParamLabels.First().LongLabel);
+                    DsOperation.SetField(newForceParameter, "ShortLabel", tmpForceParamLabels.First().ShortLabel);
+                    DsOperation.SetField(newForceParameter, "Unit", measureUnitLabel.UnitName);
+                    DsOperation.SetField(newForceParameter, "CrcValue", Math.Round(forceParameter.CrcValue * measureUnitLabel.AddKoeff, 3));
+                    DsOperation.SetField(newForceParameter, "DesignValue", Math.Round(forceParameter.DesignValue * measureUnitLabel.AddKoeff, 3));
+
                     ForceParameters.Rows.Add(newForceParameter);
                     crcForceDescription += tmpForceParamLabels.First().ShortLabel + "=";
                     crcForceDescription += Math.Round(forceParameter.CrcValue * measureUnitLabel.AddKoeff, 3);
@@ -175,16 +146,16 @@ namespace CSL.Common
 
                     forceDescription += tmpForceParamLabels.First().ShortLabel + "=" + Math.Round(forceParameter.DesignValue * measureUnitLabel.AddKoeff, 3) + measureUnitLabel.UnitName + "; ";
                 }
-                newLoadSet.ItemArray = new object[]
-                    {   loadSet.Id,
-                        loadSet.Name,
-                        parentId,
-                        "",
-                        loadSet.PartialSafetyFactor,
-                        crcForceDescription,
-                        designForceDescription,
-                        forceDescription
-                    };
+
+                DsOperation.SetField(newLoadSet, "Id", loadSet.Id);
+                DsOperation.SetField(newLoadSet, "ParentId", parentId);
+                DsOperation.SetField(newLoadSet, "Name", loadSet.Name);
+                DsOperation.SetField(newLoadSet, "Description", "");
+                DsOperation.SetField(newLoadSet, "PartialSafetyFactor", loadSet.PartialSafetyFactor);
+                DsOperation.SetField(newLoadSet, "CrcForceDescription", crcForceDescription);
+                DsOperation.SetField(newLoadSet, "DesignForceDescription", designForceDescription);
+                DsOperation.SetField(newLoadSet, "ForceDescription", forceDescription);
+
                 dataTable.Rows.Add(newLoadSet);
             }
         }

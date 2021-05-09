@@ -3,6 +3,7 @@ using RDBLL.Common.Service;
 using RDBLL.Entity.RCC.Slabs.Punchings;
 using RDBLL.Entity.SC.Column.SteelBases;
 using RDStartWPF.ViewModels.Base;
+using RDStartWPF.ViewModels.RCC.Slabs.Punchings;
 using RDStartWPF.ViewModels.SC.Columns.Bases;
 using RDStartWPF.Views.RCC.Slabs.Punchings;
 using RDStartWPF.Views.SC.Columns.Bases;
@@ -49,7 +50,10 @@ namespace RDStartWPF.Views.Common.Service
             }
             else if (_Element is Punching)
             {
-                page = new PgPunching(_Element as Punching);
+                Punching punching = _Element as Punching;
+                page = new PgPunching(punching);
+                (page as PgPunching).PunchingVM.ParentVM = DialogVM;
+                DialogVM.Children.Add((page as PgPunching).PunchingVM);
                 Title = "Продавливание плиты колонной прямоугольного сечения";
                 MinWidth = 600;
                 MinHeight = 400;

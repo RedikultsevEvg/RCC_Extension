@@ -1,0 +1,127 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Report ScriptLanguage="CSharp" DoublePass="true" ReportInfo.Created="08/11/2019 20:16:27" ReportInfo.Modified="05/09/2021 19:22:55" ReportInfo.CreatorVersion="2020.1.0.0">
+  <Dictionary>
+    <TableDataSource Name="Punchings" ReferenceName="Data.Punchings" DataType="System.Int32" Enabled="true">
+      <Column Name="Id" DataType="System.Int32"/>
+      <Column Name="Name" DataType="System.String"/>
+      <Column Name="ParentId" DataType="System.Int32"/>
+    </TableDataSource>
+    <TableDataSource Name="PunchingContours" ReferenceName="Data.PunchingContours" DataType="System.Int32" Enabled="true">
+      <Column Name="Id" DataType="System.Int32"/>
+      <Column Name="Name" DataType="System.String"/>
+      <Column Name="ParentId" DataType="System.Int32"/>
+    </TableDataSource>
+    <TableDataSource Name="LoadSets" ReferenceName="Data.LoadSets" DataType="System.Int32" Enabled="true">
+      <Column Name="Id" DataType="System.Int32"/>
+      <Column Name="ParentId" DataType="System.Int32"/>
+      <Column Name="Name" DataType="System.String"/>
+      <Column Name="Description" DataType="System.String"/>
+      <Column Name="PartialSafetyFactor" DataType="System.Double"/>
+      <Column Name="DesignForceDescription" DataType="System.String"/>
+      <Column Name="ForceDescription" DataType="System.String"/>
+      <Column Name="CrcForceDescription" DataType="System.String"/>
+    </TableDataSource>
+    <TableDataSource Name="LoadSetsForceParameters" ReferenceName="Data.LoadSetsForceParameters" DataType="System.Int32" Enabled="true">
+      <Column Name="Id" DataType="System.Int32"/>
+      <Column Name="ParentId" DataType="System.Int32"/>
+      <Column Name="ElementName" DataType="System.String"/>
+      <Column Name="LoadSetId" DataType="System.Int32"/>
+      <Column Name="LoadSetName" DataType="System.String"/>
+      <Column Name="Description" DataType="System.String"/>
+      <Column Name="LongLabel" DataType="System.String"/>
+      <Column Name="ShortLabel" DataType="System.String"/>
+      <Column Name="Unit" DataType="System.String"/>
+      <Column Name="CrcValue" DataType="System.Double"/>
+      <Column Name="DesignValue" DataType="System.Double"/>
+    </TableDataSource>
+    <TableDataSource Name="LoadCases" ReferenceName="Data.LoadCases" DataType="System.Int32" Enabled="true">
+      <Column Name="Id" DataType="System.Int32"/>
+      <Column Name="ParentId" DataType="System.Int32"/>
+      <Column Name="Name" DataType="System.String"/>
+      <Column Name="Description" DataType="System.String"/>
+      <Column Name="PartialSafetyFactor" DataType="System.Double"/>
+      <Column Name="DesignForceDescription" DataType="System.String"/>
+      <Column Name="ForceDescription" DataType="System.String"/>
+      <Column Name="CrcForceDescription" DataType="System.String"/>
+    </TableDataSource>
+    <TableDataSource Name="LoadCasesForceParameters" ReferenceName="Data.LoadCasesForceParameters" DataType="System.Int32" Enabled="true">
+      <Column Name="Id" DataType="System.Int32"/>
+      <Column Name="ParentId" DataType="System.Int32"/>
+      <Column Name="ElementName" DataType="System.String"/>
+      <Column Name="LoadSetId" DataType="System.Int32"/>
+      <Column Name="LoadSetName" DataType="System.String"/>
+      <Column Name="Description" DataType="System.String"/>
+      <Column Name="LongLabel" DataType="System.String"/>
+      <Column Name="ShortLabel" DataType="System.String"/>
+      <Column Name="Unit" DataType="System.String"/>
+      <Column Name="CrcValue" DataType="System.Double"/>
+      <Column Name="DesignValue" DataType="System.Double"/>
+    </TableDataSource>
+    <Parameter Name="Units" DataType="System.String">
+      <Parameter Name="LinearSize" DataType="System.String"/>
+      <Parameter Name="Force" DataType="System.String"/>
+      <Parameter Name="Moment" DataType="System.String"/>
+      <Parameter Name="Stress" DataType="System.String"/>
+      <Parameter Name="Geometry" DataType="System.String">
+        <Parameter Name="Area" DataType="System.String"/>
+        <Parameter Name="SecMoment" DataType="System.String"/>
+        <Parameter Name="Moment" DataType="System.String"/>
+      </Parameter>
+      <Parameter Name="Mass" DataType="System.String"/>
+      <Parameter Name="Density" DataType="System.String"/>
+      <Parameter Name="VolumeWeight" DataType="System.String"/>
+      <Parameter Name="SizeArea" DataType="System.String"/>
+      <Parameter Name="SizeVolume" DataType="System.String"/>
+      <Parameter Name="DisributedForce" DataType="System.String"/>
+      <Parameter Name="DisributedLoad" DataType="System.String"/>
+      <Parameter Name="Filtration" DataType="System.String"/>
+    </Parameter>
+  </Dictionary>
+  <ReportPage Name="MainReport" RawPaperSize="9" LeftMargin="20" TopMargin="5" RightMargin="5" BottomMargin="5" Watermark.Font="Arial, 60pt">
+    <ReportTitleBand Name="ReportTitle1" Width="699.3" Height="28.35">
+      <TextObject Name="Text1" Width="179.55" Height="28.35" Border.Lines="Bottom" Border.Color="Red" Border.Width="2" Fill.Color="LemonChiffon" Text="[Date]" HorzAlign="Center" Font="Arial, 10pt"/>
+      <TextObject Name="Text2" Left="179.55" Width="519.75" Height="28.35" Border.Lines="Bottom" Border.Color="Red" Border.Width="2" Fill.Color="LemonChiffon" Text="Отчет по результатам расчета на продавливание" HorzAlign="Center" Font="Arial, 10pt"/>
+    </ReportTitleBand>
+    <PageHeaderBand Name="PageHeader1" Top="32.35" Width="699.3" Height="28.35"/>
+    <DataBand Name="Punching" Top="64.7" Width="699.3" Height="28.35" CanGrow="true" OutlineExpression="[Punchings.Name]" IdColumn="Punchings.Id">
+      <TextObject Name="Text4" Width="699.3" Height="28.35" CanGrow="true" GrowToBottom="true" Text="Расчет на продавливание: [Punchings.Name]" HorzAlign="Center" Font="Arial, 10pt, style=Bold"/>
+      <ChildBand Name="Child1" Top="97.05" Width="699.3" Height="378" OutlineExpression="ToString(&quot;План фундамента&quot;)">
+        <PictureObject Name="Picture2" Width="699.3" Height="378" CanGrow="true" Image=""/>
+        <ChildBand Name="Child2" Top="479.05" Width="699.3" Height="18.9">
+          <TextObject Name="Text54" Width="699.3" Height="18.9" CanGrow="true" GrowToBottom="true" Text="Рисунок. Схема продавливания [Punchings.Name]" HorzAlign="Center" Font="Arial, 10pt, style=Bold"/>
+          <ChildBand Name="Child7" Top="501.95" Width="699.3" Height="18.9" OutlineExpression="ToString(&quot;Нагрузки&quot;)">
+            <SubreportObject Name="SubReportLoadSet" Width="264.6" Height="18.9" ReportPage="ReportLoads"/>
+            <ChildBand Name="Child9" Top="524.85" Width="699.3" Height="18.9" CanGrow="true" OutlineExpression="ToString(&quot;Давления&quot;)">
+              <TextObject Name="Text23" Width="699.3" Height="18.9" Border.Lines="All" Fill.Color="PaleTurquoise" CanGrow="true" Text="Результаты расчета давления к подошве фундамента (с учетом веса фундамента и грунта на уступах), 2-я группа предельных состояний:" HorzAlign="Center" Font="Arial, 10pt, style=Bold"/>
+              <ChildBand Name="Child4" Top="547.75" Width="699.3" Height="122.85" CanGrow="true">
+                <TextObject Name="Text184" Top="56.7" Width="699.3" Height="18.9" CanGrow="true" GrowToBottom="true" Text="Суммарная требуемая площадь армирования вдоль оси Y: " Font="Arial, 10pt"/>
+                <TextObject Name="Text187" Top="37.8" Width="699.3" Height="18.9" Border.Lines="All" Fill.Color="PaleTurquoise" CanGrow="true" Text="Результаты расчета армирования, 1-я группа предельных состояний:" HorzAlign="Center" Font="Arial, 10pt, style=Bold"/>
+                <TextObject Name="Text188" Top="75.6" Width="699.3" Height="18.9" CanGrow="true" GrowToBottom="true" Text="Foundations.AsFstConclusionX" Font="Arial, 10pt, style=Bold"/>
+                <ChildBand Name="Child3" Top="674.6" Width="699.3" Height="37.8" CanGrow="true" OutlineExpression="ToString(&quot;Общий вывод&quot;)">
+                  <TextObject Name="Text138" Width="699.3" Height="18.9" Border.Lines="All" Fill.Color="PaleTurquoise" CanGrow="true" CanShrink="true" Text="Общий вывод" HorzAlign="Center" Font="Arial, 10pt, style=Bold"/>
+                  <TextObject Name="Text139" Top="18.9" Width="699.3" Height="18.9" CanGrow="true" GrowToBottom="true" Text="Foundations.GeneralConclusion" Font="Arial, 10pt, style=Bold"/>
+                </ChildBand>
+              </ChildBand>
+            </ChildBand>
+          </ChildBand>
+        </ChildBand>
+      </ChildBand>
+    </DataBand>
+    <PageFooterBand Name="PageFooter1" Top="716.4" Width="699.3" Height="28.35">
+      <TextObject Name="Text3" Width="349.65" Height="28.35" Fill.Color="LemonChiffon" Text="RealDoc Calculator" HorzAlign="Center" Font="Arial, 10pt, style=Bold"/>
+      <TextObject Name="Text140" Left="349.65" Width="349.65" Height="28.35" Fill.Color="LemonChiffon" Cursor="Hand" Hyperlink.Value="www.realdoc.info" Text="www.RealDoc.info" HorzAlign="Center" Font="Arial, 10pt, style=Bold, Underline" TextFill.Color="Blue"/>
+    </PageFooterBand>
+  </ReportPage>
+  <ReportPage Name="ReportLoads" Watermark.Font="Arial, 60pt">
+    <DataBand Name="Data2" Top="22.9" Width="718.2" Height="47.25" CanGrow="true">
+      <TextObject Name="Text14" Width="699.3" Height="18.9" CanGrow="true" GrowToBottom="true" Text="Нагрузка: [LoadSets.Name]" Font="Arial, 10pt, style=Bold"/>
+      <TextObject Name="Text15" Top="18.9" Width="699.3" Height="28.35" CanGrow="true" GrowToBottom="true" Text="Нормативные значения: [LoadSets.CrcForceDescription]&#13;&#10;Расчетные значения (n=[LoadSets.PartialSafetyFactor]): [LoadSets.DesignForceDescription]" Font="Arial, 10pt"/>
+      <DataHeaderBand Name="DataHeader2" Width="718.2" Height="18.9">
+        <TextObject Name="Text40" Width="699.3" Height="18.9" Border.Lines="All" Fill.Color="PaleTurquoise" CanGrow="true" Text="Нагрузки на фундамент" HorzAlign="Center" Font="Arial, 10pt, style=Bold"/>
+      </DataHeaderBand>
+      <DataFooterBand Name="DataFooter1" Top="74.15" Width="718.2" Height="18.9">
+        <TextObject Name="Text122" Printable="false" Width="699.3" Height="18.9" Visible="false" Exportable="false" Cursor="Hand" Hyperlink.Kind="DetailReport" Hyperlink.Value="ForceCombination" Hyperlink.DetailReportName="..\..\..\..\bin\Debug\Reports\RCC\Slabs\Punchings\ForceCombinations.frx" CanGrow="true" GrowToBottom="true" Text="(Подробнее...)" HideZeros="true" Font="Arial, 10pt, style=Bold, Italic, Underline" TextFill.Color="Blue"/>
+      </DataFooterBand>
+    </DataBand>
+  </ReportPage>
+</Report>

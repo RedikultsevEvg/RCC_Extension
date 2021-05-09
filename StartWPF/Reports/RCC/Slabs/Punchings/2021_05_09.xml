@@ -1,0 +1,143 @@
+<?xml version="1.0" standalone="yes"?>
+<NewDataSet>
+  <Generators Id="26" />
+  <Versions>
+    <Version>1</Version>
+  </Versions>
+  <MeasurementUnits Id="2" />
+  <MeasurementUnits Id="7" />
+  <MeasurementUnits Id="12" />
+  <MeasurementUnits Id="18" />
+  <MeasurementUnits Id="22" />
+  <MeasurementUnits Id="27" />
+  <MeasurementUnits Id="32" />
+  <MeasurementUnits Id="36" />
+  <MeasurementUnits Id="41" />
+  <MeasurementUnits Id="46" />
+  <MeasurementUnits Id="51" />
+  <MeasurementUnits Id="56" />
+  <MeasurementUnits Id="61" />
+  <MeasurementUnits Id="71" />
+  <MeasurementUnits Id="81" />
+  <BuildingSites Id="0" Name="Мой объект" />
+  <Buildings Id="1" Name="Мое здание" ParentId="0">
+    <RelativeLevel>0</RelativeLevel>
+    <AbsoluteLevel>260</AbsoluteLevel>
+    <AbsolutePlaningLevel>260</AbsolutePlaningLevel>
+    <MaxFoundationSettlement>0.08</MaxFoundationSettlement>
+    <IsRigid>false</IsRigid>
+    <RigidRatio>4</RigidRatio>
+  </Buildings>
+  <Levels Id="0" Name="Этаж 1" ParentId="1">
+    <FloorLevel>0</FloorLevel>
+    <Height>3</Height>
+    <TopOffset>-0.2</TopOffset>
+    <BasePointX>0</BasePointX>
+    <BasePointY>0</BasePointY>
+    <BasePointZ>0</BasePointZ>
+  </Levels>
+  <ForcesGroups Id="2" Name="Новая группа нагрузок">
+    <CenterX>0</CenterX>
+    <CenterY>0</CenterY>
+  </ForcesGroups>
+  <ForcesGroups Id="13" Name="Новая группа нагрузок">
+    <CenterX>0</CenterX>
+    <CenterY>0</CenterY>
+  </ForcesGroups>
+  <LoadSets Id="6" Name="Постоянная">
+    <PartialSafetyFactor>1.1</PartialSafetyFactor>
+    <IsLiveLoad>false</IsLiveLoad>
+    <IsCombination>false</IsCombination>
+    <BothSign>false</BothSign>
+  </LoadSets>
+  <LoadSets Id="14" Name="Постоянная">
+    <PartialSafetyFactor>1.1</PartialSafetyFactor>
+    <IsLiveLoad>false</IsLiveLoad>
+    <IsCombination>false</IsCombination>
+    <BothSign>false</BothSign>
+  </LoadSets>
+  <ForcesGroupLoadSets Id="28" ForcesGroupId="2" LoadSetId="6" />
+  <ForcesGroupLoadSets Id="30" ForcesGroupId="13" LoadSetId="14" />
+  <ForceParameters Id="7" LoadSetId="6">
+    <KindId>1</KindId>
+    <CrcValue>-100000</CrcValue>
+  </ForceParameters>
+  <ForceParameters Id="8" LoadSetId="6">
+    <KindId>2</KindId>
+    <CrcValue>200000</CrcValue>
+  </ForceParameters>
+  <ForceParameters Id="15" LoadSetId="14">
+    <KindId>1</KindId>
+    <CrcValue>-100000</CrcValue>
+  </ForceParameters>
+  <ForceParameters Id="16" LoadSetId="14">
+    <KindId>2</KindId>
+    <CrcValue>200000</CrcValue>
+  </ForceParameters>
+  <ParentForcesGroups Id="27" ParentId="1" ForcesGroupId="2" />
+  <ParentForcesGroups Id="29" ParentId="12" ForcesGroupId="13" />
+  <MaterialUsings Id="4" Name="Бетон" ParentId="3">
+    <Purpose>Plate</Purpose>
+    <Materialkindname>Concrete</Materialkindname>
+    <SelectedId>6</SelectedId>
+    <Diameter>0.012</Diameter>
+    <Prestrain>0</Prestrain>
+  </MaterialUsings>
+  <MaterialUsings Id="18" Name="Бетон" ParentId="3">
+    <Purpose>Plate</Purpose>
+    <Materialkindname>Concrete</Materialkindname>
+    <SelectedId>5</SelectedId>
+    <Diameter>0.012</Diameter>
+    <Prestrain>0</Prestrain>
+  </MaterialUsings>
+  <Safetyfactors Id="5" Name="Коэффициент, учитывающий длительность действия нагрузки" ParentId="4">
+    <_x0030_>1</_x0030_>
+    <_x0031_>1</_x0031_>
+    <_x0032_>1</_x0032_>
+    <_x0033_>1</_x0033_>
+    <_x0034_>0.9</_x0034_>
+    <_x0035_>0.9</_x0035_>
+    <_x0036_>1</_x0036_>
+    <_x0037_>1</_x0037_>
+    <_x0038_>1</_x0038_>
+    <_x0039_>1</_x0039_>
+    <_x0031_0>1</_x0031_0>
+    <_x0031_1>1</_x0031_1>
+  </Safetyfactors>
+  <Safetyfactors Id="19" Name="Коэффициент, учитывающий длительность действия нагрузки" ParentId="18">
+    <_x0030_>1</_x0030_>
+    <_x0031_>1</_x0031_>
+    <_x0032_>1</_x0032_>
+    <_x0033_>1</_x0033_>
+    <_x0034_>0.9</_x0034_>
+    <_x0035_>0.9</_x0035_>
+    <_x0036_>1</_x0036_>
+    <_x0037_>1</_x0037_>
+    <_x0038_>1</_x0038_>
+    <_x0039_>1</_x0039_>
+    <_x0031_0>1</_x0031_0>
+    <_x0031_1>1</_x0031_1>
+  </Safetyfactors>
+  <Punchings Id="1" Name="Продавливание 1" ParentId="0">
+    <Width>0.4</Width>
+    <Length>0.4</Length>
+    <CenterX>0</CenterX>
+    <CenterY>0</CenterY>
+    <CoveringLayerX>0.03</CoveringLayerX>
+    <CoveringLayerY>0.04</CoveringLayerY>
+  </Punchings>
+  <Punchings Id="12" Name="Продавливание 2" ParentId="0">
+    <Width>0.4</Width>
+    <Length>0.4</Length>
+    <CenterX>0</CenterX>
+    <CenterY>0</CenterY>
+    <CoveringLayerX>0.03</CoveringLayerX>
+    <CoveringLayerY>0.04</CoveringLayerY>
+  </Punchings>
+  <PunchingLayers Id="3" Name="Верхний слой" ParentId="1">
+    <Height>0.2</Height>
+  </PunchingLayers>
+  <PunchingLayers Id="17" Name="Верхний слой" ParentId="12">
+    <Height>0.2</Height>
+  </PunchingLayers>
+</NewDataSet>

@@ -1,6 +1,9 @@
 ﻿using RDBLL.Common.Geometry;
 using RDBLL.Common.Geometry.Mathematic;
+using RDBLL.Common.Service;
 using RDBLL.Entity.Common.Materials;
+using RDBLL.Entity.RCC.Slabs.Punchings.Results;
+using RDBLL.Entity.RCC.Slabs.Punchings.Results.Factories;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,7 +15,7 @@ namespace RDBLL.Entity.RCC.Slabs.Punchings.Processors
     public class BearingProcessor : IBearingProcessor
     {
         /// <summary>
-        /// Возвращает коэффициент несущей спсо
+        /// Возвращает коэффициент несущей способности (отношение действующих усилий к предельным)
         /// </summary>
         /// <param name="contour">Расчетный контур продавливания</param>
         /// <param name="Nz">Продольная сила</param>
@@ -20,7 +23,7 @@ namespace RDBLL.Entity.RCC.Slabs.Punchings.Processors
         /// <param name="My">Tо же относительно оси Y</param>
         /// <param name="fullLoad">Флаг полной нагрузки</param>
         /// <returns></returns>
-        public double GetBearindCapacityCoefficient(PunchingContour contour, double Nz, double Mx, double My, bool fullLoad = true)
+        public double GetBearingCapacityCoefficient(PunchingContour contour, double Nz, double Mx, double My, bool fullLoad = true)
         {
             double A = GetForceResistance(contour, fullLoad);
             double[] w = GetMomentResistance(contour, fullLoad);
@@ -186,6 +189,26 @@ namespace RDBLL.Entity.RCC.Slabs.Punchings.Processors
             Rbt[0] = (mat.MaterialKind as ConcreteKind).FstTensStrength * mat.TotalSafetyFactor.PsfFstTens;
             Rbt[1] = (mat.MaterialKind as ConcreteKind).FstTensStrength * mat.TotalSafetyFactor.PsfFstLongTens;
             return Rbt;
+        }
+        /// <summary>
+        /// Вычисление результата
+        /// </summary>
+        /// <param name="punching"></param>
+        public void CalcResult(Punching punching)
+        {
+            try
+            {
+                IPunchingResultBuilder resultBuilder = new PunchingResultBuilder(punching);
+                punching.Result = resultBuilder.GetPunchingResult();
+                punching.IsActive = true;
+                //punching.IsActive = false;
+            }
+            catch (Exception ex)
+            {
+                CommonErrorProcessor.ShowErrorMessage($"Ошибка расчета элемента: " + punching.Name, ex);
+                punching.IsActive = false;
+            }
+            
         }
     }
 }

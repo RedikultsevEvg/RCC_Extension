@@ -54,7 +54,7 @@ namespace CSL.Reports
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Ошибка вывода отчета"+ex);
+                CommonErrorProcessor.ShowErrorMessage($"Ошибка вывода отчета", ex);
             }
             finally
             {
