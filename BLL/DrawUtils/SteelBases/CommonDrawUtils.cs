@@ -28,7 +28,7 @@ namespace RDBLL.DrawUtils.SteelBases
             {
                 Line axisX = new Line();
                 axisX.X1 = canvas.Width * gap;
-                axisX.Y1 = canvas.Height/2;
+                axisX.Y1 = canvas.Height / 2;
                 axisX.X2 = canvas.Width * (1-gap);
                 axisX.Y2 = canvas.Height / 2;
                 axisX.Stroke = Brushes.Red;

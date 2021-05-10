@@ -153,6 +153,9 @@
     <Compile Include="Views\Common\Patterns\WndPatternSelect.xaml.cs">
       <DependentUpon>WndPatternSelect.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\Common\Service\Pages\Scatches\PgScatch.xaml.cs">
+      <DependentUpon>PgScatch.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Common\Service\WndCommonDialog.xaml.cs">
       <DependentUpon>WndCommonDialog.xaml</DependentUpon>
     </Compile>
@@ -374,6 +377,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\Common\Patterns\WndPatternSelect.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Common\Service\Pages\Scatches\PgScatch.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

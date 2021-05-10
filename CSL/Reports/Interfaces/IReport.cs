@@ -10,6 +10,7 @@ namespace CSL.Reports.Interfaces
     public interface IReport
     {
         DataSet dataSet { get; set; }
+        void PrepareReport();
         void ShowReport(string fileName);
     }
 }

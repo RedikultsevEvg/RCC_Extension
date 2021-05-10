@@ -9,6 +9,9 @@ using RDBLL.Entity.RCC.Foundations.Processors;
 using RDBLL.Common.Service;
 using RDBLL.Entity.RCC.Foundations.Builders;
 using RDBLL.Entity.Soils.Factories;
+using CSL.Reports.Interfaces;
+using CSL.Reports.RCC.Slabs.Punchings;
+using System.Data;
 
 namespace TestIntegrationProject.RCC.FoundationTests.RectFoundations
 {
@@ -26,7 +29,6 @@ namespace TestIntegrationProject.RCC.FoundationTests.RectFoundations
             double actualValue = (-1D) * Foundation.Result.MaxSettlement;
             Assert.AreEqual(expectedValue, actualValue, expectedValue * tolerance);
         }
-
         [TestMethod] //Тестирование глубины сжимаемой толщи
         public void CompressionHeightTest()
         {
@@ -36,7 +38,6 @@ namespace TestIntegrationProject.RCC.FoundationTests.RectFoundations
             double actualValue = Foundation.Result.CompressHeight;
             Assert.AreEqual(expectedValue, actualValue, expectedValue * tolerance);
         }
-
         [TestMethod] //Тестирование среднего давления под подошвой
         public void SndAvgStressTest()
         {
@@ -46,7 +47,6 @@ namespace TestIntegrationProject.RCC.FoundationTests.RectFoundations
             double actualValue = Foundation.Result.MinSndAvgStressesWithWeight;
             Assert.AreEqual(expectedValue, actualValue, (-1D) * expectedValue * tolerance);
         }
-
         [TestMethod] //Тестирование краевого давления под подошвой
         public void SndMiddleStressTest()
         {
@@ -56,7 +56,6 @@ namespace TestIntegrationProject.RCC.FoundationTests.RectFoundations
             double actualValue = Foundation.Result.MinSndMiddleStressesWithWeight;
             Assert.AreEqual(expectedValue, actualValue,  (-1D) * expectedValue * tolerance);
         }
-
         [TestMethod] //Тестирование углового давления под подошвой
         public void SndCornerStressTest()
         {
@@ -66,7 +65,6 @@ namespace TestIntegrationProject.RCC.FoundationTests.RectFoundations
             double actualValue = Foundation.Result.MinSndCornerStressesWithWeight;
             Assert.AreEqual(expectedValue, actualValue,  (-1D) * expectedValue * tolerance);
         }
-
         [TestMethod] //Тестирование определения расчетного сопротивления
         public void SndResistanceTest1()
         {
@@ -75,6 +73,25 @@ namespace TestIntegrationProject.RCC.FoundationTests.RectFoundations
             SolveFoundation();
             double actualValue = Foundation.Result.SndResistance;
             Assert.AreEqual(expectedValue, actualValue, expectedValue * tolerance);
+        }
+        //Тестирование подготовки отчета
+        [TestMethod]
+        public void ReportTest()
+        {
+            ProgrammSettings.InicializeNew();
+            SolveFoundation();
+            //Ссылка на строительный объект
+            BuildingSite buildingSite = ProgrammSettings.BuildingSite;
+            IReport report = new PunchingReport(buildingSite);
+            report.PrepareReport();
+            //Проверяем, что отчет не пустой
+            Assert.IsNotNull(report);
+            DataSet dataSet = report.dataSet;
+            //Проверяем, что датасет не пустой
+            Assert.IsNotNull(dataSet);
+            //Проверяем количество таблиц в датасете
+            int tableCount = dataSet.Tables.Count;
+            Assert.AreEqual(5, tableCount);
         }
 
         private Foundation PrepareFoundation()

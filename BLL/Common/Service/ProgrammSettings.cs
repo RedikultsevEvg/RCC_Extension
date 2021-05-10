@@ -166,10 +166,10 @@ namespace RDBLL.Common.Service
         {
             try
             {
-                win32.SaveFileDialog saveFileDialog = new win32.SaveFileDialog();
-                saveFileDialog.Filter = "XML file (*.xml)|*.xml";
                 if (FilePath == "" || FilePath == null || InNewFile)
                 {
+                    win32.SaveFileDialog saveFileDialog = new win32.SaveFileDialog();
+                    saveFileDialog.Filter = "XML file (*.xml)|*.xml";
 
                     if (saveFileDialog.ShowDialog() == true)
                         FilePath = saveFileDialog.FileName;

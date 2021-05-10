@@ -61,7 +61,7 @@ namespace CSL.Reports
                 report.Dispose();
             }
         }
-        private void PrepareReport()
+        public void PrepareReport()
         {
             foreach (Building building in _buildingSite.Children)
             {

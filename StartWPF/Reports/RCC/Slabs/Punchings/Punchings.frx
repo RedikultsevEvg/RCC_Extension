@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Report ScriptLanguage="CSharp" DoublePass="true" ReportInfo.Created="08/11/2019 20:16:27" ReportInfo.Modified="05/10/2021 13:54:40" ReportInfo.CreatorVersion="2020.1.0.0">
+<Report ScriptLanguage="CSharp" DoublePass="true" ReportInfo.Created="08/11/2019 20:16:27" ReportInfo.Modified="05/10/2021 17:49:17" ReportInfo.CreatorVersion="2020.1.0.0">
   <Dictionary>
     <TableDataSource Name="Punchings" ReferenceName="Data.Punchings" DataType="System.Int32" Enabled="true">
       <Column Name="Id" DataType="System.Int32"/>
@@ -19,6 +19,10 @@
       <Column Name="ParentId" DataType="System.Int32"/>
       <Column Name="CenterX" DataType="System.Double"/>
       <Column Name="CenterY" DataType="System.Double"/>
+      <Column Name="WxPos" DataType="System.Double"/>
+      <Column Name="WxNeg" DataType="System.Double"/>
+      <Column Name="WyPos" DataType="System.Double"/>
+      <Column Name="WyNeg" DataType="System.Double"/>
     </TableDataSource>
     <TableDataSource Name="LoadSets" ReferenceName="Data.LoadSets" DataType="System.Int32" Enabled="true">
       <Column Name="Id" DataType="System.Int32"/>
@@ -77,6 +81,10 @@
       <Column Name="Height" DataType="System.Double"/>
       <Column Name="ConcreteName" DataType="System.String"/>
       <Column Name="Length" DataType="System.Double"/>
+      <Column Name="WxPos" DataType="System.Double"/>
+      <Column Name="WxNeg" DataType="System.Double"/>
+      <Column Name="WyPos" DataType="System.Double"/>
+      <Column Name="WyNeg" DataType="System.Double"/>
     </TableDataSource>
     <TableDataSource Name="PunchingLines" ReferenceName="Data.PunchingLines" DataType="System.Int32" Enabled="true">
       <Column Name="Id" DataType="System.Int32"/>
@@ -86,6 +94,7 @@
       <Column Name="StartY" DataType="System.Double"/>
       <Column Name="EndX" DataType="System.Double"/>
       <Column Name="EndY" DataType="System.Double"/>
+      <Column Name="Length" DataType="System.Double"/>
     </TableDataSource>
     <TableDataSource Name="PunchingLoadSetContours" ReferenceName="Data.PunchingLoadSetContours" DataType="System.Int32" Enabled="true">
       <Column Name="Id" DataType="System.Int32"/>
@@ -147,11 +156,11 @@
         <TextObject Name="Text8" Width="699.3" Height="18.9" CanGrow="true" GrowToBottom="true" Text="Сочетание нагрузок: [LoadCases.Name]" Font="Arial, 10pt, style=Bold"/>
       </DataBand>
       <DataBand Name="DtContours" Top="636.8" Width="699.3" Height="18.9" CanGrow="true" OutlineExpression="ToString(&quot;Расчетный контур №&quot; + [Row#])" DataSource="PunchingContours" IdColumn="PunchingContours.Id" ParentIdColumn="Punchings.Id">
-        <TextObject Name="Text141" Width="699.3" Height="18.9" CanGrow="true" GrowToBottom="true" Text="Расчетный контур [Row#]. Центр тяжести: X=[PunchingContours.CenterX][Units.LinearSize], Y=[PunchingContours.CenterY][Units.LinearSize]" Font="Arial, 10pt"/>
+        <TextObject Name="Text141" Width="699.3" Height="18.9" CanGrow="true" GrowToBottom="true" Text="Расчетный контур [Row#]. Центр тяжести: X=[PunchingContours.CenterX][Units.LinearSize], Y=[PunchingContours.CenterY][Units.LinearSize]&#13;&#10;Локальные моменты сопротивления: WxPos=[PunchingContours.WxPos][Units.Geometry.Area], WxNeg=[PunchingContours.WxNeg][Units.Geometry.Area], WyPos=[PunchingContours.WyPos][Units.Geometry.Area], WyNeg=[PunchingContours.WyNeg][Units.Geometry.Area]." Font="Arial, 10pt"/>
         <DataBand Name="DtSubContours" Top="659.7" Width="699.3" Height="18.9" CanGrow="true" DataSource="PunchingSubContours" IdColumn="PunchingSubContours.Id" ParentIdColumn="PunchingContours.Id">
-          <TextObject Name="Text142" Left="18.9" Width="699.3" Height="18.9" CanGrow="true" GrowToBottom="true" Text="Субконтур [Row#]: h=[PunchingSubContours.Height][Units.LinearSize], L=[PunchingSubContours.Length][Units.LinearSize], Бетон [PunchingSubContours.ConcreteName]" Font="Arial, 10pt"/>
+          <TextObject Name="Text142" Left="18.9" Width="699.3" Height="18.9" CanGrow="true" GrowToBottom="true" Text="Субконтур [Row#]: Высота, h=[PunchingSubContours.Height][Units.LinearSize], Периметр L=[PunchingSubContours.Length][Units.LinearSize].&#13;&#10;Локальные моменты сопротивления: WxPos=[PunchingSubContours.WxPos][Units.Geometry.Area], WxNeg=[PunchingSubContours.WxNeg][Units.Geometry.Area], WyPos=[PunchingSubContours.WyPos][Units.Geometry.Area], WyNeg=[PunchingSubContours.WyNeg][Units.Geometry.Area].&#13;&#10;Бетон [PunchingSubContours.ConcreteName]" Font="Arial, 10pt"/>
           <DataBand Name="DtLines" Top="682.6" Width="699.3" Height="15.12" CanGrow="true" DataSource="PunchingLines" IdColumn="PunchingLines.Id" ParentIdColumn="PunchingSubContours.Id">
-            <TextObject Name="Text143" Left="37.8" Width="699.3" Height="15.12" CanGrow="true" GrowToBottom="true" Text="Линия [Row#]. Точка 1: X=[PunchingLines.StartX][Units.LinearSize], Y=[PunchingLines.StartY][Units.LinearSize], Точка 2: X=[PunchingLines.EndX][Units.LinearSize], Y=[PunchingLines.EndY][Units.LinearSize]" Font="Courier New, 10pt"/>
+            <TextObject Name="Text143" Left="37.8" Width="699.3" Height="15.12" CanGrow="true" GrowToBottom="true" Text="Линия [Row#]. Точка 1: X=[PunchingLines.StartX][Units.LinearSize], Y=[PunchingLines.StartY][Units.LinearSize], Точка 2: X=[PunchingLines.EndX][Units.LinearSize], Y=[PunchingLines.EndY][Units.LinearSize], Длина L=[PunchingLines.Length][Units.LinearSize]" Font="Courier New, 10pt"/>
           </DataBand>
         </DataBand>
       </DataBand>

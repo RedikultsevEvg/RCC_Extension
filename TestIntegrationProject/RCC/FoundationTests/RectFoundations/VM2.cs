@@ -11,6 +11,9 @@ using RDBLL.Entity.RCC.Foundations.Builders;
 using System.Data;
 using RDBLL.Common.Service.DsOperations.Factory;
 using RDBLL.Entity.Soils.Factories;
+using CSL.Reports.Interfaces;
+using CSL.Reports.RCC.Slabs.Punchings;
+using CSL.Reports;
 
 namespace TestIntegrationProject.RCC.FoundationTests.RectFoundations
 {
@@ -59,6 +62,26 @@ namespace TestIntegrationProject.RCC.FoundationTests.RectFoundations
             DataSet dataSet = ProgrammSettings.CurrentDataSet;
             SolveFoundation();
             Foundation foundation = _Foundation.Clone() as Foundation;
+        }
+
+        //Тестирование подготовки отчета
+        [TestMethod]
+        public void ReportFoundationTest()
+        {
+            ProgrammSettings.InicializeNew();
+            SolveFoundation();
+            //Ссылка на строительный объект
+            BuildingSite buildingSite = ProgrammSettings.BuildingSite;
+            IReport report = new FoundationReport(buildingSite);
+            report.PrepareReport();
+            //Проверяем, что отчет не пустой
+            Assert.IsNotNull(report);
+            DataSet dataSet = report.dataSet;
+            //Проверяем, что датасет не пустой
+            Assert.IsNotNull(dataSet);
+            //Проверяем количество таблиц в датасете
+            int tableCount = dataSet.Tables.Count;
+            Assert.AreEqual(15, tableCount);
         }
 
         [TestMethod] //Тестирование среднего давления под подошвой

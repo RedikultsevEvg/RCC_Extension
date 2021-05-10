@@ -76,7 +76,7 @@ namespace RDBLL.Entity.RCC.Slabs.Punchings.Processors
             double rYPos = 0;
             double rYNeg = 0;
             //Находим момент инерции контура
-            double[] moments = GeomProcessor.GetMomentOfInertia(contour);
+            double[] moments = GeomProcessor.GetMomentOfInertiaHeight(contour);
             double Ix = moments[0];
             double Iy = moments[1];
 

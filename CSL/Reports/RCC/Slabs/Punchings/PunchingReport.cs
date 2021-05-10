@@ -4,6 +4,7 @@ using CSL.DataSets.Factories.RCC.Slabs.Punchings;
 using CSL.Reports.Interfaces;
 using FastReport;
 using RDBLL.Common.Geometry;
+using RDBLL.Common.Geometry.Mathematic;
 using RDBLL.Common.Interfaces;
 using RDBLL.Common.Service;
 using RDBLL.Common.Service.DsOperations;
@@ -28,8 +29,9 @@ namespace CSL.Reports.RCC.Slabs.Punchings
 {
     public class PunchingReport : IReport
     {
+        //Ссылка на строительный объект
         private BuildingSite _BuildingSite;
-
+        #region Units
         private double linearSizeCoefficient = MeasureUnitConverter.GetCoefficient(0);
         private double forceCoefficient = MeasureUnitConverter.GetCoefficient(1);
         private double momentCoefficient = MeasureUnitConverter.GetCoefficient(2);
@@ -38,9 +40,15 @@ namespace CSL.Reports.RCC.Slabs.Punchings
         private double geometrySecMomentCoefficient = MeasureUnitConverter.GetCoefficient(5);
         private double geometryMomentCoefficient = MeasureUnitConverter.GetCoefficient(6);
         private double MassCoefficient = MeasureUnitConverter.GetCoefficient(7);
-
+        #endregion
+        /// <summary>
+        /// Датасет для сохранения результатов и передачи их в отчет
+        /// </summary>
         public DataSet dataSet { get; set; }
-
+        /// <summary>
+        /// Метод вывода отчета
+        /// </summary>
+        /// <param name="fileName"></param>
         public void ShowReport(string fileName)
         {
             PrepareReport();
@@ -71,15 +79,20 @@ namespace CSL.Reports.RCC.Slabs.Punchings
                 report.Dispose();
             }
         }
-
+        /// <summary>
+        /// Конструктор по строительному объекту
+        /// </summary>
+        /// <param name="buildingSite"></param>
         public PunchingReport(BuildingSite buildingSite)
         {
             _BuildingSite = buildingSite;
             IReportDataSetFactory dataSetFactory = new PunchingDataSetFactory();
             dataSet = dataSetFactory.CreateDataSet();
         }
-
-        private void PrepareReport()
+        /// <summary>
+        /// Метод подготовки отчета
+        /// </summary>
+        public void PrepareReport()
         {
             foreach (Building building in _BuildingSite.Children)
             {
@@ -169,7 +182,22 @@ namespace CSL.Reports.RCC.Slabs.Punchings
                 Point2D center = GeomProcessor.GetContourCenter(contour);
                 DsOperation.SetField(row, "CenterX", MathOperation.Round(center.X * linearSizeCoefficient));
                 DsOperation.SetField(row, "CenterY", MathOperation.Round(center.Y * linearSizeCoefficient));
+                //Момент сопротивления контура
+                //Момент инерции в данном случае находится с учетом высоты
+                double[] momInertia = GeomProcessor.GetMomentOfInertiaHeight(contour);
+                double[] maxDist = GeomProcessor.GetMaxDistFromContour(contour);
+                double totalHeight = GeomProcessor.GetContourHeight(contour);
+                //Для получения единичных моментов сопротивления контура делим на суммарныю высоту контура
+                double WxPos = momInertia[0] / maxDist[0] / totalHeight;
+                double WxNeg = momInertia[0] / maxDist[1] / totalHeight;
+                double WyPos = momInertia[1] / maxDist[2] / totalHeight;
+                double WyNeg = momInertia[1] / maxDist[3] / totalHeight;
+                DsOperation.SetField(row, "WxPos", MathOperation.Round(WxPos * geometryAreaCoefficient));
+                DsOperation.SetField(row, "WxNeg", MathOperation.Round(WxNeg * geometryAreaCoefficient));
+                DsOperation.SetField(row, "WyPos", MathOperation.Round(WyPos * geometryAreaCoefficient));
+                DsOperation.SetField(row, "WyNeg", MathOperation.Round(WyNeg * geometryAreaCoefficient));
                 dataTable.Rows.Add(row);
+                //Заполняем данные для субконтуров
                 ProcessSubContours(result, result.Id);
             }
         }
@@ -178,9 +206,11 @@ namespace CSL.Reports.RCC.Slabs.Punchings
         {
             DataTable dataTable = DsOperation.GetDataTable(dataSet, "PunchingSubContours");
             PunchingContour contour = result.PunchingContour;
+            Point2D center = GeomProcessor.GetContourCenter(contour);
             foreach (PunchingSubContour subContour in contour.SubContours)
             {
                 DataRow row = dataTable.NewRow();
+                //Формируем временный код
                 int Id = ProgrammSettings.CurrentTmpId;
                 DsOperation.SetField(row, "Id", Id);
                 DsOperation.SetField(row, "ParentId", parentId);
@@ -188,8 +218,21 @@ namespace CSL.Reports.RCC.Slabs.Punchings
                 DsOperation.SetField(row, "Height", MathOperation.Round(subContour.Height * linearSizeCoefficient));
                 //Длина субконтура
                 DsOperation.SetField(row, "Length", MathOperation.Round(GeomProcessor.GetSubContourLength(subContour) * linearSizeCoefficient));
+                //Момент сопротивления субконтура
+                double[] momInertia = GeomProcessor.GetMomentOfInertia(subContour, center);
+                double[] maxDist = GeomProcessor.GetMaxDistFromLineList(subContour.Lines, center);
+                double WxPos = momInertia[0] / maxDist[0];
+                double WxNeg = momInertia[0] / maxDist[1];
+                double WyPos = momInertia[1] / maxDist[2];
+                double WyNeg = momInertia[1] / maxDist[3];
+                DsOperation.SetField(row, "WxPos", MathOperation.Round(WxPos * geometryAreaCoefficient));
+                DsOperation.SetField(row, "WxNeg", MathOperation.Round(WxNeg * geometryAreaCoefficient));
+                DsOperation.SetField(row, "WyPos", MathOperation.Round(WyPos * geometryAreaCoefficient));
+                DsOperation.SetField(row, "WyNeg", MathOperation.Round(WyNeg * geometryAreaCoefficient));
+                //Класс бетона субконтура
                 DsOperation.SetField(row, "ConcreteName", subContour.Concrete.MaterialKind.Name);
                 dataTable.Rows.Add(row);
+                //Заполняем данные по линиям субконтура
                 ProcessLines(subContour, Id);
             }
         }
@@ -207,6 +250,8 @@ namespace CSL.Reports.RCC.Slabs.Punchings
                 DsOperation.SetField(row, "StartY", MathOperation.Round(line.StartPoint.Y * linearSizeCoefficient));
                 DsOperation.SetField(row, "EndX", MathOperation.Round(line.EndPoint.X * linearSizeCoefficient));
                 DsOperation.SetField(row, "EndY", MathOperation.Round(line.EndPoint.Y * linearSizeCoefficient));
+                double length = GeometryProc.GetDistance(line.StartPoint, line.EndPoint);
+                DsOperation.SetField(row, "Length", MathOperation.Round(length * linearSizeCoefficient));
                 dataTable.Rows.Add(row);
             }
         }

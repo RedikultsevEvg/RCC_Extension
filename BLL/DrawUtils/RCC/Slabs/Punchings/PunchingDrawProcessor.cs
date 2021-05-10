@@ -22,11 +22,12 @@ namespace RDBLL.DrawUtils.RCC.Slabs.Punchings
             if (item is Punching)
             {
                 Punching punching = item as Punching;
-                double width = punching.Width * 3;
-                double length = punching.Length * 3;
+                double width = Math.Max(punching.Width * 3, punching.Length * 3);
+                //double width = punching.Width * 3;
+                //double length = punching.Length * 3;
 
                 double zoom_factor_X = canvas.Width / width / 1.2;
-                double zoom_factor_Y = canvas.Height / length / 1.2;
+                double zoom_factor_Y = canvas.Height / width / 1.2;
                 double scale_factor;
                 Point2D center = new Point2D(canvas.Width / 2, canvas.Height / 2 );
                 //Принимаем минимальный масштаб

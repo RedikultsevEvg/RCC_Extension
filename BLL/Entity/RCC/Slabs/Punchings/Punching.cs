@@ -16,6 +16,9 @@ using System.Threading.Tasks;
 
 namespace RDBLL.Entity.RCC.Slabs.Punchings
 {
+    /// <summary>
+    /// Класс расчета узла колонна-плиты на продавливание
+    /// </summary>
     public class Punching : IHasParent, ICloneable, IHasForcesGroups, IRectangle, IHasChildren
     {
         /// <summary>
@@ -62,6 +65,45 @@ namespace RDBLL.Entity.RCC.Slabs.Punchings
         /// Величина защитного слоя для арматуры вдоль оси Y
         /// </summary>
         public double CoveringLayerY { get; set; }
+        /// <summary>
+        /// Флаг видимости нескольких слоев
+        /// </summary>
+        public bool SeveralLayers { get; set; }
+        /// <summary>
+        /// Признак необходимости учета края слева
+        /// </summary>
+        public bool LeftEdge { get; set; }
+        /// <summary>
+        /// Признак необходимости учета края справа
+        /// </summary>
+        public bool RightEdge { get; set; }
+        /// <summary>
+        /// Признак необходимости учета края сверху
+        /// </summary>
+        public bool TopEdge { get; set; }
+        /// <summary>
+        /// Признак необходимости учета края снизу
+        /// </summary>
+        public bool BottomEdge { get; set; }
+        /// <summary>
+        /// Расстояние до края слева
+        /// </summary>
+        public double LeftEdgeDist { get; set; }
+        /// <summary>
+        /// Расстояние до края справа
+        /// </summary>
+        public double RightEdgeDist { get; set; }
+        /// <summary>
+        /// Расстояние до края сверху
+        /// </summary>
+        public double TopEdgeDist { get; set; }
+        /// <summary>
+        /// Расстояние до края снизу
+        /// </summary>
+        public double BottomEdgeDist { get; set; }
+        /// <summary>
+        /// Признак актуальности расчета
+        /// </summary>
         public bool IsActive { get; set; }
         /// <summary>
         /// Свойство для хранения результата
@@ -80,6 +122,10 @@ namespace RDBLL.Entity.RCC.Slabs.Punchings
             ForcesGroups.Add(new ForcesGroup(this));
             Center = new Point2D();
         }
+        /// <summary>
+        /// Клонирование объекта
+        /// </summary>
+        /// <returns></returns>
         public object Clone()
         {
             Punching punching = this.MemberwiseClone() as Punching;
@@ -101,7 +147,10 @@ namespace RDBLL.Entity.RCC.Slabs.Punchings
             punching.Center = this.Center.Clone() as Point2D;
             return punching;
         }
-
+        /// <summary>
+        /// Удалить объект из датасета
+        /// </summary>
+        /// <param name="dataSet"></param>
         public void DeleteFromDataSet(DataSet dataSet)
         {
             foreach (ForcesGroup forcesGroup in ForcesGroups)
@@ -114,14 +163,19 @@ namespace RDBLL.Entity.RCC.Slabs.Punchings
             }
             DsOperation.DeleteRow(dataSet, GetTableName(), Id);
         }
-
         public double GetArea()
         {
             throw new NotImplementedException();
         }
-
+        /// <summary>
+        /// Возвращает наименование таблицы
+        /// </summary>
+        /// <returns></returns>
         public string GetTableName() { return "Punchings";}
-
+        /// <summary>
+        /// Открывает объект из датасета
+        /// </summary>
+        /// <param name="dataSet"></param>
         public void OpenFromDataSet(DataSet dataSet)
         {
             try
@@ -133,7 +187,10 @@ namespace RDBLL.Entity.RCC.Slabs.Punchings
                 CommonErrorProcessor.ShowErrorMessage($"Ошибка получения элемента из базы данных. Элемент {this.GetType().Name}: " + Name, ex);
             }
         }
-
+        /// <summary>
+        /// Открывает объект из датасета
+        /// </summary>
+        /// <param name="dataRow"></param>
         public void OpenFromDataSet(DataRow dataRow)
         {
             EntityOperation.SetProps(dataRow, this);
@@ -143,7 +200,10 @@ namespace RDBLL.Entity.RCC.Slabs.Punchings
             DsOperation.Field(dataRow, ref d, "CoveringLayerY", 0.03);
             CoveringLayerY = d;
         }
-
+        /// <summary>
+        /// Регистрация родительского элемента
+        /// </summary>
+        /// <param name="parent"></param>
         public void RegisterParent(IDsSaveable parent)
         {
             if (ParentMember != null) { UnRegisterParent(); }
@@ -169,14 +229,20 @@ namespace RDBLL.Entity.RCC.Slabs.Punchings
                 CommonErrorProcessor.ShowErrorMessage($"Ошибка сохранения элемента {this.GetType().Name}: " + Name, ex);
             }
         }
-
+        /// <summary>
+        /// Удаление регистрации на родителе
+        /// </summary>
         public void UnRegisterParent()
         {
             Level level = ParentMember as Level;
             level.Children.Remove(this);
             ParentMember = null;
         }
-        //Сравнение объектов
+        /// <summary>
+        /// Сравнение объектов
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
         public override bool Equals(object obj)
         {
             if (!(obj is Punching)) return false;

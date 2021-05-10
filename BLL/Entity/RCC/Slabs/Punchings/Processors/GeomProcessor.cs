@@ -101,7 +101,7 @@ namespace RDBLL.Entity.RCC.Slabs.Punchings.Processors
         /// </summary>
         /// <param name="contour"></param>
         /// <returns></returns>
-        public static double[] GetMomentOfInertia(PunchingContour contour)
+        public static double[] GetMomentOfInertiaHeight(PunchingContour contour)
         {
             double Ix = 0;
             double Iy = 0;
@@ -150,7 +150,7 @@ namespace RDBLL.Entity.RCC.Slabs.Punchings.Processors
         /// <param name="lines">Коллекция линий</param>
         /// <param name="center">Заданный центр</param>
         /// <returns></returns>
-        private static double[] GetMaxDistFromLineList(List<PunchingLine> lines, Point2D center)
+        public static double[] GetMaxDistFromLineList(List<PunchingLine> lines, Point2D center)
         {
             //Коллекции для хранения координат линий контура
             List<double> coordsX = new List<double>();
