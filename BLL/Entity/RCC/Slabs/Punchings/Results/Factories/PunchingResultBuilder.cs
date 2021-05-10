@@ -1,4 +1,5 @@
 ﻿using RDBLL.Common.Service;
+using RDBLL.Entity.Common.NDM;
 using RDBLL.Entity.RCC.Slabs.Punchings.Processors;
 using RDBLL.Forces;
 using RDBLL.Processors.Forces;
@@ -35,9 +36,14 @@ namespace RDBLL.Entity.RCC.Slabs.Punchings.Results.Factories
             _Result.ContourResults = new List<PunchingCalcResult>();
             foreach (LoadCaseResult load in _Result.LoadCases)
             {
-                double Nz = 0;
-                double Mx = 0;
-                double My = 0;
+                SumForces sumForces = new SumForces(load.LoadSet);
+
+                double Mx = sumForces.ForceMatrix[0, 0];
+                double My = sumForces.ForceMatrix[1, 0];
+                double Nz = sumForces.ForceMatrix[2, 0];
+
+                Nz = Math.Abs(Nz);
+
                 foreach (ContourResult contourResult in _Result.PunchingContours)
                 {
                     PunchingContour contour = contourResult.PunchingContour;
@@ -49,6 +55,8 @@ namespace RDBLL.Entity.RCC.Slabs.Punchings.Results.Factories
                     PunchingCalcResult calcResult  = new PunchingCalcResult();
                     //Добавляем код результата
                     calcResult.Id = ProgrammSettings.CurrentTmpId;
+                    //Добавляем ссылку на продавливание
+                    calcResult.Punching = _Punching;
                     //Добавляем ссылку на нагрузку
                     calcResult.LoadSet = load.LoadSet;
                     //Добавляем ссылку на контур

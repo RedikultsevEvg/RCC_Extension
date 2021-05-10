@@ -24,14 +24,14 @@ namespace CSL.Reports
     public class SteelBaseReport :IReport
     {
         private BuildingSite _buildingSite;
-        private double linearSizeCoefficient;
-        private double forceCoefficient;
-        private double momentCoefficient;
-        private double stressCoefficient;
-        private double geometryAreaCoefficient;
-        private double geometrySecMomentCoefficient { get; }
-        private double geometryMomentCoefficient;
-        private double MassCoefficient;
+        private double linearSizeCoefficient = MeasureUnitConverter.GetCoefficient(0);
+        private double forceCoefficient = MeasureUnitConverter.GetCoefficient(1);
+        private double momentCoefficient = MeasureUnitConverter.GetCoefficient(2);
+        private double stressCoefficient = MeasureUnitConverter.GetCoefficient(3);
+        private double geometryAreaCoefficient = MeasureUnitConverter.GetCoefficient(4);
+        private double geometrySecMomentCoefficient = MeasureUnitConverter.GetCoefficient(5);
+        private double geometryMomentCoefficient = MeasureUnitConverter.GetCoefficient(6);
+        private double MassCoefficient = MeasureUnitConverter.GetCoefficient(7);
         public DataSet dataSet { get; set; }
 
         public void ShowReport(string fileName)
@@ -124,15 +124,6 @@ namespace CSL.Reports
         {
             _buildingSite = buildingSite;
             dataSet = SteelBaseDataSet.GetDataSet();
-
-            linearSizeCoefficient = MeasureUnitConverter.GetCoefficient(0);
-            forceCoefficient = MeasureUnitConverter.GetCoefficient(1);
-            momentCoefficient = MeasureUnitConverter.GetCoefficient(2);
-            stressCoefficient = MeasureUnitConverter.GetCoefficient(3);
-            geometryAreaCoefficient = MeasureUnitConverter.GetCoefficient(4);
-            geometrySecMomentCoefficient = MeasureUnitConverter.GetCoefficient(5);
-            geometryMomentCoefficient = MeasureUnitConverter.GetCoefficient(6);
-            MassCoefficient = MeasureUnitConverter.GetCoefficient(7);
         }
         #endregion
         /// <summary>
@@ -166,8 +157,8 @@ namespace CSL.Reports
                         tmpForceParamLabels.First().LongLabel,
                         tmpForceParamLabels.First().ShortLabel,
                         measureUnitLabel.UnitName,
-                        Math.Round(forceParameter.CrcValueInCurUnit, 3),
-                        Math.Round(forceParameter.DesignValue * measureUnitLabel.AddKoeff, 3)
+                        MathOperation.Round(forceParameter.CrcValueInCurUnit),
+                        MathOperation.Round(forceParameter.DesignValue * measureUnitLabel.AddKoeff)
                     };
                     ForceParameters.Rows.Add(newForceParameter);
                     forceDescription += tmpForceParamLabels.First().ShortLabel + "=" + Math.Round(forceParameter.DesignValue * measureUnitLabel.AddKoeff, 3) + measureUnitLabel.UnitName + "; ";

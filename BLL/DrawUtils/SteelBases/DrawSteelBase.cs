@@ -46,9 +46,10 @@ namespace RDBLL.DrawUtils.SteelBases
             double zoom_factor_Y = canvas.Height / length / 1.2;
             double scale_factor;
             double[] columnBaseCenter = new double[2] { canvas.Width / 2, canvas.Height / 2 };
-            if (zoom_factor_X < zoom_factor_Y) { scale_factor = zoom_factor_X; } else { scale_factor = zoom_factor_Y; }
+            //Принимаем минимальный масштаб
+            scale_factor = Math.Min(zoom_factor_X, zoom_factor_Y);
             // Рисуем оси координат
-            DrawUtils.DrawAxis(canvas, true, true);
+            CommonDrawUtils.DrawAxis(canvas, true, true);
 
             //Рисуем участки
             foreach (SteelBasePart basePart in steelBase.SteelBaseParts)

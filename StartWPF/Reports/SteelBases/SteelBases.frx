@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Report ScriptLanguage="CSharp" ReportInfo.Created="08/11/2019 20:16:27" ReportInfo.Modified="03/27/2021 17:22:58" ReportInfo.CreatorVersion="2020.1.0.0">
+<Report ScriptLanguage="CSharp" ReportInfo.Created="08/11/2019 20:16:27" ReportInfo.Modified="05/10/2021 11:21:37" ReportInfo.CreatorVersion="2020.1.0.0">
   <Dictionary>
     <TableDataSource Name="LoadCases" ReferenceName="Data.LoadCases" DataType="System.Int32" Enabled="true">
       <Column Name="Id" DataType="System.Int32"/>
@@ -23,6 +23,8 @@
       <Column Name="LoadSetName" DataType="System.String"/>
       <Column Name="Description" DataType="System.String"/>
       <Column Name="ParentId" DataType="System.Int32"/>
+      <Column Name="Name" DataType="System.String"/>
+      <Column Name="ForceParamId" DataType="System.Int32"/>
     </TableDataSource>
     <TableDataSource Name="LoadSets" ReferenceName="Data.LoadSets" DataType="System.Int32" Enabled="true">
       <Column Name="Id" DataType="System.Int32"/>
@@ -46,6 +48,8 @@
       <Column Name="DesignValue" DataType="System.Double"/>
       <Column Name="ElementName" DataType="System.String"/>
       <Column Name="ParentId" DataType="System.Int32"/>
+      <Column Name="Name" DataType="System.String"/>
+      <Column Name="ForceParamId" DataType="System.Int32"/>
     </TableDataSource>
     <TableDataSource Name="SteelBases" ReferenceName="Data.SteelBases" DataType="System.Int32" Enabled="true">
       <Column Name="Name" DataType="System.String"/>
@@ -127,7 +131,7 @@
         <TextObject Name="Text15" Top="18.9" Width="699.3" Height="28.35" CanGrow="true" GrowToBottom="true" Text="Нормативные значения: [LoadSets.CrcForceDescription]&#13;&#10;Расчетные значения (n=[LoadSets.PartialSafetyFactor]): [LoadSets.DesignForceDescription]" Font="Arial, 10pt"/>
       </DataBand>
       <DataBand Name="Data1" Top="577.55" Width="699.3" Height="37.8" CanGrow="true" CanShrink="true" DataSource="LoadCases">
-        <TextObject Name="Text8" Width="699.3" Height="18.9" CanGrow="true" GrowToBottom="true" Text="Сочетание нагрузок: [LoadCases.Description]" Font="Arial, 10pt, style=Bold"/>
+        <TextObject Name="Text8" Width="699.3" Height="18.9" CanGrow="true" GrowToBottom="true" Text="Сочетание нагрузок: [LoadCases.Name]" Font="Arial, 10pt, style=Bold"/>
         <TextObject Name="Text13" Top="18.9" Width="699.3" Height="18.9" CanGrow="true" GrowToBottom="true" Text="[LoadCases.ForceDescription]" Font="Arial, 10pt"/>
       </DataBand>
       <DataBand Name="LoadCasesData" Top="619.35" Width="699.3" Height="141.75" CanGrow="true" DataSource="SteelBasesParts" IdColumn="SteelBasesParts.Id">

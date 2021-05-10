@@ -52,7 +52,7 @@ namespace RDBLL.Entity.RCC.Slabs.Punchings.Factories
                         ConcreteUsing concrete = new ConcreteUsing(layer);
                         concrete.Name = "Бетон";
                         concrete.Purpose = "Plate";
-                        concrete.SelectedId = ProgrammSettings.ConcreteKinds[0].Id;
+                        concrete.SelectedId = 6;
                         concrete.AddGammaB1();
                         layer.Concrete = concrete;
                         return punching;
@@ -72,7 +72,7 @@ namespace RDBLL.Entity.RCC.Slabs.Punchings.Factories
                         ConcreteUsing concrete = new ConcreteUsing(layer);
                         concrete.Name = "Бетон";
                         concrete.Purpose = "Plate";
-                        concrete.SelectedId = ProgrammSettings.ConcreteKinds[0].Id;
+                        concrete.SelectedId = 6;
                         concrete.AddGammaB1();
                         layer.Concrete = concrete;
                         return punching;
@@ -92,7 +92,7 @@ namespace RDBLL.Entity.RCC.Slabs.Punchings.Factories
                         ConcreteUsing concrete = new ConcreteUsing(layer);
                         concrete.Name = "Бетон";
                         concrete.Purpose = "Plate";
-                        concrete.SelectedId = ProgrammSettings.ConcreteKinds[0].Id;
+                        concrete.SelectedId = 6;
                         concrete.AddGammaB1();
                         layer.Concrete = concrete;
                         return punching;

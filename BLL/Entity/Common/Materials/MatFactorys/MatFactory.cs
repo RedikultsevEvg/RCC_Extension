@@ -38,39 +38,129 @@ namespace RDBLL.Entity.Common.Materials.MatFactorys
         {
             List<ConcreteKind> concreteKinds = new List<ConcreteKind>();
             ConcreteKind concreteKind;
-            #region B20
+            #region B10
             concreteKind = new ConcreteKind();
-            concreteKind.Id = 5;
-            concreteKind.Name = "B20";
-            concreteKind.FstCompStrength = 11.7e6;
-            concreteKind.FstTensStrength = 0.98e6;
-            concreteKind.SndCompStrength = 17.7e6;
-            concreteKind.SndTensStrength = 0.98e6;
+            concreteKind.Id = 2;
+            concreteKind.Name = "B10";
+            concreteKind.FstCompStrength = 6.0e6;
+            concreteKind.FstTensStrength = 0.56e6;
+            concreteKind.SndCompStrength = 7.5e6;
+            concreteKind.SndTensStrength = 0.85e6;
             concreteKind.Epsb1Comp = 0.00150;
             concreteKind.Epsb1Tens = 0.00008;
             concreteKind.Epsb2Comp = 0.00200;
             concreteKind.Epsb2Tens = 0.00010;
             concreteKind.EpsbMaxComp = 0.00350;
             concreteKind.EpsbMaxTens = 0.00015;
-            concreteKind.ElasticModulus = 3e10;
+            concreteKind.ElasticModulus = 1.9e10;
+            concreteKind.PoissonRatio = 0.2;
+            concreteKinds.Add(concreteKind);
+            #endregion
+            #region B15
+            concreteKind = new ConcreteKind();
+            concreteKind.Id = 4;
+            concreteKind.Name = "B15";
+            concreteKind.FstCompStrength = 8.5e6;
+            concreteKind.FstTensStrength = 0.75e6;
+            concreteKind.SndCompStrength = 11.0e6;
+            concreteKind.SndTensStrength = 1.10e6;
+            concreteKind.Epsb1Comp = 0.00150;
+            concreteKind.Epsb1Tens = 0.00008;
+            concreteKind.Epsb2Comp = 0.00200;
+            concreteKind.Epsb2Tens = 0.00010;
+            concreteKind.EpsbMaxComp = 0.00350;
+            concreteKind.EpsbMaxTens = 0.00015;
+            concreteKind.ElasticModulus = 2.4e10;
+            concreteKind.PoissonRatio = 0.2;
+            concreteKinds.Add(concreteKind);
+            #endregion
+            #region B20
+            concreteKind = new ConcreteKind();
+            concreteKind.Id = 5;
+            concreteKind.Name = "B20";
+            concreteKind.FstCompStrength = 11.7e6;
+            concreteKind.FstTensStrength = 0.9e6;
+            concreteKind.SndCompStrength = 15.0e6;
+            concreteKind.SndTensStrength = 1.35e6;
+            concreteKind.Epsb1Comp = 0.00150;
+            concreteKind.Epsb1Tens = 0.00008;
+            concreteKind.Epsb2Comp = 0.00200;
+            concreteKind.Epsb2Tens = 0.00010;
+            concreteKind.EpsbMaxComp = 0.00350;
+            concreteKind.EpsbMaxTens = 0.00015;
+            concreteKind.ElasticModulus = 2.75e10;
             concreteKind.PoissonRatio = 0.2;
             concreteKinds.Add(concreteKind);
             #endregion
             #region B25
             concreteKind = new ConcreteKind();
             concreteKind.Id = 6;
-            concreteKind.Name = "B25"; //Неверно
+            concreteKind.Name = "B25";
             concreteKind.FstCompStrength = 14.5e6;
-            concreteKind.FstTensStrength = 0.98e6;
-            concreteKind.SndCompStrength = 17.7e6;
-            concreteKind.SndTensStrength = 0.98e6;
+            concreteKind.FstTensStrength = 1.05e6;
+            concreteKind.SndCompStrength = 18.5e6;
+            concreteKind.SndTensStrength = 1.55e6;
             concreteKind.Epsb1Comp = 0.00150;
             concreteKind.Epsb1Tens = 0.00008;
             concreteKind.Epsb2Comp = 0.00200;
             concreteKind.Epsb2Tens = 0.00010;
             concreteKind.EpsbMaxComp = 0.00350;
             concreteKind.EpsbMaxTens = 0.00015;
-            concreteKind.ElasticModulus = 3e10;
+            concreteKind.ElasticModulus = 3.0e10;
+            concreteKind.PoissonRatio = 0.2;
+            concreteKinds.Add(concreteKind);
+            #endregion
+            #region B30
+            concreteKind = new ConcreteKind();
+            concreteKind.Id = 7;
+            concreteKind.Name = "B30";
+            concreteKind.FstCompStrength = 17.0e6;
+            concreteKind.FstTensStrength = 1.15e6;
+            concreteKind.SndCompStrength = 22.0e6;
+            concreteKind.SndTensStrength = 1.75e6;
+            concreteKind.Epsb1Comp = 0.00150;
+            concreteKind.Epsb1Tens = 0.00008;
+            concreteKind.Epsb2Comp = 0.00200;
+            concreteKind.Epsb2Tens = 0.00010;
+            concreteKind.EpsbMaxComp = 0.00350;
+            concreteKind.EpsbMaxTens = 0.00015;
+            concreteKind.ElasticModulus = 3.25e10;
+            concreteKind.PoissonRatio = 0.2;
+            concreteKinds.Add(concreteKind);
+            #endregion
+            #region B35
+            concreteKind = new ConcreteKind();
+            concreteKind.Id = 8;
+            concreteKind.Name = "B35";
+            concreteKind.FstCompStrength = 19.5e6;
+            concreteKind.FstTensStrength = 1.3e6;
+            concreteKind.SndCompStrength = 25.5e6;
+            concreteKind.SndTensStrength = 1.95e6;
+            concreteKind.Epsb1Comp = 0.00150;
+            concreteKind.Epsb1Tens = 0.00008;
+            concreteKind.Epsb2Comp = 0.00200;
+            concreteKind.Epsb2Tens = 0.00010;
+            concreteKind.EpsbMaxComp = 0.00350;
+            concreteKind.EpsbMaxTens = 0.00015;
+            concreteKind.ElasticModulus = 3.45e10;
+            concreteKind.PoissonRatio = 0.2;
+            concreteKinds.Add(concreteKind);
+            #endregion
+            #region B40
+            concreteKind = new ConcreteKind();
+            concreteKind.Id = 9;
+            concreteKind.Name = "B40";
+            concreteKind.FstCompStrength = 22.0e6;
+            concreteKind.FstTensStrength = 1.4e6;
+            concreteKind.SndCompStrength = 29.0e6;
+            concreteKind.SndTensStrength = 2.1e6;
+            concreteKind.Epsb1Comp = 0.00150;
+            concreteKind.Epsb1Tens = 0.00008;
+            concreteKind.Epsb2Comp = 0.00200;
+            concreteKind.Epsb2Tens = 0.00010;
+            concreteKind.EpsbMaxComp = 0.00350;
+            concreteKind.EpsbMaxTens = 0.00015;
+            concreteKind.ElasticModulus = 3.6e10;
             concreteKind.PoissonRatio = 0.2;
             concreteKinds.Add(concreteKind);
             #endregion

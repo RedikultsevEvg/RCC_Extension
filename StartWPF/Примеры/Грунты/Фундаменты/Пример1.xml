@@ -1,0 +1,498 @@
+<?xml version="1.0" standalone="yes"?>
+<NewDataSet>
+  <Generators Id="232" />
+  <Versions>
+    <Version>1</Version>
+  </Versions>
+  <MeasurementUnits Id="2" />
+  <MeasurementUnits Id="7" />
+  <MeasurementUnits Id="12" />
+  <MeasurementUnits Id="18" />
+  <MeasurementUnits Id="22" />
+  <MeasurementUnits Id="27" />
+  <MeasurementUnits Id="32" />
+  <MeasurementUnits Id="36" />
+  <MeasurementUnits Id="41" />
+  <MeasurementUnits Id="46" />
+  <MeasurementUnits Id="51" />
+  <MeasurementUnits Id="56" />
+  <MeasurementUnits Id="61" />
+  <MeasurementUnits Id="71" />
+  <MeasurementUnits Id="81" />
+  <BuildingSites Id="0" Name="Мой объект" />
+  <Soils Id="86" Name="ИГЭ-2" ParentId="0">
+    <Type>ClaySoil</Type>
+    <Description>Суглинок песчанистый, тугопластичный</Description>
+    <IsDefinedFromTest>true</IsDefinedFromTest>
+    <CrcDensity>1950</CrcDensity>
+    <FstDesignDensity>1800</FstDesignDensity>
+    <SndDesignDensity>1900</SndDesignDensity>
+    <CrcParticularDensity>2700</CrcParticularDensity>
+    <FstParticularDensity>2700</FstParticularDensity>
+    <SndParticularDensity>2700</SndParticularDensity>
+    <PorousityCoef>0.7</PorousityCoef>
+    <FiltrationCoeff>0.0001</FiltrationCoeff>
+    <ElasticModulus>20000000</ElasticModulus>
+    <SndElasticModulus>100000000</SndElasticModulus>
+    <PoissonRatio>0.3</PoissonRatio>
+    <CrcFi>20</CrcFi>
+    <FstDesignFi>17</FstDesignFi>
+    <SndDesignFi>18</SndDesignFi>
+    <CrcCohesion>20000</CrcCohesion>
+    <FstDesignCohesion>17000</FstDesignCohesion>
+    <SndDesignCohesion>18000</SndDesignCohesion>
+    <CrcStrength>20000000</CrcStrength>
+    <FstDesignStrength>18000000</FstDesignStrength>
+    <SndDesignStrength>16000000</SndDesignStrength>
+  </Soils>
+  <SoilSections Id="85" Name="Скважина-2" ParentId="0">
+    <HasWater>false</HasWater>
+    <NaturalWaterLevel>200</NaturalWaterLevel>
+    <WaterLevel>200</WaterLevel>
+    <CenterX>0</CenterX>
+    <CenterY>0</CenterY>
+  </SoilSections>
+  <SoilLayers Id="87" SoilId="86" SoilSectionId="85">
+    <TopLevel>260</TopLevel>
+  </SoilLayers>
+  <Buildings Id="1" Name="Мое здание" ParentId="0">
+    <RelativeLevel>0</RelativeLevel>
+    <AbsoluteLevel>260</AbsoluteLevel>
+    <AbsolutePlaningLevel>260</AbsolutePlaningLevel>
+    <MaxFoundationSettlement>0.08</MaxFoundationSettlement>
+    <IsRigid>false</IsRigid>
+    <RigidRatio>4</RigidRatio>
+  </Buildings>
+  <Levels Id="0" Name="Этаж 1" ParentId="1">
+    <FloorLevel>0</FloorLevel>
+    <Height>3</Height>
+    <TopOffset>-0.2</TopOffset>
+    <BasePointX>0</BasePointX>
+    <BasePointY>0</BasePointY>
+    <BasePointZ>0</BasePointZ>
+  </Levels>
+  <ForcesGroups Id="2" Name="Новая группа нагрузок">
+    <CenterX>0</CenterX>
+    <CenterY>0</CenterY>
+  </ForcesGroups>
+  <ForcesGroups Id="104" Name="Новая группа нагрузок">
+    <CenterX>0</CenterX>
+    <CenterY>0</CenterY>
+  </ForcesGroups>
+  <LoadSets Id="77" Name="Постоянная">
+    <PartialSafetyFactor>1.1</PartialSafetyFactor>
+    <IsLiveLoad>false</IsLiveLoad>
+    <IsCombination>false</IsCombination>
+    <BothSign>false</BothSign>
+  </LoadSets>
+  <LoadSets Id="105" Name="Постоянная">
+    <PartialSafetyFactor>1.1</PartialSafetyFactor>
+    <IsLiveLoad>false</IsLiveLoad>
+    <IsCombination>false</IsCombination>
+    <BothSign>false</BothSign>
+  </LoadSets>
+  <ForcesGroupLoadSets Id="234" ForcesGroupId="2" LoadSetId="77" />
+  <ForcesGroupLoadSets Id="236" ForcesGroupId="104" LoadSetId="105" />
+  <ForceParameters Id="78" LoadSetId="77">
+    <KindId>1</KindId>
+    <CrcValue>-1000000</CrcValue>
+  </ForceParameters>
+  <ForceParameters Id="79" LoadSetId="77">
+    <KindId>2</KindId>
+    <CrcValue>200000</CrcValue>
+  </ForceParameters>
+  <ForceParameters Id="80" LoadSetId="77">
+    <KindId>3</KindId>
+    <CrcValue>50000</CrcValue>
+  </ForceParameters>
+  <ForceParameters Id="106" LoadSetId="105">
+    <KindId>1</KindId>
+    <CrcValue>-1000000</CrcValue>
+  </ForceParameters>
+  <ForceParameters Id="107" LoadSetId="105">
+    <KindId>2</KindId>
+    <CrcValue>200000</CrcValue>
+  </ForceParameters>
+  <ForceParameters Id="108" LoadSetId="105">
+    <KindId>3</KindId>
+    <CrcValue>50000</CrcValue>
+  </ForceParameters>
+  <Foundations Id="1" Name="Фундамент Фм-1" ParentId="0">
+    <RelativeTopLevel>-0.2</RelativeTopLevel>
+    <SoilRelativeTopLevel>-0.2</SoilRelativeTopLevel>
+    <SoilVolumeWeight>18000</SoilVolumeWeight>
+    <ConcreteVolumeWeight>25000</ConcreteVolumeWeight>
+    <FloorLoad>0</FloorLoad>
+    <FloorLoadFactor>1.2</FloorLoadFactor>
+    <ConcreteFloorLoad>0</ConcreteFloorLoad>
+    <CompressedLayerRatio>0.2</CompressedLayerRatio>
+  </Foundations>
+  <Foundations Id="103" Name="Фундамент Фм-2" ParentId="0">
+    <RelativeTopLevel>-0.2</RelativeTopLevel>
+    <SoilRelativeTopLevel>-0.2</SoilRelativeTopLevel>
+    <SoilVolumeWeight>18000</SoilVolumeWeight>
+    <ConcreteVolumeWeight>25000</ConcreteVolumeWeight>
+    <FloorLoad>0</FloorLoad>
+    <FloorLoadFactor>1.2</FloorLoadFactor>
+    <ConcreteFloorLoad>0</ConcreteFloorLoad>
+    <CompressedLayerRatio>0.2</CompressedLayerRatio>
+  </Foundations>
+  <FoundationParts Id="39" Name="Подколонник" ParentId="1">
+    <Type>Rect</Type>
+    <Width>1.2</Width>
+    <Length>1.2</Length>
+    <Height>1.5</Height>
+    <CenterX>0</CenterX>
+    <CenterY>0</CenterY>
+  </FoundationParts>
+  <FoundationParts Id="40" Name="Ступень 1" ParentId="1">
+    <Type>Rect</Type>
+    <Width>2.4</Width>
+    <Length>3</Length>
+    <Height>0.3</Height>
+    <CenterX>0</CenterX>
+    <CenterY>0</CenterY>
+  </FoundationParts>
+  <FoundationParts Id="109" Name="Подколонник" ParentId="103">
+    <Type>Rect</Type>
+    <Width>1.2</Width>
+    <Length>1.2</Length>
+    <Height>1.5</Height>
+    <CenterX>0</CenterX>
+    <CenterY>0</CenterY>
+  </FoundationParts>
+  <FoundationParts Id="110" Name="Ступень 1" ParentId="103">
+    <Type>Rect</Type>
+    <Width>2.4</Width>
+    <Length>2.4</Length>
+    <Height>0.3</Height>
+    <CenterX>0</CenterX>
+    <CenterY>0</CenterY>
+  </FoundationParts>
+  <ParentForcesGroups Id="233" ParentId="1" ForcesGroupId="2" />
+  <ParentForcesGroups Id="235" ParentId="103" ForcesGroupId="104" />
+  <MaterialContainers Id="41" Name="Армирование подошвы" ParentId="1">
+    <Purpose>BtmRF</Purpose>
+  </MaterialContainers>
+  <MaterialContainers Id="62" Name="Вертикальное армирование" ParentId="1">
+    <Purpose>UndColumn</Purpose>
+  </MaterialContainers>
+  <MaterialContainers Id="111" Name="Армирование подошвы" ParentId="103">
+    <Purpose>BtmRF</Purpose>
+  </MaterialContainers>
+  <MaterialContainers Id="182" Name="Вертикальное армирование" ParentId="103">
+    <Purpose>UndColumn</Purpose>
+  </MaterialContainers>
+  <MaterialUsings Id="75" Name="Бетон" ParentId="1">
+    <Purpose>MainConcrete</Purpose>
+    <Materialkindname>Concrete</Materialkindname>
+    <SelectedId>5</SelectedId>
+    <Diameter>0.012</Diameter>
+    <Prestrain>0</Prestrain>
+  </MaterialUsings>
+  <MaterialUsings Id="42" Name="Вдоль оси X" ParentId="41">
+    <Purpose>Along X-axes</Purpose>
+    <Materialkindname>Reinforcement</Materialkindname>
+    <SelectedId>2</SelectedId>
+    <Diameter>0.012</Diameter>
+    <Prestrain>0</Prestrain>
+  </MaterialUsings>
+  <MaterialUsings Id="52" Name="Вдоль оси Y" ParentId="41">
+    <Purpose>Along Y-axes</Purpose>
+    <Materialkindname>Reinforcement</Materialkindname>
+    <SelectedId>2</SelectedId>
+    <Diameter>0.012</Diameter>
+    <Prestrain>0</Prestrain>
+  </MaterialUsings>
+  <MaterialUsings Id="63" Name="Подколонник" ParentId="62">
+    <Purpose>UndColumn</Purpose>
+    <Materialkindname>Reinforcement</Materialkindname>
+    <SelectedId>2</SelectedId>
+    <Diameter>0.012</Diameter>
+    <Prestrain>0</Prestrain>
+  </MaterialUsings>
+  <MaterialUsings Id="226" Name="Бетон" ParentId="103">
+    <Purpose>MainConcrete</Purpose>
+    <Materialkindname>Concrete</Materialkindname>
+    <SelectedId>6</SelectedId>
+    <Diameter>0.012</Diameter>
+    <Prestrain>0</Prestrain>
+  </MaterialUsings>
+  <MaterialUsings Id="112" Name="Вдоль оси X" ParentId="111">
+    <Purpose>Along X-axes</Purpose>
+    <Materialkindname>Reinforcement</Materialkindname>
+    <SelectedId>2</SelectedId>
+    <Diameter>0.012</Diameter>
+    <Prestrain>0</Prestrain>
+  </MaterialUsings>
+  <MaterialUsings Id="147" Name="Вдоль оси Y" ParentId="111">
+    <Purpose>Along Y-axes</Purpose>
+    <Materialkindname>Reinforcement</Materialkindname>
+    <SelectedId>2</SelectedId>
+    <Diameter>0.012</Diameter>
+    <Prestrain>0</Prestrain>
+  </MaterialUsings>
+  <MaterialUsings Id="183" Name="Подколонник" ParentId="182">
+    <Purpose>UndColumn</Purpose>
+    <Materialkindname>Reinforcement</Materialkindname>
+    <SelectedId>2</SelectedId>
+    <Diameter>0.012</Diameter>
+    <Prestrain>0</Prestrain>
+  </MaterialUsings>
+  <Safetyfactors Id="76" Name="Коэффициент, учитывающий длительность действия нагрузки" ParentId="75">
+    <_x0030_>1</_x0030_>
+    <_x0031_>1</_x0031_>
+    <_x0032_>1</_x0032_>
+    <_x0033_>1</_x0033_>
+    <_x0034_>0.9</_x0034_>
+    <_x0035_>0.9</_x0035_>
+    <_x0036_>1</_x0036_>
+    <_x0037_>1</_x0037_>
+    <_x0038_>1</_x0038_>
+    <_x0039_>1</_x0039_>
+    <_x0031_0>1</_x0031_0>
+    <_x0031_1>1</_x0031_1>
+  </Safetyfactors>
+  <Safetyfactors Id="227" Name="Коэффициент, учитывающий длительность действия нагрузки" ParentId="226">
+    <_x0030_>1</_x0030_>
+    <_x0031_>1</_x0031_>
+    <_x0032_>1</_x0032_>
+    <_x0033_>1</_x0033_>
+    <_x0034_>0.9</_x0034_>
+    <_x0035_>0.9</_x0035_>
+    <_x0036_>1</_x0036_>
+    <_x0037_>1</_x0037_>
+    <_x0038_>1</_x0038_>
+    <_x0039_>1</_x0039_>
+    <_x0031_0>1</_x0031_0>
+    <_x0031_1>1</_x0031_1>
+  </Safetyfactors>
+  <ParametricObjects Id="43" ParentId="42">
+    <Type>LineBySpacing</Type>
+  </ParametricObjects>
+  <ParametricObjects Id="53" ParentId="52">
+    <Type>LineBySpacing</Type>
+  </ParametricObjects>
+  <ParametricObjects Id="64" ParentId="63">
+    <Type>RectArrayPlacement</Type>
+  </ParametricObjects>
+  <ParametricObjects Id="130" ParentId="112">
+    <Type>LineBySpacing</Type>
+  </ParametricObjects>
+  <ParametricObjects Id="165" ParentId="147">
+    <Type>LineBySpacing</Type>
+  </ParametricObjects>
+  <ParametricObjects Id="205" ParentId="183">
+    <Type>RectArrayPlacement</Type>
+  </ParametricObjects>
+  <StoredParams Id="44" Name="ItemAngle" ParentId="43">
+    <Type>double</Type>
+    <Value>0</Value>
+  </StoredParams>
+  <StoredParams Id="45" Name="StartX" ParentId="43">
+    <Type>double</Type>
+    <Value>0</Value>
+  </StoredParams>
+  <StoredParams Id="46" Name="StartY" ParentId="43">
+    <Type>double</Type>
+    <Value>0,07</Value>
+  </StoredParams>
+  <StoredParams Id="47" Name="EndX" ParentId="43">
+    <Type>double</Type>
+    <Value>2,9</Value>
+  </StoredParams>
+  <StoredParams Id="48" Name="EndY" ParentId="43">
+    <Type>double</Type>
+    <Value>0,07</Value>
+  </StoredParams>
+  <StoredParams Id="49" Name="AddStart" ParentId="43">
+    <Type>bool</Type>
+    <Value>True</Value>
+  </StoredParams>
+  <StoredParams Id="50" Name="AddStart" ParentId="43">
+    <Type>bool</Type>
+    <Value>True</Value>
+  </StoredParams>
+  <StoredParams Id="51" Name="Spacing" ParentId="43">
+    <Type>double</Type>
+    <Value>0,2</Value>
+  </StoredParams>
+  <StoredParams Id="54" Name="ItemAngle" ParentId="53">
+    <Type>double</Type>
+    <Value>0</Value>
+  </StoredParams>
+  <StoredParams Id="55" Name="StartX" ParentId="53">
+    <Type>double</Type>
+    <Value>0</Value>
+  </StoredParams>
+  <StoredParams Id="56" Name="StartY" ParentId="53">
+    <Type>double</Type>
+    <Value>0,07</Value>
+  </StoredParams>
+  <StoredParams Id="57" Name="EndX" ParentId="53">
+    <Type>double</Type>
+    <Value>2,3</Value>
+  </StoredParams>
+  <StoredParams Id="58" Name="EndY" ParentId="53">
+    <Type>double</Type>
+    <Value>0,07</Value>
+  </StoredParams>
+  <StoredParams Id="59" Name="AddStart" ParentId="53">
+    <Type>bool</Type>
+    <Value>True</Value>
+  </StoredParams>
+  <StoredParams Id="60" Name="AddStart" ParentId="53">
+    <Type>bool</Type>
+    <Value>True</Value>
+  </StoredParams>
+  <StoredParams Id="61" Name="Spacing" ParentId="53">
+    <Type>double</Type>
+    <Value>0,2</Value>
+  </StoredParams>
+  <StoredParams Id="65" Name="ItemAngle" ParentId="64">
+    <Type>double</Type>
+    <Value>0</Value>
+  </StoredParams>
+  <StoredParams Id="66" Name="ArrayAngle" ParentId="64">
+    <Type>double</Type>
+    <Value>0</Value>
+  </StoredParams>
+  <StoredParams Id="67" Name="CoveringLayer" ParentId="64">
+    <Type>double</Type>
+    <Value>0,05</Value>
+  </StoredParams>
+  <StoredParams Id="68" Name="CenterX" ParentId="64">
+    <Type>double</Type>
+    <Value>0</Value>
+  </StoredParams>
+  <StoredParams Id="69" Name="CenterY" ParentId="64">
+    <Type>double</Type>
+    <Value>0</Value>
+  </StoredParams>
+  <StoredParams Id="70" Name="SizeX" ParentId="64">
+    <Type>double</Type>
+    <Value>0,9</Value>
+  </StoredParams>
+  <StoredParams Id="71" Name="SizeY" ParentId="64">
+    <Type>double</Type>
+    <Value>0,9</Value>
+  </StoredParams>
+  <StoredParams Id="72" Name="QuantityX" ParentId="64">
+    <Type>int</Type>
+    <Value>2</Value>
+  </StoredParams>
+  <StoredParams Id="73" Name="QuantityY" ParentId="64">
+    <Type>int</Type>
+    <Value>2</Value>
+  </StoredParams>
+  <StoredParams Id="74" Name="FillArray" ParentId="64">
+    <Type>bool</Type>
+    <Value>True</Value>
+  </StoredParams>
+  <StoredParams Id="132" Name="ItemAngle" ParentId="130">
+    <Type>double</Type>
+    <Value>0</Value>
+  </StoredParams>
+  <StoredParams Id="134" Name="StartX" ParentId="130">
+    <Type>double</Type>
+    <Value>0</Value>
+  </StoredParams>
+  <StoredParams Id="136" Name="StartY" ParentId="130">
+    <Type>double</Type>
+    <Value>0,07</Value>
+  </StoredParams>
+  <StoredParams Id="138" Name="EndX" ParentId="130">
+    <Type>double</Type>
+    <Value>2,9</Value>
+  </StoredParams>
+  <StoredParams Id="140" Name="EndY" ParentId="130">
+    <Type>double</Type>
+    <Value>0,07</Value>
+  </StoredParams>
+  <StoredParams Id="142" Name="AddStart" ParentId="130">
+    <Type>bool</Type>
+    <Value>True</Value>
+  </StoredParams>
+  <StoredParams Id="144" Name="AddStart" ParentId="130">
+    <Type>bool</Type>
+    <Value>True</Value>
+  </StoredParams>
+  <StoredParams Id="146" Name="Spacing" ParentId="130">
+    <Type>double</Type>
+    <Value>0,2</Value>
+  </StoredParams>
+  <StoredParams Id="167" Name="ItemAngle" ParentId="165">
+    <Type>double</Type>
+    <Value>0</Value>
+  </StoredParams>
+  <StoredParams Id="169" Name="StartX" ParentId="165">
+    <Type>double</Type>
+    <Value>0</Value>
+  </StoredParams>
+  <StoredParams Id="171" Name="StartY" ParentId="165">
+    <Type>double</Type>
+    <Value>0,07</Value>
+  </StoredParams>
+  <StoredParams Id="173" Name="EndX" ParentId="165">
+    <Type>double</Type>
+    <Value>2,3</Value>
+  </StoredParams>
+  <StoredParams Id="175" Name="EndY" ParentId="165">
+    <Type>double</Type>
+    <Value>0,07</Value>
+  </StoredParams>
+  <StoredParams Id="177" Name="AddStart" ParentId="165">
+    <Type>bool</Type>
+    <Value>True</Value>
+  </StoredParams>
+  <StoredParams Id="179" Name="AddStart" ParentId="165">
+    <Type>bool</Type>
+    <Value>True</Value>
+  </StoredParams>
+  <StoredParams Id="181" Name="Spacing" ParentId="165">
+    <Type>double</Type>
+    <Value>0,2</Value>
+  </StoredParams>
+  <StoredParams Id="207" Name="ItemAngle" ParentId="205">
+    <Type>double</Type>
+    <Value>0</Value>
+  </StoredParams>
+  <StoredParams Id="209" Name="ArrayAngle" ParentId="205">
+    <Type>double</Type>
+    <Value>0</Value>
+  </StoredParams>
+  <StoredParams Id="211" Name="CoveringLayer" ParentId="205">
+    <Type>double</Type>
+    <Value>0,05</Value>
+  </StoredParams>
+  <StoredParams Id="213" Name="CenterX" ParentId="205">
+    <Type>double</Type>
+    <Value>0</Value>
+  </StoredParams>
+  <StoredParams Id="215" Name="CenterY" ParentId="205">
+    <Type>double</Type>
+    <Value>0</Value>
+  </StoredParams>
+  <StoredParams Id="217" Name="SizeX" ParentId="205">
+    <Type>double</Type>
+    <Value>0,9</Value>
+  </StoredParams>
+  <StoredParams Id="219" Name="SizeY" ParentId="205">
+    <Type>double</Type>
+    <Value>0,9</Value>
+  </StoredParams>
+  <StoredParams Id="221" Name="QuantityX" ParentId="205">
+    <Type>int</Type>
+    <Value>2</Value>
+  </StoredParams>
+  <StoredParams Id="223" Name="QuantityY" ParentId="205">
+    <Type>int</Type>
+    <Value>2</Value>
+  </StoredParams>
+  <StoredParams Id="225" Name="FillArray" ParentId="205">
+    <Type>bool</Type>
+    <Value>True</Value>
+  </StoredParams>
+  <SoilSectionUsings Id="81" Name="Скважина" ParentId="1" SelectedId="85" />
+  <SoilSectionUsings Id="228" Name="Скважина" ParentId="103" SelectedId="85" />
+</NewDataSet>

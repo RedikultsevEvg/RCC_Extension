@@ -1,0 +1,285 @@
+<?xml version="1.0" standalone="yes"?>
+<NewDataSet>
+  <Generators Id="49" />
+  <Versions>
+    <Version>1</Version>
+  </Versions>
+  <MeasurementUnits Id="2" />
+  <MeasurementUnits Id="7" />
+  <MeasurementUnits Id="12" />
+  <MeasurementUnits Id="18" />
+  <MeasurementUnits Id="22" />
+  <MeasurementUnits Id="27" />
+  <MeasurementUnits Id="32" />
+  <MeasurementUnits Id="36" />
+  <MeasurementUnits Id="41" />
+  <MeasurementUnits Id="46" />
+  <MeasurementUnits Id="51" />
+  <MeasurementUnits Id="56" />
+  <MeasurementUnits Id="61" />
+  <MeasurementUnits Id="71" />
+  <MeasurementUnits Id="81" />
+  <BuildingSites Id="0" Name="Мой объект" />
+  <Buildings Id="1" Name="Мое здание" ParentId="0">
+    <RelativeLevel>0</RelativeLevel>
+    <AbsoluteLevel>260</AbsoluteLevel>
+    <AbsolutePlaningLevel>260</AbsolutePlaningLevel>
+    <MaxFoundationSettlement>0.08</MaxFoundationSettlement>
+    <IsRigid>false</IsRigid>
+    <RigidRatio>4</RigidRatio>
+  </Buildings>
+  <Levels Id="0" Name="Этаж 1" ParentId="1">
+    <FloorLevel>0</FloorLevel>
+    <Height>3</Height>
+    <TopOffset>-0.2</TopOffset>
+    <BasePointX>0</BasePointX>
+    <BasePointY>0</BasePointY>
+    <BasePointZ>0</BasePointZ>
+  </Levels>
+  <SteelBases Id="2" Name="Новая база" ParentId="0">
+    <IsActual>true</IsActual>
+    <Height>0.06</Height>
+    <UseSimpleMethod>false</UseSimpleMethod>
+  </SteelBases>
+  <SteelBaseParts Id="10" Name="1" ParentId="2">
+    <Width>0.3</Width>
+    <Length>0.2</Length>
+    <CenterX>-0.15</CenterX>
+    <CenterY>0.35</CenterY>
+    <LeftOffset>0</LeftOffset>
+    <RightOffset>0.008</RightOffset>
+    <TopOffset>0</TopOffset>
+    <BottomOffset>0.008</BottomOffset>
+    <FixLeft>false</FixLeft>
+    <FixRight>true</FixRight>
+    <FixTop>false</FixTop>
+    <FixBottom>true</FixBottom>
+  </SteelBaseParts>
+  <SteelBaseParts Id="12" Name="2" ParentId="2">
+    <Width>0.3</Width>
+    <Length>0.2</Length>
+    <CenterX>0.15</CenterX>
+    <CenterY>0.35</CenterY>
+    <LeftOffset>0.008</LeftOffset>
+    <RightOffset>0</RightOffset>
+    <TopOffset>0</TopOffset>
+    <BottomOffset>0.008</BottomOffset>
+    <FixLeft>true</FixLeft>
+    <FixRight>false</FixRight>
+    <FixTop>false</FixTop>
+    <FixBottom>true</FixBottom>
+  </SteelBaseParts>
+  <SteelBaseParts Id="14" Name="3" ParentId="2">
+    <Width>0.3</Width>
+    <Length>0.2</Length>
+    <CenterX>-0.15</CenterX>
+    <CenterY>-0.35</CenterY>
+    <LeftOffset>0</LeftOffset>
+    <RightOffset>0.008</RightOffset>
+    <TopOffset>0.008</TopOffset>
+    <BottomOffset>0</BottomOffset>
+    <FixLeft>false</FixLeft>
+    <FixRight>true</FixRight>
+    <FixTop>true</FixTop>
+    <FixBottom>false</FixBottom>
+  </SteelBaseParts>
+  <SteelBaseParts Id="16" Name="4" ParentId="2">
+    <Width>0.3</Width>
+    <Length>0.2</Length>
+    <CenterX>0.15</CenterX>
+    <CenterY>-0.35</CenterY>
+    <LeftOffset>0.008</LeftOffset>
+    <RightOffset>0</RightOffset>
+    <TopOffset>0.008</TopOffset>
+    <BottomOffset>0</BottomOffset>
+    <FixLeft>true</FixLeft>
+    <FixRight>false</FixRight>
+    <FixTop>true</FixTop>
+    <FixBottom>false</FixBottom>
+  </SteelBaseParts>
+  <SteelBaseParts Id="18" Name="5" ParentId="2">
+    <Width>0.3</Width>
+    <Length>0.5</Length>
+    <CenterX>-0.15</CenterX>
+    <CenterY>0</CenterY>
+    <LeftOffset>0</LeftOffset>
+    <RightOffset>0.008</RightOffset>
+    <TopOffset>0.008</TopOffset>
+    <BottomOffset>0.008</BottomOffset>
+    <FixLeft>false</FixLeft>
+    <FixRight>true</FixRight>
+    <FixTop>true</FixTop>
+    <FixBottom>true</FixBottom>
+  </SteelBaseParts>
+  <SteelBaseParts Id="20" Name="6" ParentId="2">
+    <Width>0.3</Width>
+    <Length>0.5</Length>
+    <CenterX>0.15</CenterX>
+    <CenterY>0</CenterY>
+    <LeftOffset>0.008</LeftOffset>
+    <RightOffset>0</RightOffset>
+    <TopOffset>0.008</TopOffset>
+    <BottomOffset>0.008</BottomOffset>
+    <FixLeft>true</FixLeft>
+    <FixRight>false</FixRight>
+    <FixTop>true</FixTop>
+    <FixBottom>true</FixBottom>
+  </SteelBaseParts>
+  <SteelBolts Id="21" Name="Болт №_" ParentId="2">
+    <Diameter>0.03</Diameter>
+    <CenterX>0</CenterX>
+    <CenterY>0</CenterY>
+  </SteelBolts>
+  <ForcesGroups Id="3" Name="Новая группа нагрузок">
+    <CenterX>0</CenterX>
+    <CenterY>0</CenterY>
+  </ForcesGroups>
+  <LoadSets Id="34" Name="Постоянная">
+    <PartialSafetyFactor>1.1</PartialSafetyFactor>
+    <IsLiveLoad>false</IsLiveLoad>
+    <IsCombination>false</IsCombination>
+    <BothSign>false</BothSign>
+  </LoadSets>
+  <LoadSets Id="40" Name="Снеговая">
+    <PartialSafetyFactor>1.4</PartialSafetyFactor>
+    <IsLiveLoad>true</IsLiveLoad>
+    <IsCombination>false</IsCombination>
+    <BothSign>false</BothSign>
+  </LoadSets>
+  <LoadSets Id="43" Name="Ветровая">
+    <PartialSafetyFactor>1.4</PartialSafetyFactor>
+    <IsLiveLoad>true</IsLiveLoad>
+    <IsCombination>false</IsCombination>
+    <BothSign>true</BothSign>
+  </LoadSets>
+  <ForcesGroupLoadSets Id="51" ForcesGroupId="3" LoadSetId="34" />
+  <ForcesGroupLoadSets Id="52" ForcesGroupId="3" LoadSetId="40" />
+  <ForcesGroupLoadSets Id="53" ForcesGroupId="3" LoadSetId="43" />
+  <ForceParameters Id="35" LoadSetId="34">
+    <KindId>1</KindId>
+    <CrcValue>-100000</CrcValue>
+  </ForceParameters>
+  <ForceParameters Id="36" LoadSetId="34">
+    <KindId>2</KindId>
+    <CrcValue>200000</CrcValue>
+  </ForceParameters>
+  <ForceParameters Id="41" LoadSetId="40">
+    <KindId>1</KindId>
+    <CrcValue>-200000</CrcValue>
+  </ForceParameters>
+  <ForceParameters Id="42" LoadSetId="40">
+    <KindId>2</KindId>
+    <CrcValue>100000</CrcValue>
+  </ForceParameters>
+  <ForceParameters Id="44" LoadSetId="43">
+    <KindId>2</KindId>
+    <CrcValue>50000</CrcValue>
+  </ForceParameters>
+  <ParentForcesGroups Id="50" ParentId="2" ForcesGroupId="3" />
+  <MaterialUsings Id="7" Name="Бетон" ParentId="2">
+    <Purpose>Filling</Purpose>
+    <Materialkindname>Concrete</Materialkindname>
+    <SelectedId>5</SelectedId>
+    <Diameter>0.012</Diameter>
+    <Prestrain>0</Prestrain>
+  </MaterialUsings>
+  <MaterialUsings Id="4" Name="Сталь" ParentId="2">
+    <Purpose>BaseSteel</Purpose>
+    <Materialkindname>Steel</Materialkindname>
+    <SelectedId>1</SelectedId>
+    <Diameter>0.012</Diameter>
+    <Prestrain>0</Prestrain>
+  </MaterialUsings>
+  <MaterialUsings Id="22" Name="Сталь" ParentId="21">
+    <Purpose>BoltSteel</Purpose>
+    <Materialkindname>Steel</Materialkindname>
+    <SelectedId>1</SelectedId>
+    <Diameter>0.012</Diameter>
+    <Prestrain>0</Prestrain>
+  </MaterialUsings>
+  <Safetyfactors Id="8" Name="Коэффициент, учитывающий длительность действия нагрузки" ParentId="7">
+    <_x0030_>1</_x0030_>
+    <_x0031_>1</_x0031_>
+    <_x0032_>1</_x0032_>
+    <_x0033_>1</_x0033_>
+    <_x0034_>0.9</_x0034_>
+    <_x0035_>0.9</_x0035_>
+    <_x0036_>1</_x0036_>
+    <_x0037_>1</_x0037_>
+    <_x0038_>1</_x0038_>
+    <_x0039_>1</_x0039_>
+    <_x0031_0>1</_x0031_0>
+    <_x0031_1>1</_x0031_1>
+  </Safetyfactors>
+  <Safetyfactors Id="5" Name="Коэффициент, учитывающий толщину элемента" ParentId="4">
+    <_x0030_>0.9</_x0030_>
+    <_x0031_>0.9</_x0031_>
+    <_x0032_>1</_x0032_>
+    <_x0033_>1</_x0033_>
+    <_x0034_>0.9</_x0034_>
+    <_x0035_>0.9</_x0035_>
+    <_x0036_>1</_x0036_>
+    <_x0037_>1</_x0037_>
+    <_x0038_>1</_x0038_>
+    <_x0039_>1</_x0039_>
+    <_x0031_0>1</_x0031_0>
+    <_x0031_1>1</_x0031_1>
+  </Safetyfactors>
+  <Safetyfactors Id="6" Name="Коэффициент условий работы стальной базы" ParentId="4">
+    <_x0030_>1.15</_x0030_>
+    <_x0031_>1.15</_x0031_>
+    <_x0032_>1</_x0032_>
+    <_x0033_>1</_x0033_>
+    <_x0034_>1.15</_x0034_>
+    <_x0035_>1.15</_x0035_>
+    <_x0036_>1</_x0036_>
+    <_x0037_>1</_x0037_>
+    <_x0038_>1</_x0038_>
+    <_x0039_>1</_x0039_>
+    <_x0031_0>1</_x0031_0>
+    <_x0031_1>1</_x0031_1>
+  </Safetyfactors>
+  <ParametricObjects Id="23" Name="Новый массив" ParentId="21">
+    <Type>RectArrayPlacement</Type>
+  </ParametricObjects>
+  <StoredParams Id="24" Name="ItemAngle" ParentId="23">
+    <Type>double</Type>
+    <Value>0</Value>
+  </StoredParams>
+  <StoredParams Id="25" Name="ArrayAngle" ParentId="23">
+    <Type>double</Type>
+    <Value>0</Value>
+  </StoredParams>
+  <StoredParams Id="26" Name="CoveringLayer" ParentId="23">
+    <Type>double</Type>
+    <Value>0</Value>
+  </StoredParams>
+  <StoredParams Id="27" Name="CenterX" ParentId="23">
+    <Type>double</Type>
+    <Value>0</Value>
+  </StoredParams>
+  <StoredParams Id="28" Name="CenterY" ParentId="23">
+    <Type>double</Type>
+    <Value>0</Value>
+  </StoredParams>
+  <StoredParams Id="29" Name="SizeX" ParentId="23">
+    <Type>double</Type>
+    <Value>0,4</Value>
+  </StoredParams>
+  <StoredParams Id="30" Name="SizeY" ParentId="23">
+    <Type>double</Type>
+    <Value>0,7</Value>
+  </StoredParams>
+  <StoredParams Id="31" Name="QuantityX" ParentId="23">
+    <Type>int</Type>
+    <Value>2</Value>
+  </StoredParams>
+  <StoredParams Id="32" Name="QuantityY" ParentId="23">
+    <Type>int</Type>
+    <Value>2</Value>
+  </StoredParams>
+  <StoredParams Id="33" Name="FillArray" ParentId="23">
+    <Type>bool</Type>
+    <Value>False</Value>
+  </StoredParams>
+</NewDataSet>

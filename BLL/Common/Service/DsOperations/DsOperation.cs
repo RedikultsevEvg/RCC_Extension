@@ -308,10 +308,11 @@ namespace RDBLL.Common.Service.DsOperations
         /// <summary>
         /// Возвращает таблицу если она имеется в датасете или создает новую
         /// </summary>
-        /// <param name="dataSet"></param>
-        /// <param name="tableName"></param>
+        /// <param name="dataSet">Датасет, в который добавляется таблица</param>
+        /// <param name="tableName">Наименование таблицы</param>
+        /// <param name="parentTableName">Наименование родительской таблицы (необязательно)</param>
         /// <returns></returns>
-        public static DataTable GetDataTable(DataSet dataSet, string tableName)
+        public static DataTable GetDataTable(DataSet dataSet, string tableName, string parentTableName = null)
         {
             DataTable dataTable;
             //Если датасет содержит нужную таблицу, то получаем ее
@@ -321,7 +322,7 @@ namespace RDBLL.Common.Service.DsOperations
             {
                 dataTable = new DataTable(tableName);
                 dataSet.Tables.Add(dataTable);
-                AddIdNameParentIdColumn(dataTable);
+                AddIdNameParentIdColumn(dataTable, parentTableName);
             }
             return dataTable;
         }

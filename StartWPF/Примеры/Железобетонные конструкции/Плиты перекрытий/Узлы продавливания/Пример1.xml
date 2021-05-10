@@ -1,6 +1,6 @@
 <?xml version="1.0" standalone="yes"?>
 <NewDataSet>
-  <Generators Id="182" />
+  <Generators Id="190" />
   <Versions>
     <Version>1</Version>
   </Versions>
@@ -62,9 +62,9 @@
     <IsCombination>false</IsCombination>
     <BothSign>false</BothSign>
   </LoadSets>
-  <ForcesGroupLoadSets Id="184" ForcesGroupId="2" LoadSetId="6" />
-  <ForcesGroupLoadSets Id="185" ForcesGroupId="2" LoadSetId="135" />
-  <ForcesGroupLoadSets Id="187" ForcesGroupId="121" LoadSetId="122" />
+  <ForcesGroupLoadSets Id="192" ForcesGroupId="2" LoadSetId="6" />
+  <ForcesGroupLoadSets Id="193" ForcesGroupId="2" LoadSetId="135" />
+  <ForcesGroupLoadSets Id="195" ForcesGroupId="121" LoadSetId="122" />
   <ForceParameters Id="7" LoadSetId="6">
     <KindId>1</KindId>
     <CrcValue>-100000</CrcValue>
@@ -75,14 +75,18 @@
   </ForceParameters>
   <ForceParameters Id="123" LoadSetId="122">
     <KindId>1</KindId>
-    <CrcValue>-100000</CrcValue>
+    <CrcValue>-300000</CrcValue>
   </ForceParameters>
   <ForceParameters Id="124" LoadSetId="122">
     <KindId>2</KindId>
     <CrcValue>200000</CrcValue>
   </ForceParameters>
-  <ParentForcesGroups Id="183" ParentId="1" ForcesGroupId="2" />
-  <ParentForcesGroups Id="186" ParentId="120" ForcesGroupId="121" />
+  <ForceParameters Id="185" LoadSetId="122">
+    <KindId>3</KindId>
+    <CrcValue>150000</CrcValue>
+  </ForceParameters>
+  <ParentForcesGroups Id="191" ParentId="1" ForcesGroupId="2" />
+  <ParentForcesGroups Id="194" ParentId="120" ForcesGroupId="121" />
   <MaterialUsings Id="4" Name="Бетон" ParentId="3">
     <Purpose>Plate</Purpose>
     <Materialkindname>Concrete</Materialkindname>
@@ -93,7 +97,7 @@
   <MaterialUsings Id="126" Name="Бетон" ParentId="125">
     <Purpose>Plate</Purpose>
     <Materialkindname>Concrete</Materialkindname>
-    <SelectedId>5</SelectedId>
+    <SelectedId>6</SelectedId>
     <Diameter>0.012</Diameter>
     <Prestrain>0</Prestrain>
   </MaterialUsings>
@@ -145,6 +149,6 @@
     <Height>0.2</Height>
   </PunchingLayers>
   <PunchingLayers Id="125" Name="Верхний слой" ParentId="120">
-    <Height>0.2</Height>
+    <Height>0.25</Height>
   </PunchingLayers>
 </NewDataSet>

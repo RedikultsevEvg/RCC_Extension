@@ -499,6 +499,15 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <Content Include="Примеры\Грунты\Фундаменты\Пример1.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Примеры\Железобетонные конструкции\Плиты перекрытий\Узлы продавливания\Пример1.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Примеры\Стальные конструкции\Колонны\Базы колонн\Пример1.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -653,6 +662,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Views\WPF_Windows\CommonWindows\" />
+    <Folder Include="Примеры\Стальные конструкции\Колонны\Базы колонн\Расчет по участкам\" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\IconPunching40.png">

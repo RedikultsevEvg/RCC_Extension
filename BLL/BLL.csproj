@@ -86,9 +86,11 @@
     <Compile Include="Common\Service\DsOperations\Factory\DsFactory.cs" />
     <Compile Include="Common\Service\GetEntity.cs" />
     <Compile Include="Common\Service\DsOperations\EntityOperation.cs" />
+    <Compile Include="DrawUtils\Interfaces\IDrawScatch.cs" />
+    <Compile Include="DrawUtils\RCC\Slabs\Punchings\PunchingDrawProcessor.cs" />
     <Compile Include="DrawUtils\SteelBases\DrawFoundation.cs" />
     <Compile Include="DrawUtils\SteelBases\DrawSteelBase.cs" />
-    <Compile Include="DrawUtils\SteelBases\DrawUtils.cs" />
+    <Compile Include="DrawUtils\SteelBases\CommonDrawUtils.cs" />
     <Compile Include="Entity\Common\Materials\CircleUsingBase.cs" />
     <Compile Include="Entity\Common\Materials\ConcreteUsing.cs" />
     <Compile Include="Entity\Common\Materials\Interfaces\IMaterialUsing.cs" />

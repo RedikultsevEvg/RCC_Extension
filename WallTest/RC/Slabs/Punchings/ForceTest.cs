@@ -34,14 +34,14 @@ namespace Test.RC.Slabs.Punchings
             foreach (PunchingContour contour in contours)
             {
                 double actual = bearingProcessor.GetBearingCapacityCoefficient(contour, Nz, Mx, My, true);
-                double Rbt = 980000;
+                double Rbt = 1050000;
                 double expected = Nz / (Rbt * um * h0) + Mx / (Rbt * wx * h0) + Mx / (Rbt * wx * h0);
                 Assert.AreEqual(expected, actual, expected * 0.01);
             }
             foreach (PunchingContour contour in contours)
             {
                 double actual = bearingProcessor.GetBearingCapacityCoefficient(contour, Nz, Mx, My, false);
-                double Rbt = 980000 * 0.9;
+                double Rbt = 1050000 * 0.9;
                 double expected = Nz / (Rbt * um * h0) + Mx / (Rbt * wx * h0) + Mx / (Rbt * wx * h0);
                 Assert.AreEqual(expected, actual, expected * 0.01);
             }
@@ -69,7 +69,7 @@ namespace Test.RC.Slabs.Punchings
             foreach (PunchingContour contour in contours)
             {
                 double actual = bearingProcessor.GetBearingCapacityCoefficient(contour, Nz, Mx, My, true);
-                double Rbt = 980000;
+                double Rbt = 1050000;
                 double exp_N = Math.Abs(Nz / (Rbt * um * h0));
                 double exp_Mx = Math.Abs(Mx / (Rbt * wx * h0));
                 double exp_My = Math.Abs(My / (Rbt * wy * h0));
@@ -86,7 +86,7 @@ namespace Test.RC.Slabs.Punchings
             foreach (PunchingContour contour in contours)
             {
                 double actual = bearingProcessor.GetBearingCapacityCoefficient(contour, Nz, Mx, My, false);
-                double Rbt = 980000 * 0.9;
+                double Rbt = 1050000 * 0.9;
                 double exp_N = Math.Abs(Nz / (Rbt * um * h0));
                 double exp_Mx = Math.Abs(Mx / (Rbt * wx * h0));
                 double exp_My = Math.Abs(My / (Rbt * wy * h0));
@@ -124,7 +124,7 @@ namespace Test.RC.Slabs.Punchings
             foreach (PunchingContour contour in contours)
             {
                 double actual = bearingProcessor.GetBearingCapacityCoefficient(contour, Nz, Mx, My, true);
-                double Rbt = 980000;
+                double Rbt = 1050000;
                 double exp_N = Math.Abs(Nz / (Rbt * um * h0));
                 double exp_Mx = Math.Abs(Mx / (Rbt * wx * h0));
                 double exp_My = Math.Abs(My / (Rbt * wy * h0));
@@ -141,7 +141,7 @@ namespace Test.RC.Slabs.Punchings
             foreach (PunchingContour contour in contours)
             {
                 double actual = bearingProcessor.GetBearingCapacityCoefficient(contour, Nz, Mx, My, false);
-                double Rbt = 980000 * 0.9;
+                double Rbt = 1050000 * 0.9;
                 double exp_N = Math.Abs(Nz / (Rbt * um * h0));
                 double exp_Mx = Math.Abs(Mx / (Rbt * wx * h0));
                 double exp_My = Math.Abs(My / (Rbt * wy * h0));
@@ -180,7 +180,7 @@ namespace Test.RC.Slabs.Punchings
             foreach (PunchingContour contour in contours)
             {
                 double actual = bearingProcessor.GetBearingCapacityCoefficient(contour, Nz, Mx, My, true);
-                double Rbt = 980000;
+                double Rbt = 1050000;
                 double exp_N = Math.Abs(Nz / (Rbt * um * h0));
                 double exp_Mx = Math.Abs(Mx / (Rbt * wx * h0));
                 double exp_My = Math.Abs(My / (Rbt * wy * h0));
@@ -197,7 +197,7 @@ namespace Test.RC.Slabs.Punchings
             foreach (PunchingContour contour in contours)
             {
                 double actual = bearingProcessor.GetBearingCapacityCoefficient(contour, Nz, Mx, My, false);
-                double Rbt = 980000 * 0.9;
+                double Rbt = 1050000 * 0.9;
                 double exp_N = Math.Abs(Nz / (Rbt * um * h0));
                 double exp_Mx = Math.Abs(Mx / (Rbt * wx * h0));
                 double exp_My = Math.Abs(My / (Rbt * wy * h0));
@@ -236,7 +236,7 @@ namespace Test.RC.Slabs.Punchings
             foreach (PunchingContour contour in contours)
             {
                 double actual = bearingProcessor.GetBearingCapacityCoefficient(contour, Nz, Mx, My, true);
-                double Rbt = 980000;
+                double Rbt = 1050000;
                 double exp_N = Math.Abs(Nz / (Rbt * um * h0));
                 double exp_Mx = Math.Abs(Mx / (Rbt * wx * h0));
                 double exp_My = Math.Abs(My / (Rbt * wy * h0));
@@ -253,7 +253,7 @@ namespace Test.RC.Slabs.Punchings
             foreach (PunchingContour contour in contours)
             {
                 double actual = bearingProcessor.GetBearingCapacityCoefficient(contour, Nz, Mx, My, false);
-                double Rbt = 980000 * 0.9;
+                double Rbt = 1050000 * 0.9;
                 double exp_N = Math.Abs(Nz / (Rbt * um * h0));
                 double exp_Mx = Math.Abs(Mx / (Rbt * wx * h0));
                 double exp_My = Math.Abs(My / (Rbt * wy * h0));
@@ -292,7 +292,7 @@ namespace Test.RC.Slabs.Punchings
             foreach (PunchingContour contour in contours)
             {
                 double actual = bearingProcessor.GetBearingCapacityCoefficient(contour, Nz, Mx, My, true);
-                double Rbt = 980000;
+                double Rbt = 1050000;
                 double exp_N = Math.Abs(Nz / (Rbt * um * h0));
                 double exp_Mx = Math.Abs(Mx / (Rbt * wx * h0));
                 double exp_My = Math.Abs(My / (Rbt * wy * h0));
@@ -309,7 +309,7 @@ namespace Test.RC.Slabs.Punchings
             foreach (PunchingContour contour in contours)
             {
                 double actual = bearingProcessor.GetBearingCapacityCoefficient(contour, Nz, Mx, My, false);
-                double Rbt = 980000 * 0.9;
+                double Rbt = 1050000 * 0.9;
                 double exp_N = Math.Abs(Nz / (Rbt * um * h0));
                 double exp_Mx = Math.Abs(Mx / (Rbt * wx * h0));
                 double exp_My = Math.Abs(My / (Rbt * wy * h0));
@@ -341,7 +341,7 @@ namespace Test.RC.Slabs.Punchings
 
             foreach (PunchingContour contour in contours)
             {
-                double Rbt = 980000;
+                double Rbt = 1050000;
                 double wxPos = Rbt * wx * h0;
                 double wyPos = Rbt * wy * h0;
                 double[] actualW = (bearingProcessor as BearingProcessor).GetMomentResistance(contour, true);
@@ -373,7 +373,7 @@ namespace Test.RC.Slabs.Punchings
 
             foreach (PunchingContour contour in contours)
             {
-                double Rbt = 980000;
+                double Rbt = 1050000;
                 double wxPos = Rbt * wx * h0;
                 double wyPos = Rbt * wy * h0;
                 double[] actualW = (bearingProcessor as BearingProcessor).GetMomentResistance(contour, true);
@@ -405,7 +405,7 @@ namespace Test.RC.Slabs.Punchings
 
             foreach (PunchingContour contour in contours)
             {
-                double Rbt = 980000;
+                double Rbt = 1050000;
                 double wxPos = Rbt * wx * h0;
                 double wyPos = Rbt * wy * h0;
                 double[] actualW = (bearingProcessor as BearingProcessor).GetMomentResistance(contour, true);

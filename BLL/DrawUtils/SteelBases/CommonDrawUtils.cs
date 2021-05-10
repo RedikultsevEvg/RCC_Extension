@@ -12,7 +12,7 @@ namespace RDBLL.DrawUtils.SteelBases
     /// <summary>
     /// Утилиты рисования
     /// </summary>
-    public class DrawUtils
+    public class CommonDrawUtils
     {
         /// <summary>
         /// Рисует изображение перекрестия осей

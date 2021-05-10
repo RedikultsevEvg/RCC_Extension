@@ -1,4 +1,5 @@
-﻿using RDBLL.Common.Interfaces;
+﻿using Microsoft.Win32;
+using RDBLL.Common.Interfaces;
 using RDBLL.Common.Service;
 using RDBLL.Entity.RCC.Slabs.Punchings;
 using RDBLL.Entity.SC.Column.SteelBases;
@@ -58,7 +59,41 @@ namespace RDStartWPF.Views.Common.Service
                 MinWidth = 600;
                 MinHeight = 400;
             }
-            if (page !=null) ElementProps.Navigate(page);
+            if (page != null) { ElementProps.Navigate(page); }
+            try
+            {
+                if (_Element != null)
+                {
+                    Type type = _Element.GetType();
+                    RegistryKey currentUserKey = Registry.CurrentUser;
+                    RegistryKey windowsKey = currentUserKey.CreateSubKey("SOFTWARE\\RDCalculator\\Controls\\Windows\\Dialogs\\Window\\" + type.Name);
+                    Width = Convert.ToDouble(windowsKey.GetValue("Width") ?? 800);
+                    Height = Convert.ToDouble(windowsKey.GetValue("Height") ?? 800);
+                    Left = Convert.ToDouble(windowsKey.GetValue("Left") ?? (System.Windows.SystemParameters.PrimaryScreenWidth / 2 - Width / 2));
+                    Top = Convert.ToDouble(windowsKey.GetValue("Top") ?? (System.Windows.SystemParameters.PrimaryScreenHeight / 2 - Height / 2));
+                    windowsKey.Close();
+                }
+            }
+            catch (Exception ex)
+            {
+                CommonErrorProcessor.ShowErrorMessage("Ошибка загрузки параметров из реестра", ex);
+            }
+        }
+
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            Window window = sender as Window;
+            if (_Element != null)
+            {
+                Type type = _Element.GetType();
+                RegistryKey currentUserKey = Registry.CurrentUser;
+                RegistryKey windowsKey = currentUserKey.CreateSubKey("SOFTWARE\\RDCalculator\\Controls\\Windows\\Dialogs\\Window\\" + type.Name);
+                windowsKey.SetValue("Width", window.Width);
+                windowsKey.SetValue("Height", window.Height);
+                windowsKey.SetValue("Left", window.Left);
+                windowsKey.SetValue("Top", window.Top);
+                windowsKey.Close();
+            }
         }
     }
 }

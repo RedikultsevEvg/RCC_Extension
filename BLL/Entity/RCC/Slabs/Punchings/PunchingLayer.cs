@@ -46,11 +46,17 @@ namespace RDBLL.Entity.RCC.Slabs.Punchings
         {
             if (GenId) { Id = ProgrammSettings.CurrentId; }
         }
+        /// <summary>
+        /// Клонирование объекта
+        /// </summary>
+        /// <returns></returns>
         public object Clone()
         {
             PunchingLayer layer = this.MemberwiseClone() as PunchingLayer;
             layer.Id = ProgrammSettings.CurrentId;
-            layer.Concrete = this.Concrete.Clone() as ConcreteUsing;
+            ConcreteUsing concrete = this.Concrete.Clone() as ConcreteUsing;
+            concrete.RegisterParent(layer);
+            layer.Concrete = concrete;
             return layer;
         }
 

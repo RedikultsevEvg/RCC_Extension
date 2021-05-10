@@ -27,6 +27,11 @@ namespace RDBLL.Entity.RCC.Slabs.Punchings.Processors
             }
             return length;
         }
+        /// <summary>
+        /// Возвращает суммарную высоту контура
+        /// </summary>
+        /// <param name="contour"></param>
+        /// <returns></returns>
         public static double GetContourHeight(PunchingContour contour)
         {
             double totalHeight = 0;
@@ -36,12 +41,15 @@ namespace RDBLL.Entity.RCC.Slabs.Punchings.Processors
             }
             return totalHeight;
         }
-
+        /// <summary>
+        /// Возвращает момент сопротивления
+        /// </summary>
+        /// <param name="contour"></param>
+        /// <returns></returns>
         public static double[] GetMomentResistance(PunchingContour contour)
         {
             throw new NotImplementedException();
         }
-
         /// <summary>
         /// Возвращает центр тяжести субконтура
         /// </summary>
@@ -189,6 +197,20 @@ namespace RDBLL.Entity.RCC.Slabs.Punchings.Processors
             double minY = coordsY.Min();
 
             return new double[] { maxX, minX, maxY, minY };
+        }
+        /// <summary>
+        /// Возвращает суммарную толщину плиты
+        /// </summary>
+        /// <param name="punching"></param>
+        /// <returns></returns>
+        public static double GetTotalHeight(Punching punching)
+        {
+            double total = 0;
+            foreach (PunchingLayer layer in punching.Children)
+            {
+                total += layer.Height;
+            }
+            return total;
         }
     }
 }

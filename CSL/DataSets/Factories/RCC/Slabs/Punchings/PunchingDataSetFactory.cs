@@ -17,12 +17,28 @@ namespace CSL.DataSets.Factories.RCC.Slabs.Punchings
         {
             DataSet dataSet = new DataSet();
             DataTable newTable;
+            //Таблица продавливаний
             newTable = new DataTable("Punchings");
             DsOperation.AddIdNameParentIdColumn(newTable);
             dataSet.Tables.Add(newTable);
+            //Таблица 
+            
+            //Таблица расчетных контуров
             newTable = new DataTable("PunchingContours");
-            DsOperation.AddIdNameParentIdColumn(newTable);
             dataSet.Tables.Add(newTable);
+            DsOperation.AddIdNameParentIdColumn(newTable, "Punchings");
+            //Таблица расчетных субконтуров
+            newTable = new DataTable("PunchingSubContours");
+            dataSet.Tables.Add(newTable);
+            DsOperation.AddIdNameParentIdColumn(newTable, "PunchingContours");
+            //Таблица линий расчетного контура
+            newTable = new DataTable("PunchingLines");
+            dataSet.Tables.Add(newTable);
+            DsOperation.AddIdNameParentIdColumn(newTable, "PunchingSubContours");
+            //Таблица результатов расчета по контурам
+            newTable = new DataTable("PunchingLoadSetContours");
+            dataSet.Tables.Add(newTable);
+            DsOperation.AddIdNameParentIdColumn(newTable, "Punchings");
             return dataSet;
         }
     }

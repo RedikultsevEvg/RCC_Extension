@@ -228,6 +228,7 @@ namespace RDBLL.Entity.Common.Materials
         /// <param name="parent"></param>
         public void RegisterParent(IDsSaveable parent)
         {
+            if (ParentMember != null) UnRegisterParent();
             ParentMember = parent;
         }
         /// <summary>

@@ -42,7 +42,7 @@ namespace RDBLL.DrawUtils.SteelBases
                 }
             }
             // Рисуем оси координат
-            DrawUtils.DrawAxis(canvas, true, true);
+            CommonDrawUtils.DrawAxis(canvas, true, true);
         }
         /// <summary>
         /// Рисование ступеней фундамента в плане
