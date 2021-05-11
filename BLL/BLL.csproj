@@ -149,6 +149,9 @@
     <Compile Include="Common\Geometry\Point2D.cs" />
     <Compile Include="Common\Geometry\Point3D.cs" />
     <Compile Include="Entity\Common\Materials\ConcreteKind.cs" />
+    <Compile Include="Entity\RCC\Common\CommonRCC\Ancorages\AncorageBar.cs" />
+    <Compile Include="Entity\RCC\Common\CommonRCC\Ancorages\AncorageGroup.cs" />
+    <Compile Include="Entity\RCC\Common\CommonRCC\Ancorages\Interfaces\IAncorageCalcLogic.cs" />
     <Compile Include="Entity\RCC\Common\Processors\RectSectionProcessor.cs" />
     <Compile Include="Entity\RCC\Foundations\Builders\BuilderBase.cs" />
     <Compile Include="Entity\RCC\Foundations\Builders\BuilderTemplate1.cs" />
