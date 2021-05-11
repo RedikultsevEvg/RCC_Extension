@@ -59,7 +59,7 @@ namespace TestIntegrationProject.RCC.Slabs.Punchigs
             Assert.IsNotNull(dataSet);
             //Проверяем количество таблиц в датасете
             int tableCount = dataSet.Tables.Count;
-            Assert.AreEqual(5, tableCount);
+            Assert.AreEqual(8, tableCount);
         }
 
         private Punching PreparePunching()

@@ -83,51 +83,6 @@ namespace RDStartWPF.Views.Common.Service
                 windowsKey.SetValue("Top", window.Top);
                 windowsKey.Close();
             }
-            else if (_Element is Punching)
-            {
-                Punching punching = _Element as Punching;
-                page = new PgPunching(punching);
-                (page as PgPunching).PunchingVM.ParentVM = DialogVM;
-                DialogVM.Children.Add((page as PgPunching).PunchingVM);
-                Title = "Продавливание плиты колонной прямоугольного сечения";
-                MinWidth = 600;
-                MinHeight = 400;
-            }
-            if (page != null) { ElementProps.Navigate(page); }
-            try
-            {
-                if (_Element != null)
-                {
-                    Type type = _Element.GetType();
-                    RegistryKey currentUserKey = Registry.CurrentUser;
-                    RegistryKey windowsKey = currentUserKey.CreateSubKey("SOFTWARE\\RDCalculator\\Controls\\Windows\\Dialogs\\Window\\" + type.Name);
-                    Width = Convert.ToDouble(windowsKey.GetValue("Width") ?? 800);
-                    Height = Convert.ToDouble(windowsKey.GetValue("Height") ?? 800);
-                    Left = Convert.ToDouble(windowsKey.GetValue("Left") ?? (System.Windows.SystemParameters.PrimaryScreenWidth / 2 - Width / 2));
-                    Top = Convert.ToDouble(windowsKey.GetValue("Top") ?? (System.Windows.SystemParameters.PrimaryScreenHeight / 2 - Height / 2));
-                    windowsKey.Close();
-                }
-            }
-            catch (Exception ex)
-            {
-                CommonErrorProcessor.ShowErrorMessage("Ошибка загрузки параметров из реестра", ex);
-            }
-        }
-
-        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
-        {
-            Window window = sender as Window;
-            if (_Element != null)
-            {
-                Type type = _Element.GetType();
-                RegistryKey currentUserKey = Registry.CurrentUser;
-                RegistryKey windowsKey = currentUserKey.CreateSubKey("SOFTWARE\\RDCalculator\\Controls\\Windows\\Dialogs\\Window\\" + type.Name);
-                windowsKey.SetValue("Width", window.Width);
-                windowsKey.SetValue("Height", window.Height);
-                windowsKey.SetValue("Left", window.Left);
-                windowsKey.SetValue("Top", window.Top);
-                windowsKey.Close();
-            }
         }
     }
 }
