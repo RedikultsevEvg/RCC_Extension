@@ -173,6 +173,8 @@
     <Compile Include="Common\Service\DetailObjectList.cs" />
     <Compile Include="Common\Service\ProgrammSettings.cs" />
     <Compile Include="Common\Service\XMLOperations.cs" />
+    <Compile Include="Entity\RCC\Slabs\Punchings\DropPanels\DropPanelBase.cs" />
+    <Compile Include="Entity\RCC\Slabs\Punchings\DropPanels\DropPanelRect.cs" />
     <Compile Include="Entity\RCC\Slabs\Punchings\Factories\CentralColumnPunching.cs" />
     <Compile Include="Entity\RCC\Slabs\Punchings\Factories\IPunchingFactory.cs" />
     <Compile Include="Entity\RCC\Slabs\Punchings\Factories\TestCaseFactory.cs" />

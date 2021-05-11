@@ -21,7 +21,18 @@ namespace RDBLL.Entity.RCC.Slabs.Punchings.Factories
         /// <summary>
         /// Средняя колонна 600х400мм, толщина переккрытия 200мм.
         /// </summary>
-        TestType3_600х400х400
+        TestType3_600х400х400,
+        Edge1,
+        Edge2,
+        Edge3,
+        Angle1,
+        Angle2,
+        Angle3,
+        DropPanel1,
+        DropPanel2,
+        DropPanelEdge1,
+        DropPanelEdge2,
+        DropPanelAngle1,
     }
     /// <summary>
     /// Фабрика создания тестовых вариантов для расчета на продавливание
