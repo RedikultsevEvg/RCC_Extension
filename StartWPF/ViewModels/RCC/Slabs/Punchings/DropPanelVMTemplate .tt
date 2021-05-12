@@ -1,0 +1,100 @@
+﻿<#@ template debug="false" hostspecific="false" language="C#" #>
+<#@ assembly name="System.Core" #>
+<#@ import namespace="System" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Text" #>
+<#@ import namespace="System.Reflection" #>
+<#@ import namespace="System.Collections.Generic" #>
+<#@ assembly name="$(SolutionDir)\\StartWPF\\bin\\Debug\BLL.dll" #>
+<#@ import namespace="RDBLL.Entity.RCC.Slabs.Punchings"#>
+<#@ import namespace="RDBLL.Entity.RCC.Slabs.Punchings.DropPanels"#>
+<#@ import namespace="RDBLL.Entity.Common.Materials"#>
+<#@ output extension=".cs" #>
+
+using RDBLL.Entity.Common.Materials;
+using RDBLL.Entity.RCC.Slabs.Punchings;
+using RDBLL.Entity.RCC.Slabs.Punchings.DropPanels;
+using RDStartWPF.InfraStructure.Comands.Base;
+using RDStartWPF.InfraStructure.Common.CommonOperations;
+using RDStartWPF.ViewModels.Base;
+using RDStartWPF.ViewModels.Base.Interfaces;
+
+//---------------------------------------------------------------------------------------
+//Этот файл сгенерирован автоматически. Не вносите в данный файл какие либо изменения
+//---------------------------------------------------------------------------------------
+<#System.Type type = typeof(DropPanelRect);#>
+
+partial class <#= type.Name#>VMTemplate : ViewModelBase
+{
+    <#= type.Name#> _<#= type.Name#>;
+
+    <# foreach (PropertyInfo propertyInfo in type.GetProperties())
+    {
+        if (propertyInfo.PropertyType.Name == "Double"
+        || propertyInfo.PropertyType.Name == "String"
+        || propertyInfo.PropertyType.Name == "Int32"
+        || propertyInfo.PropertyType.Name == "Boolean")
+        {
+        if (propertyInfo.Name == "Id")
+        {#>
+    /// <summary>
+    /// Код элемента
+    /// </summary>
+        <#
+        }
+        if (propertyInfo.Name == "Name")
+        {#>
+    /// <summary>
+    /// Наименование элемента
+    /// </summary>
+        <#
+        }#>
+    public <#= propertyInfo.PropertyType#> <#= propertyInfo.Name#>
+        {
+            get => _<#= type.Name#>.<#= propertyInfo.Name#>;
+            set
+            {
+            <#= propertyInfo.PropertyType#> d = _<#= type.Name#>.<#= propertyInfo.Name#>;
+            if (SetProperty(ref d, value)) { _<#= type.Name#>.<#= propertyInfo.Name#> = d; }
+            }
+        }   
+    <#}
+}#>
+
+    public override string this[string columnName]
+    {
+        get
+        {
+            string error = string.Empty;
+            switch (columnName)
+                {
+                    case "Name":
+                        {
+                            if (string.IsNullOrEmpty(Name))
+                            {
+                                error = "Имя элемента не может быть пустым";
+                            }
+                        }
+                        break;
+                    case "Width":
+                        {
+                            if (Width < 0.05)
+                            {
+                                error = "Ширина колонны должна быть больше 50мм";
+                            }
+                        }
+                        break;
+                    case "Length":
+                        {
+                            if (Length < 0.05)
+                            {
+                                error = "Высота сечения колонны должна быть больше 50мм";
+                            }
+                        }
+                        break;
+                }
+                Error = error;
+            return error;
+        }
+    }
+}

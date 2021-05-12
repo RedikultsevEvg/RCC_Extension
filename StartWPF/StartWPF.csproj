@@ -131,6 +131,16 @@
     <Compile Include="ViewModels\MatUsings\MatUsingVM.cs" />
     <Compile Include="ViewModels\MatUsings\SafetyFactorsVM.cs" />
     <Compile Include="ViewModels\RCC\Slabs\Punchings\PunchingVM.cs" />
+    <Compile Include="ViewModels\RCC\Slabs\Punchings\DropPanelVMTemplate .cs">
+      <DependentUpon>DropPanelVMTemplate .tt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="ViewModels\RCC\Slabs\Punchings\PunchingVMTemplate.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>PunchingVMTemplate.tt</DependentUpon>
+    </Compile>
     <Compile Include="ViewModels\SC\Columns\Bases\SteelBasePartGroupPgVM.cs" />
     <Compile Include="ViewModels\SC\Columns\Bases\SteelBasePartsPgVM.cs" />
     <Compile Include="ViewModels\SC\Columns\Bases\SteelBaseVM.cs" />
@@ -506,6 +516,14 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <Content Include="ViewModels\RCC\Slabs\Punchings\DropPanelVMTemplate .tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>DropPanelVMTemplate .cs</LastGenOutput>
+    </Content>
+    <Content Include="ViewModels\RCC\Slabs\Punchings\PunchingVMTemplate.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>PunchingVMTemplate.cs</LastGenOutput>
+    </Content>
     <Content Include="Примеры\Грунты\Фундаменты\Пример1.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -710,6 +728,9 @@
     <Content Include="Reports\SteelBases\SteelBases.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
