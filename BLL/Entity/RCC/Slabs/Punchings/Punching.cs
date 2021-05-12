@@ -221,6 +221,15 @@ namespace RDBLL.Entity.RCC.Slabs.Punchings
                 #region setFields
                 DsOperation.SetField(row, "CoveringLayerX", CoveringLayerX);
                 DsOperation.SetField(row, "CoveringLayerY", CoveringLayerY);
+                DsOperation.SetField(row, "CoveringLayerY", SeveralLayers);
+                DsOperation.SetField(row, "LeftEdge", LeftEdge);
+                DsOperation.SetField(row, "RightEdge)", RightEdge);
+                DsOperation.SetField(row, "TopEdge", TopEdge);
+                DsOperation.SetField(row, "BottomEdge", BottomEdge);
+                DsOperation.SetField(row, "LeftEdgeDist", LeftEdgeDist);
+                DsOperation.SetField(row, "RightEdgeDist)", RightEdgeDist);
+                DsOperation.SetField(row, "TopEdgeDist", TopEdgeDist);
+                DsOperation.SetField(row, "BottomEdgeDist", BottomEdgeDist);
                 #endregion
                 row.AcceptChanges();
             }

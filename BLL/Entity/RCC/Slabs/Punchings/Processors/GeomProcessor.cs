@@ -212,5 +212,20 @@ namespace RDBLL.Entity.RCC.Slabs.Punchings.Processors
             }
             return total;
         }
+        /// <summary>
+        /// Проверяет расположение краев у продавливания
+        /// </summary>
+        /// <param name="punching"></param>
+        /// <returns></returns>
+        public static bool CheckPunchingEdges(Punching punching)
+        {
+            //Если свободные края слева и справа, то получается перекрытие только с двух сторон
+            //такое закрепление является неверным (перекрытие не может считаться на продавливание и должно считаться как балка
+            if (punching.LeftEdge & punching.RightEdge) { return false; }
+            //Если свободные края сверху и снизу, то закрепление также является неверным
+            else if (punching.TopEdge & punching.BottomEdge) { return true; }
+            //Иначе возвращаем, что края назначены верно
+            else return true;
+        }
     }
 }
