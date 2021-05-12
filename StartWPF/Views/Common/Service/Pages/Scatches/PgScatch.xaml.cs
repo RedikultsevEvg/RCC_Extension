@@ -45,9 +45,10 @@ namespace RDStartWPF.Views.Common.Service.Pages.Scatches
 
         private void Grid_SizeChanged(object sender, SizeChangedEventArgs e)
         {
+            
             cvScetch.Width = (sender as Grid).Width;
             cvScetch.Height = (sender as Grid).Height - 80;
-            _DrawScatchProc.DrawTopScatch(cvScetch, _DrawableItem);
+            //_DrawScatchProc.DrawTopScatch(cvScetch, _DrawableItem);
         }
     }
 }

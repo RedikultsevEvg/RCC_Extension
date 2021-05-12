@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Report ScriptLanguage="CSharp" DoublePass="true" ReportInfo.Created="08/11/2019 20:16:27" ReportInfo.Modified="05/10/2021 17:49:17" ReportInfo.CreatorVersion="2020.1.0.0">
+<Report ScriptLanguage="CSharp" DoublePass="true" ReportInfo.Created="08/11/2019 20:16:27" ReportInfo.Modified="05/11/2021 12:40:55" ReportInfo.CreatorVersion="2020.4.0.0">
   <Dictionary>
     <TableDataSource Name="Punchings" ReferenceName="Data.Punchings" DataType="System.Int32" Enabled="true">
       <Column Name="Id" DataType="System.Int32"/>
@@ -135,41 +135,41 @@
       <TextObject Name="Text1" Width="179.55" Height="28.35" Border.Lines="Bottom" Border.Color="Red" Border.Width="2" Fill.Color="LemonChiffon" Text="[Date]" HorzAlign="Center" Font="Arial, 10pt"/>
       <TextObject Name="Text2" Left="179.55" Width="519.75" Height="28.35" Border.Lines="Bottom" Border.Color="Red" Border.Width="2" Fill.Color="LemonChiffon" Text="Отчет по результатам расчета на продавливание" HorzAlign="Center" Font="Arial, 10pt"/>
     </ReportTitleBand>
-    <PageHeaderBand Name="PageHeader1" Top="32.35" Width="699.3" Height="28.35"/>
-    <DataBand Name="Punching" Top="64.7" Width="699.3" Height="28.35" CanGrow="true" KeepChild="true" OutlineExpression="[Punchings.Name]" DataSource="Punchings" IdColumn="Punchings.Id">
+    <PageHeaderBand Name="PageHeader1" Top="30.35" Width="699.3" Height="28.35"/>
+    <DataBand Name="Punching" Top="60.7" Width="699.3" Height="28.35" CanGrow="true" KeepChild="true" OutlineExpression="[Punchings.Name]" DataSource="Punchings" IdColumn="Punchings.Id">
       <TextObject Name="Text4" Width="699.3" Height="28.35" CanGrow="true" GrowToBottom="true" Text="Расчет на продавливание: [Punchings.Name]" HorzAlign="Center" Font="Arial, 10pt, style=Bold"/>
-      <ChildBand Name="Child1" Top="97.05" Width="699.3" Height="378" OutlineExpression="ToString(&quot;Схема узла продавливания&quot;)">
+      <ChildBand Name="Child1" Top="91.05" Width="699.3" Height="378" OutlineExpression="ToString(&quot;Схема узла продавливания&quot;)">
         <PictureObject Name="Picture2" Width="699.3" Height="378" CanGrow="true" DataColumn="Punchings.TopScatch"/>
-        <ChildBand Name="Child2" Top="479.05" Width="699.3" Height="18.9">
+        <ChildBand Name="Child2" Top="471.05" Width="699.3" Height="18.9">
           <TextObject Name="Text54" Width="699.3" Height="18.9" CanGrow="true" GrowToBottom="true" Text="Рисунок. Схема продавливания [Punchings.Name]" HorzAlign="Center" Font="Arial, 10pt, style=Bold"/>
         </ChildBand>
       </ChildBand>
-      <DataBand Name="Data1" Top="501.95" Width="699.3" Height="37.8" CanGrow="true">
+      <DataBand Name="Data1" Top="491.95" Width="699.3" Height="37.8" CanGrow="true">
         <TextObject Name="Text144" Width="699.3" Height="28.35" CanGrow="true" GrowToBottom="true" Text="Ширина сечения колонны (размер вдоль оси X),  Bx = [Punchings.ColumnSizeX][Units.LinearSize]&#13;&#10;Высота сечения колонны (размер вдоль оси Y),  Lx = [Punchings.ColumnSizeY][Units.LinearSize]&#13;&#10;Толщина плиты, h = [Punchings.Height][Units.LinearSize]&#13;&#10;Защитный слой для арматуры вдоль оси X, Cx = [Punchings.CoveringLayerX]мм&#13;&#10;Защитный слой для арматуры вдоль оси Y, Cy = [Punchings.CoveringLayerY]мм" Font="Arial, 10pt"/>
       </DataBand>
-      <DataBand Name="DtLoadSets" Top="543.75" Width="699.3" Height="47.25" CanGrow="true" OutlineExpression="ToString(&quot;Нагрузка: &quot; + [LoadSets.Name])" DataSource="LoadSets" IdColumn="LoadSets.Id" ParentIdColumn="Punchings.Id">
+      <DataBand Name="DtLoadSets" Top="531.75" Width="699.3" Height="47.25" CanGrow="true" OutlineExpression="ToString(&quot;Нагрузка: &quot; + [LoadSets.Name])" DataSource="LoadSets" IdColumn="LoadSets.Id" ParentIdColumn="Punchings.Id">
         <TextObject Name="Text14" Width="699.3" Height="18.9" CanGrow="true" GrowToBottom="true" Text="Нагрузка: [LoadSets.Name]" Font="Arial, 10pt, style=Bold"/>
         <TextObject Name="Text15" Top="18.9" Width="699.3" Height="28.35" CanGrow="true" GrowToBottom="true" Text="Нормативные значения: [LoadSets.CrcForceDescription]&#13;&#10;Расчетные значения (n=[LoadSets.PartialSafetyFactor]): [LoadSets.DesignForceDescription]" Font="Arial, 10pt"/>
       </DataBand>
-      <DataBand Name="DtLoadCases" Top="595" Width="699.3" Height="37.8" CanGrow="true" OutlineExpression="ToString(&quot;Сочетание нагрузок: &quot; + [LoadCases.Name])" DataSource="LoadCases" IdColumn="LoadCases.Id" ParentIdColumn="Punchings.Id">
+      <DataBand Name="DtLoadCases" Top="581" Width="699.3" Height="37.8" CanGrow="true" OutlineExpression="ToString(&quot;Сочетание нагрузок: &quot; + [LoadCases.Name])" DataSource="LoadCases" IdColumn="LoadCases.Id" ParentIdColumn="Punchings.Id">
         <TextObject Name="Text13" Top="18.9" Width="699.3" Height="18.9" CanGrow="true" GrowToBottom="true" Text="[LoadCases.ForceDescription]" Font="Arial, 10pt"/>
         <TextObject Name="Text8" Width="699.3" Height="18.9" CanGrow="true" GrowToBottom="true" Text="Сочетание нагрузок: [LoadCases.Name]" Font="Arial, 10pt, style=Bold"/>
       </DataBand>
-      <DataBand Name="DtContours" Top="636.8" Width="699.3" Height="18.9" CanGrow="true" OutlineExpression="ToString(&quot;Расчетный контур №&quot; + [Row#])" DataSource="PunchingContours" IdColumn="PunchingContours.Id" ParentIdColumn="Punchings.Id">
+      <DataBand Name="DtContours" Top="620.8" Width="699.3" Height="18.9" CanGrow="true" OutlineExpression="ToString(&quot;Расчетный контур №&quot; + [Row#])" DataSource="PunchingContours" IdColumn="PunchingContours.Id" ParentIdColumn="Punchings.Id">
         <TextObject Name="Text141" Width="699.3" Height="18.9" CanGrow="true" GrowToBottom="true" Text="Расчетный контур [Row#]. Центр тяжести: X=[PunchingContours.CenterX][Units.LinearSize], Y=[PunchingContours.CenterY][Units.LinearSize]&#13;&#10;Локальные моменты сопротивления: WxPos=[PunchingContours.WxPos][Units.Geometry.Area], WxNeg=[PunchingContours.WxNeg][Units.Geometry.Area], WyPos=[PunchingContours.WyPos][Units.Geometry.Area], WyNeg=[PunchingContours.WyNeg][Units.Geometry.Area]." Font="Arial, 10pt"/>
-        <DataBand Name="DtSubContours" Top="659.7" Width="699.3" Height="18.9" CanGrow="true" DataSource="PunchingSubContours" IdColumn="PunchingSubContours.Id" ParentIdColumn="PunchingContours.Id">
+        <DataBand Name="DtSubContours" Top="641.7" Width="699.3" Height="18.9" CanGrow="true" DataSource="PunchingSubContours" IdColumn="PunchingSubContours.Id" ParentIdColumn="PunchingContours.Id">
           <TextObject Name="Text142" Left="18.9" Width="699.3" Height="18.9" CanGrow="true" GrowToBottom="true" Text="Субконтур [Row#]: Высота, h=[PunchingSubContours.Height][Units.LinearSize], Периметр L=[PunchingSubContours.Length][Units.LinearSize].&#13;&#10;Локальные моменты сопротивления: WxPos=[PunchingSubContours.WxPos][Units.Geometry.Area], WxNeg=[PunchingSubContours.WxNeg][Units.Geometry.Area], WyPos=[PunchingSubContours.WyPos][Units.Geometry.Area], WyNeg=[PunchingSubContours.WyNeg][Units.Geometry.Area].&#13;&#10;Бетон [PunchingSubContours.ConcreteName]" Font="Arial, 10pt"/>
-          <DataBand Name="DtLines" Top="682.6" Width="699.3" Height="15.12" CanGrow="true" DataSource="PunchingLines" IdColumn="PunchingLines.Id" ParentIdColumn="PunchingSubContours.Id">
-            <TextObject Name="Text143" Left="37.8" Width="699.3" Height="15.12" CanGrow="true" GrowToBottom="true" Text="Линия [Row#]. Точка 1: X=[PunchingLines.StartX][Units.LinearSize], Y=[PunchingLines.StartY][Units.LinearSize], Точка 2: X=[PunchingLines.EndX][Units.LinearSize], Y=[PunchingLines.EndY][Units.LinearSize], Длина L=[PunchingLines.Length][Units.LinearSize]" Font="Courier New, 10pt"/>
+          <DataBand Name="DtLines" Top="662.6" Width="699.3" Height="15.12" CanGrow="true" DataSource="PunchingLines" IdColumn="PunchingLines.Id" ParentIdColumn="PunchingSubContours.Id">
+            <TextObject Name="Text143" Left="37.8" Width="699.3" Height="15.12" CanGrow="true" GrowToBottom="true" Text="Линия [Row#]. Точка 1: X=[PunchingLines.StartX][Units.LinearSize], Y=[PunchingLines.StartY][Units.LinearSize], Точка 2: X=[PunchingLines.EndX][Units.LinearSize], Y=[PunchingLines.EndY][Units.LinearSize], Длина L=[PunchingLines.Length][Units.LinearSize]" Font="Arial, 10pt"/>
           </DataBand>
         </DataBand>
       </DataBand>
-      <DataBand Name="DtGenConclusion" Top="701.72" Width="699.3" Height="37.8" CanGrow="true" OutlineExpression="ToString(&quot;Общий вывод&quot;)">
+      <DataBand Name="DtGenConclusion" Top="679.72" Width="699.3" Height="37.8" CanGrow="true" OutlineExpression="ToString(&quot;Общий вывод&quot;)">
         <TextObject Name="Text138" Width="699.3" Height="18.9" Border.Lines="All" Fill.Color="PaleTurquoise" CanGrow="true" CanShrink="true" Text="Общий вывод" HorzAlign="Center" Font="Arial, 10pt, style=Bold"/>
         <TextObject Name="Text139" Top="18.9" Width="699.3" Height="18.9" CanGrow="true" GrowToBottom="true" Text="[Punchings.GenConclusion]" Font="Arial, 10pt, style=Bold"/>
       </DataBand>
     </DataBand>
-    <PageFooterBand Name="PageFooter1" Top="743.52" Width="699.3" Height="28.35">
+    <PageFooterBand Name="PageFooter1" Top="719.52" Width="699.3" Height="28.35">
       <TextObject Name="Text3" Width="349.65" Height="28.35" Fill.Color="LemonChiffon" Text="RealDoc Calculator" HorzAlign="Center" Font="Arial, 10pt, style=Bold"/>
       <TextObject Name="Text140" Left="349.65" Width="349.65" Height="28.35" Fill.Color="LemonChiffon" Cursor="Hand" Hyperlink.Value="www.realdoc.info" Text="www.RealDoc.info" HorzAlign="Center" Font="Arial, 10pt, style=Bold, Underline" TextFill.Color="Blue"/>
     </PageFooterBand>

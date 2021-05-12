@@ -564,9 +564,9 @@
     <Content Include="Reports\Foundations\Stresses.frx">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Resource Include="Reports\RCC\Slabs\Punchings\Punchings.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Resource>
+    <Content Include="Reports\RCC\Slabs\Punchings\Punchings.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Reports\SteelBases\Assignment.frx">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

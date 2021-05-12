@@ -48,6 +48,16 @@ namespace RDStartWPF.Views.Common.Service
                 page = new PgSteelBasePartGroup(_Element as SteelBasePartGroup);
                 Title = "Группа участков базы стальной колонны";
             }
+            else if (_Element is Punching)
+            {
+                Punching punching = _Element as Punching;
+                page = new PgPunching(punching);
+                (page as PgPunching).PunchingVM.ParentVM = DialogVM;
+                DialogVM.Children.Add((page as PgPunching).PunchingVM);
+                Title = "Продавливание плиты колонной прямоугольного сечения";
+                MinWidth = 600;
+                MinHeight = 400;
+            }
             if (page != null) { ElementProps.Navigate(page); }
             try
             {

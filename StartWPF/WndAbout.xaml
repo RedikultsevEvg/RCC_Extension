@@ -40,7 +40,7 @@
             </TextBlock>
         </StackPanel>
         <Label x:Name="lbBuild" Content="Сборка" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" FontFamily="Arial" FontSize="14" FontWeight="Bold" Background="{x:Null}" Foreground="Black" Grid.Row="2" Height="26" Width="60"/>
-        <Label x:Name="lbBuildText" Content="Сборка" HorizontalAlignment="Left" Margin="200,10,0,0" VerticalAlignment="Top" FontFamily="Arial" FontSize="14" FontWeight="Bold" Background="{x:Null}" Foreground="Black" Grid.Row="2" Height="26" Width="60"/>
+        <Label x:Name="lbBuildText" Content="Сборка" HorizontalAlignment="Left" Margin="200,10,0,0" VerticalAlignment="Top" FontFamily="Arial" FontSize="14" FontWeight="Bold" Background="{x:Null}" Foreground="Black" Grid.Row="2" Height="26" Width="200"/>
 
     </Grid>
 </Window>
