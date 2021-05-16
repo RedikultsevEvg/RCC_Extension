@@ -2,7 +2,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using RDBLL.Entity.RCC.Common.Processors;
 
-namespace Test.RC.Common
+namespace Test.RCC.Common
 {
     [TestClass]
     public class RectCrossSection

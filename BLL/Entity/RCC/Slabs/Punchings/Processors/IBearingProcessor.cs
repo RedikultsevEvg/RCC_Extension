@@ -1,4 +1,5 @@
 ﻿using RDBLL.Entity.RCC.Slabs.Punchings.Results;
+using RDBLL.Forces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,6 +13,13 @@ namespace RDBLL.Entity.RCC.Slabs.Punchings.Processors
     /// </summary>
     public interface IBearingProcessor
     {
+        /// <summary>
+        /// Возвращает коэффициент несущей способности по заданным усилиям для заданного контура
+        /// </summary>
+        /// <param name="contour">Контур продавливания</param>
+        /// <param name="loadSet">Коллекция нагрузок</param>
+        /// <returns>Коэффициент использования несущей способности</returns>
+        double GetBearingCapacityCoefficient(PunchingContour contour, LoadSet loadSet);
         /// <summary>
         /// Возвращает коэффициент несущей способности по заданным усилиям для заданного контура
         /// </summary>

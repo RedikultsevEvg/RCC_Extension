@@ -133,7 +133,7 @@ namespace RDBLL.Entity.RCC.Reinforcement
         public Int32 BarQuantity ()
         {
             int Quant = 0;
-            double length = GeometryProc.GetDistance(this.StartPoint, this.EndPoint);
+            double length = GeometryProcessor.GetDistance(this.StartPoint, this.EndPoint);
             double mainLength = length - this.StartOffset-this.EndOffset;
              
             if (this.barSpacingSettings.AddBarsLeft)

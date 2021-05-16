@@ -14,7 +14,7 @@ namespace Test.Geometry.Mathematic
             Point2D startPoint = new Point2D(0, -2);
             Point2D endPoint = new Point2D(0, 2);
             Point2D center = new Point2D(0, 0);
-            double[] moments = GeometryProc.GetLineMomentInertia(startPoint, endPoint, center);
+            double[] moments = GeometryProcessor.GetLineMomentInertia(startPoint, endPoint, center);
             double Ix = moments[0];
             double Iy = moments[1];
             double expectedIx = 4.0 * 4.0 * 4.0 / 12;
@@ -28,7 +28,7 @@ namespace Test.Geometry.Mathematic
             Point2D startPoint = new Point2D(0, 0);
             Point2D endPoint = new Point2D(0, 2);
             Point2D center = new Point2D(0, 0);
-            double[] moments = GeometryProc.GetLineMomentInertia(startPoint, endPoint, center);
+            double[] moments = GeometryProcessor.GetLineMomentInertia(startPoint, endPoint, center);
             double Ix = moments[0];
             double Iy = moments[1];
             double expectedIx = 2.0 * 2.0 * 2.0 / 12 + 2.0 * 1.0 * 1.0;
@@ -42,7 +42,7 @@ namespace Test.Geometry.Mathematic
             Point2D startPoint = new Point2D(0, 2);
             Point2D endPoint = new Point2D(0, 4);
             Point2D center = new Point2D(0, 0);
-            double[] moments = GeometryProc.GetLineMomentInertia(startPoint, endPoint, center);
+            double[] moments = GeometryProcessor.GetLineMomentInertia(startPoint, endPoint, center);
             double Ix = moments[0];
             double Iy = moments[1];
             double expectedIx = 2.0 * 2.0 * 2.0 / 12 + 2.0 * 3.0 * 3.0;
@@ -57,7 +57,7 @@ namespace Test.Geometry.Mathematic
             Point2D startPoint = new Point2D(-4, 2);
             Point2D endPoint = new Point2D(4, 2);
             Point2D center = new Point2D(0, 0);
-            double[] moments = GeometryProc.GetLineMomentInertia(startPoint, endPoint, center);
+            double[] moments = GeometryProcessor.GetLineMomentInertia(startPoint, endPoint, center);
             double Ix = moments[0];
             double Iy = moments[1];
             double expectedIx = 8.0 * 2.0 * 2.0;

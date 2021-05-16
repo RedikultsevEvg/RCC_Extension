@@ -281,7 +281,7 @@ namespace RDBLL.Processors.SC
             {
                 shapes.Add(part);
             }
-            return GeometryProc.GetArea(shapes);
+            return GeometryProcessor.GetArea(shapes);
         }
         public static double[] GetMomInertia(SteelBase steelBase)
         {
@@ -290,7 +290,7 @@ namespace RDBLL.Processors.SC
             {
                 shapes.Add(part);
             }
-            return GeometryProc.GetMomInertia(shapes);
+            return GeometryProcessor.GetMomInertia(shapes);
         }
         public static double[] GetMinSecMomInertia(SteelBase steelBase)
         {
@@ -299,7 +299,7 @@ namespace RDBLL.Processors.SC
             {
                 shapes.Add(part);
             }
-            return GeometryProc.GetMinSecMomentInertia(shapes);
+            return GeometryProcessor.GetMinSecMomentInertia(shapes);
         }
         public static double[] GetMaxSizes(SteelBase steelBase)
         {
@@ -308,7 +308,7 @@ namespace RDBLL.Processors.SC
             {
                 shapes.Add(part);
             }
-            return GeometryProc.GetEdgeDist(shapes);
+            return GeometryProcessor.GetEdgeDist(shapes);
         }
     }
 }

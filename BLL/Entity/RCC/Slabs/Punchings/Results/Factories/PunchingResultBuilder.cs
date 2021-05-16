@@ -1,4 +1,5 @@
-﻿using RDBLL.Common.Service;
+﻿using RDBLL.Common.Geometry;
+using RDBLL.Common.Service;
 using RDBLL.Entity.Common.NDM;
 using RDBLL.Entity.RCC.Slabs.Punchings.Processors;
 using RDBLL.Forces;
@@ -36,20 +37,18 @@ namespace RDBLL.Entity.RCC.Slabs.Punchings.Results.Factories
             _Result.ContourResults = new List<PunchingCalcResult>();
             foreach (LoadCaseResult load in _Result.LoadCases)
             {
-                SumForces sumForces = new SumForces(load.LoadSet);
-
-                double Mx = sumForces.ForceMatrix[0, 0];
-                double My = sumForces.ForceMatrix[1, 0];
-                double Nz = sumForces.ForceMatrix[2, 0];
-
-                Nz = Math.Abs(Nz);
 
                 foreach (ContourResult contourResult in _Result.PunchingContours)
                 {
                     PunchingContour contour = contourResult.PunchingContour;
+                    //Получаем центр тяжести контура
+                    Point2D contourCenter = PunchingGeometryProcessor.GetContourCenter(contour);
+                    //Приводим нагрузки к центру тяжести контура
+                    LoadSet transformedSet = LoadSetProcessor.GetLoadSetTransform(load.LoadSet, contourCenter);              
+                    //Процессор для вычисления несущей способности
                     IBearingProcessor bearingProcessor = new BearingProcessor();
                     //расчет на полную нагрузку
-                    double coef = bearingProcessor.GetBearingCapacityCoefficient(contour, Nz, Mx, My, true);
+                    double coef = bearingProcessor.GetBearingCapacityCoefficient(contour, load.LoadSet);
                     //Расчет на длительные нагрузки
                     //double coef = bearingProcessor.GetBearingCapacityCoefficient(contour, Nz, Mx, My, false);
                     PunchingCalcResult calcResult  = new PunchingCalcResult();
@@ -59,6 +58,8 @@ namespace RDBLL.Entity.RCC.Slabs.Punchings.Results.Factories
                     calcResult.Punching = _Punching;
                     //Добавляем ссылку на нагрузку
                     calcResult.LoadSet = load.LoadSet;
+                    //Добавляем ссылку на преобразованную коллекцию нагрузок
+                    calcResult.TransformedLoadSet = LoadSetProcessor.GetLoadSetTransform(load.LoadSet, contourCenter);
                     //Добавляем ссылку на контур
                     calcResult.PunchingContour = contour;
                     //Добавляем рассчитанный коэффициент
@@ -87,13 +88,13 @@ namespace RDBLL.Entity.RCC.Slabs.Punchings.Results.Factories
         private void GetPunchingContours()
         {
             _Result.PunchingContours = new List<ContourResult>();
-            ILayerProcessor layerProcessor = new OneLayerProcessor();
+            ILayerProcessor layerProcessor = new MultiLayersProcessor();
             List<PunchingContour> contours = layerProcessor.GetPunchingContours(_Punching);
             foreach (PunchingContour contour in contours)
             {
                 ContourResult contourResult = new ContourResult { Id = ProgrammSettings.CurrentTmpId };
                 contourResult.PunchingContour = contour;
-                contourResult.Center = GeomProcessor.GetContourCenter(contour);
+                contourResult.Center = PunchingGeometryProcessor.GetContourCenter(contour);
                 _Result.PunchingContours.Add(contourResult);
             }         
         }

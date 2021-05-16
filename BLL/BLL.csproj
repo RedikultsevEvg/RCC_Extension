@@ -56,7 +56,7 @@
       <DependentUpon>wndErrorMessage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Common\Geometry\MassProperty.cs" />
-    <Compile Include="Common\Geometry\Mathematic\GeometryProc.cs" />
+    <Compile Include="Common\Geometry\Mathematic\GeometryProcessor.cs" />
     <Compile Include="Common\Geometry\MathOperation.cs" />
     <Compile Include="Common\Geometry\Mathematic\Constants.cs" />
     <Compile Include="Common\Geometry\Mathematic\Matrix.cs" />
@@ -73,6 +73,7 @@
     <Compile Include="Common\Interfaces\IDsSaveable.cs" />
     <Compile Include="Common\Interfaces\IRDObservable.cs" />
     <Compile Include="Common\Interfaces\Shapes\IHasHeight.cs" />
+    <Compile Include="Common\Interfaces\Shapes\ILine.cs" />
     <Compile Include="Common\Interfaces\Shapes\IPoligone.cs" />
     <Compile Include="Common\Interfaces\Shapes\IRectangle.cs" />
     <Compile Include="Common\Interfaces\Shapes\IShape.cs" />
@@ -179,9 +180,12 @@
     <Compile Include="Entity\RCC\Slabs\Punchings\Factories\IPunchingFactory.cs" />
     <Compile Include="Entity\RCC\Slabs\Punchings\Factories\TestCaseFactory.cs" />
     <Compile Include="Entity\RCC\Slabs\Punchings\Processors\BearingProcessor.cs" />
-    <Compile Include="Entity\RCC\Slabs\Punchings\Processors\GeomProcessor.cs" />
+    <Compile Include="Entity\RCC\Slabs\Punchings\Processors\PunchingGeometryProcessor.cs" />
     <Compile Include="Entity\RCC\Slabs\Punchings\Processors\IBearingProcessor.cs" />
     <Compile Include="Entity\RCC\Slabs\Punchings\Processors\ILayerProcessor.cs" />
+    <Compile Include="Entity\RCC\Slabs\Punchings\Processors\MultyLayersProcessor.cs" />
+    <Compile Include="Entity\RCC\Slabs\Punchings\Processors\Offsets\Offset.cs" />
+    <Compile Include="Entity\RCC\Slabs\Punchings\Processors\Offsets\RectOffsetGroup.cs" />
     <Compile Include="Entity\RCC\Slabs\Punchings\Processors\OneLayerProcessor.cs" />
     <Compile Include="Entity\RCC\Slabs\Punchings\Punching.cs" />
     <Compile Include="Entity\RCC\Slabs\Punchings\PunchingContour.cs" />

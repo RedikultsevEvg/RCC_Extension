@@ -1,5 +1,9 @@
 ﻿using RDBLL.Common.Geometry;
 using RDBLL.Common.Geometry.Mathematic;
+using RDBLL.Common.Interfaces;
+using RDBLL.Common.Interfaces.Shapes;
+using RDBLL.Entity.Common.Materials;
+using RDBLL.Entity.RCC.Slabs.Punchings.Processors.Offsets;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace RDBLL.Entity.RCC.Slabs.Punchings.Processors
 {
-    public static class GeomProcessor
+    public static class PunchingGeometryProcessor
     {
         /// <summary>
         /// Возвращает суммарную длину субконтура
@@ -22,7 +26,7 @@ namespace RDBLL.Entity.RCC.Slabs.Punchings.Processors
             {
                 if (line.IsBearing)
                 {
-                    length += GeometryProc.GetDistance(line.StartPoint, line.EndPoint);
+                    length += GeometryProcessor.GetDistance(line.StartPoint, line.EndPoint);
                 }
             }
             return length;
@@ -51,7 +55,7 @@ namespace RDBLL.Entity.RCC.Slabs.Punchings.Processors
             throw new NotImplementedException();
         }
         /// <summary>
-        /// Возвращает центр тяжести субконтура
+        /// Возвращает центр тяжести контура
         /// </summary>
         /// <param name="сontour"></param>
         /// <returns></returns>
@@ -73,9 +77,9 @@ namespace RDBLL.Entity.RCC.Slabs.Punchings.Processors
                     if (line.IsBearing)
                     {
                         //Длина линии
-                        double lineLength = GeometryProc.GetDistance(line.StartPoint, line.EndPoint);
+                        double lineLength = GeometryProcessor.GetDistance(line.StartPoint, line.EndPoint);
                         //Точка центра линии
-                        Point2D lineCenter = GeometryProc.GetMiddlePoint(line.StartPoint, line.EndPoint);
+                        Point2D lineCenter = GeometryProcessor.GetMiddlePoint(line.StartPoint, line.EndPoint);
                         //Расстояние от центра линии до заданного центра
                         double dXLoc = lineCenter.X - initCenter.X;
                         double dYLoc = lineCenter.Y - initCenter.Y;
@@ -92,7 +96,7 @@ namespace RDBLL.Entity.RCC.Slabs.Punchings.Processors
             if (sumLineLength == 0) { throw new Exception("Countour isn't bearing"); }
             //Получаем сдвижку центра тяжести расчетного контура относительно заданного начального контура
             double dX = statMomentX / sumLineLength;
-            double dY = statMomentX / sumLineLength;
+            double dY = statMomentY / sumLineLength;
             Point2D newCenter = new Point2D(initCenter.X + dX, initCenter.Y + dY);
             return newCenter;
         }
@@ -103,6 +107,7 @@ namespace RDBLL.Entity.RCC.Slabs.Punchings.Processors
         /// <returns></returns>
         public static double[] GetMomentOfInertiaHeight(PunchingContour contour)
         {
+            //моммент инерции относительно осей X и Y
             double Ix = 0;
             double Iy = 0;
             Point2D center = GetContourCenter(contour);
@@ -113,9 +118,12 @@ namespace RDBLL.Entity.RCC.Slabs.Punchings.Processors
                     //Если линия субконтура несущая, то учитываем ее при подсчете момента инерции контура
                     if (line.IsBearing)
                     {
-                        double[] moments = GeometryProc.GetLineMomentInertia(line.StartPoint, line.EndPoint, center);
-                        Ix += moments[0] * subContour.Height;
-                        Iy += moments[1] * subContour.Height;
+                        double[] moments = GeometryProcessor.GetLineMomentInertia(line.StartPoint, line.EndPoint, center);
+
+                        double bearingCoef = GetLineWorkCoef(line, subContour.Height);
+                        //моммент инерции относительно осей X и Y
+                        Ix += moments[0] * subContour.Height * bearingCoef;
+                        Iy += moments[1] * subContour.Height * bearingCoef;
                     }
                 }
             }
@@ -137,7 +145,7 @@ namespace RDBLL.Entity.RCC.Slabs.Punchings.Processors
                 //Если линия субконтура несущая, то учитываем ее при подсчете момента инерции контура
                 if (line.IsBearing)
                 {
-                    double[] moments = GeometryProc.GetLineMomentInertia(line.StartPoint, line.EndPoint, center);
+                    double[] moments = GeometryProcessor.GetLineMomentInertia(line.StartPoint, line.EndPoint, center);
                     Ix += moments[0];
                     Iy += moments[1];
                 }
@@ -172,6 +180,20 @@ namespace RDBLL.Entity.RCC.Slabs.Punchings.Processors
 
             return new double[] { maxX, minX, maxY, minY };
         }
+
+        internal static double GetSubContourArea(PunchingSubContour subContour)
+        {
+            double area = 0;
+            foreach (PunchingLine line in subContour.Lines)
+            {
+                if (line.IsBearing)
+                {
+                    area += GeometryProcessor.GetDistance(line.StartPoint, line.EndPoint) * GetLineWorkCoef(line, subContour.Height) * subContour.Height;
+                }
+            }
+            return area;
+        }
+
         /// <summary>
         /// Возвращает минимальные и максимальные расстояния от заданного центра до точек линий
         /// </summary>
@@ -213,7 +235,7 @@ namespace RDBLL.Entity.RCC.Slabs.Punchings.Processors
             return total;
         }
         /// <summary>
-        /// Проверяет расположение краев у продавливания
+        /// Проверяет верно ли задано расположение краев у продавливания
         /// </summary>
         /// <param name="punching"></param>
         /// <returns></returns>
@@ -221,11 +243,157 @@ namespace RDBLL.Entity.RCC.Slabs.Punchings.Processors
         {
             //Если свободные края слева и справа, то получается перекрытие только с двух сторон
             //такое закрепление является неверным (перекрытие не может считаться на продавливание и должно считаться как балка
-            if (punching.LeftEdge & punching.RightEdge) { return false; }
             //Если свободные края сверху и снизу, то закрепление также является неверным
-            else if (punching.TopEdge & punching.BottomEdge) { return true; }
+            if ((punching.LeftEdge & punching.RightEdge) || (punching.TopEdge & punching.BottomEdge)) { return false; }
             //Иначе возвращаем, что края назначены верно
             else return true;
+        }
+        /// <summary>
+        /// Возвращает прямоугольный субконтур с учетом отступов
+        /// </summary>
+        /// <param name="rectangle">Исходный прямоугольник</param>
+        /// <param name="height">Высота субконтура</param>
+        /// <param name="concrete">Бетон субконтура</param>
+        /// <param name="offsetGroup">Коллекция отступов</param>
+        /// <returns></returns>
+        public static PunchingSubContour GetRectSubContour(IRectangle rectangle, double height, ConcreteUsing concrete, RectOffsetGroup offsetGroup = null)
+        {
+            #region Величина отступов
+            double leftSize, rightSize, topSize, bottomSize;
+            double leftCoef, rightCoef, topCoef, bottomCoef;
+            //Если группа отступов не задана, считаем, что отступов нет
+            if (offsetGroup is null)
+            {
+                leftSize = rightSize = topSize = bottomSize = height / 2;
+                leftCoef = rightCoef = topCoef = bottomCoef = 2;
+            }
+            else
+            {
+                leftSize = offsetGroup.LeftOffset.Size;
+                rightSize = offsetGroup.RightOffset.Size;
+                topSize = offsetGroup.TopOffset.Size;
+                bottomSize = offsetGroup.BottomOffset.Size;
+
+                leftCoef = offsetGroup.LeftOffset.IsBearing ? 2 : 1;
+                rightCoef = offsetGroup.RightOffset.IsBearing ? 2 : 1;
+                topCoef = offsetGroup.TopOffset.IsBearing ? 2 : 1;
+                bottomCoef = offsetGroup.BottomOffset.IsBearing ? 2 : 1;
+            }
+            double[] offsets = new double[4] { leftSize, rightSize, topSize, bottomSize };
+            #endregion
+            //Получаем прямоугольное сечение с учетом отступов
+            IRectangle rect = GeometryProcessor.GetRectangleOffset(rectangle, offsets);
+            //Получаем коллекцию угловых точек прямоугольного сечения
+            List<Point2D> anglePoints = GeometryProcessor.GetAnglePointsFromRectangle(rect);
+            //Создаем новый субконтур
+            PunchingSubContour subContour = new PunchingSubContour();
+            //Высота субконтура
+            subContour.Height = height;
+            //Бетон субконтура
+            subContour.Concrete = concrete;
+            //Линии субконтура
+            #region left line
+            PunchingLine leftLine;
+            leftLine = new PunchingLine();
+            leftLine.HorizontalProjection = leftSize * leftCoef;
+            leftLine.IsBearing = offsetGroup.LeftOffset.IsBearing;
+            leftLine.StartPoint = anglePoints[0];
+            leftLine.EndPoint = anglePoints[1];
+            subContour.Lines.Add(leftLine);
+            #endregion
+            #region right line
+            PunchingLine rightLine;
+            rightLine = new PunchingLine();
+            rightLine.HorizontalProjection = rightSize * rightCoef;
+            rightLine.IsBearing = offsetGroup.RightOffset.IsBearing;
+            rightLine.StartPoint = anglePoints[2];
+            rightLine.EndPoint = anglePoints[3];
+            subContour.Lines.Add(rightLine);
+            #endregion
+            #region top line
+            PunchingLine topLine;
+            topLine = new PunchingLine();
+            topLine.HorizontalProjection = topSize * topCoef;
+            topLine.IsBearing = offsetGroup.TopOffset.IsBearing;
+            topLine.StartPoint = anglePoints[1];
+            topLine.EndPoint = anglePoints[3];
+            subContour.Lines.Add(topLine);
+            #endregion
+            #region bottom line
+            PunchingLine bottomLine;
+            bottomLine = new PunchingLine();
+            bottomLine.HorizontalProjection = bottomSize * bottomCoef;
+            bottomLine.IsBearing = offsetGroup.BottomOffset.IsBearing;
+            bottomLine.StartPoint = anglePoints[0];
+            bottomLine.EndPoint = anglePoints[2];
+            subContour.Lines.Add(bottomLine);
+            #endregion
+            return subContour;
+        }
+        /// <summary>
+        /// Возвращает коллекцию слоев с истинной высотой (за вычетом защитных слоев)
+        /// </summary>
+        /// <param name="punching"></param>
+        /// <returns></returns>
+        public static List<PunchingLayer> GetTrueLayers(Punching punching)
+        {
+            List<PunchingLayer> layers = new List<PunchingLayer>();
+            List<PunchingLayer> tmpPunchingLayers = new List<PunchingLayer>();
+            foreach (IHasParent child in punching.Children)
+            {
+                if (child is PunchingLayer) { tmpPunchingLayers.Add(child as PunchingLayer); }
+            }
+            //Величина защитного слоя определяется как среднее значение величи вдоль осей X и Y
+            double coveringLayer = (punching.CoveringLayerX + punching.CoveringLayerY) / 2;
+            //Создаем самый верхний слой
+            PunchingLayer fstLayer = tmpPunchingLayers[0].Clone() as PunchingLayer;
+            fstLayer.Height -= coveringLayer;
+            int count = tmpPunchingLayers.Count();
+            layers.Add(fstLayer);
+            for (int i=1; i<count; i++)
+            {
+                layers.Add(tmpPunchingLayers[0].Clone() as PunchingLayer);
+            }
+            return layers;
+        }
+        /// <summary>
+        /// Меняет порядок слоев в коллекции (если слои были введены сверху вниз, то возвращает снизу вверх)
+        /// </summary>
+        /// <param name="startLayers"></param>
+        /// <returns></returns>
+        public static List<PunchingLayer> GetInvertLayers (List<PunchingLayer> startLayers)
+        {
+            List<PunchingLayer> layers = new List<PunchingLayer>();
+            int count = startLayers.Count();
+            for (int i = 1; i == count; i++)
+            {
+                layers.Add(startLayers[count - i].Clone() as PunchingLayer);
+            }
+            return layers;
+        }
+        /// <summary>
+        /// Возвращает суммарную толщину слоев
+        /// </summary>
+        /// <param name="layers"></param>
+        /// <returns></returns>
+        public static double GetTotalLayerHeight(List<PunchingLayer> layers)
+        {
+            double total = 0;
+            foreach (PunchingLayer layer in layers)
+            {
+                total += layer.Height;
+            }
+            return total;
+        }
+        private static double GetLineWorkCoef(PunchingLine line, double height)
+        {
+            //Коэффициент несущей способности линии, зависящий от соотношения горизонтальной проекции линии и высоты контура
+            //Чем меньше горизонтальная проекция, тем выше несущая способность
+            double bearingCoef;
+            //При соотношении 0.4 достигается максимум несущей способности
+            if (line.HorizontalProjection < height * 0.4) { bearingCoef = 2.5; }
+            else { bearingCoef = height / line.HorizontalProjection; }
+            return bearingCoef;
         }
     }
 }

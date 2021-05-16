@@ -5,7 +5,7 @@ using RDBLL.Common.Service;
 using RDBLL.Entity.RCC.Slabs.Punchings;
 using RDBLL.Entity.RCC.Slabs.Punchings.Factories;
 
-namespace Test.RC.Slabs.Punchings
+namespace Test.RCC.Slabs.Punchings
 {
     [TestClass]
     public class SaveTest

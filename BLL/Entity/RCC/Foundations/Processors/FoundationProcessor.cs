@@ -200,26 +200,8 @@ namespace RDBLL.Entity.RCC.Foundations.Processors
         public static bool SolveFoundation(Foundation foundation)
         {
             bool result = false;
-            #region checking
-            //Если для фундамента не задана скважина
-            if (foundation.SoilSectionUsing.SelectedId is null)
-            {
-                Building building = (foundation.ParentMember as Level).ParentMember as Building;
-                BuildingSite buildingSite = building.ParentMember as BuildingSite;
-                SoilSection soilSection = buildingSite.AddDefaultSoilSection(building);
-                foundation.SoilSectionUsing.SelectedId = soilSection.Id;
-            }
-            if (foundation.SoilSectionUsing.SoilSection.SoilLayers.Count ==0)
-            {
-                MessageBox.Show("Скважина не содержит грунтов");
-                return false;
-            }
-            if (foundation.Parts.Count == 0)
-            {
-                MessageBox.Show("Не заданы ступени фундамента");
-                return false;
-            }
-            #endregion
+            //Проверяем заданы ли грунты для фундамента
+            if (!CheckFoundation(foundation)) return false;
             try
             {
                 //if (!foundation.IsLoadCasesActual || !foundation.IsPartsActual)
@@ -261,10 +243,8 @@ namespace RDBLL.Entity.RCC.Foundations.Processors
                     foundationPart.Result = new FoundationPart.PartResult();
                 }
                 SetFoundationPartZCoord(foundation);
-                FoundationBodyProcessor.CalcBottomMomentAreas(foundation);
-                FoundationBodyProcessor.CalcCrcMoment(foundation);
-                FoundationBodyProcessor.GetReinforcementArea(foundation);
-                FoundationBodyProcessor.GetActualReinforcementArea(foundation);
+                CalcFoundationBody(foundation);
+
                 //}
                 result = true;
             }
@@ -275,6 +255,52 @@ namespace RDBLL.Entity.RCC.Foundations.Processors
             }
             return result;
         }
+        /// <summary>
+        /// Выполняет расчет бетона и арматуры для фундамента
+        /// </summary>
+        /// <param name="foundation"></param>
+        private static void CalcFoundationBody(Foundation foundation)
+        {
+            //Вычисляет моменты для ступеней
+            FoundationBodyProcessor.CalcBottomMomentAreas(foundation);
+            //Вычисляет моменты трещинообразования
+            FoundationBodyProcessor.CalcCrcMoment(foundation);
+            //Вычисляет требуемую площадь армирования подошвы
+            FoundationBodyProcessor.GetReinforcementArea(foundation);
+            //Вычисляет принятую площадь армирования подошвы
+            FoundationBodyProcessor.GetActualReinforcementArea(foundation);
+        }
+
+        /// <summary>
+        /// Проверяет заданы ли для фундамента грунты и ступени и если не заданы, возвращает false
+        /// </summary>
+        /// <param name="foundation"></param>
+        /// <returns></returns>
+        private static bool CheckFoundation(Foundation foundation)
+        {
+            //Если для фундамента не задана скважина
+            if (foundation.SoilSectionUsing.SelectedId is null)
+            {
+                Building building = (foundation.ParentMember as Level).ParentMember as Building;
+                BuildingSite buildingSite = building.ParentMember as BuildingSite;
+                SoilSection soilSection = buildingSite.AddDefaultSoilSection(building);
+                foundation.SoilSectionUsing.SelectedId = soilSection.Id;
+            }
+            //Если для фундамента задана скважина, в которой нет грунтов
+            if (foundation.SoilSectionUsing.SoilSection.SoilLayers.Count == 0)
+            {
+                MessageBox.Show("Скважина не содержит грунтов");
+                return false;
+            }
+            //Если для фундамента не заданы ступени
+            if (foundation.Parts.Count == 0)
+            {
+                MessageBox.Show("Не заданы ступени фундамента");
+                return false;
+            }
+            return true;
+        }
+
         /// <summary>
         /// Возвращает группу нагрузок с учетом веса фундамент и грунта на его уступах
         /// </summary>

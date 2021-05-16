@@ -2,8 +2,11 @@
 using RDBLL.Common.Geometry.Mathematic;
 using RDBLL.Common.Service;
 using RDBLL.Entity.Common.Materials;
+using RDBLL.Entity.Common.NDM;
 using RDBLL.Entity.RCC.Slabs.Punchings.Results;
 using RDBLL.Entity.RCC.Slabs.Punchings.Results.Factories;
+using RDBLL.Forces;
+using RDBLL.Processors.Forces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -76,13 +79,13 @@ namespace RDBLL.Entity.RCC.Slabs.Punchings.Processors
             double rYPos = 0;
             double rYNeg = 0;
             //Находим момент инерции контура
-            double[] moments = GeomProcessor.GetMomentOfInertiaHeight(contour);
+            double[] moments = PunchingGeometryProcessor.GetMomentOfInertiaHeight(contour);
             double Ix = moments[0];
             double Iy = moments[1];
 
-            Point2D center = GeomProcessor.GetContourCenter(contour);
+            Point2D center = PunchingGeometryProcessor.GetContourCenter(contour);
 
-            double totalHeight = GeomProcessor.GetContourHeight(contour);
+            double totalHeight = PunchingGeometryProcessor.GetContourHeight(contour);
 
             foreach (PunchingSubContour subContour in contour.SubContours)
             {
@@ -92,7 +95,7 @@ namespace RDBLL.Entity.RCC.Slabs.Punchings.Processors
                 double Rbtlong = GetConcreteRbt(subContour)[1];
                 //Расчетное сопротивление бетона растяжению
                 double Rbt = fullLoad ? RbtFull : Rbtlong;
-                double[] dists = GeomProcessor.GetMaxDistFromContour(contour);
+                double[] dists = PunchingGeometryProcessor.GetMaxDistFromContour(contour);
                 //Прибавляем несущую способность субконтура
                 double[] capacity = GetSubContourMomentCapacity(subContour, center, dists, Rbt);
 
@@ -117,7 +120,7 @@ namespace RDBLL.Entity.RCC.Slabs.Punchings.Processors
             double maxYmoment = 0;
             double minYmoment = 0;
 
-            double[] I = GeomProcessor.GetMomentOfInertia(subContour, center);
+            double[] I = PunchingGeometryProcessor.GetMomentOfInertia(subContour, center);
             double Ix = I[0];
             double Iy = I[1];
 
@@ -161,8 +164,8 @@ namespace RDBLL.Entity.RCC.Slabs.Punchings.Processors
         /// <returns></returns>
         private double GetSubContourForceCapacity(PunchingSubContour subContour, double Rbt)
         {
-            double length = GeomProcessor.GetSubContourLength(subContour);
-            double forceCapacity = GetForceCapacity(length, subContour.Height, Rbt);
+            double area = PunchingGeometryProcessor.GetSubContourArea(subContour);
+            double forceCapacity = GetForceCapacity(area, Rbt);
             return forceCapacity;
         }
         /// <summary>
@@ -175,6 +178,11 @@ namespace RDBLL.Entity.RCC.Slabs.Punchings.Processors
         private double GetForceCapacity(double contourLength, double depth, double Rbt)
         {
             double forceCapacity = contourLength * depth * Rbt;
+            return forceCapacity;
+        }
+        private double GetForceCapacity(double area, double Rbt)
+        {
+            double forceCapacity = area * Rbt;
             return forceCapacity;
         }
         /// <summary>
@@ -209,6 +217,26 @@ namespace RDBLL.Entity.RCC.Slabs.Punchings.Processors
                 punching.IsActive = false;
             }
             
+        }
+
+        public double GetBearingCapacityCoefficient(PunchingContour contour, LoadSet loadSet)
+        {
+            //Получаем центр тяжести контура
+            Point2D contourCenter = PunchingGeometryProcessor.GetContourCenter(contour);
+            //Приводим нагрузки к центру тяжести контура
+            LoadSet transformedSet = LoadSetProcessor.GetLoadSetTransform(loadSet, contourCenter);
+            SumForces sumForces = new SumForces(transformedSet);
+
+            double Mx = sumForces.ForceMatrix[0, 0];
+            double My = sumForces.ForceMatrix[1, 0];
+            double Nz = sumForces.ForceMatrix[2, 0];
+
+            Nz = Math.Abs(Nz);
+
+            IBearingProcessor bearingProcessor = new BearingProcessor();
+            //расчет на полную нагрузку
+            double coef = bearingProcessor.GetBearingCapacityCoefficient(contour, Nz, Mx, My, true);
+            return coef;
         }
     }
 }

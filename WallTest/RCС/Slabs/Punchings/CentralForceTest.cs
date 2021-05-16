@@ -6,10 +6,10 @@ using RDBLL.Entity.RCC.Slabs.Punchings;
 using RDBLL.Entity.RCC.Slabs.Punchings.Factories;
 using RDBLL.Entity.RCC.Slabs.Punchings.Processors;
 
-namespace Test.RC.Slabs.Punchings
+namespace Test.RCC.Slabs.Punchings
 {
     [TestClass]
-    public class ForceTest
+    public class CentralForceTest
     {
         [TestMethod]
         public void ForceOnlyTest1()
@@ -55,7 +55,7 @@ namespace Test.RC.Slabs.Punchings
 
             ProgrammSettings.InicializeNew();
             Punching punching = TestCaseFactory.GetPunching(PunchingType.TestType1_400х400х200);
-            ILayerProcessor layerProcessor = new OneLayerProcessor();
+            ILayerProcessor layerProcessor = new MultiLayersProcessor();
             List<PunchingContour> contours = layerProcessor.GetPunchingContours(punching);
             IBearingProcessor bearingProcessor = new BearingProcessor();
             double b = punching.Width;

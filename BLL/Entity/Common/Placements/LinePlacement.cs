@@ -88,9 +88,9 @@ namespace RDBLL.Entity.Common.Placements
         /// <returns></returns>
         public List<Point2D> GetElementPoints(int quant)
         {    
-            return GeometryProc.GetInternalPoints(StartPoint, EndPoint, quant, AddStart, AddEnd);
+            return GeometryProcessor.GetInternalPoints(StartPoint, EndPoint, quant, AddStart, AddEnd);
         }
 
-        public double GetLength() {return GeometryProc.GetDistance(StartPoint, EndPoint);}
+        public double GetLength() {return GeometryProcessor.GetDistance(StartPoint, EndPoint);}
     }
 }

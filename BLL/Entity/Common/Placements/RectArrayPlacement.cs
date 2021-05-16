@@ -85,7 +85,7 @@ namespace RDBLL.Entity.Common.Placements
         /// <returns></returns>
         public override List<Point2D> GetElementPoints()
         {
-            return GeometryProc.GetRectArrayPoints(Center, SizeX, SizeY, QuantityX, QuantityY, FillArray);
+            return GeometryProcessor.GetRectArrayPoints(Center, SizeX, SizeY, QuantityX, QuantityY, FillArray);
         }
     }
 }

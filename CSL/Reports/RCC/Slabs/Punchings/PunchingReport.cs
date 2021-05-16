@@ -129,7 +129,7 @@ namespace CSL.Reports.RCC.Slabs.Punchings
                 DsOperation.SetField(row, "Id", punching.Id);
                 DsOperation.SetField(row, "ParentId", punching.ParentMember.Id);
                 DsOperation.SetField(row, "Name", punching.Name);
-                DsOperation.SetField(row, "Height", MathOperation.Round(GeomProcessor.GetTotalHeight(punching) * linearSizeCoefficient));
+                DsOperation.SetField(row, "Height", MathOperation.Round(PunchingGeometryProcessor.GetTotalHeight(punching) * linearSizeCoefficient));
                 DsOperation.SetField(row, "ColumnSizeX", punching.Width * linearSizeCoefficient);
                 DsOperation.SetField(row, "ColumnSizeY", punching.Length * linearSizeCoefficient);
                 DsOperation.SetField(row, "CoveringLayerX", punching.CoveringLayerX * 1000);
@@ -145,7 +145,7 @@ namespace CSL.Reports.RCC.Slabs.Punchings
                 #endregion
                 dataTable.Rows.Add(row);
                 ProcessLoadCases(dataSet, punchingResult);
-                ProcessPunchingContours(dataSet, punchingResult);
+                ProcessPunchingContours(dataSet, punchingResult, punching);
                 double maxBearing = ProcessLoadContour(dataSet, punchingResult);
                 if (maxBearing > 1) { isBearing = false; }
                 string addc = isBearing ? "" : "не ";
@@ -171,7 +171,7 @@ namespace CSL.Reports.RCC.Slabs.Punchings
             return maxBearing;
         }
 
-        private void ProcessPunchingContours(DataSet dataSet, PunchingResult punchingResult)
+        private void ProcessPunchingContours(DataSet dataSet, PunchingResult punchingResult, Punching punching = null)
         {
             DataTable dataTable = DsOperation.GetDataTable(dataSet, "PunchingContours");
             foreach (ContourResult result in punchingResult.PunchingContours)
@@ -180,14 +180,14 @@ namespace CSL.Reports.RCC.Slabs.Punchings
                 DsOperation.SetField(row, "Id", result.Id);
                 DsOperation.SetField(row, "ParentId", punchingResult.Punching.Id);
                 PunchingContour contour = result.PunchingContour;
-                Point2D center = GeomProcessor.GetContourCenter(contour);
+                Point2D center = PunchingGeometryProcessor.GetContourCenter(contour);
                 DsOperation.SetField(row, "CenterX", MathOperation.Round(center.X * linearSizeCoefficient));
                 DsOperation.SetField(row, "CenterY", MathOperation.Round(center.Y * linearSizeCoefficient));
                 //Момент сопротивления контура
                 //Момент инерции в данном случае находится с учетом высоты
-                double[] momInertia = GeomProcessor.GetMomentOfInertiaHeight(contour);
-                double[] maxDist = GeomProcessor.GetMaxDistFromContour(contour);
-                double totalHeight = GeomProcessor.GetContourHeight(contour);
+                double[] momInertia = PunchingGeometryProcessor.GetMomentOfInertiaHeight(contour);
+                double[] maxDist = PunchingGeometryProcessor.GetMaxDistFromContour(contour);
+                double totalHeight = PunchingGeometryProcessor.GetContourHeight(contour);
                 //Для получения единичных моментов сопротивления контура делим на суммарныю высоту контура
                 double WxPos = momInertia[0] / maxDist[0] / totalHeight;
                 double WxNeg = momInertia[0] / maxDist[1] / totalHeight;
@@ -197,6 +197,15 @@ namespace CSL.Reports.RCC.Slabs.Punchings
                 DsOperation.SetField(row, "WxNeg", MathOperation.Round(WxNeg * geometryAreaCoefficient));
                 DsOperation.SetField(row, "WyPos", MathOperation.Round(WyPos * geometryAreaCoefficient));
                 DsOperation.SetField(row, "WyNeg", MathOperation.Round(WyNeg * geometryAreaCoefficient));
+                #region Picture
+                Canvas canvas = new Canvas();
+                canvas.Width = 600;
+                canvas.Height = 600;
+                IDrawScatch drawScatch = new PunchingDrawProcessor();
+                (drawScatch as PunchingDrawProcessor).DrawPunchingContour(canvas, punching, contour);
+                byte[] b = CommonServices.ExportToByte(canvas);
+                DsOperation.SetField(row, "ContourScatch", b);
+                #endregion
                 dataTable.Rows.Add(row);
                 //Заполняем данные для субконтуров
                 ProcessSubContours(result, result.Id);
@@ -207,7 +216,7 @@ namespace CSL.Reports.RCC.Slabs.Punchings
         {
             DataTable dataTable = DsOperation.GetDataTable(dataSet, "PunchingSubContours");
             PunchingContour contour = result.PunchingContour;
-            Point2D center = GeomProcessor.GetContourCenter(contour);
+            Point2D center = PunchingGeometryProcessor.GetContourCenter(contour);
             foreach (PunchingSubContour subContour in contour.SubContours)
             {
                 DataRow row = dataTable.NewRow();
@@ -218,10 +227,10 @@ namespace CSL.Reports.RCC.Slabs.Punchings
                 //Высота субконтура
                 DsOperation.SetField(row, "Height", MathOperation.Round(subContour.Height * linearSizeCoefficient));
                 //Длина субконтура
-                DsOperation.SetField(row, "Length", MathOperation.Round(GeomProcessor.GetSubContourLength(subContour) * linearSizeCoefficient));
+                DsOperation.SetField(row, "Length", MathOperation.Round(PunchingGeometryProcessor.GetSubContourLength(subContour) * linearSizeCoefficient));
                 //Момент сопротивления субконтура
-                double[] momInertia = GeomProcessor.GetMomentOfInertia(subContour, center);
-                double[] maxDist = GeomProcessor.GetMaxDistFromLineList(subContour.Lines, center);
+                double[] momInertia = PunchingGeometryProcessor.GetMomentOfInertia(subContour, center);
+                double[] maxDist = PunchingGeometryProcessor.GetMaxDistFromLineList(subContour.Lines, center);
                 double WxPos = momInertia[0] / maxDist[0];
                 double WxNeg = momInertia[0] / maxDist[1];
                 double WyPos = momInertia[1] / maxDist[2];
@@ -251,7 +260,7 @@ namespace CSL.Reports.RCC.Slabs.Punchings
                 DsOperation.SetField(row, "StartY", MathOperation.Round(line.StartPoint.Y * linearSizeCoefficient));
                 DsOperation.SetField(row, "EndX", MathOperation.Round(line.EndPoint.X * linearSizeCoefficient));
                 DsOperation.SetField(row, "EndY", MathOperation.Round(line.EndPoint.Y * linearSizeCoefficient));
-                double length = GeometryProc.GetDistance(line.StartPoint, line.EndPoint);
+                double length = GeometryProcessor.GetDistance(line.StartPoint, line.EndPoint);
                 DsOperation.SetField(row, "Length", MathOperation.Round(length * linearSizeCoefficient));
                 dataTable.Rows.Add(row);
             }

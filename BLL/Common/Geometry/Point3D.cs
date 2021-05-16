@@ -6,23 +6,43 @@ using System.Threading.Tasks;
 
 namespace RDBLL.Common.Geometry
 {
+    /// <summary>
+    /// Класс точки в трехмерном пространстве
+    /// </summary>
     public class Point3D
     {
-        public decimal coord_X { get; set; }
-        public decimal coord_Y { get; set; }
-        public decimal coord_Z { get; set; }
+        public double X { get; set; }
+        public double Y { get; set; }
+        public double Z { get; set; }
 
+        /// <summary>
+        /// Конструктор точки с нулевыми коорединатами
+        /// </summary>
         public Point3D()
         {
-           // Point3D point3D = new Point3D();
+            X = Y = Z = 0;
         }
-
-        public Point3D(decimal coord_X, decimal coord_Y, decimal coord_Z)
+        /// <summary>
+        /// Конструктор точки с указанными координатами
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <param name="z"></param>
+        public Point3D(double x, double y, double z)
         {
-            Point3D point3D = new Point3D();
-            point3D.coord_X = coord_X;
-            point3D.coord_Y = coord_Y;
-            point3D.coord_Z = coord_Y;
+            X = x;
+            Y = y;
+            Z = y;
+        }
+        /// <summary>
+        /// Конструктор точки 3D по точке 2D, координата Z принимается равной нулю
+        /// </summary>
+        /// <param name="point2D"></param>
+        public Point3D(Point2D point2D)
+        {
+            X = point2D.X;
+            Y = point2D.Y;
+            Z = 0;
         }
     }
 }

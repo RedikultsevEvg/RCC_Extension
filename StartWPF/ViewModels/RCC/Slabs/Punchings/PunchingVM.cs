@@ -84,6 +84,87 @@ namespace RDStartWPF.ViewModels.RCC.Slabs.Punchings
         {
             get => (_Punching.Children[0] as PunchingLayer).Concrete;
         }
+        public bool SeveralLayers
+        {
+            get => _Punching.SeveralLayers;
+            set
+            {
+                bool d = _Punching.SeveralLayers;
+                if (SetProperty(ref d, value)) { _Punching.SeveralLayers = d; }
+            }
+        }
+        public bool LeftEdge
+        {
+            get => _Punching.LeftEdge;
+            set
+            {
+                bool d = _Punching.LeftEdge;
+                if (SetProperty(ref d, value)) { _Punching.LeftEdge = d; }
+            }
+        }
+        public bool RightEdge
+        {
+            get => _Punching.RightEdge;
+            set
+            {
+                bool d = _Punching.RightEdge;
+                if (SetProperty(ref d, value)) { _Punching.RightEdge = d; }
+            }
+        }
+        public bool TopEdge
+        {
+            get => _Punching.TopEdge;
+            set
+            {
+                bool d = _Punching.TopEdge;
+                if (SetProperty(ref d, value)) { _Punching.TopEdge = d; }
+            }
+        }
+        public bool BottomEdge
+        {
+            get => _Punching.BottomEdge;
+            set
+            {
+                bool d = _Punching.BottomEdge;
+                if (SetProperty(ref d, value)) { _Punching.BottomEdge = d; }
+            }
+        }
+        public double LeftEdgeDist
+        {
+            get => _Punching.LeftEdgeDist;
+            set
+            {
+                double d = _Punching.LeftEdgeDist;
+                if (SetProperty(ref d, value)) { _Punching.LeftEdgeDist = d; }
+            }
+        }
+        public double RightEdgeDist
+        {
+            get => _Punching.RightEdgeDist;
+            set
+            {
+                double d = _Punching.RightEdgeDist;
+                if (SetProperty(ref d, value)) { _Punching.RightEdgeDist = d; }
+            }
+        }
+        public double TopEdgeDist
+        {
+            get => _Punching.TopEdgeDist;
+            set
+            {
+                double d = _Punching.TopEdgeDist;
+                if (SetProperty(ref d, value)) { _Punching.TopEdgeDist = d; }
+            }
+        }
+        public double BottomEdgeDist
+        {
+            get => _Punching.BottomEdgeDist;
+            set
+            {
+                double d = _Punching.BottomEdgeDist;
+                if (SetProperty(ref d, value)) { _Punching.BottomEdgeDist = d; }
+            }
+        }
 
         private CommandBase _EditForceCommand;
         public CommandBase EditForceCommand

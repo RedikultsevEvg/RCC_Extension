@@ -35,7 +35,7 @@ namespace RDBLL.Entity.Common.Placements
         /// <returns></returns>
         public override List<Point2D> GetElementPoints()
         {
-            return GeometryProc.GetInternalPoints(StartPoint, EndPoint, Spacing, AddStart, AddEnd);
+            return GeometryProcessor.GetInternalPoints(StartPoint, EndPoint, Spacing, AddStart, AddEnd);
         }
     }
 }

@@ -285,6 +285,50 @@ namespace RDBLL.Processors.Forces
             return newLoadSet;
         }
         /// <summary>
+        /// Возвращает коллекцию нагрузок, приведенную к другой точке
+        /// </summary>
+        /// <param name="loadCase"></param>
+        /// <param name="fromPoint"></param>
+        /// <param name="toPoint"></param>
+        /// <returns></returns>
+        public static LoadSet GetLoadSetTransform(LoadSet loadCase, Point3D fromPoint, Point3D toPoint)
+        {
+            double[] delta = new double[3];
+            delta[0] = toPoint.X - fromPoint.X;
+            delta[1] = toPoint.Y - fromPoint.Y;
+            delta[2] = toPoint.Z - fromPoint.Z;
+            return GetLoadSetTransform(loadCase, delta);
+        }
+        /// <summary>
+        /// Возвращает коллекцию нагрузок, приведенную к другой точке
+        /// </summary>
+        /// <param name="loadCase"></param>
+        /// <param name="fromPoint"></param>
+        /// <param name="toPoint"></param>
+        /// <returns></returns>
+        public static LoadSet GetLoadSetTransform(LoadSet loadCase, Point2D fromPoint, Point2D toPoint)
+        {
+            double[] delta = new double[3];
+            delta[0] = toPoint.X - fromPoint.X;
+            delta[1] = toPoint.Y - fromPoint.Y;
+            delta[2] = 0;
+            return GetLoadSetTransform(loadCase, delta);
+        }
+        /// <summary>
+        /// Возвращает коллекцию нагрузок, приведенную к другой точке (из точки 0,0)
+        /// </summary>
+        /// <param name="loadCase">Коллекция нагрузок</param>
+        /// <param name="toPoint">Конечная точка</param>
+        /// <returns></returns>
+        public static LoadSet GetLoadSetTransform(LoadSet loadCase, Point2D toPoint)
+        {
+            double[] delta = new double[3];
+            delta[0] = toPoint.X;
+            delta[1] = toPoint.Y;
+            delta[2] = 0;
+            return GetLoadSetTransform(loadCase, delta);
+        }
+        /// <summary>
         /// Возвращает коллекцию комбинаций нагрузок приведенную к другой точке
         /// </summary>
         /// <param name="loadCases">Исходная коллекция комбинаций нагрузок</param>

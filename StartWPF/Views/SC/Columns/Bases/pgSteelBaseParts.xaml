@@ -98,8 +98,6 @@
                                          IsEnabled="{Binding ElementName=cbFixBottom, Path=IsChecked}"/>
                                 <TextBlock Grid.Column="3" x:Name="tbBottomOffsetMesure" Style="{StaticResource PropertyTextBlock}" Text="мм" />
                             </Grid>
-
-
                             <Rectangle Grid.Column="1" Margin="0" Grid.Row="1">
                                 <Rectangle.Effect>
                                     <DropShadowEffect/>

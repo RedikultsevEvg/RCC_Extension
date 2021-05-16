@@ -52,7 +52,7 @@ namespace RDBLL.Entity.RCC.WallAndColumn
         }
         public double GetLength()
         {
-            return GeometryProc.GetDistance(this.StartPoint, this.EndPoint);
+            return GeometryProcessor.GetDistance(this.StartPoint, this.EndPoint);
         }
         public double GetConcreteLength()
         {

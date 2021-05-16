@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using RDBLL.Entity.Soils.Processors;
 
-namespace Test.RC.Foundations.NaturalSoilFoundation.CheckStress
+namespace Test.RCC.Foundations.NaturalSoilFoundation.CheckStress
 {
     [TestClass]
     public class AlphaCoff

@@ -11,8 +11,8 @@ namespace RDBLL.Common.Geometry.Mathematic
     /// <summary>
     /// Класс геометрических операций
     /// </summary>
-    public static class GeometryProc
-    { 
+    public static class GeometryProcessor
+    {
         /// <summary>
         /// Получение расстояния между двумя точками
         /// </summary>
@@ -24,6 +24,50 @@ namespace RDBLL.Common.Geometry.Mathematic
             double dX = EndPoint.X - StartPoint.X;
             double dY = EndPoint.Y - StartPoint.Y;
             return Convert.ToDouble(Math.Sqrt(Convert.ToDouble(dX * dX + dY * dY)));
+        }
+        /// <summary>
+        /// Возвращает длину линии
+        /// </summary>
+        /// <param name="line">Линия</param>
+        /// <returns></returns>
+        public static double GetLineLength(ILine2D line)
+        {
+            return GetDistance(line.StartPoint, line.EndPoint);
+        }
+        /// <summary>
+        /// Возвращает минимальные и максимальные координаты вершин по коллекции линий
+        /// </summary>
+        /// <param name="lines"></param>
+        /// <returns></returns>
+        public static double[] GetTotalSizesOfLines(List<ILine2D> lines)
+        {
+            double maxX, minX, maxY, minY;
+            maxX = minX = maxY = minY = 0;
+            //Максимальные координаты по X
+            maxX = lines.Max(x =>
+            {
+                var res = Math.Max(x.StartPoint.X, x.EndPoint.X);
+                return res;
+            });
+            //Минимальные координаты по X
+            minX = lines.Min(x =>
+            {
+                var res = Math.Min(x.StartPoint.X, x.EndPoint.X);
+                return res;
+            });
+            //Максимальные координаты по Y
+            maxY = lines.Max(x =>
+            {
+                var res = Math.Max(x.StartPoint.Y, x.EndPoint.Y);
+                return res;
+            });
+            //Минимальные координаты по Y
+            minY = lines.Min(x =>
+            {
+                var res = Math.Min(x.StartPoint.Y, x.EndPoint.Y);
+                return res;
+            });
+            return new double[4] { maxX, minX, maxY, minY };
         }
         /// <summary>
         /// Возвращает значение угла между осью X и заданным отрезком
@@ -91,7 +135,7 @@ namespace RDBLL.Common.Geometry.Mathematic
             double spacing = length / (quant + 1);
             for (int i = 1; i <= quant; i++)
             {
-                points.Add(GeometryProc.GetPointOfset(startPoint, endPoint, spacing * i));
+                points.Add(GeometryProcessor.GetPointOfset(startPoint, endPoint, spacing * i));
             }
             if (addEnd) points.Add(endPoint.Clone() as Point2D);
             return points;
@@ -144,24 +188,24 @@ namespace RDBLL.Common.Geometry.Mathematic
                 //Если по Y есть точки
                 if (quantityY > 1)
                 {
-                    List<Point2D> pointsLeftY = GeometryProc.GetInternalPoints(bottomLeft, topLeft, quantityY - 2, false, false);
-                    List<Point2D> pointsRightY = GeometryProc.GetInternalPoints(bottomRight, topRight, quantityY - 2, false, false);
-                    points.AddRange(GeometryProc.GetInternalPoints(bottomLeft, bottomRight, quantityX - 2, true, true));
+                    List<Point2D> pointsLeftY = GeometryProcessor.GetInternalPoints(bottomLeft, topLeft, quantityY - 2, false, false);
+                    List<Point2D> pointsRightY = GeometryProcessor.GetInternalPoints(bottomRight, topRight, quantityY - 2, false, false);
+                    points.AddRange(GeometryProcessor.GetInternalPoints(bottomLeft, bottomRight, quantityX - 2, true, true));
                     for (int i = 0; i < pointsLeftY.Count(); i++)
                     {
                         points.Add(pointsLeftY[i]);
                         if (fillArray)
                         {
-                            points.AddRange(GeometryProc.GetInternalPoints(pointsLeftY[i], pointsRightY[i], quantityX - 2, false, false));
+                            points.AddRange(GeometryProcessor.GetInternalPoints(pointsLeftY[i], pointsRightY[i], quantityX - 2, false, false));
                         }
                         points.Add(pointsRightY[i]);
                     }
-                    points.AddRange(GeometryProc.GetInternalPoints(topLeft, topRight, quantityX - 2, true, true));
+                    points.AddRange(GeometryProcessor.GetInternalPoints(topLeft, topRight, quantityX - 2, true, true));
                 }
                 //Если по Y только одна точка
                 else
                 {
-                    points.AddRange(GeometryProc.GetInternalPoints(leftCenter, rightCenter, quantityX - 2, true, true));
+                    points.AddRange(GeometryProcessor.GetInternalPoints(leftCenter, rightCenter, quantityX - 2, true, true));
                 }
             }
             //Если точка по X только одна
@@ -170,7 +214,7 @@ namespace RDBLL.Common.Geometry.Mathematic
                 //Если по Y есть точки
                 if (quantityY > 1)
                 {
-                    points.AddRange(GeometryProc.GetInternalPoints(bottomCenter, topCenter, quantityY - 2, true, true));
+                    points.AddRange(GeometryProcessor.GetInternalPoints(bottomCenter, topCenter, quantityY - 2, true, true));
                 }
                 //Если необходимо вывести только одну точку
                 else points.Add(center);
@@ -315,6 +359,11 @@ namespace RDBLL.Common.Geometry.Mathematic
             double[] dists = new double[] { coordX.Max(), coordX.Min(), coordY.Max(), coordY.Min() };
             return dists;
         }
+        /// <summary>
+        /// Возвращает моменты сопротивления по коллекции фигур
+        /// </summary>
+        /// <param name="shapes">Коллекция фигур</param>
+        /// <returns>WxPos, WxNeg, WyPos, WyNeg,</returns>
         public static double[] GetSecMomentInertia(List<IShape> shapes)
         {
             double[] inertia = GetMomInertia(shapes);
@@ -323,6 +372,11 @@ namespace RDBLL.Common.Geometry.Mathematic
             double[] moms = new double[] { inertia[0] / Math.Abs(edgDist[2]), inertia[0] / Math.Abs(edgDist[3]), inertia[1] / Math.Abs(edgDist[0]), inertia[1] / Math.Abs(edgDist[1]) };
             return moms;
         }
+        /// <summary>
+        /// Возвращает минимальные момент сопротивления относительно осей X и Y
+        /// </summary>
+        /// <param name="shapes"></param>
+        /// <returns>Wx, Wy</returns>
         public static double[] GetMinSecMomentInertia(List<IShape> shapes)
         {
             double[] moms = GetSecMomentInertia(shapes);
@@ -330,6 +384,62 @@ namespace RDBLL.Common.Geometry.Mathematic
 
             double[] momsMin = new double[] { Math.Min(moms[0], moms[1]), Math.Min(moms[2], moms[3]) };
             return momsMin;
+        }
+        /// <summary>
+        /// Возвращает прямоугольное сечение по исходному прямоугольному сечению и массиву офсетов
+        /// </summary>
+        /// <param name="rectangle">Исходный прямоугольник</param>
+        /// <param name="ofssets">Массив отступов слева, справа, сверху, снизу</param>
+        /// <returns>Прямоугольное сечение</returns>
+        public static RectCrossSection GetRectangleOffset(IRectangle rectangle, double[] ofssets)
+        {
+            if (ofssets.Count() != 4) throw new Exception("Count of members of array is not valid");
+            Point2D center = new Point2D(rectangle.Center.X, rectangle.Center.Y);
+            double width = rectangle.Width;
+            double length = rectangle.Length;
+            width += ofssets[0] + ofssets[1];
+            length += ofssets[2] + ofssets[3];
+            center.X += (ofssets[1] - ofssets[0]) / 2;
+            center.Y += (ofssets[2] - ofssets[3]) / 2;
+            RectCrossSection section = new RectCrossSection(width, length, center);
+            return section;
+        }
+        /// <summary>
+        /// Возвращает прямоугольное сечение по исходному прямоугольному сечению и массиву офсетов
+        /// </summary>
+        /// <param name="rectangle">Исходный прямоугольник</param>
+        /// <param name="ofsset">Величина офсета (одинаковый для всех сторон)</param>
+        /// <returns>Прямоугольное сечение</returns>
+        public static RectCrossSection GetRectangleOffset(IRectangle rectangle, double ofsset)
+        {
+            double[] ofssets = new double[] { ofsset, ofsset, ofsset, ofsset };
+            return GetRectangleOffset(rectangle, ofssets);
+        }
+        /// <summary>
+        /// Возвращает угловые точки по исходному прямоугольному сечению
+        /// </summary>
+        /// <param name="rectangle">Исходный прямоугольник</param>
+        /// <returns>Коллекция угловых точек</returns>
+        public static List<Point2D> GetAnglePointsFromRectangle(IRectangle rectangle)
+        {
+            List<Point2D> points = new List<Point2D>();
+            Point2D center = rectangle.Center;
+            double width = rectangle.Width;
+            double length = rectangle.Length;
+            Point2D point;
+            //левая нижняя точка
+            point = new Point2D(center.X - width / 2, center.Y - length / 2);
+            points.Add(point);
+            //левая верхняя точка
+            point = new Point2D(center.X - width / 2, center.Y + length / 2);
+            points.Add(point);
+            //правая нижняя точка
+            point = new Point2D(center.X + width / 2, center.Y - length / 2);
+            points.Add(point);
+            //правая верхняя точка
+            point = new Point2D(center.X + width / 2, center.Y + length / 2);
+            points.Add(point);
+            return points;
         }
     }
 }
