@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Report ScriptLanguage="CSharp" DoublePass="true" ReportInfo.Created="08/11/2019 20:16:27" ReportInfo.Modified="05/16/2021 18:12:36" ReportInfo.CreatorVersion="2020.1.0.0">
+<Report ScriptLanguage="CSharp" DoublePass="true" ReportInfo.Created="08/11/2019 20:16:27" ReportInfo.Modified="05/18/2021 21:24:10" ReportInfo.CreatorVersion="2020.1.0.0">
   <Dictionary>
     <TableDataSource Name="Punchings" ReferenceName="Data.Punchings" DataType="System.Int32" Enabled="true">
       <Column Name="Id" DataType="System.Int32"/>
@@ -24,6 +24,7 @@
       <Column Name="WyPos" DataType="System.Double"/>
       <Column Name="WyNeg" DataType="System.Double"/>
       <Column Name="ContourScatch" DataType="System.Byte[]" BindableControl="Picture"/>
+      <Column Name="ContourOrderNum" DataType="System.Int32"/>
     </TableDataSource>
     <TableDataSource Name="LoadSets" ReferenceName="Data.LoadSets" DataType="System.Int32" Enabled="true">
       <Column Name="Id" DataType="System.Int32"/>
@@ -102,6 +103,9 @@
       <Column Name="Name" DataType="System.String"/>
       <Column Name="ParentId" DataType="System.Int32"/>
       <Column Name="BearingCoef" DataType="System.Double"/>
+      <Column Name="LoadSetDescription" DataType="System.String"/>
+      <Column Name="TranseLoadSetDescription" DataType="System.String"/>
+      <Column Name="ContourOrderNum" DataType="System.Int32"/>
     </TableDataSource>
     <Relation Name="PunchingsPunchingContours" ReferenceName="Data.PunchingsPunchingContours" ParentDataSource="Punchings" ChildDataSource="PunchingContours" ParentColumns="Id" ChildColumns="ParentId" Enabled="true"/>
     <Relation Name="PunchingContoursPunchingSubContours" ReferenceName="Data.PunchingContoursPunchingSubContours" ParentDataSource="PunchingContours" ChildDataSource="PunchingSubContours" ParentColumns="Id" ChildColumns="ParentId" Enabled="true"/>
@@ -157,7 +161,7 @@
         <TextObject Name="Text8" Width="699.3" Height="18.9" CanGrow="true" GrowToBottom="true" Text="Сочетание нагрузок: [LoadCases.Name]" Font="Arial, 10pt, style=Bold"/>
       </DataBand>
       <DataBand Name="DtContours" Top="636.8" Width="699.3" Height="18.9" CanGrow="true" OutlineExpression="ToString(&quot;Расчетный контур №&quot; + [Row#])" DataSource="PunchingContours" IdColumn="PunchingContours.Id" ParentIdColumn="Punchings.Id">
-        <TextObject Name="Text141" Width="699.3" Height="18.9" CanGrow="true" GrowToBottom="true" Text="Расчетный контур [Row#]. Центр тяжести: X=[PunchingContours.CenterX][Units.LinearSize], Y=[PunchingContours.CenterY][Units.LinearSize]&#13;&#10;Локальные моменты сопротивления: WxPos=[PunchingContours.WxPos][Units.Geometry.Area], WxNeg=[PunchingContours.WxNeg][Units.Geometry.Area], WyPos=[PunchingContours.WyPos][Units.Geometry.Area], WyNeg=[PunchingContours.WyNeg][Units.Geometry.Area]." Font="Arial, 10pt"/>
+        <TextObject Name="Text141" Width="699.3" Height="18.9" CanGrow="true" GrowToBottom="true" Text="Расчетный контур [PunchingContours.ContourOrderNum]. Центр тяжести: X=[PunchingContours.CenterX][Units.LinearSize], Y=[PunchingContours.CenterY][Units.LinearSize]&#13;&#10;Локальные моменты сопротивления: WxPos=[PunchingContours.WxPos][Units.Geometry.Area], WxNeg=[PunchingContours.WxNeg][Units.Geometry.Area], WyPos=[PunchingContours.WyPos][Units.Geometry.Area], WyNeg=[PunchingContours.WyNeg][Units.Geometry.Area]." Font="Arial, 10pt"/>
         <ChildBand Name="Child3" Top="659.7" Width="699.3" Height="189">
           <PictureObject Name="Picture3" Width="699.3" Height="189" CanGrow="true" DataColumn="PunchingContours.ContourScatch"/>
           <ChildBand Name="Child4" Top="852.7" Width="699.3" Height="18.9">
@@ -171,12 +175,54 @@
           </DataBand>
         </DataBand>
       </DataBand>
-      <DataBand Name="DtGenConclusion" Top="917.62" Width="699.3" Height="37.8" CanGrow="true" OutlineExpression="ToString(&quot;Общий вывод&quot;)">
-        <TextObject Name="Text138" Width="699.3" Height="18.9" Border.Lines="All" Fill.Color="PaleTurquoise" CanGrow="true" CanShrink="true" Text="Общий вывод" HorzAlign="Center" Font="Arial, 10pt, style=Bold"/>
-        <TextObject Name="Text139" Top="18.9" Width="699.3" Height="18.9" CanGrow="true" GrowToBottom="true" Text="[Punchings.GenConclusion]" Font="Arial, 10pt, style=Bold"/>
+      <DataBand Name="DtGenConclusion" Top="917.62" Width="699.3" Height="97.14" CanGrow="true" OutlineExpression="ToString(&quot;Общий вывод&quot;)">
+        <MatrixObject Name="Matrix1" Top="18.9" Width="453.64" Height="78.24" FixedRows="2" FixedColumns="2" AutoSize="false" DataSource="PunchingLoadSetContours" ShowTitle="true">
+          <MatrixColumns>
+            <Header Expression="[PunchingLoadSetContours.ContourOrderNum]"/>
+          </MatrixColumns>
+          <MatrixRows>
+            <Header Expression="[PunchingLoadSetContours.LoadSetDescription]" Totals="false"/>
+            <Header Expression="[PunchingLoadSetContours.TranseLoadSetDescription]"/>
+          </MatrixRows>
+          <MatrixCells>
+            <Cell Expression="[PunchingLoadSetContours.BearingCoef]" Function="Max"/>
+          </MatrixCells>
+          <TableColumn Name="Column1" Width="174.72"/>
+          <TableColumn Name="Column2" Width="179.67"/>
+          <TableColumn Name="Column3" Width="54.41"/>
+          <TableColumn Name="Column4" Width="44.84"/>
+          <TableRow Name="Row1" Height="19.56">
+            <TableCell Name="Cell1" Border.Lines="All" Text="Сочетание нагрузок" HorzAlign="Center" VertAlign="Center" Font="Arial, 10pt" ColSpan="2"/>
+            <TableCell Name="Cell2" Font="Arial, 10pt"/>
+            <TableCell Name="Cell7" Border.Lines="All" Text="Номер контура" HorzAlign="Center" VertAlign="Center" Font="Arial, 10pt" ColSpan="2"/>
+            <TableCell Name="Cell15" Font="Arial, 10pt"/>
+          </TableRow>
+          <TableRow Name="Row2" Height="19.56">
+            <TableCell Name="Cell3" Border.Lines="All" Text="Исходное" HorzAlign="Center" VertAlign="Center" Font="Arial, 10pt"/>
+            <TableCell Name="Cell4" Border.Lines="All" Text="Приведенное" HorzAlign="Center" VertAlign="Center" Font="Arial, 10pt"/>
+            <TableCell Name="Cell8" Border.Lines="All" Text="[ContourOrderNum]" HorzAlign="Center" VertAlign="Center" Font="Arial, 10pt"/>
+            <TableCell Name="Cell16" Border.Lines="All" Border.Width="2" Text="Max" HorzAlign="Center" VertAlign="Center" Font="Arial, 10pt"/>
+          </TableRow>
+          <TableRow Name="Row3" Height="19.56">
+            <TableCell Name="Cell9" Border.Lines="All" Text="[LoadSetDescription]" HorzAlign="Center" VertAlign="Center" Font="Arial, 10pt" RowSpan="2"/>
+            <TableCell Name="Cell10" Border.Lines="All" Text="[TranseLoadSetDescription]" VertAlign="Center" Font="Arial, 10pt"/>
+            <TableCell Name="Cell11" Border.Lines="All" Text="[BearingCoef]" HorzAlign="Right" VertAlign="Center" Font="Arial, 10pt"/>
+            <TableCell Name="Cell17" Border.Lines="All" Border.Width="2" HorzAlign="Right" VertAlign="Center" Font="Arial, 10pt"/>
+          </TableRow>
+          <TableRow Name="Row4" Height="19.56">
+            <TableCell Name="Cell12" Font="Arial, 10pt"/>
+            <TableCell Name="Cell13" Border.Lines="All" Border.Width="2" Text="Max" HorzAlign="Center" VertAlign="Center" Font="Arial, 10pt"/>
+            <TableCell Name="Cell14" Border.Lines="All" Border.Width="2" HorzAlign="Right" VertAlign="Center" Font="Arial, 10pt"/>
+            <TableCell Name="Cell18" Border.Lines="All" Border.Width="2" HorzAlign="Right" VertAlign="Center" Font="Arial, 10pt, style=Bold"/>
+          </TableRow>
+        </MatrixObject>
+        <ChildBand Name="Child5" Top="1018.76" Width="699.3" Height="56.7" CanGrow="true">
+          <TextObject Name="Text139" Top="37.8" Width="699.3" Height="18.9" CanGrow="true" GrowToBottom="true" Text="[Punchings.GenConclusion]" Font="Arial, 10pt, style=Bold"/>
+          <TextObject Name="Text138" Top="18.9" Width="699.3" Height="18.9" Border.Lines="All" Fill.Color="PaleTurquoise" CanGrow="true" CanShrink="true" Text="Общий вывод" HorzAlign="Center" Font="Arial, 10pt, style=Bold"/>
+        </ChildBand>
       </DataBand>
     </DataBand>
-    <PageFooterBand Name="PageFooter1" Top="959.42" Width="699.3" Height="28.35">
+    <PageFooterBand Name="PageFooter1" Top="1079.46" Width="699.3" Height="28.35">
       <TextObject Name="Text3" Width="349.65" Height="28.35" Fill.Color="LemonChiffon" Text="RealDoc Calculator" HorzAlign="Center" Font="Arial, 10pt, style=Bold"/>
       <TextObject Name="Text140" Left="349.65" Width="349.65" Height="28.35" Fill.Color="LemonChiffon" Cursor="Hand" Hyperlink.Value="www.realdoc.info" Text="www.RealDoc.info" HorzAlign="Center" Font="Arial, 10pt, style=Bold, Underline" TextFill.Color="Blue"/>
     </PageFooterBand>

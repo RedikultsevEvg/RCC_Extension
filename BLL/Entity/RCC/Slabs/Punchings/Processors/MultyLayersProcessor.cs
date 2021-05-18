@@ -34,6 +34,7 @@ namespace RDBLL.Entity.RCC.Slabs.Punchings.Processors
             List<Offset> contourBottomSizes = GetOffsets(punching.BottomEdge, totalHeight, punching.BottomEdgeDist);
             #endregion
             //Проходим по всем возможным левым сторонам контуров
+            int i = 0;
             foreach (Offset leftSize in contourLeftSizes)
             {
                 //То же по правым сторонам
@@ -45,7 +46,9 @@ namespace RDBLL.Entity.RCC.Slabs.Punchings.Processors
                         //То же по нижним сторонам
                         foreach (Offset bottomSize in contourBottomSizes)
                         {
-                            PunchingContour contour = new PunchingContour();
+                            PunchingContour contour = new PunchingContour(true);
+                            contour.OrderNum = ++i;
+                            contour.Name = $"Контур №{i}";
                             double sumLeftDist = 0,  sumRightDist = 0, sumTopDist = 0, sumBottomDist = 0;
                             IRectangle rectangle = punching;
                             //Проходимо по коллекции слоев панчинга для составления контуров

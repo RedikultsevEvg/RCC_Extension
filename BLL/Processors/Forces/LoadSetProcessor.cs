@@ -9,6 +9,7 @@ using RDBLL.Common.Geometry;
 using System.Windows.Forms;
 using RDBLL.Entity.Results.NDM;
 using RDBLL.Common.Service;
+using RDBLL.Entity.MeasureUnits;
 
 namespace RDBLL.Processors.Forces
 {
@@ -355,6 +356,28 @@ namespace RDBLL.Processors.Forces
                 forceParameter.CrcValueInCurUnit /= loadSet.PartialSafetyFactor;
                 forceParameter.DesignValue /= loadSet.PartialSafetyFactor;
             }
+        }
+        /// <summary>
+        /// Возвращает описание комбинации нагрузок как склеенный текст всех параметров
+        /// </summary>
+        /// <param name="loadSet"></param>
+        /// <returns></returns>
+        public static string GetLoadSetDescription(LoadSet loadSet)
+        {
+            string s = string.Empty;
+            foreach (ForceParameter parameter in loadSet.ForceParameters)
+            {
+                if (Math.Abs(parameter.DesignValue) > 1E-10)
+                {
+                    var tmpForceParamLabels = from t in ProgrammSettings.ForceParamKinds where t.Id == parameter.KindId select t;
+                    MeasureUnitLabel measureUnitLabel = tmpForceParamLabels.First().MeasureUnit.GetCurrentLabel();
+                    s += tmpForceParamLabels.First().ShortLabel + "=";
+                    s += MathOperation.Round(parameter.DesignValue);
+                    s += measureUnitLabel.UnitName;
+                    s += "; ";
+                }
+            }
+            return s;
         }
     }
 }

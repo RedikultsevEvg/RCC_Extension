@@ -93,8 +93,10 @@ namespace RDBLL.DrawUtils.RCC.Slabs.Punchings
 
         private void DrawSubContour(Canvas canvas, PunchingSubContour subContour, Point2D center, double scale_factor)
         {
+            //Для каждой линии субконтура
             foreach (PunchingLine line in subContour.Lines)
             {
+                //создаем новую линию
                 Line LineShape = new Line();
                 LineShape.X1 = line.StartPoint.X * scale_factor + center.X;
                 //Координаты по Y переворачиваем, так как у канваса отсчет идет сверху вниз
@@ -102,16 +104,20 @@ namespace RDBLL.DrawUtils.RCC.Slabs.Punchings
                 LineShape.X2 = line.EndPoint.X * scale_factor + center.X;
                 //Координаты по Y переворачиваем, так как у канваса отсчет идет сверху вниз
                 LineShape.Y2 = line.EndPoint.Y * scale_factor * (-1D) + center.Y;
+                //Если линия является несущей
                 if (line.IsBearing)
                 {
+                    //Линия будет красной и толстой
                     LineShape.Stroke = Brushes.Red;
                     LineShape.StrokeThickness = 1;
                 }
                 else
                 {
+                    //Иначе линия будет серой и более тонкой
                     LineShape.Stroke = Brushes.Gray;
                     LineShape.StrokeThickness = 0.5;
                 }
+                //Линя будет пунктирной
                 LineShape.StrokeDashArray = new DoubleCollection { 10, 4 };
                 canvas.Children.Add(LineShape);
             }
@@ -121,6 +127,7 @@ namespace RDBLL.DrawUtils.RCC.Slabs.Punchings
         {
             //Если края перекрытия не указаны, то просто рисуем область в 3 раза больше размера колонны
             double size = Math.Max(punching.Width * 3, punching.Length * 3);
+            //Изначально линии ограничивающие прямоугольник перекрытия определяем из его размера
             double posX = size / 2, posY = size / 2;
             double negX = -size / 2, negY = - size / 2;
             //Если для перекрытия указаны края, то указываем четкие размеры до краев
@@ -128,7 +135,7 @@ namespace RDBLL.DrawUtils.RCC.Slabs.Punchings
             if (punching.RightEdge) { posX = punching.RightEdgeDist + punching.Width / 2 + punching.Center.X; }
             if (punching.TopEdge) { posY = punching.TopEdgeDist + punching.Length / 2 + punching.Center.Y; }
             if (punching.BottomEdge) { negY = - (punching.Length / 2 + punching.BottomEdgeDist) + punching.Center.Y; }
-
+            //Ширина и длина прямоугольника перекрытия
             double width = - negX + posX;
             double length = - negY + posY;
             //Центр прямоугольника перекрытия
@@ -138,14 +145,66 @@ namespace RDBLL.DrawUtils.RCC.Slabs.Punchings
             rect.Width = width * scale_factor;
             rect.Height = length * scale_factor;
             rect.Fill = Brushes.LightBlue;
-            rect.Stroke = Brushes.Blue;
-            rect.StrokeThickness = 1;
             rect.Opacity = opacity;
+            //Добавляем прямоугольник перекрытия на канвас
             canvas.Children.Add(rect);
             Canvas.SetLeft(rect, center.X + rectCenter.X * scale_factor - rect.Width / 2);
             Canvas.SetTop(rect, center.Y - rectCenter.Y * scale_factor - rect.Height / 2);
+            double[] coordinates = new double[] { negX, posX, negY, posY };
+            //Рисуем линии контура перекрытия
+            DrawSlabLines(punching, coordinates, scale_factor, canvas, center);
         }
-
+        /// <summary>
+        /// Добавляет линии для перекрытия при продавливании на канвас
+        /// </summary>
+        /// <param name="punching"></param>
+        /// <param name="coordinates"></param>
+        /// <param name="scale_factor"></param>
+        /// <param name="canvas"></param>
+        /// <param name="center"></param>
+        private void DrawSlabLines(Punching punching, double[] coordinates, double scale_factor, Canvas canvas, Point2D center)
+        {
+            //Координаты линии
+            double posX = coordinates[1], posY = - coordinates[3];
+            double negX = coordinates[0], negY = - coordinates[2];
+            //Точки для построения линий
+            Point2D leftBottomPoint = new Point2D(negX * scale_factor + center.X, negY * scale_factor + center.Y);
+            Point2D leftTopPoint = new Point2D(negX * scale_factor + center.X, posY * scale_factor + center.Y);
+            Point2D rightBottomPoint = new Point2D(posX * scale_factor + center.X, negY * scale_factor + center.Y);
+            Point2D rightTopPoint = new Point2D(posX * scale_factor + center.X, posY * scale_factor + center.Y);
+            //Если контур перекрытия ограничен, добавляем соответствующие линии
+            if (punching.LeftEdge) { DrawSlabLine(leftBottomPoint, leftTopPoint, canvas);}
+            if (punching.RightEdge) { DrawSlabLine(rightBottomPoint, rightTopPoint, canvas);}
+            if (punching.TopEdge) { DrawSlabLine(leftTopPoint, rightTopPoint, canvas);}
+            if (punching.BottomEdge) { DrawSlabLine(leftBottomPoint, rightBottomPoint, canvas); }
+        }
+        /// <summary>
+        /// Добавляет линию перекрытия на канвас
+        /// </summary>
+        /// <param name="startPoint"></param>
+        /// <param name="endPoint"></param>
+        /// <param name="brush"></param>
+        /// <param name="thickness"></param>
+        /// <param name="canvas"></param>
+        private void DrawSlabLine(Point2D startPoint, Point2D endPoint, Canvas canvas)
+        {
+            Line LineShape = new Line();
+            LineShape.X1 = startPoint.X;
+            LineShape.Y1 = startPoint.Y;
+            LineShape.X2 = endPoint.X;
+            LineShape.Y2 = endPoint.Y;
+            LineShape.Stroke = Brushes.Blue;
+            LineShape.StrokeThickness = 1;
+            canvas.Children.Add(LineShape);
+        }
+        /// <summary>
+        /// Добавляет прямоугольник перекрытия на канвас
+        /// </summary>
+        /// <param name="canvas"></param>
+        /// <param name="punching"></param>
+        /// <param name="center"></param>
+        /// <param name="scale_factor"></param>
+        /// <param name="opacity"></param>
         private void DrawColumn(Canvas canvas, Punching punching, Point2D center, double scale_factor, double opacity = 0.6)
         {
             Rectangle columnRect = new Rectangle();

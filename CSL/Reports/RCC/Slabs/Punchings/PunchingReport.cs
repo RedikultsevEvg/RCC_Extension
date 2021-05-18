@@ -16,6 +16,7 @@ using RDBLL.Entity.RCC.Slabs.Punchings;
 using RDBLL.Entity.RCC.Slabs.Punchings.Processors;
 using RDBLL.Entity.RCC.Slabs.Punchings.Results;
 using RDBLL.Forces;
+using RDBLL.Processors.Forces;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -164,7 +165,10 @@ namespace CSL.Reports.RCC.Slabs.Punchings
                 DataRow row = dataTable.NewRow();
                 DsOperation.SetField(row, "Id", result.Id);
                 DsOperation.SetField(row, "ParentId", result.Punching.Id);
-                DsOperation.SetField(row, "BearingCoef", result.BearingCoef);
+                DsOperation.SetField(row, "LoadSetDescription", LoadSetProcessor.GetLoadSetDescription(result.LoadSet));
+                DsOperation.SetField(row, "TranseLoadSetDescription", LoadSetProcessor.GetLoadSetDescription(result.TransformedLoadSet));
+                DsOperation.SetField(row, "ContourOrderNum", result.PunchingContour.OrderNum);
+                DsOperation.SetField(row, "BearingCoef", MathOperation.Round(result.BearingCoef));
                 dataTable.Rows.Add(row);
                 if (result.BearingCoef > maxBearing) { maxBearing = result.BearingCoef; }
             }
@@ -183,6 +187,7 @@ namespace CSL.Reports.RCC.Slabs.Punchings
                 Point2D center = PunchingGeometryProcessor.GetContourCenter(contour);
                 DsOperation.SetField(row, "CenterX", MathOperation.Round(center.X * linearSizeCoefficient));
                 DsOperation.SetField(row, "CenterY", MathOperation.Round(center.Y * linearSizeCoefficient));
+                DsOperation.SetField(row, "ContourOrderNum", result.PunchingContour.OrderNum);
                 //Момент сопротивления контура
                 //Момент инерции в данном случае находится с учетом высоты
                 double[] momInertia = PunchingGeometryProcessor.GetMomentOfInertiaHeight(contour);
@@ -200,7 +205,7 @@ namespace CSL.Reports.RCC.Slabs.Punchings
                 #region Picture
                 Canvas canvas = new Canvas();
                 canvas.Width = 600;
-                canvas.Height = 600;
+                canvas.Height = 300;
                 IDrawScatch drawScatch = new PunchingDrawProcessor();
                 (drawScatch as PunchingDrawProcessor).DrawPunchingContour(canvas, punching, contour);
                 byte[] b = CommonServices.ExportToByte(canvas);
