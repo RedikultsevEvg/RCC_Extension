@@ -372,7 +372,7 @@ namespace RDBLL.Processors.Forces
                     var tmpForceParamLabels = from t in ProgrammSettings.ForceParamKinds where t.Id == parameter.KindId select t;
                     MeasureUnitLabel measureUnitLabel = tmpForceParamLabels.First().MeasureUnit.GetCurrentLabel();
                     s += tmpForceParamLabels.First().ShortLabel + "=";
-                    s += MathOperation.Round(parameter.DesignValue);
+                    s += MathOperation.Round(parameter.DesignValue) * measureUnitLabel.AddKoeff;
                     s += measureUnitLabel.UnitName;
                     s += "; ";
                 }

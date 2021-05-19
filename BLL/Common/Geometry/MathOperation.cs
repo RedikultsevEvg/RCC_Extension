@@ -53,12 +53,24 @@ namespace RDBLL.Common.Geometry
             result = InterpolateNumber(x1, y1, x2, y2, xn);
             return result;
         }
+        /// <summary>
+        /// Умное окруление до нужного числа значащих цифр, например (12345, 3) дает результат 12300, например (0.12345, 3) дает результат 0,123
+        /// </summary>
+        /// <param name="value"></param>
+        /// <param name="quant"></param>
+        /// <returns></returns>
         public static double Round(double value, int quant = 3)
         {
             if (value == 0) return 0;
             int i = Convert.ToInt32(Math.Ceiling(Math.Log10(Math.Abs(value))));
             return Math.Round(Math.Abs(value) * Math.Pow(10, quant - i)) / Math.Pow(10, quant - i) * Math.Sign(value);
         }
+        /// <summary>
+        /// Умное округление по массиву до нужного числа значащих цифр
+        /// </summary>
+        /// <param name="values"></param>
+        /// <param name="quant"></param>
+        /// <returns></returns>
         public static double[] Round(double[] values, int quant = 3)
         {
             double[] result = new double[values.Count()];
@@ -68,6 +80,12 @@ namespace RDBLL.Common.Geometry
             }
             return result;
         }
+        /// <summary>
+        /// Умное округление по коллекции до нужного числа значащих цифр
+        /// </summary>
+        /// <param name="values"></param>
+        /// <param name="quant"></param>
+        /// <returns></returns>
         public static List<double> Round(List<double> values, int quant = 3)
         {
             List<double> result = new List<double>();
@@ -77,6 +95,12 @@ namespace RDBLL.Common.Geometry
             }
             return result;
         }
+        /// <summary>
+        /// Умное округление по коллекции массивово до нужного числа значащих цифр
+        /// </summary>
+        /// <param name="values"></param>
+        /// <param name="quant"></param>
+        /// <returns></returns>
         public static List<double[]> Round(List<double[]> values, int quant = 3)
         {
             List<double[]> result = new List<double[]>();

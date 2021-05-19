@@ -14,6 +14,7 @@ using System.Windows.Media.Imaging;
 using System.Collections.ObjectModel;
 using System.Collections.Generic;
 using RDBLL.Common.Service.DsOperations;
+using RDBLL.Common.Geometry;
 
 namespace CSL.Common
 {
@@ -129,8 +130,8 @@ namespace CSL.Common
                     DsOperation.SetField(newForceParameter, "LongLabel", tmpForceParamLabels.First().LongLabel);
                     DsOperation.SetField(newForceParameter, "ShortLabel", tmpForceParamLabels.First().ShortLabel);
                     DsOperation.SetField(newForceParameter, "Unit", measureUnitLabel.UnitName);
-                    DsOperation.SetField(newForceParameter, "CrcValue", Math.Round(forceParameter.CrcValue * measureUnitLabel.AddKoeff, 3));
-                    DsOperation.SetField(newForceParameter, "DesignValue", Math.Round(forceParameter.DesignValue * measureUnitLabel.AddKoeff, 3));
+                    DsOperation.SetField(newForceParameter, "CrcValue", MathOperation.Round(forceParameter.CrcValue * measureUnitLabel.AddKoeff));
+                    DsOperation.SetField(newForceParameter, "DesignValue", MathOperation.Round(forceParameter.DesignValue * measureUnitLabel.AddKoeff));
 
                     ForceParamTable.Rows.Add(newForceParameter);
                     crcForceDescription += tmpForceParamLabels.First().ShortLabel + "=";
