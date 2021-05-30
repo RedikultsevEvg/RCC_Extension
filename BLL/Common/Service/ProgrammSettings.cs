@@ -15,7 +15,7 @@ using RDBLL.Entity.MeasureUnits;
 using System.Collections.ObjectModel;
 using System.Data;
 using RDBLL.Entity.Common.Materials;
-using RDBLL.Entity.Common.Materials.MatFactorys;
+using RDBLL.Entity.Common.Materials.MatFactories;
 using RDBLL.Entity.Common.Materials.SteelMaterialUsing;
 using RDBLL.Entity.MeasureUnits.Factorys;
 using RDBLL.Common.Service.DsOperations.Factory;

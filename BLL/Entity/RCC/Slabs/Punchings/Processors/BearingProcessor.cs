@@ -2,6 +2,7 @@
 using RDBLL.Common.Geometry.Mathematic;
 using RDBLL.Common.Service;
 using RDBLL.Entity.Common.Materials;
+using RDBLL.Entity.Common.Materials.Processors.Strength;
 using RDBLL.Entity.Common.NDM;
 using RDBLL.Entity.RCC.Slabs.Punchings.Results;
 using RDBLL.Entity.RCC.Slabs.Punchings.Results.Factories;
@@ -144,10 +145,11 @@ namespace RDBLL.Entity.RCC.Slabs.Punchings.Processors
             //Для каждого субконтура в контуре
             foreach (PunchingSubContour subContour in contour.SubContours)
             {
+                ConcreteUsing concrete = subContour.Concrete;
                 //Расчетное сопротивление бетона растяжению для полных нагрузок
-                double RbtFull = GetConcreteRbt(subContour)[0];
+                double RbtFull = StrengthProcessor.GetConcreteStrength(concrete, true, false, true);
                 //Расчетное сопротивление бетона растяжению для нагрузок продолжительного действия
-                double Rbtlong = GetConcreteRbt(subContour)[1];
+                double Rbtlong = StrengthProcessor.GetConcreteStrength(concrete, true, false, false);
                 //Расчетное сопротивление бетона растяжению
                 double Rbt = fullLoad ? RbtFull : Rbtlong;
                 //Прибавляем несущую способность субконтура

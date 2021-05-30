@@ -43,7 +43,13 @@ namespace RDBLL.Entity.SC.Column
         public Placement Placement { get; set; }
 
         //public BoltUsing BoltUsing { get; set; }
+        /// <summary>
+        /// Коллекция единиц измерения
+        /// </summary>
         public MeasureUnitList Measures { get => new MeasureUnitList(); }
+        /// <summary>
+        /// Точка центра
+        /// </summary>
         public Point2D Center { get { return new Point2D(); } set {; } }
 
         public IMaterialModel MaterialModel { get; set; }
@@ -62,11 +68,6 @@ namespace RDBLL.Entity.SC.Column
         }
         #endregion
         #region IODataSet
-        /// <summary>
-        /// Return name of table in dataset for CRUD operation
-        /// </summary>
-        /// <returns>Name of table</returns>
-        public string GetTableName() { return "SteelBolts"; }
         public void SaveToDataSet(DataSet dataSet, bool createNew)
         {
             DataRow row = EntityOperation.SaveEntity(dataSet, createNew, this);
@@ -74,7 +75,8 @@ namespace RDBLL.Entity.SC.Column
         }
         public void OpenFromDataSet(DataSet dataSet)
         {
-            DataTable dataTable = dataSet.Tables[GetTableName()];
+            string tableName = DsOperation.GetTableName(this);
+            DataTable dataTable = DsOperation.GetDataTable(dataSet, tableName);
             var row = (from dataRow in dataTable.AsEnumerable()
                        where dataRow.Field<int>("Id") == Id
                        select dataRow).Single();
@@ -133,6 +135,11 @@ namespace RDBLL.Entity.SC.Column
         public void SetPlacement(Placement placement)
         {
             this.Placement = placement;
+        }
+
+        public double GetPerimeter()
+        {
+            throw new NotImplementedException();
         }
     }
 }

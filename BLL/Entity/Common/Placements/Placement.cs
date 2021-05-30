@@ -10,6 +10,7 @@ using RDBLL.Common.Params;
 using RDBLL.Common.Geometry;
 using RDBLL.Common.Geometry.Mathematic;
 using RDBLL.Common.Service.DsOperations;
+using RDBLL.Common.Interfaces.Geometry.Points;
 
 namespace RDBLL.Entity.Common.Placements
 {
@@ -54,20 +55,17 @@ namespace RDBLL.Entity.Common.Placements
         /// <param name="dataSet"></param>
         public void DeleteFromDataSet(DataSet dataSet)
         {
-            DsOperation.DeleteRow(dataSet, GetTableName(), Id);
+            string tableName = DsOperation.GetTableName(this);
+            DsOperation.DeleteRow(dataSet, tableName, Id);
         }
-        /// <summary>
-        /// Возвращает имя таблицы
-        /// </summary>
-        /// <returns></returns>
-        public string GetTableName() => "ParametricObjects";
         /// <summary>
         /// Обновление записи в датасете
         /// </summary>
         /// <param name="dataSet">Датасет</param>
         public void OpenFromDataSet(DataSet dataSet)
         {
-            OpenFromDataSet(DsOperation.OpenFromDataSetById(dataSet, GetTableName(), Id));
+            string tableName = DsOperation.GetTableName(this);
+            OpenFromDataSet(DsOperation.OpenFromDataSetById(dataSet, tableName, Id));
         }
         /// <summary>
         /// Обновление строки датасета
@@ -115,6 +113,6 @@ namespace RDBLL.Entity.Common.Placements
             }
             return placement;
         }
-        public abstract List<Point2D> GetElementPoints();
+        public abstract List<IPoint2D> GetElementPoints();
     }
 }

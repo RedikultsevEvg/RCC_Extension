@@ -18,6 +18,7 @@ using System.Windows;
 using System.Windows.Controls;
 using RDBLL.Common.Interfaces.Shapes;
 using RDBLL.Common.Interfaces;
+using RDBLL.Common.Interfaces.Geometry.Points;
 
 namespace CSL.Reports
 {
@@ -230,7 +231,7 @@ namespace CSL.Reports
             DataTable dataTable = dataSet.Tables["SteelBasesBolts"];
             foreach (SteelBolt steelBolt in steelBase.SteelBolts)
             {
-                List<Point2D> points = steelBolt.Placement.GetElementPoints();
+                List<IPoint2D> points = steelBolt.Placement.GetElementPoints();
                 foreach (Point2D point in points)
                 {
                     DataRow newSteelBaseBolt = dataTable.NewRow();

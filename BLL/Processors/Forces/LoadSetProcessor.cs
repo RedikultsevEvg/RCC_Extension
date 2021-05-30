@@ -364,20 +364,20 @@ namespace RDBLL.Processors.Forces
         /// <returns></returns>
         public static string GetLoadSetDescription(LoadSet loadSet)
         {
-            string s = string.Empty;
+            string description = string.Empty;
             foreach (ForceParameter parameter in loadSet.ForceParameters)
             {
                 if (Math.Abs(parameter.DesignValue) > 1E-10)
                 {
                     var tmpForceParamLabels = from t in ProgrammSettings.ForceParamKinds where t.Id == parameter.KindId select t;
                     MeasureUnitLabel measureUnitLabel = tmpForceParamLabels.First().MeasureUnit.GetCurrentLabel();
-                    s += tmpForceParamLabels.First().ShortLabel + "=";
-                    s += MathOperation.Round(parameter.DesignValue) * measureUnitLabel.AddKoeff;
-                    s += measureUnitLabel.UnitName;
-                    s += "; ";
+                    description += tmpForceParamLabels.First().ShortLabel + "=";
+                    description += MathOperation.Round(parameter.DesignValue) * measureUnitLabel.AddKoeff;
+                    description += measureUnitLabel.UnitName;
+                    description += "; ";
                 }
             }
-            return s;
+            return description;
         }
     }
 }

@@ -30,5 +30,10 @@ namespace RDBLL.Entity.RCC.Slabs.Punchings.DropPanels
         {
             throw new NotImplementedException();
         }
+
+        public double GetPerimeter()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

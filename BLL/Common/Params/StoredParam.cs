@@ -267,7 +267,10 @@ namespace RDBLL.Common.Params
         /// Удаляет запись из датасета
         /// </summary>
         /// <param name="dataSet"></param>
-        public void DeleteFromDataSet(DataSet dataSet) => DsOperation.DeleteRow(dataSet, GetTableName(), Id);
+        public void DeleteFromDataSet(DataSet dataSet)
+        {
+            DsOperation.DeleteRow(dataSet, GetTableName(), Id);
+        }
         /// <summary>
         /// Регистрирует ссылку на родителя
         /// </summary>

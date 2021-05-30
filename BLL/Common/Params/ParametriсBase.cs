@@ -9,6 +9,9 @@ using System.Threading.Tasks;
 
 namespace RDBLL.Common.Params
 {
+    /// <summary>
+    /// Базовый абстрактный класс параметрических объектов
+    /// </summary>
     public abstract class ParametriсBase : IHasParent, IHasStoredParams, ICloneable
     {
         public IDsSaveable ParentMember { get; private set; }

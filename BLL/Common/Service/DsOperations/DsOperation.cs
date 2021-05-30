@@ -5,6 +5,10 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Data;
 using RDBLL.Common.Interfaces;
+using System.Reflection;
+using RDBLL.Common.Geometry;
+using RDBLL.Common.Service.DsOperations.Mappings;
+using RDBLL.Common.Service.DsOperations.Mappings.Factories;
 
 namespace RDBLL.Common.Service.DsOperations
 {
@@ -96,15 +100,13 @@ namespace RDBLL.Common.Service.DsOperations
             childDataTable.Columns.Add(FkIdColumn);
             return FkIdColumn;
         }
-        private static DataColumn AddNameColumn(DataTable dataTable)
-        {
-            DataColumn NameColumn;
-            NameColumn = new DataColumn("Name", Type.GetType("System.String"));
-            NameColumn.ColumnMapping = MappingType.Attribute;
-            dataTable.Columns.Add(NameColumn);
-            return NameColumn;
-        }
-        public static List<DataColumn> AddIdNameParentIdColumn(DataTable dataTable, string parentTable = null)
+        /// <summary>
+        /// Добавляет стандартные столбцы
+        /// </summary>
+        /// <param name="dataTable">Ссылка на таблицу, в которую добавляются столбцы</param>
+        /// <param name="parentTable">Наименование родительской таблицы</param>
+        /// <returns></returns>
+        public static List<DataColumn> AddCommonColumns(DataTable dataTable, string parentTable = null)
         {
             List<DataColumn> dataColumns = new List<DataColumn>();
             dataColumns.AddRange(AddIdColumn(dataTable, true));
@@ -203,7 +205,7 @@ namespace RDBLL.Common.Service.DsOperations
         /// <param name="dataTable">Ссылка на таблицу в которой ищется запись</param>
         /// <param name=""></param>
         /// <returns></returns>
-        public static DataRow CreateNewRow (int Id, bool createNew, DataTable dataTable)
+        public static DataRow CreateNewRow(int Id, bool createNew, DataTable dataTable)
         {
             DataRow row;
             //Если флаг создания новой записи установлен
@@ -240,7 +242,7 @@ namespace RDBLL.Common.Service.DsOperations
         /// /// <param name="dataTableName">Имя таблицы</param>
         /// <param name="Id">Код элемента</param>
         /// <returns></returns>
-        public static DataRow OpenFromDataSetById (DataSet dataSet, string dataTableName, int Id)
+        public static DataRow OpenFromDataSetById(DataSet dataSet, string dataTableName, int Id)
         {
             DataTable dataTable = dataSet.Tables[dataTableName];
             var row = (from dataRow in dataTable.AsEnumerable()
@@ -252,11 +254,11 @@ namespace RDBLL.Common.Service.DsOperations
         /// Возвращает строку из датасета по элементу (необходимо для отката изменений)
         /// </summary>
         /// <param name="dataSet"></param>
-        /// <param name="item"></param>
+        /// <param name="entity"></param>
         /// <returns></returns>
-        public static DataRow OpenFromDataSetById(DataSet dataSet, IDsSaveable item)
+        public static DataRow OpenFromDataSetById(DataSet dataSet, IDsSaveable entity)
         {
-            return OpenFromDataSetById(dataSet, item.GetTableName(), item.Id);
+            return OpenFromDataSetById(dataSet, GetTableName(entity), entity.Id);
         }
         public static void SetId(DataRow dataRow, int id, string name = null, int? parentId = null)
         {
@@ -272,15 +274,22 @@ namespace RDBLL.Common.Service.DsOperations
                         select dataRow;
             return query;
         }
+        /// <summary>
+        /// Устанавливает значение свойства в строку таблицы датасета
+        /// </summary>
+        /// <typeparam name="T">Тип значения</typeparam>
+        /// <param name="row">Ссылка на строку таблицы датасета</param>
+        /// <param name="columnName">Наименование столбца</param>
+        /// <param name="value">Устанавливаемое значение</param>
         public static void SetField<T>(DataRow row, string columnName, T value)
         {
             DataTable table = row.Table;
-            if (! table.Columns.Contains(columnName))
+            if (!table.Columns.Contains(columnName))
             {
                 DataColumn column = new DataColumn(columnName, typeof(T));
                 table.Columns.Add(column);
             }
-            row.SetField<T>(columnName, value);
+            row.SetField(columnName, value);
         }
         public static void Field<T>(DataRow row, ref T target, string columnName, T defaultValue)
         {
@@ -293,7 +302,6 @@ namespace RDBLL.Common.Service.DsOperations
             }
             target = row.Field<T>(columnName);
         }
-
         //public static ValueType GetField<T>(DataRow row, string columnName, T defaultValue)
         //{
         //    DataTable table = row.Table;
@@ -322,9 +330,256 @@ namespace RDBLL.Common.Service.DsOperations
             {
                 dataTable = new DataTable(tableName);
                 dataSet.Tables.Add(dataTable);
-                AddIdNameParentIdColumn(dataTable, parentTableName);
+                AddCommonColumns(dataTable, parentTableName);
             }
             return dataTable;
+        }
+        /// <summary>
+        /// Добавляет все свойства указанного класса как столбцы таблицы датасета
+        /// </summary>
+        /// <param name="dataTable">Таблица датасета</param>
+        /// <param name="type">Тип, для которого необходимо добавить столбцы</param>
+        public static void AddColumnsFromProperties(DataTable dataTable, Type type)
+        {
+            //Коллекция наименования столбцов, которые добавлять не нужно
+            List<string> exceptList = new List<string> { "Id", "ParentMember", "Name", "Children", "ForcesGroups", "LoadCases", "IsActive" };
+            //Коллекция типов, которые нужно добавлять в таблицу
+            List<string> typeList = new List<string> { "Double", "String", "Int32", "Boolean", "Point2D" };
+            foreach (PropertyInfo propertyInfo in type.GetProperties())
+            {
+                //Наименование свойства
+                string name = propertyInfo.Name;
+                //Наименование типа свойства
+                string propertyType = propertyInfo.PropertyType.Name;
+                if (!(exceptList.Contains(name)) //Если наименование таблицы не входит в перечень исключенных
+                    & (typeList.Contains(propertyType))) //И входит в перечень допустимых типов значения
+                {
+                    //Получаем коллекцию столбцов, которые надо добавить в таблицу
+                    List<ColumnTemplate> columns = GetTypes(propertyInfo);
+                    //Добавляем столбцы в таблицу
+                    AddColumnFromTypes(dataTable, columns);
+                }
+            }
+        }
+        /// <summary>
+        /// Возвращает таблицу с названием равным имени типа и наименованию родительской таблицы
+        /// </summary>
+        /// <param name="type">Тип объекта</param>
+        /// <param name="parentTableName">Наименование родительской таблицы</param>
+        /// <returns></returns>
+        public static DataTable AddTableToDataset(Type type)
+        {
+            //Получаем имя для новой таблицы в соответствие с типом
+            string tableName = GetTableName(type);
+            DataTable dataTable = new DataTable(tableName);
+            //Добавляем столбцы из свойств типа
+            AddColumnsFromProperties(dataTable, type);
+            return dataTable;
+        }
+        /// <summary>
+        /// Выполняет сериализацию объекта в строку датасета
+        /// </summary>
+        /// <param name="row"></param>
+        /// <param name="obj"></param>
+        public static void SetRowFields(DataRow row, IDsSaveable obj)
+        {
+            //Коллекция наименования столбцов, которые добавлять не нужно
+            List<string> exceptList = new List<string> { "Id", "ParentMember", "Name", "Children", "ForcesGroups", "LoadCases", "IsActive" };
+            //Коллекция типов, которые нужно добавлять в таблицу
+            List<string> typeList = new List<string> { "Double", "String", "Int32", "Boolean", "Point2D" };
+            foreach (PropertyInfo propertyInfo in obj.GetType().GetProperties())
+            {
+                DataTable dataTable = row.Table;
+                //Наименование свойства
+                string name = propertyInfo.Name;
+                //Наименование типа свойства
+                string propertyTypeName = propertyInfo.PropertyType.Name;
+                if (!(exceptList.Contains(name)) //Если наименование таблицы не входит в перечень исключенных
+                    & (typeList.Contains(propertyTypeName))) //И входит в перечень допустимых типов значения
+                {
+
+                    if (propertyTypeName == "Point2D")
+                    {
+                        Point2D point = propertyInfo.GetValue(obj) as Point2D;
+                        SetField(row, name + "X", point.X);
+                        SetField(row, name + "Y", point.Y);
+                    }
+                    else
+                    {
+                        object value = propertyInfo.GetValue(obj);
+                        SetField(row, name, value);
+                    }
+
+                }
+            }
+        }
+        /// <summary>
+        /// Устанавливает свойства объекта по строке датасета
+        /// </summary>
+        /// <param name="row"></param>
+        /// <param name="obj"></param>
+        public static void GetFieldsFromRow(DataRow row, IDsSaveable obj)
+        {
+            //Коллекция наименования столбцов, которые добавлять не нужно
+            List<string> exceptList = new List<string> { "Id", "ParentMember", "Name", "Children", "ForcesGroups", "LoadCases", "IsActive" };
+            //Коллекция типов, которые нужно добавлять в таблицу
+            List<string> typeSimpleList = new List<string> { "Double", "String", "Int32", "Boolean" };
+            //Коллекция сложных типов
+            List<string> typeComplexList = new List<string> { "Point2D" };
+            foreach (PropertyInfo propertyInfo in obj.GetType().GetProperties())
+            {
+                DataTable dataTable = row.Table;
+                //Наименование свойства
+                string propertyName = propertyInfo.Name;
+                //Тип свойства
+                Type propertyType = propertyInfo.PropertyType;
+                //Наименование типа свойства
+                string propertyTypeName = propertyType.Name;
+                if (!(exceptList.Contains(propertyName)) //Если наименование таблицы не входит в перечень исключенных
+                    & (typeSimpleList.Contains(propertyTypeName) || typeComplexList.Contains(propertyTypeName))) //И входит в перечень допустимых типов значения
+                {
+                    if (typeSimpleList.Contains(propertyTypeName) & !dataTable.Columns.Contains(propertyName))
+                    {
+                        throw new Exception($"Table {dataTable.TableName} not contain required column {propertyName}");
+                    }
+                    //Если тип является точкой
+                    if (propertyTypeName == "Point2D")
+                    {
+                        double x = row.Field<double>(propertyName + "X");
+                        double y = row.Field<double>(propertyName + "Y");
+                        Point2D point = new Point2D(x, y);
+                        propertyInfo.SetValue(obj, point);
+                    }
+                    //Если тип является строкой
+                    else if (propertyTypeName == "String")
+                    {
+                        string value = row.Field<string>(propertyName);
+                        propertyInfo.SetValue(obj, value);
+                    }
+                    else //Если тип является типом значения
+                    {
+                        ValueType value;
+                        if (propertyTypeName == "Double")
+                        {
+                            value = row.Field<double>(propertyName);
+                        }
+                        else if (propertyTypeName == "Int32")
+                        {
+                            value = row.Field<int>(propertyName);
+                        }
+                        else if (propertyTypeName == "Boolean")
+                        {
+                            value = row.Field<bool>(propertyName);
+                        }
+                        else
+                        {
+                            throw new Exception($"Type of property {propertyTypeName} is unknown");
+                        }
+                        propertyInfo.SetValue(obj, value);
+                    }
+
+                }
+            }
+        }
+        /// <summary>
+        /// Возвращает наименование таблицы, в которую следует сохранять указанный тип объекта
+        /// </summary>
+        /// <param name="type">тип объекта</param>
+        /// <returns></returns>
+        public static string GetTableName(Type type)
+        {
+            List<TableMapping> tableMappings = TableMappingFactory.GetTableMappings();
+            string tableName = type.Name + "s";
+            foreach (TableMapping mapping in tableMappings)
+            {
+                if (mapping.EntityName == type.Name)
+                {
+                    tableName = mapping.TableName;
+                    break;
+                }
+            }
+            return tableName;
+        }
+        /// <summary>
+        /// Возвращает наименование таблицы, в которую следует сохранять объект
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        public static string GetTableName(IDsSaveable obj)
+        {
+            return GetTableName(obj.GetType());
+        }
+        /// <summary>
+        /// Заполняет свойства объекта из датасета
+        /// </summary>
+        /// <param name="dataSet">Датасет</param>
+        /// <param name="entity">Ссылка на объект</param>
+        public static void OpenEntityFromDataSet(DataSet dataSet, IDsSaveable entity)
+        {
+            string tablename = GetTableName(entity);
+            DataRow row = OpenFromDataSetById(dataSet, tablename, entity.Id);
+            EntityOperation.SetProps(row, entity);
+            GetFieldsFromRow(row, entity);
+        }
+        /// <summary>
+        /// Возвращает коллекцию шаблонов столцов, которые необходимо создать по информации о свойстве типа
+        /// </summary>
+        /// <param name="propertyInfo"></param>
+        /// <returns></returns>
+        private static List<ColumnTemplate> GetTypes(PropertyInfo propertyInfo)
+        {
+            string name = propertyInfo.Name;
+            Type propertyType = propertyInfo.PropertyType;
+            string propertyTypeName = propertyType.Name;
+
+            List<ColumnTemplate> columns = new List<ColumnTemplate>();
+            if (propertyTypeName == "Double" || propertyTypeName == "Int32")
+            {
+                columns.Add(new ColumnTemplate() { ColumnName = name, ColumnType = propertyType, DefaultValue = 0 });
+            }
+            else if (propertyTypeName == "String")
+            {
+                columns.Add(new ColumnTemplate() { ColumnName = name, ColumnType = propertyType, DefaultValue = "" });
+            }
+            else if (propertyTypeName == "Boolean")
+            {
+                columns.Add(new ColumnTemplate() { ColumnName = name, ColumnType = propertyType, DefaultValue = true });
+            }
+            else if (propertyTypeName == "Point2D")
+            {
+                columns.Add(new ColumnTemplate() { ColumnName = name + "X", ColumnType = typeof(double), DefaultValue = 0 });
+                columns.Add(new ColumnTemplate() { ColumnName = name + "Y", ColumnType = typeof(double), DefaultValue = 0 });
+            }
+            else
+            {
+                throw new Exception("Type is unknown");
+            }
+            return columns;
+        }
+        /// <summary>
+        /// Создает столцы в таблице датасета по коллекции шаблонов
+        /// </summary>
+        /// <param name="dataTable"></param>
+        /// <param name="columns"></param>
+        private static void AddColumnFromTypes (DataTable dataTable, List<ColumnTemplate> columns)
+        {
+            //Для каждого элемента коллекции создаем новый столбец в таблице
+            foreach (ColumnTemplate column in columns)
+            {
+                DataColumn NewColumn;
+                NewColumn = new DataColumn(column.ColumnName, column.ColumnType);
+                NewColumn.AllowDBNull = false;
+                NewColumn.DefaultValue = column.DefaultValue;
+                dataTable.Columns.Add(NewColumn);
+            }
+        }
+        private static DataColumn AddNameColumn(DataTable dataTable)
+        {
+            DataColumn NameColumn;
+            NameColumn = new DataColumn("Name", Type.GetType("System.String"));
+            NameColumn.ColumnMapping = MappingType.Attribute;
+            dataTable.Columns.Add(NameColumn);
+            return NameColumn;
         }
     }
 }

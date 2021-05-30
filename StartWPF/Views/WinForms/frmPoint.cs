@@ -9,18 +9,20 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using RDBLL.Common.Service;
 using RDBLL.Common.Geometry;
+using RDBLL.Common.Interfaces.Geometry.Points;
 
 namespace RDUIL.WinForms
 {
     public partial class frmPoint : Form
     {
-        private Point2D _point2D;
+        private IPoint2D _point2D;
 
-        public frmPoint(Point2D point2D)
+        public frmPoint(IPoint2D point2D)
         {
             InitializeComponent();
             _point2D = point2D;
-            tbCoord.Text = _point2D.PointText();
+            throw new NotImplementedException();
+            //tbCoord.Text = _point2D.PointText();
             nudCoord_X.Value = Convert.ToDecimal(_point2D.X);
             nudCoord_Y.Value = Convert.ToDecimal(_point2D.Y);
         }

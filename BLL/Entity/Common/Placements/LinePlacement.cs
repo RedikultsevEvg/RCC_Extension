@@ -8,6 +8,7 @@ using RDBLL.Common.Service;
 using System.Drawing;
 using RDBLL.Common.Geometry;
 using RDBLL.Common.Geometry.Mathematic;
+using RDBLL.Common.Interfaces.Geometry.Points;
 
 namespace RDBLL.Entity.Common.Placements
 {
@@ -86,7 +87,7 @@ namespace RDBLL.Entity.Common.Placements
         /// </summary>
         /// <param name="quant"></param>
         /// <returns></returns>
-        public List<Point2D> GetElementPoints(int quant)
+        public List<IPoint2D> GetElementPoints(int quant)
         {    
             return GeometryProcessor.GetInternalPoints(StartPoint, EndPoint, quant, AddStart, AddEnd);
         }

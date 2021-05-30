@@ -109,7 +109,6 @@ namespace RDBLL.Entity.RCC.Slabs.Punchings
         /// Свойство для хранения результата
         /// </summary>
         public PunchingResult Result { get; set; }
-
         /// <summary>
         /// Клонирование элемента
         /// </summary>
@@ -161,44 +160,28 @@ namespace RDBLL.Entity.RCC.Slabs.Punchings
             {
                 child.DeleteFromDataSet(dataSet);
             }
-            DsOperation.DeleteRow(dataSet, GetTableName(), Id);
+            DsOperation.DeleteRow(dataSet, DsOperation.GetTableName(this), Id);
         }
         public double GetArea()
         {
             throw new NotImplementedException();
         }
         /// <summary>
-        /// Возвращает наименование таблицы
-        /// </summary>
-        /// <returns></returns>
-        public string GetTableName() { return "Punchings";}
-        /// <summary>
         /// Открывает объект из датасета
         /// </summary>
         /// <param name="dataSet"></param>
         public void OpenFromDataSet(DataSet dataSet)
         {
-            try
-            {
-                OpenFromDataSet(DsOperation.OpenFromDataSetById(dataSet, GetTableName(), Id));
-            }
-            catch (Exception ex)
-            {
-                CommonErrorProcessor.ShowErrorMessage($"Ошибка получения элемента из базы данных. Элемент {this.GetType().Name}: " + Name, ex);
-            }
+            DsOperation.OpenEntityFromDataSet(dataSet, this);
         }
         /// <summary>
         /// Открывает объект из датасета
         /// </summary>
-        /// <param name="dataRow"></param>
-        public void OpenFromDataSet(DataRow dataRow)
+        /// <param name="row"></param>
+        public void OpenFromDataSet(DataRow row)
         {
-            EntityOperation.SetProps(dataRow, this);
-            double d = 0;
-            DsOperation.Field(dataRow, ref d, "CoveringLayerX", 0.03);
-            CoveringLayerX = d;
-            DsOperation.Field(dataRow, ref d, "CoveringLayerY", 0.03);
-            CoveringLayerY = d;
+            EntityOperation.SetProps(row, this);
+            DsOperation.GetFieldsFromRow(row, this);
         }
         /// <summary>
         /// Регистрация родительского элемента
@@ -212,25 +195,15 @@ namespace RDBLL.Entity.RCC.Slabs.Punchings
             ParentMember = level;
             level.Children.Add(this);
         }
-        //Сохранение объекта в датасет
+        /// <summary>
+        /// Сохранение объекта в датасет
+        /// </summary>
         public void SaveToDataSet(DataSet dataSet, bool createNew)
         {
             try
             {
                 DataRow row = EntityOperation.SaveEntity(dataSet, createNew, this);
-                #region setFields
-                DsOperation.SetField(row, "CoveringLayerX", CoveringLayerX);
-                DsOperation.SetField(row, "CoveringLayerY", CoveringLayerY);
-                DsOperation.SetField(row, "CoveringLayerY", SeveralLayers);
-                DsOperation.SetField(row, "LeftEdge", LeftEdge);
-                DsOperation.SetField(row, "RightEdge)", RightEdge);
-                DsOperation.SetField(row, "TopEdge", TopEdge);
-                DsOperation.SetField(row, "BottomEdge", BottomEdge);
-                DsOperation.SetField(row, "LeftEdgeDist", LeftEdgeDist);
-                DsOperation.SetField(row, "RightEdgeDist)", RightEdgeDist);
-                DsOperation.SetField(row, "TopEdgeDist", TopEdgeDist);
-                DsOperation.SetField(row, "BottomEdgeDist", BottomEdgeDist);
-                #endregion
+                DsOperation.SetRowFields(row, this);
                 row.AcceptChanges();
             }
             catch (Exception ex)
@@ -272,6 +245,11 @@ namespace RDBLL.Entity.RCC.Slabs.Punchings
                 }
             }
             return true;
+        }
+
+        public double GetPerimeter()
+        {
+            throw new NotImplementedException();
         }
     }
 }

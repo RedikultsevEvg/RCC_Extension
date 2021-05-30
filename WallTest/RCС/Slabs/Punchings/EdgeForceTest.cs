@@ -72,7 +72,7 @@ namespace Test.RCС.Slabs.Punchings
             IBearingProcessor bearingProcessor = new BearingProcessor();
 
             double actual = bearingProcessor.GetBearingCapacityCoefficient(contours[0], Nz, Mx, My, true);
-            double expected = 1.677;
+            double expected = 1.645;
             //Проверка количества расчетных контуров
             Assert.AreEqual(2, contours.Count);
             //Проверка коэффициента несущей способности

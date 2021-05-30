@@ -296,7 +296,8 @@ namespace RDBLL.Entity.RCC.WallAndColumn
         {       
             Name = "Новая стена";
             this.StartPoint = StartPoint;
-            this.EndPoint = StartPoint.EndPoint(Angle, Length);
+            throw new NotImplementedException();
+            //this.EndPoint = StartPoint.EndPoint(Angle, Length);
         }
         //Клонирование объекта
         public object Clone()

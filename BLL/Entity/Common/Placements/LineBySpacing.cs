@@ -8,7 +8,7 @@ using RDBLL.Common.Service;
 using System.Drawing;
 using RDBLL.Common.Geometry.Mathematic;
 using RDBLL.Common.Geometry;
-
+using RDBLL.Common.Interfaces.Geometry.Points;
 
 namespace RDBLL.Entity.Common.Placements
 {
@@ -33,7 +33,7 @@ namespace RDBLL.Entity.Common.Placements
         /// Возвращает коллекцию точек расположения элементов
         /// </summary>
         /// <returns></returns>
-        public override List<Point2D> GetElementPoints()
+        public override List<IPoint2D> GetElementPoints()
         {
             return GeometryProcessor.GetInternalPoints(StartPoint, EndPoint, Spacing, AddStart, AddEnd);
         }

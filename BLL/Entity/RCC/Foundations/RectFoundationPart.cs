@@ -97,6 +97,11 @@ namespace RDBLL.Entity.RCC.Foundations
         {
             throw new NotImplementedException();
         }
+
+        public double GetPerimeter()
+        {
+            throw new NotImplementedException();
+        }
         #endregion
         public string Error { get { throw new NotImplementedException(); } }
         public string this[string columnName]

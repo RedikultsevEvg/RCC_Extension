@@ -4,6 +4,7 @@ using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using RDBLL.Common.Geometry;
 using RDBLL.Common.Geometry.Mathematic;
+using RDBLL.Common.Interfaces.Geometry.Points;
 
 namespace Test.Geometry.Mathematic
 {
@@ -19,7 +20,7 @@ namespace Test.Geometry.Mathematic
             int QuantityX = 4;
             int QuantityY = 6;
             bool FillArray = true;
-            List<Point2D> points = GeometryProcessor.GetRectArrayPoints(Center, SizeX, SizeY, QuantityX, QuantityY, FillArray);
+            List<IPoint2D> points = GeometryProcessor.GetRectArrayPoints(Center, SizeX, SizeY, QuantityX, QuantityY, FillArray);
             int count = points.Count();
             Assert.AreEqual(24, count);
         }
@@ -32,7 +33,7 @@ namespace Test.Geometry.Mathematic
             int QuantityX = 4;
             int QuantityY = 6;
             bool FillArray = false;
-            List<Point2D> points = GeometryProcessor.GetRectArrayPoints(Center, SizeX, SizeY, QuantityX, QuantityY, FillArray);
+            List<IPoint2D> points = GeometryProcessor.GetRectArrayPoints(Center, SizeX, SizeY, QuantityX, QuantityY, FillArray);
             int count = points.Count();
             Assert.AreEqual(16, count);
         }
@@ -45,7 +46,7 @@ namespace Test.Geometry.Mathematic
             int quantityX = 4;
             int quantityY = 6;
             bool FillArray = true;
-            List<Point2D> points = GeometryProcessor.GetRectArrayPoints(center, sizeX, sizeY, quantityX, quantityY, FillArray);
+            List<IPoint2D> points = GeometryProcessor.GetRectArrayPoints(center, sizeX, sizeY, quantityX, quantityY, FillArray);
             Assert.AreEqual(-sizeX/2, points[0].X, sizeX * 0.001);
         }
     }

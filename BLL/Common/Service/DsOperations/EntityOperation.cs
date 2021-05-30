@@ -22,11 +22,12 @@ namespace RDBLL.Common.Service
         /// <summary>
         /// Заполняет строку в соответствии с общими свойствами объекта
         /// </summary>
-        /// <param name="row"></param>
+        /// <param name="dataSet"></param>
+        /// <param name="createNew"></param>
         /// <param name="entity"></param>
         public static DataRow SaveEntity(DataSet dataSet, bool createNew, IDsSaveable entity)
         {
-            string tableName = entity.GetTableName();
+            string tableName = DsOperation.GetTableName(entity);
             DataTable dataTable = DsOperation.GetDataTable(dataSet, tableName);
             DataRow row = DsOperation.CreateNewRow(entity.Id, createNew, dataTable);
             DsOperation.SetField(row, "Id", entity.Id);
@@ -174,8 +175,8 @@ namespace RDBLL.Common.Service
                 IHasStoredParams obj = entity as IHasStoredParams;
                 foreach (StoredParam param in obj.StoredParams) { param.DeleteFromDataSet(dataSet); }
             }
-
-            DsOperation.DeleteRow(dataSet, entity.GetTableName(), entity.Id);
+            string tableName = DsOperation.GetTableName(entity);
+            DsOperation.DeleteRow(dataSet, tableName, entity.Id);
         }
     }
 }

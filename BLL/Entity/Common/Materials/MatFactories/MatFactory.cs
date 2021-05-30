@@ -5,10 +5,17 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RDBLL.Entity.Common.Materials.MatFactorys
+namespace RDBLL.Entity.Common.Materials.MatFactories
 {
+    /// <summary>
+    /// Класс фабрики материалов
+    /// </summary>
     public static class MatFactory
     {
+        /// <summary>
+        /// Фабрика классов стали
+        /// </summary>
+        /// <returns></returns>
         public static List<SteelKind> GetSteelKinds()
         {
             List<SteelKind> steelKinds = new List<SteelKind>();
@@ -34,6 +41,10 @@ namespace RDBLL.Entity.Common.Materials.MatFactorys
 
             return steelKinds;
         }
+        /// <summary>
+        /// Фабрика классов бетона
+        /// </summary>
+        /// <returns></returns>
         public static List<ConcreteKind> GetConcreteKinds()
         {
             List<ConcreteKind> concreteKinds = new List<ConcreteKind>();
@@ -166,6 +177,10 @@ namespace RDBLL.Entity.Common.Materials.MatFactorys
             #endregion
             return concreteKinds;
         }
+        /// <summary>
+        /// Фабрика классов арматуры
+        /// </summary>
+        /// <returns></returns>
         public static List<ReinforcementKind> GetReinforcementKinds()
         {
             List<ReinforcementKind> reinforcementKinds = new List<ReinforcementKind>();

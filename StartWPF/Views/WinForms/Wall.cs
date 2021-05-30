@@ -102,14 +102,16 @@ namespace RDUIL.WinForms
         {
             frmPoint frmPoint = new frmPoint(_tmpStartPoint);
             frmPoint.ShowDialog();
-            if (frmPoint.DialogResult == DialogResult.OK) { tbStartCoord.Text = _tmpStartPoint.PointText(); }
+            throw new NotImplementedException();
+            //if (frmPoint.DialogResult == DialogResult.OK) { tbStartCoord.Text = _tmpStartPoint.PointText(); }
         }
 
         private void btnEndPoint_Click(object sender, EventArgs e)
         {
             frmPoint frmPoint = new frmPoint(_tmpEndPoint);
             frmPoint.ShowDialog();
-            if (frmPoint.DialogResult == DialogResult.OK) { tbEndCoord.Text = _tmpEndPoint.PointText(); }
+            throw new NotImplementedException();
+            //if (frmPoint.DialogResult == DialogResult.OK) { tbEndCoord.Text = _tmpEndPoint.PointText(); }
         }
 
         private void cbOverrideVertSpacing_CheckedChanged(object sender, EventArgs e)

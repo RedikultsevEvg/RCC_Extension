@@ -79,7 +79,7 @@ namespace RDBLL.Entity.RCC.Slabs.Punchings.Processors
                         //Длина линии
                         double lineLength = GeometryProcessor.GetDistance(line.StartPoint, line.EndPoint);
                         //Точка центра линии
-                        Point2D lineCenter = GeometryProcessor.GetMiddlePoint(line.StartPoint, line.EndPoint);
+                        Point2D lineCenter = GeometryProcessor.GetMiddlePoint(line.StartPoint, line.EndPoint) as Point2D;
                         //Расстояние от центра линии до заданного центра
                         double dXLoc = lineCenter.X - initCenter.X;
                         double dYLoc = lineCenter.Y - initCenter.Y;

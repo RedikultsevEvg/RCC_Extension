@@ -1,4 +1,5 @@
-﻿using System;
+﻿using RDBLL.Entity.RCC.Slabs.Punchings;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
@@ -34,10 +35,6 @@ namespace RDBLL.Common.Service.DsOperations.Factory
             dataSet.Tables.Add(dataTable);
             DsOperation.AddIdColumn(dataTable);
             #endregion
-            #region SteelClasses
-            #endregion
-            #region ConcreteClasses
-            #endregion
             #region BuildingSites
             dataTable = new DataTable("BuildingSites");
             dataSet.Tables.Add(dataTable);
@@ -48,7 +45,7 @@ namespace RDBLL.Common.Service.DsOperations.Factory
             #region Soils
             dataTable = new DataTable("Soils");
             dataSet.Tables.Add(dataTable);
-            DsOperation.AddIdNameParentIdColumn(dataTable, "BuildingSites");
+            DsOperation.AddCommonColumns(dataTable, "BuildingSites");
             DsOperation.AddStringColumn(dataTable, "Type");
             DsOperation.AddStringColumn(dataTable, "Description");
             DsOperation.AddBoolColumn(dataTable, "IsDefinedFromTest", true);
@@ -76,7 +73,7 @@ namespace RDBLL.Common.Service.DsOperations.Factory
             #region SoilSections
             dataTable = new DataTable("SoilSections");
             dataSet.Tables.Add(dataTable);
-            DsOperation.AddIdNameParentIdColumn(dataTable, "BuildingSites");
+            DsOperation.AddCommonColumns(dataTable, "BuildingSites");
             DsOperation.AddBoolColumn(dataTable, "HasWater", false);
             DsOperation.AddDoubleColumn(dataTable, "NaturalWaterLevel", 200);
             DsOperation.AddDoubleColumn(dataTable, "WaterLevel", 200);
@@ -94,7 +91,7 @@ namespace RDBLL.Common.Service.DsOperations.Factory
             #region Buildings
             dataTable = new DataTable("Buildings");
             dataSet.Tables.Add(dataTable);
-            DsOperation.AddIdNameParentIdColumn(dataTable, "BuildingSites");
+            DsOperation.AddCommonColumns(dataTable, "BuildingSites");
             DsOperation.AddDoubleColumn(dataTable, "RelativeLevel", 0);
             DsOperation.AddDoubleColumn(dataTable, "AbsoluteLevel", 260);
             DsOperation.AddDoubleColumn(dataTable, "AbsolutePlaningLevel", 259.5);
@@ -105,7 +102,7 @@ namespace RDBLL.Common.Service.DsOperations.Factory
             #region Levels
             dataTable = new DataTable("Levels");
             dataSet.Tables.Add(dataTable);
-            DsOperation.AddIdNameParentIdColumn(dataTable, "Buildings");
+            DsOperation.AddCommonColumns(dataTable, "Buildings");
             DsOperation.AddDoubleColumn(dataTable, "FloorLevel", 0);
             DsOperation.AddDoubleColumn(dataTable, "Height", 3);
             DsOperation.AddDoubleColumn(dataTable, "TopOffset", -0.2);
@@ -116,7 +113,7 @@ namespace RDBLL.Common.Service.DsOperations.Factory
             #region SteelBases
             dataTable = new DataTable("SteelBases");
             dataSet.Tables.Add(dataTable);
-            DsOperation.AddIdNameParentIdColumn(dataTable, "Levels");
+            DsOperation.AddCommonColumns(dataTable, "Levels");
             FkIdColumn = new DataColumn("SteelClassId", Type.GetType("System.Int32"));
             dataTable.Columns.Add(FkIdColumn);
             FkIdColumn = new DataColumn("ConcreteClassId", Type.GetType("System.Int32"));
@@ -133,14 +130,14 @@ namespace RDBLL.Common.Service.DsOperations.Factory
             #region SteelBasePartGroups
             dataTable = new DataTable("SteelBasePartGroups");
             dataSet.Tables.Add(dataTable);
-            DsOperation.AddIdNameParentIdColumn(dataTable, "Levels");
+            DsOperation.AddCommonColumns(dataTable, "Levels");
             DsOperation.AddDoubleColumn(dataTable, "Height");
             DsOperation.AddDoubleColumn(dataTable, "Pressure");
             #endregion
             #region SteelBaseParts
             dataTable = new DataTable("SteelBaseParts");
             dataSet.Tables.Add(dataTable);
-            DsOperation.AddIdNameParentIdColumn(dataTable);
+            DsOperation.AddCommonColumns(dataTable);
             DsOperation.AddDoubleColumn(dataTable, "Width");
             DsOperation.AddDoubleColumn(dataTable, "Length");
             DsOperation.AddDoubleColumn(dataTable, "CenterX");
@@ -159,7 +156,7 @@ namespace RDBLL.Common.Service.DsOperations.Factory
             #region SteelBolts
             dataTable = new DataTable("SteelBolts");
             dataSet.Tables.Add(dataTable);
-            DsOperation.AddIdNameParentIdColumn(dataTable, "SteelBases");
+            DsOperation.AddCommonColumns(dataTable, "SteelBases");
             DsOperation.AddDoubleColumn(dataTable, "Diameter");
             DsOperation.AddDoubleColumn(dataTable, "CenterX");
             DsOperation.AddDoubleColumn(dataTable, "CenterY");
@@ -200,13 +197,13 @@ namespace RDBLL.Common.Service.DsOperations.Factory
             #region Foundations
             dataTable = new DataTable("Foundations");
             dataSet.Tables.Add(dataTable);
-            DsOperation.AddIdNameParentIdColumn(dataTable, "Levels");
+            DsOperation.AddCommonColumns(dataTable, "Levels");
             DsOperation.AddFkIdColumn("SoilSections", "SoilSectionId", dataTable, true);
             #endregion
             #region FoundationParts
             dataTable = new DataTable("FoundationParts");
             dataSet.Tables.Add(dataTable);
-            DsOperation.AddIdNameParentIdColumn(dataTable, "Foundations");
+            DsOperation.AddCommonColumns(dataTable, "Foundations");
             DsOperation.AddStringColumn(dataTable, "Type");
             DsOperation.AddDoubleColumn(dataTable, "Width");
             DsOperation.AddDoubleColumn(dataTable, "Length");
@@ -224,13 +221,13 @@ namespace RDBLL.Common.Service.DsOperations.Factory
             #region MaterialContainer
             dataTable = new DataTable("MaterialContainers");
             dataSet.Tables.Add(dataTable);
-            DsOperation.AddIdNameParentIdColumn(dataTable);
+            DsOperation.AddCommonColumns(dataTable);
             DsOperation.AddStringColumn(dataTable, "Purpose");
             #endregion
             #region MaterialUsing
             dataTable = new DataTable("MaterialUsings");
             dataSet.Tables.Add(dataTable);
-            DsOperation.AddIdNameParentIdColumn(dataTable);
+            DsOperation.AddCommonColumns(dataTable);
             DsOperation.AddStringColumn(dataTable, "Purpose");
             DsOperation.AddStringColumn(dataTable, "Materialkindname");
             DsOperation.AddIntColumn(dataTable, "SelectedId");
@@ -240,53 +237,42 @@ namespace RDBLL.Common.Service.DsOperations.Factory
             #region Safetyfactors
             dataTable = new DataTable("Safetyfactors");
             dataSet.Tables.Add(dataTable);
-            DsOperation.AddIdNameParentIdColumn(dataTable);
+            DsOperation.AddCommonColumns(dataTable);
             for (int i = 0; i <= 11; i++) { DsOperation.AddDoubleColumn(dataTable, Convert.ToString(i)); }
             #endregion
             #region RFSpacings
             dataTable = new DataTable("RFSpacings");
             dataSet.Tables.Add(dataTable);
-            DsOperation.AddIdNameParentIdColumn(dataTable);
+            DsOperation.AddCommonColumns(dataTable);
             DsOperation.AddStringColumn(dataTable, "Type");
             #endregion
             #region ParametricObjects
             dataTable = new DataTable("ParametricObjects");
             dataSet.Tables.Add(dataTable);
-            DsOperation.AddIdNameParentIdColumn(dataTable);
+            DsOperation.AddCommonColumns(dataTable);
             DsOperation.AddStringColumn(dataTable, "Type");
             #endregion
             #region StoredParams
             dataTable = new DataTable("StoredParams");
             dataSet.Tables.Add(dataTable);
-            DsOperation.AddIdNameParentIdColumn(dataTable);
+            DsOperation.AddCommonColumns(dataTable);
             DsOperation.AddStringColumn(dataTable, "Type");
             DsOperation.AddStringColumn(dataTable, "Value");
             #endregion
             #region SoilSectionUsing
             dataTable = new DataTable("SoilSectionUsings");
             dataSet.Tables.Add(dataTable);
-            DsOperation.AddIdNameParentIdColumn(dataTable);
+            DsOperation.AddCommonColumns(dataTable);
             DsOperation.AddFkIdColumn("SoilSections", "SelectedId", dataTable, true);
             #endregion
-            #region Punchings
-            dataTable = new DataTable("Punchings");
+            //Добавление таблицы узлов на продавливания
+            dataTable = DsOperation.AddTableToDataset(typeof(Punching));
             dataSet.Tables.Add(dataTable);
-            DsOperation.AddIdNameParentIdColumn(dataTable);
-            DsOperation.AddDoubleColumn(dataTable, "Width", 0.4);
-            DsOperation.AddDoubleColumn(dataTable, "Length", 0.4);
-            DsOperation.AddDoubleColumn(dataTable, "CenterX", 0);
-            DsOperation.AddDoubleColumn(dataTable, "CenterY", 0);
-            DsOperation.AddDoubleColumn(dataTable, "CoveringLayerX", 0.03);
-            DsOperation.AddDoubleColumn(dataTable, "CoveringLayerY", 0.03);
-            #endregion
-            #region Punchings
-            dataTable = new DataTable("PunchingLayers");
+            DsOperation.AddCommonColumns(dataTable, "Levels");
+            //Добавление таблицы слоев продавливания
+            dataTable = DsOperation.AddTableToDataset(typeof(PunchingLayer));
             dataSet.Tables.Add(dataTable);
-            DsOperation.AddDoubleColumn(dataTable, "Height", 0.2);
-            DsOperation.AddIdNameParentIdColumn(dataTable);
-            #endregion
-            #region
-            #endregion
+            DsOperation.AddCommonColumns(dataTable, "Punchings");
             return dataSet;
         }
     }

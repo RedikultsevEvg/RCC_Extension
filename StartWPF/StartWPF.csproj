@@ -686,6 +686,7 @@
     <Resource Include="Soil.jpg" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Views\RCC\Common\" />
     <Folder Include="Views\WPF_Windows\CommonWindows\" />
     <Folder Include="Примеры\Стальные конструкции\Колонны\Базы колонн\Расчет по участкам\" />
   </ItemGroup>

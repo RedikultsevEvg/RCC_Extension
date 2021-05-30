@@ -21,7 +21,7 @@ namespace CSL.DataSets.RCC.Foundations
             #region Foundations
             newTable = new DataTable("Foundations");
             dataSet.Tables.Add(newTable);
-            DsOperation.AddIdNameParentIdColumn(newTable);
+            DsOperation.AddCommonColumns(newTable);
             DsOperation.AddByteColumn(newTable, "Picture");
             DsOperation.AddDoubleColumn(newTable, "Width");
             DsOperation.AddDoubleColumn(newTable, "Length");
@@ -67,7 +67,7 @@ namespace CSL.DataSets.RCC.Foundations
             #region FoundationParts
             newTable = new DataTable("FoundationParts");
             dataSet.Tables.Add(newTable);
-            DsOperation.AddIdNameParentIdColumn(newTable, "Foundations");
+            DsOperation.AddCommonColumns(newTable, "Foundations");
             DsOperation.AddDoubleColumn(newTable, "Width");
             DsOperation.AddDoubleColumn(newTable, "Length");
             DsOperation.AddDoubleColumn(newTable, "Heigth");
@@ -110,7 +110,7 @@ namespace CSL.DataSets.RCC.Foundations
             #region SettlementSets
             newTable = new DataTable("SettlementSets");
             dataSet.Tables.Add(newTable);
-            DsOperation.AddIdNameParentIdColumn(newTable, "Foundations");
+            DsOperation.AddCommonColumns(newTable, "Foundations");
             DsOperation.AddDoubleColumn(newTable, "MinSettlement");
             DsOperation.AddDoubleColumn(newTable, "CompressedHeight");
             DsOperation.AddDoubleColumn(newTable, "SumRotateX");
@@ -123,7 +123,7 @@ namespace CSL.DataSets.RCC.Foundations
             #region ComressedLayers
             newTable = new DataTable("ComressedLayers");
             dataSet.Tables.Add(newTable);
-            DsOperation.AddIdNameParentIdColumn(newTable, "SettlementSets");
+            DsOperation.AddCommonColumns(newTable, "SettlementSets");
             DsOperation.AddDoubleColumn(newTable, "ZLevel");
             DsOperation.AddDoubleColumn(newTable, "TopLevel");
             DsOperation.AddDoubleColumn(newTable, "BtmLevel");
@@ -137,7 +137,7 @@ namespace CSL.DataSets.RCC.Foundations
             #region FoundationPartMoments
             newTable = new DataTable("PartMoments");
             dataSet.Tables.Add(newTable);
-            DsOperation.AddIdNameParentIdColumn(newTable, "FoundationParts");
+            DsOperation.AddCommonColumns(newTable, "FoundationParts");
             DsOperation.AddDoubleColumn(newTable, "CrcMomentX");
             DsOperation.AddDoubleColumn(newTable, "DesignMomentY");
             #endregion
@@ -145,7 +145,7 @@ namespace CSL.DataSets.RCC.Foundations
         }
         private static void AddFoundStress(DataTable dataTable)
         {
-            DsOperation.AddIdNameParentIdColumn(dataTable, "Foundations");
+            DsOperation.AddCommonColumns(dataTable, "Foundations");
             DsOperation.AddDoubleColumn(dataTable, "crcAvgStress");
             DsOperation.AddDoubleColumn(dataTable, "crcCenterStress");
             DsOperation.AddDoubleColumn(dataTable, "crcMiddleSresses");

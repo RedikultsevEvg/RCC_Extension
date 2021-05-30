@@ -18,5 +18,10 @@ namespace RDBLL.Common.Interfaces.Shapes
         /// </summary>
         /// <returns></returns>
         double GetArea();
+        /// <summary>
+        /// Возвращает периметр фигуры
+        /// </summary>
+        /// <returns></returns>
+        double GetPerimeter();
     }
 }

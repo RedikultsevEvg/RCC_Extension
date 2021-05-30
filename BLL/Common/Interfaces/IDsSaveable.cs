@@ -22,11 +22,6 @@ namespace RDBLL.Common.Interfaces
         /// </summary>
         string Name { get; set; }
         /// <summary>
-        /// Возвращает наименование таблицы для сохранения
-        /// </summary>
-        /// <returns></returns>
-        string GetTableName();
-        /// <summary>
         /// Сохранение в датасет
         /// </summary>
         /// <param name="dataSet">Датасет</param>

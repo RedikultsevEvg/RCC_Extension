@@ -5,48 +5,46 @@ using System.Text;
 using System.Threading.Tasks;
 using RDBLL.Common.Service;
 using System.Xml;
+using RDBLL.Common.Interfaces.Geometry.Points;
 
 namespace RDBLL.Common.Geometry
 
 {
-    public class Point2D : ICloneable
+    /// <summary>
+    /// Класс для точки на плоскости
+    /// </summary>
+    public class Point2D : IPoint2D, ICloneable
     {
+        /// <summary>
+        /// Координата X, метры
+        /// </summary>
         public double X { get; set; }
+        /// <summary>
+        /// Координата Y, метры
+        /// </summary>
         public double Y { get; set; }
-
-        public String PointText()
-        {
-            return "(" + Convert.ToString(X) + ";" + Convert.ToString(Y) + ")";
-        }
-
-        public Point2D EndPoint (double Angle, double Length)
-        {
-            Point2D EndPoint = new Point2D(0,0);
-            EndPoint.X = this.X + Convert.ToDouble(Math.Cos(Convert.ToDouble(Angle))) * Length;
-            EndPoint.Y = this.Y + Convert.ToDouble(Math.Sin(Convert.ToDouble(Angle))) * Length;
-            return EndPoint;
-        }
-
-        public XmlElement SaveToXMLNode(XmlDocument xmlDocument, String NodeName)
-        {
-            XmlElement xmlNode = xmlDocument.CreateElement(NodeName);
-            XMLOperations.AddAttribute(xmlNode, xmlDocument, "Coord_X", Convert.ToString(X));
-            XMLOperations.AddAttribute(xmlNode, xmlDocument, "Coord_Y", Convert.ToString(Y));
-            return xmlNode;
-        }
-
+        /// <summary>
+        /// Конструктор точки с координатами 0,0
+        /// </summary>
         public Point2D()
         {
             X = 0;
             Y = 0;
         }
-
+        /// <summary>
+        /// Конструтор точки с указанными координатами
+        /// </summary>
+        /// <param name="coord_X"></param>
+        /// <param name="coord_Y"></param>
         public Point2D(double coord_X, double coord_Y)
         {
             X = coord_X;
             Y = coord_Y;
         }
-
+        /// <summary>
+        /// Клонирование точки
+        /// </summary>
+        /// <returns></returns>
         public object Clone()
         {
             return this.MemberwiseClone();

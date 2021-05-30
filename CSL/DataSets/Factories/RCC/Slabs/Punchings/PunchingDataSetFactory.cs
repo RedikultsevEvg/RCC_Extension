@@ -19,26 +19,26 @@ namespace CSL.DataSets.Factories.RCC.Slabs.Punchings
             DataTable newTable;
             //Таблица продавливаний
             newTable = new DataTable("Punchings");
-            DsOperation.AddIdNameParentIdColumn(newTable);
+            DsOperation.AddCommonColumns(newTable);
             dataSet.Tables.Add(newTable);
             //Таблица 
             
             //Таблица расчетных контуров
             newTable = new DataTable("PunchingContours");
             dataSet.Tables.Add(newTable);
-            DsOperation.AddIdNameParentIdColumn(newTable, "Punchings");
+            DsOperation.AddCommonColumns(newTable, "Punchings");
             //Таблица расчетных субконтуров
             newTable = new DataTable("PunchingSubContours");
             dataSet.Tables.Add(newTable);
-            DsOperation.AddIdNameParentIdColumn(newTable, "PunchingContours");
+            DsOperation.AddCommonColumns(newTable, "PunchingContours");
             //Таблица линий расчетного контура
             newTable = new DataTable("PunchingLines");
             dataSet.Tables.Add(newTable);
-            DsOperation.AddIdNameParentIdColumn(newTable, "PunchingSubContours");
+            DsOperation.AddCommonColumns(newTable, "PunchingSubContours");
             //Таблица результатов расчета по контурам
             newTable = new DataTable("PunchingLoadSetContours");
             dataSet.Tables.Add(newTable);
-            DsOperation.AddIdNameParentIdColumn(newTable, "Punchings");
+            DsOperation.AddCommonColumns(newTable, "Punchings");
             return dataSet;
         }
     }

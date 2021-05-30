@@ -218,5 +218,10 @@ namespace RDBLL.Entity.SC.Column
         {
             return Width * Length;
         }
+
+        public double GetPerimeter()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

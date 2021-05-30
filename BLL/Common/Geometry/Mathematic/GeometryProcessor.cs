@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using RDBLL.Common.Geometry;
+using RDBLL.Common.Interfaces.Geometry.Points;
 using RDBLL.Common.Interfaces.Shapes;
 
 namespace RDBLL.Common.Geometry.Mathematic
@@ -19,7 +20,7 @@ namespace RDBLL.Common.Geometry.Mathematic
         /// <param name="StartPoint">Начальная точка</param>
         /// <param name="EndPoint">Конечная точка</param>
         /// <returns></returns>
-        public static double GetDistance(Point2D StartPoint, Point2D EndPoint)
+        public static double GetDistance(IPoint2D StartPoint, IPoint2D EndPoint)
         {
             double dX = EndPoint.X - StartPoint.X;
             double dY = EndPoint.Y - StartPoint.Y;
@@ -75,7 +76,7 @@ namespace RDBLL.Common.Geometry.Mathematic
         /// <param name="startPoint">Начальная точка отрезка</param>
         /// <param name="endPoint">Конечная точка отрезка</param>
         /// <returns>Значение угла в радианах</returns>
-        public static double GetAngle(Point2D startPoint, Point2D endPoint)
+        public static double GetAngle(IPoint2D startPoint, IPoint2D endPoint)
         {
             double dX = endPoint.X - startPoint.X;
             double dY = endPoint.Y - startPoint.Y;
@@ -88,7 +89,7 @@ namespace RDBLL.Common.Geometry.Mathematic
         /// <param name="angle">Угол вдоль которого строится новая точка</param>
         /// <param name="dist">Расстояние, на котором строится новая точка</param>
         /// <returns></returns>
-        public static Point2D GetPointOfset(Point2D point, double angle, double dist)
+        public static IPoint2D GetPointOfset(IPoint2D point, double angle, double dist)
         {
             return new Point2D(point.X + Math.Cos(angle) * dist, point.Y + Math.Sin(angle) * dist);
         }
@@ -98,12 +99,12 @@ namespace RDBLL.Common.Geometry.Mathematic
         /// <param name="startPoint">Начальная точка</param>
         /// <param name="endPoint">Конечная точка</param>
         /// <returns></returns>
-        public static Point2D GetMiddlePoint(Point2D startPoint, Point2D endPoint)
+        public static IPoint2D GetMiddlePoint(IPoint2D startPoint, IPoint2D endPoint)
         {
             //Расстояние между точками
             double lineLength = GetDistance(startPoint, endPoint);
             //Точка центра линии
-            Point2D lineCenter = GetPointOfset(startPoint, endPoint, lineLength / 2);
+            Point2D lineCenter = GetPointOfset(startPoint, endPoint, lineLength / 2) as Point2D;
             return lineCenter;
         }
         /// <summary>
@@ -113,7 +114,7 @@ namespace RDBLL.Common.Geometry.Mathematic
         /// <param name="endPoint">Конечная точка</param>
         /// <param name="dist">Расстояние от начальной точки</param>
         /// <returns></returns>
-        public static Point2D GetPointOfset(Point2D startPoint, Point2D endPoint, double dist)
+        public static IPoint2D GetPointOfset(IPoint2D startPoint, IPoint2D endPoint, double dist)
         {
             double angle = Math.Atan2((endPoint.Y - startPoint.Y), (endPoint.X - startPoint.X)); 
             return GetPointOfset(startPoint, angle, dist);
@@ -127,17 +128,17 @@ namespace RDBLL.Common.Geometry.Mathematic
         /// <param name="addStart">Флаг добавления начальной точки</param>
         /// <param name="addEnd">Флаг добавления конечной точки</param>
         /// <returns></returns>
-        public static List<Point2D> GetInternalPoints(Point2D startPoint, Point2D endPoint, int quant, bool addStart, bool addEnd)
+        public static List<IPoint2D> GetInternalPoints(IPoint2D startPoint, IPoint2D endPoint, int quant, bool addStart, bool addEnd)
         {
-            List<Point2D> points = new List<Point2D>();
-            if (addStart) points.Add(startPoint.Clone() as Point2D);
+            List<IPoint2D> points = new List<IPoint2D>();
+            if (addStart) points.Add((startPoint as Point2D).Clone() as Point2D);
             double length = GetDistance(startPoint, endPoint);
             double spacing = length / (quant + 1);
             for (int i = 1; i <= quant; i++)
             {
                 points.Add(GeometryProcessor.GetPointOfset(startPoint, endPoint, spacing * i));
             }
-            if (addEnd) points.Add(endPoint.Clone() as Point2D);
+            if (addEnd) points.Add((endPoint as Point2D).Clone() as Point2D);
             return points;
         }
         /// <summary>
@@ -149,7 +150,7 @@ namespace RDBLL.Common.Geometry.Mathematic
         /// <param name="addStart">Флаг добавления начальной точки</param>
         /// <param name="addEnd">Флаг добавления конечной точки</param>
         /// <returns></returns>
-        public static List<Point2D> GetInternalPoints(Point2D startPoint, Point2D endPoint, double maxSpacing, bool addStart, bool addEnd)
+        public static List<IPoint2D> GetInternalPoints(IPoint2D startPoint, IPoint2D endPoint, double maxSpacing, bool addStart, bool addEnd)
         {
             double length = GetDistance(startPoint, endPoint);
             int quant = Convert.ToInt32(Math.Ceiling(length / maxSpacing)) - 1;
@@ -165,9 +166,9 @@ namespace RDBLL.Common.Geometry.Mathematic
         /// <param name="quantityY">Количество по Y</param>
         /// <param name="fillArray">Флаг заполнения массива</param>
         /// <returns></returns>
-        public static List<Point2D> GetRectArrayPoints(Point2D center, double sizeX, double sizeY, int quantityX, int quantityY, bool fillArray)
+        public static List<IPoint2D> GetRectArrayPoints(IPoint2D center, double sizeX, double sizeY, int quantityX, int quantityY, bool fillArray)
         {
-            List<Point2D> points = new List<Point2D>();
+            List<IPoint2D> points = new List<IPoint2D>();
             double bottomPointY = center.Y - sizeY / 2;
             double topPointY = center.Y + sizeY / 2;
             double leftPointX = center.X - sizeX / 2;
@@ -188,8 +189,8 @@ namespace RDBLL.Common.Geometry.Mathematic
                 //Если по Y есть точки
                 if (quantityY > 1)
                 {
-                    List<Point2D> pointsLeftY = GeometryProcessor.GetInternalPoints(bottomLeft, topLeft, quantityY - 2, false, false);
-                    List<Point2D> pointsRightY = GeometryProcessor.GetInternalPoints(bottomRight, topRight, quantityY - 2, false, false);
+                    List<IPoint2D> pointsLeftY = GeometryProcessor.GetInternalPoints(bottomLeft, topLeft, quantityY - 2, false, false);
+                    List<IPoint2D> pointsRightY = GeometryProcessor.GetInternalPoints(bottomRight, topRight, quantityY - 2, false, false);
                     points.AddRange(GeometryProcessor.GetInternalPoints(bottomLeft, bottomRight, quantityX - 2, true, true));
                     for (int i = 0; i < pointsLeftY.Count(); i++)
                     {
@@ -244,7 +245,7 @@ namespace RDBLL.Common.Geometry.Mathematic
         public static double[] GetMomInertia(List<IShape> shapes)
         {
             double[] moments = new double[] { 0, 0 };
-            Point2D center = GetGravCenter(shapes);
+            Point2D center = GetGravCenter(shapes) as Point2D;
             foreach (IShape shape in shapes)
             {
                 double[] locMoments = GetMomInertia(shape, center);
@@ -260,13 +261,13 @@ namespace RDBLL.Common.Geometry.Mathematic
         /// <param name="endPoint"></param>
         /// <param name="gravityCenter"></param>
         /// <returns></returns>
-        public static double[] GetLineMomentInertia(Point2D startPoint, Point2D endPoint, Point2D gravityCenter)
+        public static double[] GetLineMomentInertia(IPoint2D startPoint, IPoint2D endPoint, IPoint2D gravityCenter)
         {
             double Ix, Iy;
             //Находим длину отрезка
             double lineLength = GetDistance(startPoint, endPoint);
             //Находим центр отрезка
-            Point2D lineCenter = GetMiddlePoint(startPoint, endPoint);
+            Point2D lineCenter = GetMiddlePoint(startPoint, endPoint) as Point2D;
             //Находим угол между осью X и отрезком
             double angle = GetAngle(startPoint, endPoint);
             //расстояние от заданного центра тяжести до центра отрезка (проекция на ось X)
@@ -285,7 +286,7 @@ namespace RDBLL.Common.Geometry.Mathematic
         /// </summary>
         /// <param name="shapes">Коллекция фигур</param>
         /// <returns>Точка центра тяжести</returns>
-        public static Point2D GetGravCenter(List<IShape> shapes)
+        public static IPoint2D GetGravCenter(List<IShape> shapes)
         {
             double[] s = new double[] { 0, 0, };
             double totArea = GetArea(shapes);
@@ -440,6 +441,43 @@ namespace RDBLL.Common.Geometry.Mathematic
             point = new Point2D(center.X + width / 2, center.Y + length / 2);
             points.Add(point);
             return points;
+        }
+        /// <summary>
+        /// Поворачивает массив точек на указанный угол относительно указанного центра
+        /// </summary>
+        /// <param name="points"></param>
+        /// <param name="angle"></param>
+        /// <param name="center"></param>
+        public static void RotatePoints(List<IPoint2D> points, double angle, IPoint2D center = null)
+        {
+            if (center == null)
+            {
+                center = new Point2D();
+            }
+            foreach (IPoint2D point in points)
+            {
+                double dist = GetDistance(point, center);
+                point.X += dist * Math.Sin(angle);
+                point.Y += dist * Math.Cos(angle);
+                if (point is IPoint2DRot)
+                {
+                    (point as IPoint2DRot).RotZ += angle;
+                }
+            }
+        }
+        /// <summary>
+        /// Перемещает массив точек на указанное расстояние
+        /// </summary>
+        /// <param name="points">Массив точек</param>
+        /// <param name="dX">Расстояние по оси X</param>
+        /// <param name="dY">Рассточние по оси Y</param>
+        public static void MovePoints (List<IPoint2D> points, double dX, double dY)
+        {
+            foreach (IPoint2D point in points)
+            {
+                point.X += dX;
+                point.Y += dY;
+            }
         }
     }
 }

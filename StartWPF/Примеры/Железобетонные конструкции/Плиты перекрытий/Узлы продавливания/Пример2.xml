@@ -1,6 +1,6 @@
 <?xml version="1.0" standalone="yes"?>
 <NewDataSet>
-  <Generators Id="424" />
+  <Generators Id="31" />
   <Versions>
     <Version>1</Version>
   </Versions>
@@ -46,27 +46,20 @@
     <IsCombination>false</IsCombination>
     <BothSign>false</BothSign>
   </LoadSets>
-  <LoadSets Id="135" Name="Временная">
-    <PartialSafetyFactor>1.2</PartialSafetyFactor>
-    <IsLiveLoad>true</IsLiveLoad>
-    <IsCombination>false</IsCombination>
-    <BothSign>false</BothSign>
-  </LoadSets>
-  <ForcesGroupLoadSets Id="426" ForcesGroupId="2" LoadSetId="6" />
-  <ForcesGroupLoadSets Id="427" ForcesGroupId="2" LoadSetId="135" />
+  <ForcesGroupLoadSets Id="33" ForcesGroupId="2" LoadSetId="6" />
   <ForceParameters Id="7" LoadSetId="6">
     <KindId>1</KindId>
     <CrcValue>-100000</CrcValue>
   </ForceParameters>
-  <ForceParameters Id="136" LoadSetId="135">
-    <KindId>1</KindId>
-    <CrcValue>-200000</CrcValue>
+  <ForceParameters Id="8" LoadSetId="6">
+    <KindId>2</KindId>
+    <CrcValue>200000</CrcValue>
   </ForceParameters>
-  <ParentForcesGroups Id="425" ParentId="1" ForcesGroupId="2" />
+  <ParentForcesGroups Id="32" ParentId="1" ForcesGroupId="2" />
   <MaterialUsings Id="4" Name="Бетон" ParentId="3">
     <Purpose>Plate</Purpose>
     <Materialkindname>Concrete</Materialkindname>
-    <SelectedId>5</SelectedId>
+    <SelectedId>6</SelectedId>
     <Diameter>0.012</Diameter>
     <Prestrain>0</Prestrain>
   </MaterialUsings>
@@ -84,21 +77,22 @@
     <_x0031_0>1</_x0031_0>
     <_x0031_1>1</_x0031_1>
   </Safetyfactors>
-  <Punchings Id="1" Name="Продавливание 1" ParentId="0">
+  <Punchings Id="1" Name="Продавливание прямоугольной колонной" ParentId="0">
     <Width>0.4</Width>
-    <Length>0.6</Length>
+    <Length>0.4</Length>
     <CenterX>0</CenterX>
     <CenterY>0</CenterY>
     <CoveringLayerX>0.03</CoveringLayerX>
-    <CoveringLayerY>0</CoveringLayerY>
+    <CoveringLayerY>0.04</CoveringLayerY>
+    <SeveralLayers>false</SeveralLayers>
     <LeftEdge>true</LeftEdge>
-    <RightEdge_x0029_>false</RightEdge_x0029_>
+    <RightEdge>false</RightEdge>
     <TopEdge>false</TopEdge>
     <BottomEdge>true</BottomEdge>
-    <LeftEdgeDist>0</LeftEdgeDist>
-    <RightEdgeDist_x0029_>0</RightEdgeDist_x0029_>
+    <LeftEdgeDist>0.3</LeftEdgeDist>
+    <RightEdgeDist>0</RightEdgeDist>
     <TopEdgeDist>0</TopEdgeDist>
-    <BottomEdgeDist>0.25</BottomEdgeDist>
+    <BottomEdgeDist>0.2</BottomEdgeDist>
   </Punchings>
   <PunchingLayers Id="3" Name="Верхний слой" ParentId="1">
     <Height>0.2</Height>
