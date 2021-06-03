@@ -50,6 +50,58 @@ namespace RDBLL.Entity.Common.Materials.Processors.Strength
             return strength;
         }
         /// <summary>
+        /// Возвращает расчетное сопротивление арматурной стали
+        /// </summary>
+        /// <param name="reinforcement">Применение арматуры</param>
+        /// <param name="firstState">Флаг первой группы предельных состояний</param>
+        /// <param name="inCompression">Флаг сжатия</param>
+        /// <param name="fullLoad">Флаг полной нагрузки</param>
+        /// <returns></returns>
+        public static double GetReinforcementStrength(ReinforcementUsing reinforcement, bool firstState, bool inCompression, bool fullLoad)
+        {
+            double strength;
+            ReinforcementKind kind = reinforcement.MaterialKind as ReinforcementKind;
+            double coefficient = GetPartialCoefficient(reinforcement, firstState, inCompression, fullLoad);
+            if (firstState) //Если для первой группы предельных состояния
+            {
+                if (inCompression) //Если при сжатии
+                {
+                    strength = kind.FstCompStrength;
+                }
+                else //иначе при растяжении
+                {
+                    strength = kind.FstTensStrength;
+                }
+            }
+            else //Иначе для второй группы предельных состояния
+            {
+                if (inCompression)
+                {
+                    strength = kind.SndCompStrength;
+                }
+                else
+                {
+                    strength = kind.SndTensStrength;
+                }
+            }
+            //В любом случае расчетно сопротивление при сжатии принимается
+            if (inCompression) //Если при сжатии
+            {
+                //Не более 500МПа при длительных нагрузках
+                if (strength > 5.0e8)
+                {
+                    strength = 5.0e8;
+                }
+                //Не более 400МПа для всех нагрузок
+                if (strength > 4.0e8 & fullLoad)
+                {
+                    strength = 4.0e8;
+                }
+            }
+            strength *= coefficient;
+            return strength;
+        }
+        /// <summary>
         /// Возвращает суммарный коэффициент условий работы
         /// </summary>
         /// <param name="material">Материал</param>

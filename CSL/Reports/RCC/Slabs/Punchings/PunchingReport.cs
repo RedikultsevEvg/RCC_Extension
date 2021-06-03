@@ -194,10 +194,10 @@ namespace CSL.Reports.RCC.Slabs.Punchings
                 double[] maxDist = PunchingGeometryProcessor.GetMaxDistFromContour(contour);
                 double totalHeight = PunchingGeometryProcessor.GetContourHeight(contour);
                 //Для получения единичных моментов сопротивления контура делим на суммарныю высоту контура
-                double WxPos = momInertia[0] / maxDist[0] / totalHeight;
-                double WxNeg = momInertia[0] / maxDist[1] / totalHeight;
-                double WyPos = momInertia[1] / maxDist[2] / totalHeight;
-                double WyNeg = momInertia[1] / maxDist[3] / totalHeight;
+                double WxPos = momInertia[0] / maxDist[2] / totalHeight;
+                double WxNeg = momInertia[0] / maxDist[3] / totalHeight;
+                double WyPos = momInertia[1] / maxDist[0] / totalHeight;
+                double WyNeg = momInertia[1] / maxDist[1] / totalHeight;
                 DsOperation.SetField(row, "WxPos", MathOperation.Round(WxPos * geometryAreaCoefficient));
                 DsOperation.SetField(row, "WxNeg", MathOperation.Round(WxNeg * geometryAreaCoefficient));
                 DsOperation.SetField(row, "WyPos", MathOperation.Round(WyPos * geometryAreaCoefficient));

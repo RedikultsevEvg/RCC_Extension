@@ -32,17 +32,9 @@ namespace RDBLL.Entity.RCC.Reinforcements.Bars
         /// </summary>
         public IDsSaveable ParentMember { get; }
         /// <summary>
-        /// Диаметр стержня
-        /// </summary>
-        public double Diameter { get; set; }
-        /// <summary>
         /// Предварительная деформация
         /// </summary>
         public double Prestrain { get; set; }
-        /// <summary>
-        /// Точка центра (не используется)
-        /// </summary>
-        public Point2D Center { get => new Point2D(); set => throw new NotImplementedException(); }
         /// <summary>
         /// Расположение элементов
         /// </summary>
@@ -54,7 +46,7 @@ namespace RDBLL.Entity.RCC.Reinforcements.Bars
         /// <summary>
         /// Форма стержня
         /// </summary>
-        public IShape Shape { get; set; }
+        public ICircle Circle { get; set; }
         #endregion
         public void DeleteFromDataSet(DataSet dataSet)
         {

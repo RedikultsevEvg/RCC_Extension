@@ -54,11 +54,17 @@ namespace RDBLL.Entity.Common.Materials
         /// </summary>
         public double Eps2Tens { get; set; }
         /// <summary>
-        /// модуль упругости
+        /// модуль упругости (модуль Юнга)
         /// </summary>
         public double ElasticModulus { get; set; }
+        /// <summary>
+        /// Коэффициент Пуассона
+        /// </summary>
         public double PoissonRatio { get => 0.3; }
-
+        /// <summary>
+        /// Коэффициент сцепления для расчета длины анкеовки
+        /// </summary>
+        public double BondCoefficient { get; set; }
         #region IODataset
         /// <summary>
         /// Return name of table in dataset for CRUD operation

@@ -186,6 +186,8 @@
     <Compile Include="Entity\RCC\Foundations\RectFoundationPart.cs" />
     <Compile Include="Entity\RCC\Foundations\Processors\FoundationProcessor.cs" />
     <Compile Include="Entity\RCC\Foundations\Results\FoundationResult.cs" />
+    <Compile Include="Entity\RCC\Reinforcements\Ancorages\AncorageLogic.cs" />
+    <Compile Include="Entity\RCC\Reinforcements\Ancorages\Factories\AncorageTestFactory.cs" />
     <Compile Include="Entity\RCC\Reinforcements\Ancorages\IAncorageCalc.cs" />
     <Compile Include="Entity\RCC\Reinforcements\Ancorages\IAncorageLogic.cs" />
     <Compile Include="Entity\RCC\Reinforcements\Bar.cs" />

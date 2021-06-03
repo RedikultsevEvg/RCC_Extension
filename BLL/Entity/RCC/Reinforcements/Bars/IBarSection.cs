@@ -10,9 +10,18 @@ using System.Threading.Tasks;
 
 namespace RDBLL.Entity.RCC.Reinforcements.Bars
 {
+    /// <summary>
+    /// Интерфейс арматурного стержня круглого сечения
+    /// </summary>
     public interface IBarSection : IHasParent
     {
-        IShape Shape { get; set; }
+        /// <summary>
+        /// Форма стержня
+        /// </summary>
+        ICircle Circle { get; set; }
+        /// <summary>
+        /// Использование материала арматуры
+        /// </summary>
         ReinforcementUsing Reinforcement { get; set; }
     }
 }

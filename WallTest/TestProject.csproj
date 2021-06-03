@@ -60,6 +60,7 @@
     <Compile Include="RCС\Common\RectCrossSection.cs" />
     <Compile Include="RCС\Foundations\NaturalSoilFoundation\CheckStress\AlphaCoff.cs" />
     <Compile Include="RCС\Foundations\NaturalSoilFoundation\CheckStress\MCofficients.cs" />
+    <Compile Include="RCС\Reinforcement\Ancorages\AncorageTest.cs" />
     <Compile Include="RCС\Slabs\Punchings\CentralForceTest.cs" />
     <Compile Include="RCС\Slabs\Punchings\SaveTest.cs" />
     <Compile Include="RCС\Slabs\Punchings\EdgeForceTest.cs" />
@@ -74,6 +75,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\.editorconfig">
+      <Link>.editorconfig</Link>
+    </None>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>

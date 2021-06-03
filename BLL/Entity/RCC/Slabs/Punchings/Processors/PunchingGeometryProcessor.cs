@@ -12,6 +12,9 @@ using System.Threading.Tasks;
 
 namespace RDBLL.Entity.RCC.Slabs.Punchings.Processors
 {
+    /// <summary>
+    /// Геометрический процессор для вычисления параметров продавливания
+    /// </summary>
     public static class PunchingGeometryProcessor
     {
         /// <summary>
@@ -180,20 +183,25 @@ namespace RDBLL.Entity.RCC.Slabs.Punchings.Processors
 
             return new double[] { maxX, minX, maxY, minY };
         }
-
+        /// <summary>
+        /// Возвращает площадь субконтура
+        /// </summary>
+        /// <param name="subContour">Субконтур продавливания</param>
+        /// <returns></returns>
         internal static double GetSubContourArea(PunchingSubContour subContour)
         {
             double area = 0;
             foreach (PunchingLine line in subContour.Lines)
             {
+                //Если линия является несущей
                 if (line.IsBearing)
                 {
+                    //Добавляем ее площадь
                     area += GeometryProcessor.GetDistance(line.StartPoint, line.EndPoint) * GetLineWorkCoef(line, subContour.Height) * subContour.Height;
                 }
             }
             return area;
         }
-
         /// <summary>
         /// Возвращает минимальные и максимальные расстояния от заданного центра до точек линий
         /// </summary>
@@ -385,6 +393,12 @@ namespace RDBLL.Entity.RCC.Slabs.Punchings.Processors
             }
             return total;
         }
+        /// <summary>
+        /// Возвращает коэффициент условий работы линии с учетом ее горизонтальной проекции и высоты контура
+        /// </summary>
+        /// <param name="line"></param>
+        /// <param name="height"></param>
+        /// <returns></returns>
         private static double GetLineWorkCoef(PunchingLine line, double height)
         {
             //Коэффициент несущей способности линии, зависящий от соотношения горизонтальной проекции линии и высоты контура

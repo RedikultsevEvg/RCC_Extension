@@ -189,11 +189,12 @@ namespace RDBLL.Entity.Common.Materials.MatFactories
             reinforcementKind = new ReinforcementKind();
             reinforcementKind.Id = 2;
             reinforcementKind.Name = "A400";
-            reinforcementKind.FstCompStrength = 350e6;
-            reinforcementKind.FstTensStrength = 350e6;
-            reinforcementKind.SndCompStrength = 400e6;
-            reinforcementKind.SndTensStrength = 400e6;
+            reinforcementKind.FstCompStrength = 340e6;
+            reinforcementKind.FstTensStrength = 340e6;
+            reinforcementKind.SndCompStrength = 390e6;
+            reinforcementKind.SndTensStrength = 390e6;
             reinforcementKind.ElasticModulus = 2e11;
+            reinforcementKind.BondCoefficient = 2.5;
             reinforcementKinds.Add(reinforcementKind);
             #endregion
             #region А500
@@ -205,6 +206,7 @@ namespace RDBLL.Entity.Common.Materials.MatFactories
             reinforcementKind.SndCompStrength = 500e6;
             reinforcementKind.SndTensStrength = 500e6;
             reinforcementKind.ElasticModulus = 2e11;
+            reinforcementKind.BondCoefficient = 2.5;
             reinforcementKinds.Add(reinforcementKind);
             #endregion
             return reinforcementKinds;

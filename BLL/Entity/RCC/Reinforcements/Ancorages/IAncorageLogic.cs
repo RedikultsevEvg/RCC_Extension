@@ -20,7 +20,7 @@ namespace RDBLL.Entity.RCC.Reinforcements.Ancorages
         /// <param name="barSection">Сечение арматурного стержня</param>
         /// <param name="loadRate">Доля длительности нагрузки</param>
         /// <returns></returns>
-        double GetAncorageLenth(ConcreteUsing concrete, IBarSection barSection, double loadRate);
+        double GetAncorageLenth(ConcreteUsing concrete, IBarSection barSection, double loadRate, bool inCompression, double areaCofficient = 1);
         /// <summary>
         /// Возвращает длину нахлеста арматуры в бетоне для нахлеста с разбежкой
         /// </summary>
@@ -28,7 +28,7 @@ namespace RDBLL.Entity.RCC.Reinforcements.Ancorages
         /// <param name="barSection">Сечение арматурного стержня</param>
         /// <param name="loadRate">Доля длительности нагрузки</param>
         /// <returns></returns>
-        double GetSimpleLappingLenth(ConcreteUsing concrete, IBarSection barSection, double loadRate);
+        double GetSimpleLappingLenth(ConcreteUsing concrete, IBarSection barSection, double loadRate, bool inCompression, double areaCofficient = 1);
         /// <summary>
         /// Возвращает длину разбежки арматуры в бетоне для нахлеста с разбежкой
         /// </summary>
@@ -36,7 +36,7 @@ namespace RDBLL.Entity.RCC.Reinforcements.Ancorages
         /// <param name="barSection">Сечение арматурного стержня</param>
         /// <param name="loadRate">Доля длительности нагрузки</param>
         /// <returns></returns>
-        double GetSimpleLappingGapLenth(ConcreteUsing concrete, IBarSection barSection, double loadRate);
+        double GetSimpleLappingGapLenth(ConcreteUsing concrete, IBarSection barSection, double loadRate, bool inCompression, double areaCofficient = 1);
         /// <summary>
         /// Возвращает длину нахлеста арматуры в бетоне для нахлеста без разбежки
         /// </summary>
@@ -44,6 +44,6 @@ namespace RDBLL.Entity.RCC.Reinforcements.Ancorages
         /// <param name="barSection">Сечение арматурного стержня</param>
         /// <param name="loadRate">Доля длительности нагрузки</param>
         /// <returns></returns>
-        double GetDoubleLappingLenth(ConcreteUsing concrete, IBarSection barSection, double loadRate);
+        double GetDoubleLappingLenth(ConcreteUsing concrete, IBarSection barSection, double loadRate, bool inCompression, double areaCofficient = 1);
     }
 }

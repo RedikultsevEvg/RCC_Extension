@@ -43,7 +43,7 @@ namespace RDBLL.Common.Geometry.Sections
         /// <returns></returns>
         public double GetPerimeter()
         {
-            return Math.PI * Diameter * Diameter / 4;
+            return Math.PI * Diameter;
         }
     }
 }
