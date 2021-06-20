@@ -19,7 +19,7 @@ namespace RDBLL.Forces
     /// <summary>
     /// Группа нагрузок, приложенных в одной точке
     /// </summary>
-    public class ForcesGroup: IDsSaveable, IDuplicate
+    public class ForcesGroup: IDsSaveable, ICloneable
     {
         #region Fields and properties
         /// <summary>

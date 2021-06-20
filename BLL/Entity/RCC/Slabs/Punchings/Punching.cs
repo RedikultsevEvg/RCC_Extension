@@ -1,5 +1,6 @@
 ﻿using RDBLL.Common.Geometry;
 using RDBLL.Common.Interfaces;
+using RDBLL.Common.Interfaces.IOInterfaces;
 using RDBLL.Common.Interfaces.Shapes;
 using RDBLL.Common.Service;
 using RDBLL.Common.Service.DsOperations;
@@ -36,7 +37,7 @@ namespace RDBLL.Entity.RCC.Slabs.Punchings
         /// <summary>
         /// Коллекция слоев продавливания
         /// </summary>
-        public ObservableCollection<IHasParent> Children { get; set; }
+        public ObservableCollection<IHasId> Children { get; set; }
         /// <summary>
         /// Коллекция групп нагрузок
         /// </summary>
@@ -116,7 +117,7 @@ namespace RDBLL.Entity.RCC.Slabs.Punchings
         public Punching(bool GenId = false)
         {
             if (GenId) { Id = ProgrammSettings.CurrentId; }
-            Children = new ObservableCollection<IHasParent>();
+            Children = new ObservableCollection<IHasId>();
             ForcesGroups = new ObservableCollection<ForcesGroup>();
             ForcesGroups.Add(new ForcesGroup(this));
             Center = new Point2D();
@@ -137,7 +138,7 @@ namespace RDBLL.Entity.RCC.Slabs.Punchings
                 newLoad.Owners.Add(punching);
                 punching.ForcesGroups.Add(newLoad);
             }
-            punching.Children = new ObservableCollection<IHasParent>();
+            punching.Children = new ObservableCollection<IHasId>();
             foreach (PunchingLayer layer in Children)
             {
                 PunchingLayer newLayer = layer.Clone() as PunchingLayer;

@@ -1,9 +1,13 @@
 ﻿using RDBLL.Common.Geometry;
 using RDBLL.Common.Interfaces;
+using RDBLL.Common.Interfaces.IOInterfaces;
 using RDBLL.Common.Interfaces.Materials;
 using RDBLL.Common.Interfaces.Placements;
 using RDBLL.Common.Interfaces.Shapes;
+using RDBLL.Common.Service;
+using RDBLL.Common.Service.DsOperations;
 using RDBLL.Entity.Common.Materials;
+using RDBLL.Entity.RCC.Reinforcements.Ancorages;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -26,11 +30,11 @@ namespace RDBLL.Entity.RCC.Reinforcements.Bars
         /// <summary>
         /// Наименование
         /// </summary>
-        public string Name {get; set; }
+        public string Name { get; set; }
         /// <summary>
         /// Ссылка на родительский элемент
         /// </summary>
-        public IDsSaveable ParentMember { get; }
+        public IHasId ParentMember { get; private set; }
         /// <summary>
         /// Предварительная деформация
         /// </summary>
@@ -48,34 +52,41 @@ namespace RDBLL.Entity.RCC.Reinforcements.Bars
         /// </summary>
         public ICircle Circle { get; set; }
         #endregion
-        public void DeleteFromDataSet(DataSet dataSet)
+        #region Constructors
+        /// <summary>
+        /// Конструктор по умолчанию
+        /// </summary>
+        /// <param name="circle">Круглое сечение</param>
+        /// <param name="genId">Флаг необходимости генерации кода</param>
+        public CircleBarSection (ICircle circle, bool genId = false)
         {
-            
+            if (genId)
+            {
+                Id = ProgrammSettings.CurrentId;
+            }
+            Circle = circle;
         }
 
-        public void OpenFromDataSet(DataSet dataSet)
+        public void RegisterParent(IHasId parent)
         {
-            throw new NotImplementedException();
-        }
-
-        public void OpenFromDataSet(DataRow dataRow)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void RegisterParent(IDsSaveable parent)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void SaveToDataSet(DataSet dataSet, bool createNew)
-        {
-            throw new NotImplementedException();
+            if (ParentMember != null)
+            {
+                UnRegisterParent();
+            }
+            IAncorage ancorage = parent as IAncorage;
+            ancorage.BarSections.Add(this);
+            ParentMember = ancorage;
         }
 
         public void UnRegisterParent()
         {
-            throw new NotImplementedException();
+            if (ParentMember != null)
+            {
+                IAncorage ancorage = ParentMember as IAncorage;
+                ancorage.BarSections.Remove(this);
+            }
+            ParentMember = null;
         }
+        #endregion
     }
 }

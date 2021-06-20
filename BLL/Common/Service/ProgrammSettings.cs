@@ -176,6 +176,12 @@ namespace RDBLL.Common.Service
                     else return false;
                 }
                 DataSet dataSet = GetDataSet();
+                string path = Path.GetDirectoryName(FilePath);
+                //Если директории не существует, создаем ее
+                if (! File.Exists(path))
+                {
+                    Directory.CreateDirectory(path);
+                }
                 dataSet.WriteXml(FilePath);
                 IsDataChanged = false;
                 return true;

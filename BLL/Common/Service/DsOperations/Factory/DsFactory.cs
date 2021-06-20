@@ -1,4 +1,7 @@
-﻿using RDBLL.Entity.RCC.Slabs.Punchings;
+﻿using RDBLL.Entity.RCC.BuildingAndSite;
+using RDBLL.Entity.RCC.Reinforcements.Ancorages;
+using RDBLL.Entity.RCC.Reinforcements.Bars;
+using RDBLL.Entity.RCC.Slabs.Punchings;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -19,6 +22,7 @@ namespace RDBLL.Common.Service.DsOperations.Factory
 
             DataTable dataTable;
             DataColumn FkIdColumn;
+            string parentTableName;
             #region Generators
             dataTable = new DataTable("Generators");
             dataSet.Tables.Add(dataTable);
@@ -265,14 +269,34 @@ namespace RDBLL.Common.Service.DsOperations.Factory
             DsOperation.AddCommonColumns(dataTable);
             DsOperation.AddFkIdColumn("SoilSections", "SelectedId", dataTable, true);
             #endregion
+            #region Punchings
             //Добавление таблицы узлов на продавливания
             dataTable = DsOperation.AddTableToDataset(typeof(Punching));
             dataSet.Tables.Add(dataTable);
-            DsOperation.AddCommonColumns(dataTable, "Levels");
+            parentTableName = DsOperation.GetTableName(typeof(Level));
+            DsOperation.AddCommonColumns(dataTable, parentTableName);
+            #endregion
+            #region PunchingLayers
             //Добавление таблицы слоев продавливания
             dataTable = DsOperation.AddTableToDataset(typeof(PunchingLayer));
             dataSet.Tables.Add(dataTable);
-            DsOperation.AddCommonColumns(dataTable, "Punchings");
+            parentTableName = DsOperation.GetTableName(typeof(Punching));
+            DsOperation.AddCommonColumns(dataTable, parentTableName);
+            #endregion
+            #region Ancorages
+            //Добавление таблицы расчетов анкеровки
+            dataTable = DsOperation.AddTableToDataset(typeof(IAncorage));
+            dataSet.Tables.Add(dataTable);
+            parentTableName = DsOperation.GetTableName(typeof(Level));
+            DsOperation.AddCommonColumns(dataTable, parentTableName);
+            #endregion
+            #region BarSections
+            //Добавление таблицы узлов на продавливания
+            dataTable = DsOperation.AddTableToDataset(typeof(IBarSection));
+            dataSet.Tables.Add(dataTable);
+            parentTableName = DsOperation.GetTableName(typeof(IAncorage));
+            DsOperation.AddCommonColumns(dataTable, parentTableName);
+            #endregion
             return dataSet;
         }
     }

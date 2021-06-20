@@ -51,6 +51,8 @@
     <Reference Include="System.Data" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Examples\RCC\Reinforcement\Ancorages\AncorageExample1.cs" />
+    <Compile Include="Infrastracture\Factories\FilePathFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RCC\FoundationTests\RectFoundations\VM2.cs" />
     <Compile Include="RCC\FoundationTests\RectFoundations\VM1.cs" />

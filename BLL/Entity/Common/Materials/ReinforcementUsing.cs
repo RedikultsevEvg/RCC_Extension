@@ -23,7 +23,7 @@ namespace RDBLL.Entity.Common.Materials
         public RFExtender Extender { get; private set; }
 
         #region Constructors
-        public ReinforcementUsing() : base() { }
+        public ReinforcementUsing(bool genId = false) : base(genId) { }
         public ReinforcementUsing(IDsSaveable parentMember) : base(parentMember) { SelectedId = 2; }
         #endregion
         #region Method

@@ -19,11 +19,19 @@ using RDBLL.Entity.SC.Column.SteelBases;
 using RDBLL.Common.Service.DsOperations;
 using RDBLL.Entity.RCC.Slabs.Punchings;
 using RDBLL.Common.Interfaces.Materials;
+using RDBLL.Common.Interfaces.IOInterfaces;
+using RDBLL.Entity.RCC.Reinforcements.Ancorages;
+using RDBLL.Entity.RCC.Reinforcements.Ancorages.Repositories;
+using RDBLL.Entity.RCC.Reinforcements.Bars;
+using RDBLL.Entity.RCC.Reinforcements.Bars.Storages;
 
 namespace RDBLL.Common.Service
 {
     public static class GetEntity
     {
+        private static IDataTableProcessor _DataTableProcessor { get => new DataTableProcessor(); }
+        private static IDataRowProcessor _DataRowProcessor { get => new DataRowProcessor(); }
+
         /// <summary>
         /// Получает коллекцию зданий по датасету и строительному объекту
         /// </summary>
@@ -33,10 +41,8 @@ namespace RDBLL.Common.Service
         public static ObservableCollection<Building> GetBuildings(DataSet dataSet, BuildingSite buildingSite)
         {
             ObservableCollection<Building> newObjects = new ObservableCollection<Building>();
-            DataTable dataTable = dataSet.Tables["Buildings"];
-            var query = from dataRow in dataTable.AsEnumerable()
-                        where dataRow.Field<int>("ParentId") == buildingSite.Id
-                        select dataRow;
+            DataTable dataTable = _DataTableProcessor.GetTable(dataSet, typeof(Building));
+            var query = _DataRowProcessor.FindDataRowsByParentId(dataTable, buildingSite.Id);
             foreach (var dataRow in query)
             {
                 Building newObject = new Building();
@@ -53,13 +59,12 @@ namespace RDBLL.Common.Service
         /// <param name="dataSet">Датасет</param>
         /// <param name="building">ссылка на здание</param>
         /// <returns></returns>
-        public static ObservableCollection<Level> GetLevels(DataSet dataSet, Building building)
+        public static IEnumerable<Level> GetLevels(DataSet dataSet, Building building)
         {
             ObservableCollection<Level> newObjects = new ObservableCollection<Level>();
-            DataTable dataTable = dataSet.Tables["Levels"];
-            var query = from dataRow in dataTable.AsEnumerable()
-                                         where dataRow.Field<int>("ParentId") == building.Id
-                                         select dataRow;
+            DataTable dataTable = _DataTableProcessor.GetTable(dataSet, typeof(Level));
+            var query = _DataRowProcessor.FindDataRowsByParentId(dataTable, building.Id);
+
             foreach (var dataRow in query)
             {
                 Level newObject = new Level();
@@ -69,10 +74,47 @@ namespace RDBLL.Common.Service
                 GetFoundations(dataSet, newObject);
                 GetSteelBasePartGroups(dataSet, newObject);
                 GetPunchings(dataSet, newObject);
+                GetAncorages(dataSet, newObject);
                 newObjects.Add(newObject);
             }
             return newObjects;
         }
+
+        private static IEnumerable<IAncorage> GetAncorages(DataSet dataSet, Level level)
+        {
+            List<IAncorage> ancorages = new List<IAncorage>();
+            DataTable dataTable = _DataTableProcessor.GetTable(dataSet, typeof(IAncorage));
+            IEnumerable<int> ids = DsOperation.GetIdsFromParentId(dataTable, level.Id);
+            IRepository<IAncorage> repository = new AncorageCRUD(dataSet);
+            //Добавляем стержни
+            foreach (int ancorageId in ids)
+            {
+                IAncorage ancorage = repository.GetEntityById(ancorageId) as IAncorage;
+                AddMaterial(dataSet, ancorage);
+                ancorages.Add(ancorage);
+                level.Children.Add(ancorage);
+                GetBarSections(dataSet, ancorage);
+            }
+            return ancorages;
+        }
+
+        private static IEnumerable<IBarSection> GetBarSections(DataSet dataSet, IAncorage ancorage)
+        {
+            List<IBarSection> barSections = new List<IBarSection>();
+            DataTable dataTable = _DataTableProcessor.GetTable(dataSet, typeof(IAncorage));
+            IEnumerable<int> ids = DsOperation.GetIdsFromParentId(dataTable, ancorage.Id);
+            IRepository<IBarSection> repository = new BarCRUD(dataSet);
+            //Добавляем стержни
+            foreach (int barId in ids)
+            {
+                IBarSection barSection = repository.GetEntityById(barId) as IBarSection;
+                AddMaterial(dataSet, barSection);
+                barSection.RegisterParent(ancorage);
+                barSections.Add(barSection);
+            }
+            return barSections;
+        }
+
         /// <summary>
         /// Получает коллекцию стальных баз по датасету и уровню
         /// </summary>
@@ -305,7 +347,14 @@ namespace RDBLL.Common.Service
                 newObject.OpenFromDataSet(dataRow);
                 newObject.Parts = GetFoundationParts(dataSet, newObject);                
                 newObject.ForcesGroups = GetParentForcesGroups(dataSet, newObject);
-                GetSoilSection(dataSet, newObject);
+                try
+                {
+                    GetSoilSection(dataSet, newObject);
+                }
+                catch(Exception ex)
+                {
+                    //У фундамента не задана скважина
+                }
                 newObjects.Add(newObject);
             }
             return newObjects;
@@ -434,9 +483,9 @@ namespace RDBLL.Common.Service
             return newObjects;
         }
 
-        private static ObservableCollection<IHasParent> GetPunchingLayers(DataSet dataSet, IDsSaveable parent)
+        private static ObservableCollection<IHasId> GetPunchingLayers(DataSet dataSet, IDsSaveable parent)
         {
-            ObservableCollection<IHasParent> newObjects = new ObservableCollection<IHasParent>();
+            ObservableCollection<IHasId> newObjects = new ObservableCollection<IHasId>();
             DataTable dataTable = dataSet.Tables["PunchingLayers"];
             var query = from dataRow in dataTable.AsEnumerable()
                         where dataRow.Field<int>("ParentId") == parent.Id
@@ -478,7 +527,7 @@ namespace RDBLL.Common.Service
             }
             return materialContainers;
         }
-        public static List<MaterialUsing> GetMaterialUsings(DataSet dataSet, IDsSaveable parent)
+        public static List<MaterialUsing> GetMaterialUsings(DataSet dataSet, IHasId parent)
         {
             List<MaterialUsing> materialUsings = new List<MaterialUsing>();
             DataTable dataTable = dataSet.Tables["MaterialUsings"];
@@ -616,7 +665,7 @@ namespace RDBLL.Common.Service
             }
 
         }
-        private static void AddMaterial(DataSet dataSet, IDsSaveable newObject)
+        private static void AddMaterial(DataSet dataSet, IHasId newObject)
         {
             List<MaterialUsing> materials = GetMaterialUsings(dataSet, newObject);
             foreach (MaterialUsing material in materials)

@@ -13,13 +13,14 @@ using RDBLL.Entity.Common.Placements;
 using RDBLL.Entity.Common.Materials.RFExtenders;
 using RDBLL.Entity.Common.Materials.SteelMaterialUsing;
 using RDBLL.Common.Service.DsOperations;
+using RDBLL.Common.Interfaces.IOInterfaces;
 
 namespace RDBLL.Entity.Common.Materials
 {
     /// <summary>
     /// Класс применения материалов в элементах
     /// </summary>
-    public abstract class MaterialUsing : IHasParent, ICloneable
+    public abstract class MaterialUsing : IDsSaveable, IChild, ICloneable
     {
         /// <summary>
         /// Код применения
@@ -110,7 +111,7 @@ namespace RDBLL.Entity.Common.Materials
         /// <summary>
         /// Ссылка на родительский элемент
         /// </summary>
-        public IDsSaveable ParentMember { get; private set; }
+        public IHasId ParentMember { get; private set; }
         #region Constructors
         /// <summary>
         /// Конструктор без параметров
@@ -143,6 +144,7 @@ namespace RDBLL.Entity.Common.Materials
         public void SaveToDataSet(DataSet dataSet, bool createNew)
         {
             DataRow row = EntityOperation.SaveEntity(dataSet, createNew, this);
+            row.SetField("ParentId",ParentMember.Id);
             #region setFields
             DsOperation.SetField(row, "Purpose", Purpose);
             if (this is ConcreteUsing) DsOperation.SetField(row, "Materialkindname", "Concrete");
@@ -226,7 +228,7 @@ namespace RDBLL.Entity.Common.Materials
         /// Регистрация ссылки на родительскую сущность
         /// </summary>
         /// <param name="parent"></param>
-        public void RegisterParent(IDsSaveable parent)
+        public void RegisterParent(IHasId parent)
         {
             if (ParentMember != null) UnRegisterParent();
             ParentMember = parent;
@@ -238,18 +240,6 @@ namespace RDBLL.Entity.Common.Materials
         {
             ParentMember = null;
         }
-        //public double[] GetTotalSafetyFactor()
-        //{
-        //    double[] safetyFactors = new double[] { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 };
-        //    foreach (SafetyFactor safetyFactor in SafetyFactors)
-        //    {
-        //        for (int i = 0; i<SafetyFactor.CoefCount; i++)
-        //        {
-        //            safetyFactors[i] *= safetyFactor.Coefficients[i];
-        //        }
-        //    }
-        //    return safetyFactors;
-        //}
         #endregion
     }
 }

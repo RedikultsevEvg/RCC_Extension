@@ -53,6 +53,7 @@ namespace TestIntegrationProject.RCC.FoundationTests.RectFoundations
             BuildingSite buildingSite = BuildingProcessor.GetBuildingSite(_Foundation);
             buildingSite.DeleteFromDataSet(dataSet);
             buildingSite.SaveToDataSet(dataSet, true);
+            buildingSite.OpenFromDataSet(dataSet);
         }
 
         [TestMethod] //Тестирование клонирования фундамента

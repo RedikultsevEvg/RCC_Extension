@@ -8,7 +8,7 @@ namespace RDBLL.Common.Service.DsOperations.Mappings.Factories
 {
     internal static class TableMappingFactory
     {
-        public static List<TableMapping> GetTableMappings()
+        public static IEnumerable<TableMapping> GetTableMappings()
         {
             List<TableMapping> tableMappings = new List<TableMapping>();
             TableMapping tableMapping;
@@ -29,6 +29,10 @@ namespace RDBLL.Common.Service.DsOperations.Mappings.Factories
             tableMapping = new TableMapping() { EntityName = "ConcreteUsing", TableName = "MaterialUsings" };
             tableMappings.Add(tableMapping);
             tableMapping = new TableMapping() { EntityName = "SteelUsing", TableName = "MaterialUsings" };
+            tableMappings.Add(tableMapping);
+            tableMapping = new TableMapping() { EntityName = "IAncorage", TableName = "Ancorages" };
+            tableMappings.Add(tableMapping);
+            tableMapping = new TableMapping() { EntityName = "IBarSection", TableName = "BarSections" };
             tableMappings.Add(tableMapping);
             return tableMappings;
         }

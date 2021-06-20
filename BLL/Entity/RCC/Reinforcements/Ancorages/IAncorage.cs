@@ -1,4 +1,6 @@
-﻿using RDBLL.Entity.Common.Materials;
+﻿using RDBLL.Common.Interfaces.IOInterfaces;
+using RDBLL.Common.Interfaces.Materials;
+using RDBLL.Entity.Common.Materials;
 using RDBLL.Entity.RCC.Reinforcements.Bars;
 using System;
 using System.Collections.Generic;
@@ -11,12 +13,8 @@ namespace RDBLL.Entity.RCC.Reinforcements.Ancorages
     /// <summary>
     /// Интерфейс расчета длин анкеровки
     /// </summary>
-    public interface IAncorageCalc
+    public interface IAncorage : IHasId, IChild, IHasConcrete
     {
-        /// <summary>
-        /// Ссылка на применение бетона
-        /// </summary>
-        ConcreteUsing Concrete { get; set; }
         /// <summary>
         /// Коллекция сечений арматурных стержней
         /// </summary>
@@ -28,6 +26,6 @@ namespace RDBLL.Entity.RCC.Reinforcements.Ancorages
         /// <summary>
         /// Логика расчета длин анкеровки
         /// </summary>
-        IAncorageLogic AncorageLogic { get; set; }
+        IAncorageLogic AncorageLogic { get; }
     }
 }

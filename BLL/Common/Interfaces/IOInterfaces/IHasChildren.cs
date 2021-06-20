@@ -1,4 +1,5 @@
-﻿using System;
+﻿using RDBLL.Common.Interfaces.IOInterfaces;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -9,6 +10,6 @@ namespace RDBLL.Common.Interfaces
 {
     interface IHasChildren : IDsSaveable
     {
-        ObservableCollection<IHasParent> Children { get; }
+        ObservableCollection<IHasId> Children { get; }
     }
 }

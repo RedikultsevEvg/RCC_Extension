@@ -12,6 +12,7 @@ using RDBLL.Entity.Soils.Factories;
 using CSL.Reports.Interfaces;
 using CSL.Reports.RCC.Slabs.Punchings;
 using System.Data;
+using RDBLL.Entity.RCC.BuildingAndSite.Factories;
 
 namespace TestIntegrationProject.RCC.FoundationTests.RectFoundations
 {
@@ -98,14 +99,10 @@ namespace TestIntegrationProject.RCC.FoundationTests.RectFoundations
         {           
             #region Building
             BuildingSite buildingSite = new BuildingSite();
-            Building building = new Building(buildingSite);
-            building.RelativeLevel = 0.000;
-            building.AbsoluteLevel = 260;
-            building.AbsolutePlaningLevel = 259.5;
-            building.IsRigid = false;
-            buildingSite.Children.Add(building);
-            Level level = new Level(building);
-            building.Children.Add(level);
+            Building building = BuildingFactory.GetBuilding(BuildingType.SimpleType);
+            building.RegisterParent(buildingSite);
+            Level level = LevelFactory.GetLevel(LevelType.SimpleType);
+            level.RegisterParent(building);
             #endregion
             #region Soil
             Soil soil = SoilFactory.GetSoil(buildingSite, FactorySoilType.FoundationVM1);
