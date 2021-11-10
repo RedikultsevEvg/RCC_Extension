@@ -13,6 +13,12 @@ using System.Data;
 using RDBLL.Common.Interfaces;
 using RDBLL.Entity.RCC.Foundations;
 using RDBLL.Common.Service.DsOperations;
+using RDBLL.Common.Interfaces.IOInterfaces;
+using RDBLL.Entity.RCC.Reinforcements.Bars;
+using RDBLL.Entity.RCC.Reinforcements.Bars.Storages;
+using RDBLL.Common.ErrorProcessing.Messages;
+using RDBLL.Entity.RCC.Reinforcements.Ancorages;
+using RDBLL.Entity.RCC.Reinforcements.Ancorages.Repositories;
 
 namespace RDBLL.Entity.RCC.BuildingAndSite
 {
@@ -68,7 +74,7 @@ namespace RDBLL.Entity.RCC.BuildingAndSite
         /// <summary>
         /// Коллекция дочерних элементов
         /// </summary>
-        public ObservableCollection<IHasParent> Children { get; private set; }
+        public ObservableCollection<IHasId> Children { get; private set; }
 
         /// <summary>
         /// Получение суммарного объема бетона
@@ -86,11 +92,6 @@ namespace RDBLL.Entity.RCC.BuildingAndSite
         }
         #region IODataSet
         /// <summary>
-        /// Return name of table in dataset for CRUD operation
-        /// </summary>
-        /// <returns>Name of table</returns>
-        public string GetTableName() { return "Levels"; }
-        /// <summary>
         /// Сохранение в датасет
         /// </summary>
         /// <param name="dataSet"></param>
@@ -98,6 +99,35 @@ namespace RDBLL.Entity.RCC.BuildingAndSite
         public void SaveToDataSet(DataSet dataSet, bool createNew)
         {
             DataRow row = EntityOperation.SaveEntity(dataSet, createNew, this);
+            foreach (IHasId child in Children)
+                {
+                    if (child is IDsSaveable)
+                    {
+                        
+                    }
+                    else
+                    {
+                        string childTableName = DsOperation.GetTableName(child);
+                        DataTable dataTable = DsOperation.GetDataTable(dataSet, childTableName);
+                        IRepository<IAncorage> repository;
+                        if (child is IAncorage)
+                        {
+                            repository = new AncorageCRUD(dataSet);
+                        }
+                        else
+                        {
+                            throw new Exception(CommonMessages.TypeIsUknown);
+                        }
+                    if (createNew)
+                    {
+                        repository.Create(child as IAncorage);
+                    }
+                        else
+                    {
+                        repository.Update(child as IAncorage);
+                    }
+                    }
+                }
             #region SetField
             row.SetField("FloorLevel", Elevation);
             row.SetField("Height", Height);
@@ -114,7 +144,8 @@ namespace RDBLL.Entity.RCC.BuildingAndSite
         /// <param name="dataSet"></param>
         public void OpenFromDataSet(DataSet dataSet)
         {
-            DataTable dataTable = dataSet.Tables[GetTableName()];
+            string tableName = DsOperation.GetTableName(this);
+            DataTable dataTable = DsOperation.GetDataTable(dataSet, tableName);
             var level = (from dataRow in dataTable.AsEnumerable()
                             where dataRow.Field<int>("Id") == Id
                             select dataRow).Single();
@@ -141,20 +172,51 @@ namespace RDBLL.Entity.RCC.BuildingAndSite
         /// <param name="dataSet"></param>
         public void DeleteFromDataSet(DataSet dataSet)
         {
-            foreach (IDsSaveable child in Children)
+            foreach (IHasId child in Children)
             {
-                child.DeleteFromDataSet(dataSet);
+                if (child is IDsSaveable)
+                {
+                    IDsSaveable dsChild = child as IDsSaveable;
+                    dsChild.DeleteFromDataSet(dataSet);
+                }
+                else
+                {
+                    string childTableName = DsOperation.GetTableName(child);
+                    DataTable dataTable = DsOperation.GetDataTable(dataSet, childTableName);
+                    IRepository<IAncorage> repository;
+                    if (child is IAncorage)
+                    {
+                        repository = new AncorageCRUD(dataSet);
+                    }
+                    else
+                    {
+                        throw new Exception(CommonMessages.TypeIsUknown);
+                    }
+                    try
+                    {
+                        repository.Delete(child as IAncorage);
+                    }
+                    catch (Exception ex)
+                    {
+
+                    }
+                }
             }
-            DsOperation.DeleteRow(dataSet, GetTableName(), Id);
+            string tableName = DsOperation.GetTableName(this);
+            DsOperation.DeleteRow(dataSet, tableName, Id);
         }
         #endregion
         /// <summary>
         /// Конструктор без параметров
         /// </summary>
-        public Level ()
+        public Level (bool genId = false)
         {
-            Walls = new ObservableCollection<Wall>();
-            Children = new ObservableCollection<IHasParent>();
+            if (genId)
+            {
+                Id = ProgrammSettings.CurrentId;
+            }
+            //Walls = new ObservableCollection<Wall>();
+            Children = new ObservableCollection<IHasId>();
         }
 
         /// <summary>
@@ -170,7 +232,7 @@ namespace RDBLL.Entity.RCC.BuildingAndSite
             Height = 3;
             TopOffset = -0.2;
             //Walls = new ObservableCollection<Wall>();
-            Children = new ObservableCollection<IHasParent>();
+            Children = new ObservableCollection<IHasId>();
         }
 
         /// <summary>
@@ -191,9 +253,12 @@ namespace RDBLL.Entity.RCC.BuildingAndSite
 
         public void UnRegisterParent()
         {
-            Building building = ParentMember as Building;
-            building.Children.Remove(this);
-            ParentMember = null;
+            if (ParentMember != null)
+            {
+                Building building = ParentMember as Building;
+                building.Children.Remove(this);
+                ParentMember = null;
+            }
         }
     }
 }

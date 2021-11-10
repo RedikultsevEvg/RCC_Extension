@@ -5,22 +5,15 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Data;
 using RDBLL.Entity.MeasureUnits;
+using RDBLL.Common.Interfaces.IOInterfaces;
 
 namespace RDBLL.Common.Interfaces
 {
     /// <summary>
     /// Интерфейс объектов для которых возможно сохранение в датасет
     /// </summary>
-    public interface IDsSaveable
+    public interface IDsSaveable : IHasId
     {
-        /// <summary>
-        /// Код элемента
-        /// </summary>
-        int Id { get; set; }
-        /// <summary>
-        /// Наименование
-        /// </summary>
-        string Name { get; set; }
         /// <summary>
         /// Сохранение в датасет
         /// </summary>

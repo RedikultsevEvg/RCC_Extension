@@ -1,4 +1,5 @@
-﻿using RDBLL.Common.Interfaces;
+﻿using RDBLL.Common.ErrorProcessing.Messages;
+using RDBLL.Common.Interfaces;
 using RDBLL.Common.Service;
 using RDBLL.Common.Service.DsOperations;
 using RDBLL.Entity.MeasureUnits;
@@ -71,11 +72,13 @@ namespace RDBLL.Entity.RCC.BuildingAndSite
         /// <summary>
         /// Конструктор без параметров
         /// </summary>
-        public Building()
+        public Building(bool genId = false)
         {
+            if (genId)
+            {
+                Id = ProgrammSettings.CurrentId;
+            }
             Children = new ObservableCollection<Level>();
-            //WallTypeList = new ObservableCollection<WallType>();
-            //OpeningTypeList = new ObservableCollection<OpeningType>();
         }
         /// <summary>
         /// Конструктор по строительному объекту
@@ -93,8 +96,6 @@ namespace RDBLL.Entity.RCC.BuildingAndSite
             IsRigid = false;
             RigidRatio = 4;
             Children = new ObservableCollection<Level>();
-            //WallTypeList = new ObservableCollection<WallType>();
-            //OpeningTypeList = new ObservableCollection<OpeningType>();
         }
         #region IODataset
         /// <summary>
@@ -182,17 +183,23 @@ namespace RDBLL.Entity.RCC.BuildingAndSite
             }
             catch
             {
-                throw new Exception("Parent type is not valid");
+                throw new Exception(CommonMessages.ParentTypeIsntValid);
             }
             buildingSite.Children.Add(this);
             ParentMember = buildingSite;
         }
-
+        /// <summary>
+        /// Удаляет ссылку на родителя
+        /// </summary>
         public void UnRegisterParent()
         {
-            BuildingSite buildingSite = ParentMember as BuildingSite;
-            buildingSite.Children.Remove(this);
-            ParentMember = null;
+            if (ParentMember != null)
+            {
+                BuildingSite buildingSite = ParentMember as BuildingSite;
+                buildingSite.Children.Remove(this);
+                ParentMember = null;
+            }
+                
         }
 
         /// <summary>

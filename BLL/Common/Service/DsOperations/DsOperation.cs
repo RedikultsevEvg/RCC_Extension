@@ -9,6 +9,12 @@ using System.Reflection;
 using RDBLL.Common.Geometry;
 using RDBLL.Common.Service.DsOperations.Mappings;
 using RDBLL.Common.Service.DsOperations.Mappings.Factories;
+using RDBLL.Common.Interfaces.IOInterfaces;
+using RDBLL.Entity.Common.Materials;
+using RDBLL.Common.ErrorProcessing.Messages;
+using RDBLL.Common.Interfaces.Shapes;
+using RDBLL.Entity.Common.Materials.SteelMaterialUsing;
+using RDBLL.Common.Geometry.Sections;
 
 namespace RDBLL.Common.Service.DsOperations
 {
@@ -43,7 +49,7 @@ namespace RDBLL.Common.Service.DsOperations
             dataTable.Columns.Add(IdColumn);
             dataColumns.Add(IdColumn);
             //dataTable.PrimaryKey = new DataColumn[] { dataTable.Columns["Id"] };
-            if (addNameColumn) { dataColumns.Add(AddNameColumn(dataTable)); }
+            if (addNameColumn & (! dataTable.Columns.Contains("Name"))) { dataColumns.Add(AddNameColumn(dataTable)); }
             return dataColumns;
         }
         /// <summary>
@@ -89,6 +95,20 @@ namespace RDBLL.Common.Service.DsOperations
 
             return FkIdColumn;
         }
+
+        internal static IEnumerable<int> GetIdsFromParentId(DataTable dataTable, int parentId)
+        {
+            List<int> idS = new List<int>();
+            var query = from dataRow in dataTable.AsEnumerable()
+                        where dataRow.Field<int>("ParentId") == parentId
+                        select dataRow;
+            foreach (var dataRow in query)
+            {
+                idS.Add(dataRow.Field<int>("Id"));
+            }
+            return idS;
+        }
+
         public static DataColumn AddFkIdColumn(string parentColumnName, DataTable childDataTable, bool allowNull = false)
         {
             DataSet dataSet = childDataTable.DataSet;
@@ -190,6 +210,10 @@ namespace RDBLL.Common.Service.DsOperations
         public static void DeleteRow(DataSet dataSet, string dataTableName, string keyFieldName, int Id)
         {
             DataTable dataTable = dataSet.Tables[dataTableName];
+            DeleteRow(dataTable, keyFieldName, Id);
+        }
+        public static void DeleteRow(DataTable dataTable, string keyFieldName, int Id)
+        {
             DataRow[] rows = dataTable.Select($"{keyFieldName}={Id}");
             int count = rows.Length;
             for (int j = count - 1; j >= 0; j--)
@@ -245,6 +269,10 @@ namespace RDBLL.Common.Service.DsOperations
         public static DataRow OpenFromDataSetById(DataSet dataSet, string dataTableName, int Id)
         {
             DataTable dataTable = dataSet.Tables[dataTableName];
+            return OpenFromDataTableById(dataTable, Id);
+        }
+        public static DataRow OpenFromDataTableById(DataTable dataTable, int Id)
+        {
             var row = (from dataRow in dataTable.AsEnumerable()
                        where dataRow.Field<int>("Id") == Id
                        select dataRow).Single();
@@ -342,9 +370,9 @@ namespace RDBLL.Common.Service.DsOperations
         public static void AddColumnsFromProperties(DataTable dataTable, Type type)
         {
             //Коллекция наименования столбцов, которые добавлять не нужно
-            List<string> exceptList = new List<string> { "Id", "ParentMember", "Name", "Children", "ForcesGroups", "LoadCases", "IsActive" };
+            IEnumerable<string> exceptList = GetExceptColumnList();
             //Коллекция типов, которые нужно добавлять в таблицу
-            List<string> typeList = new List<string> { "Double", "String", "Int32", "Boolean", "Point2D" };
+            IEnumerable<string> typeList = GetStringsFromTypes(GetColumnTypesToAddToTable());
             foreach (PropertyInfo propertyInfo in type.GetProperties())
             {
                 //Наименование свойства
@@ -381,12 +409,14 @@ namespace RDBLL.Common.Service.DsOperations
         /// </summary>
         /// <param name="row"></param>
         /// <param name="obj"></param>
-        public static void SetRowFields(DataRow row, IDsSaveable obj)
+        public static void SetRowFields(DataRow row, IHasId obj)
         {
             //Коллекция наименования столбцов, которые добавлять не нужно
-            List<string> exceptList = new List<string> { "Id", "ParentMember", "Name", "Children", "ForcesGroups", "LoadCases", "IsActive" };
+            IEnumerable<string> exceptList = GetExceptColumnList();
             //Коллекция типов, которые нужно добавлять в таблицу
-            List<string> typeList = new List<string> { "Double", "String", "Int32", "Boolean", "Point2D" };
+            List<string> typeList = new List<string>();
+            typeList.AddRange(GetStringsFromTypes(GetColumnSimpleTypes()));
+            typeList.AddRange(GetStringsFromTypes(GetColumnComplexTypes()));
             foreach (PropertyInfo propertyInfo in obj.GetType().GetProperties())
             {
                 DataTable dataTable = row.Table;
@@ -398,11 +428,24 @@ namespace RDBLL.Common.Service.DsOperations
                     & (typeList.Contains(propertyTypeName))) //И входит в перечень допустимых типов значения
                 {
 
-                    if (propertyTypeName == "Point2D")
+                    if (propertyTypeName == typeof(Point2D).Name)
                     {
                         Point2D point = propertyInfo.GetValue(obj) as Point2D;
                         SetField(row, name + "X", point.X);
                         SetField(row, name + "Y", point.Y);
+                    }
+                    else if (propertyTypeName == typeof(ConcreteUsing).Name
+                        ||
+                        propertyTypeName == typeof(ReinforcementUsing).Name)
+                    {
+                        SetMaterialRow(row.Table.DataSet, propertyInfo, obj);
+                    }
+                    else if (propertyTypeName == typeof(ICircle).Name)
+                    {
+                        ICircle circle = propertyInfo.GetValue(obj) as ICircle;
+                        SetField(row, name + "CenterX", circle.Center.X);
+                        SetField(row, name + "CenterY", circle.Center.Y);
+                        SetField(row, name + "Diameter", circle.Diameter);
                     }
                     else
                     {
@@ -412,6 +455,26 @@ namespace RDBLL.Common.Service.DsOperations
 
                 }
             }
+        }
+        private static void SetMaterialRow(DataSet dataSet, PropertyInfo propertyInfo, IHasId obj)
+        {
+            //Наименование типа свойства
+            string propertyTypeName = propertyInfo.PropertyType.Name;
+
+            MaterialUsing entity;
+            if (propertyTypeName == typeof(ConcreteUsing).Name)
+            {
+                entity = propertyInfo.GetValue(obj) as ConcreteUsing;
+            }
+            else if (propertyTypeName == typeof(ReinforcementUsing).Name)
+            {
+                entity = propertyInfo.GetValue(obj) as ReinforcementUsing;
+            }
+            else
+            {
+                throw new Exception(CommonMessages.TypeIsUknown);
+            }
+            entity.SaveToDataSet(dataSet, true);
         }
         /// <summary>
         /// Устанавливает свойства объекта по строке датасета
@@ -442,45 +505,90 @@ namespace RDBLL.Common.Service.DsOperations
                     {
                         throw new Exception($"Table {dataTable.TableName} not contain required column {propertyName}");
                     }
-                    //Если тип является точкой
-                    if (propertyTypeName == "Point2D")
-                    {
-                        double x = row.Field<double>(propertyName + "X");
-                        double y = row.Field<double>(propertyName + "Y");
-                        Point2D point = new Point2D(x, y);
-                        propertyInfo.SetValue(obj, point);
-                    }
-                    //Если тип является строкой
-                    else if (propertyTypeName == "String")
-                    {
-                        string value = row.Field<string>(propertyName);
-                        propertyInfo.SetValue(obj, value);
-                    }
-                    else //Если тип является типом значения
-                    {
-                        ValueType value;
-                        if (propertyTypeName == "Double")
-                        {
-                            value = row.Field<double>(propertyName);
-                        }
-                        else if (propertyTypeName == "Int32")
-                        {
-                            value = row.Field<int>(propertyName);
-                        }
-                        else if (propertyTypeName == "Boolean")
-                        {
-                            value = row.Field<bool>(propertyName);
-                        }
-                        else
-                        {
-                            throw new Exception($"Type of property {propertyTypeName} is unknown");
-                        }
-                        propertyInfo.SetValue(obj, value);
-                    }
-
+                    ProcessObjectFromProperty(obj, row, propertyInfo);
                 }
             }
         }
+
+        private static void ProcessObjectFromProperty(IHasId obj, DataRow row, PropertyInfo propertyInfo)
+        {
+            //Наименование свойства
+            string propertyName = propertyInfo.Name;
+            //Тип свойства
+            Type propertyType = propertyInfo.PropertyType;
+            //Наименование типа свойства
+            string propertyTypeName = propertyType.Name;
+            //Если тип является точкой
+            if (propertyTypeName == typeof(Point2D).Name)
+            {
+                Point2D point = GetPointFromProperty(row, propertyInfo);
+                propertyInfo.SetValue(obj, point);
+            }
+            else if (propertyTypeName == typeof(ICircle).Name)
+            {
+                ICircle circle = GetCircleFromProperty(row, propertyInfo);
+                propertyInfo.SetValue(obj, circle);
+            }
+            else if (propertyTypeName == typeof(ConcreteUsing).Name)
+            {
+                //ConcreteUsing concrete = new ConcreteUsing(false);
+                //propertyInfo.SetValue(obj, concrete);
+            }
+            else if (propertyTypeName == typeof(ReinforcementUsing).Name)
+            {
+                //ReinforcementUsing reinforcement = new ReinforcementUsing(false);
+                //propertyInfo.SetValue(obj, reinforcement);
+            }
+            //Если тип является строкой
+            else if (propertyTypeName == typeof(string).Name)
+            {
+                string value = row.Field<string>(propertyName);
+                propertyInfo.SetValue(obj, value);
+            }
+            else //Если тип является типом значения
+            {
+                ValueType value;
+                if (propertyTypeName == typeof(double).Name)
+                {
+                    value = row.Field<double>(propertyName);
+                }
+                else if (propertyTypeName == typeof(int).Name)
+                {
+                    value = row.Field<int>(propertyName);
+                }
+                else if (propertyTypeName == typeof(bool).Name)
+                {
+                    value = row.Field<bool>(propertyName);
+                }
+                else
+                {
+                    throw new Exception(CommonMessages.TypeIsUknown);
+                }
+                propertyInfo.SetValue(obj, value);
+            }
+        }
+
+        private static ICircle GetCircleFromProperty(DataRow row, PropertyInfo propertyInfo)
+        {
+            string name = propertyInfo.Name;
+            ICircle circle = new CircleSection();
+            double x = row.Field<double>($"{name}CenterX");
+            double y = row.Field<double>($"{name}CenterY");
+            circle.Center = new Point2D(x, y);
+            circle.Diameter = row.Field<double>("CircleDiameter");
+            return circle;
+        }
+
+        private static Point2D GetPointFromProperty(DataRow row, PropertyInfo propertyInfo)
+        {
+            //Наименование свойства
+            string propertyName = propertyInfo.Name;
+            double x = row.Field<double>(propertyName + "X");
+            double y = row.Field<double>(propertyName + "Y");
+            Point2D point = new Point2D(x, y);
+            return point;
+        }
+
         /// <summary>
         /// Возвращает наименование таблицы, в которую следует сохранять указанный тип объекта
         /// </summary>
@@ -488,7 +596,7 @@ namespace RDBLL.Common.Service.DsOperations
         /// <returns></returns>
         public static string GetTableName(Type type)
         {
-            List<TableMapping> tableMappings = TableMappingFactory.GetTableMappings();
+            IEnumerable<TableMapping> tableMappings = TableMappingFactory.GetTableMappings();
             string tableName = type.Name + "s";
             foreach (TableMapping mapping in tableMappings)
             {
@@ -505,7 +613,7 @@ namespace RDBLL.Common.Service.DsOperations
         /// </summary>
         /// <param name="obj"></param>
         /// <returns></returns>
-        public static string GetTableName(IDsSaveable obj)
+        public static string GetTableName(IHasId obj)
         {
             return GetTableName(obj.GetType());
         }
@@ -520,6 +628,97 @@ namespace RDBLL.Common.Service.DsOperations
             DataRow row = OpenFromDataSetById(dataSet, tablename, entity.Id);
             EntityOperation.SetProps(row, entity);
             GetFieldsFromRow(row, entity);
+        }
+        public static void OpenEntityFromRow(DataRow row, IHasId obj)
+        {
+            //Коллекция наименования столбцов, которые обрабатывать не нужно
+            IEnumerable<string> exceptList = GetExceptColumnList();
+            //Коллекция типов, которые нужно обрабатывать
+            IEnumerable<string> typeSimpleList = GetStringsFromTypes(GetColumnSimpleTypes());
+            IEnumerable<string> typeCompexList = GetStringsFromTypes(GetColumnComplexTypes());
+            foreach (PropertyInfo propertyInfo in obj.GetType().GetProperties())
+            {
+                //Наименование свойства
+                string name = propertyInfo.Name;
+                //Наименование типа свойства
+                string propertyTypeName = propertyInfo.PropertyType.Name;
+                if (!(exceptList.Contains(name)))
+                {
+                    if (typeSimpleList.Contains(propertyTypeName) || typeCompexList.Contains(propertyTypeName))
+                    {
+                        string columnName = GetMappingColumnName(name);
+                        if ((typeSimpleList.Contains(propertyTypeName)) & (! row.Table.Columns.Contains(columnName)))
+                        {
+                            throw new Exception(CommonMessages.TableNotContainColumn);
+                        }
+                        ProcessObjectFromProperty(obj, row, propertyInfo);
+                    }
+                }
+            }
+        }
+
+        private static string GetMappingColumnName(string name)
+        {
+            IEnumerable<ColumnMapping> columnMappings = ColumnMappingFactory.GetColumnMappings(); 
+            string columnName = name;
+            foreach (ColumnMapping mapping in columnMappings)
+            {
+                if (mapping.PropertyName == name)
+                {
+                    columnName = mapping.ColumnName;
+                }
+            }
+            return columnName;
+        }
+        private static IEnumerable<Type> GetColumnSimpleTypes()
+        {
+            List<Type> types = new List<Type>();
+            types.Add(typeof(double));
+            types.Add(typeof(string));
+            types.Add(typeof(int));
+            types.Add(typeof(bool));
+            return types;
+        }
+        private static IEnumerable<Type> GetColumnComplexTypes()
+        {
+            List<Type> types = new List<Type>();
+            types.Add(typeof(Point2D));
+            types.Add(typeof(ICircle));
+            types.Add(typeof(IRectangle));
+            types.Add(typeof(IShape));
+            types.Add(typeof(ConcreteUsing));
+            types.Add(typeof(ReinforcementUsing));
+            types.Add(typeof(SteelUsing));
+            return types;
+        }
+        private static IEnumerable<Type> GetColumnTypesToAddToTable()
+        {
+            List<Type> types = new List<Type>();
+            types.Add(typeof(double));
+            types.Add(typeof(string));
+            types.Add(typeof(int));
+            types.Add(typeof(bool));
+            types.Add(typeof(Point2D));
+            types.Add(typeof(ICircle));
+            types.Add(typeof(IRectangle));
+            types.Add(typeof(IShape));
+            return types;
+        }
+        private static IEnumerable<string> GetStringsFromTypes(IEnumerable<Type> types)
+        {
+            List<string> strings = new List<string>();
+            foreach(Type type in types)
+            {
+                strings.Add(type.Name);
+            }
+            return strings;
+        }
+        private static IEnumerable<string> GetExceptColumnList()
+        {
+            List<string> exceptList = new List<string>
+            { "Id", "ParentMember", "Children", "ForcesGroups", "LoadCases", "IsActive"
+            };
+            return exceptList;
         }
         /// <summary>
         /// Возвращает коллекцию шаблонов столцов, которые необходимо создать по информации о свойстве типа
@@ -545,10 +744,16 @@ namespace RDBLL.Common.Service.DsOperations
             {
                 columns.Add(new ColumnTemplate() { ColumnName = name, ColumnType = propertyType, DefaultValue = true });
             }
-            else if (propertyTypeName == "Point2D")
+            else if (propertyTypeName == typeof(Point2D).Name)
             {
                 columns.Add(new ColumnTemplate() { ColumnName = name + "X", ColumnType = typeof(double), DefaultValue = 0 });
                 columns.Add(new ColumnTemplate() { ColumnName = name + "Y", ColumnType = typeof(double), DefaultValue = 0 });
+            }
+            else if (propertyTypeName == typeof(ICircle).Name)
+            {
+                columns.Add(new ColumnTemplate() { ColumnName = "CircleCenterX", ColumnType = typeof(double), DefaultValue = 0 });
+                columns.Add(new ColumnTemplate() { ColumnName = "CircleCenterY", ColumnType = typeof(double), DefaultValue = 0 });
+                columns.Add(new ColumnTemplate() { ColumnName = "CircleDiameter", ColumnType = typeof(double), DefaultValue = 0 });
             }
             else
             {
@@ -566,11 +771,14 @@ namespace RDBLL.Common.Service.DsOperations
             //Для каждого элемента коллекции создаем новый столбец в таблице
             foreach (ColumnTemplate column in columns)
             {
-                DataColumn NewColumn;
-                NewColumn = new DataColumn(column.ColumnName, column.ColumnType);
-                NewColumn.AllowDBNull = false;
-                NewColumn.DefaultValue = column.DefaultValue;
-                dataTable.Columns.Add(NewColumn);
+                if (! dataTable.Columns.Contains(column.ColumnName))
+                {
+                    DataColumn NewColumn;
+                    NewColumn = new DataColumn(column.ColumnName, column.ColumnType);
+                    NewColumn.AllowDBNull = false;
+                    NewColumn.DefaultValue = column.DefaultValue;
+                    dataTable.Columns.Add(NewColumn);
+                }
             }
         }
         private static DataColumn AddNameColumn(DataTable dataTable)

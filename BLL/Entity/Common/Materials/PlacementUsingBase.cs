@@ -18,7 +18,7 @@ namespace RDBLL.Entity.Common.Materials
         /// </summary>
         public Placement Placement { get; private set; }
 
-        public PlacementUsingBase() : base() { }
+        public PlacementUsingBase(bool genId = false) : base(genId) { }
         public PlacementUsingBase(IDsSaveable parentMember) : base(parentMember) { }
 
         /// <summary>

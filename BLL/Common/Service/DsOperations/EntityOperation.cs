@@ -1,4 +1,5 @@
 ﻿using RDBLL.Common.Interfaces;
+using RDBLL.Common.Interfaces.IOInterfaces;
 using RDBLL.Common.Interfaces.Materials;
 using RDBLL.Common.Interfaces.Shapes;
 using RDBLL.Common.Params;
@@ -42,7 +43,17 @@ namespace RDBLL.Common.Service
             if (entity is IHasChildren)
             {
                 IHasChildren parent = entity as IHasChildren;
-                foreach (IHasParent child in parent.Children) { child.SaveToDataSet(dataSet, createNew);}
+                foreach (IHasId child in parent.Children)
+                {
+                    if (child is IDsSaveable)
+                    {
+                        (child as IDsSaveable).SaveToDataSet(dataSet, createNew);
+                    }
+                    else
+                    {
+
+                    }
+                }
             }
             //Сохраняем нагрузки
             if (entity is IHasForcesGroups)

@@ -25,6 +25,7 @@ using RDBLL.Common.Service.DsOperations;
 using System.Data;
 using RDBLL.Entity.RCC.Slabs.Punchings;
 using RDBLL.Entity.RCC.Slabs.Punchings.Factories;
+using RDBLL.Common.Interfaces.IOInterfaces;
 
 namespace RDStartWPF.Views.Common.BuildingsAndSites
 {
@@ -36,7 +37,7 @@ namespace RDStartWPF.Views.Common.BuildingsAndSites
         private Level _level;
         private LvlChildType _ChildType;
         private string _childName;
-        private ObservableCollection<IHasParent> _collection;
+        private ObservableCollection<IHasId> _collection;
         /// <summary>
         /// Конструктор окна
         /// </summary>
@@ -155,7 +156,7 @@ namespace RDStartWPF.Views.Common.BuildingsAndSites
                     if (LvMain.Items.Count == 1) LvMain.UnselectAll();
                     else if (a < (LvMain.Items.Count - 1)) LvMain.SelectedIndex = a + 1;
                     else LvMain.SelectedIndex = a - 1;
-                    _collection[a].DeleteFromDataSet(ProgrammSettings.CurrentDataSet);
+                    (_collection[a] as IHasParent).DeleteFromDataSet(ProgrammSettings.CurrentDataSet);
                     _collection.RemoveAt(a);
                     ProgrammSettings.IsDataChanged = true;
                 }
@@ -172,7 +173,7 @@ namespace RDStartWPF.Views.Common.BuildingsAndSites
             {
                 int a = LvMain.SelectedIndex;
                 bool dialogResult = false;
-                IHasParent item = _collection[a];
+                IHasParent item = _collection[a] as IHasParent;
                     
                 if (_collection[a] is SteelBase)
                 {
@@ -199,7 +200,7 @@ namespace RDStartWPF.Views.Common.BuildingsAndSites
                 {
                     try
                     {
-                        _collection[a].SaveToDataSet(ProgrammSettings.CurrentDataSet, false);
+                        item.SaveToDataSet(ProgrammSettings.CurrentDataSet, false);
                         //(_collection[a] as SteelBase).IsActual = false;
                         ProgrammSettings.IsDataChanged = true;
                     }
@@ -211,7 +212,7 @@ namespace RDStartWPF.Views.Common.BuildingsAndSites
                 else
                 {
                     DataRow row = DsOperation.OpenFromDataSetById(ProgrammSettings.CurrentDataSet, item);
-                    _collection[a].OpenFromDataSet(row);
+                    item.OpenFromDataSet(row);
                 }
             }
             else
@@ -230,7 +231,7 @@ namespace RDStartWPF.Views.Common.BuildingsAndSites
             if (LvMain.SelectedIndex >= 0)
             {
                 int a = LvMain.SelectedIndex;
-                IHasParent child = _collection[a];
+                IHasParent child = _collection[a] as IHasParent;
                 if (child is ICloneable)
                 {
                     ICloneable cloneable = child as ICloneable;

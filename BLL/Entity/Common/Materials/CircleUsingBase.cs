@@ -27,7 +27,7 @@ namespace RDBLL.Entity.Common.Materials
         /// </summary>
         public double TotalBarsArea { get { return BarArea * Placement.GetElementPoints().Count(); } }
 
-        public CircleUsingBase() : base() { }
+        public CircleUsingBase(bool genId = false) : base(genId) { }
         public CircleUsingBase(IDsSaveable parentMember) : base(parentMember) { }
 
         /// <summary>

@@ -9,6 +9,6 @@ namespace RDBLL.Common.Interfaces.Materials
 {
     public interface IHasReinforcement
     {
-        ReinforcementUsing Reinfocement { get; set; }
+        ReinforcementUsing Reinforcement { get; set; }
     }
 }

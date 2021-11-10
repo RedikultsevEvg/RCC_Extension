@@ -15,7 +15,7 @@ namespace RDBLL.Entity.RCC.Foundations
     /// <summary>
     /// Класс части (ступени) фундамента
     /// </summary>
-    public class RectFoundationPart :FoundationPart, IDsSaveable, IDataErrorInfo, IDuplicate, IRectangle
+    public class RectFoundationPart :FoundationPart, IDsSaveable, IDataErrorInfo, ICloneable, IRectangle
     {
         #region fields and properties
         /// <summary>

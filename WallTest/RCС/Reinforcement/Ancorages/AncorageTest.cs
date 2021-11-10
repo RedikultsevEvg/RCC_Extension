@@ -23,7 +23,7 @@ namespace Test.RCС.Reinforcement.Ancorages
             concrete.AddGammaB1();
             ReinforcementUsing reinforcement = new ReinforcementUsing();
             reinforcement.SelectedId = ProgrammSettings.ReinforcementKinds[0].Id;
-            IBarSection barSection = new CircleBarSection() { Circle = circle, Reinforcement = reinforcement};
+            IBarSection barSection = new CircleBarSection(circle) { Reinforcement = reinforcement};
             IAncorageLogic ancorageLogic = new AncorageLogic();
             //Проверка длины анкеровки растянутой арматуры
             double expected = 0.675;
@@ -61,7 +61,7 @@ namespace Test.RCС.Reinforcement.Ancorages
             concrete.AddGammaB1();
             ReinforcementUsing reinforcement = new ReinforcementUsing();
             reinforcement.SelectedId = ProgrammSettings.ReinforcementKinds[0].Id;
-            IBarSection barSection = new CircleBarSection() { Circle = circle, Reinforcement = reinforcement };
+            IBarSection barSection = new CircleBarSection(circle) {Reinforcement = reinforcement };
             IAncorageLogic ancorageLogic = new AncorageLogic();
             //Проверка длины анкеровки растянутой арматуры
             double expected = 1.349;
@@ -99,7 +99,7 @@ namespace Test.RCС.Reinforcement.Ancorages
             concrete.AddGammaB1();
             ReinforcementUsing reinforcement = new ReinforcementUsing();
             reinforcement.SelectedId = ProgrammSettings.ReinforcementKinds[0].Id;
-            IBarSection barSection = new CircleBarSection() { Circle = circle, Reinforcement = reinforcement };
+            IBarSection barSection = new CircleBarSection(circle) {Reinforcement = reinforcement };
             IAncorageLogic ancorageLogic = new AncorageLogic();
             //Проверка длины анкеровки растянутой арматуры
             double expected = 2.998;

@@ -52,6 +52,7 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Common\ErrorProcessing\Messages\CommonMessages.cs" />
     <Compile Include="Common\ErrorProcessing\wndErrorMessage.xaml.cs">
       <DependentUpon>wndErrorMessage.xaml</DependentUpon>
     </Compile>
@@ -66,7 +67,10 @@
     <Compile Include="Common\Geometry\Sections\RectangleSection.cs" />
     <Compile Include="Common\Interfaces\Geometry\Points\IPoint2D.cs" />
     <Compile Include="Common\Interfaces\Geometry\Points\IPoint2DR.cs" />
-    <Compile Include="Common\Interfaces\IHasChildren.cs" />
+    <Compile Include="Common\Interfaces\IOInterfaces\IChild.cs" />
+    <Compile Include="Common\Interfaces\IOInterfaces\IHasChildren.cs" />
+    <Compile Include="Common\Interfaces\IOInterfaces\IHasId.cs" />
+    <Compile Include="Common\Interfaces\IOInterfaces\IRepository.cs" />
     <Compile Include="Common\Interfaces\Materials\IHasConcrete.cs" />
     <Compile Include="Common\Interfaces\Materials\IHasReinforcement.cs" />
     <Compile Include="Common\Interfaces\Materials\IHasSteel.cs" />
@@ -74,12 +78,11 @@
     <Compile Include="Common\Interfaces\Placements\IParentPlacement.cs" />
     <Compile Include="Common\Interfaces\Placements\IPlacementEh.cs" />
     <Compile Include="Common\Interfaces\Shapes\ICircle.cs" />
-    <Compile Include="Common\Interfaces\IDuplicate.cs" />
-    <Compile Include="Common\Interfaces\IHasParent.cs" />
+    <Compile Include="Common\Interfaces\IOInterfaces\IHasParent.cs" />
     <Compile Include="Common\Interfaces\IHasSoilSection.cs" />
     <Compile Include="Common\Interfaces\IHasForcesGroups.cs" />
     <Compile Include="Common\Interfaces\IRDObserver.cs" />
-    <Compile Include="Common\Interfaces\IDsSaveable.cs" />
+    <Compile Include="Common\Interfaces\IOInterfaces\IDsSaveable.cs" />
     <Compile Include="Common\Interfaces\IRDObservable.cs" />
     <Compile Include="Common\Interfaces\Shapes\IHasHeight.cs" />
     <Compile Include="Common\Interfaces\Shapes\ILine.cs" />
@@ -93,10 +96,20 @@
     <Compile Include="Common\Service\Compare.cs" />
     <Compile Include="Common\Service\CommonErrorProcessor.cs" />
     <Compile Include="Common\Service\DsOperations\ColumnTemplate.cs" />
+    <Compile Include="Common\Service\DsOperations\DataRowProcessor.cs" />
+    <Compile Include="Common\Service\DsOperations\DataSetProcessor.cs" />
+    <Compile Include="Common\Service\DsOperations\DataTableProcessor.cs" />
     <Compile Include="Common\Service\DsOperations\DsOperation.cs" />
     <Compile Include="Common\Service\DsOperations\Factory\DsFactory.cs" />
+    <Compile Include="Common\Service\DsOperations\FieldSetter.cs" />
+    <Compile Include="Common\Service\DsOperations\IDataRowProcessor.cs" />
+    <Compile Include="Common\Service\DsOperations\IDataSetProcessor.cs" />
+    <Compile Include="Common\Service\DsOperations\IDataTableProcessor.cs" />
+    <Compile Include="Common\Service\DsOperations\Mappings\ColumnMapping.cs" />
+    <Compile Include="Common\Service\DsOperations\Mappings\Factories\ColumnMappingFactory.cs" />
     <Compile Include="Common\Service\DsOperations\Mappings\Factories\TableMappingFactory.cs" />
     <Compile Include="Common\Service\DsOperations\Mappings\TableMapping.cs" />
+    <Compile Include="Common\Service\FieldGetter.cs" />
     <Compile Include="Common\Service\GetEntity.cs" />
     <Compile Include="Common\Service\DsOperations\EntityOperation.cs" />
     <Compile Include="DrawUtils\Interfaces\IDrawScatch.cs" />
@@ -164,6 +177,8 @@
     <Compile Include="Entity\RCC\BuildingAndSite\Building.cs" />
     <Compile Include="Entity\RCC\BuildingAndSite\BuildingProcessor.cs" />
     <Compile Include="Entity\RCC\BuildingAndSite\BuildingSite.cs" />
+    <Compile Include="Entity\RCC\BuildingAndSite\Factories\BuildingFactory.cs" />
+    <Compile Include="Entity\RCC\BuildingAndSite\Factories\LevelFactory.cs" />
     <Compile Include="Entity\RCC\BuildingAndSite\Level.cs" />
     <Compile Include="Common\Geometry\Path.cs" />
     <Compile Include="Common\Geometry\Point2D.cs" />
@@ -186,16 +201,21 @@
     <Compile Include="Entity\RCC\Foundations\RectFoundationPart.cs" />
     <Compile Include="Entity\RCC\Foundations\Processors\FoundationProcessor.cs" />
     <Compile Include="Entity\RCC\Foundations\Results\FoundationResult.cs" />
+    <Compile Include="Entity\RCC\Reinforcements\Ancorages\Ancorage.cs" />
     <Compile Include="Entity\RCC\Reinforcements\Ancorages\AncorageLogic.cs" />
+    <Compile Include="Entity\RCC\Reinforcements\Ancorages\Factories\AncorageFactory.cs" />
     <Compile Include="Entity\RCC\Reinforcements\Ancorages\Factories\AncorageTestFactory.cs" />
-    <Compile Include="Entity\RCC\Reinforcements\Ancorages\IAncorageCalc.cs" />
+    <Compile Include="Entity\RCC\Reinforcements\Ancorages\IAncorage.cs" />
     <Compile Include="Entity\RCC\Reinforcements\Ancorages\IAncorageLogic.cs" />
+    <Compile Include="Entity\RCC\Reinforcements\Ancorages\Repositories\AncorageCRUD.cs" />
     <Compile Include="Entity\RCC\Reinforcements\Bar.cs" />
     <Compile Include="Common\Service\DetailObjectList.cs" />
     <Compile Include="Common\Service\ProgrammSettings.cs" />
     <Compile Include="Common\Service\XMLOperations.cs" />
     <Compile Include="Entity\RCC\Reinforcements\Bars\CircleBarSection.cs" />
+    <Compile Include="Entity\RCC\Reinforcements\Bars\Factories\BarSectionFactory.cs" />
     <Compile Include="Entity\RCC\Reinforcements\Bars\IBarSection.cs" />
+    <Compile Include="Entity\RCC\Reinforcements\Bars\Repositories\BarCRUD.cs" />
     <Compile Include="Entity\RCC\Slabs\Punchings\DropPanels\DropPanelBase.cs" />
     <Compile Include="Entity\RCC\Slabs\Punchings\DropPanels\DropPanelRect.cs" />
     <Compile Include="Entity\RCC\Slabs\Punchings\Factories\CentralColumnPunching.cs" />

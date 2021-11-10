@@ -14,7 +14,7 @@ namespace RDBLL.Forces
     /// <summary>
     /// Класс величины усилия
     /// </summary>
-    public class ForceParameter : IEquatable<ForceParameter>, IDsSaveable, IDuplicate
+    public class ForceParameter : IEquatable<ForceParameter>, IDsSaveable, ICloneable
     {
         private int _KindId;
         private ForceParamKind _forceParamKind;
