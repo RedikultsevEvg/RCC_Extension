@@ -305,7 +305,14 @@ namespace RDBLL.Common.Service
                 newObject.OpenFromDataSet(dataRow);
                 newObject.Parts = GetFoundationParts(dataSet, newObject);                
                 newObject.ForcesGroups = GetParentForcesGroups(dataSet, newObject);
-                GetSoilSection(dataSet, newObject);
+                try
+                {
+                    GetSoilSection(dataSet, newObject);
+                }
+                catch(Exception ex)
+                {
+                    //Если произошла ошибка, значит скважина не была назначена
+                }
                 newObjects.Add(newObject);
             }
             return newObjects;
@@ -409,7 +416,10 @@ namespace RDBLL.Common.Service
                 newObject.SoilSection = soilSection;
                 foreach (Soil soil in (soilSection.ParentMember as BuildingSite).Soils)
                 {
-                    if (soil.Id == newObject.Soil.Id) { newObject.Soil = soil; }
+                    if (soil.Id == newObject.Soil.Id)
+                    {
+                        newObject.Soil = soil;
+                    }
                 }
                 newObjects.Add(newObject);
             }

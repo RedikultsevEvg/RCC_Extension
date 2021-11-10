@@ -103,7 +103,7 @@ namespace CSL.Common
                 string forceDescription = "";
                 //Добавляем строку только с основными параметрами чтобы было куда добавлять дочерние элементы
                 DataRow newLoadSet = LoadSetTable.NewRow();
-                DsOperation.SetField(newLoadSet, "Id", loadSet.Id);
+                DsOperation.SetField(newLoadSet, "Id", ProgrammSettings.CurrentTmpId);// loadSet.Id);
                 DsOperation.SetField(newLoadSet, "ParentId", parentId);
                 LoadSetTable.Rows.Add(newLoadSet);
                 //Таблица для параметров нагрузки
